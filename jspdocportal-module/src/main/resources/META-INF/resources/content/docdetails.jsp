@@ -39,7 +39,7 @@
 </x:if>
 <stripes:layout-render name="/WEB-INF/layout/default.jsp" pageTitle="${pageTitle}">
 	<stripes:layout-component name="html_header">
-		<title>${pageTitle}@ <fmt:message key="Webpage.title" /></title>
+        <mcr:transformXSL xml="${doc}" xslt="xsl/docdetails/metatags_html.xsl" />
 		<link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}modules/shariff/shariff.complete.css">
 		<style>
 			div.shariff span.share_text{

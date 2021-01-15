@@ -42,10 +42,11 @@
 					</p>
 				</xsl:if>
                 <xsl:if test="./mods:abstract">
+                  <h5 style="margin-bottom: .25em">Abstract:</h5>
                   <p class="ir-docdetails-abstract">
                     <xsl:value-of select="./mods:abstract" />
                   </p>
-              </xsl:if>
+                </xsl:if>
   			  <xsl:if test="./mods:classification[@displayLabel='doctype']">
             <p>
             <span class="label label-default ir-label-default">
