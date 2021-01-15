@@ -125,10 +125,13 @@
   	  	</xsl:choose>
         </xsl:if>
         
-		<xsl:for-each select="mods:relatedItem[not(@displayLabel='appears_in')][1]">
-        	<xsl:for-each select="mods:recordInfo[1]/mods:recordIdentifier[1]">
+       <xsl:for-each select="mods:relatedItem[not(@displayLabel='appears_in')]">
+          <xsl:for-each select="mods:recordInfo[1]/mods:recordIdentifier[1]">
               <field name="ir.host.recordIdentifier"><xsl:value-of select="." /></field> 
             </xsl:for-each>
+        </xsl:for-each>
+        
+		<xsl:for-each select="mods:relatedItem[not(@displayLabel='appears_in')][last()]">
             <xsl:for-each select="mods:part/mods:text[@type='sortstring'][1]">
               <field name="ir.sortstring"><xsl:value-of select="." /></field> 
             </xsl:for-each>
