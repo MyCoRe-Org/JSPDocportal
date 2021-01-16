@@ -72,7 +72,6 @@
           <xsl:variable name="file_fulltext"><xsl:value-of select="$WebApplicationBaseURL"/>file/<xsl:value-of select="$derXML/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href" />/<xsl:value-of select="$derXML/mycorederivate/@ID" />/<xsl:value-of select="@maindoc" /></xsl:variable>
           <meta name="citation_pdf_url" content="{$file_fulltext}" />
           <meta name="DC.identifier" content="{$file_fulltext}" />
-          <meta name="citation_pdf_url" content="{$WebApplicationBaseURL}resolve/id/{$mcrid}/file/fulltext" />
           </xsl:if>
         </xsl:for-each>
     </xsl:for-each>

@@ -365,11 +365,19 @@
        
        <%--Download Area --%>
      <div style="margin-bottom:30px;">
-        <x:if select="$doc/mycoreobject/structure/derobjects/derobject[@xlink:title='fulltext']">
-        <a class="btn btn-default ir-button ir-button-download"  
-             href="${WebApplicationBaseURL}resolve/id/${mcrid}/file/fulltext" target="_blank">
-            <img style="vertical-align:middle;height:30px;" src="${WebApplicationBaseURL}images/download_pdf.png" title = "<fmt:message key="Webpage.docdetails.pdfdownload" />" />
-            <fmt:message key="Webpage.docdetails.pdfdownload" />
+      <x:if select="$doc/mycoreobject/structure/derobjects/derobject[@xlink:title='fulltext']">
+        <c:set var="derid"><x:out select="$doc/mycoreobject/structure/derobjects/derobject[@xlink:title='fulltext']/@xlink:href" /></c:set>
+        <mcr:retrieveObject mcrid="${derid}" varDOM="derXML" />
+        <c:set var="maindoc"><x:out select="$derXML/mycorederivate/derivate/internals/internal/@maindoc" /></c:set>
+        <c:if test="${empty maindoc}">
+          <c:set var="fulltext_href">${WebApplicationBaseURL}resolve/id/${mcrid}/file/fulltext</c:set>
+        </c:if>
+        <c:if test="${not(empty maindoc)}">
+          <c:set var="fulltext_href">${WebApplicationBaseURL}file/${mcrid}/${derid}/${maindoc}</c:set>
+        </c:if>
+        <a class="btn btn-default ir-button ir-button-download" href="${fulltext_href}" target="_blank">
+          <img style="vertical-align:middle;height:30px;" src="${WebApplicationBaseURL}images/download_pdf.png" title = "<fmt:message key="Webpage.docdetails.pdfdownload" />" />
+          <fmt:message key="Webpage.docdetails.pdfdownload" />
         </a>
       </x:if>
       <x:if select="$doc/mycoreobject[not(contains(@ID,'_bundle_'))]/structure/derobjects/derobject[@xlink:title='DV_METS' or @xlink:title='METS']">
