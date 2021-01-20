@@ -5,8 +5,12 @@
 <%@ taglib prefix="fn"      uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="mcr" 	uri="http://www.mycore.org/jspdocportal/base.tld"%>
 <%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld"%>
-	
 <%@ taglib prefix="search" tagdir="/WEB-INF/tags/search"%>
+
+<%@ page import = "org.mycore.common.config.MCRConfiguration2" %>
+<% 
+    pageContext.setAttribute("navSide", MCRConfiguration2.getString("MCR.JSPDocportal.Navigation.Side").orElse("left"));
+%>
 
 <fmt:message var="pageTitle" key="Webpage.search.title.${actionBean.result.mask}" />
 <stripes:layout-render name="/WEB-INF/layout/default.jsp" pageTitle="${pageTitle}" layout="2columns">
@@ -15,10 +19,11 @@
 	</stripes:layout-component>
 	<stripes:layout-component name="main_part">
 	<div class="row">
-		<div id="search_nav" class="col-3">
-			<mcr:outputNavigation mode="side" id="search" expanded="true"></mcr:outputNavigation>
-			
-		</div>
+        <c:if test="${pageScope.navSide == 'left'}">
+            <div id="search_nav" class="col-3">
+                <mcr:outputNavigation mode="side" id="search" expanded="true"></mcr:outputNavigation>
+            </div>
+        </c:if>
 		<div id="search_content" class="col">
 		<c:if test="${not empty actionBean.result.mask}">
 	
@@ -48,7 +53,7 @@
               		});
             	 </script>
 		</c:if>
-		<c:if test="${actionBean.showResults}">
+        <c:if test="${actionBean.showResults}">
 				<c:if test="${not empty actionBean.result.sortfields}">
         			<search:result-sorter result="${actionBean.result}"
                     	 fields="${actionBean.result.sortfields}" mode="search" mask="${actionBean.result.mask}" />
@@ -87,6 +92,11 @@
 		});
 		</script>
 		</div>
+        <c:if test="${pageScope.navSide == 'right'}">
+            <div id="search_nav" class="col-3">
+                <mcr:outputNavigation mode="side" id="search" expanded="true"></mcr:outputNavigation>
+            </div>
+        </c:if>
 		</div>
 	</stripes:layout-component>
 </stripes:layout-render>
