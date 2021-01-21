@@ -8,7 +8,7 @@
   </parent>
   <groupId>org.mycore.jspdocportal</groupId>
   <artifactId>jspdocportal-parent</artifactId>
-  <version>2020.06-SNAPSHOT</version>
+  <version>2020.06-overhaul-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>JSPDocportal</name>
   <description>JSP based front-end for MyCoRe Repositories</description>
@@ -32,14 +32,6 @@
   </dependencyManagement>
   
   <repositories>
-    <repository>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>central</id>
-      <name>Central Repository</name>
-      <url>https://repo.maven.apache.org/maven2</url>
-    </repository>
     <repository>
       <releases>
         <enabled>false</enabled>

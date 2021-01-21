@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.mycore.jspdocportal</groupId>
     <artifactId>jspdocportal-parent</artifactId>
-    <version>2020.06-SNAPSHOT</version>
+    <version>2020.06-overhaul-SNAPSHOT</version>
   </parent>
   <artifactId>jspdocportal-ir-module</artifactId>
   <packaging>jar</packaging>
@@ -75,7 +75,7 @@
   <dependencies>
     <dependency>
     	<groupId>org.mycore.jspdocportal</groupId>
-    	<artifactId>jspdocportal-module</artifactId>
+    	<artifactId>jspdocportal-common-module</artifactId>
     	<version>${project.version}</version>
     </dependency>
     <dependency>

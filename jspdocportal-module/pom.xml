@@ -5,11 +5,11 @@
   <parent>
     <groupId>org.mycore.jspdocportal</groupId>
     <artifactId>jspdocportal-parent</artifactId>
-    <version>2020.06-SNAPSHOT</version>
+    <version>2020.06-overhaul-SNAPSHOT</version>
   </parent>
-  <artifactId>jspdocportal-module</artifactId>
+  <artifactId>jspdocportal-common-module</artifactId>
   <packaging>jar</packaging>
-  <name>JSPDocportal Base Module</name>
+  <name>JSPDocportal Common Module</name>
   <url>http://maven.apache.org</url>
 
   <properties>
