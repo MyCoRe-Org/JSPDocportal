@@ -15,7 +15,7 @@
   <inceptionYear>2004</inceptionYear>
  
   <modules>
-    <module>jspdocportal-module</module>
+    <module>jspdocportal-common-module</module>
     <module>jspdocportal-ir-module</module>
   </modules>
   
