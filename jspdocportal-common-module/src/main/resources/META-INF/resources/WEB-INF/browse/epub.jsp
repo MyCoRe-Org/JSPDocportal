@@ -161,7 +161,7 @@
         </div>
       </div>
       <div class="col-xs-12 col-md-9">
-        <search:result-sorter result="${actionBean.result}"
+        <search:result-sorter result="${actionBean.result}" mode="browse"
                               fields="score,ir.pubyear_start,modified,ir.creator.result,ir.title.result" mask="epub" />
                               
         <search:result-browser result="${actionBean.result}">

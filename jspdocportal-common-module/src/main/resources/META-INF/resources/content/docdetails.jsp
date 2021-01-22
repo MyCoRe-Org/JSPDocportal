@@ -291,17 +291,17 @@
 	                 <x:when select="$doc/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='MCRVIEWER_METS']]"> 
 				 		<c:set var="recordID"><x:out select="$doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']" /></c:set>
                           <a href="${WebApplicationBaseURL}mcrviewer/recordIdentifier/${fn:replace(recordID,'/','_')}" title="Im MyCoRe Viewer anzeigen">
-        		            <search:derivate-image mcrid="${param.id}" width="200px" labelContains="cover" />
+        		            <search:derivate-image mcrobj="${param.id}" width="200px" category="cover" />
                 		  </a>
                  	 </x:when>
                  	 <x:when select="$doc/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='DV_METS' or @categid='METS']]"> 
                        <c:set var="mcrid"><x:out select="$doc/mycoreobject/@ID" /></c:set>
 	                	 <a href="${WebApplicationBaseURL}resolve/id/${mcrid}/dfgviewer" target="_blank" title="Im DFG Viewer anzeigen">
-	                	   <search:derivate-image mcrid="${param.id}" width="200px" labelContains="cover" />
+	                	   <search:derivate-image mcrobj="${param.id}" width="200px" category="cover" />
 	                	 </a>
                 	</x:when>
                    	<x:otherwise>
-        		          <search:derivate-image mcrid="${param.id}" width="200px" labelContains="cover" />
+        		          <search:derivate-image mcrobj="${param.id}" width="200px" category="cover" />
                 	</x:otherwise>
                  </x:choose>
               </div>
