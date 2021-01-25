@@ -254,7 +254,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
     @Override
     public boolean rollbackMCRObject(DelegateExecution execution) {
         // String id =
-        // String.valueOf(execution.getVariable(MCRActivitiMgr.WF_VAR_MCR_OBJECT_ID));
+        // String.valueOf(execution.getVariable(MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID));
         // do nothing - cleanup done on workflow endState
         return true;
     }
@@ -410,7 +410,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                 }
                 /*
                 if (MCRMetadataManager.exists(derIDObj)) {
-                	ruleMap = MCRActivitiUtils.getAccessRulesMap(derID);
+                	ruleMap = MCRBPMNUtils.getAccessRulesMap(derID);
                 	MCRDerivateCommands.delete(derID);
                 }
                 MCRDerivateCommands.loadFromFile(filename, false);

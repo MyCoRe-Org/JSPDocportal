@@ -81,7 +81,7 @@ public class MCRBPMNMgr {
         MCRWorkflowMgr mgr = null;
         String prop = "";
         try {
-            prop = "MCR.Activiti.WorkflowMgr.Class.create_object_simple." + mode;
+            prop = "MCR.Workflow.WorkflowMgr.Class.create_object_simple." + mode;
             mgr = (MCRWorkflowMgr) MCRConfiguration2.getInstanceOf(prop).orElseThrow();
         } catch (Exception cce) {
             throw new MCRException("Class Cast Exception - the specified MCRWorkflowMgr in property " + prop

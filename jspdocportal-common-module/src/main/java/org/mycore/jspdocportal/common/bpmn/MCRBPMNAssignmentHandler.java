@@ -12,17 +12,17 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr;
 
 /**
- * MCRActivitiAssignmentHandler assigns the proper users and groups to the given task
+ * MCRBPMNAssignmentHandler assigns the proper users and groups to the given task
  * by looking them up in MyCoRe properties
  * 
  * they are defined as follows:
  * groups:	
- * 		"MCR.Activiti.TaskAssignment.CandidateGroups."+taskID+"."+wfMode
- * 		e.g.: MCR.Activiti.TaskAssignment.CandidateGroups.edit_object.professorum=editProfessorum
+ * 		"MCR.Workflow.TaskAssignment.CandidateGroups."+taskID+"."+wfMode
+ * 		e.g.: MCR.Workflow.TaskAssignment.CandidateGroups.edit_object.professorum=editProfessorum
  * 
  * users:
- * 		"MCR.Activiti.TaskAssignment.CandidateUsers."+taskID+"."+wfMode
- * 		e.g.: MCR.Activiti.TaskAssignment.CandidateUsers.edit_object.professorum=administrator
+ * 		"MCR.Workflow.TaskAssignment.CandidateUsers."+taskID+"."+wfMode
+ * 		e.g.: MCR.Workflow.TaskAssignment.CandidateUsers.edit_object.professorum=administrator
  * 
  * It is configured as TaskListener in BPMN model file:
  *  <userTask id="edit_object" name="Objekt bearbeiten">
@@ -44,13 +44,13 @@ public class MCRBPMNAssignmentHandler implements TaskListener {
         
         String wfID = delegateTask.getProcessDefinitionId().split(":")[0];
 
-        String propKeyGrp = "MCR.Activiti.TaskAssignment.CandidateGroups." + wfID + "." + mode;
+        String propKeyGrp = "MCR.Workflow.TaskAssignment.CandidateGroups." + wfID + "." + mode;
         List<String> groups = MCRConfiguration2.getString(propKeyGrp).map(MCRConfiguration2::splitValue)
                 .map(s -> s.collect(Collectors.toList())).orElse(Collections.emptyList());
         for (String g : groups) {
             delegateTask.addCandidateGroup(g.trim());
         }
-        String propKeyUser = "MCR.Activiti.TaskAssignment.CandidateUsers." + wfID + "." + mode;
+        String propKeyUser = "MCR.Workflow.TaskAssignment.CandidateUsers." + wfID + "." + mode;
         List<String> users = MCRConfiguration2.getString(propKeyUser).map(MCRConfiguration2::splitValue)
                 .map(s -> s.collect(Collectors.toList())).orElse(Collections.emptyList());
         for (String u : users) {
