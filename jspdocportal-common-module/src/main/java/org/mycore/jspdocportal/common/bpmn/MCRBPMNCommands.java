@@ -21,13 +21,13 @@
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  */
 
-package org.mycore.activiti;
+package org.mycore.jspdocportal.common.bpmn;
 
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.engine.RepositoryService;
+import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.mycore.common.MCRException;
 import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
@@ -43,9 +43,9 @@ import org.mycore.frontend.cli.annotation.MCRCommandGroup;
  */
 
 @MCRCommandGroup(name = "JSPDocportal Acitiviti Commands")
-public class MCRActivitiCommands extends MCRAbstractCommands {
+public class MCRBPMNCommands extends MCRAbstractCommands {
     /** The logger */
-    private static Logger LOGGER = LogManager.getLogger(MCRActivitiCommands.class);
+    private static Logger LOGGER = LogManager.getLogger(MCRBPMNCommands.class);
 
     /**
      * The command deploys a process definition to the database from a given file
@@ -56,7 +56,7 @@ public class MCRActivitiCommands extends MCRAbstractCommands {
     @MCRCommand(syntax = "deploy workflow processdefinition from resource {0}", help = "The command deploys a process definition to the database from a *.bpm20.xml file {0} available on classpath")
     public static final void deployProcessDefinition(String resource) throws MCRException {
         try {
-            ProcessEngine processEngine = MCRActivitiMgr.getWorkflowProcessEngineConfiguration()
+            ProcessEngine processEngine = MCRBPMNMgr.getWorkflowProcessEngineConfiguration()
                     .setDatabaseSchemaUpdate(ProcessEngineConfigurationImpl.DB_SCHEMA_UPDATE_TRUE).buildProcessEngine();
 
             RepositoryService repositoryService = processEngine.getRepositoryService();

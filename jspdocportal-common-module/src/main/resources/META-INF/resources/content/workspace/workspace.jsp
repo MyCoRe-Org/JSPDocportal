@@ -1,7 +1,7 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html;charset=UTF-8"%>
 <%@page import="org.mycore.common.config.MCRConfiguration2"%>
-<%@page import="org.activiti.engine.task.Task"%>
-<%@page import="org.mycore.activiti.MCRActivitiMgr"%>
+<%@page import="org.camunda.bpm.engine.task.Task"%>
+<%@page import="org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr"%>
 <%@page import="org.mycore.frontend.servlets.MCRServlet"%>
 <%@page import="org.mycore.common.MCRSessionMgr"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -25,7 +25,7 @@
           <div class="col">
             <h2><fmt:message key="WF.workspace.headline.${actionBean.mode}" /></h2>
               <div class="stripesinfo">
-              <stripes:errors />
+              net.sourceforge.stripes.validation.ValidationError error = (net.sourceforge.stripes.validation.ValidationError) pageContext.getAttribute("error");
               <stripes:messages />
             </div>
           </div>
@@ -82,7 +82,9 @@
 									<c:choose>
 										<c:when test="${currentTask.name eq 'Objekt bearbeiten'}">
 							 				<div class="card-body  border-top border-bottom border-secondary">
-							 	   				<%pageContext.setAttribute("currentVariables", MCRActivitiMgr.getWorfklowProcessEngine().getRuntimeService().getVariables(((Task)request.getAttribute("currentTask")).getExecutionId()), PageContext.REQUEST_SCOPE); %>
+							 	   				<%
+							 	   				pageContext.setAttribute("currentVariables", MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getVariables(((Task)request.getAttribute("currentTask")).getExecutionId()), PageContext.REQUEST_SCOPE);
+							 	   				%>
 							  					<c:if test="${not empty currentVariables.validationMessage}">
 													<div class="alert alert-danger" role="alert">${currentVariables.validationMessage}</div>
 												</c:if>
@@ -118,7 +120,9 @@
 											<div class="row">
                                               <div class="col">
 												<c:if test="${not fn:contains(currentVariables.mcrObjectID,'_person_')}">
-                                                   <%pageContext.setAttribute("pica3URL", MCRConfiguration2.getString("MCR.Workflow.Pica3Import.URL").orElse("")); %>
+                                                   <%
+                                                   pageContext.setAttribute("pica3URL", MCRConfiguration2.getString("MCR.Workflow.Pica3Import.URL").orElse(""));
+                                                   %>
                         							<a id="workspace_button_pica3_import" href="${pica3URL}?urn=${currentVariables.wfObjectDisplayPersistentIdentifier}&recordIdentifier=${currentVariables.wfObjectDisplayRecordIdentifier}&mcrid=${currentVariables.mcrObjectID}" 
 												   	   class="btn btn-sm btn-outline-secondary" target="_blank"><i class="fas fa-book"></i> <fmt:message key="WF.workspace.button.pica3" />
 													</a>
@@ -178,7 +182,9 @@
 								</div>
 						
 								<c:set var="currentTask" value="${task}" scope="request" />
-                                <%pageContext.setAttribute("currentVariables", MCRActivitiMgr.getWorfklowProcessEngine().getRuntimeService().getVariables(((Task)request.getAttribute("currentTask")).getExecutionId()), PageContext.REQUEST_SCOPE); %>
+                                <%
+                                pageContext.setAttribute("currentVariables", MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getVariables(((Task)request.getAttribute("currentTask")).getExecutionId()), PageContext.REQUEST_SCOPE);
+                                %>
 								<div class="card-body border-top border-secondary">
                                   <div class="row">
                                     <div class="col-3">

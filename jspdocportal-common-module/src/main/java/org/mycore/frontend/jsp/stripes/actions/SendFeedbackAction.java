@@ -13,9 +13,8 @@ import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.activiti.MCRActivitiMgr;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.config.MCRConfiguration2;
+import org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr;
 import org.mycore.services.i18n.MCRTranslation;
 
 import net.sourceforge.stripes.action.ActionBean;
@@ -99,7 +98,7 @@ public class SendFeedbackAction extends MCRAbstractStripesAction implements Acti
     	if(!sessionCSRFToken.equals(csrfToken)) {
     		return fwdResolution;
     	}
-        SimpleEmail email = MCRActivitiMgr.createNewEmailFromConfig();
+        SimpleEmail email = MCRBPMNMgr.createNewEmailFromConfig();
         try {
             if (StringUtils.isNotBlank(message)) {
                 email.setMsg(message);

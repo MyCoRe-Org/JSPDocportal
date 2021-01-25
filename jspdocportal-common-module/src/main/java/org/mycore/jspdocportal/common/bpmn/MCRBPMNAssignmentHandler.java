@@ -1,14 +1,15 @@
-package org.mycore.activiti;
+package org.mycore.jspdocportal.common.bpmn;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.activiti.engine.delegate.DelegateTask;
-import org.activiti.engine.delegate.TaskListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.camunda.bpm.engine.delegate.DelegateTask;
+import org.camunda.bpm.engine.delegate.TaskListener;
 import org.mycore.common.config.MCRConfiguration2;
+import org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr;
 
 /**
  * MCRActivitiAssignmentHandler assigns the proper users and groups to the given task
@@ -23,16 +24,23 @@ import org.mycore.common.config.MCRConfiguration2;
  * 		"MCR.Activiti.TaskAssignment.CandidateUsers."+taskID+"."+wfMode
  * 		e.g.: MCR.Activiti.TaskAssignment.CandidateUsers.edit_object.professorum=administrator
  * 
- * @author Robert Stephan
- *
+ * It is configured as TaskListener in BPMN model file:
+ *  <userTask id="edit_object" name="Objekt bearbeiten">
+ *    <extensionElements>
+ *      <camunda:taskListener class="org.mycore.jspdocportal.common.bpmn.MCRBPMNAssignmentHandler" event="create" />
+ *    </extensionElements>
+ *    ...
+ *  </userTask>  
+ * 
+ *  @author Robert Stephan
+ *  
  */
-public class MCRActivitiAssignmentHandler implements TaskListener {
-    private static final long serialVersionUID = 1L;
-
-    private static Logger LOGGER = LogManager.getLogger(MCRActivitiAssignmentHandler.class);
+public class MCRBPMNAssignmentHandler implements TaskListener {
+    
+    private static Logger LOGGER = LogManager.getLogger(MCRBPMNAssignmentHandler.class);
 
     public void notify(DelegateTask delegateTask) {
-        String mode = String.valueOf(delegateTask.getVariable(MCRActivitiMgr.WF_VAR_MODE));
+        String mode = String.valueOf(delegateTask.getVariable(MCRBPMNMgr.WF_VAR_MODE));
         
         String wfID = delegateTask.getProcessDefinitionId().split(":")[0];
 

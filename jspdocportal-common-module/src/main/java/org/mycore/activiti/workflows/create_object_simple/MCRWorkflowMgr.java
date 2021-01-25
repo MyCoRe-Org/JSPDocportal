@@ -1,6 +1,6 @@
 package org.mycore.activiti.workflows.create_object_simple;
 
-import org.activiti.engine.delegate.DelegateExecution;
+import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;

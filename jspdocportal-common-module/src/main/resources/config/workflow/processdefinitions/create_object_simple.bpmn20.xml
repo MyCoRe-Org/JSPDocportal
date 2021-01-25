@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- origin at X=0.0 Y=0.0 -->                            
-<definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:ext="http://org.eclipse.bpmn2/ext" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="Definitions_1" exporter="org.eclipse.bpmn2.modeler.core" exporterVersion="1.1.0.201409091530" targetNamespace="http://www.activiti.org/processdef">
+<definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:ext="http://org.eclipse.bpmn2/ext" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="Definitions_1" targetNamespace="http://www.activiti.org/processdef" exporter="Camunda Modeler" exporterVersion="4.2.0">
   <message id="msg_start_create" name="start_create" />
   <message id="msg_start_load" name="start_load" />
   <process id="create_object_simple" name="Simple workflow to create a MyCoRe object" isExecutable="true">
@@ -9,29 +8,28 @@
       <messageEventDefinition messageRef="msg_start_create" />
     </startEvent>
     <startEvent id="start_load" name="Mit bestehendem Objekt starten">
-     <extensionElements>
-        <ext:style ext:labelPosition="Above Figure"/>
+      <extensionElements>
+        <ext:style labelPosition="Above Figure" />
       </extensionElements>
       <outgoing>start_load.load_object</outgoing>
       <messageEventDefinition messageRef="msg_start_load" />
     </startEvent>
     <endEvent id="end" name="Ende">
-       <extensionElements>
-        <activiti:executionListener class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiEndEventDelegate" event="start" />
-        <!-- Activiti Documentation: Listeners can be captured at ... starting an end event -->
-        <ext:style ext:labelPosition="Right of Figure"/>
+      <extensionElements>
+        <camunda:executionListener class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiEndEventDelegate" event="start" />
+        <ext:style labelPosition="Right of Figure" />
       </extensionElements>
       <incoming>cancel_object.end</incoming>
       <incoming>commit_object.end</incoming>
       <incoming>drop_object.end</incoming>
     </endEvent>
-    <serviceTask id="create_object" activiti:class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiCreateObjectDelegate" name="Neues Objekt erzeugen">
+    <serviceTask id="create_object" name="Neues Objekt erzeugen" camunda:class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiCreateObjectDelegate">
       <incoming>start_create.create_object</incoming>
       <outgoing>create_object.edit_object</outgoing>
     </serviceTask>
     <userTask id="edit_object" name="Objekt bearbeiten">
       <extensionElements>
-        <activiti:taskListener xsi:type="xsd:anyType" event="create" class="org.mycore.activiti.MCRActivitiAssignmentHandler"/>
+        <camunda:taskListener class="org.mycore.jspdocportal.common.bpmn.MCRBPMNAssignmentHandler" event="create" />
       </extensionElements>
       <incoming>is_valid.edit_object</incoming>
       <incoming>create_object.edit_object</incoming>
@@ -40,11 +38,11 @@
       <outgoing>edit_object.do_cancel</outgoing>
       <outgoing>edit_object.do_drop</outgoing>
     </userTask>
-    <serviceTask id="commit_object" activiti:class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiCommitObjectDelegate" name="Objekt speichern">
+    <serviceTask id="commit_object" name="Objekt speichern" camunda:class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiCommitObjectDelegate">
       <incoming>is_valid.commit_object</incoming>
       <outgoing>commit_object.end</outgoing>
     </serviceTask>
-    <serviceTask id="cancel_object" activiti:class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiCancelObjectDelegate" name="Objekt verwerfen">
+    <serviceTask id="cancel_object" name="Objekt verwerfen" camunda:class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiCancelObjectDelegate">
       <incoming>edit_object.do_cancel</incoming>
       <outgoing>cancel_object.end</outgoing>
     </serviceTask>
@@ -53,15 +51,15 @@
       <outgoing>is_valid.edit_object</outgoing>
       <outgoing>is_valid.commit_object</outgoing>
     </exclusiveGateway>
-    <serviceTask id="validate_object" activiti:class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiValidateObjectDelegate" name="Objekt validieren">
+    <serviceTask id="validate_object" name="Objekt validieren" camunda:class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiValidateObjectDelegate">
       <incoming>edit_object.do_save</incoming>
       <outgoing>validate_object.is_valid</outgoing>
     </serviceTask>
-    <sequenceFlow id="cancel_object.end" sourceRef="cancel_object" targetRef="end"/>
-    <sequenceFlow id="commit_object.end" sourceRef="commit_object" targetRef="end"/>
-    <sequenceFlow id="validate_object.is_valid" sourceRef="validate_object" targetRef="is_valid"/>
-    <sequenceFlow id="is_valid.edit_object" sourceRef="is_valid" targetRef="edit_object"/>
-    <sequenceFlow id="create_object.edit_object" sourceRef="create_object" targetRef="edit_object"/>
+    <sequenceFlow id="cancel_object.end" sourceRef="cancel_object" targetRef="end" />
+    <sequenceFlow id="commit_object.end" sourceRef="commit_object" targetRef="end" />
+    <sequenceFlow id="validate_object.is_valid" sourceRef="validate_object" targetRef="is_valid" />
+    <sequenceFlow id="is_valid.edit_object" sourceRef="is_valid" targetRef="edit_object" />
+    <sequenceFlow id="create_object.edit_object" sourceRef="create_object" targetRef="edit_object" />
     <sequenceFlow id="is_valid.commit_object" sourceRef="is_valid" targetRef="commit_object">
       <conditionExpression xsi:type="tFormalExpression" id="FormalExpression_1">${validationResult}</conditionExpression>
     </sequenceFlow>
@@ -74,169 +72,169 @@
     <sequenceFlow id="edit_object.do_drop" name="Entfernen" sourceRef="edit_object" targetRef="drop_object">
       <conditionExpression xsi:type="tFormalExpression" id="FormalExpression_4">${goto == 'edit_object.do_drop'}</conditionExpression>
     </sequenceFlow>
-    <serviceTask id="load_object" activiti:class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiLoadObjectDelegate" name="Objekt laden">
+    <serviceTask id="load_object" name="Objekt laden" camunda:class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiLoadObjectDelegate">
       <incoming>start_load.load_object</incoming>
       <outgoing>load_object.edit_object</outgoing>
     </serviceTask>
-    <sequenceFlow id="load_object.edit_object" sourceRef="load_object" targetRef="edit_object"/>
-    <serviceTask id="drop_object" name="Objekt löschen" activiti:class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiDropObjectDelegate">
+    <sequenceFlow id="load_object.edit_object" sourceRef="load_object" targetRef="edit_object" />
+    <serviceTask id="drop_object" name="Objekt löschen" camunda:class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiDropObjectDelegate">
       <incoming>edit_object.do_drop</incoming>
       <outgoing>drop_object.end</outgoing>
     </serviceTask>
-    <sequenceFlow id="drop_object.end" sourceRef="drop_object" targetRef="end"/>
-    <sequenceFlow id="start_create.create_object" sourceRef="start_create" targetRef="create_object"/>
-    <sequenceFlow id="start_load.load_object" sourceRef="start_load" targetRef="load_object"/>
+    <sequenceFlow id="drop_object.end" sourceRef="drop_object" targetRef="end" />
+    <sequenceFlow id="start_create.create_object" sourceRef="start_create" targetRef="create_object" />
+    <sequenceFlow id="start_load.load_object" sourceRef="start_load" targetRef="load_object" />
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_process">
     <bpmndi:BPMNPlane id="BPMNPlane_create_object_simple" bpmnElement="create_object_simple">
-      <bpmndi:BPMNShape id="BPMNShape_start_create" bpmnElement="start_create">
-        <omgdc:Bounds height="30.0" width="30.0" x="50.0" y="135.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_25" labelStyle="BPMNLabelStyle_1">
-          <omgdc:Bounds height="30.0" width="76.0" x="27.0" y="165.0"/>
+      <bpmndi:BPMNEdge id="BPMNEdge_start_load.load_object" bpmnElement="start_load.load_object" sourceElement="BPMNShape_start_load" targetElement="BPMNShape_load_object">
+        <omgdi:waypoint x="220" y="355" />
+        <omgdi:waypoint x="292" y="355" />
+        <bpmndi:BPMNLabel id="BPMNLabel_30" labelStyle="BPMNLabelStyle_1" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_start_create.create_object" bpmnElement="start_create.create_object" sourceElement="BPMNShape_start_create" targetElement="BPMNShape_create_object">
+        <omgdi:waypoint x="220" y="150" />
+        <omgdi:waypoint x="292" y="150" />
+        <bpmndi:BPMNLabel id="BPMNLabel_28" labelStyle="BPMNLabelStyle_1" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_drop_object.end" bpmnElement="drop_object.end" sourceElement="BPMNShape_drop_object" targetElement="BPMNShape_end">
+        <omgdi:waypoint x="961" y="250" />
+        <omgdi:waypoint x="1022" y="250" />
+        <bpmndi:BPMNLabel id="BPMNLabel_23" labelStyle="BPMNLabelStyle_1" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_load_object.edit_object" bpmnElement="load_object.edit_object" sourceElement="BPMNShape_load_object" targetElement="BPMNShape_edit_object">
+        <omgdi:waypoint x="412" y="355" />
+        <omgdi:waypoint x="447" y="355" />
+        <omgdi:waypoint x="447" y="262" />
+        <omgdi:waypoint x="491" y="262" />
+        <bpmndi:BPMNLabel id="BPMNLabel_22" labelStyle="BPMNLabelStyle_1" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_edit_object.do_drop" bpmnElement="edit_object.do_drop" sourceElement="BPMNShape_edit_object" targetElement="BPMNShape_drop_object">
+        <omgdi:waypoint x="611" y="250" />
+        <omgdi:waypoint x="841" y="250" />
+        <bpmndi:BPMNLabel id="BPMNLabel_29" labelStyle="BPMNLabelStyle_1">
+          <omgdc:Bounds x="703" y="251" width="48" height="14" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_start_load" bpmnElement="start_load">
-        <omgdc:Bounds height="30.0" width="30.0" x="50.0" y="340.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_27" labelStyle="BPMNLabelStyle_1">
-          <omgdc:Bounds height="45.0" width="80.0" x="25.0" y="292.0"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_end" bpmnElement="end">
-        <omgdc:Bounds height="30.0" width="30.0" x="882.0" y="235.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_2" labelStyle="BPMNLabelStyle_1">
-          <omgdc:Bounds height="15.0" width="29.0" x="918.0" y="242.0"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_create_object" bpmnElement="create_object">
-        <omgdc:Bounds height="80.0" width="120.0" x="152.0" y="110.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_3" labelStyle="BPMNLabelStyle_1">
-          <omgdc:Bounds height="30.0" width="78.0" x="173.0" y="135.0"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_edit_object" bpmnElement="edit_object">
-        <omgdc:Bounds height="80.0" width="120.0" x="351.0" y="210.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_4" labelStyle="BPMNLabelStyle_1">
-          <omgdc:Bounds height="15.0" width="97.0" x="362.0" y="242.0"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_commit_object" bpmnElement="commit_object">
-        <omgdc:Bounds height="80.0" width="120.0" x="701.0" y="110.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_5" labelStyle="BPMNLabelStyle_1">
-          <omgdc:Bounds height="15.0" width="93.0" x="714.0" y="142.0"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_cancel_object" bpmnElement="cancel_object">
-        <omgdc:Bounds height="80.0" width="120.0" x="701.0" y="310.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_6" labelStyle="BPMNLabelStyle_1">
-          <omgdc:Bounds height="15.0" width="91.0" x="715.0" y="342.0"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_is_valid" bpmnElement="is_valid">
-        <omgdc:Bounds height="40.0" width="40.0" x="620.0" y="130.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_7" labelStyle="BPMNLabelStyle_1"/>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_validate_object" bpmnElement="validate_object">
-        <omgdc:Bounds height="80.0" width="120.0" x="467.0" y="40.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_8" labelStyle="BPMNLabelStyle_1">
-          <omgdc:Bounds height="15.0" width="91.0" x="481.0" y="72.0"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_load_object" bpmnElement="load_object">
-        <omgdc:Bounds height="80.0" width="120.0" x="152.0" y="315.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_19" labelStyle="BPMNLabelStyle_1">
-          <omgdc:Bounds height="15.0" width="69.0" x="177.0" y="347.0"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_drop_object" bpmnElement="drop_object">
-        <omgdc:Bounds height="80.0" width="120.0" x="701.0" y="210.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_24" labelStyle="BPMNLabelStyle_1">
-          <omgdc:Bounds height="15.0" width="82.0" x="720.0" y="242.0"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_validate_object.do_cancel" bpmnElement="edit_object.do_cancel" sourceElement="BPMNShape_edit_object" targetElement="BPMNShape_cancel_object">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="411.0" y="290.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="411.0" y="350.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="701.0" y="350.0"/>
+        <omgdi:waypoint x="551" y="290" />
+        <omgdi:waypoint x="551" y="350" />
+        <omgdi:waypoint x="841" y="350" />
         <bpmndi:BPMNLabel id="BPMNLabel_9" labelStyle="BPMNLabelStyle_1">
-          <omgdc:Bounds height="30.0" width="70.0" x="492.0" y="351.0"/>
+          <omgdc:Bounds x="637" y="351" width="60" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_validate_object.do_save" bpmnElement="edit_object.do_save" sourceElement="BPMNShape_edit_object" targetElement="BPMNShape_validate_object">
+        <omgdi:waypoint x="531" y="210" />
+        <omgdi:waypoint x="531" y="80" />
+        <omgdi:waypoint x="607" y="80" />
+        <bpmndi:BPMNLabel id="BPMNLabel_13" labelStyle="BPMNLabelStyle_1">
+          <omgdc:Bounds x="535" y="63" width="50" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_is_valid.commit_object" bpmnElement="is_valid.commit_object" sourceElement="BPMNShape_is_valid" targetElement="BPMNShape_commit_object">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="660.0" y="150.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="701.0" y="150.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_10" labelStyle="BPMNLabelStyle_1"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_cancel_object.end" bpmnElement="cancel_object.end" sourceElement="BPMNShape_cancel_object" targetElement="BPMNShape_end">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="821.0" y="350.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="897.0" y="350.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="897.0" y="265.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_11" labelStyle="BPMNLabelStyle_1"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_validate_object.is_valid" bpmnElement="validate_object.is_valid" sourceElement="BPMNShape_validate_object" targetElement="BPMNShape_is_valid">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="587.0" y="80.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="640.0" y="80.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="640.0" y="130.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_12" labelStyle="BPMNLabelStyle_1"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_validate_object.do_save" bpmnElement="edit_object.do_save" sourceElement="BPMNShape_edit_object" targetElement="BPMNShape_validate_object">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="391.0" y="210.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="391.0" y="80.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="467.0" y="80.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_13" labelStyle="BPMNLabelStyle_1">
-          <omgdc:Bounds height="15.0" width="56.0" x="366.0" y="114.0"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_edit_object.do_drop" bpmnElement="edit_object.do_drop" sourceElement="BPMNShape_edit_object" targetElement="BPMNShape_drop_object">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="471.0" y="250.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="701.0" y="250.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_29" labelStyle="BPMNLabelStyle_1">
-          <omgdc:Bounds height="15.0" width="53.0" x="560.0" y="251.0"/>
-        </bpmndi:BPMNLabel>
+        <omgdi:waypoint x="800" y="150" />
+        <omgdi:waypoint x="841" y="150" />
+        <bpmndi:BPMNLabel id="BPMNLabel_10" labelStyle="BPMNLabelStyle_1" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_create_object.edit_object" bpmnElement="create_object.edit_object" sourceElement="BPMNShape_create_object" targetElement="BPMNShape_edit_object">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="272.0" y="150.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="307.0" y="150.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="307.0" y="236.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="351.0" y="236.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_15" labelStyle="BPMNLabelStyle_1"/>
+        <omgdi:waypoint x="412" y="150" />
+        <omgdi:waypoint x="447" y="150" />
+        <omgdi:waypoint x="447" y="236" />
+        <omgdi:waypoint x="491" y="236" />
+        <bpmndi:BPMNLabel id="BPMNLabel_15" labelStyle="BPMNLabelStyle_1" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_is_valid.edit_object" bpmnElement="is_valid.edit_object" sourceElement="BPMNShape_is_valid" targetElement="BPMNShape_edit_object">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="620.0" y="150.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="431.0" y="150.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="431.0" y="210.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_16" labelStyle="BPMNLabelStyle_1"/>
+        <omgdi:waypoint x="760" y="150" />
+        <omgdi:waypoint x="571" y="150" />
+        <omgdi:waypoint x="571" y="210" />
+        <bpmndi:BPMNLabel id="BPMNLabel_16" labelStyle="BPMNLabelStyle_1" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_validate_object.is_valid" bpmnElement="validate_object.is_valid" sourceElement="BPMNShape_validate_object" targetElement="BPMNShape_is_valid">
+        <omgdi:waypoint x="727" y="80" />
+        <omgdi:waypoint x="780" y="80" />
+        <omgdi:waypoint x="780" y="130" />
+        <bpmndi:BPMNLabel id="BPMNLabel_12" labelStyle="BPMNLabelStyle_1" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_commit_object.end" bpmnElement="commit_object.end" sourceElement="BPMNShape_commit_object" targetElement="BPMNShape_end">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="821.0" y="150.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="897.0" y="150.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="897.0" y="235.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_17" labelStyle="BPMNLabelStyle_1"/>
+        <omgdi:waypoint x="961" y="150" />
+        <omgdi:waypoint x="1037" y="150" />
+        <omgdi:waypoint x="1037" y="235" />
+        <bpmndi:BPMNLabel id="BPMNLabel_17" labelStyle="BPMNLabelStyle_1" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_load_object.edit_object" bpmnElement="load_object.edit_object" sourceElement="BPMNShape_load_object" targetElement="BPMNShape_edit_object">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="272.0" y="355.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="307.0" y="355.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="307.0" y="262.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="351.0" y="262.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_22" labelStyle="BPMNLabelStyle_1"/>
+      <bpmndi:BPMNEdge id="BPMNEdge_cancel_object.end" bpmnElement="cancel_object.end" sourceElement="BPMNShape_cancel_object" targetElement="BPMNShape_end">
+        <omgdi:waypoint x="961" y="350" />
+        <omgdi:waypoint x="1037" y="350" />
+        <omgdi:waypoint x="1037" y="265" />
+        <bpmndi:BPMNLabel id="BPMNLabel_11" labelStyle="BPMNLabelStyle_1" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_drop_object.end" bpmnElement="drop_object.end" sourceElement="BPMNShape_drop_object" targetElement="BPMNShape_end">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="821.0" y="250.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="882.0" y="250.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_23" labelStyle="BPMNLabelStyle_1"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_start_create.create_object" bpmnElement="start_create.create_object" sourceElement="BPMNShape_start_create" targetElement="BPMNShape_create_object">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="80.0" y="150.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="152.0" y="150.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_28" labelStyle="BPMNLabelStyle_1"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_start_load.load_object" bpmnElement="start_load.load_object" sourceElement="BPMNShape_start_load" targetElement="BPMNShape_load_object">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="80.0" y="355.0"/>
-        <omgdi:waypoint xsi:type="omgdc:Point" x="152.0" y="355.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_30" labelStyle="BPMNLabelStyle_1"/>
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="BPMNShape_start_create" bpmnElement="start_create">
+        <omgdc:Bounds x="190" y="135" width="30" height="30" />
+        <bpmndi:BPMNLabel id="BPMNLabel_25" labelStyle="BPMNLabelStyle_1">
+          <omgdc:Bounds x="161" y="165" width="88" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_start_load" bpmnElement="start_load">
+        <omgdc:Bounds x="190" y="340" width="30" height="30" />
+        <bpmndi:BPMNLabel id="BPMNLabel_27" labelStyle="BPMNLabelStyle_1">
+          <omgdc:Bounds x="163" y="292" width="85" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_end" bpmnElement="end">
+        <omgdc:Bounds x="1022" y="235" width="30" height="30" />
+        <bpmndi:BPMNLabel id="BPMNLabel_2" labelStyle="BPMNLabelStyle_1">
+          <omgdc:Bounds x="1060" y="242" width="26" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_create_object" bpmnElement="create_object">
+        <omgdc:Bounds x="292" y="110" width="120" height="80" />
+        <bpmndi:BPMNLabel id="BPMNLabel_3" labelStyle="BPMNLabelStyle_1">
+          <omgdc:Bounds x="173" y="135" width="78" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_edit_object" bpmnElement="edit_object">
+        <omgdc:Bounds x="491" y="210" width="120" height="80" />
+        <bpmndi:BPMNLabel id="BPMNLabel_4" labelStyle="BPMNLabelStyle_1">
+          <omgdc:Bounds x="362" y="242" width="97" height="15" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_commit_object" bpmnElement="commit_object">
+        <omgdc:Bounds x="841" y="110" width="120" height="80" />
+        <bpmndi:BPMNLabel id="BPMNLabel_5" labelStyle="BPMNLabelStyle_1">
+          <omgdc:Bounds x="714" y="142" width="93" height="15" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_cancel_object" bpmnElement="cancel_object">
+        <omgdc:Bounds x="841" y="310" width="120" height="80" />
+        <bpmndi:BPMNLabel id="BPMNLabel_6" labelStyle="BPMNLabelStyle_1">
+          <omgdc:Bounds x="715" y="342" width="91" height="15" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_is_valid" bpmnElement="is_valid" isMarkerVisible="true">
+        <omgdc:Bounds x="760" y="130" width="40" height="40" />
+        <bpmndi:BPMNLabel id="BPMNLabel_7" labelStyle="BPMNLabelStyle_1" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_validate_object" bpmnElement="validate_object">
+        <omgdc:Bounds x="607" y="40" width="120" height="80" />
+        <bpmndi:BPMNLabel id="BPMNLabel_8" labelStyle="BPMNLabelStyle_1">
+          <omgdc:Bounds x="481" y="72" width="91" height="15" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_load_object" bpmnElement="load_object">
+        <omgdc:Bounds x="292" y="315" width="120" height="80" />
+        <bpmndi:BPMNLabel id="BPMNLabel_19" labelStyle="BPMNLabelStyle_1">
+          <omgdc:Bounds x="177" y="347" width="69" height="15" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_drop_object" bpmnElement="drop_object">
+        <omgdc:Bounds x="841" y="210" width="120" height="80" />
+        <bpmndi:BPMNLabel id="BPMNLabel_24" labelStyle="BPMNLabelStyle_1">
+          <omgdc:Bounds x="720" y="242" width="82" height="15" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
     <bpmndi:BPMNLabelStyle id="BPMNLabelStyle_1">
-      <omgdc:Font name="arial" size="9.0"/>
+      <omgdc:Font name="arial" size="9" />
     </bpmndi:BPMNLabelStyle>
   </bpmndi:BPMNDiagram>
 </definitions>

@@ -17,12 +17,13 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.activiti.engine.TaskService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.variable.value.StringValue;
 import org.jdom2.output.DOMOutputter;
-import org.mycore.activiti.MCRActivitiMgr;
 import org.mycore.activiti.MCRActivitiUtils;
 import org.mycore.activiti.workflows.create_object_simple.MCRWorkflowMgr;
 import org.mycore.datamodel.classifications2.MCRCategory;
@@ -37,6 +38,7 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.jsp.MCRHibernateTransactionWrapper;
+import org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr;
 import org.w3c.dom.Document;
 
 import net.sourceforge.stripes.action.ActionBean;
@@ -80,18 +82,20 @@ public class EditDerivatesAction extends MCRAbstractStripesAction implements Act
 
     @DefaultHandler
     public Resolution defaultRes() {
-        TaskService ts = MCRActivitiMgr.getWorfklowProcessEngine().getTaskService();
+        RuntimeService rs = MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService();
         for (String s : getContext().getRequest().getParameterMap().keySet()) {
             if (s.startsWith("doCreateNewDerivate-task_")) {
                 taskid = s.substring(s.indexOf("_") + 1);
-                mcrobjid = ts.getVariable(taskid, MCRActivitiMgr.WF_VAR_MCR_OBJECT_ID, String.class);
+                StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID); 
+                mcrobjid = sv.getValue();
                 createNewDerivate();
             }
             //doMoveUpDerivate-task_${actionBean.taskid}-derivate_${derID}
             if (s.startsWith("doMoveUpDerivate-")) {
                 int start = s.indexOf("task_") + 5;
                 taskid = s.substring(start, s.indexOf("-", start));
-                mcrobjid = ts.getVariable(taskid, MCRActivitiMgr.WF_VAR_MCR_OBJECT_ID, String.class);
+                StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID); 
+                mcrobjid = sv.getValue();
                 start = s.indexOf("derivate_") + 9;
                 String derid = s.substring(start);
                 moveDerivate(taskid, derid, Direction.MOVE_UP);
@@ -101,7 +105,8 @@ public class EditDerivatesAction extends MCRAbstractStripesAction implements Act
             if (s.startsWith("doMoveDownDerivate-")) {
                 int start = s.indexOf("task_") + 5;
                 taskid = s.substring(start, s.indexOf("-", start));
-                mcrobjid = ts.getVariable(taskid, MCRActivitiMgr.WF_VAR_MCR_OBJECT_ID, String.class);
+                StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID); 
+                mcrobjid = sv.getValue();
                 start = s.indexOf("derivate_") + 9;
                 String derid = s.substring(start);
                 moveDerivate(taskid, derid, Direction.MOVE_DOWN);
@@ -111,7 +116,8 @@ public class EditDerivatesAction extends MCRAbstractStripesAction implements Act
             if (s.startsWith("doSaveDerivateMeta-")) {
                 int start = s.indexOf("task_") + 5;
                 taskid = s.substring(start, s.indexOf("-", start));
-                mcrobjid = ts.getVariable(taskid, MCRActivitiMgr.WF_VAR_MCR_OBJECT_ID, String.class);
+                StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID); 
+                mcrobjid = sv.getValue();
                 start = s.indexOf("derivate_") + 9;
                 String derid = s.substring(start);
                 saveDerivateMetadata(taskid, derid, getContext().getRequest());
@@ -121,7 +127,8 @@ public class EditDerivatesAction extends MCRAbstractStripesAction implements Act
             if (s.startsWith("doAddFile-")) {
                 int start = s.indexOf("task_") + 5;
                 taskid = s.substring(start, s.indexOf("-", start));
-                mcrobjid = ts.getVariable(taskid, MCRActivitiMgr.WF_VAR_MCR_OBJECT_ID, String.class);
+                StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID); 
+                mcrobjid = sv.getValue();
                 start = s.indexOf("derivate_") + 9;
                 String derid = s.substring(start);
                 addFileToDerivate(taskid, derid, getContext().getRequest());
@@ -131,7 +138,8 @@ public class EditDerivatesAction extends MCRAbstractStripesAction implements Act
             if (s.startsWith("doDeleteFile-")) {
                 int start = s.indexOf("task_") + 5;
                 taskid = s.substring(start, s.indexOf("-", start));
-                mcrobjid = ts.getVariable(taskid, MCRActivitiMgr.WF_VAR_MCR_OBJECT_ID, String.class);
+                StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID); 
+                mcrobjid = sv.getValue();
                 start = s.indexOf("derivate_") + 9;
                 String derid = s.substring(start, s.indexOf("-", start));
                 start = s.indexOf("file_") + 5;
@@ -143,7 +151,8 @@ public class EditDerivatesAction extends MCRAbstractStripesAction implements Act
             if (s.startsWith("doRenameFile-")) {
                 int start = s.indexOf("task_") + 5;
                 taskid = s.substring(start, s.indexOf("-", start));
-                mcrobjid = ts.getVariable(taskid, MCRActivitiMgr.WF_VAR_MCR_OBJECT_ID, String.class);
+                StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID); 
+                mcrobjid = sv.getValue();
                 start = s.indexOf("derivate_") + 9;
                 String derid = s.substring(start, s.indexOf("-", start));
                 start = s.indexOf("file_") + 5;
@@ -155,7 +164,8 @@ public class EditDerivatesAction extends MCRAbstractStripesAction implements Act
             if (s.startsWith("doDeleteDerivate-")) {
                 int start = s.indexOf("task_") + 5;
                 taskid = s.substring(start, s.indexOf("-", start));
-                mcrobjid = ts.getVariable(taskid, MCRActivitiMgr.WF_VAR_MCR_OBJECT_ID, String.class);
+                StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID); 
+                mcrobjid = sv.getValue();
                 start = s.indexOf("derivate_") + 9;
                 String derid = s.substring(start);
                 deleteDerivate(taskid, derid);
@@ -163,7 +173,8 @@ public class EditDerivatesAction extends MCRAbstractStripesAction implements Act
         }
 
         if (taskid != null && mcrobjid != null) {
-        	mode = ts.getVariable(taskid, MCRActivitiMgr.WF_VAR_MODE, String.class);
+        	StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MODE); 
+            mode = sv.getValue();
         } else {
             messages.add("URL Parameter taskid was not set!");
         }
@@ -362,10 +373,10 @@ public class EditDerivatesAction extends MCRAbstractStripesAction implements Act
     }
 
     private void createNewDerivate() {
-        TaskService ts = MCRActivitiMgr.getWorfklowProcessEngine().getTaskService();
+        TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
         MCRDerivate der = null;
         try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
-            MCRWorkflowMgr wfm = MCRActivitiMgr
+            MCRWorkflowMgr wfm = MCRBPMNMgr
                     .getWorkflowMgr(ts.createTaskQuery().taskId(taskid).singleResult().getProcessInstanceId());
             FileBean fb = ((StripesRequestWrapper) getContext().getRequest())
                     .getFileParameterValue("newDerivate_file-task_" + taskid);

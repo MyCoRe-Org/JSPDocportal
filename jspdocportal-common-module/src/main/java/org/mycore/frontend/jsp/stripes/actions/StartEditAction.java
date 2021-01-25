@@ -3,18 +3,17 @@ package org.mycore.frontend.jsp.stripes.actions;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
-import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.task.Task;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.task.Task;
 import org.jdom2.Document;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.access.MCRAccessManager;
-import org.mycore.activiti.MCRActivitiMgr;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration;
@@ -22,6 +21,7 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.jsp.MCRHibernateTransactionWrapper;
+import org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr;
 import org.mycore.user2.MCRUserManager;
 
 import net.sourceforge.stripes.action.ActionBean;
@@ -67,14 +67,14 @@ public class StartEditAction extends MCRAbstractStripesAction implements ActionB
                     	String mode = retrieveModeFromMetadata(mcrObj);
                     	
                         Map<String, Object> variables = new HashMap<String, Object>();
-                        variables.put(MCRActivitiMgr.WF_VAR_OBJECT_TYPE, mcrObjID.getTypeId());
-                        variables.put(MCRActivitiMgr.WF_VAR_PROJECT_ID, mcrObjID.getProjectId());
-                        variables.put(MCRActivitiMgr.WF_VAR_MCR_OBJECT_ID, mcrObjID.toString());
-                        variables.put(MCRActivitiMgr.WF_VAR_MODE, mode);                        
-                        RuntimeService rs = MCRActivitiMgr.getWorfklowProcessEngine().getRuntimeService();
+                        variables.put(MCRBPMNMgr.WF_VAR_OBJECT_TYPE, mcrObjID.getTypeId());
+                        variables.put(MCRBPMNMgr.WF_VAR_PROJECT_ID, mcrObjID.getProjectId());
+                        variables.put(MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID, mcrObjID.toString());
+                        variables.put(MCRBPMNMgr.WF_VAR_MODE, mode);                        
+                        RuntimeService rs = MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService();
                         //ProcessInstance pi = rs.startProcessInstanceByKey("create_object_simple", variables);
                         ProcessInstance pi = rs.startProcessInstanceByMessage("start_load", variables);
-                        TaskService ts = MCRActivitiMgr.getWorfklowProcessEngine().getTaskService();
+                        TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
                         for (Task t : ts.createTaskQuery().processInstanceId(pi.getId()).list()) {
                             ts.setAssignee(t.getId(), MCRUserManager.getCurrentUser().getUserID());
                         }

@@ -1,4 +1,4 @@
-package org.mycore.activiti.workflows.create_object_simple;
+package org.mycore.jspdocportal.ir.bpmn.workflows.create_object_simple;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -15,13 +15,13 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectMetadata;
 import org.xml.sax.SAXParseException;
 
-public class MCRWorkflowMgrDisshab extends MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
+public class MCRWorkflowMgrThesis extends MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
     private static final String DEFAULT_METADATA_XML = "" + "<metadata>" 
     		+ "  <def.modsContainer class='MCRMetaXML'>"
             + "    <modsContainer inherited='0'>"
             + "      <mods:mods xmlns:mods='http://www.loc.gov/mods/v3' version='3.6'>"
             + "        <mods:titleInfo xml:lang='de' usage='primary'>"
-            + "           <mods:title>Neue Dissertation / Habilitation</mods:title>" 
+            + "           <mods:title>Neue stud. Abschlussarbeit</mods:title>" 
             + "        </mods:titleInfo>"
             + "            <mods:classification displayLabel='doctype' valueURI='#epub' />"
             + "      </mods:mods>" 

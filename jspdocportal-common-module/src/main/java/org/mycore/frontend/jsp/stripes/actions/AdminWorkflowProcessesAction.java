@@ -3,16 +3,16 @@ package org.mycore.frontend.jsp.stripes.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.runtime.ProcessInstance;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.mycore.access.MCRAccessManager;
-import org.mycore.activiti.MCRActivitiMgr;
 import org.mycore.activiti.workflows.create_object_simple.MCRWorkflowMgr;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.jsp.MCRHibernateTransactionWrapper;
+import org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr;
 
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.Before;
@@ -65,10 +65,10 @@ public class AdminWorkflowProcessesAction extends MCRAbstractStripesAction imple
             }
 
             if (MCRAccessManager.checkPermission("administrate-" + objectType)) {
-                RuntimeService rs = MCRActivitiMgr.getWorfklowProcessEngine().getRuntimeService();
+                RuntimeService rs = MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService();
                 runningProcesses = rs.createProcessInstanceQuery()
-                        .variableValueEquals(MCRActivitiMgr.WF_VAR_OBJECT_TYPE, objectType)
-                        .variableValueEquals(MCRActivitiMgr.WF_VAR_PROJECT_ID, projectID).orderByProcessInstanceId()
+                        .variableValueEquals(MCRBPMNMgr.WF_VAR_OBJECT_TYPE, objectType)
+                        .variableValueEquals(MCRBPMNMgr.WF_VAR_PROJECT_ID, projectID).orderByProcessInstanceId()
                         .desc().list();
             } else {
                 messages.add("You don't have the Permission to delete a process instance");
@@ -80,7 +80,7 @@ public class AdminWorkflowProcessesAction extends MCRAbstractStripesAction imple
 
     private void deleteProcessInstance(String processInstanceId) {
         LOGGER.debug("Delete Process " + processInstanceId);
-        MCRWorkflowMgr wfMgr = MCRActivitiMgr.getWorkflowMgr(processInstanceId);
+        MCRWorkflowMgr wfMgr = MCRBPMNMgr.getWorkflowMgr(processInstanceId);
         wfMgr.deleteProcessInstance(processInstanceId);
     }
 

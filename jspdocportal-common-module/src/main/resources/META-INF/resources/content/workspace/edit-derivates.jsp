@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html;charset=UTF-8"%>
 <%@page import="org.mycore.frontend.jsp.stripes.actions.EditDerivatesAction"%>
-<%@page import="org.mycore.activiti.MCRActivitiMgr"%>
+<%@page import="org.mycore.activiti.MCRBPMNMgr"%>
 <%@page import="org.mycore.frontend.servlets.MCRServlet"%>
 <%@page import="org.mycore.common.MCRSessionMgr"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -58,7 +58,9 @@
           <div class="col">
 		 	<h2><fmt:message key="WF.derivates.headline" /></h2>
 			<c:set  var="baseURL" value="${applicationScope.WebApplicationBaseURL}" />
-			<%request.setAttribute("currentVariables", MCRActivitiMgr.getWorfklowProcessEngine().getTaskService().getVariables(((EditDerivatesAction)request.getAttribute("actionBean")).getTaskid())); %>
+			<%
+			request.setAttribute("currentVariables", MCRBPMNMgr.getWorfklowProcessEngine().getTaskService().getVariables(((EditDerivatesAction)request.getAttribute("actionBean")).getTaskid()));
+			%>
 			
 			<stripes:form
 				beanclass="org.mycore.frontend.jsp.stripes.actions.EditDerivatesAction"
