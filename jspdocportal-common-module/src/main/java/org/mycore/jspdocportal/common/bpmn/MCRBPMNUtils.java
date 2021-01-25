@@ -1,4 +1,4 @@
-package org.mycore.activiti;
+package org.mycore.jspdocportal.common.bpmn;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -41,8 +41,8 @@ import org.xml.sax.SAXParseException;
  * @author Robert Stephan
  * 
  */
-public class MCRActivitiUtils {
-    private static Logger LOGGER = LogManager.getLogger(MCRActivitiUtils.class);
+public class MCRBPMNUtils {
+    private static Logger LOGGER = LogManager.getLogger(MCRBPMNUtils.class);
 
     /**
      * saves a given MCR object into the workflow directory
@@ -62,7 +62,7 @@ public class MCRActivitiUtils {
     public static MCRObject loadMCRObjectFromWorkflowDirectory(MCRObjectID mcrObjID) {
         MCRObject mcrObj = null;
         try {
-            mcrObj = MCRActivitiUtils.getWorkflowObject(mcrObjID);
+            mcrObj = MCRBPMNUtils.getWorkflowObject(mcrObjID);
         } catch (Exception e) {
             LOGGER.error(e);
         }
@@ -126,7 +126,7 @@ public class MCRActivitiUtils {
 
     public static Document getWorkflowObjectXML(MCRObjectID mcrObjID) {
         Document doc = null;
-        Path wfFile = MCRActivitiUtils.getWorkflowObjectFile(mcrObjID);
+        Path wfFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);
         MCRPathContent mpc = new MCRPathContent(wfFile);
         try {
             doc = mpc.asXML();
@@ -155,7 +155,7 @@ public class MCRActivitiUtils {
 
     public static Document getWorkflowDerivateXML(MCRObjectID mcrObjID, MCRObjectID mcrDerID) {
         Document doc = null;
-        Path wfFile = MCRActivitiUtils.getWorkflowDerivateFile(mcrObjID, mcrDerID);
+        Path wfFile = MCRBPMNUtils.getWorkflowDerivateFile(mcrObjID, mcrDerID);
         MCRPathContent mpc = new MCRPathContent(wfFile);
         try {
             doc = mpc.asXML();
@@ -220,7 +220,7 @@ public class MCRActivitiUtils {
     public static Map<String, List<String>> getDerivateFiles(MCRObjectID mcrObjID) {
         HashMap<String, List<String>> result = new HashMap<String, List<String>>();
         Path baseDir = getWorkflowObjectDir(mcrObjID);
-        MCRObject obj = MCRActivitiUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
+        MCRObject obj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
         try {
             for (MCRMetaLinkID derID : obj.getStructure().getDerivates()) {
                 String id = derID.getXLinkHref();

@@ -40,12 +40,12 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Document;
 import org.jdom2.output.DOMOutputter;
-import org.mycore.activiti.MCRActivitiUtils;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.jsp.MCRHibernateTransactionWrapper;
+import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
 import org.mycore.solr.MCRSolrClientFactory;
 
 import com.google.common.cache.CacheBuilder;
@@ -179,7 +179,7 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
             MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrid);
             org.jdom2.Document doc = null;
             if (fromWorkflow) {
-                doc = MCRActivitiUtils.getWorkflowObjectXML(mcrObjID);
+                doc = MCRBPMNUtils.getWorkflowObjectXML(mcrObjID);
             } else {
                 if(cache.contains("true") || cache.contains("on")) {
                     doc = MCROBJECTXML_CACHE.get(mcrid);

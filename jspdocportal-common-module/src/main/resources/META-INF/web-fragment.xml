@@ -348,7 +348,7 @@
   
    <servlet>
     <servlet-name>MCRStoreMetadataServlet</servlet-name>
-    <servlet-class>org.mycore.activiti.workflows.MCRStoreMetadataServlet</servlet-class>
+    <servlet-class>org.mycore.jspdocportal.common.bpmn.workflows.servlets.MCRStoreMetadataServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>MCRStoreMetadataServlet</servlet-name>

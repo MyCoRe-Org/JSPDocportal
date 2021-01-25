@@ -179,7 +179,7 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <!-- required by activiti -->
+      <!-- check if still required by camunda bpmn -->
       <groupId>commons-dbcp</groupId>
       <artifactId>commons-dbcp</artifactId>
       <version>1.4</version>

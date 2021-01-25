@@ -39,9 +39,9 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.DOMOutputter;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.mycore.activiti.MCRActivitiUtils;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
 import org.mycore.services.i18n.MCRTranslation;
 import org.w3c.dom.Document;
 
@@ -140,7 +140,7 @@ public class MCRDocDetailsTag extends SimpleTagSupport {
             MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
             org.jdom2.Document xml = null;
             if (fromWorkflow) {
-                xml = MCRActivitiUtils.getWorkflowObjectXML(mcrObjID);
+                xml = MCRBPMNUtils.getWorkflowObjectXML(mcrObjID);
             } else {
                 xml = MCRMetadataManager.retrieve(mcrObjID).createXML();
             }

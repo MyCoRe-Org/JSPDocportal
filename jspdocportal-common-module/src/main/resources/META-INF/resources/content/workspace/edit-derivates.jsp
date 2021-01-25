@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html;charset=UTF-8"%>
 <%@page import="org.mycore.frontend.jsp.stripes.actions.EditDerivatesAction"%>
-<%@page import="org.mycore.activiti.MCRBPMNMgr"%>
+<%@page import="org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr"%>
 <%@page import="org.mycore.frontend.servlets.MCRServlet"%>
 <%@page import="org.mycore.common.MCRSessionMgr"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

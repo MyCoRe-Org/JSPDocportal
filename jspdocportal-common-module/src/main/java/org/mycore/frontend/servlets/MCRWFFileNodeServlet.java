@@ -34,8 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.activiti.MCRActivitiUtils;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
 
 
 /**
@@ -83,7 +83,7 @@ public class MCRWFFileNodeServlet extends HttpServlet {
             getServletContext().getRequestDispatcher("/nav?path=~mycore-error&messageKey=IdNotGiven").forward(request,
                     response);
         }
-        Path derDir = MCRActivitiUtils.getWorkflowDerivateDir(MCRObjectID.getInstance(mcrObjID), MCRObjectID.getInstance(derivateID));
+        Path derDir = MCRBPMNUtils.getWorkflowDerivateDir(MCRObjectID.getInstance(mcrObjID), MCRObjectID.getInstance(derivateID));
         Path file = derDir.resolve(filename);
         if (Files.exists(file) && Files.isReadable(file)) {
             // 	 Set the headers.

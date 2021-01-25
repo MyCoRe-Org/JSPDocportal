@@ -1,4 +1,4 @@
-package org.mycore.activiti.workflows;
+package org.mycore.jspdocportal.common.bpmn.workflows.servlets;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jdom2.Document;
-import org.mycore.activiti.MCRActivitiUtils;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
+import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
 
 /**
  * Stores the Metadata (JDOM Document) from XEditor into the MCRObject file in workflow directory
@@ -31,7 +31,7 @@ public class MCRStoreMetadataServlet extends HttpServlet {
         Document xml = (org.jdom2.Document) (req.getAttribute("MCRXEditorSubmission"));
         String mcrID = xml.getRootElement().getAttributeValue("ID");
         MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
-        Path wfFile = MCRActivitiUtils.getWorkflowObjectFile(mcrObjID);
+        Path wfFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);
         MCRJDOMContent content = new MCRJDOMContent(xml);
         content.sendTo(wfFile,StandardCopyOption.REPLACE_EXISTING);
         String mode = req.getParameter("mode");

@@ -1,4 +1,4 @@
-package org.mycore.activiti.workflows.create_object_simple;
+package org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.mycore.datamodel.metadata.MCRDerivate;

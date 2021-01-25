@@ -24,7 +24,6 @@ import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.access.MCRAccessManager;
-import org.mycore.activiti.MCRActivitiUtils;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.classifications2.MCRCategory;
@@ -44,6 +43,7 @@ import org.mycore.frontend.xeditor.MCREditorSession;
 import org.mycore.frontend.xeditor.MCREditorSessionStore;
 import org.mycore.frontend.xeditor.MCREditorSessionStoreUtils;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr;
+import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserManager;
@@ -249,7 +249,7 @@ public class ShowWorkspaceAction extends MCRAbstractStripesAction implements Act
             objectType = "disshab";
         }
         editorPath = "/editor/metadata/editor-" + objectType + "-default.xed";
-        Path wfFile = MCRActivitiUtils.getWorkflowObjectFile(mcrObjID);
+        Path wfFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);
         sourceURI = wfFile.toUri().toString();
         ForwardResolution res = new ForwardResolution("/content/editor/fullpageEditor.jsp");
         StringBuffer sbCancel = new StringBuffer(MCRFrontendUtil.getBaseURL() + "showWorkspace.action?");
@@ -287,7 +287,7 @@ public class ShowWorkspaceAction extends MCRAbstractStripesAction implements Act
         }
 
         // Title
-        MCRObject mcrObj = MCRActivitiUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
+        MCRObject mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
         String txt = null;
         try {
             String xpTitle = MCRConfiguration2
@@ -423,16 +423,16 @@ public class ShowWorkspaceAction extends MCRAbstractStripesAction implements Act
             LOGGER.error("WFObject could not be read.");
         }
 
-        MCRObject mcrObj = MCRActivitiUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
+        MCRObject mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
         StringWriter result = new StringWriter();
         if (mcrObj != null && mcrObj.getStructure().getDerivates().size() > 0) {
-            Map<String, List<String>> derivateFiles = MCRActivitiUtils.getDerivateFiles(mcrObjID);
+            Map<String, List<String>> derivateFiles = MCRBPMNUtils.getDerivateFiles(mcrObjID);
             for (MCRMetaLinkID derID : mcrObj.getStructure().getDerivates()) {
                 result.append("<div class=\"row\">");
                 result.append("\n  <div class=\"offset-1 col-3\">");
                 result.append("<span class=\"badge badge-pill badge-secondary\">" + derID.getXLinkHref() + "</span>");
                 result.append("\n  </div>");
-                MCRDerivate der = MCRActivitiUtils.loadMCRDerivateFromWorkflowDirectory(mcrObjID,
+                MCRDerivate der = MCRBPMNUtils.loadMCRDerivateFromWorkflowDirectory(mcrObjID,
                         derID.getXLinkHrefID());
                 result.append("\n  <div class=\"col-8\">");
                 if (!der.getDerivate().getClassifications().isEmpty()) {
@@ -489,8 +489,8 @@ public class ShowWorkspaceAction extends MCRAbstractStripesAction implements Act
 
     private void importMODSFromGVK(String mcrID, String taskId) {
         MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
-        Path mcrFile = MCRActivitiUtils.getWorkflowObjectFile(mcrObjID);
-        Document docJdom = MCRActivitiUtils.getWorkflowObjectXML(mcrObjID);
+        Path mcrFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);
+        Document docJdom = MCRBPMNUtils.getWorkflowObjectXML(mcrObjID);
         modsCatService.updateWorkflowFile(mcrFile, docJdom);
         updateWFObjectMetadata(taskId);
     }

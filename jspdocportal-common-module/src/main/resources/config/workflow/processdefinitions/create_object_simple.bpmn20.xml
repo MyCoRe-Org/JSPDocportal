@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:ext="http://org.eclipse.bpmn2/ext" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="Definitions_1" targetNamespace="http://www.activiti.org/processdef" exporter="Camunda Modeler" exporterVersion="4.2.0">
+<definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:ext="http://org.eclipse.bpmn2/ext" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="def_create_object_simple" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.2.0">
   <message id="msg_start_create" name="start_create" />
   <message id="msg_start_load" name="start_load" />
   <process id="create_object_simple" name="Simple workflow to create a MyCoRe object" isExecutable="true">
@@ -16,14 +16,14 @@
     </startEvent>
     <endEvent id="end" name="Ende">
       <extensionElements>
-        <camunda:executionListener class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiEndEventDelegate" event="start" />
+        <camunda:executionListener class="org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple.delegates.MCRBPMNEndEventDelegate" event="start" />
         <ext:style labelPosition="Right of Figure" />
       </extensionElements>
       <incoming>cancel_object.end</incoming>
       <incoming>commit_object.end</incoming>
       <incoming>drop_object.end</incoming>
     </endEvent>
-    <serviceTask id="create_object" name="Neues Objekt erzeugen" camunda:class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiCreateObjectDelegate">
+    <serviceTask id="create_object" name="Neues Objekt erzeugen" camunda:class="org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple.delegates.MCRBPMNCreateObjectDelegate">
       <incoming>start_create.create_object</incoming>
       <outgoing>create_object.edit_object</outgoing>
     </serviceTask>
@@ -38,11 +38,11 @@
       <outgoing>edit_object.do_cancel</outgoing>
       <outgoing>edit_object.do_drop</outgoing>
     </userTask>
-    <serviceTask id="commit_object" name="Objekt speichern" camunda:class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiCommitObjectDelegate">
+    <serviceTask id="commit_object" name="Objekt speichern" camunda:class="org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple.delegates.MCRBPMNCommitObjectDelegate">
       <incoming>is_valid.commit_object</incoming>
       <outgoing>commit_object.end</outgoing>
     </serviceTask>
-    <serviceTask id="cancel_object" name="Objekt verwerfen" camunda:class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiCancelObjectDelegate">
+    <serviceTask id="cancel_object" name="Objekt verwerfen" camunda:class="org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple.delegates.MCRBPMNCancelObjectDelegate">
       <incoming>edit_object.do_cancel</incoming>
       <outgoing>cancel_object.end</outgoing>
     </serviceTask>
@@ -51,7 +51,7 @@
       <outgoing>is_valid.edit_object</outgoing>
       <outgoing>is_valid.commit_object</outgoing>
     </exclusiveGateway>
-    <serviceTask id="validate_object" name="Objekt validieren" camunda:class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiValidateObjectDelegate">
+    <serviceTask id="validate_object" name="Objekt validieren" camunda:class="org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple.delegates.MCRBPMNValidateObjectDelegate">
       <incoming>edit_object.do_save</incoming>
       <outgoing>validate_object.is_valid</outgoing>
     </serviceTask>
@@ -72,12 +72,12 @@
     <sequenceFlow id="edit_object.do_drop" name="Entfernen" sourceRef="edit_object" targetRef="drop_object">
       <conditionExpression xsi:type="tFormalExpression" id="FormalExpression_4">${goto == 'edit_object.do_drop'}</conditionExpression>
     </sequenceFlow>
-    <serviceTask id="load_object" name="Objekt laden" camunda:class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiLoadObjectDelegate">
+    <serviceTask id="load_object" name="Objekt laden" camunda:class="org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple.delegates.MCRBPMNLoadObjectDelegate">
       <incoming>start_load.load_object</incoming>
       <outgoing>load_object.edit_object</outgoing>
     </serviceTask>
     <sequenceFlow id="load_object.edit_object" sourceRef="load_object" targetRef="edit_object" />
-    <serviceTask id="drop_object" name="Objekt löschen" camunda:class="org.mycore.activiti.workflows.create_object_simple.delegates.MCRActivitiDropObjectDelegate">
+    <serviceTask id="drop_object" name="Objekt löschen" camunda:class="org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple.delegates.MCRBPMNDropObjectDelegate">
       <incoming>edit_object.do_drop</incoming>
       <outgoing>drop_object.end</outgoing>
     </serviceTask>

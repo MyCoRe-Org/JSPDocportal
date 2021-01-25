@@ -24,7 +24,6 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.transform.JDOMSource;
-import org.mycore.activiti.MCRActivitiUtils;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.content.MCRFileContent;
@@ -33,6 +32,7 @@ import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
+import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
 import org.xml.sax.SAXException;
 
 import net.sourceforge.stripes.controller.StripesRequestWrapper;
@@ -240,7 +240,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
         } else if (!isNewEditorSource.equals("true") && mcrid != null && !mcrid.equals("") && type != null
                 && !type.equals("")) {
             try {
-                url = MCRActivitiUtils.getWorkflowObjectFile(MCRObjectID.getInstance(mcrid)).toUri().toURL().toString();
+                url = MCRBPMNUtils.getWorkflowObjectFile(MCRObjectID.getInstance(mcrid)).toUri().toURL().toString();
             } catch (MalformedURLException mue) {
                 logger.error("Wrong URL", mue);
             }
