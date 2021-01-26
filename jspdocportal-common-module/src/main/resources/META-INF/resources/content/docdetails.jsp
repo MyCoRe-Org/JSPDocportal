@@ -8,7 +8,6 @@
 <%@ taglib prefix="search" tagdir="/WEB-INF/tags/search"%>
 <%@ taglib prefix="mcrdd" 	uri="http://www.mycore.org/jspdocportal/docdetails.tld"%>
 
-<mcrdd:setnamespace prefix="xlink" uri="http://www.w3.org/1999/xlink" />
 <mcrdd:setnamespace prefix="mods" uri="http://www.loc.gov/mods/v3" />
 <c:set var="WebApplicationBaseURL" value="${applicationScope.WebApplicationBaseURL}" />
 <c:set var="mcrid">
