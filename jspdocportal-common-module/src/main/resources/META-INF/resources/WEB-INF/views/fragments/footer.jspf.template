@@ -1,0 +1,10 @@
+<div class="container-fluid ir-footer">
+  <div class="container my-footer">
+    <div class="row">
+      <div class="col-12 border border-secondary">
+        Please add your footer here ..
+      </div>
+    </div>
+  </div>
+</div>
+<mcr:webjarLocator htmlElement="script" project="bootstrap" file="bootstrap.min.js" />

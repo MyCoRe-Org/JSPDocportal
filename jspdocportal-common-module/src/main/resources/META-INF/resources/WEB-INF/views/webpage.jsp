@@ -4,28 +4,33 @@
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld"%>
-<%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld"%>
 
 <%@ page import = "org.mycore.common.config.MCRConfiguration2" %>
 <% 
     pageContext.setAttribute("navSide", MCRConfiguration2.getString("MCR.JSPDocportal.Navigation.Side").orElse("left"));
 %>
 
-<fmt:message var="pageTitle" key="Webpage.title.${fn:replace(actionBean.path, '/', '.')}" />
+<fmt:message var="pageTitle" key="Webpage.title.${fn:replace(it.path, '/', '.')}" />
 
-<stripes:layout-render name="/WEB-INF/layout/default.jsp" pageTitle="${pageTitle}" layout="${layout}">
-  <stripes:layout-component name="main_part">
-    <div class="container">
-    <c:if test="${not empty actionBean.info}">
+<!doctype html>
+<html lang="en">
+<head>
+  <title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
+  <%@ include file="fragments/html_head.jspf" %>
+</head>
+<body>
+  <%@ include file="fragments/header.jspf" %>
+  <div class="container">
+    <c:if test="${not empty it.info}">
       <div class="row">
         <div class="col col-md-8">
           <div class="ir-box">
-            <mcr:includeWebcontent id="${fn:replace(actionBean.path, '/', '.')}" file="${actionBean.path}.html" />
+            <mcr:includeWebcontent id="${fn:replace(it.path, '/', '.')}" file="${it.path}.html" />
           </div>
         </div>
         <div class="col col-md-4">
           <div class="row">
-            <c:forEach var="id" items="${fn:split(actionBean.info,',')}">
+            <c:forEach var="id" items="${fn:split(it.info,',')}">
               <div class="col">
                 <div class="ir-box ir-box-bordered">
                   <mcr:includeWebcontent id="${id}" file="${fn:replace(id, '.', '/')}.html" />
@@ -36,12 +41,12 @@
         </div>
       </div>
     </c:if>
-    <c:if test="${empty actionBean.info}">
+    <c:if test="${empty it.info}">
       <div class="row">
         <c:if test="${empty requestScope['org.mycore.navigation.side.path']}">
           <div id="main" class="col ir-content-main">
               <div class="ir-box">
-                <mcr:includeWebcontent id="${fn:replace(actionBean.path, '/', '.')}" file="${actionBean.path}.html" />
+                <mcr:includeWebcontent id="${fn:replace(it.path, '/', '.')}" file="${it.path}.html" />
               </div>
           </div>
        </c:if>
@@ -49,27 +54,28 @@
          <c:if test="${pageScope.navSide == 'left'}">
            <div id="left-side-nav" class="col col-md-3 ir-content-side">
               <mcr:outputNavigation mode="side" id="${fn:substringBefore(requestScope['org.mycore.navigation.side.path'], '.')}"></mcr:outputNavigation>
-              <c:if test="${not empty actionBean.infoBox}">
-                <mcr:includeWebcontent id="${fn:replace(actionBean.infoBox, '/', '.')}" file="${actionBean.infoBox}.html" />
+              <c:if test="${not empty it.infoBox}">
+                <mcr:includeWebcontent id="${fn:replace(it.infoBox, '/', '.')}" file="${it.infoBox}.html" />
               </c:if>
             </div>
           </c:if>
           <div id="main" class="col col-md-9 ir-content-main">
               <div class="ir-box">
-                <mcr:includeWebcontent id="${fn:replace(actionBean.path, '/', '.')}" file="${actionBean.path}.html" />
+                <mcr:includeWebcontent id="${fn:replace(it.path, '/', '.')}" file="${it.path}.html" />
               </div>
           </div>
           <c:if test="${pageScope.navSide == 'right'}">
             <div class="col col-md-3 ir-content-side" id="left-side-nav">
               <mcr:outputNavigation mode="side" id="${fn:substringBefore(requestScope['org.mycore.navigation.side.path'], '.')}"></mcr:outputNavigation>
-              <c:if test="${not empty actionBean.infoBox}">
-                <mcr:includeWebcontent id="${fn:replace(actionBean.infoBox, '/', '.')}" file="${actionBean.infoBox}.html" />
+              <c:if test="${not empty it.infoBox}">
+                <mcr:includeWebcontent id="${fn:replace(it.infoBox, '/', '.')}" file="${it.infoBox}.html" />
               </c:if>
             </div>
           </c:if>
        </c:if>
       </div>
     </c:if>
-    </div>
-  </stripes:layout-component>
-</stripes:layout-render>
+  </div>
+  <%@ include file="fragments/footer.jspf" %>
+  </body>
+</html>
