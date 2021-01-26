@@ -108,6 +108,13 @@
     </dependency>
     
     <dependency>
+      <groupId>org.glassfish.jersey.ext</groupId>
+      <artifactId>jersey-mvc-jsp</artifactId>
+      <!-- keep synchronized with MyCoRe - ToDo - DependencyManagement -->
+      <version>2.32</version>
+    </dependency>
+    
+    <dependency>
       <groupId>org.camunda.bpm</groupId>
       <artifactId>camunda-engine</artifactId>
       <version>7.14.0</version>
