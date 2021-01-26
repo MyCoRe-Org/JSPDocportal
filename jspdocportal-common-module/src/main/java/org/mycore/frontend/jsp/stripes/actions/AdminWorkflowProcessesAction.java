@@ -57,7 +57,8 @@ public class AdminWorkflowProcessesAction extends MCRAbstractStripesAction imple
     @DefaultHandler
     public Resolution defaultRes() {
         try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
-            for (String s : getContext().getRequest().getParameterMap().keySet()) {
+            for (Object o : getContext().getRequest().getParameterMap().keySet()) {
+                String s = o.toString();
                 if (s.startsWith("doDeleteProcess_")) {
                     String id = s.substring(s.indexOf("_") + 1);
                     deleteProcessInstance(id);

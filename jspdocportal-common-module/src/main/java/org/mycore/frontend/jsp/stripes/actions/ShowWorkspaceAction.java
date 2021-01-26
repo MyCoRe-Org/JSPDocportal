@@ -128,7 +128,8 @@ public class ShowWorkspaceAction extends MCRAbstractStripesAction implements Act
             }
         }
 
-        for (String s : getContext().getRequest().getParameterMap().keySet()) {
+        for (Object o : getContext().getRequest().getParameterMap().keySet()) {
+            String s= o.toString();
             if (s.equals("doPublishAllTasks")) {
                 publishAllTasks();
             }

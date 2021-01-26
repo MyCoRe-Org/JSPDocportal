@@ -127,7 +127,7 @@ public class MCRDepotAPIServlet extends HttpServlet {
                 }
                 try (OutputStream out = new BufferedOutputStream(response.getOutputStream())) {
                     response.setContentType(getServletContext().getMimeType(file.getFileName().toString()));
-                    response.setContentLengthLong(Files.size(file));
+                    response.setContentLength(Long.valueOf(Files.size(file)).intValue());
                     Files.copy(file, out);
                 }
             } catch (Exception e) {

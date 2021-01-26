@@ -58,7 +58,8 @@ public class SaveWebcontentAction extends MCRAbstractStripesAction implements Ac
     public Resolution defaultRes() {
         try (MCRHibernateTransactionWrapper htw = new MCRHibernateTransactionWrapper()) {
             if (MCRAccessManager.checkPermission("administrate-webcontent")) {
-                for (String s : getContext().getRequest().getParameterMap().keySet()) {
+                for (Object o : getContext().getRequest().getParameterMap().keySet()) {
+                    String s = o.toString();
                     if (s.startsWith("doSave_")) {
                         id = s.substring(s.indexOf("_") + 1);
                         doSave(id);

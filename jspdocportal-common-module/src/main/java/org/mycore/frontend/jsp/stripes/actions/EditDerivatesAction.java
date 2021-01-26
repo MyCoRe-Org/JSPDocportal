@@ -83,7 +83,8 @@ public class EditDerivatesAction extends MCRAbstractStripesAction implements Act
     @DefaultHandler
     public Resolution defaultRes() {
         RuntimeService rs = MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService();
-        for (String s : getContext().getRequest().getParameterMap().keySet()) {
+        for (Object o : getContext().getRequest().getParameterMap().keySet()) {
+            String s = o.toString();
             if (s.startsWith("doCreateNewDerivate-task_")) {
                 taskid = s.substring(s.indexOf("_") + 1);
                 StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID); 
