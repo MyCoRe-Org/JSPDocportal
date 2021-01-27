@@ -9,6 +9,8 @@
 <%@ taglib prefix="mcrdd" 	uri="http://www.mycore.org/jspdocportal/docdetails.tld"%>
 
 <mcrdd:setnamespace prefix="mods" uri="http://www.loc.gov/mods/v3" />
+<mcrdd:setnamespace prefix="xlink" uri="http://www.w3.org/1999/xlink" />
+  
 <c:set var="WebApplicationBaseURL" value="${applicationScope.WebApplicationBaseURL}" />
 <c:set var="mcrid">
 	<c:choose>
@@ -37,6 +39,7 @@
 <x:if select="contains($doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='doctype']/@valueURI, '#histbest')">
   <c:set var="org.mycore.navigation.path" scope="request">left.histbest.histbest_recherche</c:set>
 </x:if>
+
 <stripes:layout-render name="/WEB-INF/layout/default.jsp" pageTitle="${pageTitle}">
   <stripes:layout-component name="html_head">
 		<mcr:transformXSL xml="${doc}" xslt="xsl/docdetails/metatags_html.xsl" />
