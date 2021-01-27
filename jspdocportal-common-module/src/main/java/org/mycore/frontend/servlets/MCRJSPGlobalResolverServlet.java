@@ -57,6 +57,7 @@ import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
+import org.mycore.jspdocportal.common.controller.MCRResolvingController;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.MCRSolrUtils;
@@ -68,8 +69,10 @@ import org.mycore.solr.MCRSolrUtils;
  * 
  * @author Robert Stephan
  * 
- * @see org.mycore.frontend.servlets.MCRServlet
+ * @see MCRResolvingController
+ * @deprecated
  */
+
 public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
 
     private static final long serialVersionUID = 1L;

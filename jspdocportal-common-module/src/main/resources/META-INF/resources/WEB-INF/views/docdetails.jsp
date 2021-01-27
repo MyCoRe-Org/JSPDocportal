@@ -4,7 +4,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld"%>
-<%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld"%>
 <%@ taglib prefix="search" tagdir="/WEB-INF/tags/search"%>
 <%@ taglib prefix="mcrdd" 	uri="http://www.mycore.org/jspdocportal/docdetails.tld"%>
 
@@ -15,7 +14,7 @@
 <c:set var="mcrid">
 	<c:choose>
 		<c:when test="${!empty(requestScope.id)}">${requestScope.id}</c:when>
-		<c:otherwise>${param.id}</c:otherwise>
+		<c:otherwise>${it.id}</c:otherwise>
 	</c:choose>
 </c:set>
 <c:set var="from" value="${param.fromWF}" />
@@ -40,10 +39,13 @@
   <c:set var="org.mycore.navigation.path" scope="request">left.histbest.histbest_recherche</c:set>
 </x:if>
 
-<stripes:layout-render name="/WEB-INF/layout/default.jsp" pageTitle="${pageTitle}">
-  <stripes:layout-component name="html_head">
-		<mcr:transformXSL xml="${doc}" xslt="xsl/docdetails/metatags_html.xsl" />
-	    <link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}modules/shariff_3.0.1/shariff.min.css">
+<!doctype html>
+<html>
+<head>
+  <title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
+  <%@ include file="fragments/html_head.jspf" %>
+  <mcr:transformXSL xml="${doc}" xslt="xsl/docdetails/metatags_html.xsl" />
+  <link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}modules/shariff_3.0.1/shariff.min.css">
 		<script>
      	$( document ).ready(function() {
  			$('[data-mcr-action="popover4person"]').popover({
@@ -83,9 +85,9 @@
      		$("button[aria-describedby='"+id+"']").click();
      	}
  		</script>
-  </stripes:layout-component>
-	
-  <stripes:layout-component name="main_part">
+</head>
+<body>
+  <%@ include file="fragments/header.jspf" %>
     <div class="container">
       <div class="row d-block d-lg-none" style="padding: 0px 15px">
         <div class="col-12" style="padding-top:45px">
@@ -159,7 +161,7 @@
                             </div>
                           </c:if>
                           <c:if test="${hasAccess}">
-                            <search:mcrviewer mcrid="${param.id}" recordIdentifier="${param.id}" doctype="pdf" id="divMCRViewer_2" />
+                            <search:mcrviewer mcrid="${it.id}" recordIdentifier="${it.id}" doctype="pdf" id="divMCRViewer_2" />
                             <div id="divMCRViewer_2" style="height:80vh; margin:0px 16px; position:relative;"></div>
                           </c:if> 
 				       </x:if>
@@ -174,7 +176,7 @@
                            </div>
                          </c:if>
                          <c:if test="${hasAccess}">
-					       <search:mcrviewer mcrid="${param.id}" recordIdentifier="${recordidentifier}" doctype="mets" id="divMCRViewer_1" />
+					       <search:mcrviewer mcrid="${it.id}" recordIdentifier="${recordidentifier}" doctype="mets" id="divMCRViewer_1" />
                            <div id="divMCRViewer_1" style="height:80vh; margin:0px 16px; position:relative;"></div>
                          </c:if>
                          <script type="text/javascript">
@@ -196,7 +198,7 @@
 			        <div id="nav_content_structure" class="collapse" data-parent="#nav_content_root">
 				      <div style="font-size: 85%;min-height:600px">
 			    	    <c:set var="recordIdentifier"><x:out select="$doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier"/></c:set>
-					    <search:docdetails-structure hostRecordIdentifier="${recordIdentifier}" hostMcrID="${param.id}" />
+					    <search:docdetails-structure hostRecordIdentifier="${recordIdentifier}" hostMcrID="${it.id}" />
 				      </div>
 			        </div>
 		          </x:if>
@@ -293,17 +295,17 @@
 	                 <x:when select="$doc/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='MCRVIEWER_METS']]"> 
 				 		<c:set var="recordID"><x:out select="$doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']" /></c:set>
                           <a href="${WebApplicationBaseURL}mcrviewer/recordIdentifier/${fn:replace(recordID,'/','_')}" title="Im MyCoRe Viewer anzeigen">
-        		            <search:derivate-image mcrobj="${param.id}" width="200px" category="cover" />
+        		            <search:derivate-image mcrobj="${it.id}" width="200px" category="cover" />
                 		  </a>
                  	 </x:when>
                  	 <x:when select="$doc/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='DV_METS' or @categid='METS']]"> 
                        <c:set var="mcrid"><x:out select="$doc/mycoreobject/@ID" /></c:set>
 	                	 <a href="${WebApplicationBaseURL}resolve/id/${mcrid}/dfgviewer" target="_blank" title="Im DFG Viewer anzeigen">
-	                	   <search:derivate-image mcrobj="${param.id}" width="200px" category="cover" />
+	                	   <search:derivate-image mcrobj="${it.id}" width="200px" category="cover" />
 	                	 </a>
                 	</x:when>
                    	<x:otherwise>
-        		          <search:derivate-image mcrobj="${param.id}" width="200px" category="cover" />
+        		          <search:derivate-image mcrobj="${it.id}" width="200px" category="cover" />
                 	</x:otherwise>
                  </x:choose>
               </div>
@@ -491,9 +493,9 @@
          <x:if select="starts-with($doc/mycoreobject/@ID, 'dbhsnb')">
             <c:set var="shariff_subject">Dokument in der Digitalen Bibliothek der Hochschule Neubrandenburg</c:set>
          </x:if>
-         <div class="shariff" data-url="${WebApplicationBaseURL}resolve/id/${param.id}"
+         <div class="shariff" data-url="${WebApplicationBaseURL}resolve/id/${it.id}"
              data-services="[&quot;twitter&quot;, &quot;facebook&quot;, &quot;googleplus&quot;, &quot;linkedin&quot;, &quot;xing&quot;, &quot;whatsapp&quot;, &quot;mail&quot;, &quot;info&quot;]"
-             data-mail-url="mailto:" data-mail-subject="${shariff_subject}" data-mail-body="${WebApplicationBaseURL}resolve/id/${param.id}"
+             data-mail-url="mailto:" data-mail-subject="${shariff_subject}" data-mail-body="${WebApplicationBaseURL}resolve/id/${it.id}"
              data-orientation="horizontal" data-theme="standard">
          </div> <%--data-theme=standard|grey|white --%>
          <script src="${WebApplicationBaseURL}modules/shariff_3.0.1/shariff.min.js"></script>
@@ -535,7 +537,7 @@
               <x:if select="$doc/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='REPOS_METS']]">
                 <c:set var="derid"><x:out select="$doc/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='REPOS_METS']]/@xlink:href" /></c:set>
                 <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
-                   href="${WebApplicationBaseURL}api/v1/objects/${param.id}/derivates/${derid}/open" class="btn btn-default" title="<fmt:message key="Webpage.tools.showREPOS_METS" />">METS</a>
+                   href="${WebApplicationBaseURL}api/v1/objects/${it.id}/derivates/${derid}/open" class="btn btn-default" title="<fmt:message key="Webpage.tools.showREPOS_METS" />">METS</a>
               </x:if>
               <x:if select="$doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[contains(@valueURI, '#epub') or contains(@valueURI, '#data')]">
                 <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
@@ -556,5 +558,6 @@
    </div><%-- right area --%>
       </div><%--row --%>
     </div>
-  </stripes:layout-component>
-</stripes:layout-render>
+  <%@ include file="fragments/footer.jspf" %>
+  </body>
+</html>

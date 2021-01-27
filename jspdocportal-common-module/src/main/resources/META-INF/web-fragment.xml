@@ -313,29 +313,12 @@
          <servlet-name>MCRWFFileNodeServlet</servlet-name>
          <url-pattern>/wffile/*</url-pattern>
     </servlet-mapping>
-   
-    <servlet-mapping>
-          <servlet-name>MCRJSPGlobalResolverServlet</servlet-name>
-          <url-pattern>/resolve/*</url-pattern>
-    </servlet-mapping>
-    
-    <servlet-mapping>
-          <servlet-name>MCRJSPIDResolverServlet</servlet-name>
-          <url-pattern>/resolve</url-pattern>
-    </servlet-mapping>
-
-
 	<!--  mycore servlets mapping  -->
 
-   
-
- 
      <servlet-mapping>
            <servlet-name>MCRZipServlet</servlet-name>
            <url-pattern>/zip</url-pattern>
      </servlet-mapping>
-     
-
      <servlet-mapping>
            <servlet-name>MCRZipWebcontentServlet</servlet-name>
            <url-pattern>/zipwebcontent</url-pattern>
@@ -402,6 +385,10 @@
     <servlet-mapping>
         <servlet-name>MVC Jersey Servlet</servlet-name>
         <url-pattern>/browse/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MVC Jersey Servlet</servlet-name>
+        <url-pattern>/resolve/*</url-pattern>
     </servlet-mapping>
          
   <!-- **************************************************************** -->
