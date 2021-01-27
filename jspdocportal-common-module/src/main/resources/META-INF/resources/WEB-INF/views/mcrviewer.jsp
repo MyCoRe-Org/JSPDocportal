@@ -13,6 +13,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld"%>
+
 <c:set var="iviewBaseURL" value="${applicationScope.WebApplicationBaseURL}modules/iview2/" />
 <!DOCTYPE html>
 <html>
@@ -46,7 +47,7 @@
       }
 </style>
 
-<c:if test="${actionBean.doctype eq 'pdf'}">
+<c:if test="${it.doctype eq 'pdf'}">
 	<script type="text/javascript" src="${iviewBaseURL}js/iview-client-pdf.js"></script>
 	<script type="text/javascript" src="${iviewBaseURL}js/lib/pdf.js"></script>
 	<script type="text/javascript" src="${iviewBaseURL}js/iview-client-metadata.js"></script>
@@ -65,9 +66,9 @@
 			var config = {
 				logoURL:"${applicationScope.WebApplicationBaseURL}images/mcrviewer/mcrviewer.png",
 				"mobile" : false,
-				pdfProviderURL : "${applicationScope.WebApplicationBaseURL}${actionBean.pdfProviderURL}",
-				derivate : "${actionBean.recordIdentifier}",
-				filePath : "${actionBean.filePath}",
+				pdfProviderURL : "${applicationScope.WebApplicationBaseURL}${it.pdfProviderURL}",
+				derivate : "${it.recordIdentifier}",
+				filePath : "${it.filePath}",
 				doctype : "pdf",
 				startImage : "1",
 				i18nURL : "${applicationScope.WebApplicationBaseURL}rsc/locale/translate/{lang}/component.viewer.*",
@@ -79,7 +80,7 @@
 				permalink : {
 					enabled : true,
 					updateHistory : true,
-					viewerLocationPattern : "{baseURL}/mcrviewer/recordIdentifier/${fn:replace(actionBean.recordIdentifier,'/','_')}/{file}"
+					viewerLocationPattern : "{baseURL}/mcrviewer/recordIdentifier/${fn:replace(it.recordIdentifier,'/','_')}/{file}"
 				},
 				onClose : function() {
 					window.history.back();
@@ -96,7 +97,7 @@
 								id : "pdf_download",
 								type : "button",
 								label : "buttons.pdf_download",
-								href : "${applicationScope.WebApplicationBaseURL}${actionBean.pdfProviderURL}",
+								href : "${applicationScope.WebApplicationBaseURL}${it.pdfProviderURL}",
 								icon: "fa-download",
 								inGroup: "addOns"
 							} ]
@@ -105,8 +106,8 @@
 		};
 	</script>
 </c:if>
-<c:if test="${actionBean.doctype eq 'mets'}">
-	<c:set var="mcrid">${actionBean.mcrid}</c:set>
+<c:if test="${it.doctype eq 'mets'}">
+	<c:set var="mcrid">${it.mcrid}</c:set>
 	<script type="text/javascript" src="${iviewBaseURL}js/iview-client-mets.js"></script>
 	<script type="text/javascript" src="${iviewBaseURL}js/iview-client-metadata.js"></script>
 	
@@ -137,24 +138,24 @@
 				mobile : false,
 				doctype : "mets",
 
-				//derivate: "${fn:replace(actionBean.recordIdentifier,'/','%252F')}",
+				//derivate: "${fn:replace(it.recordIdentifier,'/','%252F')}",
 				derivate : "${derid}",
-				filePath : "${actionBean.filePath}",
+				filePath : "${it.filePath}",
 				metsURL : "${applicationScope.WebApplicationBaseURL}file/${mcrid}/${derid}/${maindoc}",
-				imageXmlPath : "${applicationScope.WebApplicationBaseURL}tiles/${fn:replace(actionBean.recordIdentifier,'/','_')}/",
-				tileProviderPath : "${applicationScope.WebApplicationBaseURL}tiles/${fn:replace(actionBean.recordIdentifier,'/','_')}/",
+				imageXmlPath : "${applicationScope.WebApplicationBaseURL}tiles/${fn:replace(it.recordIdentifier,'/','_')}/",
+				tileProviderPath : "${applicationScope.WebApplicationBaseURL}tiles/${fn:replace(it.recordIdentifier,'/','_')}/",
 
 				i18nURL : "${applicationScope.WebApplicationBaseURL}rsc/locale/translate/{lang}/component.viewer.*",
 				lang : "de",
 				webApplicationBaseURL : "${applicationScope.WebApplicationBaseURL}",
-				// derivateURL : "${applicationScope.WebApplicationBaseURL}depot/${fn:replace(actionBean.recordIdentifier,'/','%25252F')}/",
+				// derivateURL : "${applicationScope.WebApplicationBaseURL}depot/${fn:replace(it.recordIdentifier,'/','%25252F')}/",
 				derivateURL : "${applicationScope.WebApplicationBaseURL}file/${mcrid}/${derid}/",
 				"canvas.startup.fitWidth" : true,
 				"canvas.overview.enabled" : false,
 				permalink : {
 					enabled : true,
 					updateHistory : true,
-					viewerLocationPattern : "{baseURL}/mcrviewer/recordIdentifier/${fn:replace(actionBean.recordIdentifier,'/','_')}/{file}"
+					viewerLocationPattern : "{baseURL}/mcrviewer/recordIdentifier/${fn:replace(it.recordIdentifier,'/','_')}/{file}"
 				},
 				imageOverview : {
 					enabled : true
@@ -184,7 +185,7 @@
 	                    	   id : "btn_pdf_download",
 	                    	   type : "button",
 	                    	   label : "buttons.pdf_download",
-	                    	   href : "${applicationScope.WebApplicationBaseURL}pdfdownload/recordIdentifier/${fn:replace(actionBean.recordIdentifier,'/','_')}",
+	                    	   href : "${applicationScope.WebApplicationBaseURL}pdfdownload/recordIdentifier/${fn:replace(it.recordIdentifier,'/','_')}",
 	                    	   icon: "fa-download",
 	                    	   inGroup: "addOns"
 				           },
@@ -197,7 +198,7 @@
 		                    	   <%-- Alternativ müsste man die Komponenten Liste des Viewer nach der MyCoReImageScrollComponent suchen. 
                                         Diese hat das Property _currentImage --%>
 		                    	   			var s = $("div[data-id='ImageChangeControllGroup'] > select > option:selected");
-		                    	   			window.location.href="${applicationScope.WebApplicationBaseURL}depot/${fn:replace(actionBean.recordIdentifier,'/','_')}/images/"+s.data('id')+".jpg";
+		                    	   			window.location.href="${applicationScope.WebApplicationBaseURL}depot/${fn:replace(it.recordIdentifier,'/','_')}/images/"+s.data('id')+".jpg";
 		                       },
 		                       icon: "fa-download",
 		                       inGroup: "addOns"

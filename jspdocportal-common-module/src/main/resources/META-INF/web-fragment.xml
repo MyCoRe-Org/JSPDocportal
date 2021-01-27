@@ -115,7 +115,6 @@
 		<url-pattern>/metadata/*</url-pattern>
 		<url-pattern>/classbrowser/*</url-pattern>
 		<url-pattern>/indexbrowser/*</url-pattern>
-        <url-pattern>/mcrviewer/*</url-pattern>
 		<url-pattern>/servlets/ErrorServlet</url-pattern>
 		<url-pattern>/servlets/XEditor</url-pattern>
         <url-pattern>/servlets/solr/*</url-pattern>
@@ -142,7 +141,6 @@
 		<url-pattern>/classbrowser/*</url-pattern>
 		<url-pattern>/indexbrowser/*</url-pattern>
 		<url-pattern>/metadata/*</url-pattern>
-        <url-pattern>/mcrviewer/*</url-pattern>
 	</servlet-mapping>
     
     <!-- servlets -->
@@ -389,6 +387,10 @@
     <servlet-mapping>
         <servlet-name>MVC Jersey Servlet</servlet-name>
         <url-pattern>/resolve/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MVC Jersey Servlet</servlet-name>
+        <url-pattern>/mcrviewer/*</url-pattern>
     </servlet-mapping>
          
   <!-- **************************************************************** -->
