@@ -13,7 +13,7 @@
 <fmt:message var="pageTitle" key="Webpage.title.${fn:replace(it.path, '/', '.')}" />
 
 <!doctype html>
-<html lang="en">
+<html>
 <head>
   <title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
   <%@ include file="fragments/html_head.jspf" %>

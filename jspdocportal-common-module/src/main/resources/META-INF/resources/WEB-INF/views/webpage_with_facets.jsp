@@ -6,29 +6,28 @@
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"   %>
 <%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld" %>
-<%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
 
 <%@ taglib prefix="search" tagdir="/WEB-INF/tags/search"%>
 
-<fmt:message var="pageTitle" key="Webpage.title.${fn:replace(actionBean.path, '/', '.')}" />
-<stripes:layout-render name="/WEB-INF/layout/default.jsp" pageTitle = "${pageTitle}">
-	<stripes:layout-component name="main_part">
-    
-     <div class="container">
-     
+<fmt:message var="pageTitle" key="Webpage.title.${fn:replace(it.path, '/', '.')}" />
+<!doctype html>
+<html>
+<head>
+  <title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
+  <%@ include file="fragments/html_head.jspf" %>
+</head>
+<body>
+  <%@ include file="fragments/header.jspf" %>
+
+  <div class="container">
      <c:if test="${fn:contains(WebApplicationBaseURL, 'rosdok')}">
      <div class="row">
-     	<div class="col-12">
-     		<h2><fmt:message key="Webpage.browse.${actionBean.path}.title" /></h2>
-     	</div>
-     </div>
-     <div class="row">
        <div class="col-12 col-md-8 my-3 pr-5">
-          <mcr:includeWebcontent id="${fn:replace(actionBean.path, '/', '.')}" file="${actionBean.path}.html" />
+          <mcr:includeWebcontent id="${fn:replace(it.path, '/', '.')}" file="${it.path}.html" />
       </div>
       <div class="col-md-4 d-none d-md-block">
          <%--epub or histbest --%>
-        <fmt:message var="img" key="Webpage.browse.${actionBean.path}.image">
+        <fmt:message var="img" key="Webpage.browse.${it.path}.image">
         	<fmt:param>${WebApplicationBaseURL}</fmt:param>
         </fmt:message>
 		<img src="${img}" style="width:100%">
@@ -36,7 +35,7 @@
       </div>
       <div class="row my-5">
       	<div class="col-12 col-md-8">
-      		<search:main-searchmask mode="${actionBean.path}" />
+      		<search:main-searchmask mode="${it.path}" />
          </div>
       </div>
       </c:if>
@@ -46,10 +45,10 @@
       		<div class="col-12 col-md-8 my-3" style="padding:0 90px 0 30px">
           		<h2>Digitale Bibliothek Neubrandenburg</h2>
           		<div class="mt-5">
-         			<search:main-searchmask mode="${actionBean.path}" />
+         			<search:main-searchmask mode="${it.path}" />
          		</div>
          		<div style="margin-top:70px">
-         		<mcr:includeWebcontent id="${fn:replace(actionBean.path, '/', '.')}" file="${actionBean.path}.html" />
+         		<mcr:includeWebcontent id="${fn:replace(it.path, '/', '.')}" file="${it.path}.html" />
          		</div>
       		</div>
       		
@@ -64,7 +63,7 @@
       	</div>
       </c:if>
      
-      <c:if test="${(actionBean.path eq 'epub') or (actionBean.path eq 'histbest') }">
+      <c:if test="${(it.path eq 'epub') or (it.path eq 'histbest') }">
             <script type="text/javascript">
 				function changeFacetIncludeURL(key, value, mask) {
 					window.location=$("meta[name='mcr:baseurl']").attr("content")
@@ -76,7 +75,7 @@
 				
 				</script>
 				
-				  <c:set var="mask" value="${actionBean.path}" />
+				  <c:set var="mask" value="${it.path}" />
             <%
 			        MCRSearchResultDataBean result = new MCRSearchResultDataBean();
 		    	    result = new MCRSearchResultDataBean();
@@ -107,7 +106,7 @@
 	        		<div class="container">	
     		      		<div class="row">
 	 		
-            			<c:if test="${actionBean.path eq 'histbest' }">
+            			<c:if test="${it.path eq 'histbest' }">
                 <div class="col-md-3 col-12">
                 <%-- <search:browse-facet result="${result}" mask="${mask}" facetField="ir.doctype_class.facet" /> --%>
                 <%-- <search:browse-classification categid="doctype:histbest" mask="${mask}" facetField="ir.doctype_class.facet" /> --%>
@@ -126,14 +125,14 @@
               <div class="col-md-3 col-12 bg-dark">
          			<div class="ir-latestdocs">
            				<h4 style="padding-top:"><fmt:message key="Browse.latestdocs" /></h4>       
-           				<div id="latest_documents" data-ir-mode="${actionBean.path}"></div>
-          				<a href="${WebApplicationBaseURL}browse/${actionBean.path}" class="ir-latestdocs-more-button btn btn-sm btn-primary float-right mt-3">mehr ...</a>			
+           				<div id="latest_documents" data-ir-mode="${it.path}"></div>
+          				<a href="${WebApplicationBaseURL}browse/${it.path}" class="ir-latestdocs-more-button btn btn-sm btn-primary float-right mt-3">mehr ...</a>			
 	    			</div>
       			</div>
             
           </c:if>
 
-            <c:if test="${actionBean.path eq 'epub' }">
+            <c:if test="${it.path eq 'epub' }">
              
                 <div class="col-md-3 col-12">
                   <%--<search:browse-facet result="${result}" mask="${mask}" facetField="ir.doctype_class.facet" /> --%>
@@ -149,11 +148,11 @@
                 </div>
                 <div class="col-md-3 col-12 bg-dark">
          <div class="ir-latestdocs">
-           <a href="/browse/${actionBean.path}"> 
+           <a href="/browse/${it.path}"> 
          	<h4 style="padding-top:"><fmt:message key="Browse.latestdocs" /></h4>
            </a>  
                   
-           <div id="latest_documents" data-ir-mode="${actionBean.path}">
+           <div id="latest_documents" data-ir-mode="${it.path}">
             <%--
             <div class="card ir-latestdocs-card">
               <div class="card-body">
@@ -178,7 +177,7 @@
               </div>
 		    </div> --%>
           </div>
-          <a href="${WebApplicationBaseURL}browse/${actionBean.path}" class="ir-latestdocs-more-button btn btn-sm btn-primary float-right mt-3">mehr ...</a>			
+          <a href="${WebApplicationBaseURL}browse/${it.path}" class="ir-latestdocs-more-button btn btn-sm btn-primary float-right mt-3">mehr ...</a>			
 	    </div>
 	    </div>
 	    </c:if>
@@ -214,8 +213,8 @@
                 <div class="col-md-4 col-12 bg-dark" style="padding-bottom:30px;">
          			<div class="ir-latestdocs">
            				<h4 style="padding-top:"><fmt:message key="Browse.latestdocs" /></h4>       
-           				<div id="latest_documents" data-ir-mode="${actionBean.path}"></div>
-          				<a href="${WebApplicationBaseURL}browse/${actionBean.path}" class="ir-latestdocs-more-button btn btn-sm btn-primary float-right mt-3">mehr ...</a>			
+           				<div id="latest_documents" data-ir-mode="${it.path}"></div>
+          				<a href="${WebApplicationBaseURL}browse/${it.path}" class="ir-latestdocs-more-button btn btn-sm btn-primary float-right mt-3">mehr ...</a>			
 	    			</div>
       			</div>
       			</div>
@@ -252,6 +251,10 @@
 					    	if("${mask}"=="histbest" && $.inArray($(el).attr('data-mcr-facet-value'), ["doctype:histbest.print", "doctype:histbest.manuscript"])!=-1){
 					    		$(el).parent().parent().attr('disabled', 'disabled');
 					    	}
+					    	else if("${mask}"=="epub" && $.inArray($(el).attr('data-mcr-facet-value'), ["institution:unirostock"])!=-1){
+					    		$(el).parent().parent().attr('disabled', 'disabled');
+					    		$(el).parent().prev().addClass('text-muted');
+					    	}
 					    	else{
 					    		$(el).parent().parent().addClass('d-none');
 					    	}
@@ -262,7 +265,7 @@
 								$(el).text(c) ;
 					    	}
 					    	else{
-					    		$(el).parent().parent().addClass('d-none');
+				    			$(el).parent().parent().addClass('d-none');
 					    	}
 					 	}
 					});
@@ -325,5 +328,7 @@
 		});
      </script>
 
-  </stripes:layout-component>	
-</stripes:layout-render>
+<%@ include file="fragments/footer.jspf" %>
+  </body>
+</html>
+
