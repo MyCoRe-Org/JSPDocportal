@@ -4,17 +4,22 @@
 <%@ taglib prefix="fmt"     uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn"      uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="mcr" 	uri="http://www.mycore.org/jspdocportal/base.tld"%>
-<%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld"%>
 	
 <%@ taglib prefix="search" tagdir="/WEB-INF/tags/search"%>
 <c:set var="org.mycore.navigation.path" scope="request">left.epub.epub_recherche</c:set>
-<fmt:message var="pageTitle" key="Webpage.browse.title.${actionBean.result.mask}" />
-<stripes:layout-render name="/WEB-INF/layout/default.jsp" pageTitle="${pageTitle}">
-  <stripes:layout-component name="html_head">
-    <meta name="mcr:search.id" content="${actionBean.result.id}" />
-  </stripes:layout-component>
-  <stripes:layout-component name="main_part">
-    <div class="container">
+<fmt:message var="pageTitle" key="Webpage.browse.title.${it.result.mask}" />
+
+
+<!doctype html>
+<html>
+<head>
+  <title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
+  <%@ include file="../fragments/html_head.jspf" %>
+  <meta name="mcr:search.id" content="${it.result.id}" />
+</head>
+<body>
+  <%@ include file="../fragments/header.jspf" %>
+  <div class="container">
     <div class="row">
       <div class="col">
         <h2>${pageTitle}</h2>
@@ -139,13 +144,13 @@
 
           <div class="row" style="margin-bottom: 10px;">
             <div class="col">
-              <c:forEach var="fq" items="${actionBean.result.filterQueries}">
+              <c:forEach var="fq" items="${it.result.filterQueries}">
                 <c:if test="${not fn:contains(fq, '.facet:')}">
                   <c:url var="url" value="${WebApplicationBaseURL}browse/epub">
-                    <c:param name="_search" value="${actionBean.result.id}" />
+                    <c:param name="_search" value="${it.result.id}" />
                     <c:param name="_remove-filter" value="${fq}" />
                   </c:url>
-                  <c:set var="c"><fmt:message key="Browse.Filter.epub.${fn:substringBefore(fn:substring(fq, 1, -1),':')}" />: ${actionBean.calcFacetOutputString(fn:substringBefore(fn:substring(fq, 1, -1),':'), fn:substringAfter(fn:substring(fq, 1, -1),':'))}</c:set>
+                  <c:set var="c"><fmt:message key="Browse.Filter.epub.${fn:substringBefore(fn:substring(fq, 1, -1),':')}" />: ${it.util.calcFacetOutputString(fn:substringBefore(fn:substring(fq, 1, -1),':'), fn:substringAfter(fn:substring(fq, 1, -1),':'))}</c:set>
                    <button class="btn btn-sm ir-filter-btn active" 
                        onclick="window.location.href='${url}'">
                       <i class="fas fa-times" style="position: absolute; top: 5px; right: 5px; color: darkred;"></i>
@@ -156,15 +161,15 @@
             </div>
           </div>
 
-          <search:result-facets result="${actionBean.result}" mask="epub" top="5" />
+          <search:result-facets result="${it.result}" mask="epub" top="5" />
           </div>
         </div>
       </div>
       <div class="col-xs-12 col-md-9">
-        <search:result-sorter result="${actionBean.result}" mode="browse"
+        <search:result-sorter result="${it.result}" mode="browse"
                               fields="score,ir.pubyear_start,modified,ir.creator.result,ir.title.result" mask="epub" />
                               
-        <search:result-browser result="${actionBean.result}">
+        <search:result-browser result="${it.result}">
           <c:set var="doctype" value="${fn:substringBefore(fn:substringAfter(mcrid, '_'),'_')}" />
           <c:choose>
             <c:when test="${(doctype eq 'disshab') or (doctype eq 'thesis')}">
@@ -212,5 +217,6 @@
         </div>
       </div>
     </div>
-  </stripes:layout-component>
-</stripes:layout-render>
+  <%@ include file="../fragments/footer.jspf" %>
+  </body>
+</html>

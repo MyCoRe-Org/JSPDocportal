@@ -1,10 +1,36 @@
-package org.mycore.frontend.jsp.stripes.actions;
+/*
+ * This file is part of ***  M y C o R e  ***
+ * See http://www.mycore.de/ for details.
+ *
+ * MyCoRe is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MyCoRe is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MyCoRe.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package org.mycore.jspdocportal.common.controller;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.util.ClientUtils;
+import org.glassfish.jersey.server.mvc.Viewable;
 import org.jdom2.Namespace;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.classifications2.MCRCategory;
@@ -13,50 +39,30 @@ import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.frontend.jsp.search.MCRSearchResultDataBean;
 import org.mycore.services.i18n.MCRTranslation;
 
-import net.sourceforge.stripes.action.ActionBean;
-import net.sourceforge.stripes.action.Before;
-import net.sourceforge.stripes.action.DefaultHandler;
-import net.sourceforge.stripes.action.ForwardResolution;
-import net.sourceforge.stripes.action.Resolution;
-import net.sourceforge.stripes.action.UrlBinding;
-import net.sourceforge.stripes.controller.LifecycleStage;
-
 /**
- * Action Bean for Search Browsing
- * 
+ * MVC Controller for Search Browsing
  * 
  * @author Stephan
  *
  */
-@UrlBinding("/browse/{mask}")
-public class BrowseAction extends MCRAbstractStripesAction implements ActionBean {
+
+@Path("/browse/{mask}")
+public class BrowseController {
     @SuppressWarnings("unused")
-    private static Logger LOGGER = LogManager.getLogger(BrowseAction.class);
+    private static Logger LOGGER = LogManager.getLogger(BrowseController.class);
 
     public static Namespace NS_XED = Namespace.getNamespace("xed", "http://www.mycore.de/xeditor");
 
     public static int DEFAULT_ROWS = 20;
 
-    private String mask = null;
-
     private MCRSearchResultDataBean result;
+    
+    @GET
+    public Viewable get(@PathParam("mask") String mask,
+        @Context HttpServletRequest request) {
+        Map<String, Object> model = new HashMap<>();
+        Viewable v = new Viewable("/browse/" + mask, model);
 
-    public BrowseAction() {
-
-    }
-
-    @Before(stages = LifecycleStage.BindingAndValidation)
-    public void rehydrate() {
-        super.rehydrate();
-    }
-
-    @DefaultHandler
-    public Resolution defaultRes() {
-        ForwardResolution fwdResolutionForm = new ForwardResolution("/WEB-INF/browse/" + mask + ".jsp");
-
-        getContext().getResponse().setCharacterEncoding("UTF-8");
-        getContext().getResponse().setContentType("text/xhtml;charset=utf-8");
-        HttpServletRequest request = getContext().getRequest();
         if (request.getParameter("_search") != null && request.getParameter("_search").length() > 0) {
             //check against null if session does not exist
             result = MCRSearchResultDataBean.retrieveSearchresultFromSession(request, request.getParameter("_search"));
@@ -147,26 +153,15 @@ public class BrowseAction extends MCRAbstractStripesAction implements ActionBean
             MCRSearchResultDataBean.addSearchresultToSession(request, result);
             result.doSearch();
         }
+        model.put("result",  result);
+        model.put("util",  new Util());
 
-        return fwdResolutionForm;
+        return v;
     }
 
-    public MCRSearchResultDataBean getResult() {
-        return result;
-    }
 
-    public void setResult(MCRSearchResultDataBean result) {
-        this.result = result;
-    }
-
-    public String getMask() {
-        return mask;
-    }
-
-    public void setMask(String mask) {
-        this.mask = mask;
-    }
-
+    //TODO move to jsp tag
+   public class Util{
     public String calcFacetOutputString(String facetKey, String facetValue) {
         String result = facetValue;
         if (facetKey.contains("_msg.facet")) {
@@ -183,5 +178,6 @@ public class BrowseAction extends MCRAbstractStripesAction implements ActionBean
         return result;
 
     }
+   }
 
 }

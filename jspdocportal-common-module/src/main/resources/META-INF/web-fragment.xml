@@ -112,7 +112,6 @@
 		<url-pattern>*.jsp</url-pattern>
         <url-pattern>/actions/*</url-pattern>
 		<url-pattern>/search/*</url-pattern>
-		<url-pattern>/browse/*</url-pattern>
 		<url-pattern>/metadata/*</url-pattern>
 		<url-pattern>/classbrowser/*</url-pattern>
 		<url-pattern>/indexbrowser/*</url-pattern>
@@ -140,7 +139,6 @@
 		<url-pattern>*.action</url-pattern>
         <url-pattern>/actions/*</url-pattern>
 		<url-pattern>/search/*</url-pattern>
-		<url-pattern>/browse/*</url-pattern>
 		<url-pattern>/classbrowser/*</url-pattern>
 		<url-pattern>/indexbrowser/*</url-pattern>
 		<url-pattern>/metadata/*</url-pattern>
@@ -399,17 +397,13 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>MVC Jersey Servlet</servlet-name>
-        <url-pattern>/mvc/*</url-pattern>
+        <url-pattern>/site/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>MVC Jersey Servlet</servlet-name>
-        <url-pattern>/site/*</url-pattern>
+        <url-pattern>/browse/*</url-pattern>
     </servlet-mapping>
-        <servlet-mapping>
-        <servlet-name>MVC Jersey Servlet</servlet-name>
-        <url-pattern>/watson/*</url-pattern>
-    </servlet-mapping>
-     
+         
   <!-- **************************************************************** -->
   <!-- MyCoRe OAI                                                       -->
   <!-- **************************************************************** -->

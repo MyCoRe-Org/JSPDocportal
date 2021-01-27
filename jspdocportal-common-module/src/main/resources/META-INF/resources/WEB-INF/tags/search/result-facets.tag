@@ -51,7 +51,7 @@
 						<button class="btn btn-sm ir-facets-btn active" onclick="window.location.href='${url}'">
 							<i class="fa fa-times" style="position:absolute; top:5px; right:5px; color:darkred;"></i>
 							<span style="display:table-cell;vertical-align:middle;">
-								${actionBean.calcFacetOutputString(facetKey, countsKey)}
+								${it.util.calcFacetOutputString(facetKey, countsKey)}
 							</span>
 							<span style="display:table-cell;vertical-align:middle;padding-left:12px">
 								<span class="badge ir-facets-badge">${facets.get(facetKey).get(countsKey)}</span>
@@ -62,7 +62,7 @@
 						<button class="btn btn-sm ir-facets-btn ${toggleClass}" 
 						        onclick="changeFacetIncludeURL('${facetKey}','${countsKey}');">
 							<span style="display:table-cell;vertical-align:middle;">
-								${actionBean.calcFacetOutputString(facetKey, countsKey)}
+								${it.util.calcFacetOutputString(facetKey, countsKey)}
 							</span>
 							<span style="display:table-cell;vertical-align:middle;padding-left:12px;">
 								<span class="badge ir-facets-badge">${facets.get(facetKey).get(countsKey)}</span>
