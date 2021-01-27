@@ -30,12 +30,12 @@ import org.glassfish.jersey.server.ContainerRequest;
  * This Filter overrides the base uri of the Jersey RequestContext with its parent uri.
  * 
  * WHY?
- * We have to register our MVC Controller for multiple URLs (endpoints).
+ * We need to register our MVC Controller for multiple URLs (end-points).
  * In an ideal world we would register it with the application root, but there are
  * lots of other services that cannot be put under Jersey MVC control in the application.
  * 
- * By doing this the @Path Annotations in MVC-Controllers may contain the root path
- * of the filter to distinguish between the multiple endpoints.
+ * By doing this the @Path annotations in MVC controllers can start with the root path
+ * of the Jersey resource to distinguish between the multiple end-points.
  *
  *  web.xml:
  *   <servlet>
@@ -49,18 +49,17 @@ import org.glassfish.jersey.server.ContainerRequest;
  *   </servlet>
  *   <servlet-mapping>
  *       <servlet-name>MVC Jersey Servlet</servlet-name>
- *       <url-pattern>/jersey/*</url-pattern>
+ *       <url-pattern>/view/*</url-pattern>
  *   </servlet-mapping>
  *       <servlet-mapping>
  *       <servlet-name>MVC Jersey Servlet</servlet-name>
- *       <url-pattern>/georgia/*</url-pattern>
+ *       <url-pattern>/resolve/*</url-pattern>
  *   </servlet-mapping>
  * 
  * Example:
  *  localhost:8080/myapp/view/hello
- *  without modification BaseURI: /view   Request Path: /hello
- *  with modification:   BaseURI: /       Request Path: /view/hello
- * 
+ *  without modification Jersey BaseURI: /view   Path seen by Jersey Controller: /hello
+ *  after modification:   Jersey BaseURI: /       Path seen by Jersey Controller: /view/hello
  * 
  * @author Robert Stephan
  *
