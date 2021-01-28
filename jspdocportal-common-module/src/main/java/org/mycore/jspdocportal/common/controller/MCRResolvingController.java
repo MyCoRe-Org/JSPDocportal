@@ -195,7 +195,11 @@ public class MCRResolvingController  {
                 url = createURLForDFGViewer(request, mcrID, OpenBy.nr, path[4]);
             }
             if (path.length > 4 && path[3].equals("part")) {
-                url = createURLForDFGViewer(request, mcrID, OpenBy.part, path[4]);
+                String nr = path[4];
+                if(nr.matches("phys\\d+")) {
+                    nr = nr.replace("phys",  "phys_");
+                }
+                url = createURLForDFGViewer(request, mcrID, OpenBy.part, nr);
             }
             if (url.length() > 0) {
                 LOGGER.debug("DFGViewer URL: " + url);
@@ -217,7 +221,11 @@ public class MCRResolvingController  {
                 url = createURLForMyCoReViewer(request, mcrID, OpenBy.nr, path[4]);
             }
             if (path.length > 4 && path[3].equals("part")) {
-                url = createURLForMyCoReViewer(request, mcrID, OpenBy.part, path[4]);
+                String nr = path[4];
+                if(nr.matches("phys\\d+")) {
+                    nr = nr.replace("phys",  "phys_");
+                }
+                url = createURLForMyCoReViewer(request, mcrID, OpenBy.part, nr);
             }
             if (url.length() > 0) {
                 LOGGER.debug("MyCoReViewer URL: " + url);
