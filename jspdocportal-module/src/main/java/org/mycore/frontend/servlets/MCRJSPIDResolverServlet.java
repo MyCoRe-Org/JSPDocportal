@@ -405,6 +405,12 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
                                                 + "']", Filters.element(), null, nsMets)
                                             .evaluateFirst(docMETS);
                                     } else if (openBy == OpenBy.part) {
+                                        // BUGFIX By accident we generated wrong PURLs in footer of our images
+                                        // this is the place where we fix that: 
+                                        // 'phys0123' -> 'phys_0123'
+                                        if(nr.matches("phys\\d+")) {
+                                            nr = nr.replace("phys",  "phys_");
+                                        }
                                         eMETSPhysDiv = XPathFactory.instance()
                                             .compile(
                                                 "/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
