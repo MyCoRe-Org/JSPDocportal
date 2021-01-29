@@ -121,6 +121,14 @@
 	},
 	{
 		"add-field": {
+			"name": "ir.host.recordIdentifier2",
+			"type": "string",
+			"multiValued": false,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
 			"name": "ir.host.title.result",
 			"type": "string",
 			"multiValued": false,
