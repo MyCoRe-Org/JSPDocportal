@@ -32,12 +32,20 @@ import org.mycore.solr.MCRSolrClientFactory;
  * @author Robert Stephan
  *
  */
-@Path("/mcrviewer/{field}/{identifier}/{filePath}")
+@Path("/mcrviewer")
 public class MCRViewerController {
     private static Logger LOGGER = LogManager.getLogger(MCRViewerController.class);
 
     @GET
-    public Response doGet(@PathParam("field") String field, @PathParam("identifier") String identifier_,
+    @Path("/{field}/{identifier}")
+    public Response doGetFirstImage(@PathParam("field") String field, @PathParam("identifier") String identifier_,
+        @Context HttpServletRequest request) {
+        return doGetWithFile(field, identifier_, "", request);
+    }
+
+    @GET
+    @Path("/{field}/{identifier}/{filePath:.*}")
+    public Response doGetWithFile(@PathParam("field") String field, @PathParam("identifier") String identifier_,
         @PathParam("filePath") String filePath, @Context HttpServletRequest request) {
 
         String identifier = URLDecoder.decode(URLDecoder.decode(identifier_, StandardCharsets.UTF_8),
@@ -45,7 +53,9 @@ public class MCRViewerController {
         Map<String, Object> model = new HashMap<>();
         model.put("field", field);
         model.put("identifier", identifier);
-        model.put("filePath", filePath);
+        if (!StringUtils.isEmpty(filePath)) {
+            model.put("filePath", filePath);
+        }
 
         Viewable v = new Viewable("/mcrviewer", model);
 
@@ -68,10 +78,14 @@ public class MCRViewerController {
                     model.put("doctype", "pdf");
                     String pdfProviderURL = String.valueOf(solrDoc.getFieldValue("ir.pdffulltext_url"));
                     model.put("pdfProviderURL", pdfProviderURL);
-                    model.put("filePath", pdfProviderURL.substring(pdfProviderURL.lastIndexOf("/") + 1));
+                    if (!model.containsKey("filePath")) {
+                        model.put("filePath", pdfProviderURL.substring(pdfProviderURL.lastIndexOf("/") + 1));
+                    }
                 } else {
                     model.put("doctype", "mets");
-                    model.put("filePath", StringUtils.isEmpty(filePath) ? "iview2/phys_0001.iview2" : filePath);
+                    if (!model.containsKey("filePath")) {
+                        model.put("filePath", StringUtils.isEmpty(filePath) ? "iview2/phys_0001.iview2" : filePath);
+                    }
                 }
             }
         } catch (SolrServerException | IOException e) {
