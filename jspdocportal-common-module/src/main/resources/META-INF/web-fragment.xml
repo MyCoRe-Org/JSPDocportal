@@ -63,6 +63,7 @@
    		<url-pattern>*.jsp</url-pattern>
 		<url-pattern>/search/*</url-pattern>
 		<url-pattern>/browse/*</url-pattern>
+        <url-pattern>/view/*</url-pattern>
 		<url-pattern>/resolve/*</url-pattern>
 		<url-pattern>/classbrowser/*</url-pattern>
 		<url-pattern>/indexbrowser/*</url-pattern>
@@ -391,6 +392,10 @@
     <servlet-mapping>
         <servlet-name>MVC Jersey Servlet</servlet-name>
         <url-pattern>/mcrviewer/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MVC Jersey Servlet</servlet-name>
+        <url-pattern>/view/*</url-pattern>
     </servlet-mapping>
          
   <!-- **************************************************************** -->
