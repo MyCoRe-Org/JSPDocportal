@@ -1,11 +1,20 @@
-package org.mycore.frontend.jsp.stripes.actions;
+package org.mycore.jspdocportal.common.controller;
 
 import java.io.IOException;
+import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,49 +26,31 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
+import org.glassfish.jersey.server.mvc.Viewable;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.frontend.jsp.search.MCRSearchResultDataBean;
 import org.mycore.solr.MCRSolrClientFactory;
 
-import net.sourceforge.stripes.action.ActionBean;
-import net.sourceforge.stripes.action.Before;
-import net.sourceforge.stripes.action.DefaultHandler;
-import net.sourceforge.stripes.action.ForwardResolution;
-import net.sourceforge.stripes.action.RedirectResolution;
-import net.sourceforge.stripes.action.Resolution;
-import net.sourceforge.stripes.action.UrlBinding;
-import net.sourceforge.stripes.controller.LifecycleStage;
-
-@UrlBinding("/indexbrowser/{modus}")
-public class IndexBrowserAction extends MCRAbstractStripesAction implements ActionBean {
-    private static Logger LOGGER = LogManager.getLogger(IndexBrowserAction.class);
-    ForwardResolution fwdResolution = new ForwardResolution("/content/indexbrowser.jsp");
+@Path("/view/indexbrowser/{modus}")
+public class MCRIndexBrowserController {
+    private static Logger LOGGER = LogManager.getLogger(MCRIndexBrowserController.class);
 
     private TreeSet<String> firstSelector = new TreeSet<String>();
+
     private Map<String, Long> secondSelector = new TreeMap<String, Long>();
-    private String modus = "";
-    private String select;
+
     private MCRSearchResultDataBean mcrSearchResult;
 
-    public IndexBrowserAction() {
+    @GET
+    public Response defaultRes(@PathParam("modus") String modus,
+        @QueryParam("select") String select,
+        @Context HttpServletRequest request) {
+        HashMap<String, Object> model = new HashMap<>();
+        model.put("modus", modus);
+        model.put("select", select);
 
-    }
-
-    @Before(stages = LifecycleStage.BindingAndValidation)
-    public void rehydrate() {
-        super.rehydrate();
-        if (getContext().getRequest().getParameter("modus") != null) {
-            modus = getContext().getRequest().getParameter("modus");
-        }
-        if (getContext().getRequest().getParameter("select") != null) {
-            select = getContext().getRequest().getParameter("select");
-        }
-
-    }
-
-    @DefaultHandler
-    public Resolution defaultRes() {
+        Viewable v = new Viewable("/indexbrowser", model);
         try {
             String searchfield = MCRConfiguration2.getString("MCR.IndexBrowser." + modus + ".Searchfield").orElse(null);
             String facetfield = MCRConfiguration2.getString("MCR.IndexBrowser." + modus + ".Facetfield").orElse(null);
@@ -104,8 +95,8 @@ public class IndexBrowserAction extends MCRAbstractStripesAction implements Acti
 
                 mcrSearchResult.doSearch();
                 mcrSearchResult.setBackURL(
-                        getContext().getRequest().getContextPath() + "/indexbrowser/" + modus + "?select=" + select);
-                MCRSearchResultDataBean.addSearchresultToSession(getContext().getRequest(), mcrSearchResult);
+                    request.getContextPath() + "/indexbrowser/" + modus + "?select=" + select);
+                MCRSearchResultDataBean.addSearchresultToSession(request, mcrSearchResult);
 
                 QueryResponse response = mcrSearchResult.getSolrQueryResponse();
                 if (response != null) {
@@ -126,38 +117,12 @@ public class IndexBrowserAction extends MCRAbstractStripesAction implements Acti
                     }
                 }
             }
-            return fwdResolution;
+            model.put("firstSelector", firstSelector);
+            model.put("secondSelector", secondSelector);
+            model.put("result", mcrSearchResult);
+            return Response.ok(v).build();
         } catch (MCRConfigurationException e) {
-            return new RedirectResolution("/");
+            return Response.temporaryRedirect(URI.create("/")).build();
         }
     }
-
-    public SortedSet<String> getFirstSelector() {
-        return firstSelector;
-    }
-
-    public String getModus() {
-        return modus;
-    }
-
-    public void setModus(String modus) {
-        this.modus = modus;
-    }
-
-    public String getSelect() {
-        return select;
-    }
-
-    public void setSelect(String select) {
-        this.select = select;
-    }
-
-    public Map<String, Long> getSecondSelector() {
-        return secondSelector;
-    }
-
-    public MCRSearchResultDataBean getResult() {
-        return mcrSearchResult;
-    }
-
 }
