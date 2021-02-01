@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.server.mvc.Viewable;
 import org.mycore.common.config.MCRConfiguration2;
 
-@Path("/view/classbrowser/{modus}")
+@Path("/do/classbrowser/{modus}")
 public class MCRClassBrowserController {
 
 

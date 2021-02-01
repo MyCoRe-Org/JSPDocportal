@@ -32,7 +32,7 @@ import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.frontend.jsp.search.MCRSearchResultDataBean;
 import org.mycore.solr.MCRSolrClientFactory;
 
-@Path("/view/indexbrowser/{modus}")
+@Path("/do/indexbrowser/{modus}")
 public class MCRIndexBrowserController {
     private static Logger LOGGER = LogManager.getLogger(MCRIndexBrowserController.class);
 
