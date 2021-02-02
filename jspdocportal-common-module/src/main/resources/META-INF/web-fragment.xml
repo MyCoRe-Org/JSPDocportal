@@ -61,7 +61,6 @@
    		<filter-name>MCRSessionInitializationFilter</filter-name>
    		<url-pattern>*.action</url-pattern>
    		<url-pattern>*.jsp</url-pattern>
-		<url-pattern>/search/*</url-pattern>
 		<url-pattern>/browse/*</url-pattern>
         <url-pattern>/do/*</url-pattern>
 		<url-pattern>/resolve/*</url-pattern>
@@ -112,7 +111,6 @@
 		<url-pattern>*.action</url-pattern>
 		<url-pattern>*.jsp</url-pattern>
         <url-pattern>/actions/*</url-pattern>
-		<url-pattern>/search/*</url-pattern>
 		<url-pattern>/metadata/*</url-pattern>
 		<url-pattern>/classbrowser/*</url-pattern>
 		<url-pattern>/indexbrowser/*</url-pattern>
@@ -138,7 +136,6 @@
 		<servlet-name>StripesDispatcher</servlet-name>
 		<url-pattern>*.action</url-pattern>
         <url-pattern>/actions/*</url-pattern>
-		<url-pattern>/search/*</url-pattern>
 		<url-pattern>/classbrowser/*</url-pattern>
 		<url-pattern>/indexbrowser/*</url-pattern>
 		<url-pattern>/metadata/*</url-pattern>
