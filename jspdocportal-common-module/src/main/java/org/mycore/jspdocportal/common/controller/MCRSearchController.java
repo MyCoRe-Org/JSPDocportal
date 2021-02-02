@@ -51,7 +51,7 @@ import org.mycore.solr.search.MCRSolrSearchUtils;
  * @author Stephan
  *
  */
-@Path("/do/search/{mask}")
+@Path("/do/search")
 public class MCRSearchController {
     private static Logger LOGGER = LogManager.getLogger(MCRSearchController.class);
 
@@ -71,13 +71,22 @@ public class MCRSearchController {
 
     }
 
+    @GET
+    @Path("/")
+    public Response resolveRes(@Context HttpServletRequest request,
+        @Context HttpServletResponse response) {
+        return defaultRes(null, request, response);
+    }
+    
     @POST
+    @Path("/{mask}")
     public Response submit(@PathParam("mask") String mask, @Context HttpServletRequest request,
         @Context HttpServletResponse response) {
         return defaultRes(mask, request, response);
     }
 
     @GET
+    @Path("/{mask}")
     public Response defaultRes(@PathParam("mask") String mask, @Context HttpServletRequest request,
         @Context HttpServletResponse response) {
         HashMap<String, Object> model = new HashMap<String, Object>();

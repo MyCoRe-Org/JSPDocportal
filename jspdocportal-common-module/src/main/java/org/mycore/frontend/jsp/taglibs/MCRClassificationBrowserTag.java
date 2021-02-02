@@ -460,9 +460,11 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
 
             } else {
                 // "normal" classification browser - do a search
-                url.append("search");
-                url.append("?q="
-                        + URLEncoder.encode(generateQuery(cb, categ.getId().getID()), Charset.defaultCharset().name()));
+                url.append("do/search");
+                String query = URLEncoder.encode(generateQuery(cb, categ.getId().getID()), Charset.defaultCharset().name());
+                query = query.replace("\\", "%5C");
+                url.append("?q=").append(query);
+                        
                 if (cb.sortResult != null) {
                     url.append("&sort=").append(cb.sortResult.trim());
                 }
