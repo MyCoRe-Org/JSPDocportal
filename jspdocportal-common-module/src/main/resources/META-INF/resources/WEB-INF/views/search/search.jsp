@@ -12,12 +12,16 @@
     pageContext.setAttribute("navSide", MCRConfiguration2.getString("MCR.JSPDocportal.Navigation.Side").orElse("left"));
 %>
 
-<fmt:message var="pageTitle" key="Webpage.search.title.${actionBean.result.mask}" />
-<stripes:layout-render name="/WEB-INF/layout/default.jsp" pageTitle="${pageTitle}" layout="2columns">
-	<stripes:layout-component name="html_head">
-	    <meta name="mcr:search.id" content="${actionBean.result.id}" />
-	</stripes:layout-component>
-	<stripes:layout-component name="main_part">
+<!doctype html>
+<html>
+<head>
+  <title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
+  <%@ include file="../fragments/html_head.jspf" %>
+  <meta name="mcr:search.id" content="${it.result.id}" />
+</head>
+<body>
+  <%@ include file="../fragments/header.jspf" %>
+  <div class="container">
 	<div class="row">
         <c:if test="${pageScope.navSide == 'left'}">
             <div id="search_nav" class="col-3">
@@ -25,10 +29,10 @@
             </div>
         </c:if>
 		<div id="search_content" class="col">
-		<c:if test="${not empty actionBean.result.mask}">
+		<c:if test="${not empty it.result.mask}">
 	
 				<c:set var="classCollapse" value="" />
-				<c:if test="${not actionBean.showMask and actionBean.result.numFound>0}">
+				<c:if test="${not it.showMask and it.result.numFound>0}">
 					<button id="buttonCollapseSearchmask" class="btn btn-secondary float-right" type="button"
 						    data-toggle="collapse" data-target="#searchmask" aria-expanded="false" aria-controls="searchmask">
 						<fmt:message key="Webpage.Searchresult.redefine" />
@@ -37,11 +41,11 @@
 				</c:if>
 			
 				<div>
-					<mcr:includeWebcontent id="search_intro" file="search/${actionBean.result.mask}_intro.html" />
+					<mcr:includeWebcontent id="search_intro" file="search/${it.result.mask}_intro.html" />
 				</div>
 
 				<div class="card ${classCollapse}" id="searchmask">
-					<c:out value="${actionBean.xeditorHtml}" escapeXml="false" />
+					<c:out value="${it.xeditorHtml}" escapeXml="false" />
 				</div>
 				<script type="text/javascript">
               		$('#searchmask').on('show.bs.collapse', function (event) {
@@ -53,18 +57,18 @@
               		});
             	 </script>
 		</c:if>
-        <c:if test="${actionBean.showResults}">
-				<c:if test="${not empty actionBean.result.sortfields}">
-        			<search:result-sorter result="${actionBean.result}"
-                    	 fields="${actionBean.result.sortfields}" mode="search" mask="${actionBean.result.mask}" />
+        <c:if test="${it.showResults}">
+				<c:if test="${not empty it.result.sortfields}">
+        			<search:result-sorter result="${it.result}"
+                    	 fields="${it.result.sortfields}" mode="search" mask="${it.result.mask}" />
 				</c:if>
-			  	<search:result-browser result="${actionBean.result}">
+			  	<search:result-browser result="${it.result}">
 			  		<c:set var="doctype" value="${fn:substringBefore(fn:substringAfter(mcrid, '_'),'_')}" /> 
 						<search:result-entry entry="${entry}" url="${url}" protectDownload="true"/>
 						<div style="clear:both"></div>
 			  	</search:result-browser>
 			  	<%--2nd redefine search button requested by CPB --%>
-			  	<c:if test="${not actionBean.showMask and actionBean.result.numFound>0}">
+			  	<c:if test="${not it.showMask and it.result.numFound>0}">
 					<button id="buttonCollapseSearchmask2" class="btn btn-secondary float-right mt-3" type="button"
 						    data-toggle="collapse" data-target="#searchmask" aria-expanded="false" aria-controls="searchmask">
 						<fmt:message key="Webpage.Searchresult.redefine" />
@@ -98,5 +102,7 @@
             </div>
         </c:if>
 		</div>
-	</stripes:layout-component>
-</stripes:layout-render>
+	 </div>
+  <%@ include file="../fragments/footer.jspf" %>
+  </body>
+</html>
