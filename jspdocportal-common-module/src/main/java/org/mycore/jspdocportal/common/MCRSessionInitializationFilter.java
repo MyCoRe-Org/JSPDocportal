@@ -16,7 +16,7 @@
  * along with MyCoRe.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mycore.frontend.jsp;
+package org.mycore.jspdocportal.common;
 
 import java.io.IOException;
 import java.util.UUID;

@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.mycore.frontend.jsp.MCRNavigationUtil;
+import org.mycore.jspdocportal.common.MCRNavigationUtil;
 
 @XmlRootElement(name = "navigations", namespace = "http://www.mycore.org/jspdocportal/navigation")
 @XmlAccessorType(XmlAccessType.NONE)

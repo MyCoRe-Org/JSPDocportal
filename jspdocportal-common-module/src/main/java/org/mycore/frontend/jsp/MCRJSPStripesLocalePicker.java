@@ -7,8 +7,6 @@ import javax.servlet.jsp.jstl.core.Config;
 
 import org.mycore.common.MCRSessionMgr;
 
-import net.sourceforge.stripes.localization.DefaultLocalePicker;
-
 /**
  * This class follows the advice on the Stripes Homepage:
  * http://www.stripesframework.org/display/stripes/Localization 
@@ -25,25 +23,23 @@ import net.sourceforge.stripes.localization.DefaultLocalePicker;
  *  
  * 
  * @author Robert Stephan
+ * 
+ * TODO migrate / reimplement for Jersey
  *
  */
-public class MCRJSPStripesLocalePicker extends DefaultLocalePicker {
+public class MCRJSPStripesLocalePicker  {
 
-    @Override
+    
     public Locale pickLocale(HttpServletRequest request) {
         String lang = request.getParameter("lang");
         if (lang != null) {
             Locale loc = new Locale(lang);
-            if (locales.contains(loc)) {
-                request.getSession().setAttribute("stripes_locale", loc);
-            } else {
-                request.getSession().setAttribute("stripes_locale", locales.get(0));
-            }
+            request.getSession().setAttribute("stripes_locale", loc);
             MCRSessionMgr.getCurrentSession().setCurrentLanguage(lang);
             Config.set(request.getSession(), Config.FMT_LOCALE, loc);
         }
         if (request.getSession().getAttribute("stripes_locale") == null) {
-            request.getSession().setAttribute("stripes_locale", locales.get(0));
+            request.getSession().setAttribute("stripes_locale", "de");
         }
         return (Locale) request.getSession().getAttribute("stripes_locale");
     }

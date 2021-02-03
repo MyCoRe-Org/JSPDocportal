@@ -55,7 +55,7 @@
 
   <filter>
     <filter-name>MCRSessionInitializationFilter</filter-name>
-    <filter-class>org.mycore.frontend.jsp.MCRSessionInitializationFilter</filter-class>
+    <filter-class>org.mycore.jspdocportal.common.MCRSessionInitializationFilter</filter-class>
   </filter>
   <filter-mapping>
    		<filter-name>MCRSessionInitializationFilter</filter-name>
