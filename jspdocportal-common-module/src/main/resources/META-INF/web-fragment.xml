@@ -193,15 +193,6 @@
         <servlet-class>org.mycore.frontend.servlets.MCREditorForwardServlet</servlet-class>
     </servlet>
     
-    <servlet>
-        <servlet-name>EditorSubmitted</servlet-name>
-        <servlet-class>org.mycore.frontend.jsp.DebugServlet</servlet-class>
-    </servlet>
-    
-    <servlet>
-        <servlet-name>DebugServlet</servlet-name>
-        <servlet-class>org.mycore.frontend.jsp.DebugServlet</servlet-class>
-    </servlet>
 
     <servlet>
         <servlet-name>MCRPassToTargetServlet</servlet-name>
@@ -233,10 +224,6 @@
       <servlet id="MCRAccessCheckServlet">
             <servlet-name>MCRAccessCheckServlet</servlet-name>
             <servlet-class>org.mycore.access.MCRAccessCheckServlet</servlet-class>
-      </servlet>
-      <servlet id=" MCRZipWebcontentServlet">
-            <servlet-name> MCRZipWebcontentServlet</servlet-name>
-            <servlet-class> org.mycore.frontend.servlets.MCRZipWebcontentServlet</servlet-class>
       </servlet>
           
     <!-- servlet mappings -->
@@ -273,21 +260,6 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>MCREditorForwardServlet</servlet-name>
-        <url-pattern>/editor-forward/*</url-pattern>
-    </servlet-mapping>
-    
-    <servlet-mapping>
-        <servlet-name>EditorSubmitted</servlet-name>
-        <url-pattern>/submitted</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>DebugServlet</servlet-name>
-        <url-pattern>/debug</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
         <servlet-name>MCRPassToTargetServlet</servlet-name>
         <url-pattern>/servlets/MCRPassToTargetServlet/*</url-pattern>
     </servlet-mapping>
@@ -302,10 +274,6 @@
      <servlet-mapping>
            <servlet-name>MCRZipServlet</servlet-name>
            <url-pattern>/zip</url-pattern>
-     </servlet-mapping>
-     <servlet-mapping>
-           <servlet-name>MCRZipWebcontentServlet</servlet-name>
-           <url-pattern>/zipwebcontent</url-pattern>
      </servlet-mapping>
      
   

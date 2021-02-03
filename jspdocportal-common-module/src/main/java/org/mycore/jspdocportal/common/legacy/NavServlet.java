@@ -1,4 +1,5 @@
-package org.mycore.frontend.jsp;
+package org.mycore.jspdocportal.common.legacy;
+
 
 import java.io.IOException;
 

@@ -18,6 +18,8 @@ import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
 /**
  * Stores the Metadata (JDOM Document) from XEditor into the MCRObject file in workflow directory
  * 
+ * TODO rewrite as Jersey-Controller?
+ * 
  * @author Robert Stephan
  */
 public class MCRStoreMetadataServlet extends HttpServlet {
