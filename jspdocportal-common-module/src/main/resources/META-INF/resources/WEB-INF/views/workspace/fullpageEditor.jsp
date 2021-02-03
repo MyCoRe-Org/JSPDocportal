@@ -6,23 +6,25 @@
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld" %>
-<%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
-
-
-<%--Parameter: objectType --%>
 
 <fmt:message var="pageTitle" key="WF.Headline" /> 
-<stripes:layout-render name="/WEB-INF/layout/default.jsp" pageTitle = "${pageTitle}" layout="1column">
-  <stripes:layout-component name="html_head">
-	
-  </stripes:layout-component>
-  <stripes:layout-component name="main_part">
-    <div class="container">
+
+<!doctype html>
+<html>
+<head>
+  <title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
+  <%@ include file="../fragments/html_head.jspf" %>
+</head>
+<body>
+  <%@ include file="../fragments/header.jspf" %>
+  <div class="container">
       <div class="row">
         <div class="col">
-		  <mcr:includeXEditor editorPath="${actionBean.editorPath}" cancelURL="${actionBean.cancelURL}" sourceURI="${actionBean.sourceURI}" />
+		  <mcr:includeXEditor editorPath="${it.editorPath}" cancelURL="${it.cancelURL}" sourceURI="${it.sourceURI}" />
         </div>
       </div>
-    </div>
-  </stripes:layout-component>
-</stripes:layout-render>
+  </div>
+  <%@ include file="../fragments/footer.jspf" %>
+</body>
+</html>
+

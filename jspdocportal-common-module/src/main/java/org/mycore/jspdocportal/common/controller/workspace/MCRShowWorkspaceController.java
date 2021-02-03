@@ -1,7 +1,7 @@
-package org.mycore.frontend.jsp.stripes.actions;
+package org.mycore.jspdocportal.common.controller.workspace;
 
-import java.io.IOException;
 import java.io.StringWriter;
+import java.net.URI;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +10,14 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,6 +25,7 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
+import org.glassfish.jersey.server.mvc.Viewable;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.filter.Filters;
@@ -38,7 +46,6 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.jsp.MCRHibernateTransactionWrapper;
-import org.mycore.frontend.jsp.stripes.actions.util.MCRMODSCatalogService;
 import org.mycore.frontend.xeditor.MCREditorSession;
 import org.mycore.frontend.xeditor.MCREditorSessionStore;
 import org.mycore.frontend.xeditor.MCREditorSessionStoreUtils;
@@ -48,59 +55,35 @@ import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserManager;
 
-import net.sourceforge.stripes.action.ActionBean;
-import net.sourceforge.stripes.action.Before;
-import net.sourceforge.stripes.action.DefaultHandler;
-import net.sourceforge.stripes.action.ForwardResolution;
-import net.sourceforge.stripes.action.RedirectResolution;
-import net.sourceforge.stripes.action.Resolution;
-import net.sourceforge.stripes.action.UrlBinding;
-import net.sourceforge.stripes.controller.LifecycleStage;
-
-@UrlBinding("/showWorkspace.action")
-public class ShowWorkspaceAction extends MCRAbstractStripesAction implements ActionBean {
-    private static Logger LOGGER = LogManager.getLogger(ShowWorkspaceAction.class);
-
-    ForwardResolution fwdResolution = new ForwardResolution("/content/workspace/workspace.jsp");
+@javax.ws.rs.Path("/do/workspace/tasks")
+public class MCRShowWorkspaceController {
+    private static Logger LOGGER = LogManager.getLogger(MCRShowWorkspaceController.class);
 
     private MCRMODSCatalogService modsCatService = (MCRMODSCatalogService) MCRConfiguration2
             .getInstanceOf("MCR.Workflow.MODSCatalogService.class").orElse(null);
 
-    private List<String> messages = new ArrayList<String>();
-
-    private String mode = "";
-
-    private List<Task> myTasks = new ArrayList<Task>();
-
-    private List<Task> availableTasks = new ArrayList<Task>();
-
-    private String editorPath;
-
-    private String sourceURI;
-
-    private String cancelURL;
-
-    public ShowWorkspaceAction() {
-
+    @POST
+    public Response submitForm(@FormParam("mode") @DefaultValue("") String mode,
+        @Context HttpServletRequest request) {
+        return defaultRes(mode, request);
     }
-
-    @Before(stages = LifecycleStage.BindingAndValidation)
-    public void rehydrate() {
-        super.rehydrate();
-        if (getContext().getRequest().getParameter("mode") != null) {
-            mode = getContext().getRequest().getParameter("mode");
-        }
-    }
-
-    @DefaultHandler
-    public Resolution defaultRes() {
+    
+    @GET
+    public Response defaultRes(@QueryParam("mode") @DefaultValue("") String mode,
+        @Context HttpServletRequest request) {
         if (mode == null) {
-            return new RedirectResolution("/");
+            return Response.temporaryRedirect(URI.create("/")).build();
         }
+        
+        HashMap<String, Object> model = new HashMap<String, Object>();
+        model.put("mode", mode);
+        
+        List<String> messages = new ArrayList<String>();
+        model.put("messages", messages);
 
         // open XEditor
-        if (getContext().getRequest().getParameter(MCREditorSessionStore.XEDITOR_SESSION_PARAM) != null) {
-            String xEditorStepID = getContext().getRequest().getParameter(MCREditorSessionStore.XEDITOR_SESSION_PARAM);
+        if (request.getParameter(MCREditorSessionStore.XEDITOR_SESSION_PARAM) != null) {
+            String xEditorStepID = request.getParameter(MCREditorSessionStore.XEDITOR_SESSION_PARAM);
             String sessionID = xEditorStepID.split("-")[0];
             MCREditorSession session = MCREditorSessionStoreUtils.getSessionStore().getSession(sessionID);
 
@@ -108,34 +91,31 @@ public class ShowWorkspaceAction extends MCRAbstractStripesAction implements Act
                 LOGGER.error("Editor session invalid !!!");
                 // ToDo - Forward to error page
                 // String msg = getErrorI18N("xeditor.error", "noSession", sessionID);
-                try {
-                    getContext().getResponse().sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                            "EditorSession not found: " + sessionID);
-                } catch (IOException e) {
-                    LOGGER.error(e);
-                }
-                return null;
+                
+                    //sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,  "EditorSession not found: " + sessionID);
+                return Response.serverError().build();
+                
             }
 
             String mcrID = session.getEditedXML().getRootElement().getAttributeValue("ID");
-            return editObject(mcrID, null);
+            return editObject(mcrID, null, mode);
         }
 
         try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
-            if (getContext().getRequest().getSession(false) == null
+            if (request.getSession(false) == null
                     || !MCRUserManager.getCurrentUser().isUserInRole("adminwf-" + mode)) {
-                return new RedirectResolution("/login.action");
+                return Response.temporaryRedirect(URI.create("do/login")).build();
             }
         }
 
-        for (Object o : getContext().getRequest().getParameterMap().keySet()) {
+        for (Object o : request.getParameterMap().keySet()) {
             String s= o.toString();
             if (s.equals("doPublishAllTasks")) {
-                publishAllTasks();
+                publishAllTasks(mode, messages);
             }
             if (s.startsWith("doCreateNewTask-")) {
                 String mcrBase = s.substring(s.indexOf("-") + 1);
-                createNewTask(mcrBase);
+                createNewTask(mcrBase, request, mode, messages);
             }
             if (s.startsWith("doAcceptTask-task_")) {
                 String id = s.substring(s.indexOf("_") + 1);
@@ -151,7 +131,7 @@ public class ShowWorkspaceAction extends MCRAbstractStripesAction implements Act
                 String taskID = id.substring(0, id.indexOf("-"));
                 taskID = taskID.substring(taskID.indexOf("_") + 1);
                 String transactionID = id.substring(id.indexOf("-") + 1);
-                followTransaction(taskID, transactionID);
+                followTransaction(taskID, transactionID, messages);
             }
 
             // doEditObject-task_[ID]-[mcrObjID]
@@ -160,19 +140,23 @@ public class ShowWorkspaceAction extends MCRAbstractStripesAction implements Act
                 String taskID = id.substring(0, id.indexOf("-"));
                 taskID = taskID.substring(taskID.indexOf("_") + 1);
                 String mcrObjID = id.substring(id.indexOf("-") + 1);
-                return editObject(mcrObjID, taskID);
+                return editObject(mcrObjID, taskID, mode);
             }
 
+            /*
+             * GET-Request as URL in Front-end
+             
             // doEditDerivates-task_[ID]-[mcrObjID]
             if (s.startsWith("doEditDerivates-task_")) {
                 String id = s.substring(s.indexOf("-") + 1);
                 String taskID = id.substring(0, id.indexOf("-"));
                 taskID = taskID.substring(taskID.indexOf("_") + 1);
                 String mcrObjID = id.substring(id.indexOf("-") + 1);
-                ForwardResolution res = new ForwardResolution(
-                        "/editDerivates.action?taskid=" + taskID + "&mcrobjid=" + mcrObjID);
-                return res;
+                return Response.temporaryRedirect(URI.create("do/workspace/derivates?taskid=" + taskID + "&mcrobjid=" + mcrObjID))
+                    .entity(null)
+                    .build();
             }
+            */
 
             // doImportMODS-task_[ID]-[mcrObjID]
             if (s.startsWith("doImportMODS-task_")) {
@@ -189,27 +173,33 @@ public class ShowWorkspaceAction extends MCRAbstractStripesAction implements Act
             MCRUser user = MCRUserManager.getCurrentUser();
 
             TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
-            myTasks = ts.createTaskQuery().taskAssignee(user.getUserID())
+            List<Task> myTasks = ts.createTaskQuery().taskAssignee(user.getUserID())
                     .processVariableValueEquals(MCRBPMNMgr.WF_VAR_MODE, mode).orderByTaskCreateTime().desc().list();
-
+            model.put("myTasks", myTasks);
+            
             for (Task t : myTasks) {
                 updateWFObjectMetadata(t.getId());
                 updateWFDerivateList(t);
             }
 
-            availableTasks = ts.createTaskQuery().taskCandidateUser(user.getUserID())
+            List<Task> availableTasks = ts.createTaskQuery().taskCandidateUser(user.getUserID())
                     .processVariableValueEquals(MCRBPMNMgr.WF_VAR_MODE, mode).orderByTaskCreateTime().desc().list();
-
+            model.put("availableTasks", availableTasks);
         }
-        return fwdResolution;
+
+        model.put("newObjectBases",  MCRConfiguration2.getOrThrow("MCR.Workflow.NewObjectBases." + mode, MCRConfiguration2::splitValue)
+                    .collect(Collectors.toList()));
+
+        Viewable v = new Viewable("/workspace/workspace", model);
+        return Response.ok(v).build();
     }
 
-    public void createNewTask(String mcrBase) {
+    public void createNewTask(String mcrBase, HttpServletRequest request, String mode, List<String> messages) {
         if (mcrBase != null) {
             try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
                 String projectID = mcrBase.substring(0, mcrBase.indexOf("_"));
                 String objectType = mcrBase.substring(mcrBase.indexOf("_") + 1);
-                if (getContext().getRequest().getSession(false) != null
+                if (request.getSession(false) != null
                         && MCRAccessManager.checkPermission("create-" + objectType)) {
                     Map<String, Object> variables = new HashMap<String, Object>();
                     variables.put(MCRBPMNMgr.WF_VAR_OBJECT_TYPE, objectType);
@@ -243,16 +233,20 @@ public class ShowWorkspaceAction extends MCRAbstractStripesAction implements Act
         ts.setAssignee(taskId, null);
     }
 
-    private Resolution editObject(String mcrID, String taskID) {
+    private Response editObject(String mcrID, String taskID, String mode) {
         MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
         String objectType = mcrObjID.getTypeId();
         if (objectType.equals("thesis")) {
             objectType = "disshab";
         }
-        editorPath = "/editor/metadata/editor-" + objectType + "-default.xed";
+
+        HashMap<String, Object> model = new HashMap<String, Object>();
+        Viewable v = new Viewable("/workspace/fullpageEditor", model);
+        
         Path wfFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);
-        sourceURI = wfFile.toUri().toString();
-        ForwardResolution res = new ForwardResolution("/content/editor/fullpageEditor.jsp");
+        String sourceURI = wfFile.toUri().toString();
+        model.put("sourceURI", sourceURI);        
+        
         StringBuffer sbCancel = new StringBuffer(MCRFrontendUtil.getBaseURL() + "showWorkspace.action?");
         if (!mode.isEmpty()) {
             sbCancel.append("&mode=").append(mode);
@@ -260,12 +254,16 @@ public class ShowWorkspaceAction extends MCRAbstractStripesAction implements Act
         if (taskID != null) {
             sbCancel.append("#task_").append(taskID);
         }
-        cancelURL = sbCancel.toString();
-
-        return res;
+        String cancelURL = sbCancel.toString();
+        model.put("cancelURL", cancelURL);
+        
+        String editorPath = "/editor/metadata/editor-" + objectType + "-default.xed";
+        model.put("editorPath", editorPath);
+        
+        return Response.ok(v).build();
     }
 
-    private void followTransaction(String taskId, String transactionID) {
+    private void followTransaction(String taskId, String transactionID, List<String> messages) {
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
         ts.setVariable(taskId, "goto", transactionID);
 
@@ -477,14 +475,14 @@ public class ShowWorkspaceAction extends MCRAbstractStripesAction implements Act
 
     }
 
-    private void publishAllTasks() {
+    private void publishAllTasks(String mode, List<String> messages) {
         MCRUser user = MCRUserManager.getCurrentUser();
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
-        myTasks = ts.createTaskQuery().taskAssignee(user.getUserID())
+        List<Task> myTasks = ts.createTaskQuery().taskAssignee(user.getUserID())
                 .processVariableValueEquals(MCRBPMNMgr.WF_VAR_MODE, mode).orderByTaskCreateTime().desc().list();
 
         for (Task t : myTasks) {
-            followTransaction(t.getId(), "edit_object.do_save");
+            followTransaction(t.getId(), "edit_object.do_save", messages);
         }
     }
 
@@ -496,49 +494,4 @@ public class ShowWorkspaceAction extends MCRAbstractStripesAction implements Act
         updateWFObjectMetadata(taskId);
     }
 
-    public String getMode() {
-        return mode;
-    }
-
-    public void setMode(String mode) {
-        this.mode = mode;
-        ;
-    }
-
-    public List<String> getNewObjectBases() {
-        return MCRConfiguration2.getOrThrow("MCR.Workflow.NewObjectBases." + mode, MCRConfiguration2::splitValue)
-                .collect(Collectors.toList());
-    }
-
-    public List<Task> getMyTasks() {
-        return myTasks;
-    }
-
-    public List<Task> getAvailableTasks() {
-        return availableTasks;
-    }
-
-    public static Logger getLOGGER() {
-        return LOGGER;
-    }
-
-    public ForwardResolution getFwdResolution() {
-        return fwdResolution;
-    }
-
-    public List<String> getMessages() {
-        return messages;
-    }
-
-    public String getEditorPath() {
-        return editorPath;
-    }
-
-    public String getSourceURI() {
-        return sourceURI;
-    }
-
-    public String getCancelURL() {
-        return cancelURL;
-    }
 }

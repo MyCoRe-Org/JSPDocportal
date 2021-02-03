@@ -17,6 +17,7 @@
  */
 package org.mycore.jspdocportal.common.controller;
 
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
 
@@ -28,5 +29,6 @@ public class MCRJerseyMVCApp extends ResourceConfig {
         property(JspMvcFeature.TEMPLATE_BASE_PATH, "/WEB-INF/views");
         register(MCRMakePathAbsoluteFilter.class);
         register(JspMvcFeature.class);
+        register(MultiPartFeature.class);
     }
 }

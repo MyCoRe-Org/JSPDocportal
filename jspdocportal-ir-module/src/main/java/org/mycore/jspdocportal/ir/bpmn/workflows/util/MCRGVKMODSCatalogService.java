@@ -1,4 +1,4 @@
-package org.mycore.frontend.jsp.stripes.actions.util;
+package org.mycore.jspdocportal.ir.bpmn.workflows.util;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -15,6 +15,8 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+
+import org.mycore.jspdocportal.common.controller.workspace.MCRMODSCatalogService;
 
 public abstract class MCRGVKMODSCatalogService implements MCRMODSCatalogService {
     
@@ -35,7 +37,7 @@ public abstract class MCRGVKMODSCatalogService implements MCRMODSCatalogService 
 
     private static XPathExpression<Element> XP_MODS_ROOT = XPathFactory.instance().compile("//*[./mods:mods]",
         Filters.element(), null, MODS_NAMESPACE);
-
+    
     public void updateWorkflowFile(Path mcrFile, Document docJdom) {
         try {
             

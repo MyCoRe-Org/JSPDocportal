@@ -72,7 +72,6 @@ public class MCRSearchController {
     }
 
     @GET
-    @Path("/")
     public Response resolveRes(@Context HttpServletRequest request,
         @Context HttpServletResponse response) {
         return defaultRes(null, request, response);

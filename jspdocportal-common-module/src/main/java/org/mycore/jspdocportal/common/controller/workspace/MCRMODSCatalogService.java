@@ -1,4 +1,4 @@
-package org.mycore.frontend.jsp.stripes.actions.util;
+package org.mycore.jspdocportal.common.controller.workspace;
 
 import java.nio.file.Path;
 
