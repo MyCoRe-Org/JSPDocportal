@@ -36,7 +36,7 @@ import org.mycore.common.MCRConstants;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
-import org.mycore.frontend.jsp.MCRHibernateTransactionWrapper;
+import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

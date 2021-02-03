@@ -9,7 +9,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.access.MCRAccessManager;
-import org.mycore.frontend.jsp.MCRHibernateTransactionWrapper;
+import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 
 public class MCRHasAccessTag extends SimpleTagSupport {
     private String permission;

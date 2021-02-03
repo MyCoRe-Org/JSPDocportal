@@ -10,7 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
-import org.mycore.frontend.jsp.MCRHibernateTransactionWrapper;
+import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 
 public class MCRReceiveMainDocTag extends SimpleTagSupport {
     private static Logger logger = LogManager.getLogger(MCRReceiveMainDocTag.class);

@@ -38,7 +38,7 @@ import org.mycore.datamodel.metadata.MCRObjectMetadata;
 import org.mycore.datamodel.metadata.MCRObjectService;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.cli.MCRDerivateCommands;
-import org.mycore.frontend.jsp.MCRHibernateTransactionWrapper;
+import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
 import org.xml.sax.SAXParseException;

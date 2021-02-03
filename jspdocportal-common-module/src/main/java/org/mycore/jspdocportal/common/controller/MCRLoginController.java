@@ -49,7 +49,7 @@ import org.mycore.common.MCRSystemUserInformation;
 import org.mycore.common.MCRUserInformation;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.frontend.MCRFrontendUtil;
-import org.mycore.frontend.jsp.MCRHibernateTransactionWrapper;
+import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 import org.mycore.jspdocportal.common.controller.login.MCRLoginNextStep;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.user2.MCRRole;

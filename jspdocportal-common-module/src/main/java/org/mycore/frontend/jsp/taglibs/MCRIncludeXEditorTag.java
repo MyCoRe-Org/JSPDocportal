@@ -16,16 +16,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.MCRStringContent;
 import org.mycore.common.content.MCRURLContent;
-import org.mycore.frontend.jsp.MCRHibernateTransactionWrapper;
 import org.mycore.frontend.xeditor.MCREditorSessionStore;
 import org.mycore.frontend.xeditor.MCRStaticXEditorFileServlet;
-import org.xml.sax.SAXException;
+import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 
 /**
  * This tag includes an xeditor definition, which can be provided as attribute

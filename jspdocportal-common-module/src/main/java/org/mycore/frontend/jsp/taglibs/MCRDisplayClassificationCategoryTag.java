@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
-import org.mycore.frontend.jsp.MCRHibernateTransactionWrapper;
+import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 
 public class MCRDisplayClassificationCategoryTag extends SimpleTagSupport {
     private static MCRCategoryDAO categoryDAO = MCRCategoryDAOFactory.getInstance();

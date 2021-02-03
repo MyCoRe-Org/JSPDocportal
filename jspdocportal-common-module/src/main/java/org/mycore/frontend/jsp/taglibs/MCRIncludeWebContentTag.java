@@ -18,9 +18,8 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRSessionMgr;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.frontend.jsp.MCRHibernateTransactionWrapper;
+import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 import org.mycore.services.i18n.MCRTranslation;
 
 /**
