@@ -148,14 +148,6 @@
          <url-pattern>/file/*</url-pattern>
     </servlet-mapping>
     
-
-    <servlet id="WFFileNode">
-         <servlet-name>MCRWFFileNodeServlet</servlet-name>
-         <servlet-class>org.mycore.frontend.servlets.MCRWFFileNodeServlet</servlet-class>
-    </servlet>
-    
-    
-
 	<servlet id="IDResolver">
          <servlet-name>MCRJSPIDResolverServlet</servlet-name>
          <servlet-class>org.mycore.frontend.servlets.MCRJSPIDResolverServlet</servlet-class>
@@ -305,10 +297,6 @@
         <url-pattern>/servlets/MCRCheckMetadataServlet/*</url-pattern>
     </servlet-mapping>    
 
-    <servlet-mapping>
-         <servlet-name>MCRWFFileNodeServlet</servlet-name>
-         <url-pattern>/wffile/*</url-pattern>
-    </servlet-mapping>
 	<!--  mycore servlets mapping  -->
 
      <servlet-mapping>

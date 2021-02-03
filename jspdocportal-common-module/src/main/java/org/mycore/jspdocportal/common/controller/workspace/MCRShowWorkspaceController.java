@@ -414,7 +414,8 @@ public class MCRShowWorkspaceController {
         }
 
     }
-
+    
+    //TODO: -> JSP-Tag oder Model-Object + HTML im Frontend
     private void updateWFDerivateList(Task t) {
         MCRObjectID mcrObjID = MCRObjectID.getInstance(String.valueOf(MCRBPMNMgr.getWorfklowProcessEngine()
                 .getTaskService().getVariable(t.getId(), MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID)));
@@ -456,7 +457,7 @@ public class MCRShowWorkspaceController {
                     } else {
                         result.append("<i class=\"fa fa-folder-open mr-3\"></i>");
                     }
-                    result.append("<a href=\"" + MCRFrontendUtil.getBaseURL() + "wffile/" + mcrObjID.toString() + "/"
+                    result.append("<a href=\"" + MCRFrontendUtil.getBaseURL() + "do/wffile/" + mcrObjID.toString() + "/"
                             + der.getId().toString() + "/" + fileName + "\">" + fileName + "</a>");
 
                     if (fileName.equals(der.getDerivate().getInternals().getMainDoc())) {
