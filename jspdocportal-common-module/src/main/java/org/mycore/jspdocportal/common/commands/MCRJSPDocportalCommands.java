@@ -21,7 +21,7 @@
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  */
 
-package org.mycore.frontend.jsp;
+package org.mycore.jspdocportal.common.commands;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -63,7 +63,6 @@ import org.mycore.backend.jpa.MCREntityManagerProvider;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
@@ -402,7 +401,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
      */
     @MCRCommand(syntax = "drop mycore content", help = "The command deletes all data from mycore directories and database on a lower level.")
     public static final void dropMyCoReContent() {
-        Map<String, String> ifsProperties = MCRConfiguration.instance().getPropertiesMap("MCR.IFS.ContentStore");
+        Map<String, String> ifsProperties = MCRConfiguration2.getSubPropertiesMap("MCR.IFS.ContentStore");
         for (String key : ifsProperties.keySet()) {
             if (key.endsWith(".BaseDir")) {
                 Path dir = Paths.get(String.valueOf(ifsProperties.get(key)));
