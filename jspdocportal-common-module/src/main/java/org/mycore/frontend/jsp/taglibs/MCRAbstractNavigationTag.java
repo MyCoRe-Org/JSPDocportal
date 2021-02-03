@@ -32,10 +32,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.access.MCRAccessManager;
-import org.mycore.frontend.jsp.navigation.model.Navigation;
-import org.mycore.frontend.jsp.navigation.model.NavigationItem;
-import org.mycore.frontend.jsp.navigation.model.NavigationObject;
-import org.mycore.frontend.jsp.navigation.model.Navigations;
+import org.mycore.jspdocportal.common.model.Navigations;
+import org.mycore.jspdocportal.common.navigation.model.Navigation;
+import org.mycore.jspdocportal.common.navigation.model.NavigationItem;
+import org.mycore.jspdocportal.common.navigation.model.NavigationObject;
 
 /**
  * Even though this class extends the SimpleTagSupport class,

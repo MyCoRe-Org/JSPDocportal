@@ -21,7 +21,7 @@
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  *
  */
-package org.mycore.frontend.jsp.navigation.model;
+package org.mycore.jspdocportal.common.navigation.model;
 
 import java.util.List;
 

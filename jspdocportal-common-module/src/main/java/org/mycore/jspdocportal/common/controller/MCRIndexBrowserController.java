@@ -29,7 +29,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.glassfish.jersey.server.mvc.Viewable;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationException;
-import org.mycore.frontend.jsp.search.MCRSearchResultDataBean;
+import org.mycore.jspdocportal.common.search.MCRSearchResultDataBean;
 import org.mycore.solr.MCRSolrClientFactory;
 
 @Path("/do/indexbrowser/{modus}")

@@ -36,7 +36,7 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
-import org.mycore.frontend.jsp.search.MCRSearchResultDataBean;
+import org.mycore.jspdocportal.common.search.MCRSearchResultDataBean;
 import org.mycore.services.i18n.MCRTranslation;
 
 /**

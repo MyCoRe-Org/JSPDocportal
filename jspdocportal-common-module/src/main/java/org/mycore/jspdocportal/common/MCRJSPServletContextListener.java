@@ -46,10 +46,9 @@ import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRSessionMgr;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.frontend.MCRFrontendUtil;
-import org.mycore.frontend.jsp.navigation.model.Navigations;
+import org.mycore.jspdocportal.common.model.Navigations;
 import org.mycore.services.i18n.MCRTranslation;
 
 /**

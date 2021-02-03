@@ -21,7 +21,7 @@
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  *
  */
-package org.mycore.frontend.jsp.navigation.model;
+package org.mycore.jspdocportal.common.model;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -41,6 +41,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.mycore.jspdocportal.common.MCRNavigationUtil;
+import org.mycore.jspdocportal.common.navigation.model.Navigation;
+import org.mycore.jspdocportal.common.navigation.model.NavigationItem;
 
 @XmlRootElement(name = "navigations", namespace = "http://www.mycore.org/jspdocportal/navigation")
 @XmlAccessorType(XmlAccessType.NONE)

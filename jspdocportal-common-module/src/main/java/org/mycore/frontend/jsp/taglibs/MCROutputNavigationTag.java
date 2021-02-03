@@ -33,9 +33,9 @@ import javax.servlet.jsp.JspWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.frontend.MCRFrontendUtil;
-import org.mycore.frontend.jsp.navigation.model.NavigationItem;
-import org.mycore.frontend.jsp.navigation.model.NavigationObject;
 import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
+import org.mycore.jspdocportal.common.navigation.model.NavigationItem;
+import org.mycore.jspdocportal.common.navigation.model.NavigationObject;
 
 /**
  * <p>

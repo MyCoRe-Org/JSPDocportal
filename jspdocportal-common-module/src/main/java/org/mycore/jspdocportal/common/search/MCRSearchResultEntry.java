@@ -21,12 +21,11 @@
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  *
  */
-package org.mycore.frontend.jsp.search;
+package org.mycore.jspdocportal.common.search;
 
 import java.util.LinkedHashMap;
 
 import org.apache.solr.common.SolrDocument;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.config.MCRConfiguration2;
 
 /**
