@@ -24,7 +24,7 @@
 <%@tag import="org.mycore.datamodel.metadata.MCRMetaClassification"%>
 
 
-<%@tag import="org.mycore.frontend.jsp.MCRHibernateTransactionWrapper"%>
+<%@tag import="org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper"%>
 
 <%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions" %>

@@ -1,5 +1,5 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html;charset=UTF-8"%>
-<%@ page import="org.mycore.frontend.jsp.search.MCRSearchResultDataBean" %>
+<%@ page import="org.mycore.jspdocportal.common.search.MCRSearchResultDataBean" %>
 <%@ page import="org.mycore.common.config.MCRConfiguration2" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>

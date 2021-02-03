@@ -15,7 +15,7 @@
 
    	<listener>
 		<listener-class>
-			org.mycore.frontend.jsp.MCRJSPServletContextListener
+			org.mycore.jspdocportal.common.MCRJSPServletContextListener
 		</listener-class>
 	</listener>
 	<listener>
@@ -67,7 +67,6 @@
 		<url-pattern>/classbrowser/*</url-pattern>
 		<url-pattern>/indexbrowser/*</url-pattern>
 		<url-pattern>/site/*</url-pattern>
-		<url-pattern>/metadata/*</url-pattern>
         <url-pattern>/rsc/iiif/*</url-pattern>
         <!-- <url-pattern>/file/*</url-pattern> exclude MCRFileNodeServlet = MCRServlet -->
    </filter-mapping>
@@ -89,10 +88,12 @@
     		<param-name>LocalePicker.Locales</param-name>
     		<param-value>de:UTF-8,en:UTF-8,de_DE:UTF-8,en_US:UTF-8,en_GB:UTF-8</param-value>
 		</init-param>
-    	<init-param>
+    	<!-- 
+        <init-param>
     		<param-name>LocalePicker.Class</param-name>
     		<param-value>org.mycore.frontend.jsp.MCRJSPStripesLocalePicker</param-value>
 		</init-param>
+         -->
 		<init-param>
       		<param-name>PopulationStrategy.Class</param-name>
       		<param-value>net.sourceforge.stripes.tag.BeanFirstPopulationStrategy</param-value>
@@ -101,17 +102,19 @@
             <param-name>FileUpload.MaximumPostSize</param-name>
             <param-value>101m</param-value>
         </init-param>
+        <!-- 
         <init-param>
     		<param-name>ExceptionHandler.Class</param-name>
     		<param-value>org.mycore.frontend.jsp.stripes.error.MCRJSPExceptionHandler</param-value>
-		</init-param> 
+		</init-param>
+        -->
+     
  	</filter>
 	<filter-mapping>
 		<filter-name>StripesFilter</filter-name>
 		<url-pattern>*.action</url-pattern>
 		<url-pattern>*.jsp</url-pattern>
         <url-pattern>/actions/*</url-pattern>
-		<url-pattern>/metadata/*</url-pattern>
 		<url-pattern>/classbrowser/*</url-pattern>
 		<url-pattern>/indexbrowser/*</url-pattern>
 		<url-pattern>/servlets/ErrorServlet</url-pattern>
@@ -138,7 +141,7 @@
         <url-pattern>/actions/*</url-pattern>
 		<url-pattern>/classbrowser/*</url-pattern>
 		<url-pattern>/indexbrowser/*</url-pattern>
-		<url-pattern>/metadata/*</url-pattern>
+		
 	</servlet-mapping>
     
     <!-- servlets -->
@@ -341,6 +344,10 @@
     <servlet-mapping>
         <servlet-name>MVC Jersey Servlet</servlet-name>
         <url-pattern>/resolve/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MVC Jersey Servlet</servlet-name>
+        <url-pattern>/metadata/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>MVC Jersey Servlet</servlet-name>

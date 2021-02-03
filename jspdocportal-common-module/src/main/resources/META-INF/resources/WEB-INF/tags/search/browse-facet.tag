@@ -6,7 +6,7 @@
 
 <%@ taglib prefix="search" tagdir="/WEB-INF/tags/search"%>
 
-<%@ attribute name="result" required="true" type="org.mycore.frontend.jsp.search.MCRSearchResultDataBean"%>
+<%@ attribute name="result" required="true" type="org.mycore.jspdocportal.common.search.MCRSearchResultDataBean"%>
 <%@ attribute name="top" required="false" type="java.lang.Integer" %>
 <%@ attribute name="facetField" required="true" type="java.lang.String" %>
 <%@ attribute name="mask" required="true" type="java.lang.String" %>

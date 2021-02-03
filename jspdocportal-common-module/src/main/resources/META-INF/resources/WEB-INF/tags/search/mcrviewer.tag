@@ -3,7 +3,7 @@
 <%@tag import="org.jdom2.filter.Filters"%>
 <%@tag import="org.jdom2.xpath.XPathFactory"%>
 <%@tag import="org.jdom2.xpath.XPathExpression"%>
-<%@tag import="org.mycore.frontend.jsp.MCRHibernateTransactionWrapper"%>
+<%@tag import="org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper"%>
 <%@tag import="org.mycore.datamodel.metadata.MCRDerivate"%>
 <%@tag import="org.mycore.datamodel.metadata.MCRMetaEnrichedLinkID"%>
 <%@tag import="org.mycore.datamodel.metadata.MCRObjectID"%>

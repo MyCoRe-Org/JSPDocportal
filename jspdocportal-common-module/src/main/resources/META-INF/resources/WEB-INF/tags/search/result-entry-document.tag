@@ -6,7 +6,7 @@
 <%@ taglib prefix="search" tagdir="/WEB-INF/tags/search"%>
 
 <%@ attribute name="url" required="true" type="java.lang.String"%>
-<%@ attribute name="entry" required="true" type="org.mycore.frontend.jsp.search.MCRSearchResultEntry"%>
+<%@ attribute name="entry" required="true" type="org.mycore.jspdocportal.common.search.MCRSearchResultEntry"%>
 
 <div class="row">
 	<div class="col-sm-9">

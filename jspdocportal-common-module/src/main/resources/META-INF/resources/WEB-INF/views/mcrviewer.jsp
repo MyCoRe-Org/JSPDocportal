@@ -7,7 +7,7 @@
 <%@page import="org.mycore.datamodel.metadata.MCRObject"%>
 <%@page import="org.mycore.datamodel.metadata.MCRObjectID"%>
 <%@page import="org.mycore.datamodel.metadata.MCRMetadataManager"%>
-<%@page import="org.mycore.frontend.jsp.MCRHibernateTransactionWrapper"%>
+<%@page import="org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
