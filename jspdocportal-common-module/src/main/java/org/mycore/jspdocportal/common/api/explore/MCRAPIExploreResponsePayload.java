@@ -15,51 +15,48 @@
  * You should have received a copy of the GNU General Public License
  * along with MyCoRe.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.mycore.frontend.jsp.api.explore;
+package org.mycore.jspdocportal.common.api.explore;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlValue;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.xml.bind.annotation.XmlElement;
 
 /**
- * This object represents a link an REST /explore response.
+ * This object represents the payload of a response object of the REST /explore request.
  * 
  * @author Robert Stephan
  *
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class MCRAPIExploreResponseLink {
+public class MCRAPIExploreResponsePayload {
 
     @XmlAttribute
-    private String rel;
+    private String name;
 
-    @XmlValue
-    @JsonProperty("url")
-    private String url;
+    @XmlElement
+    //RS: @XMLValue would be cleaner, but does not work, because JAXB needs a place for the xsi:type attribute.
+    private Object data;
 
-    public MCRAPIExploreResponseLink(String rel, String url) {
+    public MCRAPIExploreResponsePayload(String name, Object data) {
         super();
-        this.rel = rel;
-        this.url = url;
+        this.name = name;
+        this.data = data;
     }
 
-    public String getRel() {
-        return rel;
+    public String getName() {
+        return name;
     }
 
-    public void setRel(String rel) {
-        this.rel = rel;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getUrl() {
-        return url;
+    public Object getData() {
+        return data;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setData(Object data) {
+        this.data = data;
     }
-
 }

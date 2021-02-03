@@ -17,7 +17,7 @@
  * along with MyCoRe.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mycore.frontend.jsp.api.explore;
+package org.mycore.jspdocportal.common.api.explore;
 
 import java.io.IOException;
 import java.util.Arrays;
