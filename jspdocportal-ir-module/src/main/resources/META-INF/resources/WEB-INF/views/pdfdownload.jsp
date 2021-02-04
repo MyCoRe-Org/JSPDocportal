@@ -5,19 +5,23 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld" %>
 <%@ taglib prefix="mcrdd" uri="http://www.mycore.org/jspdocportal/docdetails.tld" %>
-<%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
 <%@ taglib prefix="search" tagdir="/WEB-INF/tags/search"%>
 
 <c:set var="WebApplicationBaseURL" value="${applicationScope.WebApplicationBaseURL}" />
 
-<c:set var="pageTitle"><fmt:message key="PDF.download.pageTitle" /></c:set> 
-<stripes:layout-render name="../../WEB-INF/layout/default.jsp" pageTitle = "${pageTitle}">
-	<stripes:layout-component name="html_head">
-		<title>${pageTitle} @ <fmt:message key="Webpage.title" /></title>
-		<link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}css/style_docdetails.css">
-	</stripes:layout-component>
-	<stripes:layout-component name="main_part">
-    <div class="row" style="margin-bottom:30px;">
+<c:set var="pageTitle"><fmt:message key="PDF.download.pageTitle" /></c:set>
+
+<!doctype html>
+<html>
+<head>
+  <title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
+  <link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}css/style_docdetails.css">
+  <%@ include file="fragments/html_head.jspf" %>
+</head>
+<body>
+  <%@ include file="fragments/header.jspf" %>
+  <div class="container">
+     <div class="row" style="margin-bottom:30px;">
       <div class="col-xs-12">
         <h2><fmt:message key="PDF.download.headline.download" /></h2>   
       </div>
@@ -25,15 +29,15 @@
     
     <div class="row">
       <div class="col-xs-12">
-          <c:forEach var="msg" items="${actionBean.errorMessages}">
+          <c:forEach var="msg" items="${it.errorMessages}">
 	 	     <p style="font-size:125%; color:darkred"><c:out value="${msg}" escapeXml="false" /></p>
 	       </c:forEach>
       </div>
     </div>
    
 	 
-	 <c:if test="${empty actionBean.errorMessages}">
-        <mcr:retrieveObject query="recordIdentifier:${fn:replace(actionBean.recordIdentifier, 'rosdok_', 'rosdok%252F')}" varDOM="doc" />
+	 <c:if test="${empty it.errorMessages}">
+        <mcr:retrieveObject query="recordIdentifier:${fn:replace(it.recordIdentifier, 'rosdok_', 'rosdok%252F')}" varDOM="doc" />
 		<mcrdd:setnamespace prefix="mods" uri="http://www.loc.gov/mods/v3" />
 		<x:choose>
    		<x:when select="$doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo">
@@ -59,11 +63,11 @@
  
          	<c:url var="imgIconUrl" value="/images/download_pdf.png" />
 			<c:choose>
-				<c:when test="${actionBean.ready}">
+				<c:when test="${it.ready}">
 					<div class="ir-box" style="margin:-15px">
-                       <c:url var="url" value="/pdfdownload/recordIdentifier/${actionBean.recordIdentifier}/${actionBean.filename}" />
+                       <c:url var="url" value="/pdfdownload/recordIdentifier/${it.recordIdentifier}/${it.filename}" />
 					   <a href="${url}" class="btn btn-default ir-button-download" style="font-size:150%;padding:15px;">
-                          <img src="${imgIconUrl}" style="height:60px;"/>&nbsp;&nbsp;${actionBean.filename} &nbsp;&nbsp;&nbsp; <small>(${actionBean.filesize})</small>
+                          <img src="${imgIconUrl}" style="height:60px;"/>&nbsp;&nbsp;${it.filename} &nbsp;&nbsp;&nbsp; <small>(${it.filesize})</small>
                        </a>
 					</div>
                     <div class="ir-box-teaser">
@@ -74,10 +78,10 @@
                     </div>
 				</c:when>
 				<c:otherwise>
-					<c:set var="progress" value="${actionBean.progress}" />
+					<c:set var="progress" value="${it.progress}" />
 					<c:choose>
 						<c:when test="${progress < 0}">
-					     	<c:url var="url" value="/pdfdownload/recordIdentifier/${actionBean.recordIdentifier}/${actionBean.filename}" />
+					     	<c:url var="url" value="/pdfdownload/recordIdentifier/${it.recordIdentifier}/${it.filename}" />
 							<div class="ir-box" style="margin:-15px">
 								<a href="${url}"><img src="${imgIconUrl}" style="vertical-align:middle;" />&nbsp;&nbsp;<fmt:message key="PDF.download.generate" /></a>
 							</div>
@@ -107,7 +111,7 @@
             <div style="padding-bottom: 100px; text-align: center;"></div>
  		</div>
     </div>
- 		<c:if test="${progress >= 0 or fn:endsWith(actionBean.requestURL, actionBean.filename)}">
+ 		<c:if test="${progress >= 0 or fn:endsWith(it.requestURL, it.filename)}">
 			<script>	
 				function refresh() {
 					setTimeout(function () {
@@ -119,6 +123,7 @@
 		</c:if>
  	</c:if>
 
- 	</stripes:layout-component>
-	
-</stripes:layout-render>
+   </div>
+  <%@ include file="fragments/footer.jspf" %>
+  </body>
+</html>

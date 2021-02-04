@@ -21,19 +21,29 @@
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  * 
  */
-package org.mycore.frontend.jsp.stripes.actions;
+package org.mycore.jspdocportal.ir.controller;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.GET;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,64 +52,37 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
+import org.glassfish.jersey.server.mvc.Viewable;
 import org.mycore.common.HashedDirectoryStructure;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.frontend.jsp.pdfdownload.PDFGenerator;
 import org.mycore.frontend.jsp.pdfdownload.PDFGeneratorService;
 import org.mycore.solr.MCRSolrClientFactory;
 
-import net.sourceforge.stripes.action.ActionBean;
-import net.sourceforge.stripes.action.ActionBeanContext;
-import net.sourceforge.stripes.action.DefaultHandler;
-import net.sourceforge.stripes.action.ForwardResolution;
-import net.sourceforge.stripes.action.Resolution;
-import net.sourceforge.stripes.action.StreamingResolution;
-import net.sourceforge.stripes.action.UrlBinding;
+@javax.ws.rs.Path("/do/pdfdownload")
+public class MCRPDFDownloadController {
+   
+    private static final Logger LOGGER = LogManager.getLogger(MCRPDFDownloadController.class);
 
-@UrlBinding("/actions/pdfdownload/recordIdentifier")
-public class PDFDownloadAction implements ActionBean {
-    private List<String> errorMessages = new ArrayList<String>();
-
-    private Path depotDir;
-
-    private String recordIdentifier;
-
-    private String filename;
-
-    private String requestURL;
-
-    private String filesize = "O MB";
-
-    private boolean ready;
-
-    public PDFDownloadAction() {
-        depotDir = Paths.get(MCRConfiguration.instance().getString("MCR.depotdir"));
-    }
-
-    private static final Logger LOGGER = LogManager.getLogger(PDFDownloadAction.class);
-
-    private ActionBeanContext context;
-
-    public ActionBeanContext getContext() {
-        return context;
-    }
-
-    public void setContext(ActionBeanContext context) {
-        this.context = context;
-    }
-
-    @DefaultHandler
-    public Resolution defaultResolution() {
-        requestURL = getContext().getRequest().getRequestURL().toString();
-        String path = getContext().getRequest().getPathInfo().replace("/actions/pdfdownload/recordIdentifier", "").replace("..",
+    @GET
+    @javax.ws.rs.Path("recordIdentifier/{recordID}")
+    public Response get(@PathParam("recordID") String recordID, @Context HttpServletRequest request, @Context ServletContext servletContext) {
+        HashMap<String, Object> model = new HashMap<>();
+        
+        List<String> errorMessages = new ArrayList<String>();
+        model.put("errorMessages",  errorMessages);
+        model.put("requestURL", request.getRequestURL().toString());
+        
+        String path = request.getPathInfo().replace("/actions/pdfdownload/recordIdentifier", "").replace("..",
                 "");
         while (path.startsWith("/")) {
             path = path.substring(1);
         }
         if (path.length() == 0) {
-            return new ForwardResolution("/index.jsp");
+            Response.temporaryRedirect(URI.create("/")).build();
         }
         path = path.replace("%25", "%").replace("%2F", "/");
+        String recordIdentifier = "";
         if (path.endsWith(".pdf")) {
             // download file if it exists or show progress html
             recordIdentifier = path.substring(0, path.lastIndexOf("/"));
@@ -118,42 +101,57 @@ public class PDFDownloadAction implements ActionBean {
             SolrDocumentList solrResults = response.getResults();
 
             if (solrResults.getNumFound() > 0) {
-                filename = recordIdentifier.replace("/", "_") + ".pdf";
+                String filename = recordIdentifier.replace("/", "_") + ".pdf";
+                model.put("filename",  filename);
 
                 final Path resultPDF = calculateCacheDir().resolve(recordIdentifier).resolve(filename);
-                ready = Files.exists(resultPDF);
+                boolean ready = Files.exists(resultPDF);
+                model.put("ready",  ready);
+
                 if (ready) {
-                    filesize = String.format(Locale.GERMANY, "%1.1f%n MB",
-                            (double) Files.size(resultPDF) / 1024 / 1024);
+                    model.put("filesize", String.format(Locale.GERMANY, "%1.1f%n MB",
+                            (double) Files.size(resultPDF) / 1024 / 1024));
+                }
+                else {
+                    model.put("filesize", "O MB");
                 }
 
-                if (path.endsWith(".pdf") && ready && getProgress() < 0) {
+                if (path.endsWith(".pdf") && ready && getProgress(servletContext, recordIdentifier) < 0) {
                     // download pdf
                     Path fCount = resultPDF.getParent().resolve(resultPDF.getFileName() + ".count");
                     Files.write(fCount, ".".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE,
                             StandardOpenOption.APPEND);
-
-                    return new StreamingResolution("application/pdf") {
-                        @Override
-                        protected void stream(HttpServletResponse response) throws Exception {
-                            Files.copy(resultPDF, response.getOutputStream());
+                    
+                    StreamingOutput stream = new StreamingOutput() {
+                        public void write(OutputStream output) throws IOException, WebApplicationException {
+                            try {
+                                Files.copy(resultPDF, output);
+                            } catch (Exception e) {
+                                throw new WebApplicationException(e);
+                            }
                         }
-                    }.setFilename(filename);
+                    };
+
+                    return Response.ok(stream)
+                        .header("Content-Type", "application/pdf")
+                        .header("Content-Type", "application/x-download")
+                        .header("Content-Disposition", "attachment; filename=" + filename).
+                        build();
                 }
 
                 String mcrid = String.valueOf(solrResults.get(0).getFirstValue("returnId"));
 
-                if (!ready && getProgress() < 0) {
-                    getContext().getServletContext().setAttribute(PDFGenerator.SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier,
+                if (!ready && getProgress(servletContext, recordIdentifier) < 0) {
+                    servletContext.setAttribute(PDFGenerator.SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier,
                             0);
+                    Path depotDir = Paths.get(MCRConfiguration2.getString("MCR.depotdir").orElse(""));
                     PDFGeneratorService.execute(new PDFGenerator(resultPDF,
                             HashedDirectoryStructure.createOutputDirectory(depotDir, recordIdentifier),
-                            recordIdentifier, mcrid, getContext().getServletContext()));
+                            recordIdentifier, mcrid, servletContext));
                 }
 
-                if (getProgress() > 100) {
-                    getContext().getServletContext()
-                            .removeAttribute(PDFGenerator.SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier);
+                if (getProgress(servletContext, recordIdentifier) > 100) {
+                    servletContext.removeAttribute(PDFGenerator.SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier);
                 }
 
             } else {
@@ -163,23 +161,19 @@ public class PDFDownloadAction implements ActionBean {
             LOGGER.error(e);
         }
 
-        return new ForwardResolution("/WEB-INF/views/pdfdownload.jsp");
+
+
+        model.put("progresss",  getProgress(servletContext, recordIdentifier));
+        model.put("recordIdentifier",  recordID.replace("/", "_"));
+    
+        Viewable v = new Viewable("/pdfdownload", model);
+        return Response.ok(v).build();
     }
 
-    public String getRecordIdentifier() {
-        return recordIdentifier.replace("/", "_");
-    }
 
-    public boolean isReady() {
-        return ready;
-    }
 
-    public String getFilename() {
-        return filename;
-    }
-
-    public int getProgress() {
-        Integer num = (Integer) getContext().getServletContext()
+    public int getProgress(ServletContext servletContext, String recordIdentifier) {
+        Integer num = (Integer) servletContext
                 .getAttribute(PDFGenerator.SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier);
         if (num == null) {
             return -1;
@@ -189,23 +183,8 @@ public class PDFDownloadAction implements ActionBean {
     }
 
     private Path calculateCacheDir() {
-        Path cacheDir = Paths.get(MCRConfiguration.instance().getString("MCR.PDFDownload.CacheDir"));
+        Path cacheDir = Paths.get(MCRConfiguration2.getString("MCR.PDFDownload.CacheDir").orElseThrow());
         return cacheDir;
     }
 
-    public String getFilesize() {
-        return filesize;
-    }
-
-    public List<String> getErrorMessages() {
-        return errorMessages;
-    }
-
-    public void setErrorMessages(List<String> errorMessages) {
-        this.errorMessages = errorMessages;
-    }
-
-    public String getRequestURL() {
-        return requestURL;
-    }
 }
