@@ -1,7 +1,6 @@
 <%@page import="org.mycore.common.MCRSessionMgr"%>
 <%@page import="org.apache.logging.log4j.LogManager"%>
 <%@page import="org.apache.logging.log4j.core.Logger"%>
-<%@page import="net.sourceforge.stripes.action.ActionBean"%>
 <%@page import="org.jdom2.Element"%>
 <%@page import="org.mycore.datamodel.metadata.MCRMetaEnrichedLinkID"%>
 <%@page import="org.mycore.datamodel.metadata.MCRObject"%>
