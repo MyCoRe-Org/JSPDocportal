@@ -47,7 +47,7 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
-import org.mycore.frontend.jsp.taglibs.MCRTransformXslTag;
+import org.mycore.jspdocportal.common.taglibs.MCRTransformXslTag;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;

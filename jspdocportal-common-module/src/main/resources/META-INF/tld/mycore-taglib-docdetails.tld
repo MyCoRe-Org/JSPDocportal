@@ -10,7 +10,7 @@
 	<tag>
 		<description>Outer Tag for MyCoRe Docdetails</description>
 		<name>docdetails</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.docdetails.MCRDocDetailsTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.docdetails.MCRDocDetailsTag</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<name>mcrID</name>
@@ -44,7 +44,7 @@
 	<tag>
 		<description>add a namespace to be used by the JSTL XML Tag Library (using Java Reflection)</description>
 		<name>setnamespace</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.docdetails.MCRDocDetailsSetNamespaceTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.docdetails.MCRDocDetailsSetNamespaceTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>prefix</name>
@@ -58,14 +58,14 @@
 	<tag>
 		<description>display the header</description>
 		<name>header</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.docdetails.MCRDocDetailsHeaderTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.docdetails.MCRDocDetailsHeaderTag</tag-class>
 		<body-content>scriptless</body-content>
 	</tag>
 	
 	<tag>
 		<description>displays a docdetails row</description>
 		<name>row</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.docdetails.MCRDocDetailsRowTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.docdetails.MCRDocDetailsRowTag</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<name>select</name>
@@ -90,7 +90,7 @@
 	<tag>
 		<description>shows a separator, which can be a space or a line</description>
 		<name>separator</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.docdetails.MCRDocDetailsSeparatorTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.docdetails.MCRDocDetailsSeparatorTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>showLine</name>
@@ -101,7 +101,7 @@
 	<tag>
 		<description>displays a docdetail item</description>
 		<name>item</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.docdetails.MCRDocDetailsItemTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.docdetails.MCRDocDetailsItemTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>select</name>
@@ -129,7 +129,7 @@
 	<tag>
 		<description>returns a Docdetails linked text or text item</description>
 		<name>linkitem</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.docdetails.MCRDocDetailsLinkItemTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.docdetails.MCRDocDetailsLinkItemTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>select</name>
@@ -143,7 +143,7 @@
 	<tag>
 		<description>displays a docdetails publishedin item</description>
 		<name>publishedinitem</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.docdetails.MCRDocDetailsPublishedInItemTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.docdetails.MCRDocDetailsPublishedInItemTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>select</name>
@@ -159,7 +159,7 @@
 	<tag>
 		<description>displays a docdetail classification item</description>
 		<name>classificationitem</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.docdetails.MCRDocDetailsClassificationItemTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.docdetails.MCRDocDetailsClassificationItemTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>select</name>
@@ -173,7 +173,7 @@
 	<tag>
 		<description>displays a docdetail output item</description>
 		<name>outputitem</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.docdetails.MCRDocDetailsOutputItemTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.docdetails.MCRDocDetailsOutputItemTag</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<name>select</name>
@@ -191,7 +191,7 @@
 	<tag>
 		<description>includes the content of a derivate into the docdetails</description>
 		<name>derivatecontent</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.docdetails.MCRDocDetailsDerivateContentTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.docdetails.MCRDocDetailsDerivateContentTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>select</name>
@@ -209,7 +209,7 @@
 	<tag>
 		<description>includes the content from PND Beacon Findbuch</description>
 		<name>pndbeacon</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.docdetails.MCRDocDetailsPNDBeaconTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.docdetails.MCRDocDetailsPNDBeaconTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>pnd</name>
@@ -230,7 +230,7 @@
 	<tag>
 		<description>includes the content from PND Beacon Findbuch</description>
 		<name>complexref</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.docdetails.MCRDocDetailsShowComplexRefTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.docdetails.MCRDocDetailsShowComplexRefTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>content</name>

@@ -11,7 +11,7 @@
 	<tag>
 		<description>A tag, that renders the navigation</description>
 		<name>outputNavigation</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCROutputNavigationTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCROutputNavigationTag</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<name>id</name>
@@ -38,7 +38,7 @@
 	<tag>
 		<description>A tag, that appends all necessary information about the navigation into PAGE_SCOPE.</description>
 		<name>customNavigation</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRCustomNavigationTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRCustomNavigationTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>id</name>
@@ -69,7 +69,7 @@
           For the list of parameters look at the documentation of this class.
         </description>
 		<name>outputLanguageSelector</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCROutputLanguageSelectorTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCROutputLanguageSelectorTag</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<name>languages</name>
@@ -85,7 +85,7 @@
 	
 	<tag>
 		<name>includeXEditor</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRIncludeXEditorTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRIncludeXEditorTag</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<name>editorPath</name>
@@ -114,7 +114,7 @@
 		<description> A Tag, that checks if a MyCoRe object is currently processed by 
 		    the workflow</description>
 		<name>isLocked</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRIsObjectLockedTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRIsObjectLockedTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>var</name>
@@ -131,7 +131,7 @@
 	<tag>
 		<description>A Tag, that loads an MCRObject from Repository or workflow directory </description>
 		<name>retrieveObject</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRRetrieveObjectTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRRetrieveObjectTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>mcrid</name>
@@ -168,7 +168,7 @@
   <tag>
     <description>A Tag, that loads the content (directory listing) of a derivate as XML</description>
     <name>retrieveDerivateContentsXML</name>
-    <tag-class>org.mycore.frontend.jsp.taglibs.MCRRetrieveDerivateContentsXMLTag</tag-class>
+    <tag-class>org.mycore.jspdocportal.common.taglibs.MCRRetrieveDerivateContentsXMLTag</tag-class>
     <body-content>empty</body-content>
     <attribute>
       <name>derid</name>
@@ -195,7 +195,7 @@
   <tag>
     <description>A tag, that makes an XSLT transformation</description>
     <name>transformXSL</name>
-    <tag-class>org.mycore.frontend.jsp.taglibs.MCRTransformXslTag</tag-class>
+    <tag-class>org.mycore.jspdocportal.common.taglibs.MCRTransformXslTag</tag-class>
     <body-content>scriptless</body-content>
     <attribute>
       <name>xslt</name>
@@ -215,7 +215,7 @@
 		 	has the specified access permission for a given object
 		 </description>
 		<name>hasAccess</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRHasAccessTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRHasAccessTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>permission</name>
@@ -236,7 +236,7 @@
 	<tag>
 		<description>A Tag, that includes another web page trying to load it in the current language</description>
 		<name>includeWebcontent</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRIncludeWebContentTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRIncludeWebContentTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>id</name>
@@ -253,7 +253,7 @@
 	<tag>
 		<description>add a namespace to be used by the JSTL XML Tag Library (using Java Reflection)</description>
 		<name>setNamespace</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRSetNamespaceTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRSetNamespaceTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>prefix</name>
@@ -267,7 +267,7 @@
   
     <tag>
       <name>session</name>
-      <tag-class>org.mycore.frontend.jsp.taglibs.MCRSessionTag</tag-class>
+      <tag-class>org.mycore.jspdocportal.common.taglibs.MCRSessionTag</tag-class>
       <body-content>empty</body-content>
       <attribute>
         <name>var</name>
@@ -284,7 +284,7 @@
     
     <tag>
       <name>webjarLocator</name>
-      <tag-class> org.mycore.frontend.jsp.taglibs.MCRWebjarLocatorTag</tag-class>
+      <tag-class> org.mycore.jspdocportal.common.taglibs.MCRWebjarLocatorTag</tag-class>
       <body-content>empty</body-content>
       <attribute>
         <name>var</name>
@@ -314,7 +314,7 @@
 	 ************************************************************************* -->
 	<tag>
 		<name>endTask</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCREndTaskTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCREndTaskTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>success</name>
@@ -340,7 +340,7 @@
 	</tag>
 	<tag>
 		<name>checkDecisionNode</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRCheckDecisionNodeTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRCheckDecisionNodeTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>var</name>
@@ -367,7 +367,7 @@
 	</tag>
 	<tag>
 		<name>listWorkflowProcess</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRListWorkflowProcessTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRListWorkflowProcessTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>var</name>
@@ -384,7 +384,7 @@
 	</tag>
 	<tag>
 		<name>listWorkflowDerivates</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRListWorkflowDerivatesTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRListWorkflowDerivatesTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>varDom</name>
@@ -416,7 +416,7 @@
 	</tag>
 	<tag>
 		<name>getAccessRulesTag</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRGetAccessRulesTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRGetAccessRulesTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>var</name>
@@ -446,7 +446,7 @@
 	</tag>
 	<tag>
 		<name>getWorkflowTaskBeanList</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRGetWorkflowTaskBeanListTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRGetWorkflowTaskBeanListTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>var</name>
@@ -488,7 +488,7 @@
 
 	<tag>
 		<name>deleteProcess</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRDeleteProcessTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRDeleteProcessTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>pid</name>
@@ -510,7 +510,7 @@
 	</tag>
 	<tag>
 		<name>getWorkflowEngineVariable</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRGetWorkflowEngineVariableTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRGetWorkflowEngineVariableTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>var</name>
@@ -531,7 +531,7 @@
 	</tag>
 	<tag>
 		<name>initWorkflowProcess</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRInitWorkflowProcessTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRInitWorkflowProcessTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>workflowProcessType</name>
@@ -567,7 +567,7 @@
 	</tag>
 	<tag>
 		<name>includeEditorInWorkflow</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRIncludeEditorInWorkflowTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRIncludeEditorInWorkflowTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>nextPath</name>
@@ -650,7 +650,7 @@
 
 	<tag>
 		<name>includeEditor</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRIncludeEditorTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRIncludeEditorTag</tag-class>
 		<body-content>empty</body-content>
 		<!-- <attribute> <name>editorSessionID</name> <required>false</required> 
 			<rtexprvalue>true</rtexprvalue> </attribute> -->
@@ -674,7 +674,7 @@
 
 	<tag>
 		<name>getFreeUserIDs</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRGetFreeUserIDs</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRGetFreeUserIDs</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>var</name>
@@ -695,7 +695,7 @@
 	</tag>
 	<tag>
 		<name>ifSorted</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRIfSortedTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRIfSortedTag</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<name>query</name>
@@ -722,7 +722,7 @@
 	</tag>
 	<tag>
 		<name>setQueryAsString</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRSetQueryAsStringTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRSetQueryAsStringTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>jdom</name>
@@ -740,7 +740,7 @@
 
 	<tag>
 		<name>displayClassificationCategory</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRDisplayClassificationCategoryTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRDisplayClassificationCategoryTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>classid</name>
@@ -767,7 +767,7 @@
 
 	<tag>
 		<name>simpleXpath</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRSimpleXpathTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRSimpleXpathTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>jdom</name>
@@ -785,7 +785,7 @@
 
 	<tag>
 		<name>getConfigProperty</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRGetConfigPropertyTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRGetConfigPropertyTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>prop</name>
@@ -808,7 +808,7 @@
 	<tag>
 		<description>A Tag, that outputs debug information</description>
 		<name>debugInfo</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRDebugInfoTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRDebugInfoTag</tag-class>
 		<body-content>empty</body-content>
 
 	</tag>
@@ -816,7 +816,7 @@
 	<tag>
 		<description>A Tag, that retrieves the main file from a derivate</description>
 		<name>receiveMainDoc</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRReceiveMainDocTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRReceiveMainDocTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>derid</name>
@@ -833,7 +833,7 @@
 	<tag>
 		<description>A Tag, that formats published-in information</description>
 		<name>formatPublishedIn</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRFormatPublishedInTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRFormatPublishedInTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>xml</name>
@@ -845,7 +845,7 @@
 	<tag>
 		<description>A Tag, that includes a classification browser for MyCoRe (state: new, still experimental)</description>
 		<name>classificationBrowser</name>
-		<tag-class>org.mycore.frontend.jsp.taglibs.MCRClassificationBrowserTag</tag-class>
+		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRClassificationBrowserTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<description>the classification browser modus (property prefix)</description>
