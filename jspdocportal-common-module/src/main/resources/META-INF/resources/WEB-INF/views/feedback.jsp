@@ -4,35 +4,44 @@
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld"%>
-<%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld"%>
 
 <fmt:message var="pageTitle" key="Webpage.feedback" />
-<stripes:layout-render name="../WEB-INF/layout/default.jsp"
-	pageTitle="${pageTitle}" layout="2columns">
-	<stripes:layout-component name="main_part">
+
+<!doctype html>
+<html>
+<head>
+  <title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
+  <%@ include file="fragments/html_head.jspf" %>
+</head>
+<body>
+  <%@ include file="fragments/header.jspf" %>
+  <div class="container">
+  <div class="row">
+  <div class="col">
 		<div class="ir-box">
 			<mcr:includeWebcontent id="feedback" file="feedback.html" />
 
-		<stripes:messages />
+          <c:forEach var="m" items="${it.messages}">
+            <div class="alert alert-info" role="alert">
+              <c:out value="${m}" />
+            </div>
+          </c:forEach>
 
-
-			<stripes:form
-				beanclass="org.mycore.frontend.jsp.stripes.actions.SendFeedbackAction"
-				id="feedback-form" enctype="multipart/form-data" acceptcharset="UTF-8"
+			<form id="feedback-form" action="${applicationScope.WebApplicationBaseURL}do/feedback" accept-charset="UTF-8"
 				class="form-horizontal ir-box">
 				<input name="csrfToken" type="hidden" id="csrf-token" value="" />
-				<stripes:hidden name="returnURL">${actionBean.returnURL}</stripes:hidden>
-				<stripes:hidden name="subject">${actionBean.subject}</stripes:hidden>
-				<stripes:hidden name="recipient">${actionBean.recipient}</stripes:hidden>
-				<stripes:hidden name="topicHeader">${actionBean.topicHeader}</stripes:hidden>
-				<stripes:hidden name="topicURL">${actionBean.topicURL}</stripes:hidden>
+				<input type="hidden" name="returnURL" value="${it.returnURL}" />
+				<input type="hidden" name="subject" value="${it.subject}" />
+				<input type="hidden" name="recipient" value="${it.recipient}" />
+				<input type="hidden" name="topicHeader" value="${it.topicHeader}" />
+				<input type="hidden" name="topicURL" value="${it.topicURL}" />
 
 				<div class="form-group">
 					<label class="col-sm-2 control-label"><fmt:message
 							key="Webpage.feedback.label.recipient" /></label>
 					<div class="col-sm-10">
 						<p class="form-control-static">
-							<b>${actionBean.recipient}</b>
+							<b>${it.recipient}</b>
 						</p>
 					</div>
 				</div>
@@ -40,7 +49,7 @@
 					<label class="col-sm-2 control-label"><fmt:message
 							key="Webpage.feedback.label.topic" /></label>
 					<div class="col-sm-10">
-						<h4 class="form-control-static" style="margin-top: 0px">${actionBean.topicHeader}<br />(${actionBean.topicURL})
+						<h4 class="form-control-static" style="margin-top: 0px">${it.topicHeader}<br />(${it.topicURL})
 						</h4>
 					</div>
 				</div>
@@ -49,23 +58,21 @@
 					<label for="inputName" class="col-sm-2 control-label"><fmt:message
 							key="Webpage.feedback.label.senderName" /></label>
 					<div class="col-sm-10">
-						<stripes:text class="form-control" id="inputName" name="fromName" />
+						<input type="text" class="form-control" id="inputName" name="fromName" />
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="inputEmail" class="col-sm-2 control-label"><fmt:message
 							key="Webpage.feedback.label.senderEmail" /></label>
 					<div class="col-sm-10">
-						<stripes:text class="form-control" id="inputEmail"
-							name="fromEmail" />
+						<input type="text" class="form-control" id="inputEmail" name="fromEmail" />
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="inputEmail" class="col-sm-2 control-label"><fmt:message
 							key="Webpage.feedback.label.message" /></label>
 					<div class="col-sm-10">
-						<stripes:textarea class="form-control" id="inputEmail" rows="10"
-							name="message" />
+						<textarea class="form-control" id="message" rows="10" name="message"></textarea> 
 					</div>
 				</div>
 				<hr />
@@ -74,10 +81,10 @@
 					<div class="col-sm-10">
 						<fmt:message key="Webpage.feedback.button.send" var="lblSend" />
 						<input name="doSend" type="submit" id="submit-button" style="display:none" disabled="disabled" value="${lblSend}"  />
-					    <button type="button" class="btn btn-primary" onclick="submitForm('${actionBean.csrfToken}')">${lblSend}</button>
+					    <button type="button" class="btn btn-primary" onclick="submitForm('${it.csrfToken}')">${lblSend}</button>
 					</div>
 				</div>
-			</stripes:form>
+			</form>
 			<script type="text/javascript">
 				function submitForm(csrf){
 					document.getElementById('csrf-token').value = csrf;
@@ -85,6 +92,10 @@
 					document.getElementById('submit-button').click();
 				}
 			</script>
-		</div>
-	</stripes:layout-component>
-</stripes:layout-render>
+		 </div>
+     </div>
+     </div>
+     </div>
+  <%@ include file="fragments/footer.jspf" %>
+  </body>
+</html>
