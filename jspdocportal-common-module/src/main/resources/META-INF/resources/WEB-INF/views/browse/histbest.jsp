@@ -4,7 +4,6 @@
 <%@ taglib prefix="fmt"     uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn"      uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="mcr" 	uri="http://www.mycore.org/jspdocportal/base.tld"%>
-<%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld"%>
 	
 <%@ taglib prefix="search" tagdir="/WEB-INF/tags/search"%>
 <c:set var="org.mycore.navigation.path" scope="request">left.histbest.histbest_recherche</c:set>

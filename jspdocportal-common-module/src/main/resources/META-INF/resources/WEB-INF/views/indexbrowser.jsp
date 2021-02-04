@@ -60,14 +60,14 @@
       <div class="col-12">
         <div class="card indexbrowser-searchbar">
           <div class="card-body">
-            <stripes:form beanclass="org.mycore.frontend.jsp.stripes.actions.IndexBrowserAction"
+            <form action="${applicationScope.WebApplicationBaseURL}do/indexbrowser"
                             id="indexbrowserForm" enctype="multipart/form-data" acceptcharset="UTF-8" class="form-inline">
-              <stripes:hidden name="modus">${actionBean.modus}</stripes:hidden>
-              <stripes:label for="txtSelect"><fmt:message key="Webpage.indexbrowser.form.label" />:</stripes:label>&#160;&#160;&#160;&#160;&#160;
-              <stripes:text class="form-control form-control-sm" id="txtSelect" name="select" />
+              <input type=hidden" name="modus" value="${actionBean.modus} " />
+              <label for="txtSelect"><fmt:message key="Webpage.indexbrowser.form.label" />:</label>&#160;&#160;&#160;&#160;&#160;
+              <input type="text" class="form-control form-control-sm" id="txtSelect" name="select" />
               <fmt:message var="output" key="Webpage.indexbrowser.form.button" />
-              <stripes:submit name="doSearch" value="${output}" class="btn btn-sm btn-primary ml-4" />
-            </stripes:form>
+              <button name="doSearch" value="${output}" class="btn btn-sm btn-primary ml-4" />
+            </form>
           </div>
         </div>
       </div>

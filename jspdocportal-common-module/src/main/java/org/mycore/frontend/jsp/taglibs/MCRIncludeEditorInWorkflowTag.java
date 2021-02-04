@@ -31,11 +31,8 @@ import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
-import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
 import org.xml.sax.SAXException;
-
-import net.sourceforge.stripes.controller.StripesRequestWrapper;
 
 public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
     private String isNewEditorSource;
@@ -164,9 +161,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
             File editorFile = new File(path);
 
             HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
-            if (request instanceof StripesRequestWrapper) {
-                request = (HttpServletRequest) ((StripesRequestWrapper) request).getRequest();
-            }
+
             request.getParameterMap().clear();
 
             for (Object key : parameters.keySet()) {
