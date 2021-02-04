@@ -13,7 +13,7 @@
  		<c:when test="${not locked}">
  			<!--  Editbutton -->
  			<a class="btn btn-primary btn-lg pull-right" style="padding:6px" 
-				href="${WebApplicationBaseURL}startedit.action?mcrid=${mcrid}" title="<fmt:message key="WF.common.object.EditObject" />">
+				href="${WebApplicationBaseURL}do/startedit?mcrid=${mcrid}" title="<fmt:message key="WF.common.object.EditObject" />">
 		   		<i class="fas fa-pencil-alt"></i>
 		   	</a> 
 		</c:when>

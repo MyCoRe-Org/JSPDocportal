@@ -1,7 +1,15 @@
-package org.mycore.frontend.jsp.stripes.actions;
+package org.mycore.jspdocportal.common.controller;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +24,7 @@ import org.jdom2.xpath.XPathFactory;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -24,37 +32,15 @@ import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr;
 import org.mycore.user2.MCRUserManager;
 
-import net.sourceforge.stripes.action.ActionBean;
-import net.sourceforge.stripes.action.Before;
-import net.sourceforge.stripes.action.DefaultHandler;
-import net.sourceforge.stripes.action.RedirectResolution;
-import net.sourceforge.stripes.action.Resolution;
-import net.sourceforge.stripes.action.UrlBinding;
-import net.sourceforge.stripes.controller.LifecycleStage;
+@Path("/do/startedit")
+public class MCRStartEditController  {
+    private static Logger LOGGER = LogManager.getLogger(MCRStartEditController.class);
 
-@UrlBinding("/startedit.action")
-public class StartEditAction extends MCRAbstractStripesAction implements ActionBean {
-    private static Logger LOGGER = LogManager.getLogger(StartEditAction.class);
-
-    private String mcrid = null;
-
-    public StartEditAction() {
-
-    }
-
-    @Before(stages = LifecycleStage.BindingAndValidation)
-    public void rehydrate() {
-        super.rehydrate();
-        if (getContext().getRequest().getParameter("mcrid") != null) {
-            mcrid = getContext().getRequest().getParameter("mcrid");
-        }
-    }
-
-    @DefaultHandler
-    public Resolution defaultRes() {
+    @GET
+    public Response defaultRes(@QueryParam("mcrid") String mcrid, @Context HttpServletRequest request) {
         try (MCRHibernateTransactionWrapper htw = new MCRHibernateTransactionWrapper()) {
-            if (getContext().getRequest().getSession(false)==null  || !MCRAccessManager.checkPermission(mcrid, "writedb")) {
-                return new RedirectResolution("/login.action");
+            if (request.getSession(false)==null  || !MCRAccessManager.checkPermission(mcrid, "writedb")) {
+                return Response.temporaryRedirect(URI.create("/do/login")).build();
             }
 
             LOGGER.debug("Document MCRID = " + mcrid);
@@ -78,18 +64,19 @@ public class StartEditAction extends MCRAbstractStripesAction implements ActionB
                         for (Task t : ts.createTaskQuery().processInstanceId(pi.getId()).list()) {
                             ts.setAssignee(t.getId(), MCRUserManager.getCurrentUser().getUserID());
                         }
-                        return new RedirectResolution("/showWorkspace.action?mode=" + mode);
+                        return Response.temporaryRedirect(URI.create("/showWorkspace.action?mode=" + mode)).build();
                     }
                    
                 }
             }
         }
-        return null;
+        //TODO redirect to ERROR-Page
+        return Response.temporaryRedirect(URI.create("/")).build();
     }
     
     private static String retrieveModeFromMetadata(MCRObject mcrObj) {
     	Document doc = mcrObj.createXML();
-    	Map<String, String>modeChecks = MCRConfiguration.instance().getPropertiesMap("MCR.Workflow.RetrieveMode.");
+    	Map<String, String>modeChecks = MCRConfiguration2.getSubPropertiesMap("MCR.Workflow.RetrieveMode.");
     	
     	XPathFactory xpathFactory = XPathFactory.instance();
     	for(Map.Entry<String, String> entry: modeChecks.entrySet()) {
