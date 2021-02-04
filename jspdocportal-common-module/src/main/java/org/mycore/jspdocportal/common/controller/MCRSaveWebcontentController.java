@@ -1,4 +1,4 @@
-package org.mycore.frontend.jsp.stripes.actions;
+package org.mycore.jspdocportal.common.controller;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,70 +12,59 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.glassfish.jersey.server.mvc.Viewable;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 
-import net.sourceforge.stripes.action.ActionBean;
-import net.sourceforge.stripes.action.Before;
-import net.sourceforge.stripes.action.DefaultHandler;
-import net.sourceforge.stripes.action.ForwardResolution;
-import net.sourceforge.stripes.action.RedirectResolution;
-import net.sourceforge.stripes.action.Resolution;
-import net.sourceforge.stripes.action.UrlBinding;
-import net.sourceforge.stripes.controller.LifecycleStage;
+@Path("/do/save-webcontent")
+public class MCRSaveWebcontentController {
+    private static Logger LOGGER = LogManager.getLogger(MCRSaveWebcontentController.class);
 
-@UrlBinding("/saveWebcontent.action")
-public class SaveWebcontentAction extends MCRAbstractStripesAction implements ActionBean {
-    private static Logger LOGGER = LogManager.getLogger(SaveWebcontentAction.class);
-
-    private String file = "";
-
-    private String content = "";
-
-    private String referer = null;
-
-    private String id = null;
-
-    public SaveWebcontentAction() {
-
-    }
-
-    @Before(stages = LifecycleStage.BindingAndValidation)
-    public void rehydrate() {
-        super.rehydrate();
-    }
-
-    @DefaultHandler
-    public Resolution defaultRes() {
+    @POST
+    public Response post(@Context HttpServletRequest request) {
+        String referer = null;
         try (MCRHibernateTransactionWrapper htw = new MCRHibernateTransactionWrapper()) {
             if (MCRAccessManager.checkPermission("administrate-webcontent")) {
-                for (Object o : getContext().getRequest().getParameterMap().keySet()) {
+                for (Object o :request.getParameterMap().keySet()) {
                     String s = o.toString();
                     if (s.startsWith("doSave_")) {
-                        id = s.substring(s.indexOf("_") + 1);
-                        doSave(id);
+                        String id = s.substring(s.indexOf("_") + 1);
+                        doSave(id, request);
                         break;
                     }
                     if (s.startsWith("doOpen_")) {
-                        id = s.substring(s.indexOf("_") + 1);
+                        String id = s.substring(s.indexOf("_") + 1);
                         getOpenEditorsFromSession().add(id);
-                        referer = getContext().getRequest().getHeader("Referer");
-                        file = getContext().getRequest().getParameter("file_" + id);
-                        content = loadContent();
-                        return new ForwardResolution("/editor/editor-webcontent.jsp");
+                        HashMap<String, Object> model = new HashMap<>();
+                        model.put("id",  id);
+                        model.put("referer", request.getHeader("Referer"));
+                        String file = request.getParameter("file_" + id);
+                        model.put("file", file);
+                        model.put("content", loadContent(file));
+                        
+                        Viewable v = new Viewable("/webcontenteditor", model);
+                        return Response.ok(v).build();
+                        
                     }
                     if (s.startsWith("doCancel_")) {
-                        id = s.substring(s.indexOf("_") + 1);
+                        String id = s.substring(s.indexOf("_") + 1);
                         getOpenEditorsFromSession().remove(id);
-                        referer = getContext().getRequest().getHeader("Referer");
                         break;
                     }
                 }
@@ -84,15 +73,14 @@ public class SaveWebcontentAction extends MCRAbstractStripesAction implements Ac
         if (referer == null) {
             referer = MCRFrontendUtil.getBaseURL();
         }
-        //return new RedirectResolution(getContext().getRequest().getHeader("Referer"), false);
-        return new RedirectResolution(referer, false);
+        return Response.temporaryRedirect(URI.create(referer)).build();
     }
 
-    private void doSave(String id) {
+
+    private void doSave(String id, HttpServletRequest request) {
         getOpenEditorsFromSession().remove(id);
-        file = getContext().getRequest().getParameter("file_" + id);
-        content = getContext().getRequest().getParameter("content_" + id);
-        referer = getContext().getRequest().getParameter("referer_" + id);
+        String file = request.getParameter("file_" + id);
+        String content = request.getParameter("content_" + id);
         File saveDir = new File(MCRConfiguration2.getString("MCR.WebContent.SaveFolder").orElseThrow());
         saveDir = new File(saveDir, MCRSessionMgr.getCurrentSession().getCurrentLanguage());
         File saveFile = new File(saveDir, file);
@@ -116,7 +104,7 @@ public class SaveWebcontentAction extends MCRAbstractStripesAction implements Ac
         return openEditors;
     }
 
-    private String loadContent() {
+    private String loadContent(String file) {
         StringWriter out = new StringWriter();
         String lang = MCRSessionMgr.getCurrentSession().getCurrentLanguage();
         File dirSaveWebcontent = new File(MCRConfiguration2.getString("MCR.WebContent.SaveFolder").orElseThrow());
@@ -145,21 +133,5 @@ public class SaveWebcontentAction extends MCRAbstractStripesAction implements Ac
             LOGGER.error(e);
         }
         return out.toString();
-    }
-
-    public String getFile() {
-        return file;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public String getReferer() {
-        return referer;
-    }
-
-    public String getId() {
-        return id;
     }
 }

@@ -111,7 +111,7 @@ public class MCRIncludeWebContentTag extends SimpleTagSupport {
                 .toString();
         out.write("\n<div class=\"float-right\">");
         out.write("\n    <form id=\"editWebcontent_" + id + "\" method=\"post\" action=\"" + baseurl
-                + "saveWebcontent.action\">");
+                + "do/save-webcontent\">");
         out.write("\n        <input type=\"hidden\" name=\"file_" + id + "\" value=\"" + file + "\" />");
         out.write("\n        <input type=\"submit\"  name=\"doOpen_" + id
                 + "\" value=\"&#9997;\" style=\"font-size:200%;padding:0px 6px;position:relative;z-index:100;\" class=\"btn btn-success\" title=\""

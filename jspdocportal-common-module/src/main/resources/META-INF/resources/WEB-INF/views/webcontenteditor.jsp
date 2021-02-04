@@ -4,29 +4,32 @@
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"   %>
 <%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld" %>
-<%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
 
 
 <fmt:message var="pageTitle" key="Webpage.editwebcontent.form.headline" />
-<stripes:layout-render name="../WEB-INF/layout/default.jsp" pageTitle = "${pageTitle}" layout="1column">
-	<stripes:layout-component name="html_head">
-		<%-- Jquery from Layout: <script src="//code.jquery.com/jquery-1.11.1.min.js"></script> --%>
-   		<%-- Bootstrap from Layout: <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> --%>
-   		
-   		<mcr:webjarLocator htmlElement="script" project="ckeditor" file="standard/ckeditor.js" />
-   		<mcr:webjarLocator htmlElement="script" project="ckeditor" file="standard/adapters/jquery.js" />
-	</stripes:layout-component>
-	
-	<stripes:layout-component name="main_part">
-		<div class="ir-box">
+
+<!doctype html>
+<html>
+<head>
+  <title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
+  <%@ include file="fragments/html_head.jspf" %>
+   <mcr:webjarLocator htmlElement="script" project="ckeditor" file="standard/ckeditor.js" />
+   <mcr:webjarLocator htmlElement="script" project="ckeditor" file="standard/adapters/jquery.js" />
+  
+</head>
+<body>
+  <%@ include file="fragments/header.jspf" %>
+  <div class="container">
+    <div class="row">
+		<div class="col ir-box">
 			<h2><fmt:message key="Webpage.editwebcontent.form.headline" /></h2>
-			<p><strong>Datei: ${actionBean.file}</strong></p>
-		<form id="editWebcontent_${actionBean.id}" method="post" action="saveWebcontent.action" accept-charset="UTF-8">
-		    <input type="hidden" name="file_${actionBean.id}" value="${actionBean.file}" />
-		    <input type="hidden" name="referer_${actionBean.id}" value="${actionBean.referer}" />
-		    <textarea  id="taedit_${actionBean.id}" name="content_${actionBean.id}" rows="10" cols="80">${actionBean.content}</textarea>
+			<p><strong>Datei: ${it.file}</strong></p>
+		<form id="editWebcontent_${it.id}" method="post" action="${applicationScope.WebApplicationBaseURL}do/save-webcontent" accept-charset="UTF-8">
+		    <input type="hidden" name="file_${it.id}" value="${it.file}" />
+		    <input type="hidden" name="referer_${it.id}" value="${it.referer}" />
+		    <textarea  id="taedit_${it.id}" name="content_${it.id}" rows="10" cols="80">${it.content}</textarea>
 		
-		<c:set var="jsid" value="${fn:replace(actionBean.id, '.', '\\\\\\\\.')}" />
+		<c:set var="jsid" value="${fn:replace(it.id, '.', '\\\\\\\\.')}" />
 		<script type="text/javascript">
 		
 		 	var config = {
@@ -44,17 +47,21 @@
 		</script>
 		  <div class="card">  
 		    <div class="card-body bg-warning">
-		        <input type="submit"  name="doSave_${actionBean.id}" class="btn btn-primary" 
+		        <input type="submit"  name="doSave_${it.id}" class="btn btn-primary" 
 		               title="<fmt:message key="Webpage.editwebcontent.save"/>" value="Speichern" /> 
 		                 <%-- <i class="fa fa-floppy-o"></i> <fmt:message key="Webpage.editwebcontent.save" /> --%>
 				
 
-		        <input type="submit"  name="doCancel_${actionBean.id}" class="btn btn-danger" 
+		        <input type="submit"  name="doCancel_${it.id}" class="btn btn-danger" 
 		        	title="<fmt:message key="Webpage.editwebcontent.cancel" />" value="Abbrechen" />
 		        		<%-- <i class="fa fa-times"></i> <fmt:message key="Webpage.editwebcontent.cancel" /> --%>
 		    </div>
 		  </div>
 		</form>
 		</div>
-	</stripes:layout-component>
-</stripes:layout-render>   
+    </div>
+    </div>
+  <%@ include file="fragments/footer.jspf" %>
+  </body>
+</html>
+    
