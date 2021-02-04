@@ -20,7 +20,7 @@
  *
  */
 
-package org.mycore.frontend.depotapi;
+package org.mycore.jspdocportal.ir.depotapi;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;

@@ -21,7 +21,7 @@
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  * 
  */
-package org.mycore.frontend.jsp.pdfdownload;
+package org.mycore.jspdocportal.ir.pdfdownload;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -51,8 +51,8 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
-import org.mycore.frontend.jsp.pdfdownload.util.PDFFrontpageUtil;
-import org.mycore.frontend.jsp.pdfdownload.util.PDFTOCUtil;
+import org.mycore.jspdocportal.ir.pdfdownload.util.PDFFrontpageUtil;
+import org.mycore.jspdocportal.ir.pdfdownload.util.PDFTOCUtil;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;

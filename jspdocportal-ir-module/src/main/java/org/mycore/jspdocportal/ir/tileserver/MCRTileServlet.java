@@ -21,7 +21,7 @@
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  */
 
-package org.mycore.frontend.servlets.tileserver;
+package org.mycore.jspdocportal.ir.tileserver;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;

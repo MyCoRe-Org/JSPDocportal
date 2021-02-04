@@ -11,16 +11,16 @@
   <ordering>
     <before>
       <name>mycore</name>
-      <name>jspdocportal_module</name>
+      <name>jspdocportal_common_module</name>
     </before>
   </ordering>
   
   <servlet>
     <servlet-name>MCRJSPTileServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.servlets.tileserver.MCRTileServlet</servlet-class>
+    <servlet-class>org.mycore.jspdocportal.ir.tileserver.MCRTileServlet</servlet-class>
     <init-param>
       <param-name>tileFileProvider</param-name>
-      <param-value>org.mycore.frontend.servlets.tileserver.MCRJSPTileFileProvider</param-value>
+      <param-value>org.mycore.jspdocportal.ir.tileserver.MCRJSPTileFileProvider</param-value>
     </init-param>
   </servlet>
   <servlet-mapping>

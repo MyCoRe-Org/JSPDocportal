@@ -1,4 +1,4 @@
-package org.mycore.frontend.servlets.tileserver;
+package org.mycore.jspdocportal.ir.tileserver;
 
 import java.nio.file.Path;
 

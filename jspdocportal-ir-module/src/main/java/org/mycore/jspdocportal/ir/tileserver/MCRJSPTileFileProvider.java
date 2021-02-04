@@ -20,7 +20,7 @@
  * If not, write to the Free Software Foundation Inc.,
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  */
-package org.mycore.frontend.servlets.tileserver;
+package org.mycore.jspdocportal.ir.tileserver;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -29,11 +29,10 @@ import java.nio.file.Paths;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.HashedDirectoryStructure;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationException;
-import org.mycore.frontend.servlets.tileserver.MCRTileFileProvider;
 import org.mycore.imagetiler.MCRImage;
+import org.mycore.jspdocportal.ir.depotapi.HashedDirectoryStructure;
 
 /**
  * Calculate the path for a specific tile of an image.
@@ -46,7 +45,7 @@ public class MCRJSPTileFileProvider implements MCRTileFileProvider {
 
     public Path getTileFile(String derivate, String image) {
         try {
-            Path depotDir = Paths.get(MCRConfiguration.instance().getString("MCR.depotdir"));
+            Path depotDir = Paths.get(MCRConfiguration2.getString("MCR.depotdir").orElseThrow());
             String recordIdentifier = URLDecoder.decode(URLDecoder.decode(derivate, "UTF-8"), "UTF-8");
             Path outputDir = HashedDirectoryStructure.createOutputDirectory(depotDir, recordIdentifier);
             image = image.replaceFirst("(\\w+)(_derivate_)(\\d+)(/)", "");

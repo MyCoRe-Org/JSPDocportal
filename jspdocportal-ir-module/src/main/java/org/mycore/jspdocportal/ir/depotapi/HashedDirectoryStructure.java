@@ -21,7 +21,7 @@
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  */
 
-package org.mycore.common;
+package org.mycore.jspdocportal.ir.depotapi;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

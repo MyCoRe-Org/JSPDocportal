@@ -53,10 +53,10 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.glassfish.jersey.server.mvc.Viewable;
-import org.mycore.common.HashedDirectoryStructure;
 import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.frontend.jsp.pdfdownload.PDFGenerator;
-import org.mycore.frontend.jsp.pdfdownload.PDFGeneratorService;
+import org.mycore.jspdocportal.ir.depotapi.HashedDirectoryStructure;
+import org.mycore.jspdocportal.ir.pdfdownload.PDFGenerator;
+import org.mycore.jspdocportal.ir.pdfdownload.PDFGeneratorService;
 import org.mycore.solr.MCRSolrClientFactory;
 
 @javax.ws.rs.Path("/do/pdfdownload")

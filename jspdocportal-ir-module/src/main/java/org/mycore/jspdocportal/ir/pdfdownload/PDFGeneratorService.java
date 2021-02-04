@@ -21,7 +21,7 @@
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  * 
  */
-package org.mycore.frontend.jsp.pdfdownload;
+package org.mycore.jspdocportal.ir.pdfdownload;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
