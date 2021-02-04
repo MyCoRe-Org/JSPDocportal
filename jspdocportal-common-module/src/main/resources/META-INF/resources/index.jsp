@@ -1,18 +1,34 @@
 
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"   %>
-<%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld" %>
-<%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld"%>
 
-<fmt:message var="pageTitle" key="Nav.Start" /> 
-<stripes:layout-render name="WEB-INF/layout/default.jsp" pageTitle = "${pageTitle}">
-	<stripes:layout-component name="main_part">
-	
-<h2><fmt:message key="Webpage.intro.Webpage.intro" /></h2>
-<mcr:includeWebcontent id="index_intro" file="index_introtext.html" />
 
-	</stripes:layout-component>
-</stripes:layout-render>   
+<fmt:message var="pageTitle" key="Nav.Start" />
+
+<!doctype html>
+<html>
+<head>
+<title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
+<%@ include file="/WEB-INF/views/fragments/html_head.jspf"%>
+</head>
+<body>
+  <%@ include file="/WEB-INF/views/fragments/fragments/header.jspf"%>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+            <h2>
+              <fmt:message key="Webpage.intro.Webpage.intro" />
+            </h2>
+            <mcr:includeWebcontent id="index_intro" file="index_introtext.html" />
+
+            <div style="height: 75px;">&nbsp;</div>
+      </div>
+    </div>
+    </div>
+    <%@ include file="../fragments/footer.jspf"%>
+</body>
+</html>
