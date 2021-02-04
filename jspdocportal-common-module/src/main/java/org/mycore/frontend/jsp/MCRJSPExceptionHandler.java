@@ -20,7 +20,7 @@
  * If not, write to the Free Software Foundation Inc.,
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  */
-package org.mycore.frontend.jsp.stripes.error;
+package org.mycore.frontend.jsp;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -32,8 +32,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sourceforge.stripes.exception.DefaultExceptionHandler;
-import net.sourceforge.stripes.exception.ExceptionHandler;
 
 /**
  * general error handler for stripes
@@ -45,9 +43,9 @@ import net.sourceforge.stripes.exception.ExceptionHandler;
  * @see https://stripesframework.atlassian.net/wiki/spaces/STRIPES/pages/491987/Exception+Handling
  *
  */
-public class MCRJSPExceptionHandler extends DefaultExceptionHandler implements ExceptionHandler {
+public class MCRJSPExceptionHandler {
 
-    @Override
+
     public void handle(Throwable thr, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     // ActionBean bean = (ActionBean) request.getAttribute(StripesConstants.REQ_ATTR_ACTION_BEAN);
