@@ -28,7 +28,11 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.mycore.common.MCRSession;
+import org.mycore.common.MCRSessionMgr;
+import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 
 /**
@@ -38,7 +42,10 @@ import org.mycore.frontend.servlets.MCRServlet;
  *
  */
 public class MCRSessionInitializationFilter implements Filter {
-
+    
+ public static final String ATTRIBUTE_NAME_INITIAL_URL = "initialURL"; 
+    
+    
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }
@@ -48,9 +55,26 @@ public class MCRSessionInitializationFilter implements Filter {
             throws IOException, ServletException {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
         String name = getClass().getName() + "_" + UUID.randomUUID().toString();
 
+        //sets the initial URL into a request attribute 
+        //because JSPs as views (Jersey MVC) return their own path as request URL
+        if (httpRequest.getAttribute(ATTRIBUTE_NAME_INITIAL_URL) == null) {
+            httpRequest.setAttribute(ATTRIBUTE_NAME_INITIAL_URL, httpRequest.getRequestURL());
+        }
+        
         MCRServlet.initializeMCRSession(httpRequest, name);
+        
+        MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
+        
+        //update the Language (Locale) in the MCRSession, if a request parameter &lang=xy is present
+        MCRFrontendUtil.configureSession(mcrSession, httpRequest, httpResponse);
+        
+        //this would set the current locale into the JSP Standard Taglib Configuration,
+        //but switching the language seems to work without this command
+        //import javax.servlet.jsp.jstl.core.Config;
+        //Config.set(httpRequest.getSession(), Config.FMT_LOCALE, mcrSession.getLocale());
 
         chain.doFilter(request, response);
 
