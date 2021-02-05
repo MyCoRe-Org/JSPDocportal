@@ -36,6 +36,7 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.JspFragment;
 
 import org.mycore.frontend.MCRFrontendUtil;
+import org.mycore.jspdocportal.common.MCRSessionInitializationFilter;
 
 /**
  * <p>Tag that supports rendering the language selector. See below for two usage examples</p>
@@ -88,20 +89,31 @@ import org.mycore.frontend.MCRFrontendUtil;
  */
 public class MCROutputLanguageSelectorTag extends MCRAbstractTag {
     private String languages;
+
     private String var;
 
     public void doTag() throws JspException, IOException {
 
         init();
-
         HttpServletRequest request = (HttpServletRequest) ((PageContext) getJspContext()).getRequest();
-        StringBuffer url = request.getRequestURL();
-        url.append("?");
+        StringBuffer initialURL = new StringBuffer("");
+        try {
+            initialURL = (StringBuffer) request
+                .getAttribute(MCRSessionInitializationFilter.ATTRIBUTE_NAME_INITIAL_URL);
+        } catch (Exception e) {
+            //ignore
+        }
+
+        StringBuffer url = new StringBuffer(initialURL);
+        if (!initialURL.toString().contains("?")) {
+            url.append("?");
+        }
 
         JspWriter out = getJspContext().getOut();
         JspContext context = getJspContext();
         JspFragment body = getJspBody();
 
+        @SuppressWarnings("unchecked")
         Enumeration<String> pnames = (Enumeration<String>) request.getParameterNames();
 
         while (pnames.hasMoreElements()) {
@@ -168,11 +180,17 @@ public class MCROutputLanguageSelectorTag extends MCRAbstractTag {
      */
     public static class LanguageVariables {
         private String lang;
+
         private String href;
+
         private boolean first;
+
         private String currentLang;
+
         private String imageURL;
+
         private String label;
+
         private String title;
 
         /**

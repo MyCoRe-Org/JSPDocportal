@@ -19,10 +19,6 @@
 
 <c:set var="from"  value="${param.from}" />
 
-
-<mcr:session info="language" var="lang" />
-<fmt:setLocale value="${lang}" scope="session" />
-
 <html>
 <head><title>Print Details</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />

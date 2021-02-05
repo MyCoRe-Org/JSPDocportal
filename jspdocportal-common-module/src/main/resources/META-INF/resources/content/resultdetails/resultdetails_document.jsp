@@ -11,7 +11,7 @@
 
 <mcr:retrieveObject mcrid="${param.id}" varDOM="xml"/>
 <c:set var="type" value="${fn:substringBefore(fn:substringAfter(param.id, '_'),'_')}" />
-<fmt:setLocale value="${requestScope.lang}"/>
+
 <c:set var="formatType"><x:out select="$xml/mycoreobject/metadata/formats/format/@categid"/></c:set>
 <c:set var="contentType"><x:out select="$xml/mycoreobject/metadata/types/type/@categid"/></c:set>
 
