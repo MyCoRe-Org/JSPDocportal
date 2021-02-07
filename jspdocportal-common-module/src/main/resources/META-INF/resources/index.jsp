@@ -16,7 +16,7 @@
 <%@ include file="/WEB-INF/views/fragments/html_head.jspf"%>
 </head>
 <body>
-  <%@ include file="/WEB-INF/views/fragments/fragments/header.jspf"%>
+  <%@ include file="/WEB-INF/views/fragments/header.jspf"%>
   <div class="container">
     <div class="row">
       <div class="col">
