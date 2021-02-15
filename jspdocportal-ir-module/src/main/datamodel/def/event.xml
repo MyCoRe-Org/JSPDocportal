@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objecttype name="text" isChild="false" isParent="false" hasDerivates="true" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel.xsd">
+
+  <metadata>
+
+    <!-- 01 - ID of the event - obsolete field -->
+    <element name="event01" wrapper="event01s" type="text" required="false" maxOccurs="10" />
+
+    <!-- 02 - Link to work -->
+    <element name="event02" wrapper="event02s" type="link" required="true" maxOccurs="10">
+      <target type="work" />
+    </element>
+
+    <!-- 03 - event type -->
+    <element name="event03" wrapper="event03s" type="classification" required="true" maxOccurs="1">
+      <classification id="BachDigitalEventType" />
+    </element>
+
+    <!-- 04 event date -->
+    <element name="event04" wrapper="event04s" type="date" required="false" maxOccurs="1" />
+
+    <!-- 05 - event place -->
+    <element name="event05" wrapper="event05s" type="classification" required="false" maxOccurs="1">
+      <classification id="BachDigitalEventPlace" />
+    </element>
+
+    <!-- 06 - Literature -->
+    <!-- analog MEI:biblList TEI:listBibl -->
+    <element name="event06" wrapper="event06s" type="text" required="false" maxOccurs="16" />
+
+    <!-- 07 - Remarks extern -->
+    <element name="event07" wrapper="event07s" type="text" required="false" maxOccurs="5" />
+
+    <!-- 08 - Remarks intern -->
+    <element name="event08" wrapper="event08s" type="text" required="false" maxOccurs="5" />
+
+    <!-- 09 - Editor -->
+    <element name="event09" wrapper="event09s" type="text" required="true" maxOccurs="10" />
+
+    <!-- 10 - Link -->
+    <element name="event10" wrapper="event10s" type="link" required="false" maxOccurs="25">
+      <target type="person" />
+    </element>
+
+  </metadata>
+
+</objecttype>
