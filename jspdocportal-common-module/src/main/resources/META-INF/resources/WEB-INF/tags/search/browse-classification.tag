@@ -17,7 +17,7 @@
 <% MCRCategory rootCateg = MCRCategoryDAOFactory.getInstance().getCategory(MCRCategoryID.fromString(categid), -1); 
 	jspContext.setAttribute("rootCateg", rootCateg);
 %>
-   <div class="card ir-browse-classification-card h-100">
+   <div class="mcr-facet card ir-browse-classification-card h-100" data-mcr-facet-field="${facetField}">
      <div class="card-header"><h4>
       <c:if test="${not empty lang}">
         ${rootCateg.getLabel(lang).get().text}

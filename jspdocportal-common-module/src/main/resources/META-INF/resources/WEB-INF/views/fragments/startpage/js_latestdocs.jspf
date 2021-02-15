@@ -1,12 +1,17 @@
 <%--TODO use SOLR-Parameter "&facet.mincount=1" --%>
     <script>
     $( document ).ready(function() {
+    	var facetFieldParams = 
+    	$('.mcr-facet').map(function() {
+    		  return '&facet.field='+ $(this).attr('data-mcr-facet-field');
+    	}).get().join('');
       $.ajax({
         type : "GET",
         url : $("meta[name='mcr:baseurl']").attr("content")
                +"servlets/solr/select?q=category%3A%22doctype%3A${mask}%22%20-objectType:bundle"
                    +"&rows=1&wt=json&indent=true"
-                   +"&facet=true&facet.field=ir.doctype_class.facet&facet.field=ir.institution_class.facet&facet.field=ir.collection_class.facet&facet.field=ir.epoch_msg.facet&facet.field=ir.sdnb_class.facet&facet.field=ir.ghb_class.facet"
+                   +"&facet=true"
+                   +facetFieldParams
                    +"&sort=created+DESC&rows=5&fl=id,created,ir.cover_url,ir.creator.result,ir.title.result,ir.doctype.result,ir.originInfo.result"
                    +"&wt=json&json.wrf=?",
         dataType : "jsonp",
