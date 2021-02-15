@@ -288,6 +288,9 @@
            <xsl:for-each select="mods:classification[@displayLabel='collection']">
                 <field name="ir.collection_class.facet"><xsl:value-of select="translate(substring-after(@valueURI,'classifications/'),'#',':')" /></field>
            </xsl:for-each>
+           <xsl:for-each select="mods:classification[@displayLabel='provider']">
+                <field name="ir.provider_class.facet"><xsl:value-of select="translate(substring-after(@valueURI,'classifications/'),'#',':')" /></field>
+           </xsl:for-each>
            <xsl:for-each select="mods:classification[@displayLabel='accesscondition']">
                 <field name="ir.accesscondition_class.facet"><xsl:value-of select="translate(substring-after(@valueURI,'classifications/'),'#',':')" /></field>
            </xsl:for-each>
