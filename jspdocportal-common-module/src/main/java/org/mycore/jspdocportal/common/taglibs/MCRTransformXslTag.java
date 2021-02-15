@@ -22,24 +22,21 @@
  */
 package org.mycore.jspdocportal.common.taglibs;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.util.Map;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.TransformerFactory;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.xsl.MCRParameterCollector;
-import org.mycore.common.xsl.MCRTemplatesSource;
-import org.mycore.common.xsl.MCRXSLTransformerFactory;
-import org.w3c.dom.Node;
+import org.mycore.common.content.MCRDOMContent;
+import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.common.content.transformer.MCRXSLTransformer;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.w3c.dom.Document;
 
 /**
  * This class will add namespace declarations (prefix-uri pairs) to the XPathUtil class
@@ -48,40 +45,70 @@ import org.w3c.dom.Node;
  * 
  * Uses the Java Reflection Framework to modify private fields
  * 
+ * Example:
+ * <mcr:retrieveObject mcrid="${mcrid}" varDOM="doc" />
+ * <mcr:transformXSL dom="${doc}" xslt="xsl/xsl3example.xsl" />
+ * 
  * @author Robert Stephan
  *
  */
 public class MCRTransformXslTag extends SimpleTagSupport {
     private static Logger LOGGER = LogManager.getLogger(MCRTransformXslTag.class);
 
-    private Node node;
+    private Document dom;
+    
+    private org.jdom2.Document jdom;
 
     private String stylesheet;
 
+    private String mcrid;
+
     public void doTag() throws JspException, IOException {
         try {
-            MCRTemplatesSource source = new MCRTemplatesSource(stylesheet);
-            Transformer t = MCRXSLTransformerFactory.getTransformer(source);
-            Map<String, Object> params = MCRParameterCollector.getInstanceFromUserSession().getParameterMap();
-            for (String k : params.keySet()) {
-                t.setParameter(k, params.get(k));
+            // this works, if the default transformer is xslt3 (set by property):
+            // MCR.LayoutService.TransformerFactoryClass=net.sf.saxon.TransformerFactoryImpl
+            // MCRXSLTransformer t = MCRXSLTransformer.getInstance(stylesheet);
+            
+            //  this works by configuring an individual transformer and override dummy:
+            //  MCR.ContentTransformer.jspdocportal.Class=org.mycore.common.content.transformer.MCRXSLTransformer
+            //  MCR.ContentTransformer.jspdocportal.Stylesheet=dummy-placeholder.xsl
+            //  MCR.ContentTransformer.jspdocportal.TransformerFactoryClass=net.sf.saxon.TransformerFactoryImpl
+            //
+            //  but returns a content transformer, which produces string output
+            //MCRContentTransformer t =MCRContentTransformerFactory.getTransformer("jspdocportal");
+            //((MCRXSLTransformer) t).setStylesheets(stylesheet);
+           
+            
+           // this is the final way to go:
+           //@SuppressWarnings("unchecked")
+           //Class<TransformerFactory> tfClass = (Class<TransformerFactory>)Class.forName("net.sf.saxon.TransformerFactoryImpl");
+           //MCRXSLTransformer t = MCRXSLTransformer.getInstance(tfClass, stylesheet);
+
+            // this works during development
+            // but setting transformerFactory looks expensive and should be avoided
+            // The transformers itself come from a cache, and are preconfigured with the proper transformer factory)
+           MCRXSLTransformer t = MCRXSLTransformer.getInstance(stylesheet);
+           t.setTransformerFactory("net.sf.saxon.TransformerFactoryImpl");
+           
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            if (mcrid != null) {
+                t.transform(MCRXMLMetadataManager.instance().retrieveContent(MCRObjectID.getInstance(mcrid)), baos);
+                getJspContext().getOut().append(new String(baos.toString()));
+                return;
             }
-            Source input = new DOMSource(node);
-            StringWriter sw = new StringWriter();
-            Result output = new StreamResult(sw);
-            t.transform(input, output);
-            getJspContext().getOut().append(sw.toString());
+            if (jdom != null) {
+                t.transform(new MCRJDOMContent(jdom), baos);
+                getJspContext().getOut().append(new String(baos.toString()));
+                return;
+            }
+            if (dom != null) {
+                t.transform(new MCRDOMContent(dom), baos);
+                getJspContext().getOut().append(new String(baos.toString()));
+                return;
+            }
         } catch (Exception e) {
             LOGGER.error("Something went wrong processing the XSLT: " + stylesheet, e);
         }
-    }
-
-    public Node getXml() {
-        return node;
-    }
-
-    public void setXml(Node node) {
-        this.node = node;
     }
 
     public String getXslt() {
@@ -90,5 +117,17 @@ public class MCRTransformXslTag extends SimpleTagSupport {
 
     public void setXslt(String stylesheet) {
         this.stylesheet = stylesheet;
+    }
+
+    public void setMcrid(String mcrid) {
+        this.mcrid = mcrid;
+    }
+
+    public void setDom(Document dom) {
+        this.dom = dom;
+    }
+
+    public void setJdom(org.jdom2.Document jdom) {
+        this.jdom = jdom;
     }
 }

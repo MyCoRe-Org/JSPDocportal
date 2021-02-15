@@ -203,10 +203,21 @@
       <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
-      <name>xml</name>
-      <required>true</required>
+      <name>dom</name>
+      <required>false</required>
       <rtexprvalue>true</rtexprvalue>
-      <type>org.w3c.dom.Node</type>
+      <type>org.w3c.dom.Document</type>
+    </attribute>
+    <attribute>
+      <name>jdom</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>org.jdom2.Document</type>
+    </attribute>
+    <attribute>
+      <name>mcrid</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 	

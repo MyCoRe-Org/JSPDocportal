@@ -4,7 +4,7 @@
   xmlns:mods="http://www.loc.gov/mods/v3" 
   xmlns:xlink="http://www.w3.org/1999/xlink" 
   xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" 
+  xmlns:mcri18n="http://www.mycore.de/xslt/i18n" 
   xmlns:mcrmods="xalan://org.mycore.mods.classification.MCRMODSClassificationSupport"
   xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions" 
   xmlns:mcr="http://www.mycore.org/" 
@@ -12,13 +12,13 @@
  
   <!-- to enable relative urls in import set xsltSystemId attribute in x:transform of JSP XML Tag Library !!! -->
   <xsl:import href="mods-util.xsl" />
-  
+  <xsl:import href="resource:xsl/functions/i18n.xsl" />
   <xsl:output method="html" indent="yes" standalone="no" encoding="UTF-8"/>
 
   <xsl:param name="WebApplicationBaseURL"></xsl:param>
 
   <xsl:template match="/">
-    <h2><xsl:value-of select="i18n:translate('Webpage.docdetails.deleted.header')" /></h2>
+    <h2><xsl:value-of select="mcri18n:translate('Webpage.docdetails.deleted.header')" /></h2>
   </xsl:template>
 
 </xsl:stylesheet>

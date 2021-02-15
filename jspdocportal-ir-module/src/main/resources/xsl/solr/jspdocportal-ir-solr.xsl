@@ -72,6 +72,10 @@
           </xsl:if> 
        </xsl:for-each>
        
+       <!-- XSLT3:
+	   <xsl:if test="mcrmods:is-supported(mods:classification[@displayLabel='doctype'])">
+       		<field name="ir.doctype.result"><xsl:value-of select="mcrmods:to-mycoreclass(mods:classification[@displayLabel='doctype'], 'single')/categories/categories/category/label[@xml:lang='de']/@text" /></field>
+       </xsl:if> -->
        <xsl:variable name="classlink" select="mcrmods:getClassCategLink(mods:classification[@displayLabel='doctype'])" />
   	   	<xsl:if test="string-length($classlink) &gt; 0">
        		<field name="ir.doctype.result"><xsl:value-of select="document($classlink)/mycoreclass/categories/category/label[@xml:lang='de']/@text" /></field>

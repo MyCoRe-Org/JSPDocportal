@@ -44,7 +44,7 @@
             <div class="row">
     			<c:set var="mcrid"><x:out select="$doc/mycoreobject/@ID" /></c:set>
                 <div class="col-xs-8">
-                  <mcr:transformXSL xml="${doc}" xslt="xsl/docdetails/document2header_html.xsl" />      
+                  <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/document2header_html.xsl" />      
                 </div>
                 <div class="col-xs-2 col-xs-offset-1">
                   <search:derivate-image mcrid="${mcrid}" width="100%" labelContains="cover" />

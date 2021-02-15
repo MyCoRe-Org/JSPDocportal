@@ -4,12 +4,13 @@
   xmlns:mods="http://www.loc.gov/mods/v3" 
   xmlns:xlink="http://www.w3.org/1999/xlink" 
   xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" 
+  xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
   xmlns:mcrmods="xalan://org.mycore.mods.classification.MCRMODSClassificationSupport"
   xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions" 
   xmlns:mcr="http://www.mycore.org/" 
-  exclude-result-prefixes="mods xlink xalan i18n mcrmods mcrxsl mcr">
+  exclude-result-prefixes="mods xlink xalan mcri18n mcrmods mcrxsl mcr">
 
+  <xsl:import href="resource:xsl/functions/i18n.xsl" />
   <xsl:import href="mods-util.xsl" />
   <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />
   <xsl:param name="WebApplicationBaseURL" />
@@ -20,7 +21,7 @@
       <table class="ir-table-docdetails">
         <tr>
           <th>
-            <xsl:value-of select="i18n:translate('OMD.institution')" />
+            <xsl:value-of select="mcri18n:translate('OMD.institution')" />
             :
           </th>
           <td>
@@ -38,7 +39,7 @@
         <xsl:if test="mods:name[mods:role/mods:roleTerm[@type='code']='dgs']">
         <tr>
           <th>
-            <xsl:value-of select="i18n:translate('OMD.referee')" />
+            <xsl:value-of select="mcri18n:translate('OMD.referee')" />
             :
           </th>
           <td>
@@ -61,7 +62,7 @@
         </xsl:if>
         <xsl:if test="mods:originInfo[@eventType='creation']/mods:dateCreated">
         <tr>
-          <th><xsl:value-of select="i18n:translate('OMD.yearsubmitted')" disable-output-escaping="yes"/>:</th>
+          <th><xsl:value-of select="mcri18n:translate('OMD.yearsubmitted')" disable-output-escaping="yes"/>:</th>
           <td>
             <table class="ir-table-docdetails-values">
               <tr><td>
@@ -73,7 +74,7 @@
         </xsl:if>
         <xsl:if test="mods:originInfo[@eventType='creation']/mods:dateOther[@type='defence']">
         <tr>
-          <th><xsl:value-of select="i18n:translate('OMD.yearaccepted')" disable-output-escaping="yes"/>:</th>
+          <th><xsl:value-of select="mcri18n:translate('OMD.yearaccepted')" disable-output-escaping="yes"/>:</th>
           <td>
             <table class="ir-table-docdetails-values">
               <tr><td>
@@ -88,7 +89,7 @@
       <table class="ir-table-docdetails">
         <xsl:if test="./mods:language/mods:languageTerm">
           <tr>
-            <th><xsl:value-of select="i18n:translate('OMD.languages')" /> :</th>
+            <th><xsl:value-of select="mcri18n:translate('OMD.languages')" /> :</th>
             <td><table class="ir-table-docdetails-values">
                 <xsl:for-each select="./mods:language">
                   <tr><td>
@@ -104,7 +105,7 @@
         <xsl:for-each select="mods:titleInfo[@type='translated']">
           <tr>
           <th>
-            <xsl:value-of select="i18n:translate('OMD.translated-title')" />
+            <xsl:value-of select="mcri18n:translate('OMD.translated-title')" />
             :
           </th>
           <td>
@@ -124,7 +125,7 @@
         <xsl:for-each select="mods:abstract[@type='summary'][2]">
         <tr>
           <th>
-            <xsl:value-of select="i18n:translate('OMD.translated-abstract')" />
+            <xsl:value-of select="mcri18n:translate('OMD.translated-abstract')" />
             :
           </th>
           <td>
@@ -138,7 +139,7 @@
         </xsl:for-each>
          <xsl:for-each select="mods:abstract[@type='author_keywords']">
         <tr>
-          <th><xsl:value-of select="i18n:translate('OMD.keywords')" />:</th>
+          <th><xsl:value-of select="mcri18n:translate('OMD.keywords')" />:</th>
           <td>
             <table class="ir-table-docdetails-values">
               <tr><td>
@@ -150,7 +151,7 @@
         </xsl:for-each>
         <xsl:if test="mods:classification[@displayLabel='sdnb' or @displayLabel='SDNB']/@valueURI">
         <tr>
-          <th><xsl:value-of select="i18n:translate('OMD.ir.sdnb')" /> :</th>
+          <th><xsl:value-of select="mcri18n:translate('OMD.ir.sdnb')" /> :</th>
           <td>
             <table class="ir-table-docdetails-values">
                   <xsl:for-each select="mods:classification[@displayLabel='sdnb' or @displayLabel='SDNB']/@valueURI">
@@ -167,7 +168,7 @@
 
         <xsl:if test="mods:subject">
         <tr>
-          <th><xsl:value-of select="i18n:translate('OMD.keywords')" /> :</th>
+          <th><xsl:value-of select="mcri18n:translate('OMD.keywords')" /> :</th>
           <td>
             <table class="ir-table-docdetails-values">
                   <xsl:for-each select="mods:subject">
@@ -184,7 +185,7 @@
       </xsl:if>
        <xsl:if test="mods:note[@type!='creator_info'][@type!='statement of responsibility']">
         <tr>
-          <th><xsl:value-of select="i18n:translate('OMD.ir.notes')" /> :</th>
+          <th><xsl:value-of select="mcri18n:translate('OMD.ir.notes')" /> :</th>
           <td>
             <table class="ir-table-docdetails-values">
                 <xsl:for-each select="mods:note[@type!='creator_info'][@type!='statement of responsibility']">

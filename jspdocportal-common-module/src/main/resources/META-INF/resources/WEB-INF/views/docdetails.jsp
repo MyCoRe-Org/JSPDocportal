@@ -44,7 +44,7 @@
 <head>
   <title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
   <%@ include file="fragments/html_head.jspf" %>
-  <mcr:transformXSL xml="${doc}" xslt="xsl/docdetails/metatags_html.xsl" />
+  <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/metatags_html.xsl" />
   <link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}modules/shariff_3.0.1/shariff.min.css">
 		<script>
      	$( document ).ready(function() {
@@ -107,10 +107,10 @@
 			  <div class="ir-box ir-docdetails-header">
                 <x:choose>
                   <x:when select="$doc/mycoreobject/service/servstates/servstate/@categid='deleted'">
-                    <mcr:transformXSL xml="${doc}" xslt="xsl/docdetails/deleted_header_html.xsl" />
+                    <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/deleted_header_html.xsl" />
                   </x:when>
                   <x:otherwise>
-                    <mcr:transformXSL xml="${doc}" xslt="xsl/docdetails/${objectType}2header_html.xsl" />
+                    <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/${objectType}2header_html.xsl" />
                   </x:otherwise>
                 </x:choose>
 			  </div>
@@ -120,6 +120,12 @@
           <div class="row">
             <div class="col ir-divider">
               <hr/>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col">
+               <mcr:transformXSL dom="${doc}" xslt="xsl/xsl3example.xsl" />
             </div>
           </div>
 	
@@ -206,16 +212,16 @@
 			        <div class="ir-docdetails-data" style="min-height:600px">
 				       <x:choose>
 				         <x:when select="$doc/mycoreobject/service/servstates/servstate/@categid='deleted'">
-				           <mcr:transformXSL xml="${doc}" xslt="xsl/docdetails/deleted_details_html.xsl" />
+				           <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/deleted_details_html.xsl" />
 				         </x:when>
 					     <x:when select="contains($doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='doctype']/@valueURI, '#data')">
-						   <mcr:transformXSL xml="${doc}" xslt="xsl/docdetails/data2details_html.xsl" />
+						   <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/data2details_html.xsl" />
 					     </x:when>
 					     <x:otherwise>
-						   <mcr:transformXSL xml="${doc}" xslt="xsl/docdetails/${objectType}2details_html.xsl" />
+						   <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/${objectType}2details_html.xsl" />
 					     </x:otherwise>
 			          </x:choose>
-				      <mcr:transformXSL xml="${doc}" xslt="xsl/docdetails/all2footer_html.xsl" />
+				      <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/all2footer_html.xsl" />
 			        </div>
 		          </div>
 		          <x:if select="$doc/mycoreobject/structure/derobjects/derobject">
