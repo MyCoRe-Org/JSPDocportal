@@ -69,7 +69,7 @@
 					window.location=$("meta[name='mcr:baseurl']").attr("content")
 							 	       + "browse/"+mask+"?"
 							           + "&_add-filter="
-							       + encodeURIComponent("+" + key +":"+ value.replace('epoch:',''));
+							       + encodeURIComponent("+" + key +":"+ value);
 					}
 				
 				
@@ -119,8 +119,7 @@
                   facetField="ir.collection_class.facet" />
               </div>
               <div class="col-md-3 col-12">
-                <%-- <search:browse-facet result="${result}" mask="${mask}" facetField="ir.epoch_msg.facet" /> --%>
-                <search:browse-classification categid="epoch" mask="${mask}" facetField="ir.epoch_msg.facet" />
+                <search:browse-classification categid="epoch" mask="${mask}" facetField="ir.epoch_class.facet" />
               </div>
               <div class="col-md-3 col-12 bg-dark">
          			<div class="ir-latestdocs">

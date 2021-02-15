@@ -242,25 +242,25 @@
             
           <!-- epoch facets -->
             <xsl:if test="$pubyear_start &lt;= 1500">
-              <field name="ir.epoch_msg.facet">1500_and_earlier</field>
+              <field name="ir.epoch_class.facet">epoch:1500_and_earlier</field>
             </xsl:if>
             <xsl:if test="$pubyear_start &lt;= 1600 and $pubyear_end &gt; 1500">
-              <field name="ir.epoch_msg.facet">16th_century</field>
+              <field name="ir.epoch_class.facet">epoch:16th_century</field>
             </xsl:if>
             <xsl:if test="$pubyear_start &lt;= 1700 and $pubyear_end &gt; 1600">
-              <field name="ir.epoch_msg.facet">17th_century</field>
+              <field name="ir.epoch_class.facet">epoch:17th_century</field>
             </xsl:if>
             <xsl:if test="$pubyear_start &lt;= 1800 and $pubyear_end &gt; 1700">
-              <field name="ir.epoch_msg.facet">18th_century</field>
+              <field name="ir.epoch_class.facet">epoch:18th_century</field>
             </xsl:if>
             <xsl:if test="$pubyear_start &lt;= 1900 and $pubyear_end &gt; 1800">
-              <field name="ir.epoch_msg.facet">19th_century</field>
+              <field name="ir.epoch_class.facet">epoch:19th_century</field>
             </xsl:if>
             <xsl:if test="$pubyear_start &lt;= 2000 and $pubyear_end &gt; 1900">
-              <field name="ir.epoch_msg.facet">20th_century</field>
+              <field name="ir.epoch_class.facet">epoch:20th_century</field>
             </xsl:if>
             <xsl:if test="$pubyear_start &lt;= 2100 and $pubyear_end &gt; 2000">
-              <field name="ir.epoch_msg.facet">21th_century</field>
+              <field name="ir.epoch_class.facet">epoch:21th_century</field>
             </xsl:if>
           </xsl:if>
           

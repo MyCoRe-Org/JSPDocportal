@@ -98,8 +98,7 @@
 	},
 	{
 		"add-field": {
-			"name": "ir.epoch_msg
-			.facet",
+			"name": "ir.epoch_class.facet",
 			"type": "string",
 			"multiValued": true,
 			"stored": true

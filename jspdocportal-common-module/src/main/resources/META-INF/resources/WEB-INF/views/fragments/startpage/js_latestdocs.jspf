@@ -24,8 +24,7 @@
           var fc = data.facet_counts.facet_fields;
           $('.mcr-facet-count').each(function(index, el){
              var fvalues = fc[$(el).attr('data-mcr-facet-field')];
-             //TODO remove tempory fix replace("epoch:", ...)
-             var idx = $.inArray($(el).attr('data-mcr-facet-value').replace("epoch:", ""), fvalues);
+             var idx = $.inArray($(el).attr('data-mcr-facet-value'), fvalues);
               if(idx == -1){
                 if("${mask}"=="histbest" && $.inArray($(el).attr('data-mcr-facet-value'), ["doctype:histbest.print", "doctype:histbest.manuscript"])!=-1){
                   $(el).parent().parent().attr('disabled', 'disabled');
