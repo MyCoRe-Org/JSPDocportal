@@ -282,9 +282,29 @@
               </xsl:for-each>
             </xsl:otherwise>
           </xsl:choose>
-           <xsl:for-each select="mods:classification[@displayLabel='doctype']">
-                <field name="ir.doctype_class.facet"><xsl:value-of select="translate(substring-after(@valueURI,'classifications/'),'#',':')" /></field>
-           </xsl:for-each>
+          <xsl:for-each select="mods:classification[@displayLabel='doctype']">
+            <xsl:variable name="categid" select="translate(substring-after(@valueURI,'classifications/'),'#',':')" />
+            <field name="ir.doctype_class.facet">
+              <xsl:value-of select="$categid" />
+            </field>
+            <xsl:choose>
+              <xsl:when test="starts-with($categid,'doctype:histbest.print')">
+                <field name="ir.doctype_group_class.facet">doctype:histbest.print</field>
+              </xsl:when>
+              <xsl:when test="starts-with($categid,'doctype:histbest.manuscript')">
+                <field name="ir.doctype_group_class.facet">doctype:histbest.manuscript</field>
+              </xsl:when>
+              <xsl:when test="starts-with($categid,'doctype:histbest.musicalsource')">
+                <field name="ir.doctype_group_class.facet">doctype:histbest.musicalsource</field>
+              </xsl:when>
+              <xsl:when test="starts-with($categid,'doctype:histbest.personalpapers')">
+                <field name="ir.doctype_group_class.facet">doctype:histbest.personalpapers</field>
+              </xsl:when>
+              <xsl:when test="starts-with($categid,'doctype:histbest.archivalmaterial')">
+                <field name="ir.doctype_group_class.facet">doctype:histbest.archivalmaterial</field>
+              </xsl:when>
+            </xsl:choose>
+          </xsl:for-each>
            <xsl:for-each select="mods:classification[@displayLabel='collection']">
                 <field name="ir.collection_class.facet"><xsl:value-of select="translate(substring-after(@valueURI,'classifications/'),'#',':')" /></field>
            </xsl:for-each>
