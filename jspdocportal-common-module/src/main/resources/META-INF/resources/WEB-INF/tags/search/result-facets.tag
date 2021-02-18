@@ -53,9 +53,7 @@
 							<span class="ir-facets-btn-label">
 								${it.util.calcFacetOutputString(facetKey, countsKey)}
 							</span>
-							<span class="ir-facets-btn-count">
-								<span class="badge ir-facets-badge">${facets.get(facetKey).get(countsKey)}</span>
-							</span>
+							<span class="ir-facets-btn-count">${facets.get(facetKey).get(countsKey)}</span>							
 						</button>
 					</c:if>
 					<c:if test="${not result.filterQueries.contains(key)}">
@@ -64,9 +62,7 @@
 							<span class="ir-facets-btn-label">
 								${it.util.calcFacetOutputString(facetKey, countsKey)}
 							</span>
-							<span class="ir-facets-btn-count">
-								<span class="badge ir-facets-badge">${facets.get(facetKey).get(countsKey)}</span>
-							</span>
+							<span class="ir-facets-btn-count">${facets.get(facetKey).get(countsKey)}</span>
 						</button>
 					</c:if>
 					<c:if test="${status.index >= top and status.last}">

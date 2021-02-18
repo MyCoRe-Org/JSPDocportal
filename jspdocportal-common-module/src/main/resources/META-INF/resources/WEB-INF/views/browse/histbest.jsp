@@ -24,32 +24,33 @@
         <h2>${pageTitle}</h2>
       </div>
     </div>
+    
     <div class="row">
-      <div class="col-xs-12 col-md-3">
-        <div class="ir-box ir-box-bordered" style="margin-top:42px; margin-bottom:45px;position:relative">
+      <div class="col-xs-12 col-md-3 ">
+        <div class="ir-facets h-100">
           <h3><fmt:message key="Browse.Filter.headline" /></h3>
           <script type="text/javascript">
           $(function(){
           	$('#facetInfo').on('hidden.bs.collapse', function () {
-          		$("#btnToogleFilterTextOn").addClass('hidden');
-          		$("#btnToogleFilterTextOff").removeClass('hidden');
+          		$("#btnToogleFilterTextOn").addClass('d-none');
+          		$("#btnToogleFilterTextOff").removeClass('d-none');
         	});
         	$('#facetInfo').on('shown.bs.collapse', function () {
-        		$("#btnToogleFilterTextOn").removeClass('hidden');
-           		$("#btnToogleFilterTextOff").addClass('hidden');
+        		$("#btnToogleFilterTextOn").removeClass('d-none');
+           		$("#btnToogleFilterTextOff").addClass('d-none');
         	});
           });
           </script>
-           <div style="position:absolute;top:0px;right:0px" class="visible-xs-block visible-sm-block">
-                <button id="btnToogleFilter" class="btn btn-lg btn-link" data-toggle="collapse" data-target="#facetInfo">
-                      <i id="btnToogleFilterTextOn" class="fa fa-toggle-on" style="color:#004a99;"></i>
-                      <i id="btnToogleFilterTextOff" class="fa fa-toggle-off hidden" style="color: #FFA100;"></i>
-                </button>
-            </div>
-          <div id="facetInfo" class="collapse in">
+          <div style="position:absolute;top:0px;right:15px" class="d-block d-md-none">
+             <button id="btnToogleFilter" class="btn btn-lg btn-link" data-toggle="collapse" data-target="#facetInfo">
+               <i id="btnToogleFilterTextOn" class="fa fa-toggle-on" style="color:#004a99;"></i>
+               <i id="btnToogleFilterTextOff" class="fa fa-toggle-off d-none" style="color: #FFA100;"></i>
+             </button>
+          </div>
+          <div id="facetInfo" class="collapse show">
           <form class="form-horizontal" onsubmit="return false;">
             <div class="form-group">
-              <div class="col-sm-12">
+              <div class="form-row">
               <%--
                  <select id="filterField" name="filterField" class="form-control input-sm" style="width:12em;border-radius:0px;background-color:#777777;color:white;margin-bottom:-1px">
                     <option value="allMeta"><fmt:message key="Browse.Filter.histbest.allMeta" /></option>
@@ -79,46 +80,59 @@
 										<%-- for select box use: $("#filterField option:selected").val() --%>
 				</script>
 
-                  <input class="form-control" id="filterValue" name="filterValue" style="width: 100%" placeholder="Wert"
-                    type="text" onkeypress="if (event.keyCode == 13) { changeFilterIncludeURL();}"> <span
-                    class="input-group-btn">
-                    <button id="filterInclude" class="btn btn-primary ir-facets-btn-plus" onclick="changeFilterIncludeURL();">
-                      <i class="fa fa-plus"></i>
-                    </button>
-                  </span>
+                <input class="form-control border-secondary" id="filterValue" name="filterValue" placeholder="Wert"
+                    type="text" onkeypress="if (event.keyCode == 13) { changeFilterIncludeURL();}">
+                     <div class="input-group-prepend">
+                      <button id="filterInclude" class="btn btn-primary" onclick="changeFilterIncludeURL();">
+                        <i class="fas fa-plus"></i>
+                      </button>
+                     </div>
                 </div>
               </div>
-
-              <div class="col-sm-12">
-                <table>
+</div>
+             <div class="form-row">   
+              <div class="col">
+                <table class="w-100">
                   <tr>
-                    <td class="radio input-sm"><label> <input name="filterField" value="allMeta"
-                        type="radio" checked="checked" /> <fmt:message key="Browse.Filter.histbest.allMeta" />
-                    </label>
                     <td>
-                    <td class="radio input-sm"><label> <input name="filterField" value="content"
-                        type="radio" /> <fmt:message key="Browse.Filter.histbest.content" />
-                    </label>
+                      <div class="form-check form-control-sm">
+                        <input id="filterField1"  type="radio" class="form-check-input" name="filterField" value="allMeta" checked="checked">
+                        <label for="filterField1" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.allMeta" /></label>
+                      </div>
+                    <td>
+                    <td>
+                      <div class="form-check form-control-sm">
+                        <input id="filterField2"  type="radio" class="form-check-input" name="filterField" value="content" >
+                        <label for="filterField2" class="form-check-label" style="line-height:1em;" ><fmt:message key="Browse.Filter.histbest.content" /></label>
+                      </div>
                     <td>
                   </tr>
                   <tr>
-                    <td class="radio input-sm"><label> <input name="filterField" value="ir.title_all"
-                        type="radio" /> <fmt:message key="Browse.Filter.histbest.ir.title_all" />
-                    </label>
                     <td>
-                    <td class="radio input-sm"><label> <input name="filterField" value="ir.pubyear_start"
-                        type="radio" /> <fmt:message key="Browse.Filter.histbest.ir.pubyear_start" />
-                    </label>
+                      <div class="form-check form-control-sm">
+                        <input id="filterField3"  type="radio" class="form-check-input" name="filterField" value="ir.title_all" >
+                        <label for="filterField3" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.title_all" /></label>
+                      </div>
+                    <td>
+                    <td>
+                      <div class="form-check form-control-sm">
+                        <input id="filterField4"  type="radio" class="form-check-input" name="filterField" value="ir.pubyear_start" >
+                        <label for="filterField4" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.pubyear_start" /></label>
+                      </div>
                     <td>
                   </tr>
                   <tr>
-                    <td class="radio input-sm"><label> <input name="filterField" value="ir.creator_all"
-                        type="radio" /> <fmt:message key="Browse.Filter.histbest.ir.creator_all" />
-                    </label>
                     <td>
-                    <td class="radio input-sm"><label> <input name="filterField" value="ir.pubyear_end"
-                        type="radio" /> <fmt:message key="Browse.Filter.histbest.ir.pubyear_end" />
-                    </label>
+                      <div class="form-check form-control-sm">
+                        <input id="filterField5"  type="radio" class="form-check-input" name="filterField" value="ir.creator_all" >
+                        <label for="filterField5" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.creator_all" /></label>
+                      </div>
+                    <td>
+                    <td>
+                      <div class="form-check form-control-sm">
+                        <input id="filterField6"  type="radio" class="form-check-input" name="filterField" value="ir.pubyear_end" >
+                        <label for="filterField6" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.pubyear_end" /></label>
+                      </div>
                     <td>
                   </tr>
                 </table>
@@ -188,15 +202,17 @@
       </div>
     </div>
     </div>
-        <div class="bg-white" style="height: 75px;">
+    
+    <div class="ir-footer-space" style="height: 75px;">
       <div class="container h-100">
         <div class="row h-100">
-          <div class="col-3 bg-dark"></div>
-          <div class="col-9 bg-white"></div>
+          <div class="col-3">
+              <div class="h-100 ir-footer-space-left"></div>
+          </div>
+          <div class="col-9 ir-footer-space-right"></div>
         </div>
       </div>
     </div>
   <%@ include file="../fragments/footer.jspf" %>
   </body>
 </html>
-

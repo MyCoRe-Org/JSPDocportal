@@ -27,14 +27,14 @@
              var idx = $.inArray($(el).attr('data-mcr-facet-value'), fvalues);
               if(idx == -1){
                 if("${mask}"=="histbest" && $.inArray($(el).attr('data-mcr-facet-value'), ["doctype:histbest.print", "doctype:histbest.manuscript"])!=-1){
-                  $(el).parent().parent().attr('disabled', 'disabled');
+                  $(el).parent().attr('disabled', 'disabled');
                 }
                 else if("${mask}"=="epub" && $.inArray($(el).attr('data-mcr-facet-value'), ["institution:unirostock"])!=-1){
-                  $(el).parent().parent().attr('disabled', 'disabled');
-                  $(el).parent().prev().addClass('text-muted');
+                  $(el).parent().attr('disabled', 'disabled');
+                  $(el).prev().addClass('text-muted');
                 }
                 else{
-                  $(el).parent().parent().addClass('d-none');
+                  $(el).parent().addClass('d-none');
                 }
               }
               else{
@@ -43,7 +43,7 @@
                 $(el).text(c) ;
                 }
                 else{
-                  $(el).parent().parent().addClass('d-none');
+                  $(el).parent().addClass('d-none');
                 }
             }
           });

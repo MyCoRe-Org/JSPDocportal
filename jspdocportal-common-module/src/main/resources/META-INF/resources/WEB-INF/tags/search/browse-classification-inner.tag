@@ -22,9 +22,9 @@
 				</c:if>
 				<search:browse-classification-inner category="${c}" facetField="${facetField}" mask="${mask}" />
 			</li> --%>
-			<li class="list-group-item" style="display:block" 
+			<li class="list-group-item ir-facets-btn" style="display:block" 
 					    onclick="changeFacetIncludeURL('${facetField}','${c.id.getRootID()}:${c.id.ID}', '${mask}', '${result.id}');">
-					<span style="display:table-cell;vertical-align:middle;">
+					<span class="ir-facets-btn-label">
                       <c:if test="${not empty lang}">
 							${c.getLabel(lang).get().text}
                       </c:if>
@@ -32,13 +32,15 @@
                           ${c.currentLabel.get().text}
                       </c:if>
 					</span>
-					<span style="display:table-cell;vertical-align:middle;padding-left:15px;">
-							<span class="badge ir-facets-badge mcr-facet-count" data-mcr-facet-field="${facetField}" data-mcr-facet-value="${c.id.getRootID()}:${c.id.ID}"></span>
-					</span>
+    				<span class="ir-facets-btn-count mcr-facet-count" data-mcr-facet-field="${facetField}" data-mcr-facet-value="${c.id.getRootID()}:${c.id.ID}"></span>
+	                
                     
-                    <search:browse-classification-inner category="${c}" facetField="${facetField}" mask="${mask}" />
 			</li>
-
+            <c:if test="${c.hasChildren()}">
+              <li class="list-group-item py-0">
+                <search:browse-classification-inner category="${c}" facetField="${facetField}" mask="${mask}" />
+              </li>
+            </c:if>
 		</c:forEach>
 	</ul>
 </c:if>

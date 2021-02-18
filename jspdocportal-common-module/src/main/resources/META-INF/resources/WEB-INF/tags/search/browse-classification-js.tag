@@ -45,10 +45,10 @@
 						 var idx = $.inArray($(el).attr('data-mcr-facet-value').replace("epoch:", ""), fvalues);
 					    if(idx == -1){
 					    	if("${doctype}"=="histbest" && $.inArray($(el).attr('data-mcr-facet-value'), ["doctype:histbest.print", "doctype:histbest.manuscript"])!=-1){
-					    		$(el).parent().parent().attr('disabled', 'disabled');
+					    		$(el).parent().attr('disabled', 'disabled');
 					    	}
 					    	else{
-					    		$(el).parent().parent().addClass('d-none');
+					    		$(el).parent().addClass('d-none');
 					    	}
 					    }
 					    else{
@@ -57,7 +57,7 @@
 								$(el).text(c) ;
 					    	}
 					    	else{
-					    		$(el).parent().parent().addClass('d-none');
+					    		$(el).parent().addClass('d-none');
 					    	}
 					 	}
 					});

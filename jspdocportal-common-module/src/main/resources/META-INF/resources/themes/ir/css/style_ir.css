@@ -47,22 +47,9 @@ textarea.ir-textarea-xml {
 	font-size: 90%;
 }
 
-button.ir-facets-btn{
-	text-decoration:none !important;
-}
 
-button.ir-facets-btn span.ir-facets-btn-label{
-	display:table-cell;
-	vertical-align:middle;
-	text-align: left;
-
-}
-
-button.ir-facets-btn span.ir-facets-btn-count{
-	display:table-cell;
-	vertical-align:middle;
-	text-align:right;
-	padding-left:12px
+.ir-facets-btn span.ir-facets-btn-count{
+	padding-left:1em;
 }
 
 /* =================================================================== */

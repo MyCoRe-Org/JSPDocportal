@@ -97,42 +97,42 @@
                   <tr>
                     <td>
                       <div class="form-check form-control-sm">
-                        <input type="radio" id="filterField2" name="filterField" value="content" class="form-check-input">
-                        <label class="form-check-label" for="filterField2"><fmt:message key="Browse.Filter.epub.content" /></label>
+                        <input id="filterField1" type="radio" class="form-check-input" name="filterField" value="content">
+                        <label for="filterField1" class="form-check-label" "><fmt:message key="Browse.Filter.epub.content" /></label>
                       </div>
                     <td>
                     <td>
                       <div class="form-check form-control-sm">
-                        <input type="radio" id="filterField1" name="filterField" value="allMeta" class="form-check-input" checked="checked">
-                        <label class="form-check-label" for="filterField1"><fmt:message key="Browse.Filter.epub.allMeta" /></label>
+                        <input id="filterField2" type="radio" class="form-check-input" name="filterField" value="allMeta" checked="checked">
+                        <label for="filterField2" class="form-check-label" ><fmt:message key="Browse.Filter.epub.allMeta" /></label>
                       </div>
                     <td>
                   </tr>
                   <tr>
                     <td>
                       <div class="form-check form-control-sm">
-                        <input type="radio" id="filterField3" name="filterField"  value="ir.title_all" class="form-check-input">
-                        <label class="form-check-label" for="filterField3"><fmt:message key="Browse.Filter.epub.ir.title_all" /></label>
+                        <input id="filterField3" type="radio" class="form-check-input" name="filterField" value="ir.title_all" >
+                        <label for="filterField3" class="form-check-label"><fmt:message key="Browse.Filter.epub.ir.title_all" /></label>
                       </div>
                     <td>
                     <td>
                       <div class="form-check form-control-sm">
-                        <input type="radio" id="filterField4" name="filterField" value="ir.pubyear_start" class="form-check-input">
-                        <label class="form-check-label" for="filterField4"><fmt:message key="Browse.Filter.epub.ir.pubyear_start" /></label>
+                        <input id="filterField4" type="radio" class="form-check-input" name="filterField" value="ir.pubyear_start">
+                        <label for="filterField4" class="form-check-label"><fmt:message key="Browse.Filter.epub.ir.pubyear_start" /></label>
                       </div>
                     <td>
                   </tr>
                    <tr>
                     <td>
                       <div class="form-check form-control-sm">
-                        <input type="radio" id="filterField5" name="filterField"  value="ir.creator_all" class="form-check-input">
-                        <label class="form-check-label" for="filterField5"><fmt:message key="Browse.Filter.epub.ir.creator_all" /></label>
+                        <input id="filterField5"  type="radio"class="form-check-input" name="filterField" value="ir.creator_all">
+                        <label for="filterField5" class="form-check-label"><fmt:message key="Browse.Filter.epub.ir.creator_all" /></label>
                       </div>
                     <td>
                     <td>
                       <div class="form-check form-control-sm">
-                        <input type="radio" id="filterField6" name="filterField"  value="ir.pubyear_end" class="form-check-input">
-                        <label class="form-check-label" for="filterField6"><fmt:message key="Browse.Filter.epub.ir.pubyear_end" /></label>
+                        <input id="filterField6" type="radio" class="form-check-input" name="filterField" value="ir.pubyear_end">
+                        <label for="filterField6" class="form-check-label"><fmt:message key="Browse.Filter.epub.ir.pubyear_end" /></label>
                       </div>
                     <td>
                   </tr>
@@ -208,13 +208,14 @@
       </div>
     </div>
     </div>
-    <div class="bg-white" style="height: 75px;">
+    
+    <div class="ir-footer-space" style="height: 75px;">
       <div class="container h-100">
         <div class="row h-100">
           <div class="col-3">
-              <div class="h-100 bg-dark"></div>
+              <div class="h-100 ir-footer-space-left"></div>
           </div>
-          <div class="col-9 bg-white"></div>
+          <div class="col-9 ir-footer-space-right"></div>
         </div>
       </div>
     </div>
