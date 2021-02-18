@@ -42,11 +42,11 @@
 	<c:if test="${not empty entry.coverURL}">
 		<div class="col-md-3 d-none d-md-block">
 			<div class="img-thumbnail pull-right ir-result-image">
-				<div style="position:relative">
+				<div style="position:relative;text-align:center">
    					<c:if test="${protectDownload}">
    						<img style="opacity:0.001;position:absolute;top:0px;left:0px;width:100%;height:100%;z-index:1" src="${pageContext.request.contextPath}/images/image_terms_of_use.png"/>
 	   				</c:if>
-   					<img style="position:relative;top:0px;left:0px;width:98%;padding:1%;display:block;" src="${pageContext.request.contextPath}/${entry.coverURL}" border="0" />
+   					<img style="width:98%;padding:1%;" src="${pageContext.request.contextPath}/${entry.coverURL}" border="0" />
 				</div>
 			</div>
 		</div>
