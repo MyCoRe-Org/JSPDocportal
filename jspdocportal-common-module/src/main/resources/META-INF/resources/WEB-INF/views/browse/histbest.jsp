@@ -125,31 +125,31 @@
               </div>
             </div>
           </form>
-
-          <div class="row" style="margin-bottom: 10px;">
-            <div class="col-sm-12">
+          
+          <div class="row mb-3">
+            <div class="col">
               <c:forEach var="fq" items="${it.result.filterQueries}">
                 <c:if test="${not fn:contains(fq, '.facet:')}">
                   <c:url var="url" value="${WebApplicationBaseURL}browse/histbest">
                     <c:param name="_search" value="${it.result.id}" />
                     <c:param name="_remove-filter" value="${fq}" />
                   </c:url>
-                  <c:set var="c">
-                    <fmt:message key="Browse.Filter.histbest.${fn:substringBefore(fn:substring(fq, 1, -1),':')}" />: ${it.util.calcFacetOutputString(fn:substringBefore(fn:substring(fq, 1, -1),':'), fn:substringAfter(fn:substring(fq, 1, -1),':'))}</c:set>
-                  <a class="btn btn-sm btn-default ir-facets-btn"
-                    style="display: block; text-align: left; white-space: normal; margin-bottom: 3px; color: black; width: 100%"
-                    href="${url}"> <i class="fa fa-times" style="float:right; position:relative; right:-6px; color: darkred;"></i>
-                    ${c}
-                  </a>
+                  <c:set var="c"><fmt:message key="Browse.Filter.histbest.${fn:substringBefore(fn:substring(fq, 1, -1),':')}" />: ${it.util.calcFacetOutputString(fn:substringBefore(fn:substring(fq, 1, -1),':'), fn:substringAfter(fn:substring(fq, 1, -1),':'))}</c:set>
+                   <button class="btn btn-sm ir-filter-btn active" 
+                       onclick="window.location.href='${url}'">
+                      <i class="fas fa-times" style="position: absolute; top: 5px; right: 5px; color: darkred;"></i>
+                      <span>${c}</span>
+                  </button>
                 </c:if>
               </c:forEach>
             </div>
           </div>
-
+          
           <search:result-facets result="${it.result}" mask="histbest" top="5" />
         </div>
         </div>
       </div>
+
       <div class="col-xs-12 col-md-9">
         <search:result-sorter result="${it.result}" mode="browse"
                               fields="score,ir.pubyear_start,modified,ir.creator.result,ir.title.result" mask="histbest" />

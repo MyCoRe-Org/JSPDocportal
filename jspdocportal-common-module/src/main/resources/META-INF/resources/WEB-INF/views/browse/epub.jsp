@@ -142,7 +142,7 @@
             </div>
           </form>
 
-          <div class="row" style="margin-bottom: 10px;">
+          <div class="row mb-3">
             <div class="col">
               <c:forEach var="fq" items="${it.result.filterQueries}">
                 <c:if test="${not fn:contains(fq, '.facet:')}">
@@ -165,6 +165,7 @@
           </div>
         </div>
       </div>
+      
       <div class="col-xs-12 col-md-9">
         <search:result-sorter result="${it.result}" mode="browse"
                               fields="score,ir.pubyear_start,modified,ir.creator.result,ir.title.result" mask="epub" />

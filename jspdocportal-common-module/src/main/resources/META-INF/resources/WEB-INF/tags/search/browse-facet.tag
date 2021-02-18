@@ -25,10 +25,10 @@
 
 		<button class="btn btn-sm btn-default ir-facets-btn" style="border:none; display:block;text-align:left;white-space:normal;width:100%" 
 		        onclick="changeFacetIncludeURL('${facetField}','${countsKey}', '${mask}', '${result.id}');">
-			<span style="display:table-cell;vertical-align:middle;">
+			<span class="ir-facets-btn-label">
 				${actionBean.calcFacetOutputString(facetField, countsKey)}
 			</span>
-			<span style="display:table-cell;vertical-align:middle;padding-left:12px;">
+			<span class="ir-facets-btn-count">
 				<span class="badge ir-badge">${facets.get(facetField).get(countsKey)}</span>
 			</span>
 		</button>

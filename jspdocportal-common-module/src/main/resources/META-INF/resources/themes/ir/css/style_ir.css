@@ -47,6 +47,24 @@ textarea.ir-textarea-xml {
 	font-size: 90%;
 }
 
+button.ir-facets-btn{
+	text-decoration:none !important;
+}
+
+button.ir-facets-btn span.ir-facets-btn-label{
+	display:table-cell;
+	vertical-align:middle;
+	text-align: left;
+
+}
+
+button.ir-facets-btn span.ir-facets-btn-count{
+	display:table-cell;
+	vertical-align:middle;
+	text-align:right;
+	padding-left:12px
+}
+
 /* =================================================================== */
 /* Info Hover (button + messagebox on mouse over)                      */  
 /* ToDo Migration                                                      */
@@ -193,9 +211,7 @@ a.ir-edit-btn:visited i{
 	color: white;
 }
 
-a.ir-facets-btn{
-	text-decoration:none !important;
-}
+
 
 span.ir-badge-gnd {
 	color: #004A99;
