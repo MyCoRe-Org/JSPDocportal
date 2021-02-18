@@ -69,17 +69,14 @@
 	</c:if>
 	
 	<c:if test="${numHits > 0}">	
-		<ul class="list-group">
+		<ul class="list-group list-group-flush">
 			<c:forEach var="entry" items="${result.entries}">
 				<c:set var="mcrid" value="${entry.mcrid}" />
 				<c:set var="entry" value="${entry}" />
 				<c:set var="url"   value="${pageContext.request.contextPath}/resolve/id/${entry.mcrid}?_search=${result.id}&_hit=${entry.pos}" /> 
-				
-                <div class="card-body">
-					<div class="container">
-						<jsp:doBody />
-					</div>
-				</div>				 
+                <li class="list-group-item">
+					<jsp:doBody />
+				</li>				 
 			</c:forEach>
    		</ul>
 
