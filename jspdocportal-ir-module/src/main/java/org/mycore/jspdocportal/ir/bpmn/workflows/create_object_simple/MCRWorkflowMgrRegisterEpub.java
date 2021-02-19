@@ -15,25 +15,42 @@ import org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple.MCRAbs
 import org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple.MCRWorkflowMgr;
 import org.xml.sax.SAXParseException;
 
-public class MCRWorkflowMgrDisshab extends MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
-    private static final String DEFAULT_METADATA_XML = "" + "<metadata>" 
+public class MCRWorkflowMgrRegisterEpub extends MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
+    private static final String DEFAULT_DOCUMENT_METADATA_XML = "" + "<metadata>" 
     		+ "  <def.modsContainer class='MCRMetaXML'>"
             + "    <modsContainer inherited='0'>"
             + "      <mods:mods xmlns:mods='http://www.loc.gov/mods/v3' version='3.6'>"
             + "        <mods:titleInfo xml:lang='de' usage='primary'>"
-            + "           <mods:title>Neue Dissertation / Habilitation</mods:title>" 
+            + "           <mods:title>Neues Dokument</mods:title>" 
             + "        </mods:titleInfo>"
-            + "            <mods:classification displayLabel='doctype' valueURI='#epub' />"
+            + "            <mods:classification displayLabel='doctype' valueURI='#histbest' />"
             + "      </mods:mods>" 
             + "    </modsContainer>" 
             + "  </def.modsContainer>" 
             + "</metadata>";
 
+    private static final String DEFAULT_BUNDLE_METADATA_XML = "" + "<metadata>" 
+    		+ "  <def.modsContainer class='MCRMetaXML'>"
+            + "    <modsContainer inherited='0'>"
+            + "      <mods:mods xmlns:mods='http://www.loc.gov/mods/v3' version='3.6'>"
+            + "        <mods:titleInfo xml:lang='de' usage='primary'>"
+            + "           <mods:title>Neues Bundle</mods:title>" 
+            + "        </mods:titleInfo>"
+            + "            <mods:classification displayLabel='doctype' valueURI='#histbest' />"
+            + "      </mods:mods>" 
+            + "    </modsContainer>" 
+            + "  </def.modsContainer>" 
+            + "</metadata>";
+    
     @Override
     public MCRObjectMetadata getDefaultMetadata(String mcrBase) {
         SAXBuilder sax = new SAXBuilder();
         try {
-            Document doc = sax.build(new StringReader(DEFAULT_METADATA_XML));
+        	String xml = DEFAULT_DOCUMENT_METADATA_XML;
+        	if(mcrBase.endsWith("_bundle")) {
+        		xml = DEFAULT_BUNDLE_METADATA_XML;
+        	}
+            Document doc = sax.build(new StringReader(xml));
             MCRObjectMetadata mcrOMD = new MCRObjectMetadata();
             mcrOMD.setFromDOM(doc.getRootElement());
             return mcrOMD;

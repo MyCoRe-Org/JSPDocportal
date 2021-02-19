@@ -83,9 +83,8 @@ public class MCRBPMNMgr {
         try {
             prop = "MCR.Workflow.WorkflowMgr.Class.create_object_simple." + mode;
             mgr = (MCRWorkflowMgr) MCRConfiguration2.getInstanceOf(prop).orElseThrow();
-        } catch (Exception cce) {
-            throw new MCRException("Class Cast Exception - the specified MCRWorkflowMgr in property " + prop
-                + " could not be casted to MCRWorkflowMgr", cce);
+        } catch (Exception e) {
+            throw new MCRException("Could not instantiate MCRWorkflowMgr for " + prop, e);
         }
 
         return mgr;

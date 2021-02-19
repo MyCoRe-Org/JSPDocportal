@@ -15,7 +15,7 @@ import org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple.MCRAbs
 import org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple.MCRWorkflowMgr;
 import org.xml.sax.SAXParseException;
 
-public class MCRWorkflowMgrThesis extends MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
+public class MCRWorkflowMgrEditBundle extends MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
     private static final String DEFAULT_METADATA_XML = "" + "<metadata>" 
     		+ "  <def.modsContainer class='MCRMetaXML'>"
             + "    <modsContainer inherited='0'>"
@@ -23,7 +23,7 @@ public class MCRWorkflowMgrThesis extends MCRAbstractWorkflowMgr implements MCRW
             + "        <mods:titleInfo xml:lang='de' usage='primary'>"
             + "           <mods:title>Neue stud. Abschlussarbeit</mods:title>" 
             + "        </mods:titleInfo>"
-            + "            <mods:classification displayLabel='doctype' valueURI='#epub' />"
+            + "            <mods:classification displayLabel='doctype' valueURI='#histbest' />"
             + "      </mods:mods>" 
             + "    </modsContainer>" 
             + "  </def.modsContainer>" 

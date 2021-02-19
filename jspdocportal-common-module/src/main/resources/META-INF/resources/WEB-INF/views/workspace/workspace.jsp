@@ -25,7 +25,7 @@
   <div class="container">
        <div class="row">
           <div class="col">
-            <h2><fmt:message key="WF.workspace.headline.${it.mode}" /></h2>
+            <h2><fmt:message key="WF.workspace.headline" /></h2>
           </div>
         </div>      
     	<div class="row mt-3">
@@ -33,7 +33,6 @@
           <c:set  var="baseURL" value="${applicationScope.WebApplicationBaseURL}"/>
 			<form method="post"  action="${applicationScope.WebApplicationBaseURL}do/workspace/tasks"
 				id="workspaceForm" accept-charset="UTF-8">
-				<input type="hidden" name="mode" value="${it.mode}" />
 				<c:forEach var="msg" items="${it.messages}">
 					<div class="alert alert-warning ir-workflow-message">
 						<c:out value="${msg}" escapeXml="false" />
@@ -42,8 +41,8 @@
 
 				<div class="card border border-dark my-3 w-100">
   					<div class="card-header bg-dark">
-                        <c:forEach var="mcrBase" items="${it.newObjectBases}">
-  						  <button class="btn btn-sm float-right btn-secondary mt-1 ml-3"  name="doCreateNewTask-${mcrBase}" value="doit">Neues <strong>${mcrBase}</strong> erstellen</button>
+                        <c:forEach var="base" items="${it.newObjectBases}">
+  						  <button class="btn btn-sm float-right btn-secondary mt-1 ml-3"  name="doCreateNewTask-${base}" value="doit">Neues <strong>${base}</strong> erstellen</button>
     			        </c:forEach>		
                         <h3><fmt:message key="WF.workspace.info.headline.new_task" /></h3>
   					</div>
@@ -74,7 +73,6 @@
                                     </div>
                                    </div>
 								</div>
-								<c:if test="${not empty it.mode}">
 									<c:set var="currentTask" value="${task}" scope="request" />
 									<c:choose>
 										<c:when test="${currentTask.name eq 'Objekt bearbeiten'}">
@@ -162,8 +160,7 @@
 							   			<c:otherwise>
 											<p> Nothing ToDo for TASK: = ${task.name} </p>
 							 		  	</c:otherwise>
-									</c:choose>
-								</c:if>			
+									</c:choose>	
 							</div>
 						</c:forEach>
 					</div>

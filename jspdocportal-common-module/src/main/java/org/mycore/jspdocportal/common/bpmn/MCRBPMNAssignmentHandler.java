@@ -1,5 +1,6 @@
 package org.mycore.jspdocportal.common.bpmn;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,19 +10,17 @@ import org.apache.logging.log4j.Logger;
 import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.delegate.TaskListener;
 import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr;
+import org.mycore.user2.MCRUserManager;
 
 /**
  * MCRBPMNAssignmentHandler assigns the proper users and groups to the given task
  * by looking them up in MyCoRe properties
  * 
  * they are defined as follows:
- * groups:	
- * 		"MCR.Workflow.TaskAssignment.CandidateGroups."+taskID+"."+wfMode
- * 		e.g.: MCR.Workflow.TaskAssignment.CandidateGroups.edit_object.professorum=editProfessorum
- * 
+ * groups:
+ * 	    all groups with prefix "wf_" of the current user
  * users:
- * 		"MCR.Workflow.TaskAssignment.CandidateUsers."+taskID+"."+wfMode
+ * 		"MCR.Workflow.TaskAssignment.CandidateUsers."+workflowID+"."+worflowMode
  * 		e.g.: MCR.Workflow.TaskAssignment.CandidateUsers.edit_object.professorum=administrator
  * 
  * It is configured as TaskListener in BPMN model file:
@@ -43,13 +42,14 @@ public class MCRBPMNAssignmentHandler implements TaskListener {
         String mode = String.valueOf(delegateTask.getVariable(MCRBPMNMgr.WF_VAR_MODE));
         
         String wfID = delegateTask.getProcessDefinitionId().split(":")[0];
-
-        String propKeyGrp = "MCR.Workflow.TaskAssignment.CandidateGroups." + wfID + "." + mode;
-        List<String> groups = MCRConfiguration2.getString(propKeyGrp).map(MCRConfiguration2::splitValue)
-                .map(s -> s.collect(Collectors.toList())).orElse(Collections.emptyList());
-        for (String g : groups) {
-            delegateTask.addCandidateGroup(g.trim());
+        List<String> groups = new ArrayList<String>();
+        for(String role: MCRUserManager.getCurrentUser().getSystemRoleIDs()) {
+            if(role.startsWith("wf_")) {
+                groups.add(role);
+                delegateTask.addCandidateGroup(role);
+            }
         }
+        
         String propKeyUser = "MCR.Workflow.TaskAssignment.CandidateUsers." + wfID + "." + mode;
         List<String> users = MCRConfiguration2.getString(propKeyUser).map(MCRConfiguration2::splitValue)
                 .map(s -> s.collect(Collectors.toList())).orElse(Collections.emptyList());
@@ -60,7 +60,7 @@ public class MCRBPMNAssignmentHandler implements TaskListener {
         if (groups.size()==0 && users.size()==0) {
             LOGGER.error("Please define candidate users or groups for the following workflow: "
                     + delegateTask.getProcessDefinitionId().split(":")[0]);
-            LOGGER.error("Set at least one of the following properties: " + propKeyGrp + " or " + propKeyUser + ".");
+            LOGGER.error("For candidate users you may set the following property: "+ propKeyUser);
         }
     }
 }
