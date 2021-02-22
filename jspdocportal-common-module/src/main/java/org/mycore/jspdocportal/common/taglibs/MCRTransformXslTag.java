@@ -56,7 +56,7 @@ public class MCRTransformXslTag extends SimpleTagSupport {
     private static Logger LOGGER = LogManager.getLogger(MCRTransformXslTag.class);
 
     private Document dom;
-    
+
     private org.jdom2.Document jdom;
 
     private String stylesheet;
@@ -68,42 +68,26 @@ public class MCRTransformXslTag extends SimpleTagSupport {
             // this works, if the default transformer is xslt3 (set by property):
             // MCR.LayoutService.TransformerFactoryClass=net.sf.saxon.TransformerFactoryImpl
             // MCRXSLTransformer t = MCRXSLTransformer.getInstance(stylesheet);
-            
-            //  this works by configuring an individual transformer and override dummy:
-            //  MCR.ContentTransformer.jspdocportal.Class=org.mycore.common.content.transformer.MCRXSLTransformer
-            //  MCR.ContentTransformer.jspdocportal.Stylesheet=dummy-placeholder.xsl
-            //  MCR.ContentTransformer.jspdocportal.TransformerFactoryClass=net.sf.saxon.TransformerFactoryImpl
-            //
-            //  but returns a content transformer, which produces string output
-            //MCRContentTransformer t =MCRContentTransformerFactory.getTransformer("jspdocportal");
-            //((MCRXSLTransformer) t).setStylesheets(stylesheet);
-           
-            
-           // this is the final way to go:
-           //@SuppressWarnings("unchecked")
-           //Class<TransformerFactory> tfClass = (Class<TransformerFactory>)Class.forName("net.sf.saxon.TransformerFactoryImpl");
-           //MCRXSLTransformer t = MCRXSLTransformer.getInstance(tfClass, stylesheet);
 
-            // this works during development
-            // but setting transformerFactory looks expensive and should be avoided
-            // The transformers itself come from a cache, and are preconfigured with the proper transformer factory)
-           MCRXSLTransformer t = MCRXSLTransformer.getInstance(stylesheet);
-           t.setTransformerFactory("net.sf.saxon.TransformerFactoryImpl");
-           
+            @SuppressWarnings("unchecked")
+            Class<? extends TransformerFactory> tfClass = (Class<? extends TransformerFactory>) Class
+                .forName("net.sf.saxon.TransformerFactoryImpl");
+            MCRXSLTransformer t = MCRXSLTransformer.getInstance(tfClass, stylesheet);
+
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             if (mcrid != null) {
                 t.transform(MCRXMLMetadataManager.instance().retrieveContent(MCRObjectID.getInstance(mcrid)), baos);
-                getJspContext().getOut().append(new String(baos.toString()));
+                getJspContext().getOut().append(baos.toString());
                 return;
             }
             if (jdom != null) {
                 t.transform(new MCRJDOMContent(jdom), baos);
-                getJspContext().getOut().append(new String(baos.toString()));
+                getJspContext().getOut().append(baos.toString());
                 return;
             }
             if (dom != null) {
                 t.transform(new MCRDOMContent(dom), baos);
-                getJspContext().getOut().append(new String(baos.toString()));
+                getJspContext().getOut().append(baos.toString());
                 return;
             }
         } catch (Exception e) {
