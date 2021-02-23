@@ -485,7 +485,7 @@
 								</x:forEach>
 								<x:forEach var="x" select="$doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='vd18']">
 									<c:set var="vdnr"><x:out select="$x" /></c:set>
-									<a class="ir-link-portal" href="https://gso.gbv.de/DB=1.65/CMD?ACT=SRCHA&IKT=8002&TRM=${fn:replace(vdnr,' ','+')}&ADI_MAT=B&MATCFILTER=Y">VD18</a>
+									<a class="ir-link-portal" href="https://kxp.k10plus.de/DB=1.65/CMD?ACT=SRCHA&IKT=8080&TRM=VD18${fn:replace(vdnr,' ','+')}&ADI_MAT=B&MATCFILTER=Y&MATCSET=Y">VD18</a>
 								</x:forEach>
                                 <x:forEach var="x" select="$doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='zdb']">
                                   <c:set var="zdbnr"><x:out select="$x" /></c:set>
