@@ -64,7 +64,7 @@ public class MCRStartEditController  {
                         for (Task t : ts.createTaskQuery().processInstanceId(pi.getId()).list()) {
                             ts.setAssignee(t.getId(), MCRUserManager.getCurrentUser().getUserID());
                         }
-                        return Response.temporaryRedirect(URI.create("/showWorkspace.action?mode=" + mode)).build();
+                        return Response.temporaryRedirect(URI.create("/do/workspace/tasks")).build();
                     }
                    
                 }

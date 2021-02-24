@@ -35,10 +35,9 @@ public class MCRStoreMetadataServlet extends HttpServlet {
         MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
         Path wfFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);
         MCRJDOMContent content = new MCRJDOMContent(xml);
-        content.sendTo(wfFile,StandardCopyOption.REPLACE_EXISTING);
-        String mode = req.getParameter("mode");
+        content.sendTo(wfFile, StandardCopyOption.REPLACE_EXISTING);
 
-        resp.sendRedirect(MCRFrontendUtil.getBaseURL() + "showWorkspace.action?mode=" + mode);
+        resp.sendRedirect(MCRFrontendUtil.getBaseURL() + "do/workspace/tasks");
     }
 
     @Override

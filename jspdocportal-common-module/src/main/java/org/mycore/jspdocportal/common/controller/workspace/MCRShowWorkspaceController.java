@@ -22,6 +22,7 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
+import org.camunda.bpm.engine.variable.value.StringValue;
 import org.glassfish.jersey.server.mvc.Viewable;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
@@ -213,26 +214,39 @@ public class MCRShowWorkspaceController {
 
     private Response editObject(String mcrID, String taskID) {
         MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
-        String objectType = mcrObjID.getTypeId();
-        if (objectType.equals("thesis")) {
-            objectType = "disshab";
-        }
-
+       
         HashMap<String, Object> model = new HashMap<String, Object>();
         Viewable v = new Viewable("/workspace/fullpageEditor", model);
 
         Path wfFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);
         String sourceURI = wfFile.toUri().toString();
+        //String preprocessor = MCRConfiguration2.getString("MCR.Workflow.MetadataEditor.PreProcessorXSL.create_object_simple").orElse(null);
+        //if(preprocessor!=null) {
+        //    sourceURI = "xslStyle:"+preprocessor+":" + sourceURI;
+        //}
+        String preprocessor = MCRConfiguration2.getString("MCR.Workflow.MetadataEditor.PreProcessorTransformer.create_object_simple").orElse(null);
+        
+        if(preprocessor!=null) {
+            sourceURI = "xslTransform:"+preprocessor+":" + sourceURI;
+        }
         model.put("sourceURI", sourceURI);
 
-        StringBuffer sbCancel = new StringBuffer(MCRFrontendUtil.getBaseURL() + "showWorkspace.action?");
+        StringBuffer sbCancel = new StringBuffer(MCRFrontendUtil.getBaseURL() + "do/workspace/tasks");
         if (taskID != null) {
             sbCancel.append("#task_").append(taskID);
         }
         String cancelURL = sbCancel.toString();
         model.put("cancelURL", cancelURL);
 
-        String editorPath = "/editor/metadata/editor-" + objectType + "-default.xed";
+        //MCR.Workflow.MetadataEditor.Path.create_object_simple.wf_register_data
+        
+        RuntimeService rs = MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService();
+        String mode = ((StringValue)rs.getVariableLocalTyped(taskID, MCRBPMNMgr.WF_VAR_MODE)).getValue();
+        
+        LOGGER.debug("ID: " +MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getActivityInstance(taskID).getId());
+        
+        String propKey = "MCR.Workflow.MetadataEditor.Path.create_object_simple."+mode;
+        String editorPath = MCRConfiguration2.getStringOrThrow(propKey);
         model.put("editorPath", editorPath);
 
         return Response.ok(v).build();
