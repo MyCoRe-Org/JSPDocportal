@@ -96,7 +96,9 @@ public class MCROutputLanguageSelectorTag extends MCRAbstractTag {
 
         HttpServletRequest request = (HttpServletRequest) ((PageContext) getJspContext()).getRequest();
         StringBuffer url = request.getRequestURL();
-        url.append("?");
+        if(!url.toString().contains("?")) {
+            url.append("?");
+        }
 
         JspWriter out = getJspContext().getOut();
         JspContext context = getJspContext();
