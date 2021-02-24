@@ -14,6 +14,8 @@
 <head>
   <title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
   <%@ include file="../fragments/html_head.jspf" %>
+  <mcr:webjarLocator htmlElement="script" project="ckeditor" file="standard/ckeditor.js" />
+  <mcr:webjarLocator htmlElement="script" project="ckeditor" file="standard/adapters/jquery.js" />
 </head>
 <body>
   <%@ include file="../fragments/header.jspf" %>

@@ -4,17 +4,7 @@
 
   <xed:template id="in.out">
     <xed:source uri="{$sourceURI}" />
-    <!-- 
-    <xed:source uri="xslStyle:editor/mycoreobject-template-{$template}:mcrobject:{$source}" />
-    <xed:source uri="xslStyle:editor/mods-preprocessor:mcrobject:{$id}" />
-    <xed:source uri="xslStyle:editor/mycoreobject-duepublico2ubo:http://duepublico.uni-duisburg-essen.de/servlets/DocumentServlet?id={$doc}&amp;format=mycore&amp;XSL.Style=xml" />
-    -->
     <xed:cancel url="{$cancelURL}" />
-    <!-- 
-    <xed:cancel url="receive/{$source}?XSL.Transformer=mcrmods2ubo" />
-    <xed:cancel url="ubo/index.xml" />
-    -->
-    <!-- <xed:post-processor xsl="editor/mods-postprocessor.xsl" /> -->
   </xed:template>
 
   <xed:template id="cancel.submit">

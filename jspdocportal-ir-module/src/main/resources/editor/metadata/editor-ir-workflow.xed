@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xed:form xmlns:xed="http://www.mycore.de/xeditor" role="form" class="form-horizontal" accept-charset="UTF-8" method="post">
+  <div class="row">
+    <div class="alert alert-info col-12">
+      <xed:output i18n="Editor.Common.headline" />
+    </div>
+  </div>
+  
+  <xed:post-processor class="org.mycore.jspdocportal.ir.controller.editor.MODSDataURLPostProcessor" xsl="editor/ir_xeditor2mods.xsl" />
+  <xed:cleanup-rule xpath="//*" relevant-if="true()" />
+  <xed:cleanup-rule xpath="/mycoreobject/metadata//*" relevant-if="@* or * or (string-length(text()) &gt; 0)" />
+
+  <xed:include uri="resource:editor/metadata/includes-generic.xed" ref="in.out" />
+  
+  <xed:bind xpath="/mycoreobject">
+    <xed:include uri="resource:editor/metadata/includes-generic.xed" ref="failed-validation-messages" />
+      
+    <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer[@type='reserved']/mods:mods">
+      <h3><xed:output i18n="OMD.ir.editor.pi_reservation.headline" /></h3>
+      <div class="form-group row">
+        <label class="col-2 control-label input-sm ir-label" for="pireg_title_prov">
+         <xed:output i18n="OMD.ir.editor.pi_reservation.DOI" />
+       </label>
+       <div class="col-10">
+         <xed:bind xpath="./../../modsContainer[1]/mods:mods/mods:identifier[@type='doi']">
+            <input id="pireg_doi" type="text" readonly="readonly" disabled="disabled" class="form-control input-sm"   />
+         </xed:bind>
+       </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-2 control-label input-sm ir-label" for="pireg_title_prov">
+         <xed:output i18n="OMD.ir.editor.pi_reservation.provisional_title" />
+       </label>
+       <div class="col-10">
+         <xed:bind xpath="mods:titleInfo[@usage='primary']/mods:title">
+            <input id="pireg_title_prov" type="text" class="form-control input-sm"   />
+         </xed:bind>
+       </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-2 control-label input-sm ir-label" for="pireg_info_prov">
+         <xed:output i18n="OMD.ir.editor.pi_reservation.provisional_remarks" />
+       </label>
+       <div class="col-10">
+         <xed:bind xpath="mods:note">
+            <textarea rows="5" id="pireg_infor_prov" type="text" class="form-control input-sm"   />
+         </xed:bind>
+       </div>
+      </div>
+    </xed:bind>
+      
+      
+    <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer[@type='edited']/mods:mods">
+      <h3><xed:output i18n="OMD.ir.editor.description.headline" /></h3>
+      <div class="form-group row">
+        <div class="col-12">
+         <xed:bind xpath="mods:abstract[@type='advice']">
+             <xed:bind xpath="@altFormat" initially="DO_CALCULATE" />
+             <xed:bind xpath="@contentType" initially="text/xml" />
+            <textarea rows="10" id="description_description" type="text" class="form-control input-sm ckeditor" />
+	         <!-- Replace the textarea with id ... with a CKEditor 4 instance, using default configuration. -->
+    	     <script>
+        	  CKEDITOR.replace( 'description_description' );
+         	</script>
+         </xed:bind>         
+       </div>
+      </div>
+      
+      <h3><xed:output i18n="OMD.ir.editor.external_content.headline" /></h3>
+      <xed:bind xpath="mods:extension[@displayLabel='external_content']/file">
+        <div class="form-group row">
+              <label class="col-2 control-label input-sm ir-label" for="extcont_filename">
+                <xed:output i18n="OMD.ir.editor.external_content.filename" />
+              </label>
+              <div class="col-10">
+               <xed:bind xpath="@OWNERID">
+                 <input id="extcont_filename" type="text" class="form-control input-sm"   />
+               </xed:bind>
+          </div>           
+        </div>
+        
+        <div class="form-group row">
+          <label class="col-2 control-label input-sm ir-label" for="extcont_use">
+            <xed:output i18n="OMD.ir.editor.external_content.use" />
+          </label>
+          <div class="col-4">
+            <xed:bind xpath="@USE">
+              <select id="extcont_use" class="form-control input-sm">
+                <option>fulltext</option>
+                <option>supplement</option>
+                <option>documentation</option>
+                <option>data</option>
+              </select>
+            </xed:bind>
+          </div>
+          <label class="col-2 control-label input-sm ir-label" for="extcont_created">
+                <xed:output i18n="OMD.ir.editor.external_content.created" />
+              </label>
+              <div class="col-4">
+               <xed:bind xpath="@CREATED">
+                 <input id="extcont_created" type="text" class="form-control input-sm" placeholder="yyyy-mm-ddThh:mm:ssZ"  />
+               </xed:bind>
+          </div>           
+        </div>
+        <div class="form-group row">
+          <label class="col-2 control-label input-sm ir-label" for="extcont_checksum">
+            <xed:output i18n="OMD.ir.editor.external_content.checksum" />
+          </label>
+          <div class="col-4">
+            <xed:bind xpath="@CHECKSUM">
+              <input id="extcontent_checksum" type="text" class="form-control input-sm"   />
+            </xed:bind>
+          </div>
+          <label class="col-2 control-label input-sm ir-label" for="extcont_checksum_type">
+            <xed:output i18n="OMD.ir.editor.external_content.checksumType" />
+          </label>
+          <div class="col-4">
+            <xed:bind xpath="@CHECKSUMTYPE" default="MD5" >
+              <input id="extcont_checksum_type" type="text" class="form-control input-sm" readonly="readonly" />
+            </xed:bind>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-2 control-label input-sm ir-label" for="extcont_size">
+            <xed:output i18n="OMD.ir.editor.external_content.size" />
+          </label>
+          <div class="col-4">
+            <xed:bind xpath="@SIZE">
+              <input id="extcont_size" type="text" class="form-control input-sm" />
+            </xed:bind>
+          </div>
+          <label class="col-2 control-label input-sm ir-label" for="extcont_mimetype">
+            <xed:output i18n="OMD.ir.editor.external_content.mimetype" />
+          </label>
+          <div class="col-4">
+            <xed:bind xpath="@MIMETYPE" default="application/zip" >
+              <select id="extcont_mimeype" class="form-control input-sm">
+              	<option>application/zip</option>
+                <option>application/pdf</option>
+              </select>
+            </xed:bind>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-2 control-label input-sm ir-label" for="extcont_url">
+            <xed:output i18n="OMD.ir.editor.external_content.url" />
+          </label>
+          <div class="col-10">
+            <xed:bind xpath="@URL">
+              <input id="extcont_url" type="text" class="form-control input-sm" />
+            </xed:bind>
+          </div>
+        </div>
+      </xed:bind>
+    </xed:bind>
+    <xed:include uri="resource:editor/metadata/includes-generic.xed" ref="cancel.submit" />
+  </xed:bind>
+        
+ </xed:form>
