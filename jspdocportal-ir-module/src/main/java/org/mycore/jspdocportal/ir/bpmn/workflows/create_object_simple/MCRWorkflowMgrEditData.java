@@ -16,18 +16,19 @@ import org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple.MCRWor
 import org.xml.sax.SAXParseException;
 
 public class MCRWorkflowMgrEditData extends MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
-    private static final String DEFAULT_METADATA_XML = "" + "<metadata>" 
-    		+ "  <def.modsContainer class='MCRMetaXML'>"
-            + "    <modsContainer inherited='0'>"
-            + "      <mods:mods xmlns:mods='http://www.loc.gov/mods/v3' version='3.6'>"
-            + "        <mods:titleInfo xml:lang='de' usage='primary'>"
-            + "           <mods:title>Neue Dissertation / Habilitation</mods:title>" 
-            + "        </mods:titleInfo>"
-            + "            <mods:classification displayLabel='doctype' valueURI='#epub' />"
-            + "      </mods:mods>" 
-            + "    </modsContainer>" 
-            + "  </def.modsContainer>" 
-            + "</metadata>";
+    private static final String DEFAULT_METADATA_XML = ""
+        + "<metadata>"
+        + "  <def.modsContainer class='MCRMetaXML'>"
+        + "    <modsContainer inherited='0' type='imported'>"
+        + "      <mods:mods xmlns:mods='http://www.loc.gov/mods/v3' version='3.7'>"
+        + "        <mods:titleInfo xml:lang='de' usage='primary'>"
+        + "           <mods:title>Neues DataObject</mods:title>"
+        + "        </mods:titleInfo>"
+        + "            <mods:classification displayLabel='doctype' valueURI='#epub' />"
+        + "      </mods:mods>"
+        + "    </modsContainer>"
+        + "  </def.modsContainer>"
+        + "</metadata>";
 
     @Override
     public MCRObjectMetadata getDefaultMetadata(String mcrBase) {

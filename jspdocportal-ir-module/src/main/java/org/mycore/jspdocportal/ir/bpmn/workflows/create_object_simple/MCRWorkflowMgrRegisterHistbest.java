@@ -18,8 +18,8 @@ import org.xml.sax.SAXParseException;
 public class MCRWorkflowMgrRegisterHistbest extends MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
     private static final String DEFAULT_DOCUMENT_METADATA_XML = "" + "<metadata>" 
     		+ "  <def.modsContainer class='MCRMetaXML'>"
-            + "    <modsContainer inherited='0'>"
-            + "      <mods:mods xmlns:mods='http://www.loc.gov/mods/v3' version='3.6'>"
+            + "    <modsContainer inherited='0' type='imported'>"
+            + "      <mods:mods xmlns:mods='http://www.loc.gov/mods/v3' version='3.7'>"
             + "        <mods:titleInfo xml:lang='de' usage='primary'>"
             + "           <mods:title>Neues Dokument</mods:title>" 
             + "        </mods:titleInfo>"
@@ -31,8 +31,8 @@ public class MCRWorkflowMgrRegisterHistbest extends MCRAbstractWorkflowMgr imple
 
     private static final String DEFAULT_BUNDLE_METADATA_XML = "" + "<metadata>" 
     		+ "  <def.modsContainer class='MCRMetaXML'>"
-            + "    <modsContainer inherited='0'>"
-            + "      <mods:mods xmlns:mods='http://www.loc.gov/mods/v3' version='3.6'>"
+            + "    <modsContainer inherited='0' type='imported'>"
+            + "      <mods:mods xmlns:mods='http://www.loc.gov/mods/v3' version='3.7'>"
             + "        <mods:titleInfo xml:lang='de' usage='primary'>"
             + "           <mods:title>Neues Bundle</mods:title>" 
             + "        </mods:titleInfo>"

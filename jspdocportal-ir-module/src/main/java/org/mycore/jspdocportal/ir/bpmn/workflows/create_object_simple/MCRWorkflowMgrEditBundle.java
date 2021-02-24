@@ -18,10 +18,10 @@ import org.xml.sax.SAXParseException;
 public class MCRWorkflowMgrEditBundle extends MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
     private static final String DEFAULT_METADATA_XML = "" + "<metadata>" 
     		+ "  <def.modsContainer class='MCRMetaXML'>"
-            + "    <modsContainer inherited='0'>"
-            + "      <mods:mods xmlns:mods='http://www.loc.gov/mods/v3' version='3.6'>"
+            + "    <modsContainer inherited='0' type='imported' >"
+            + "      <mods:mods xmlns:mods='http://www.loc.gov/mods/v3' version='3.7'>"
             + "        <mods:titleInfo xml:lang='de' usage='primary'>"
-            + "           <mods:title>Neue stud. Abschlussarbeit</mods:title>" 
+            + "           <mods:title>Neues Mehrbaendiges Werk / Zeitschrift / Zeitung</mods:title>" 
             + "        </mods:titleInfo>"
             + "            <mods:classification displayLabel='doctype' valueURI='#histbest' />"
             + "      </mods:mods>" 
