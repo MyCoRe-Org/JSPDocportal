@@ -6,7 +6,7 @@
     </div>
   </div>
   
-  <xed:post-processor class="org.mycore.jspdocportal.ir.controller.editor.MODSDataURLPostProcessor" xsl="editor/ir_xeditor2mods.xsl" />
+  <xed:post-processor class="org.mycore.jspdocportal.ir.controller.editor.MODSDataURLPostProcessor" xsl="editor/ir_xeditor2mods.xsl" transformer="saxon" />
   <xed:cleanup-rule xpath="//*" relevant-if="true()" />
   <xed:cleanup-rule xpath="/mycoreobject/metadata//*" relevant-if="@* or * or (string-length(text()) &gt; 0)" />
 
