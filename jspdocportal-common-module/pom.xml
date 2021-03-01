@@ -98,7 +98,7 @@
     <dependency>
       <groupId>org.glassfish.jersey.ext</groupId>
       <artifactId>jersey-mvc-jsp</artifactId>
-      <!-- keep synchronized with MyCoRe - ToDo - DependencyManagement -->
+      <!-- starting in 2021.06LTS this version is magaged by MyCoRe -->
       <version>2.32</version>
     </dependency>
     <dependency>
