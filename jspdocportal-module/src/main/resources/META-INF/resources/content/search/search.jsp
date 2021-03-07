@@ -26,8 +26,8 @@
         </c:if>
 		<div id="search_content" class="col">
 		<c:if test="${not empty actionBean.result.mask}">
-		  <div class="row">
-		    <div class="col">	
+			<div class="row">
+			  <div class="col">
 				<c:set var="classCollapse" value="" />
 				<c:if test="${not actionBean.showMask and actionBean.result.numFound>0}">
 					<button id="buttonCollapseSearchmask" class="btn btn-secondary float-right" type="button"
@@ -53,8 +53,8 @@
               			event.target.scrollIntoView();
               		});
             	 </script>
-              </div>
-		    </div>
+             </div>
+          </div>
 		</c:if>
         <c:if test="${actionBean.showResults}">
 				<c:if test="${not empty actionBean.result.sortfields}">
@@ -62,24 +62,24 @@
                     	 fields="${actionBean.result.sortfields}" mode="search" mask="${actionBean.result.mask}" />
 				</c:if>
 			<div class="row">
-		      <div class="col">	
+			  <div class="col">
 			  	<search:result-browser result="${actionBean.result}">
 			  		<c:set var="doctype" value="${fn:substringBefore(fn:substringAfter(mcrid, '_'),'_')}" /> 
 						<search:result-entry entry="${entry}" url="${url}" protectDownload="true"/>
 						<div style="clear:both"></div>
 			  	</search:result-browser>
-			  </div>
-           </div>
+			  	</div>
+			  	</div>
 			  	<%--2nd redefine search button requested by CPB --%>
 			  	<c:if test="${not actionBean.showMask and actionBean.result.numFound>0}">
 			  	  <div class="row">
-                   <div class="col">
+			        <div class="col">
 					<button id="buttonCollapseSearchmask2" class="btn btn-secondary float-right mt-3" type="button"
 						    data-toggle="collapse" data-target="#searchmask" aria-expanded="false" aria-controls="searchmask">
 						<fmt:message key="Webpage.Searchresult.redefine" />
 					</button>
-				   </div>
-			      </div>
+					</div>
+					</div>
 				</c:if>
 		</c:if>
 		
@@ -102,8 +102,7 @@
 			}
 		});
 		</script>
-		    </div>
-
+		</div>
         <c:if test="${pageScope.navSide == 'right'}">
             <div id="search_nav" class="col-3">
                 <mcr:outputNavigation mode="side" id="search" expanded="true"></mcr:outputNavigation>
