@@ -1,3 +1,4 @@
+<%@ tag pageEncoding="UTF-8" %>
 <%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -29,6 +30,15 @@
 							<td><mcr:displayClassificationCategory
 									classid="${fn:substringBefore(d.value,':')}"
 									categid="${fn:substringAfter(d.value,':')}" lang="de" /></td>
+						</c:when>
+						<%-- used in profkat to let '*' and '†' have the same width--%>
+						<c:when test="${fn:contains(d.key, 'lifetime')}">
+							<td>${fn:replace(
+							        fn:replace(
+							          fn:replace(d.value, '|', '<br />'),
+							          '*', '<span style="display:inline-block;width:1em">*</span>'),
+							      '†', '<span style="display:inline-block;width:1em">†</span>')
+							    }</td>
 						</c:when>
 						<c:otherwise>
 							<td><c:out value="${fn:replace(d.value, '|', '<br />')}"
