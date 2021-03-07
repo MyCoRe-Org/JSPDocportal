@@ -61,17 +61,25 @@
         			<search:result-sorter result="${actionBean.result}"
                     	 fields="${actionBean.result.sortfields}" mode="search" mask="${actionBean.result.mask}" />
 				</c:if>
+			<div class="row">
+		      <div class="col">	
 			  	<search:result-browser result="${actionBean.result}">
 			  		<c:set var="doctype" value="${fn:substringBefore(fn:substringAfter(mcrid, '_'),'_')}" /> 
 						<search:result-entry entry="${entry}" url="${url}" protectDownload="true"/>
 						<div style="clear:both"></div>
 			  	</search:result-browser>
+			  </div>
+           </div>
 			  	<%--2nd redefine search button requested by CPB --%>
 			  	<c:if test="${not actionBean.showMask and actionBean.result.numFound>0}">
+			  	  <div class="row">
+                   <div class="col">
 					<button id="buttonCollapseSearchmask2" class="btn btn-secondary float-right mt-3" type="button"
 						    data-toggle="collapse" data-target="#searchmask" aria-expanded="false" aria-controls="searchmask">
 						<fmt:message key="Webpage.Searchresult.redefine" />
 					</button>
+				   </div>
+			      </div>
 				</c:if>
 		</c:if>
 		
