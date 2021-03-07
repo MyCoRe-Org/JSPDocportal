@@ -97,7 +97,8 @@
 		$(function(){
 			var field = $.urlParam('searchField');
 			var value = $.urlParam('searchValue');
-			if(field!=null && value!=null){
+			// test 'truthy-ness": false = {null | undefined > NAN | empty | 0 | false}
+			if(field && value){
 				$('input#'+field.replace('.', '\\.')).val(decodeURIComponent(value));
 			}
 		});
