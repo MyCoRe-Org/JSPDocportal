@@ -26,7 +26,8 @@
         </c:if>
 		<div id="search_content" class="col">
 		<c:if test="${not empty actionBean.result.mask}">
-	
+		  <div class="row">
+		    <div class="col">	
 				<c:set var="classCollapse" value="" />
 				<c:if test="${not actionBean.showMask and actionBean.result.numFound>0}">
 					<button id="buttonCollapseSearchmask" class="btn btn-secondary float-right" type="button"
@@ -52,6 +53,8 @@
               			event.target.scrollIntoView();
               		});
             	 </script>
+              </div>
+		    </div>
 		</c:if>
         <c:if test="${actionBean.showResults}">
 				<c:if test="${not empty actionBean.result.sortfields}">
@@ -91,7 +94,8 @@
 			}
 		});
 		</script>
-		</div>
+		    </div>
+
         <c:if test="${pageScope.navSide == 'right'}">
             <div id="search_nav" class="col-3">
                 <mcr:outputNavigation mode="side" id="search" expanded="true"></mcr:outputNavigation>
