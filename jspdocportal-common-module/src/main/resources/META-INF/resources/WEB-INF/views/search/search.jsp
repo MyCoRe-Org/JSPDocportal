@@ -29,7 +29,8 @@
         </c:if>
 		<div id="search_content" class="col">
 		<c:if test="${not empty it.result.mask}">
-	
+	      <div class="row">
+             <div class="col">
 				<c:set var="classCollapse" value="" />
 				<c:if test="${not it.showMask and it.result.numFound>0}">
 					<button id="buttonCollapseSearchmask" class="btn btn-secondary float-right" type="button"
@@ -55,24 +56,34 @@
               			event.target.scrollIntoView();
               		});
             	 </script>
+             </div>
+           </div>
 		</c:if>
         <c:if test="${it.showResults}">
 				<c:if test="${not empty it.result.sortfields}">
         			<search:result-sorter result="${it.result}"
                     	 fields="${it.result.sortfields}" mode="search" mask="${it.result.mask}" />
 				</c:if>
+           <div class="row">
+              <div class="col">
 			  	<search:result-browser result="${it.result}">
 			  		<c:set var="doctype" value="${fn:substringBefore(fn:substringAfter(mcrid, '_'),'_')}" /> 
 						<search:result-entry entry="${entry}" url="${url}" protectDownload="true"/>
 						<div style="clear:both"></div>
 			  	</search:result-browser>
+              </div>
+           </div>   
 			  	<%--2nd redefine search button requested by CPB --%>
-			  	<c:if test="${not it.showMask and it.result.numFound>0}">
-					<button id="buttonCollapseSearchmask2" class="btn btn-secondary float-right mt-3" type="button"
-						    data-toggle="collapse" data-target="#searchmask" aria-expanded="false" aria-controls="searchmask">
-						<fmt:message key="Webpage.Searchresult.redefine" />
-					</button>
-				</c:if>
+		   <c:if test="${not it.showMask and it.result.numFound>0}">
+             <div class="row">
+               <div class="col">
+				  <button id="buttonCollapseSearchmask2" class="btn btn-secondary float-right mt-3" type="button"
+					      data-toggle="collapse" data-target="#searchmask" aria-expanded="false" aria-controls="searchmask">
+					  <fmt:message key="Webpage.Searchresult.redefine" />
+				  </button>
+               </div>
+             </div>
+		   </c:if>
 		</c:if>
 		
 		<script>
