@@ -72,8 +72,8 @@ import org.mycore.frontend.MCRFrontendUtil;
  *  <mcr:outputLanguageSelector languages="de,en" var="lang">
  *   <c:if test="${!lang.first}">&#160;|&#160;</c:if>                     
  *   <c:choose>
- *      <c:when test="${lang_lang == lang.currentLang }">
- *          <span class="lang_link_active">${lang.label}</span>
+ *      <c:when test="${lang.currentLang == lang.currentLang }">
+ *          <span class="lang_link active">${lang.label}</span>
  *      </c:when>
  *      <c:otherwise>
  *         <a href="${lang.href}" title="${lang.title}" class="lang_link">${lang.label}</a>
@@ -95,24 +95,41 @@ public class MCROutputLanguageSelectorTag extends MCRAbstractTag {
         init();
 
         HttpServletRequest request = (HttpServletRequest) ((PageContext) getJspContext()).getRequest();
-        StringBuffer url = request.getRequestURL();
-        url.append("?");
+        StringBuffer url = new StringBuffer();
+        /* display available attributes ...
+        Enumeration<String> attrNames = request.getAttributeNames();
+        while(attrNames.hasMoreElements()) {
+            String a = attrNames.nextElement();
+            System.out.println(a + " = " + request.getAttribute(a).toString());
+        }
+        */
+        // javax.servlet.forward.request_uri = /cpb/indexbrowser/profname
+        // javax.servlet.forward.query_string = select=Fr&test=x
+        if(request.getAttribute("javax.servlet.forward.request_uri")!=null) {
+            url.append(request.getAttribute("javax.servlet.forward.request_uri"));
+            url.append("?");
+            if(request.getAttribute("javax.servlet.forward.query_string")!=null) {
+                //disable the "old" lang parameter by renaming it
+                url.append(request.getAttribute("javax.servlet.forward.query_string").toString().replace("lang=", "lang_prev="));
+            }
+        }
+        else {
+            url = request.getRequestURL();
+            url.append("?");
+            Enumeration<String> pnames = (Enumeration<String>) request.getParameterNames();
 
+            while (pnames.hasMoreElements()) {
+                String pName = pnames.nextElement();
+                if (pName.equals("lang")) {
+                    continue;
+                }
+                url.append(pName).append("=").append(request.getParameter(pName));
+            }
+        }
+        
         JspWriter out = getJspContext().getOut();
         JspContext context = getJspContext();
         JspFragment body = getJspBody();
-
-        Enumeration<String> pnames = (Enumeration<String>) request.getParameterNames();
-
-        while (pnames.hasMoreElements()) {
-            String pName = pnames.nextElement();
-            if (pName.equals("lang")) {
-                continue;
-            }
-
-            url.append(pName).append("=").append(request.getParameter(pName));
-
-        }
 
         boolean first = true;
         for (String l : languages.split(",")) {
