@@ -375,4 +375,12 @@ public class MCRSearchResultDataBean implements Serializable {
         this.backURL = backURL;
     }
 
+    public String getCsvDownloadFields() {
+        return MCRConfiguration2.getString("MCR.Search.CsvDownload.Fields").orElse(null);
+    }
+
+    public int getCsvDownloadRows() {
+        return MCRConfiguration2.getInt("MCR.Search.CsvDownload.Rows").orElse(1000);
+    }
+
 }

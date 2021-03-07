@@ -51,6 +51,20 @@
 		  </ul>
         </nav>
         <div class="ir-result-pagination">
+          <c:if test="${(numHits gt 0) and (not empty result.csvDownloadFields)}">
+            <c:url var="csv_url" value="${WebApplicationBaseURL}api/v1/search">
+              <c:param name="q"><%= ((org.apache.solr.common.util.NamedList<Object>)result.getSolrQueryResponse().getHeader().get("params")).get("q") %></c:param>
+              <c:param name="sort"><%= ((org.apache.solr.common.util.NamedList<Object>)result.getSolrQueryResponse().getHeader().get("params")).get("sort") %></c:param>
+              <c:param name="rows">${result.csvDownloadRows}</c:param>
+              <c:param name="wt">csv</c:param>
+              <c:param name="fl">${result.csvDownloadFields}</c:param>
+            </c:url>
+            <c:set var="download_btn_title"><fmt:message key="Webpage.Searchresult.csvDownload" /></c:set>
+            <a class="ir-btn-download-csv btn btn-outline-primary page-item mr-3" rel="nofollow" href="${csv_url}" download="search_result" title="${download_btn_title}">
+              <i style="font-size:1.5em" class="fas fa-file-csv"></i>
+            </a>
+          </c:if>
+
 		<c:if test="${fn:length(result.backURL) >0}">
 			<a class="btn btn-primary page-item mr-3"
 			   href="${result.backURL}" ><fmt:message key="Webpage.searchresults.back" /></a>
