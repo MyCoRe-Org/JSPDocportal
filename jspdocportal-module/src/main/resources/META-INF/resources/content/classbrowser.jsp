@@ -12,11 +12,11 @@
 	</stripes:layout-component>
     <stripes:layout-component name="main_part">
 	<div class="row">
-		<div class="col-3">
+		<div id="classbrowser_nav" class="col-3">
 			<mcr:outputNavigation mode="side" id="search" expanded="true"></mcr:outputNavigation>
 			
 		</div>
-		<div class="col">
+		<div id="classbrowser_content" class="col">
     		<div>
 				<mcr:includeWebcontent id="classbrowser_${actionBean.modus}" file="classbrowser/${actionBean.modus}_intro.html" />
 			</div>
