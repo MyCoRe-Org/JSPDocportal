@@ -17,11 +17,11 @@
   <%@ include file="fragments/header.jspf" %>
   <div class="container">
 	<div class="row">
-		<div class="col-3">
+		<div id="classbrowser_nav" class="col-3">
 			<mcr:outputNavigation mode="side" id="search" expanded="true"></mcr:outputNavigation>
 			
 		</div>
-		<div class="col">
+		<div id="classbrowser_content" class="col">
     		<div>
 				<mcr:includeWebcontent id="classbrowser_${it.modus}" file="classbrowser/${it.modus}_intro.html" />
 			</div>
