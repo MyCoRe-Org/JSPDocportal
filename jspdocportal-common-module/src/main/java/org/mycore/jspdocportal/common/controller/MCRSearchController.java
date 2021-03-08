@@ -132,12 +132,17 @@ public class MCRSearchController {
             showResults = true;
         }
 
-        if (StringUtils.isNoneEmpty(request.getParameter("searchField"), request.getParameter("searchValue"))) {
+        if (StringUtils.isNoneEmpty(request.getParameter("searchField"))) {
             result = new MCRSearchResultDataBean();
             result.setRows(DEFAULT_ROWS);
             result.setAction("search");
-            result.setQuery("+" + request.getParameter("searchField") + ":"
-                + ClientUtils.escapeQueryChars(request.getParameter("searchValue")));
+            String value = request.getParameter("searchValue");
+            if (StringUtils.isNotBlank(value)) {
+                result.setQuery("+" + request.getParameter("searchField") + ":" + value);
+                // does not work work with "xxx*": + ClientUtils.escapeQueryChars(value));
+            } else {
+                result.setQuery("+" + request.getParameter("searchField") + ":*");
+            }
             result.setMask("");
             showMask = false;
             showResults = true;
