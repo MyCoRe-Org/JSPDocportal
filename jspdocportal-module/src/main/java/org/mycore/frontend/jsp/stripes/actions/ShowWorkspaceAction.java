@@ -307,7 +307,7 @@ public class ShowWorkspaceAction extends MCRAbstractStripesAction implements Act
                     MCRActivitiMgr.WF_VAR_DISPLAY_TITLE, txt);
         } else {
             MCRActivitiMgr.getWorfklowProcessEngine().getTaskService().setVariable(taskId,
-                    MCRActivitiMgr.WF_VAR_DISPLAY_TITLE, MCRTranslation.translate("Wf.common.newObject"));
+                    MCRActivitiMgr.WF_VAR_DISPLAY_TITLE, MCRTranslation.translate("WF.common.newObject"));
         }
 
         // Description
