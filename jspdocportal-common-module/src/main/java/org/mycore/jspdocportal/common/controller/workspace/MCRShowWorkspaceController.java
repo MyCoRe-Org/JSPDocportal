@@ -301,7 +301,7 @@ public class MCRShowWorkspaceController {
                 MCRBPMNMgr.WF_VAR_DISPLAY_TITLE, txt);
         } else {
             MCRBPMNMgr.getWorfklowProcessEngine().getTaskService().setVariable(taskId,
-                MCRBPMNMgr.WF_VAR_DISPLAY_TITLE, MCRTranslation.translate("Wf.common.newObject"));
+                MCRBPMNMgr.WF_VAR_DISPLAY_TITLE, MCRTranslation.translate("WF.common.newObject"));
         }
 
         // Description
