@@ -382,5 +382,9 @@ public class MCRSearchResultDataBean implements Serializable {
     public int getCsvDownloadRows() {
         return MCRConfiguration2.getInt("MCR.Search.CsvDownload.Rows").orElse(1000);
     }
+    
+    public String getCsvDownloadFilename() {
+        return MCRConfiguration2.getString("MCR.Search.CsvDownload.Filename").orElse("searchresult.csv");
+    }
 
 }

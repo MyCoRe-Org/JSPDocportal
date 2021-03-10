@@ -60,7 +60,7 @@
 			  <c:param name="fl">${result.csvDownloadFields}</c:param>
 		    </c:url>
 		    <c:set var="download_btn_title"><fmt:message key="Webpage.Searchresult.csvDownload" /></c:set>
-		    <a class="ir-btn-download-csv btn btn-outline-primary page-item mr-3" rel="nofollow" href="${csv_url}" download="search_result" title="${download_btn_title}">
+		    <a class="ir-btn-download-csv btn btn-outline-primary page-item mr-3" rel="nofollow" href="${csv_url}" download="${result.csvDownloadFilename}" title="${download_btn_title}">
 		      <i style="font-size:1.5em" class="fas fa-file-csv"></i>
 		    </a>
 		  </c:if>
