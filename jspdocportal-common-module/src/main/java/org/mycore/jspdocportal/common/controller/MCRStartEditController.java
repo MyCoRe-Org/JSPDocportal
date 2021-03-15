@@ -40,7 +40,7 @@ public class MCRStartEditController  {
     public Response defaultRes(@QueryParam("mcrid") String mcrid, @Context HttpServletRequest request) {
         try (MCRHibernateTransactionWrapper htw = new MCRHibernateTransactionWrapper()) {
             if (request.getSession(false)==null  || !MCRAccessManager.checkPermission(mcrid, "writedb")) {
-                return Response.temporaryRedirect(URI.create("/do/login")).build();
+                return Response.temporaryRedirect(URI.create(request.getContextPath() + "/do/login")).build();
             }
 
             LOGGER.debug("Document MCRID = " + mcrid);
@@ -64,14 +64,14 @@ public class MCRStartEditController  {
                         for (Task t : ts.createTaskQuery().processInstanceId(pi.getId()).list()) {
                             ts.setAssignee(t.getId(), MCRUserManager.getCurrentUser().getUserID());
                         }
-                        return Response.temporaryRedirect(URI.create("/do/workspace/tasks")).build();
+                        return Response.temporaryRedirect(URI.create(request.getContextPath() + "/do/workspace/tasks")).build();
                     }
                    
                 }
             }
         }
         //TODO redirect to ERROR-Page
-        return Response.temporaryRedirect(URI.create("/")).build();
+        return Response.temporaryRedirect(URI.create(request.getContextPath())).build();
     }
     
     private static String retrieveModeFromMetadata(MCRObject mcrObj) {

@@ -90,7 +90,7 @@ public class WebpageController {
                 //return Response.ok(v).build();
             }
         }
-        //return Response.temporaryRedirect(URI.create("/")).build();
+        //return Response.temporaryRedirect(URI.create(request.getContextPath())).build();
         return null;
 
     }

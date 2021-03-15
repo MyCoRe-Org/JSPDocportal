@@ -122,7 +122,7 @@ public class MCRIndexBrowserController {
             model.put("result", mcrSearchResult);
             return Response.ok(v).build();
         } catch (MCRConfigurationException e) {
-            return Response.temporaryRedirect(URI.create("/")).build();
+            return Response.temporaryRedirect(URI.create(request.getContextPath() + "/")).build();
         }
     }
 }

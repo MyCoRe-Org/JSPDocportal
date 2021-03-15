@@ -94,7 +94,7 @@ public class MCRShowWorkspaceController {
         try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
             if (request.getSession(false) == null
                 || !MCRUserManager.getCurrentUser().isUserInRole("edit")) {
-                return Response.temporaryRedirect(URI.create("do/login")).build();
+                return Response.temporaryRedirect(URI.create(request.getContextPath() + "do/login")).build();
             }
         }
 

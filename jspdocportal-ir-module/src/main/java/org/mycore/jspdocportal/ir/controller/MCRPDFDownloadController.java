@@ -79,7 +79,7 @@ public class MCRPDFDownloadController {
             path = path.substring(1);
         }
         if (path.length() == 0) {
-            Response.temporaryRedirect(URI.create("/")).build();
+            return Response.temporaryRedirect(URI.create(request.getContextPath())).build();
         }
         path = path.replace("%25", "%").replace("%2F", "/");
         String recordIdentifier = "";
