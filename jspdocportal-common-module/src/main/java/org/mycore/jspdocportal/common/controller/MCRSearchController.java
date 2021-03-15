@@ -115,7 +115,7 @@ public class MCRSearchController {
 
             if (hit != null && result != null && hit >= 0 && hit < result.getNumFound()) {
                 String mcrid = result.getHit(hit).getMcrid();
-                return Response.temporaryRedirect(URI.create("/resolve/id/" + mcrid + "?_search=" + result.getId()))
+                return Response.temporaryRedirect(URI.create(request.getContextPath()+ "/resolve/id/" + mcrid + "?_search=" + result.getId()))
                     .build();
             }
         }

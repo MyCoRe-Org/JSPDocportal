@@ -58,10 +58,10 @@
 
 		     <div class="btn-group" style="width:101%; margin:5px">
 			   <a style="font-size:1.25em" class="btn btn-primary btn-sm ${result.current == 0 ? 'disabled invisible' :''}" 
-			      href="${pageContext.request.contextPath}/search?_search=${result.id}&amp;_hit=${result.current-1}"
+			      href="${pageContext.request.contextPath}/do/search?_search=${result.id}&amp;_hit=${result.current-1}"
 			      title="<fmt:message key="Webpage.Searchresult.prevPage.hint" />"><i class="fa fa-chevron-left"></i></a>
 			   <a style="font-size:1.25em;margin-left:5px" class="btn btn-primary btn-sm ${result.current == numHits - 1 ? 'disabled invisible' : ''}" 
-				  href="${pageContext.request.contextPath}/search?_search=${result.id}&amp;_hit=${result.current+1}"
+				  href="${pageContext.request.contextPath}/do/search?_search=${result.id}&amp;_hit=${result.current+1}"
 				  title="<fmt:message key="Webpage.Searchresult.nextPage.hint" />"><i class="fa fa-chevron-right"></i></a>
 			 </div>
 		    </div>
@@ -76,7 +76,7 @@
 		  <div style="padding:5px;">
 			<div class="btn-group" style="width:101%;">
 				<a style="font-size:1.5em;width:33.333%;" class="btn btn-primary btn-sm ${result.current == 0 ? 'disabled invisible' :''}" 
-			   	   href="${pageContext.request.contextPath}/search?_search=${result.id}&amp;_hit=${result.current-1}"
+			   	   href="${pageContext.request.contextPath}/do/search?_search=${result.id}&amp;_hit=${result.current-1}"
 			       title="<fmt:message key="Webpage.Searchresult.prevPage.hint" />"><i class="fa fa-chevron-left"></i></a>
 		
 			    <a style="font-size:1.5em;width:33.333%;" class="btn btn-primary btn-sm" 
@@ -84,7 +84,7 @@
 			       title="<fmt:message key="Webpage.Searchresult.back.hint" />"><i class="fa fa-chevron-up"></i></a>
 			
 				<a style="font-size:1.5em;width:33.333%;" class="btn btn-primary btn-sm ${result.current == numHits - 1 ? 'disabled invisible' : ''}" 
-				   href="${pageContext.request.contextPath}/search?_search=${result.id}&amp;_hit=${result.current+1}"
+				   href="${pageContext.request.contextPath}/do/search?_search=${result.id}&amp;_hit=${result.current+1}"
 				   title="<fmt:message key="Webpage.Searchresult.nextPage.hint" />"><i class="fa fa-chevron-right"></i></a>
 			</div>
 		  </div>
