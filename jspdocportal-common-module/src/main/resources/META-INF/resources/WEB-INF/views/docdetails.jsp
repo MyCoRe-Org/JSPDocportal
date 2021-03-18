@@ -241,40 +241,16 @@
 		     </div><%--END: nav_content_root --%>
              <script type="text/javascript">
 	           $(document).ready(function(){
-		          $('#nav_content_fulltext').on('shown.bs.collapse', function() {
-			        $('#nav_tab_fulltext').addClass('active');
+		          $('#nav_content_root > div').on('shown.bs.collapse', function() {
+		        	  $("a.nav-link[href='#"+ $(this).attr("id") +"']").addClass('active');
                   });
 		
-		         $('#nav_content_fulltext').on('hidden.bs.collapse', function() {
-			        $('#nav_tab_fulltext').removeClass("active");
+		         $('#nav_content_root > div').on('hidden.bs.collapse', function() {
+		        	 $("a.nav-link[href='#"+ $(this).attr("id") +"']").removeClass("active");
 		         });
 		
-		         $('#nav_content_fulltext').on('shown.bs.collapse', function() {
-			       $('#nav_tab_fulltext').addClass('active');
-		         });
-		
-		         $('#nav_content_structure').on('hidden.bs.collapse', function() {
-			       $('#nav_tab_strcuture').removeClass("active");
-		         });
-		       
-		         $('#nav_content_metadata').on('shown.bs.collapse', function() {
-		           $('#nav_tab_metadata').addClass('active');
-		         });
-		       
-		         $('#nav_content_metadata').on('hidden.bs.collapse', function() {
-		    	   $('#nav_tab_metadata').removeClass("active");
-                 });
-		
-		         $('#nav_content_files').on('shown.bs.collapse', function() {
-			       $('#nav_tab_files').addClass('active');
-		         });
-		
-		         $('#nav_content_files').on('hidden.bs.collapse', function() {
-			       $('#nav_tab_files').removeClass("active");
-		         });
-		
-		         $('#nav_content_root div:first-child').addClass('show');
-		         $('#nav_bar_root li:first-child a').addClass('active');
+		         $('#nav_content_root > div:first-child').addClass('show');
+		         $('#nav_bar_root > li:first-child a').addClass('active');
 		       });
              </script>
           </div>
