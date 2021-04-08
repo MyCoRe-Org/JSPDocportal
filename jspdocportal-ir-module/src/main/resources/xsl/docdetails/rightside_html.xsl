@@ -260,8 +260,8 @@
     <div class="w-100 position-relative" style="padding-right:3em">
       <a class="badge border border-primary text-secondary position-absolute px-1 py-1" 
          style="right:0;bottom:0;height:3.0em"  download="{./maindoc}.md5" 
-         href="data:text/plain;charset=US-ASCII,{encode-for-uri(concat(./title[@type='maindoc_md5'],'  ', ./maindoc))}">
-         <i class="fas fa-check"></i><br />MD5
+         href="data:text/plain;charset=US-ASCII,{encode-for-uri(concat(./maindoc_md5,'  ', ./maindoc))}">
+         <i class="fas fa-download pb-1"></i><br />MD5
       </a>
       <a class="btn btn-primary ir-button-download d-inline-block"
          href="{$fulltext_url}" target="_blank">
@@ -276,7 +276,7 @@
              <img align="left" src="{$WebApplicationBaseURL}images/download_other.png" title="{mcri18n:translate('Webpage.docdetails.otherdownload')}" />
            </xsl:otherwise>
          </xsl:choose>
-         <span class="float-right"><small>({mcrstring:pretty-filesize(./title[@type='maindoc_size'])})</small></span>
+         <span class="float-right"><small>({mcrstring:pretty-filesize(./maindoc_size)})</small></span>
          <strong>{mcrclass:current-label-text(./classification[@classid='derivate_types'])}</strong>
          <br /><small>{mcrstring:abbreviate-center(./maindoc, 40)}</small>
       </a>
