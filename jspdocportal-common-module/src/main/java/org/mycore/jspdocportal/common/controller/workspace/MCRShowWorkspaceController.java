@@ -153,14 +153,23 @@ public class MCRShowWorkspaceController {
                 .orderByTaskCreateTime().desc().list();
             model.put("myTasks", myTasks);
 
+            Map<String, Object> myVariables = new HashMap<>();
             for (Task t : myTasks) {
                 updateWFObjectMetadata(t.getId());
                 updateWFDerivateList(t);
+                myVariables.put(t.getExecutionId(), MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getVariables(t.getExecutionId()));
             }
+            model.put("myVariables", myVariables);
 
             List<Task> availableTasks = ts.createTaskQuery().taskCandidateUser(user.getUserID())
                 .orderByTaskCreateTime().desc().list();
             model.put("availableTasks", availableTasks);
+            
+            Map<String, Object> availableVariables = new HashMap<>();
+            for (Task t : availableTasks) {
+                availableVariables.put(t.getExecutionId(), MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getVariables(t.getExecutionId()));
+            }
+            model.put("availableVariables", availableVariables);
         }
 
         LinkedHashMap<String, String> newActions = new LinkedHashMap<>();

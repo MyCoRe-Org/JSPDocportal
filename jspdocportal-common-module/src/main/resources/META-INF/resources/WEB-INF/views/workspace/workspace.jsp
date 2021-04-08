@@ -63,25 +63,22 @@
 						</div>
 					</div>
   					<div class="card-body p-0">
-    			      <c:forEach var="task" items="${it.myTasks}" >
-                        <c:set var="currentTask" value="${task}" scope="request" />
+    			      <c:forEach var="currentTask" items="${it.myTasks}" >
+                        <c:set var="currentVariables" value="${it.myVariables[currentTask.executionId]}" />
                         <c:choose>
                            <c:when test="${currentTask.name eq 'Objekt bearbeiten'}">
-                             <%
-                                pageContext.setAttribute("currentVariables", MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getVariables(((Task)request.getAttribute("currentTask")).getExecutionId()), PageContext.REQUEST_SCOPE);
-                             %>
-							<div class="card border border-primary m-3" id="task_${task.executionId}">
+							<div class="card border border-primary m-3" id="task_${currentTask.executionId}">
                                <div class="card-header">
                                   <div class="row">
                                     <div class="col-8">
-								      <h4><span class="badge badge-pill badge-secondary mr-3" style="height:auto">${task.executionId}</span> 
+								      <h4><span class="badge badge-pill badge-secondary mr-3" style="height:auto">${currentTask.executionId}</span> 
                                           ${currentVariables.wfHeadline}
                                           <span class="badge badge-pill badge-primary ml-3" style="height:auto">${currentVariables.mcrObjectID}</span>
                                       </h4>
                                     </div>
                                     <div class="col-4">
-									   <button class="btn btn-sm btn-secondary float-right" name="doReleaseTask-task_${task.executionId}"><fmt:message key="WF.workspace.submit.task" /></button>
-									   <span class="btn btn-none btn-sm float-right"><strong><fmt:message key="WF.workspace.start" /></strong> <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${task.createTime}" /></span>
+									   <button class="btn btn-sm btn-secondary float-right" name="doReleaseTask-task_${currentTask.id}"><fmt:message key="WF.workspace.submit.task" /></button>
+									   <span class="btn btn-none btn-sm float-right"><strong><fmt:message key="WF.workspace.start" /></strong> <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${currentTask.createTime}" /></span>
                                     </div>
                                    </div>
 								</div>
@@ -177,19 +174,16 @@
     				<h3><fmt:message key="WF.workspace.info.headline.available_tasks" /></h3>
   				   </div>
   				   <div class="card-body p-0">
-  						<c:forEach var="task" items="${it.availableTasks}">
-							<div class="card border border-secondary m-3" id="available_task_${task.executionId}">
+  						<c:forEach var="currentTask" items="${it.availableTasks}">
+                            <c:set var="currentVariables" value="${it.availableVariables[currentTask.executionId]}" />
+							<div class="card border border-secondary m-3" id="available_task_${currentTask.executionId}">
 								<div class="card-header">
-									<button class="btn btn-secondary btn-sm float-right" name="doAcceptTask-task_${task.executionId}"><fmt:message key="WF.workspace.submit.accept_task" /></button>
-									<span class="btn btn-none btn-sm float-right"><strong><fmt:message key="WF.workspace.start" /> </strong><fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${task.createTime}" /></span>
+									<button class="btn btn-secondary btn-sm float-right" name="doAcceptTask-task_${currentTask.id}"><fmt:message key="WF.workspace.submit.accept_task" /></button>
+									<span class="btn btn-none btn-sm float-right"><strong><fmt:message key="WF.workspace.start" /> </strong><fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${currentTask.createTime}" /></span>
 									<h5 class="card-title">
-                                        <span class="badge badge-pill badge-secondary">${task.executionId}</span> <fmt:message key="WF.workspace.task" /> ${task.name}</h5>
+                                        <span class="badge badge-pill badge-secondary">${currentTask.executionId}</span> <fmt:message key="WF.workspace.task" /> ${currentTask.name}</h5>
 								</div>
-						
-								<c:set var="currentTask" value="${task}" scope="request" />
-                                <%
-                                pageContext.setAttribute("currentVariables", MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getVariables(((Task)request.getAttribute("currentTask")).getExecutionId()), PageContext.REQUEST_SCOPE);
-                                %>
+
 								<div class="card-body border-top border-secondary">
                                   <div class="row">
                                     <div class="col-3">
