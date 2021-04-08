@@ -23,6 +23,7 @@
  */
 package org.mycore.jspdocportal.common.controller;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -163,6 +164,7 @@ import org.mycore.user2.MCRUserManager;
                 model.put("loginOK",  true);
                 model.put("loginStatus", "user.welcome");
                 updateData(mcrSession, model);
+                return Response.temporaryRedirect(URI.create(request.getContextPath() + "/do/workspace/tasks")).build();
             } else {
                 // the user is not allowed
                 model.put("loginOK",  false);
