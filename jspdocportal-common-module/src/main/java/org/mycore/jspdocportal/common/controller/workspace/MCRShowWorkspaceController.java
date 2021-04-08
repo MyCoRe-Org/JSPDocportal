@@ -165,8 +165,13 @@ public class MCRShowWorkspaceController {
 
         LinkedHashMap<String, String> newActions = new LinkedHashMap<>();
         for (String role : MCRUserManager.getCurrentUser().getSystemRoleIDs()) {
-            if(role.startsWith("wf_")) {
-                newActions.put(role, MCRCategoryDAOFactory.getInstance().getCategory(new MCRCategoryID("mcr-roles", role), 0).getCurrentLabel().orElse(new MCRLabel(MCRSessionMgr.getCurrentSession().getLocale().getLanguage(), "??"+ role +"??", "")).getText());
+            if (role.startsWith("wf_")) {
+                newActions.put(role,
+                    MCRCategoryDAOFactory.getInstance().getCategory(new MCRCategoryID("mcr-roles", role), 0)
+                        .getCurrentLabel()
+                        .orElse(new MCRLabel(MCRSessionMgr.getCurrentSession().getLocale().getLanguage(),
+                            "??" + role + "??", ""))
+                        .getText());
             }
         }
         model.put("newActions", newActions);
@@ -184,10 +189,15 @@ public class MCRShowWorkspaceController {
                     variables.put(MCRBPMNMgr.WF_VAR_OBJECT_TYPE, objectType);
                     variables.put(MCRBPMNMgr.WF_VAR_PROJECT_ID, projectID);
                     variables.put(MCRBPMNMgr.WF_VAR_MODE, mode);
+                    String role = mode + "-" + objectType;
+                    variables.put(MCRBPMNMgr.WF_VAR_HEADLINE,
+                        MCRCategoryDAOFactory.getInstance().getCategory(new MCRCategoryID("mcr-roles", role), 0)
+                            .getCurrentLabel()
+                            .orElse(new MCRLabel(MCRSessionMgr.getCurrentSession().getLocale().getLanguage(),
+                                "??" + role + "??", ""))
+                            .getText());
 
                     RuntimeService rs = MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService();
-                    // ProcessInstance pi = rs.startProcessInstanceByKey("create_object_simple",
-                    // variables);
                     ProcessInstance pi = rs.startProcessInstanceByMessage("start_create", variables);
                     TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
                     for (Task t : ts.createTaskQuery().processInstanceId(pi.getId()).list()) {
@@ -214,7 +224,7 @@ public class MCRShowWorkspaceController {
 
     private Response editObject(String mcrID, String taskID) {
         MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
-       
+
         HashMap<String, Object> model = new HashMap<String, Object>();
         Viewable v = new Viewable("/workspace/fullpageEditor", model);
 
@@ -224,10 +234,11 @@ public class MCRShowWorkspaceController {
         //if(preprocessor!=null) {
         //    sourceURI = "xslStyle:"+preprocessor+":" + sourceURI;
         //}
-        String preprocessor = MCRConfiguration2.getString("MCR.Workflow.MetadataEditor.PreProcessorTransformer.create_object_simple").orElse(null);
-        
-        if(preprocessor!=null) {
-            sourceURI = "xslTransform:"+preprocessor+":" + sourceURI;
+        String preprocessor = MCRConfiguration2
+            .getString("MCR.Workflow.MetadataEditor.PreProcessorTransformer.create_object_simple").orElse(null);
+
+        if (preprocessor != null) {
+            sourceURI = "xslTransform:" + preprocessor + ":" + sourceURI;
         }
         model.put("sourceURI", sourceURI);
 
@@ -239,13 +250,14 @@ public class MCRShowWorkspaceController {
         model.put("cancelURL", cancelURL);
 
         //MCR.Workflow.MetadataEditor.Path.create_object_simple.wf_register_data
-        
+
         RuntimeService rs = MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService();
-        String mode = ((StringValue)rs.getVariableLocalTyped(taskID, MCRBPMNMgr.WF_VAR_MODE)).getValue();
-        
-        LOGGER.debug("ID: " +MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getActivityInstance(taskID).getId());
-        
-        String propKey = "MCR.Workflow.MetadataEditor.Path.create_object_simple."+mode;
+        String mode = ((StringValue) rs.getVariableLocalTyped(taskID, MCRBPMNMgr.WF_VAR_MODE)).getValue();
+
+        LOGGER.debug(
+            "ID: " + MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getActivityInstance(taskID).getId());
+
+        String propKey = "MCR.Workflow.MetadataEditor.Path.create_object_simple." + mode;
         String editorPath = MCRConfiguration2.getStringOrThrow(propKey);
         model.put("editorPath", editorPath);
 
@@ -415,12 +427,11 @@ public class MCRShowWorkspaceController {
         MCRObjectID mcrObjID = null;
         try {
             mcrObjID = MCRObjectID.getInstance(String.valueOf(MCRBPMNMgr.getWorfklowProcessEngine()
-            .getTaskService().getVariable(t.getId(), MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID)));
-        if (mcrObjID == null) {
-            LOGGER.error("WFObject could not be read.");
-        }
-        }
-        catch(Exception e) {
+                .getTaskService().getVariable(t.getId(), MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID)));
+            if (mcrObjID == null) {
+                LOGGER.error("WFObject could not be read.");
+            }
+        } catch (Exception e) {
             MCRBPMNMgr.getWorfklowProcessEngine().getTaskService().setVariable(t.getId(),
                 MCRBPMNMgr.WF_VAR_VALIDATION_MESSAGE, e.getMessage());
             return;

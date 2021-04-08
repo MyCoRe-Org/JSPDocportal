@@ -63,34 +63,36 @@
 						</div>
 					</div>
   					<div class="card-body p-0">
-    					<c:forEach var="task" items="${it.myTasks}" >
+    			      <c:forEach var="task" items="${it.myTasks}" >
+                        <c:set var="currentTask" value="${task}" scope="request" />
+                        <c:choose>
+                           <c:when test="${currentTask.name eq 'Objekt bearbeiten'}">
+                             <%
+                                pageContext.setAttribute("currentVariables", MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getVariables(((Task)request.getAttribute("currentTask")).getExecutionId()), PageContext.REQUEST_SCOPE);
+                             %>
 							<div class="card border border-primary m-3" id="task_${task.executionId}">
                                <div class="card-header">
                                   <div class="row">
-                                    <div class="col-6">
-								      <h5><span class="badge badge-pill badge-secondary mr-3">${task.executionId}</span> <fmt:message key="WF.workspace.task" /> ${task.name}</h5>
+                                    <div class="col-8">
+								      <h4><span class="badge badge-pill badge-secondary mr-3" style="height:auto">${task.executionId}</span> 
+                                          ${currentVariables.wfHeadline}
+                                          <span class="badge badge-pill badge-primary ml-3" style="height:auto">${currentVariables.mcrObjectID}</span>
+                                      </h4>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-4">
 									   <button class="btn btn-sm btn-secondary float-right" name="doReleaseTask-task_${task.executionId}"><fmt:message key="WF.workspace.submit.task" /></button>
 									   <span class="btn btn-none btn-sm float-right"><strong><fmt:message key="WF.workspace.start" /></strong> <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${task.createTime}" /></span>
                                     </div>
                                    </div>
 								</div>
-									<c:set var="currentTask" value="${task}" scope="request" />
-									<c:choose>
-										<c:when test="${currentTask.name eq 'Objekt bearbeiten'}">
+
 							 				<div class="card-body  border-top border-bottom border-secondary">
-							 	   				<%
-							 	   				pageContext.setAttribute("currentVariables", MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getVariables(((Task)request.getAttribute("currentTask")).getExecutionId()), PageContext.REQUEST_SCOPE);
-							 	   				%>
+
 							  					<c:if test="${not empty currentVariables.validationMessage}">
 													<div class="alert alert-danger" role="alert">${currentVariables.validationMessage}</div>
 												</c:if>
                                                 <div class="row">	
-								                    <div class="col-3">
-                                                      <span class="badge badge-pill badge-secondary">${currentVariables.mcrObjectID}</span>
-                                                    </div>
-													<div class="col-6">
+													<div class="col-9">
 														<h3 style="margin-top:0px">${currentVariables.wfObjectDisplayTitle}</h3>
 														<c:out value="${currentVariables.wfObjectDisplayDescription}" escapeXml="false" />
 													</div>
@@ -159,14 +161,15 @@
 								  					<label class="ml-3"><fmt:message key="WF.workspace.label.delete" /></label>
 							  					</div>
 							  				</div>
-							   			</c:when>
-							   			<c:otherwise>
-											<p> Nothing ToDo for TASK: = ${task.name} </p>
-							 		  	</c:otherwise>
-									</c:choose>	
-							</div>
-						</c:forEach>
-					</div>
+							   			
+							     </div>
+                           </c:when>
+                           <c:otherwise>
+                             <p> Nothing ToDo for TASK: = ${task.name} </p>
+                           </c:otherwise>
+                        </c:choose> 
+				     </c:forEach>
+				   </div>
 				</div>
 				
 			   <div class="card border border-dark my-3 w-100">

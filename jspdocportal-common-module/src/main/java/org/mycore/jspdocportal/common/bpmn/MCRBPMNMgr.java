@@ -18,6 +18,8 @@ public class MCRBPMNMgr {
     private static final Logger LOGGER = LogManager.getLogger(MCRBPMNMgr.class);
 
     public static final String WF_VAR_MODE = "wfMode";
+    
+    public static final String WF_VAR_HEADLINE = "wfHeadline";
 
     public static final String WF_VAR_PROJECT_ID = "projectID";
 
