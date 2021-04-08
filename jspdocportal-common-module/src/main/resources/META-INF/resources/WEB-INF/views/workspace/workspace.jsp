@@ -25,6 +25,19 @@
   <div class="container">
        <div class="row">
           <div class="col">
+            <div class="card mt-3 float-right">
+              <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownNewActionsMenu"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <fmt:message key="WF.workspace.info.headline.new_task" />
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownNewActionsMenu">
+                  <c:forEach var="base" items="${it.newActions}">
+                    <button class="dropdown-item" type="button" name="doCreateNewTask-${base.key}" value="doit">${base.value}</button>
+                  </c:forEach>
+                </div>
+              </div>
+            </div>
             <h2><fmt:message key="WF.workspace.headline" /></h2>
           </div>
         </div>      
@@ -38,17 +51,7 @@
 						<c:out value="${msg}" escapeXml="false" />
  					</div>
 				</c:forEach>
-
-				<div class="card border border-dark my-3 w-100">
-  					<div class="card-header bg-dark">
-                        <c:forEach var="base" items="${it.newObjectBases}">
-  						  <button class="btn btn-sm float-right btn-secondary mt-1 ml-3"  name="doCreateNewTask-${base}" value="doit">Neues <strong>${base}</strong> erstellen</button>
-    			        </c:forEach>		
-                        <h3><fmt:message key="WF.workspace.info.headline.new_task" /></h3>
-  					</div>
-  				</div>
-			
-				<div class="card border border-dark my-3 w-100">
+                <div class="card border border-dark my-3 w-100">
   					<div class="card-header bg-dark">
   					   <button class="btn btn-sm float-right btn-secondary mt-1" type="button" data-toggle="collapse" data-target="#publish-dialog-task_${currentTask.executionId}"><fmt:message key="WF.workspace.button.publish_all_objects" /></button>
 					   <h3><fmt:message key="WF.workspace.info.headline.assumed_tasks" /></h3>

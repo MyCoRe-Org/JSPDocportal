@@ -5,10 +5,10 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -30,6 +30,7 @@ import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRConstants;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
@@ -162,13 +163,13 @@ public class MCRShowWorkspaceController {
             model.put("availableTasks", availableTasks);
         }
 
-        List<String> newObjects = new ArrayList<String>();
+        LinkedHashMap<String, String> newActions = new LinkedHashMap<>();
         for (String role : MCRUserManager.getCurrentUser().getSystemRoleIDs()) {
-            newObjects.addAll(MCRConfiguration2
-                .splitValue(MCRConfiguration2.getString("MCR.Workflow.NewObjectBases." + role).orElse(""))
-                .map(s -> role + "-" + s).collect(Collectors.toList()));
+            if(role.startsWith("wf_")) {
+                newActions.put(role, MCRCategoryDAOFactory.getInstance().getCategory(new MCRCategoryID("mcr-roles", role), 0).getCurrentLabel().orElse(new MCRLabel(MCRSessionMgr.getCurrentSession().getLocale().getLanguage(), "??"+ role +"??", "")).getText());
+            }
         }
-        model.put("newObjectBases", newObjects);
+        model.put("newActions", newActions);
 
         Viewable v = new Viewable("/workspace/workspace", model);
         return Response.ok(v).build();
