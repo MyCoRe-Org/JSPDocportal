@@ -22,7 +22,9 @@
 </head>
 <body>
   <%@ include file="../fragments/header.jspf" %>
-  <div class="container">
+  <form method="post"  action="${applicationScope.WebApplicationBaseURL}do/workspace/tasks"
+        id="workspaceForm" accept-charset="UTF-8">
+    <div class="container">
        <div class="row">
           <div class="col">
             <div class="card mt-3 float-right">
@@ -33,7 +35,7 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownNewActionsMenu">
                   <c:forEach var="base" items="${it.newActions}">
-                    <button class="dropdown-item" type="button" name="doCreateNewTask-${base.key}" value="doit">${base.value}</button>
+                    <button class="dropdown-item" type="submit" name="doCreateNewTask-${base.key}" value="doit">${base.value}</button>
                   </c:forEach>
                 </div>
               </div>
@@ -44,8 +46,6 @@
     	<div class="row mt-3">
           <div class="col">
           <c:set  var="baseURL" value="${applicationScope.WebApplicationBaseURL}"/>
-			<form method="post"  action="${applicationScope.WebApplicationBaseURL}do/workspace/tasks"
-				id="workspaceForm" accept-charset="UTF-8">
 				<c:forEach var="msg" items="${it.messages}">
 					<div class="alert alert-warning ir-workflow-message">
 						<c:out value="${msg}" escapeXml="false" />
@@ -206,10 +206,11 @@
 						</c:forEach>
 					</div>
 				</div>
-			</form>
-          </div>
-      </div>
-    </div>
+            </div>
+        </div>
+     </div>
+   </form>
+
     <div style="height: 75px;">&nbsp;</div>
   <%@ include file="../fragments/footer.jspf" %>
 </body>

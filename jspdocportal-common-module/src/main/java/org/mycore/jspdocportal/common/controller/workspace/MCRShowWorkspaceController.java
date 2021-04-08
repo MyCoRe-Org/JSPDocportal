@@ -95,7 +95,7 @@ public class MCRShowWorkspaceController {
         try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
             if (request.getSession(false) == null
                 || !MCRUserManager.getCurrentUser().isUserInRole("edit")) {
-                return Response.temporaryRedirect(URI.create(request.getContextPath() + "do/login")).build();
+                return Response.temporaryRedirect(URI.create(request.getContextPath() + "/do/login")).build();
             }
         }
 
@@ -175,11 +175,10 @@ public class MCRShowWorkspaceController {
         return Response.ok(v).build();
     }
 
-    private void createNewTask(String mode, String mcrBase, HttpServletRequest request, List<String> messages) {
-        if (mcrBase != null) {
+    private void createNewTask(String mode, String objectType, HttpServletRequest request, List<String> messages) {
+        if (objectType != null) {
             try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
-                String projectID = mcrBase.substring(0, mcrBase.indexOf("_"));
-                String objectType = mcrBase.substring(mcrBase.indexOf("_") + 1);
+                String projectID = MCRConfiguration2.getStringOrThrow("MCR.SWF.Project.ID");
                 if (request.getSession(false) != null) {
                     Map<String, Object> variables = new HashMap<String, Object>();
                     variables.put(MCRBPMNMgr.WF_VAR_OBJECT_TYPE, objectType);
