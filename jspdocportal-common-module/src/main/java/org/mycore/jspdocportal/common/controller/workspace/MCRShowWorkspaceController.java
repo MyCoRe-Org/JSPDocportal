@@ -222,13 +222,19 @@ public class MCRShowWorkspaceController {
     private void acceptTask(String taskId) {
         LOGGER.debug("Accepted Task" + taskId);
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
-        ts.setAssignee(taskId, MCRUserManager.getCurrentUser().getUserID());
+        for(Task t: ts.createTaskQuery().executionId(taskId).list()) {
+            //should be only one item
+            ts.setAssignee(t.getId(), MCRUserManager.getCurrentUser().getUserID());
+        }
     }
 
     private void releaseTask(String taskId) {
         LOGGER.debug("Release Task" + taskId);
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
-        ts.setAssignee(taskId, null);
+        for(Task t: ts.createTaskQuery().executionId(taskId).list()) {
+            //should be only one item
+            ts.setAssignee(t.getId(), null);
+        }
     }
 
     private Response editObject(String mcrID, String taskID) {
