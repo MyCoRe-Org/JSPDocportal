@@ -14,42 +14,7 @@
   
   <xed:bind xpath="/mycoreobject">
     <xed:include uri="resource:editor/metadata/includes-generic.xed" ref="failed-validation-messages" />
-      
-    <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer[@type='reserved']/mods:mods">
-      <h3><xed:output i18n="OMD.ir.editor.pi_reservation.headline" /></h3>
-      <div class="form-group row">
-        <label class="col-2 control-label input-sm ir-label" for="pireg_title_prov">
-         <xed:output i18n="OMD.ir.editor.pi_reservation.DOI" />
-       </label>
-       <div class="col-10">
-         <xed:bind xpath="./../../modsContainer[1]/mods:mods/mods:identifier[@type='doi']">
-            <input id="pireg_doi" type="text" readonly="readonly" disabled="disabled" class="form-control input-sm"   />
-         </xed:bind>
-       </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-2 control-label input-sm ir-label" for="pireg_title_prov">
-         <xed:output i18n="OMD.ir.editor.pi_reservation.provisional_title" />
-       </label>
-       <div class="col-10">
-         <xed:bind xpath="mods:titleInfo[@usage='primary']/mods:title">
-            <input id="pireg_title_prov" type="text" class="form-control input-sm"   />
-         </xed:bind>
-       </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-2 control-label input-sm ir-label" for="pireg_info_prov">
-         <xed:output i18n="OMD.ir.editor.pi_reservation.provisional_remarks" />
-       </label>
-       <div class="col-10">
-         <xed:bind xpath="mods:note">
-            <textarea rows="5" id="pireg_infor_prov" type="text" class="form-control input-sm"   />
-         </xed:bind>
-       </div>
-      </div>
-    </xed:bind>
-      
-      
+
     <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer[@type='edited']/mods:mods">
       <h3><xed:output i18n="OMD.ir.editor.description.headline" /></h3>
       <div class="form-group row">

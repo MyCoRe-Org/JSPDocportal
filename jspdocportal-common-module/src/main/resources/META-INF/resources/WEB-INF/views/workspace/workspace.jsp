@@ -144,6 +144,12 @@
                                   <fmt:message key="WF.workspace.button.mods_from_opac" />
                                 </button>
                               </c:if>
+                              <button id="workspace_button_edit_reservation"
+                                name="doEditReservation-task_${currentTask.executionId}-${currentVariables.mcrObjectID}"
+                                value="" class="btn btn-sm btn-outline-secondary" type="submit">
+                                <i class="fas fa-anchor"></i>
+                                <fmt:message key="WF.workspace.button.edit_reservation" />
+                              </button>
                               <button id="workspace_button_edit_metadata"
                                 name="doEditObject-task_${currentTask.executionId}-${currentVariables.mcrObjectID}"
                                 value="" class="btn btn-sm btn-outline-secondary" type="submit">

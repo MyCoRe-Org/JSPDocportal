@@ -133,6 +133,15 @@ public class MCRShowWorkspaceController {
                 String mcrObjID = id.substring(id.indexOf("-") + 1);
                 return editObject(mcrObjID, taskID);
             }
+            
+            // doEditReservation-task_[ID]-[mcrObjID]
+            if (s.startsWith("doEditReservation-task_")) {
+                String id = s.substring(s.indexOf("-") + 1);
+                String taskID = id.substring(0, id.indexOf("-"));
+                taskID = taskID.substring(taskID.indexOf("_") + 1);
+                String mcrObjID = id.substring(id.indexOf("-") + 1);
+                return editReservation(mcrObjID, taskID);
+            }
 
             // doImportMODS-task_[ID]-[mcrObjID]
             if (s.startsWith("doImportMODS-task_")) {
@@ -245,12 +254,12 @@ public class MCRShowWorkspaceController {
 
         Path wfFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);
         String sourceURI = wfFile.toUri().toString();
-        //String preprocessor = MCRConfiguration2.getString("MCR.Workflow.MetadataEditor.PreProcessorXSL.create_object_simple").orElse(null);
+        //String preprocessor = MCRConfiguration2.getString("MCR.Workflow.Metadata.Editor.PreProcessorXSL.create_object_simple").orElse(null);
         //if(preprocessor!=null) {
         //    sourceURI = "xslStyle:"+preprocessor+":" + sourceURI;
         //}
         String preprocessor = MCRConfiguration2
-            .getString("MCR.Workflow.MetadataEditor.PreProcessorTransformer.create_object_simple").orElse(null);
+            .getString("MCR.Workflow.Metadata.Editor.PreProcessorTransformer.create_object_simple").orElse(null);
 
         if (preprocessor != null) {
             sourceURI = "xslTransform:" + preprocessor + ":" + sourceURI;
@@ -261,10 +270,37 @@ public class MCRShowWorkspaceController {
         if (taskID != null) {
             sbCancel.append("#task_").append(taskID);
         }
-        String cancelURL = sbCancel.toString();
-        model.put("cancelURL", cancelURL);
+        model.put("cancelURL", sbCancel.toString());
 
-        //MCR.Workflow.MetadataEditor.Path.create_object_simple.wf_register_data
+        //MCR.Workflow.Meta.dataEditor.Path.create_object_simple.wf_register_data
+
+        RuntimeService rs = MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService();
+        String mode = ((StringValue) rs.getVariableLocalTyped(taskID, MCRBPMNMgr.WF_VAR_MODE)).getValue();
+
+        String propKey = "MCR.Workflow.Metadata.Editor.Path.create_object_simple." + mode;
+        String editorPath = MCRConfiguration2.getStringOrThrow(propKey);
+        model.put("editorPath", editorPath);
+
+        return Response.ok(v).build();
+    }
+    
+    private Response editReservation(String mcrID, String taskID) {
+        MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
+
+        HashMap<String, Object> model = new HashMap<String, Object>();
+        Viewable v = new Viewable("/workspace/fullpageEditor", model);
+
+        Path wfFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);
+        String sourceURI = wfFile.toUri().toString();
+        model.put("sourceURI", sourceURI);
+
+        StringBuffer sbCancel = new StringBuffer(MCRFrontendUtil.getBaseURL() + "do/workspace/tasks");
+        if (taskID != null) {
+            sbCancel.append("#task_").append(taskID);
+        }
+        model.put("cancelURL", sbCancel.toString());
+
+        //MCR.Workflow.Reservation.Editor.Path.create_object_simple.wf_register_data
 
         RuntimeService rs = MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService();
         String mode = ((StringValue) rs.getVariableLocalTyped(taskID, MCRBPMNMgr.WF_VAR_MODE)).getValue();
@@ -272,7 +308,7 @@ public class MCRShowWorkspaceController {
         LOGGER.debug(
             "ID: " + MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getActivityInstance(taskID).getId());
 
-        String propKey = "MCR.Workflow.MetadataEditor.Path.create_object_simple." + mode;
+        String propKey = "MCR.Workflow.Reservation.Editor.Path.create_object_simple." + mode;
         String editorPath = MCRConfiguration2.getStringOrThrow(propKey);
         model.put("editorPath", editorPath);
 
