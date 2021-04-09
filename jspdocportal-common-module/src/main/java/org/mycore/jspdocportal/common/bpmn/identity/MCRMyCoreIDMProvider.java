@@ -1,5 +1,6 @@
 package org.mycore.jspdocportal.common.bpmn.identity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +27,7 @@ import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserManager;
 
 public class MCRMyCoreIDMProvider implements ReadOnlyIdentityProvider {
-    
+
     public MCRMyCoreIDMProvider() {
 
     }
@@ -36,7 +37,7 @@ public class MCRMyCoreIDMProvider implements ReadOnlyIdentityProvider {
     @Override
     public User findUserById(String userId) {
         MCRUser mcrUser = MCRUserManager.getUser(userId);
-        if(mcrUser!=null) {
+        if (mcrUser != null) {
             return new MCRMyCoReIDMUser(mcrUser);
         }
         return null;
@@ -82,6 +83,7 @@ public class MCRMyCoreIDMProvider implements ReadOnlyIdentityProvider {
             //Collection<example.camunda.domain.User> users = userService.findAll();
             //users.removeIf(user -> !user.getGroup().getId().equals(query.getGroupId()));
             
+            MCRus
             //TODO
         }
 
@@ -91,12 +93,12 @@ public class MCRMyCoreIDMProvider implements ReadOnlyIdentityProvider {
     @Override
     public boolean checkPassword(String userId, String password) {
 
-        if(userId == null || password == null || userId.isEmpty() || password.isEmpty())
+        if (userId == null || password == null || userId.isEmpty() || password.isEmpty())
             return false;
 
         User user = findUserById(userId);
 
-        if(user == null)
+        if (user == null)
             return false;
 
         return user.getPassword().equals(password);
@@ -106,7 +108,7 @@ public class MCRMyCoreIDMProvider implements ReadOnlyIdentityProvider {
 
     @Override
     public Group findGroupById(String groupId) {
-        if(groupId!=null) {
+        if (groupId != null) {
             MCRRole mcrRole = MCRRoleManager.getRole(groupId);
             return new MCRMyCoReIDMGroup(mcrRole);
         }
@@ -128,12 +130,19 @@ public class MCRMyCoreIDMProvider implements ReadOnlyIdentityProvider {
     }
 
     public List<Group> findGroupByQueryCriteria(MCRMyCoReIDMGroupQuery query) {
-        
-        if(query.getId()!=null) {
+
+        if (query.getId() != null) {
             MCRRole mcrRole = MCRRoleManager.getRole(query.getId());
             return Arrays.asList(new MCRMyCoReIDMGroup(mcrRole));
         }
-         
+        if (query.getUserId() != null) {
+            List<Group> groups = new ArrayList<Group>();
+            for (String roleID : MCRUserManager.getUser(query.getUserId()).getSystemRoleIDs()) {
+                groups.add(new MCRMyCoReIDMGroup(MCRRoleManager.getRole(roleID)));
+            }
+            return groups;
+        }
+
         return Collections.emptyList();
     }
 

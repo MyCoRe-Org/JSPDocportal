@@ -8,8 +8,7 @@ public class MCRMyCoReIDMPlugin implements ProcessEnginePlugin {
 
     @Override
     public void preInit(ProcessEngineConfigurationImpl processEngineConfiguration) {
-        // nothing todo
-        
+        processEngineConfiguration.setIdentityProviderSessionFactory(new MCRMyCoReIDMProviderFactory());
     }
 
     @Override
