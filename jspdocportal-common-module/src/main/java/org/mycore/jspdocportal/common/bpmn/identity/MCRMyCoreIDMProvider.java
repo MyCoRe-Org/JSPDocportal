@@ -64,27 +64,27 @@ public class MCRMyCoreIDMProvider implements ReadOnlyIdentityProvider {
 
     public List<User> findUserByQueryCriteria(MCRMyCoReIDMUserQuery query) {
 
-
-
-        if(query.getId() != null) {
+        if (query.getId() != null) {
             MCRUser mcrUser = MCRUserManager.getUser(query.getId());
-            if(mcrUser!=null) {
+            if (mcrUser != null) {
                 return Arrays.asList(new MCRMyCoReIDMUser(mcrUser));
             }
         }
-        //if(query.getFirstName() != null)
-            
-        //if(query.getLastName() != null)
 
+        //implement if necessary
+        //if(query.getFirstName() != null)
+        //if(query.getLastName() != null)
         // if(query.getEmail() != null)
-            
-        if(query.getGroupId() != null) {
-            //suggestion (query all users and filter:
-            //Collection<example.camunda.domain.User> users = userService.findAll();
-            //users.removeIf(user -> !user.getGroup().getId().equals(query.getGroupId()));
-            
-            MCRus
-            //TODO
+
+        if (query.getGroupId() != null) {
+            List<User> users = new ArrayList<>();
+
+            List<MCRUser> mcrUsers = MCRUserManager.listUsers("*", null, null, null);
+            mcrUsers.removeIf(x -> !x.isUserInRole(query.getGroupId()));
+            for (MCRUser u : mcrUsers) {
+                users.add(new MCRMyCoReIDMUser(u));
+            }
+            return users;
         }
 
         return Collections.emptyList();
