@@ -232,20 +232,14 @@ public class ShowWorkspaceAction extends MCRAbstractStripesAction implements Act
 
     private void acceptTask(String taskId) {
         LOGGER.debug("Accepted Task" + taskId);
-        TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
-        for(Task t: ts.createTaskQuery().executionId(taskId).list()) {
-            //should be only one item
-            ts.setAssignee(t.getId(), MCRUserManager.getCurrentUser().getUserID());
-        }
+        TaskService ts = MCRActivitiMgr.getWorfklowProcessEngine().getTaskService();
+        ts.setAssignee(taskId, MCRUserManager.getCurrentUser().getUserID());
     }
 
     private void releaseTask(String taskId) {
         LOGGER.debug("Release Task" + taskId);
-        TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
-        for(Task t: ts.createTaskQuery().executionId(taskId).list()) {
-            //should be only one item
-            ts.setAssignee(t.getId(), null);
-        }
+        TaskService ts = MCRActivitiMgr.getWorfklowProcessEngine().getTaskService();
+        ts.setAssignee(taskId, null);
     }
 
     private Resolution editObject(String mcrID, String taskID) {
