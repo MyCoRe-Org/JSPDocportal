@@ -25,6 +25,7 @@
             <textarea rows="10" id="description_description" type="text" class="form-control input-sm ckeditor" />
 	         <!-- Replace the textarea with id ... with a CKEditor 4 instance, using default configuration. -->
     	     <script>
+    	      CKEDITOR.config.entities = false;
         	  CKEDITOR.replace( 'description_description' );
          	</script>
          </xed:bind>         
