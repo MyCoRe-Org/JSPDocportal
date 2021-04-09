@@ -77,7 +77,7 @@
                                       </h4>
                                     </div>
                                     <div class="col-4">
-									   <button class="btn btn-sm btn-secondary float-right" name="doReleaseTask-task_${currentTask.id}"><fmt:message key="WF.workspace.submit.task" /></button>
+									   <button class="btn btn-sm btn-secondary float-right" name="doReleaseTask-task_${currentTask.executionId}"><fmt:message key="WF.workspace.submit.task" /></button>
 									   <span class="btn btn-none btn-sm float-right"><strong><fmt:message key="WF.workspace.start" /></strong> <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${currentTask.createTime}" /></span>
                                     </div>
                                    </div>
@@ -178,7 +178,7 @@
                             <c:set var="currentVariables" value="${it.availableVariables[currentTask.executionId]}" />
 							<div class="card border border-secondary m-3" id="available_task_${currentTask.executionId}">
 								<div class="card-header">
-									<button class="btn btn-secondary btn-sm float-right" name="doAcceptTask-task_${currentTask.id}"><fmt:message key="WF.workspace.submit.accept_task" /></button>
+									<button class="btn btn-secondary btn-sm float-right" name="doAcceptTask-task_${currentTask.executionId}"><fmt:message key="WF.workspace.submit.accept_task" /></button>
 									<span class="btn btn-none btn-sm float-right"><strong><fmt:message key="WF.workspace.start" /> </strong><fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${currentTask.createTime}" /></span>
 									<h5 class="card-title">
                                         <span class="badge badge-pill badge-secondary">${currentTask.executionId}</span> <fmt:message key="WF.workspace.task" /> ${currentTask.name}</h5>
