@@ -29,6 +29,9 @@ import org.mycore.common.MCRSessionMgr;
  * This AutoClosable can be used to begin and commit
  * a Hibernate transaction in the current MyCoRe Session
  * 
+ * TODO Migration 2021.06LTS - use MCRJPATransactionWrapper instead.
+ * @see org.mycore.backend.jpa.MCRJPATransactionWrapper (MCR-2364) 
+ * 
  * @author Robert Stephan
  */
 public class MCRHibernateTransactionWrapper implements AutoCloseable {
