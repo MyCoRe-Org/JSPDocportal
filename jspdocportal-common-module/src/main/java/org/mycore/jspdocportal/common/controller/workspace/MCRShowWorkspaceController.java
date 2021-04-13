@@ -1,5 +1,6 @@
 package org.mycore.jspdocportal.common.controller.workspace;
 
+import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
 import java.net.URI;
 import java.nio.file.Path;
@@ -15,6 +16,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.xml.transform.TransformerFactory;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,9 +31,12 @@ import org.jdom2.Document;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.mycore.common.MCRClassTools;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration2;
+import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.common.content.transformer.MCRXSLTransformer;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
@@ -343,68 +348,26 @@ public class MCRShowWorkspaceController {
 
             // Title
             mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
+            
+            Class<? extends TransformerFactory> tfClass = MCRClassTools.forName("net.sf.saxon.TransformerFactoryImpl");
+            MCRXSLTransformer xsltTitle = MCRXSLTransformer.getInstance(tfClass, MCRConfiguration2.getString("MCR.Workflow.MCRObject.Display.Title.XSL").orElseThrow());
+            ByteArrayOutputStream baosTitle = new ByteArrayOutputStream();
+            xsltTitle.transform(new MCRJDOMContent(mcrObj.createXML()), baosTitle);
+            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_TITLE, baosTitle.toString());
+            
+            MCRXSLTransformer xsltDescription = MCRXSLTransformer.getInstance(tfClass, MCRConfiguration2.getString("MCR.Workflow.MCRObject.Display.Description.XSL").orElseThrow());
+            ByteArrayOutputStream baosDescription = new ByteArrayOutputStream();
+            xsltDescription.transform(new MCRJDOMContent(mcrObj.createXML()), baosDescription);
+            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_DESCRIPTION, baosDescription.toString());
 
-            String xpTitle = MCRConfiguration2
-                .getString("MCR.Workflow.MCRObject.Display.Title.XPath." + mcrObjID.getBase())
-                .orElse(MCRConfiguration2
-                    .getString("MCR.Workflow.MCRObject.Display.Title.XPath.default_" + mcrObjID.getTypeId())
-                    .orElse("/mycoreobject/@ID"));
-            XPathExpression<String> xpath = XPathFactory.instance().compile(xpTitle, Filters.fstring(), null,
-                MCRConstants.MODS_NAMESPACE);
-            txt = xpath.evaluateFirst(mcrObj.createXML());
         } catch (Exception e) {
             LOGGER.error(e);
             ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_VALIDATION_MESSAGE, e.getMessage());
+            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_TITLE, MCRTranslation.translate("WF.common.newObject"));
+            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_DESCRIPTION, "");
             return;
         }
-        if (txt != null) {
-            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_TITLE, txt);
-        } else {
-            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_TITLE, MCRTranslation.translate("WF.common.newObject"));
-        }
-
-        // Description
-        try {
-            String xpDescr = MCRConfiguration2
-                .getString("MCR.Workflow.MCRObject.Display.Description.XPath." + mcrObjID.getBase())
-                .orElse(MCRConfiguration2
-                    .getString(
-                        "MCR.Workflow.MCRObject.Display.Description.XPath.default_" + mcrObjID.getTypeId())
-                    .orElse("/mycoreobject/@label"));
-            XPathExpression<String> xpath = XPathFactory.instance().compile(xpDescr, Filters.fstring(), null,
-                MCRConstants.MODS_NAMESPACE);
-            txt = xpath.evaluateFirst(mcrObj.createXML());
-        } catch (Exception e) {
-            LOGGER.error(e);
-            txt = e.getMessage();
-        }
-        if (txt != null) {
-            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_DESCRIPTION, txt);
-        } else {
-            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_DESCRIPTION, "");
-        }
-
-        // PersistentIdentifier
-        try {
-            String xpPI = MCRConfiguration2
-                .getString("MCR.Workflow.MCRObject.Display.PersistentIdentifier.XPath." + mcrObjID.getBase())
-                .orElse(MCRConfiguration2.getString(
-                    "MCR.Workflow.MCRObject.Display.PersistentIdentifier.XPath.default_" + mcrObjID.getTypeId())
-                    .orElse("/mycoreobject/@ID"));
-
-            XPathExpression<String> xpath = XPathFactory.instance().compile(xpPI, Filters.fstring(), null,
-                MCRConstants.MODS_NAMESPACE);
-            txt = xpath.evaluateFirst(mcrObj.createXML());
-        } catch (Exception e) {
-            LOGGER.error(e);
-            txt = e.getMessage();
-        }
-        if (txt != null) {
-            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_PERSISTENT_IDENTIFIER, txt);
-        } else {
-            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_PERSISTENT_IDENTIFIER, "");
-        }
-
+        
         // RecordIdentifier
         try {
             String xpPI = "concat(//mods:mods//mods:recordInfo/mods:recordIdentifier,'')";
@@ -420,8 +383,8 @@ public class MCRShowWorkspaceController {
         } else {
             ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_RECORD_IDENTIFIER, "");
         }
-
-        // LicenceInfo
+        
+        // LicenceInfo ... TODO MOVE TO XSLT for Description
         ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_LICENCE_HTML, "");
         String xpLic = "//mods:mods/mods:classification[contains(@valueURI, 'licenseinfo#work')]/@valueURI";
         XPathExpression<Attribute> xpathLic = XPathFactory.instance().compile(xpLic, Filters.attribute(), null,
