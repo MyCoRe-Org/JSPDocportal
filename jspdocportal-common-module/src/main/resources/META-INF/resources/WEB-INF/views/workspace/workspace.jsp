@@ -33,7 +33,11 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownNewActionsMenu">
                   <c:forEach var="base" items="${it.newActions}">
-                    <button class="dropdown-item" type="submit" name="doCreateNewTask-${base.key}" value="doit">${base.value}</button>
+                    <button class="dropdown-item" type="submit" name="doCreateNewTask-${base.key}" value="doit">
+                      <fmt:message key="WF.menu.new.action">
+                        <fmt:param value="${base.value}"/>
+                      </fmt:message>
+                    </button>
                   </c:forEach>
                 </div>
               </div>

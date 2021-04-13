@@ -15,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.camunda.bpm.engine.variable.value.StringValue;
 import org.jdom2.Element;
 import org.mycore.access.MCRAccessException;
 import org.mycore.access.MCRAccessManager;
@@ -41,6 +42,7 @@ import org.mycore.frontend.cli.MCRDerivateCommands;
 import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
+import org.mycore.user2.MCRUserManager;
 import org.xml.sax.SAXParseException;
 
 public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
@@ -49,7 +51,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
     @Override
     public MCRObject createMCRObject(DelegateExecution execution) {
         String base = execution.getVariable(MCRBPMNMgr.WF_VAR_PROJECT_ID).toString() + "_"
-                + execution.getVariable(MCRBPMNMgr.WF_VAR_OBJECT_TYPE).toString();
+            + execution.getVariable(MCRBPMNMgr.WF_VAR_OBJECT_TYPE).toString();
         MCRObject mcrObj = new MCRObject();
 
         mcrObj.setSchema("datamodel-" + execution.getVariable(MCRBPMNMgr.WF_VAR_OBJECT_TYPE).toString() + ".xsd");
@@ -61,7 +63,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
             mcrObj.getMetadata().appendMetadata(defaultMetadata);
         }
         mcrObj.getService().setState(new MCRCategoryID(
-                MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"), "new"));
+            MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"), "new"));
         mcrObj.getStructure();
         try {
             MCRMetadataManager.create(mcrObj);
@@ -77,13 +79,11 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
     @Override
     public MCRObject loadMCRObject(DelegateExecution execution) {
         MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(
-                MCRObjectID.getInstance(String.valueOf(execution.getVariable(MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID))));
+            MCRObjectID.getInstance(String.valueOf(execution.getVariable(MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID))));
         try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
-            if(mcrObj.getService().getState()==null || "new|published".contains(mcrObj.getService().getState().getID())) {
-                mcrObj.getService().setState(new MCRCategoryID(
-                    MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"),
-                    "review"));
-            }
+            mcrObj.getService().removeFlags("editedby");
+            mcrObj.getService().addFlag("editedby", MCRUserManager.getCurrentUser().getUserID());
+
             MCRMetadataManager.update(mcrObj);
 
             MCRBPMNUtils.saveMCRObjectToWorkflowDirectory(mcrObj);
@@ -100,13 +100,14 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
     public MCRObject dropMCRObject(DelegateExecution execution) {
         MCRObject mcrObj = null;
         MCRObjectID mcrObjID = MCRObjectID
-                .getInstance(String.valueOf(execution.getVariable(MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID)));
+            .getInstance(String.valueOf(execution.getVariable(MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID)));
         if (MCRMetadataManager.exists(mcrObjID)) {
             mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
             try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
                 mcrObj.getService().setState(new MCRCategoryID(
-                        MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"),
-                        "deleted"));
+                    MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"),
+                    "deleted"));
+                mcrObj.getService().removeFlags("editedby");
                 MCRMetadataManager.delete(mcrObj);
             } catch (MCRActiveLinkException | MCRAccessException e) {
                 LOGGER.error(e);
@@ -125,22 +126,22 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
 
         der.getDerivate().setInternals(new MCRMetaIFS("internal", null));
         der.getService().setState(new MCRCategoryID(
-                MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"), "new"));
-       
+            MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"), "new"));
+
         if (!StringUtils.isBlank(title)) {
             der.getDerivate().getTitles().add(new MCRMetaLangText("title", "de", null, 0, "plain", title));
         }
         if (!StringUtils.isBlank(label)) {
             if (MCRCategoryDAOFactory.getInstance().exist(new MCRCategoryID("derivate_types", label))) {
                 der.getDerivate().getClassifications()
-                        .add(new MCRMetaClassification("classification", 0, null, "derivate_types", label));
+                    .add(new MCRMetaClassification("classification", 0, null, "derivate_types", label));
             } else {
                 LOGGER.warn("Classification 'derivate_types' does not contain a category with ID: " + label);
             }
         }
 
         if (MCRAccessManager.checkPermission("create-" + owner.getBase())
-                || MCRAccessManager.checkPermission("create-" + owner.getTypeId())) {
+            || MCRAccessManager.checkPermission("create-" + owner.getTypeId())) {
             MCRObject mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(owner);
             if (der.getId().getNumberAsInteger() == 0) {
                 MCRObjectID newDerID = MCRObjectID.getNextFreeId(der.getId().getBase());
@@ -152,13 +153,13 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                 }
                 MCRBPMNUtils.saveMCRDerivateToWorkflowDirectory(der);
             }
-            der.setOrder(mcrObj.getStructure().getDerivates().size()+1);
+            der.setOrder(mcrObj.getStructure().getDerivates().size() + 1);
             mcrObj.getStructure().addDerivate(MCRMetaEnrichedLinkIDFactory.getInstance().getDerivateLink(der));
             MCRBPMNUtils.saveMCRObjectToWorkflowDirectory(mcrObj);
 
         } else {
             throw new MCRPersistenceException(
-                    "You do not have \"create\" permission on " + der.getId().getTypeId() + ".");
+                "You do not have \"create\" permission on " + der.getId().getTypeId() + ".");
         }
         return der;
     }
@@ -187,9 +188,9 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
     public boolean commitMCRObject(DelegateExecution execution) {
         String id = String.valueOf(execution.getVariable(MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID));
         if (!id.equals("null")) {
-        	if(execution.hasVariable(MCRBPMNMgr.WF_VAR_VALIDATION_MESSAGE)){
-        		execution.removeVariable(MCRBPMNMgr.WF_VAR_VALIDATION_MESSAGE);
-        	}
+            if (execution.hasVariable(MCRBPMNMgr.WF_VAR_VALIDATION_MESSAGE)) {
+                execution.removeVariable(MCRBPMNMgr.WF_VAR_VALIDATION_MESSAGE);
+            }
             MCRObjectID mcrObjID = MCRObjectID.getInstance(id);
             try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
                 MCRObject mcrWFObj = MCRBPMNUtils.getWorkflowObject(mcrObjID);
@@ -203,42 +204,50 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                 }
 
                 mcrObjMeta.appendMetadata(mcrWFObj.getMetadata());
-                if("new|review".contains(mcrObj.getService().getState().getID())) {
-                mcrObj.getService().setState(new MCRCategoryID(
+
+                StringValue mode = execution.getVariableTyped(MCRBPMNMgr.WF_VAR_MODE);
+                if (mode.getValue().startsWith("wf_edit_")) {
+                    mcrObj.getService().setState(new MCRCategoryID(
                         MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"),
                         "published"));
                 }
-                
-                // set delete information from <service>
+                if (mode.getValue().startsWith("wf_register_")) {
+                    mcrObj.getService().setState(new MCRCategoryID(
+                        MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"),
+                        "reserved"));
+                }
+
+                // set/update delete information from <service>
                 removeServDate(mcrObj, "mcr-delete:date");
-                if(mcrWFObj.getService().getDate("mcr-delete:date")!=null) {
+                if (mcrWFObj.getService().getDate("mcr-delete:date") != null) {
                     mcrObj.getService().setDate("mcr-delete:date", mcrWFObj.getService().getDate("mcr-delete:date"));
                 }
                 mcrObj.getService().removeFlags("mcr-delete:note");
-                for(String flag : mcrWFObj.getService().getFlags("mcr-delete:note")) {
+                for (String flag : mcrWFObj.getService().getFlags("mcr-delete:note")) {
                     mcrObj.getService().addFlag("mcr-delete:note", flag);
                 }
                 mcrObj.getService().removeFlags("mcr-delete:doctype");
-                for(String flag : mcrWFObj.getService().getFlags("mcr-delete:doctype")) {
+                for (String flag : mcrWFObj.getService().getFlags("mcr-delete:doctype")) {
                     mcrObj.getService().addFlag("mcr-delete:doctype", flag);
                 }
-                if("deleted".equals(mcrWFObj.getService().getState().getID())) {
+                if ("deleted".equals(mcrWFObj.getService().getState().getID())) {
                     mcrObj.getService().setState(new MCRCategoryID(
                         MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"),
                         "deleted"));
                 }
-                
+
+                mcrObj.getService().removeFlags("editedby");
                 MCRMetadataManager.update(mcrObj);
             } catch (MCRAccessException | MCRException e) {
                 LOGGER.error(e);
                 StringBuffer msg = new StringBuffer(e.getMessage());
-                if(e.getCause()!=null) {
-                	Throwable t1 = e.getCause();
-                	msg.append("\ncaused by: ").append(t1.getMessage());
-                	if(t1.getCause()!=null) {
-                		Throwable t2 = t1.getCause();
-                		msg.append("\ncaused by: ").append(t2.getMessage());
-                	}
+                if (e.getCause() != null) {
+                    Throwable t1 = e.getCause();
+                    msg.append("\ncaused by: ").append(t1.getMessage());
+                    if (t1.getCause() != null) {
+                        Throwable t2 = t1.getCause();
+                        msg.append("\ncaused by: ").append(t2.getMessage());
+                    }
                 }
                 //TODO: Display error / exception in workflow
                 execution.setVariable(MCRBPMNMgr.WF_VAR_VALIDATION_MESSAGE, msg.toString());
@@ -299,33 +308,30 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                         if (state.equals("new")) {
                             MCRMetadataManager.delete(derObj);
                         }
-                        if (state.equals("review")) {
-                            derObj.getService()
-                                    .setState(new MCRCategoryID(
-                                            MCRConfiguration2
-                                                    .getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"),
-                                            "published"));
-                            try {
-                                MCRMetadataManager.update(derObj);
-                            } catch (MCRAccessException e) {
-                                LOGGER.error(e);
-                            }
+                        derObj.getService().removeFlags("editedby");
+                        try {
+                            MCRMetadataManager.update(derObj);
+                        } catch (MCRAccessException e) {
+                            LOGGER.error(e);
                         }
+
                     }
                 }
 
                 mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
                 if (mcrObj.getService().getState() != null) {
+                    mcrObj.getService().removeFlags("editedby");
                     String state = mcrObj.getService().getState().getID();
                     if (state.equals("new")) {
                         MCRMetadataManager.delete(mcrObj);
                     }
                     if (state.equals("review")) {
                         mcrObj.getService().setState(new MCRCategoryID(MCRConfiguration2
-                                .getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"), "published"));
+                            .getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"), "published"));
                         MCRMetadataManager.update(mcrObj);
                     }
                 }
+
             } catch (MCRActiveLinkException | MCRAccessException e) {
                 LOGGER.error(e);
             }
@@ -343,10 +349,10 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
             MCRObjectID mcrDerID = metalinkID.getXLinkHrefID();
             if (mcrDerID != null && MCRMetadataManager.exists(mcrDerID)) {
                 MCRDerivate mcrDer = MCRMetadataManager.retrieveMCRDerivate(mcrDerID);
-                if(mcrDer.getService().getState()==null || "new|published".contains(mcrDer.getService().getState().getID())) {
-                mcrDer.getService().setState(new MCRCategoryID(
-                        MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"),
-                        "review"));
+                if (mcrDer.getService().getState() == null
+                    || "new|published".contains(mcrDer.getService().getState().getID())) {
+                    mcrDer.getService().removeFlags("editedby");
+                    mcrDer.getService().addFlag("editedby", MCRUserManager.getCurrentUser().getUserID());
                 }
                 try {
                     MCRMetadataManager.update(mcrDer);
@@ -355,7 +361,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                 }
                 MCRBPMNUtils.cleanupWorkflowDirForDerivate(mcrObj.getId(), mcrDerID);
                 MCRDerivateCommands.show(mcrDerID.toString(),
-                        MCRBPMNUtils.getWorkflowObjectDir(mcrObj.getId()).toString());
+                    MCRBPMNUtils.getWorkflowObjectDir(mcrObj.getId()).toString());
             }
         }
     }
@@ -383,21 +389,22 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
         // update derivates in MyCoRe
         for (String derID : wfDerivateIDs) {
             MCRDerivate der = MCRBPMNUtils.loadMCRDerivateFromWorkflowDirectory(mcrObj.getId(),
-                    MCRObjectID.getInstance(derID));
-            if("deleted".equals(mcrObj.getService().getState().getID())) {
+                MCRObjectID.getInstance(derID));
+            if ("deleted".equals(mcrObj.getService().getState().getID())) {
                 der.getService().setState(new MCRCategoryID(
                     MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"),
                     "deleted"));
-            }
-            else if(der.getService().getState()==null || "new|review".contains(der.getService().getState().getID())){
+            } else if (der.getService().getState() == null
+                || "new|review".contains(der.getService().getState().getID())) {
                 der.getService().setState(new MCRCategoryID(
                     MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"),
                     "published"));
             }
+            der.getService().removeFlags("editedby");
             MCRBPMNUtils.saveMCRDerivateToWorkflowDirectory(der);
 
             String filename = MCRBPMNUtils.getWorkflowDerivateFile(mcrObj.getId(), MCRObjectID.getInstance(derID))
-                    .toString();
+                .toString();
             Map<String, Element> ruleMap = null;
             try {
                 MCRObjectID derIDObj = MCRObjectID.getInstance(derID);
@@ -436,7 +443,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
         }
         return false;
     }
-    
+
     //use reflection to delete a servdate from MyCoRe-Object
     //remove in LTS 2019 (use new method removeDate(String type)
     private void removeServDate(MCRObject mcrObj, String type) {
