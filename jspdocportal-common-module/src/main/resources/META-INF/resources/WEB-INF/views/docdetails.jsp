@@ -104,13 +104,13 @@
         <div class="col-12 col-md-8"><%--main area --%>
 		  <div class="row">
             <div class="col">
-			  <div class="ir-box ir-docdetails-header">
+			  <div class="ir-docdetails-header">
                 <x:choose>
                   <x:when select="$doc/mycoreobject/service/servstates/servstate/@categid='deleted'">
                     <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/deleted_header_html.xsl" />
                   </x:when>
                   <x:otherwise>
-                    <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/${objectType}2header_html.xsl" />
+                    <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/header_html.xsl" />
                   </x:otherwise>
                 </x:choose>
 			  </div>
