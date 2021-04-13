@@ -11,7 +11,7 @@
 
 <div class="row">
 	<div class="col-sm-9">
-		<search:show-edit-button mcrid="${entry.mcrid}" cssClass="btn btn-primary ir-edit-btn pull-right" /> 
+		<%--<search:show-edit-button mcrid="${entry.mcrid}" cssClass="btn btn-primary ir-edit-btn pull-right" /> --%> 
 		<h4 class="card-title">
 			<a href="${url}">${entry.label}</a>
 		</h4>
