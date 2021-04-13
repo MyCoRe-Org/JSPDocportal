@@ -268,8 +268,8 @@
 				</div>
          	</c:if>
             <search:result-navigator mcrid="${mcrid}" mode="one_line"/>
-        </div>
-        <search:show-edit-button mcrid="${mcrid}" cssClass="btn btn-sm btn-primary ir-edit-btn pull-right" />
+        
+        <mcr:showEditMenu mcrid="${mcrid}" cssClass="text-right pb-3" />
         <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/rightside_html.xsl" />
      </div>
 

@@ -127,6 +127,23 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+  
+    <tag>
+      <description> A Tag, that displays an edit menu for a given MyCoRe object</description>
+      <name>showEditMenu</name>
+      <tag-class>org.mycore.jspdocportal.common.taglibs.MCRShowEditMenuTag</tag-class>
+      <body-content>empty</body-content>
+       <attribute>
+        <name>mcrid</name>
+        <required>true</required>
+        <rtexprvalue>true</rtexprvalue>
+      </attribute>
+      <attribute>
+        <name>cssClass</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+      </attribute>
+    </tag>
 	
 	<tag>
 		<description>A Tag, that loads an MCRObject from Repository or workflow directory </description>
