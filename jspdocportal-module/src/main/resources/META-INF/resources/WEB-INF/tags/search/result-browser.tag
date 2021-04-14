@@ -52,9 +52,12 @@
         </nav>
         <div class="ir-result-pagination">
 		  <c:if test="${(numHits gt 0) and (not empty result.csvDownloadFields)}">
+		    <c:set var="sort_param"><%= ((org.apache.solr.common.util.NamedList<Object>)result.getSolrQueryResponse().getHeader().get("params")).get("sort") %></c:set>
 		    <c:url var="csv_url" value="${WebApplicationBaseURL}api/v1/search">
 		      <c:param name="q"><%= ((org.apache.solr.common.util.NamedList<Object>)result.getSolrQueryResponse().getHeader().get("params")).get("q") %></c:param>
-			  <c:param name="sort"><%= ((org.apache.solr.common.util.NamedList<Object>)result.getSolrQueryResponse().getHeader().get("params")).get("sort") %></c:param>
+			  <c:if test="${sort_param}">
+			    <c:param name="sort">${sort_param}</c:param>
+			  </c:if>
 			  <c:param name="rows">${result.csvDownloadRows}</c:param>
 			  <c:param name="wt">csv</c:param>
 			  <c:param name="fl">${result.csvDownloadFields}</c:param>
