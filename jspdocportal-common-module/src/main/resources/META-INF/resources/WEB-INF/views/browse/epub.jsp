@@ -187,7 +187,9 @@
           <div class="row">
             <div class="col-xs-12 col-md-12 mt-3">
             <p class="card-text">
+            <%--
               <search:show-edit-button mcrid="${mcrid}" cssClass="btn btn-sm btn-primary ir-edit-btn" />
+              --%>
               <span class="badge badge-secondary">${entry.data['ir.doctype.result']}</span>
               <c:choose>
                 <c:when test="${fn:contains(entry.data['ir.accesscondition_class.facet'], 'restrictedaccess')}">
