@@ -22,10 +22,11 @@
     <p>
       <em><xsl:value-of select="./metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods/mods:note" /></em>
     </p>
-    <xsl:for-each select="//mods:name[./mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='aut'][1]"/>
+    <xsl:for-each select="//mods:name[./mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='aut'][1]">
     <p>
       <xsl:value-of select="concat(/mods:namePart[@type='given'],' ',./mods:namePart[@type='family'])" />
     </p>
+    </xsl:for-each>
     <p>
       DOI: https://doi.org/{$MCR.DOI.Prefix}/{translate(//mods:mods/mods:recordInfo/mods:recordIdentifier,'/','_')}
       <br />URN: {//mods:mods/mods:identifier[@type='urn']}
