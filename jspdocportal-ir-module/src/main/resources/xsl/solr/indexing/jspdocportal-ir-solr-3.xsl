@@ -77,8 +77,17 @@
           </xsl:if> 
        </xsl:for-each>
        
-	   <xsl:if test="mcrmods:is-supported(mods:classification[@displayLabel='doctype'])">
-       		<field name="ir.doctype.result"><xsl:value-of select="mcrmods:to-mycoreclass(mods:classification[@displayLabel='doctype'], 'single')/categories/categories/category/label[@xml:lang='de']/@text" /></field>
+       <xsl:if test="mods:genre[@displayLabel='doctype']">
+	     <xsl:if test="mcrmods:is-supported(mods:genre[@displayLabel='doctype'])">
+       		<field name="ir.doctype.result"><xsl:value-of select="mcrmods:to-mycoreclass(mods:genre[@displayLabel='doctype'], 'single')/categories/categories/category/label[@xml:lang='de']/@text" /></field>
+         </xsl:if>
+       </xsl:if>
+       
+       <!-- old documents (without new pica2mods) -->
+       <xsl:if test="mods:classification[@displayLabel='doctype']">
+         <xsl:if test="mcrmods:is-supported(mods:classification[@displayLabel='doctype'])">
+            <field name="ir.doctype.result"><xsl:value-of select="mcrmods:to-mycoreclass(mods:classification[@displayLabel='doctype'], 'single')/categories/categories/category/label[@xml:lang='de']/@text" /></field>
+         </xsl:if>
        </xsl:if>
        
        <xsl:variable name="var_published">
@@ -175,10 +184,10 @@
           <xsl:choose>
             <xsl:when test="mods:originInfo[@eventType='publication']">
               <xsl:for-each select="mods:originInfo[@eventType='publication'][mods:dateIssued[not(@point) and not(@qualifier)]]">
-                <xsl:value-of select="translate(substring(mods:dateIssued,1,4),'xX', '00')" />
+                <xsl:value-of select="translate(substring(mods:dateIssued[1],1,4),'xX', '00')" />
               </xsl:for-each>
               <xsl:for-each select="mods:originInfo[@eventType='publication'][mods:dateCreated[not(@point) and not(@qualifier)]]">
-                <xsl:value-of select="translate(substring(mods:dateCreated,1,4),'xX', '00')" />
+                <xsl:value-of select="translate(substring(mods:dateCreated[1],1,4),'xX', '00')" />
               </xsl:for-each>
               <xsl:for-each select="mods:originInfo[@eventType='publication'][mods:dateCreated[@point]]">
                 <xsl:value-of select="translate(substring(mods:dateCreated[@point='start'],1,4),'xX', '00')" />
@@ -189,10 +198,10 @@
             </xsl:when>
              <xsl:when test="mods:originInfo[@eventType='creation']">
               <xsl:for-each select="mods:originInfo[@eventType='creation'][mods:dateIssued[not(@point) and not(@qualifier)]]">
-                <xsl:value-of select="translate(substring(mods:dateIssued,1,4),'xX', '00')" />
+                <xsl:value-of select="translate(substring(mods:dateIssued[1],1,4),'xX', '00')" />
               </xsl:for-each>
               <xsl:for-each select="mods:originInfo[@eventType='creation'][mods:dateCreated[not(@point) and not(@qualifier)]]">
-                <xsl:value-of select="translate(substring(mods:dateCreated,1,4),'xX', '00')" />
+                <xsl:value-of select="translate(substring(mods:dateCreated[1],1,4),'xX', '00')" />
               </xsl:for-each>
               <xsl:for-each select="mods:originInfo[@eventType='creation'][mods:dateCreated[@point]]">
                 <xsl:value-of select="translate(substring(mods:dateCreated[@point='start'],1,4),'xX', '00')" />
@@ -209,10 +218,10 @@
           <xsl:choose>
             <xsl:when test="mods:originInfo[@eventType='publication']">
               <xsl:for-each select="mods:originInfo[@eventType='publication'][mods:dateIssued[not(@point) and not(@qualifier)]]">
-                <xsl:value-of select="translate(substring(mods:dateIssued,1,4),'xX', '99')" />
+                <xsl:value-of select="translate(substring(mods:dateIssued[1],1,4),'xX', '99')" />
               </xsl:for-each>
               <xsl:for-each select="mods:originInfo[@eventType='publication'][mods:dateCreated[not(@point) and not(@qualifier)]]">
-                <xsl:value-of select="translate(substring(mods:dateCreated,1,4),'xX', '99')" />
+                <xsl:value-of select="translate(substring(mods:dateCreated[1],1,4),'xX', '99')" />
               </xsl:for-each>
               <xsl:for-each select="mods:originInfo[@eventType='publication'][mods:dateCreated[@point]]">
                 <xsl:value-of select="translate(substring(mods:dateCreated[@point='end'],1,4),'xX', '99')" />
@@ -223,10 +232,10 @@
             </xsl:when>
             <xsl:when test="mods:originInfo[@eventType='creation']">
               <xsl:for-each select="mods:originInfo[@eventType='creation'][mods:dateIssued[not(@point) and not(@qualifier)]]">
-                <xsl:value-of select="translate(substring(mods:dateIssued,1,4),'xX', '99')" />
+                <xsl:value-of select="translate(substring(mods:dateIssued[1],1,4),'xX', '99')" />
               </xsl:for-each>
               <xsl:for-each select="mods:originInfo[@eventType='creation'][mods:dateCreated[not(@point) and not(@qualifier)]]">
-                <xsl:value-of select="translate(substring(mods:dateCreated,1,4),'xX', '99')" />
+                <xsl:value-of select="translate(substring(mods:dateCreated[1],1,4),'xX', '99')" />
               </xsl:for-each>
               <xsl:for-each select="mods:originInfo[@eventType='creation'][mods:dateCreated[@point]]">
                 <xsl:value-of select="translate(substring(mods:dateCreated[@point='end'],1,4),'xX', '99')" />
