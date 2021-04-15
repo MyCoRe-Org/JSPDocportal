@@ -1,3 +1,4 @@
+<%@ page pageEncoding="UTF-8" contentType="text/html;charset=UTF-8"%>
 <%--TODO use SOLR-Parameter "&facet.mincount=1" --%>
     <script>
     $( document ).ready(function() {
@@ -56,9 +57,9 @@
             //            "created":"2018-04-19T21:53:08.915Z",
             //            "ir.cover_url":"file/rosdok_document_0000009190/rosdok_derivate_0000033719/ppn642329060.cover.jpg",
             //            "ir.creator.result":"Neumann, Ferdinand",
-            //            "ir.title.result":"Die Cultur der Georginen in Deutschland mit besonderer Rücksicht auf Erfurt : (Nebst einer lithographirten Tafel)",
+            //            "ir.title.result":"Die Cultur der Georginen in Deutschland mit besonderer RÃ¼cksicht auf Erfurt : (Nebst einer lithographirten Tafel)",
             //            "ir.doctype.result":"Monographie",
-            //            "ir.originInfo.result":"Weißensee : Großmann , 1841"}, {}, ...]
+            //            "ir.originInfo.result":"WeiÃensee : GroÃmann , 1841"}, {}, ...]
        --%>
       
                   data.response.docs.forEach(function( entry ) {
