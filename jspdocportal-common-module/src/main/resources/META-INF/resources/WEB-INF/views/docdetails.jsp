@@ -123,12 +123,6 @@
             </div>
           </div>
           
-          <div class="row">
-            <div class="col">
-               <mcr:transformXSL dom="${doc}" xslt="xsl/xsl3example.xsl" />
-            </div>
-          </div>
-	
 		  <div class="row">
 		    <div class="col">
 			  <div class="mb-3">
@@ -254,6 +248,12 @@
 		       });
              </script>
           </div>
+       </div>
+       
+       <div class="row">
+         <div class="col">
+           <mcr:transformXSL dom="${doc}" xslt="xsl/xsl3example.xsl" />
+         </div>
        </div>
     </div><%-- main area --%>
     <div class="col-xs-12 col-md-4"> <%-- right area --%>
