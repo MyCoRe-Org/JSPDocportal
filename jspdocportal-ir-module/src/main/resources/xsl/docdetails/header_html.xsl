@@ -5,127 +5,274 @@
   xmlns:xlink="http://www.w3.org/1999/xlink" 
   xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
   xmlns:mcracl="http://www.mycore.de/xslt/acl"
-  exclude-result-prefixes="mods xlink mcri18n mcracl">
- 
+  xmlns:mcrstring="http://www.mycore.de/xslt/stringutils"
+  xmlns:mcrclass="http://www.mycore.de/xslt/classification"
+  xmlns:mcrmods="http://www.mycore.de/xslt/mods"
+  exclude-result-prefixes="mods xlink mcri18n mcracl mcrstring mcrclass mcrmods"
+  expand-text="yes">
+
+  <xsl:output method="html" indent="yes" standalone="no" encoding="UTF-8"/>
+   
   <xsl:import href="resource:xsl/functions/i18n.xsl" />
   <xsl:import href="resource:xsl/functions/acl.xsl" />
-  <xsl:output method="html" indent="yes" standalone="no" encoding="UTF-8"/>
-
+  <xsl:import href="resource:xsl/functions/stringutils.xsl" />
+  <xsl:import href="resource:xsl/functions/classification.xsl" />
+  <xsl:import href="resource:xsl/functions/mods.xsl" />
+  
+  <xsl:import href="resource:xsl/docdetails/header/header_names_html.xsl" />
+  <xsl:import href="resource:xsl/docdetails/header/header_otherversions_html.xsl" />
+  
   <xsl:param name="WebApplicationBaseURL"></xsl:param>
+  <xsl:param name="CurrentLang" />
+  <xsl:param name="DefaultLang" />
 
   <xsl:template match="/mycoreobject">
-  <!-- ID reservation header -->
-  <xsl:if test="mcracl:check-permission(@ID, 'writedb')">
-    <xsl:if test="./service/servstates/servstate[@categid='reserved']">
-      <div class="card card-info border border-info mb-3">
-        <div class="card-header bg-info">
-          <h4 class="text-white">ID Reservierung</h4>
+    <!-- ID reservation header -->
+    <xsl:if test="mcracl:check-permission(@ID, 'writedb')">
+      <xsl:if test="./service/servstates/servstate[@categid='reserved']">
+        <div class="card card-info border border-info mb-3">
+          <div class="card-header bg-info">
+            <h4 class="text-white">ID Reservierung</h4>
+          </div>
+          <div class="card-body">
+            <xsl:for-each select="./metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods">
+              <xsl:if test="./mods:titleInfo/mods:title">
+                <h2>
+                  <xsl:value-of select="./mods:titleInfo/mods:title" />
+                </h2>
+              </xsl:if>
+              <xsl:if test="./mods:note">
+                <p class="card-text">
+                  <xsl:value-of select="./mods:note" />
+                </p>
+              </xsl:if>
+            </xsl:for-each>
+          </div>
         </div>
-        <div class="card-body">
-          <xsl:for-each select="./metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods">
-            <xsl:if test="./mods:titleInfo/mods:title">
-              <h2>
-                <xsl:value-of select="./mods:titleInfo/mods:title" />
-              </h2>
-            </xsl:if>
-            <xsl:if test="./mods:note">
-              <p class="card-text">
-                <xsl:value-of select="./mods:note" />
-              </p>
-            </xsl:if>
-          </xsl:for-each>
-        </div>
-      </div>
+      </xsl:if>
     </xsl:if>
-  </xsl:if>
+  
+    <!-- Metadata Header -->  
+    <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='imported' or @type='created']/mods:mods">
+
+      <!-- Button zum übergeordneten Werk -->
+      <xsl:if test="./mods:relatedItem[@type='host' or @type='series'][./mods:recordInfo]"> 
+        <div class="text-right">
+          <xsl:for-each select="./mods:relatedItem[@type='host' or @type='series'][./mods:recordInfo]">
+            <xsl:element name="a">
+              <xsl:attribute name="class">btn btn-outline-secondary btn-sm</xsl:attribute>
+              <xsl:if test="./mods:recordInfo/mods:recordIdentifier">
+                <xsl:attribute name="href">{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(./mods:recordInfo/mods:recordIdentifier, '/', '%252F')}</xsl:attribute>
+              </xsl:if>
+              <xsl:attribute name="data-toggle">popover</xsl:attribute>
+              <xsl:attribute name="data-placement">bottom</xsl:attribute>
+              <xsl:attribute name="data-html">true</xsl:attribute>
+              <xsl:attribute name="data-content">
+                &lt;strong&gt;
+                <xsl:choose>
+                  <xsl:when test="./mods:titleInfo">
+                    <xsl:variable name="title">
+                      <xsl:for-each select="./mods:titleInfo">
+                        {./mods:nonSort} {./mods:title}
+                        <xsl:if test="./mods:subTitle"> : {./mods:subTitle}</xsl:if>
+                      </xsl:for-each>
+                    </xsl:variable>
+                    {$title}
+                  </xsl:when>
+                </xsl:choose>
+                &lt;/strong&gt;
+              </xsl:attribute>
+              <xsl:value-of select="mcri18n:translate(concat('OMD.ir.docdetails.parent.', ./@type))" />
+              <xsl:text disable-output-escaping="true">&#38;nbsp;&#38;nbsp;</xsl:text><i class="fa fa-arrow-up"></i>
+            </xsl:element>
+          </xsl:for-each> 
+        </div>
+      </xsl:if>
+  
+      <xsl:call-template name="headerNames" />
+  
+      <!-- Title -->
+      <xsl:for-each select="./mods:titleInfo[@usage='primary']">
+        <xsl:variable name="title_primary">
+          {./mods:nonSort} {./mods:title}
+          <xsl:if test="./mods:subTitle"> : {./mods:subTitle}</xsl:if>
+        </xsl:variable>
+        <h2>
+         <xsl:choose>
+            <xsl:when test="./mods:partNumber or ./mods:partName">
+              <small>{$title_primary}</small><br />
+              <xsl:value-of select="string-join((./mods:partNumber, ./mods:partName), ' : ')" />
+            </xsl:when>
+            <xsl:otherwise>
+               {$title_primary}
+            </xsl:otherwise>
+          </xsl:choose>
+        </h2>
+      </xsl:for-each>
     
-    <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='imported']/mods:mods">
-         <xsl:if test="./mods:titleInfo/mods:title">
-              <h2><xsl:value-of select="./mods:titleInfo/mods:title" /></h2>
-         </xsl:if>
-    <!-- 
-      <xsl:for-each select="./mods:relatedItem[@type='host' or @type='series']/mods:recordInfo">
-           <xsl:element name="a">
-              <xsl:attribute name="class">btn btn-default btn-sm pull-right ir-docdetails-btn-goto-parent</xsl:attribute>
-              <!- temporary FIX:  ->
-              	<!- <xsl:attribute name="href"><xsl:value-of select="$WebApplicationBaseURL" />resolve/recordIdentifier/<xsl:value-of select="substring-before(./mods:recordIdentifier, '/')"/>_<xsl:value-of select="substring-after(./mods:recordIdentifier, '/')"/></xsl:attribute> ->
-              <xsl:if test="contains(./mods:recordIdentifier, '/')">
-              	<xsl:attribute name="href"><xsl:value-of select="$WebApplicationBaseURL" />resolve/recordIdentifier/<xsl:value-of select="substring-before(./mods:recordIdentifier, '/')"/>_<xsl:value-of select="substring-after(./mods:recordIdentifier, '/')"/></xsl:attribute>
-              </xsl:if>
-              <!- temporary FIX:  ->
-              <xsl:if test="contains(./mods:recordIdentifier, '_')">
-              	<xsl:attribute name="href"><xsl:value-of select="$WebApplicationBaseURL" />resolve/id/<xsl:value-of select="./mods:recordIdentifier" /></xsl:attribute>
-              </xsl:if>
-              <xsl:attribute name="title"><xsl:value-of select="../mods:titleInfo/mods:title" /></xsl:attribute>
-              <xsl:value-of select="mcri18n:translate('Webpage.docdetails.gotoParent')" />
-              <xsl:text disable-output-escaping="yes">&amp;#160;&amp;#160;&lt;i class=&quot;fa fa-arrow-up&quot;&gt;&lt;/i&gt;</xsl:text>
-           </xsl:element>
-      </xsl:for-each> 
+      <!-- Veröffentlichungsangabe -->
+      <xsl:for-each select="./mods:originInfo[@eventType='publication']">
+        <p>
+          <xsl:choose>
+            <xsl:when test="contains(../mods:genre[@displayLabel='doctype']/@valueURI,'#histbest')">
+              {string-join((./mods:edition, 
+                            (string-join((./mods:place[not(@supplied='yes')]/mods:placeTerm, ./mods:publisher), ': ')),
+                            ./mods:dateIssued[not(@*)]),  
+                            ', ')}
+            </xsl:when>
+            <xsl:otherwise>
+              {string-join((./mods:edition, ./mods:publisher, ./mods:dateIssued[not(@*)]), ', ')}
+            </xsl:otherwise>
+          </xsl:choose>
+        </p>
+      </xsl:for-each>
+    
+      <!-- erschienen in -->
+      <xsl:for-each select="./mods:relatedItem[@otherType='appears_in']">
+        <p>In:
+        <xsl:variable name="title">
+          <xsl:for-each select="./mods:titleInfo">
+            {./mods:nonSort} {./mods:title}
+            <xsl:if test="./mods:subTitle"> : {./mods:subTitle}</xsl:if>
+          </xsl:for-each>
+        </xsl:variable>
+        {string-join(($title, 
+                      ./mods:part/mods:detail[@type='article']/mods:number,
+                      ./mods:originInfo[@eventType="publication"]/mods:publisher,
+                      ./mods:originInfo[@eventType='publication']/mods:dateIssued[not(@*)]),
+                      ', ')}
+        </p> 
+      </xsl:for-each>
+    
+      <!-- DOI / PURL -->
       <p>
-        <xsl:call-template name="mods-name" /><br />
+        <xsl:choose>
+          <xsl:when test="./mods:identifier[@type='doi']">
+            <a href="https://doi.org/{./mods:identifier[@type='doi']}">https://doi.org/{./mods:identifier[@type='doi']}</a>
+          </xsl:when>
+          <xsl:when test="./mods:identifier[@type='purl']">
+            <a href="{./mods:identifier[@type='purl']}">{./mods:identifier[@type='purl']}</a>
+          </xsl:when>
+        </xsl:choose>
       </p>
       
-     <xsl:call-template name="mods-title" />
-     <xsl:if test="./mods:relatedItem[@displayLabel='appears_in']/mods:titleInfo">
-     	<xsl:value-of select="mcri18n:translate('Webpage.docdetails.appearsIn')" /><xsl:text> </xsl:text>
-     	<xsl:value-of select="./mods:relatedItem[@displayLabel='appears_in']/mods:titleInfo/*" />
-     </xsl:if>
-
-      <p>
-      <xsl:call-template name="mods-originInfo" />
-      </p>
-      <xsl:choose>
-       <xsl:when test="./mods:identifier[@type='doi']">
-        <p><xsl:element name="a">
-            <xsl:attribute name="href">https://doi.org/<xsl:value-of select="./mods:identifier[@type='doi']" /></xsl:attribute>
-             https://doi.org/<xsl:value-of select="./mods:identifier[@type='doi']" />
-          </xsl:element>
-         </p>
-        </xsl:when>
-       <xsl:when test="./mods:identifier[@type='purl']">
-        <p>
-            <xsl:element name="a">
-            <xsl:attribute name="href"><xsl:value-of select="./mods:identifier[@type='purl']" /></xsl:attribute>
-             <xsl:value-of select="./mods:identifier[@type='purl']" />
-          </xsl:element>
-         </p>
-        </xsl:when>
-        </xsl:choose>
-        <xsl:if test="./mods:abstract">
-        <h5 style="margin-bottom: .25em">Abstract:</h5>
-        <p class="small ir-docdetails-abstract">
-          <xsl:value-of select="./mods:abstract" />
-       </p>       
-       </xsl:if>
-       <p>
-        <xsl:if test="./mods:classification[@displayLabel='doctype']">
-
-        <span class="badge badge-secondary">
-          <xsl:for-each select="./mods:classification[@displayLabel='doctype']/@valueURI">
-            <xsl:call-template name="classLabel">
-              <xsl:with-param name="valueURI"><xsl:value-of select="." /></xsl:with-param>
-            </xsl:call-template>
-          </xsl:for-each>
-        </span>
-       
+      <!-- Abstract for EPUB -->
+      <xsl:if test="not(contains(../mods:genre[@displayLabel='doctype']/@valueURI,'#histbest'))">
+        <xsl:for-each select="./mods:abstract[@xml:lang=$CurrentLang]">
+        <p class="text-justify"><small>
+          <strong>Abstract:  </strong>
+          <xsl:variable name="text" select="mcrstring:shorten(., 400)" />
+          <xsl:choose>
+            <xsl:when test="ends-with($text, '…')">
+              {substring($text, 0, string-length($text))}
+              <span class="collapse" id="spanCollapseAbstract">
+                {substring(., string-length($text)+1)}
+              </span>
+              <button id="btnCollapseAbstract" class="btn btn-info btn-sm py-0 px-1" type="button" data-toggle="collapse" data-target="#spanCollapseAbstract" aria-expanded="false" aria-controls="spanCollapseAbstract">
+                <i class="fas fa-arrow-right"></i>
+              </button>
+              <script>
+                <xsl:text expand-text="false" disable-output-escaping="true">
+                  $('#spanCollapseAbstract').on('hidden.bs.collapse', function () {
+                    $('#btnCollapseAbstract').empty().append('&lt;i class="fas fa-arrow-right"&gt;&lt;/i&gt;');
+                  });
+                  $('#spanCollapseAbstract').on('shown.bs.collapse', function () {
+                    $('#btnCollapseAbstract').empty().append('&lt;i class="fas fa-arrow-left"&gt;&lt;/i&gt;');
+                  });
+                </xsl:text>
+              </script>
+            </xsl:when>
+            <xsl:otherwise>
+              {$text}
+            </xsl:otherwise>
+          </xsl:choose>
+        </small></p>
+      </xsl:for-each>
       </xsl:if>
-      <xsl:call-template name="accessLabel" />
-      </p>
-       <xsl:if test="./mods:relatedItem[@type='otherVersion']">
-       		<p style="margin-top:2em">
-       			<xsl:value-of select="mcri18n:translate('Webpage.docdetails.header.otherVersions')" />: 
-       			<xsl:for-each select="./mods:relatedItem[@type='otherVersion']">
-       				<xsl:element name="a">
-       					<xsl:attribute name="href"><xsl:value-of select="./mods:identifier[@type='purl']" /></xsl:attribute>
-             			<xsl:value-of select="./mods:note" />
-       				</xsl:element>
-       				<span> </span>
-       			</xsl:for-each>
-       		</p>
-       </xsl:if>
-       -->
-    </xsl:for-each>
     
+      <!-- Badges -->
+      <xsl:if test="./mods:genre[@displayLabel='doctype']">
+        <span class="badge badge-secondary p-2">
+          <xsl:value-of select="mcrclass:current-label-text(mcrmods:to-category(./mods:genre[@displayLabel='doctype']))" />
+        </span>
+        <span>&#160;&#160;</span> 
+      </xsl:if>
+      
+      <xsl:call-template name="accessBadge" />
+    
+      <xsl:if test="./mods:classification[contains(@valueURI, 'licenseinfo#work')]">
+        <span>&#160;&#160;</span>
+        <xsl:variable name="licecat" select="mcrmods:to-category(./mods:classification[contains(@valueURI, 'licenseinfo#work')])" />
+        <span id="badgeWorkLicense" class="badge" data-toggle="popover" data-placement="bottom" data-html="true">
+          <xsl:attribute name="data-content"><xsl:value-of select="$licecat/label[@xml:lang=$CurrentLang]/@description" /></xsl:attribute>
+          <xsl:choose>
+            <xsl:when test="$licecat/label[@xml:lang='x-icon']">
+              <img style="height:2.5em" src="{concat($WebApplicationBaseURL,'images',$licecat/label[@xml:lang='x-icon']/@text)}" />&#160;
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$licecat/label[@xml:lang=$CurrentLang]/@text" />
+            </xsl:otherwise>
+          </xsl:choose>
+        </span>
+      </xsl:if>
+    
+      <xsl:if test="/mycoreobject/metadata/def.irControl/irControl/map/list[@key='mets_filegroups']/entry[text() = 'ALTO']">
+        <span>&#160;&#160;</span>
+        <span class="badge badge-warning p-2">
+          OCR
+        </span>
+      </xsl:if> 
+
+      <!-- weitere Versionen -->
+      <xsl:call-template name="otherVersions" />
+       
+      <!-- popover javascript -->
+      <script>
+        <xsl:text expand-text="false" disable-output-escaping="true">
+          $(function () {
+            $('[data-toggle="popover"]')
+               .popover(
+                 { delay: { "show": 50, "hide": 2500 }, 
+                   trigger:"click hover",
+                   sanitize:false,
+                   content: function(){
+                     var ref = $(this).attr('data-content-ref');
+                     return $(ref).children().html();
+                   }
+                 })
+                 .on('shown.bs.popover', function () {
+                 var $popup = $(this);
+                 if($popup.is('[data-content-ref]')){
+                   $(document).on("click", $popup.attr('data-content-ref').replace('#', '#close_'), 
+                     function(){
+                       $popup.popover('hide');
+                   });
+                 }
+              });
+          });
+        </xsl:text>
+      </script>
+    </xsl:for-each>
+  </xsl:template>
+  
+  <xsl:template name="accessBadge">
+    <xsl:choose>
+      <xsl:when test="./mods:classification[@displayLabel='accesscondition'][contains(@valueURI, 'restrictedaccess')]">
+        <span class="badge ir-badge-restrictedaccess">
+          Restricted <img style="height:1.5em;padding:0 .25em"><xsl:attribute name="src"><xsl:value-of select="$WebApplicationBaseURL"></xsl:value-of>images/logo_Closed_Access.png</xsl:attribute></img>  Access           
+        </span>
+      </xsl:when>
+      <xsl:when test="./mods:classification[@displayLabel='accesscondition'][contains(@valueURI, 'closedaccess')]">
+        <span class="badge ir-badge-closedaccess">
+            Closed <img style="height:1.5em;padding:0 .25em"><xsl:attribute name="src"><xsl:value-of select="$WebApplicationBaseURL"></xsl:value-of>images/logo_Closed_Access.png</xsl:attribute></img>  Access
+        </span>
+      </xsl:when> 
+      <xsl:otherwise>
+        <span class="badge ir-badge-openaccess">
+          Open <img style="height:1.5em;padding:0 .25em"><xsl:attribute name="src"><xsl:value-of select="$WebApplicationBaseURL"></xsl:value-of>images/logo_Open_Access.png</xsl:attribute></img> Access
+        </span>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
 </xsl:stylesheet>
