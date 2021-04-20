@@ -69,7 +69,7 @@
     <p>
       <xsl:for-each select="./mods:name[@type='personal'][contains('aut edt', ./mods:role/mods:roleTerm[@authority='marcrelator'])]">
         <nobr>
-          {string-join((./mods:namePart[@type='given'], ./mods:namePart[@type='given'], ./mods:namePart[not(@type)], mods:namePart[@type='termsOfAddress']),' ')}
+          {string-join((./mods:namePart[@type='given'], ./mods:namePart[@type='family'], ./mods:namePart[not(@type)], mods:namePart[@type='termsOfAddress']),' ')}
           <button class="btn btn-sm pl-1" type="button">
             <xsl:attribute name="data-toggle">popover</xsl:attribute>
             <xsl:attribute name="data-placement">bottom</xsl:attribute>
