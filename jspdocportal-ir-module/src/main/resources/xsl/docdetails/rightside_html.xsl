@@ -6,6 +6,9 @@
   xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
   xmlns:mcrclass="http://www.mycore.de/xslt/classification"
   xmlns:mcrstring="http://www.mycore.de/xslt/stringutils"
+  xmlns:mcrmods="http://www.mycore.de/xslt/mods"
+  xmlns:json="http://www.w3.org/2005/xpath-functions"
+  
   exclude-result-prefixes="mods xlink"
   expand-text="yes">
 
@@ -19,20 +22,50 @@
   <xsl:import href="resource:xsl/functions/i18n.xsl" />
   <xsl:import href="resource:xsl/functions/classification.xsl" />
   <xsl:import href="resource:xsl/functions/stringutils.xsl" />
+   <xsl:import href="resource:xsl/functions/mods.xsl" />
   
   
   <xsl:template match="/">
+    <!-- Provider -->
+    <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" >
+      <div class="card border border-primary mb-3">
+        <div class="card-body py-1 small">
+          bereitgestellt durch:
+        </div>
+        <div class="card-body text-center py-2">
+          <xsl:variable name="categ" select="mcrmods:to-mycoreclass(., 'single')/categories/category" />
+          <xsl:variable name="homepage" select="$categ/label[@xml:lang='x-homepage']/@text" />
+          <a href="{$homepage}">
+          <xsl:variable name="json_viewer" select="replace($categ/label[@xml:lang='x-dfg-viewer']/@text, '''', '&quot;')" />
+          <xsl:variable name="logo_url" select="json-to-xml($json_viewer)/json:map/json:string[@key='logo_url']" />
+          <xsl:if test="$logo_url">
+            <img src="{$logo_url}"/>
+            <br />
+          </xsl:if>
+          <small><xsl:value-of select="mcrclass:current-label-text($categ)" /></small>
+          </a>
+        </div>
+      </div>
+    </xsl:for-each>
+  
+  
+    <!-- Cover -->
     <xsl:if test="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='cover']] 
                        or contains(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='doctype']/@valueURI, '#data')">
+      <xsl:variable name="recordID" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']" />
       <xsl:choose>
         <xsl:when test="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='cover']]">
-          <div class="ir-box ir-box-docdetails-image">
+          <div class="ir-box ir-box-docdetails-image" style="position:relative">
             <xsl:choose>
-              <xsl:when test="/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='MCRVIEWER_METS']]">
-                <xsl:variable name="recordID" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']" />
+              <xsl:when test="/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='MCRVIEWER_METS' or @categid='fulltext']]">
                 <a href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID,'/','_')}" title="Im MyCoRe Viewer anzeigen">
                   <img src="{$WebApplicationBaseURL}api/iiif/image/v2/thumbnail/{/mycoreobject/@ID}/full/full/0/default.jpg" style="width:200px" />
                 </a>
+                <div class="text-center w-100" style="position:absolute;bottom:0.25em">
+                 <a class="btn btn-light btn-sm" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID, '/','_')}" title="Im MyCoRe Viewer anzeigen">
+                   <i class="far fa-eye"></i> Anzeigen
+                 </a>
+                </div>
               </xsl:when>
               <xsl:when test="/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='DV_METS' or @categid='METS']]">
                 <xsl:variable name="mcrid" select="/mycoreobject/@ID" />
@@ -56,24 +89,27 @@
     <xsl:if test="not(/mycoreobject/service/servstates/servstate/@categid='deleted')">
       <div class="ir-box ir-box-emph">
         <h4 class="text-primary">Dauerhaft zitieren</h4>
-        <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='doi']">
-          <p><a href="https://doi.org/{.}">https://doi.org/<br class="visible-md-inline"/>{.}</a></p>
-        </xsl:for-each>
-        <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='urn']">
-          <p><a href="http://nbn-resolving.org/{.}">{.}</a></p>
-        </xsl:for-each>
-        <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='purl']">
-          <p><a href="{.}">
-            {substring-before(.,'.de/')}.de/
-              <br class="visible-md-inline"/>
-            {substring-after(.,'.de/')}
-          </a></p>
-        </xsl:for-each>
+        <xsl:choose>
+          <xsl:when test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='doi']">
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='doi']">
+              <p><a href="https://doi.org/{.}">https://doi.org/<br class="visible-md-inline"/>{.}</a></p>
+            </xsl:for-each>
+          </xsl:when>
+          <xsl:when test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='purl']">
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='purl']">
+              <p><a href="{.}">
+                {substring-before(.,'.de/')}.de/
+                  <br class="visible-md-inline"/>
+                {substring-after(.,'.de/')}
+              </a></p>
+            </xsl:for-each>
+          </xsl:when>
+        </xsl:choose>
       </div>
     </xsl:if>
     
     <!--  Download Area -->
-    <div style="margin-bottom:30px;">
+    <div style="mb-3">
       <xsl:for-each select="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext']]">
         <xsl:call-template name="download-button" />
       </xsl:for-each>
@@ -133,30 +169,44 @@
        
        <xsl:if test="not(/mycoreobject/service/servstates/servstate/@categid='deleted')">
          <div class="ir-box mt-3">
-           <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='PPN']">
+           <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
              <h4>Export</h4>
              <p>
-               <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='PPN']">
+               <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
+                 <xsl:variable name="class_provider" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" />
                  <xsl:choose>
-                   <xsl:when test="starts-with(/mycoreobject/@ID, 'rosdok')">
+                   <xsl:when test="$class_provider">
+                   <xsl:variable name="catalogs" select="mcrmods:to-mycoreclass($class_provider, 'single')/categories/category/label[@xml:lang='x-catalog']/@text" />
+                     <xsl:if test="$catalogs">
+                       <xsl:call-template name="biblio-formate">
+                         <xsl:with-param name="catalogs" select="$catalogs" />
+                         <xsl:with-param name="ppn" select="." />
+                       </xsl:call-template>
+                     </xsl:if>
+                   </xsl:when>
+                   <xsl:when test="$class_provider">
+                   <xsl:variable name="catalogs" select="mcrmods:to-mycoreclass($class_provider, 'single')/categories/category/label[@xml:lang='x-catalog']/@text" />
+                     <xsl:if test="$catalogs">
+                       <xsl:call-template name="biblio-formate">
+                         <xsl:with-param name="catalogs" select="$catalogs" />
+                         <xsl:with-param name="ppn" select="." />
+                       </xsl:call-template>
+                     </xsl:if>
+                   </xsl:when>
+                   <xsl:otherwise>
                      <xsl:call-template name="biblio-formate">
-                       <xsl:with-param name="katalog">opac-de-28</xsl:with-param>
+                       <!-- TODO: MyCoRe-Property for default UnAPI interface -->
+                       <xsl:with-param name="catalogs" select="'{''unapi'':''http://unapi.k10plus.de/?format=picaxml&amp;id=opac-de-28:ppn:{0}''}'" />
                        <xsl:with-param name="ppn" select="." />
                      </xsl:call-template>
-                   </xsl:when>
-                 <xsl:when test="starts-with(/mycoreobject/@ID, 'dbhsnb')">
-                   <xsl:call-template name="biblio-formate">
-                     <xsl:with-param name="katalog">opac-de-519</xsl:with-param>
-                     <xsl:with-param name="ppn" select="." />
-                   </xsl:call-template>
-                 </xsl:when>
-               </xsl:choose>
+                   </xsl:otherwise>
+                 </xsl:choose>
               </xsl:for-each>
             </p>
             
             <h4>Portale</h4>
             <p>
-              <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='PPN']">
+              <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
                 <xsl:choose>
                   <xsl:when test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']">
                     <a class="badge px-1" target="_blank" href="http://opac.lbs-rostock.gbv.de/DB=1/PPNSET?PPN={.}">OPAC (UB Rostock)</a>
@@ -189,33 +239,33 @@
            </xsl:if>
            <h4>Teilen</h4>
            <div class="shariff" data-url="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}"
-             data-services="[&quot;twitter&quot;, &quot;facebook&quot;, &quot;googleplus&quot;, &quot;linkedin&quot;, &quot;xing&quot;, &quot;whatsapp&quot;, &quot;mail&quot;, &quot;info&quot;]"
+             data-services="[&quot;twitter&quot;, &quot;facebook&quot;, &quot;linkedin&quot;, &quot;xing&quot;, &quot;whatsapp&quot;, &quot;telegram&quot;, &quot;mail&quot;, &quot;info&quot;]"
              data-mail-url="mailto:" data-mail-subject="{mcri18n:translate('OMD.ir.shariff.subject')}" data-mail-body="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}"
              data-orientation="horizontal" data-theme="standard">
            </div> <!-- data-theme=standard|grey|white --> 
-           <script src="{$WebApplicationBaseURL}modules/shariff_3.0.1/shariff.min.js"></script>
+           <script src="{$WebApplicationBaseURL}modules/shariff_3.2.1/shariff.min.js"></script>
            <p></p>
          </div>
        </xsl:if>
         
-       <div class="ir-box">
-         <h4>Rechte</h4>
-         <p>
-           <strong>
-             <a href="https://rightsstatements.org/page/InC/1.0/?language=de">
-               <img src="{$WebApplicationBaseURL}images/rightsstatements.org/buttons/InC.white.svg" title="in copyright" style="width:100px;background-color:grey;border:5px solid grey;" class="mr-3" />
-                  Urheberrechtsschutz
-             </a>
-             </strong>
-                <!-- old:
-                <span class="badge badge-secondary float-left mr-2 h-100"><a href="https://rightsstatements.org/page/InC/1.0/?language=de"><img src="{$WebApplicationBaseURL}images/rightsstatements.org/buttons/InC.white.svg" title="in copyright" style="width:100px"></a></span>
-                <br><strong><a href="https://rightsstatements.org/page/InC/1.0/?language=de">Urheberrechtsschutz</a></strong></p>
-                <p class="text-justify form-text text-muted small">Dieses Objekt ist durch das Urheberrecht und/oder verwandte Schutzrechte geschützt. Sie sind berechtigt, das Objekt in jeder Form zu nutzen, die das Urheberrechtsgesetz und/oder einschlägige verwandte Schutzrechte gestatten. Für weitere Nutzungsarten benötigen Sie die Zustimmung der/des Rechteinhaber/s.</p>
-                -->
-           </p> 
-       </div>
+       <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='licenseinfo'][contains(@valueURI, 'licenseinfo#work')]">
+         <div class="ir-box">
+           <h4>Rechte</h4>
+           <xsl:variable name="categ" select="mcrmods:to-mycoreclass(., 'single')/categories/category" />
+           <span class="clearfix">
+             <img src="{$WebApplicationBaseURL}images{$categ/label[@xml:lang='x-icon']/@text}" class="float-left pr-3" />
+             <a href="{$categ/label[@xml:lang='x-uri']/@text}" class="strong">
+               <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text"/>
+             </a>  
+           </span>
+           <p class="text-justify form-text text-muted small">
+             <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@description" disable-output-escaping="true" />
+           </p>
+         </div>
+       </xsl:for-each>
 
-       <div class="my-3"><!--Tools --> 
+       <!--Tools -->
+       <div class="my-3"> 
           <div class="float-right">
             <button type="button" class="btn btn-sm ir-button-tools hidden-xs" data-toggle="collapse" data-target="#hiddenTools"
                     title="{mcri18n:translate('Webpage.tools.menu4experts')}">
@@ -249,7 +299,7 @@
               </xsl:if>
             </div>
           </div>
-       </div><!-- Tools -->  
+       </div>  
   </xsl:template>
   
   <xsl:template name="download-button">
@@ -282,14 +332,18 @@
       </a>
     </div>
   </xsl:template>
+  
   <xsl:template name="biblio-formate">
-    <xsl:param name="katalog" />
+    <xsl:param name="catalogs" />
     <xsl:param name="ppn" />
-    <a class="badge px-1" target="_blank" href="http://unapi.gbv.de/?id={$katalog}:ppn:{ppn}&amp;format=bibtex">BibTeX</a>
-    <a class="badge px-1" target="_blank" href="http://unapi.gbv.de/?id={$katalog}:ppn:{ppn}&amp;format=endnote">EndNote</a>
-    <a class="badge px-1" target="_blank" href="http://unapi.gbv.de/?id={$katalog}:ppn:{ppn}&amp;format=ris">RIS</a>
-    <a class="badge px-1" target="_blank" href="http://unapi.gbv.de/?id={$katalog}ppn:{ppn}&amp;format=dc">DublinCore</a>
-    <a class="badge px-1" target="_blank" href="http://unapi.gbv.de/?id={$katalog}:ppn:{ppn}&amp;format=mods">MODS</a>
+    
+    <xsl:variable name="json_urls" select="replace($catalogs, '''', '&quot;')" />
+    <xsl:variable name="unapi_url" select="json-to-xml($json_urls)/json:map/json:string[@key='unapi']" />
+    <a class="badge px-1" target="_blank" href="{replace(replace($unapi_url, '\{0\}', $ppn), 'picaxml', 'bibtex')}">BibTeX</a>
+    <a class="badge px-1" target="_blank" href="{replace(replace($unapi_url, '\{0\}', $ppn), 'picaxml', 'endnote')}">EndNote</a>
+    <a class="badge px-1" target="_blank" href="{replace(replace($unapi_url, '\{0\}', $ppn), 'picaxml', 'ris')}">RIS</a>
+    <a class="badge px-1" target="_blank" href="{replace(replace($unapi_url, '\{0\}', $ppn), 'picaxml', 'dc')}">DublinCore</a>
+    <a class="badge px-1" target="_blank" href="{replace(replace($unapi_url, '\{0\}', $ppn), 'picaxml', 'mods')}">MODS</a>
   </xsl:template>
   
 </xsl:stylesheet>
