@@ -45,7 +45,7 @@
   <title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
   <%@ include file="fragments/html_head.jspf" %>
   <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/metatags_html.xsl" />
-  <link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}modules/shariff_3.0.1/shariff.min.css">
+  <link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}modules/shariff_3.2.1/shariff.min.css">
 		<script>
      	$( document ).ready(function() {
  			$('[data-mcr-action="popover4person"]').popover({
