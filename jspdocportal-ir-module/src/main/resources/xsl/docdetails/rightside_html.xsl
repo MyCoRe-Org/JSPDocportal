@@ -22,32 +22,40 @@
   <xsl:import href="resource:xsl/functions/i18n.xsl" />
   <xsl:import href="resource:xsl/functions/classification.xsl" />
   <xsl:import href="resource:xsl/functions/stringutils.xsl" />
-   <xsl:import href="resource:xsl/functions/mods.xsl" />
-  
-  
+  <xsl:import href="resource:xsl/functions/mods.xsl" />
+    
   <xsl:template match="/">
     <!-- Provider -->
-    <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" >
-      <div class="card border border-primary mb-3">
-        <div class="card-body py-1 small">
-          bereitgestellt durch:
-        </div>
-        <div class="card-body text-center py-2">
-          <xsl:variable name="categ" select="mcrmods:to-mycoreclass(., 'single')/categories/category" />
-          <xsl:variable name="homepage" select="$categ/label[@xml:lang='x-homepage']/@text" />
-          <a href="{$homepage}">
-          <xsl:variable name="json_viewer" select="replace($categ/label[@xml:lang='x-dfg-viewer']/@text, '''', '&quot;')" />
-          <xsl:variable name="logo_url" select="json-to-xml($json_viewer)/json:map/json:string[@key='logo_url']" />
+    
+    <div class="card border border-primary mb-3">
+      <div class="card-body py-1 small">
+        bereitgestellt durch:
+      </div>
+      <div class="card-body text-center py-2">
+        <xsl:variable name="class_provider" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" />
+        <xsl:variable name="categ">
+          <xsl:choose>
+            <xsl:when test="$class_provider">
+              <xsl:copy-of select="mcrmods:to-mycoreclass($class_provider, 'single')/categories/category" />
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:variable name="isil" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier/@source" />
+              <xsl:copy-of select="document('classification:metadata:-1:children:provider')//category[label[@xml:lang='x-isil']/@text=$isil]" />                 
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable> 
+        <xsl:variable name="homepage" select="$categ/category/label[@xml:lang='x-homepage']/@text" />
+        <a href="{$homepage}">
+          <xsl:variable name="json_viewer" select="replace($categ/category/label[@xml:lang='x-dfg-viewer']/@text, '''', '&quot;')" />
+          <xsl:variable name="logo_url" select="replace(json-to-xml($json_viewer)/json:map/json:string[@key='logo_url'], 'http://rosdok.uni-rostock.de/',$WebApplicationBaseURL)" />
           <xsl:if test="$logo_url">
             <img src="{$logo_url}"/>
             <br />
           </xsl:if>
-          <small><xsl:value-of select="mcrclass:current-label-text($categ)" /></small>
-          </a>
-        </div>
+          <small><xsl:value-of select="$categ/category/label[@xml:lang=$CurrentLang]/@text" /></small>
+        </a>
       </div>
-    </xsl:for-each>
-  
+    </div>
   
     <!-- Cover -->
     <xsl:if test="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='cover']] 
@@ -63,7 +71,7 @@
                 </a>
                 <div class="text-center w-100" style="position:absolute;bottom:0.25em">
                  <a class="btn btn-light btn-sm border border-secondary" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID, '/','_')}" title="Im MyCoRe Viewer anzeigen">
-                   <i class="far fa-eye"></i> Anzeigen
+                   <i class="far fa-eye text-primary"></i> Anzeigen
                  </a>
                 </div>
               </xsl:when>
