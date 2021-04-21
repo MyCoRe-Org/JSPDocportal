@@ -55,14 +55,14 @@
       <xsl:variable name="recordID" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']" />
       <xsl:choose>
         <xsl:when test="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='cover']]">
-          <div class="ir-box ir-box-docdetails-image" style="position:relative">
+          <div class="ir-box ir-box-docdetails-image bg-light" style="position:relative">
             <xsl:choose>
               <xsl:when test="/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='MCRVIEWER_METS' or @categid='fulltext']]">
                 <a href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID,'/','_')}" title="Im MyCoRe Viewer anzeigen">
                   <img src="{$WebApplicationBaseURL}api/iiif/image/v2/thumbnail/{/mycoreobject/@ID}/full/full/0/default.jpg" style="width:200px" />
                 </a>
                 <div class="text-center w-100" style="position:absolute;bottom:0.25em">
-                 <a class="btn btn-light btn-sm" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID, '/','_')}" title="Im MyCoRe Viewer anzeigen">
+                 <a class="btn btn-light btn-sm border border-secondary" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID, '/','_')}" title="Im MyCoRe Viewer anzeigen">
                    <i class="far fa-eye"></i> Anzeigen
                  </a>
                 </div>
