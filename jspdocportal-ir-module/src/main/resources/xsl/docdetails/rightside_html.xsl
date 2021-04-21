@@ -170,52 +170,39 @@
        <xsl:if test="not(/mycoreobject/service/servstates/servstate/@categid='deleted')">
          <div class="ir-box mt-3">
            <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
+             <xsl:variable name="class_provider" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" />
+             <xsl:variable name="catalogs">
+               <xsl:choose>
+                 <xsl:when test="$class_provider">
+                   <xsl:value-of select="mcrmods:to-mycoreclass($class_provider, 'single')/categories/category/label[@xml:lang='x-catalog']/@text" />
+                 </xsl:when>
+                 <xsl:otherwise>
+                   <xsl:variable name="isil" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier/@source" />
+                   <xsl:value-of select="document('classification:metadata:-1:children:provider')//category[label[@xml:lang='x-isil']/@text=$isil]/label[@xml:lang='x-catalog']/@text" />                 
+                 </xsl:otherwise>
+               </xsl:choose>
+             </xsl:variable> 
+           
              <h4>Export</h4>
              <p>
                <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
-                 <xsl:variable name="class_provider" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" />
-                 <xsl:choose>
-                   <xsl:when test="$class_provider">
-                   <xsl:variable name="catalogs" select="mcrmods:to-mycoreclass($class_provider, 'single')/categories/category/label[@xml:lang='x-catalog']/@text" />
-                     <xsl:if test="$catalogs">
-                       <xsl:call-template name="biblio-formate">
-                         <xsl:with-param name="catalogs" select="$catalogs" />
-                         <xsl:with-param name="ppn" select="." />
-                       </xsl:call-template>
-                     </xsl:if>
-                   </xsl:when>
-                   <xsl:when test="$class_provider">
-                   <xsl:variable name="catalogs" select="mcrmods:to-mycoreclass($class_provider, 'single')/categories/category/label[@xml:lang='x-catalog']/@text" />
-                     <xsl:if test="$catalogs">
-                       <xsl:call-template name="biblio-formate">
-                         <xsl:with-param name="catalogs" select="$catalogs" />
-                         <xsl:with-param name="ppn" select="." />
-                       </xsl:call-template>
-                     </xsl:if>
-                   </xsl:when>
-                   <xsl:otherwise>
-                     <xsl:call-template name="biblio-formate">
-                       <!-- TODO: MyCoRe-Property for default UnAPI interface -->
-                       <xsl:with-param name="catalogs" select="'{''unapi'':''http://unapi.k10plus.de/?format=picaxml&amp;id=opac-de-28:ppn:{0}''}'" />
-                       <xsl:with-param name="ppn" select="." />
-                     </xsl:call-template>
-                   </xsl:otherwise>
-                 </xsl:choose>
+                 <xsl:if test="$catalogs">
+                   <xsl:call-template name="biblio-formate">
+                     <xsl:with-param name="catalogs" select="$catalogs" />
+                     <xsl:with-param name="ppn" select="." />
+                   </xsl:call-template>
+                 </xsl:if>
+               
               </xsl:for-each>
             </p>
             
             <h4>Portale</h4>
             <p>
               <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
-                <xsl:choose>
-                  <xsl:when test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']">
-                    <a class="badge px-1" target="_blank" href="http://opac.lbs-rostock.gbv.de/DB=1/PPNSET?PPN={.}">OPAC (UB Rostock)</a>
-                  </xsl:when>
-                  <xsl:when test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-519']">
-                    <a class="badge px-1" target="_blank" href="http://opac.lbs-rostock.gbv.de/DB=2/PPNSET?PPN={.}">OPAC (HSB Neubrandenburg)</a>
-                  </xsl:when>
-                </xsl:choose>
-                <a class="badge px-1" href="https://gso.gbv.de/DB=2.1/PPNSET?PPN={.}">OPAC (GBV)</a>
+                <xsl:variable name="json_urls" select="replace($catalogs, '''', '&quot;')" />
+                <xsl:variable name="opac_url" select="json-to-xml($json_urls)/json:map/json:string[@key='opac']" />
+                <a class="badge px-1" target="_blank" href="{replace($opac_url, '\{0\}',.)}">OPAC</a>
+                <a class="badge px-1" href="https://gso.gbv.de/DB=2.1/PPNSET?PPN={.}">GVK</a>
               </xsl:for-each>              
               <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='vd16']">
                 <a class="badge px-1" target="_blank" href="http://gateway-bayern.de/VD16+{replace(.,' ','+')}">VD16</a>
