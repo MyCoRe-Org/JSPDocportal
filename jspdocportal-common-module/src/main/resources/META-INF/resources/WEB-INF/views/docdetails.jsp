@@ -46,45 +46,6 @@
   <%@ include file="fragments/html_head.jspf" %>
   <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/metatags_html.xsl" />
   <link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}modules/shariff_3.2.1/shariff.min.css">
-		<script>
-     	$( document ).ready(function() {
- 			$('[data-mcr-action="popover4person"]').popover({
- 		        html:true,
- 				content: function(){return popoverContent4Person(this);}
- 				
- 		    }); 
-     	});
-     	
-     	function popoverContent4Person(html){
-     		var gnd = $(html).data('mcr-value-gnd');
-     			var gnd_html = "";
-     			if($(html).data('mcr-value-gnd')){
-     				gnd_html = $('<div style="min-width:200px">')
-     					.append($('<strong>').attr('title', 'Gemeinsame Normdatei der Deutschen Nationalbibliothek').append('GND:'))
- 						.append(' ').append($('<span>').append(gnd))
- 						.append(' ').append($('<a>').attr('type', 'button').addClass('btn btn-xs btn-link').attr('href', 'http://d-nb.info/gnd/'+gnd)
- 							.attr('title', 'Gemeinsame Normdatei der Deutschen Nationalbibliothek')
- 							.append($('<span>').addClass('fa fa-share-square-o')));
-     			}
-     			
-     			var sep_html = "";
-     			if($(html).data('mcr-value-gnd') && $(html).data('mcr-value-affiliation')){
- 					sep_html = $('<hr>')
- 				}
- 			
- 				var affi_html = "";
- 				if($(html).data('mcr-value-affiliation')){
- 					affi_html = $('<div>')
- 						.append($('<strong>').append('Einrichtung:')).append('<br>').append($(html).data('mcr-value-affiliation'));
- 				}
-     		return $('<div>').append('<span style="color:darkred;margin-right:-5px;margin-top:-45px" class="close" onclick="hidePopover(this);"><i class="fa fa-times small"></i></span>')
-     		.append(gnd_html).append(sep_html).append(affi_html);
-     	}
-     	function hidePopover(caller){
-     		var id = $(caller).parent().parent().parent().attr("id");
-     		$("button[aria-describedby='"+id+"']").click();
-     	}
- 		</script>
 </head>
 <body>
   <%@ include file="fragments/header.jspf" %>
