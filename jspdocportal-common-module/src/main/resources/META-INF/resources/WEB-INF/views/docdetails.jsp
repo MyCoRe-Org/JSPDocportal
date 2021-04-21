@@ -209,7 +209,7 @@
 		         if(urlParam('_tab')){
              		var tab = urlParam('_tab');
              		$('#nav_content_root > div#nav_content_'+tab).addClass('show');
-		         	$('#nav_bar_root >  a#nav_tab_'+tab).addClass('active');
+		         	$('#nav_bar_root > li > a#nav_tab_'+tab).addClass('active');
          		 }else{
 		         	$('#nav_content_root > div:first-child').addClass('show');
 		         	$('#nav_bar_root > li:first-child a').addClass('active');
