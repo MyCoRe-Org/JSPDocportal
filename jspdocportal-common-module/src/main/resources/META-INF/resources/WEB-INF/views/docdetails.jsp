@@ -46,6 +46,15 @@
   <%@ include file="fragments/html_head.jspf" %>
   <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/metatags_html.xsl" />
   <link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}modules/shariff_3.2.1/shariff.min.css">
+  <script>
+   var urlParam = function(name){
+		 var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+		 if(results){
+			 return results[1] || 0;
+         }
+         return null;
+	   }
+  </script>
 </head>
 <body>
   <%@ include file="fragments/header.jspf" %>
@@ -141,12 +150,9 @@
                            <div id="divMCRViewer_1" style="height:80vh; margin:0px 16px; position:relative;"></div>
                          </c:if>
                          <script type="text/javascript">
- 	                       $.urlParam = function(name){
-    						 var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-   							 return results[1] || 0;
-						   }
+
                       	   window.addEventListener("load", function(){
-							 if($.urlParam('_mcrviewer_start')){
+							 if(urlParam('_mcrviewer_start')){
 	                    		//[0] get Javascript object from Jquery object
 	                    		$("#main_navbar")[0].scrollIntoView();
                     		 }
@@ -169,14 +175,10 @@
 				         <x:when select="$doc/mycoreobject/service/servstates/servstate/@categid='deleted'">
 				           <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/deleted_details_html.xsl" />
 				         </x:when>
-					     <x:when select="contains($doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='doctype']/@valueURI, '#data')">
-						   <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/data2details_html.xsl" />
-					     </x:when>
 					     <x:otherwise>
-						   <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/${objectType}2details_html.xsl" />
+						   <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/metadata_html.xsl" />
 					     </x:otherwise>
 			          </x:choose>
-				      <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/all2footer_html.xsl" />
 			        </div>
 		          </div>
 		          <x:if select="$doc/mycoreobject/structure/derobjects/derobject">
@@ -203,9 +205,15 @@
 		         $('#nav_content_root > div').on('hidden.bs.collapse', function() {
 		        	 $("a.nav-link[href='#"+ $(this).attr("id") +"']").removeClass("active");
 		         });
-		
-		         $('#nav_content_root > div:first-child').addClass('show');
-		         $('#nav_bar_root > li:first-child a').addClass('active');
+
+		         if(urlParam('_tab')){
+             		var tab = urlParam('_tab');
+             		$('#nav_content_root > div#nav_content_'+tab).addClass('show');
+		         	$('#nav_bar_root >  a#nav_tab_'+tab).addClass('active');
+         		 }else{
+		         	$('#nav_content_root > div:first-child').addClass('show');
+		         	$('#nav_bar_root > li:first-child a').addClass('active');
+         		 }
 		       });
              </script>
           </div>
@@ -233,8 +241,8 @@
         
         <mcr:showEditMenu mcrid="${mcrid}" cssClass="text-right pb-3" />
         <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/rightside_html.xsl" />
-     </div>
-
+       </div>
+      </div>
     </div><%-- right area --%>
   </div><%--row --%>
 </div>
