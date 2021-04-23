@@ -56,7 +56,7 @@
             </td>
           </tr>
         </xsl:if>
-        <xsl:if test="./mods:relatedItem[@otherType='appears_in']>
+        <xsl:if test="./mods:relatedItem[@otherType='appears_in']">
           <tr>
             <th>In:</th>
             <td>
