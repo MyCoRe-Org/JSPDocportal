@@ -12,7 +12,9 @@
   
   <xsl:template name="title">
     <xsl:if test="@type">
-      <span class="float-right">[{mcri18n:translate(concat('OMD.ir.docdetails.othertitle.type.', @type))}]</span>
+      <tr><td class="text-right">
+      [{mcri18n:translate(concat('OMD.ir.docdetails.othertitle.type.', @type))}]
+      </td></tr>
     </xsl:if>
     <xsl:choose>
       <xsl:when test="mods:partName or mods:partNumber">

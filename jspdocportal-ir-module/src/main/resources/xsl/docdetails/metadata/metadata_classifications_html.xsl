@@ -42,21 +42,19 @@
     </xsl:if>
     -->
     <xsl:template name="classification2metadataTable">
-    <xsl:param name="items" />
-    <xsl:if test="$items">
-      <tr>
-        <th>{mcri18n:translate(concat('OMD.ir.docdetails.classifications.', $items[1]/@displayLabel))}:</th>
-        <td><table id="ir-table-docdetails-summary" class="ir-table-docdetails-values">
-          <xsl:for-each select="$items">
-            <tr>
-              <td>{mcrclass:current-label-text(mcrmods:to-category(.))}</td>
-            </tr>                
-          </xsl:for-each>
-        </table></td>  
-      </tr>
+      <xsl:param name="items" />
+      <xsl:if test="$items">
+        <tr>
+          <th>{mcri18n:translate(concat('OMD.ir.docdetails.classifications.', $items[1]/@displayLabel))}:</th>
+          <td><table id="ir-table-docdetails-summary" class="ir-table-docdetails-values">
+            <xsl:for-each select="$items">
+              <tr>
+                <td>{mcrclass:current-label-text(mcrmods:to-category(.))}</td>
+              </tr>
+            </xsl:for-each>
+          </table></td>
+        </tr>
     </xsl:if>
-    
-
-    
   </xsl:template>
+  
 </xsl:stylesheet>
