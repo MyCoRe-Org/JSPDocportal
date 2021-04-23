@@ -3,9 +3,14 @@
   xmlns:ubr-researchdata="http://purl.uni-rostock.de/ub/standards/ubr-researchdata-information-v1.0"
   xmlns:ubr-legal="http://purl.uni-rostock.de/ub/standards/ubr-legal-information-v1.0"
   xmlns:mcrclass="http://www.mycore.de/xslt/classification"
+  xmlns:mcrmods="http://www.mycore.de/xslt/mods"
+  xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
   version="3.0" exclude-result-prefixes="mods xlink" expand-text="true">
   
   <xsl:import href="resource:xsl/functions/classification.xsl" />
+  <xsl:import href="resource:xsl/functions/mods.xsl" />
+  <xsl:import href="resource:xsl/functions/i18n.xsl" />
+  <xsl:import href="resource:/xsl/docdetails/metadata/metadata_classifications_html.xsl" />
   
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="CurrentLang" />
@@ -139,6 +144,140 @@
          </table></td>  
         </tr>
       </xsl:if>
+      <xsl:if test="mods:abstract">
+        <tr>
+          <th>Zusammenfassung:</th>
+          <td><table id="ir-table-docdetails-summary" class="ir-table-docdetails-values">
+            <xsl:for-each select="./mods:abstract[@type='summary']">
+              <tr>
+                <td>{.}</td>
+                <td>[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:rfc5646:',@xml:lang))//category)}]</td>
+              </tr>                
+            </xsl:for-each>
+         </table></td>  
+        </tr>
+      </xsl:if>
+
+      <xsl:call-template name="classification2metadataTable">
+        <xsl:with-param name="items" select="./mods:genre[@displayLabel='doctype']" />
+      </xsl:call-template>
+     
+      <xsl:call-template name="classification2metadataTable">
+        <xsl:with-param name="items" select="./mods:classification[@displayLabel='institution']" />
+      </xsl:call-template>
+      <xsl:call-template name="classification2metadataTable">
+        <xsl:with-param name="items" select="./mods:classification[@displayLabel='provider']" />
+      </xsl:call-template>
+      
+       <xsl:call-template name="classification2metadataTable">
+        <xsl:with-param name="items" select="./mods:classification[@displayLabel='collection']" />
+
+      </xsl:call-template>
+      
+      <xsl:if test="mods:language">
+        <tr>
+          <th>Sprache:</th>
+          <td><table id="ir-table-docdetails-language" class="ir-table-docdetails-values">
+            <xsl:for-each select="./mods:language/mods:languageTerm">
+              <tr><td>
+                {mcrclass:current-label-text(document(concat('classification:metadata:0:children:rfc5646:', .))//category[1])}
+              </td></tr>                
+            </xsl:for-each>
+         </table></td>  
+        </tr>
+      </xsl:if>
+      
+     <xsl:if test="mods:physicalDescription">
+        <tr>
+          <th>Umfang:</th>
+          <td><table id="ir-table-docdetails-language" class="ir-table-docdetails-values">
+            <xsl:for-each select="./mods:physicalDescription">
+              <tr><td>
+                {string-join((mods:extent, mods:note[@type='source_dimensions'], mods:note[@type='content']),'; ')}
+              </td></tr>                
+            </xsl:for-each>
+         </table></td>  
+        </tr>
+      </xsl:if>
+      
+       <xsl:if test="mods:location/mods:physicalLocation[@type='current']">
+        <tr>
+          <th>Signatur:</th>
+          <td><table id="ir-table-docdetails-physicalLocation" class="ir-table-docdetails-values">
+            <xsl:for-each select="mods:location[mods:physicalLocation[@type='current']]">
+              <tr><td>
+                {concat(mods:physicalLocation,': ', mods:shelfLocator)}
+              </td></tr>                
+            </xsl:for-each>
+         </table></td>  
+        </tr>
+      </xsl:if>
+      <xsl:if test="mods:identifier">
+        <tr>
+          <th>Identifikatoren:</th>
+          <td><table id="ir-table-docdetails-identifier" class="ir-table-docdetails-values">
+            <xsl:for-each select="mods:identifier[not(@type='purl')]">
+              <xsl:choose>
+                <xsl:when test="@type='uri'">
+                    <xsl:variable name="category" select="mcrclass:category('identifier', 'uri')" />
+                    <tr><th><abbr title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
+                    <td>
+                        <a href="{.}">{substring-after(.,':ppn:')}</a>
+                    </td></tr>
+                </xsl:when>
+                <xsl:when test="@type='rism'">
+                  <xsl:choose>
+                    <xsl:when test="contains(., 'ID no.:')">
+                      <xsl:variable name="category" select="mcrclass:category('identifier', 'rism')" />
+                      <tr>
+                      <th><abbr title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
+                      <xsl:variable name="rismID" select="substring-after(., '')" />
+                      <td><a href="{replace($category/label[@xml:lang='x-portal-url']/@text, '\{0\}',$rismID)}">{$rismID}</a></td>
+                      </tr>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:variable name="category" select="mcrclass:category('identifier', 'rism_series')" />
+                      <tr>
+                      <th><abbr title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
+                      <td>{.}</td>
+                      </tr>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:variable name="category" select="mcrclass:category('identifier', @type)" />
+                  <xsl:if test="$category">
+                    <tr>
+                      <th><abbr title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
+                      <td>
+                        <xsl:choose>
+                          <xsl:when test="$category/label[@xml:lang='x-portal-url']">
+                            <a href="{replace($category/label[@xml:lang='x-portal-url']/@text, '\{0\}',.)}">{.}</a>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            {.}
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </td>
+                    </tr>
+                  </xsl:if>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
+            <xsl:for-each select="mods:identifier[@type='purl']">
+              <xsl:variable name="categ_purl" select="mcrclass:category('identifier', 'purl')" />
+              <tr><th><abbr title="{$categ_purl/label[@xml:lang=$CurrentLang]/@description}">{$categ_purl/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
+                  <td><a href="{.}">{.}</a></td>
+              </tr>
+            </xsl:for-each>
+              <xsl:variable name="categ_mcrid" select="mcrclass:category('identifier', 'mycore_object_id')" />
+              <tr><th><abbr title="{$categ_mcrid/label[@xml:lang=$CurrentLang]/@description}">{$categ_mcrid/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
+                  <td><a href="{/mycoreobject/@ID}">{/mycoreobject/@ID}</a></td>
+              </tr>
+          </table></td>
+        </tr>
+      </xsl:if>
+      
       
       <!--       
       <xsl:if test="./mods:identifier[@type='local']">
@@ -301,8 +440,6 @@
             </td>
           </tr>
         </xsl:if>
-   
-   
    -->
       
     </xsl:for-each>
