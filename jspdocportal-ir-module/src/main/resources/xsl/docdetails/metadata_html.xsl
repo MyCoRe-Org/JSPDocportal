@@ -23,24 +23,85 @@
           <th>Titel:</th>
           <td><table id="ir-table-docdetails-title" class="ir-table-docdetails-values">
             <xsl:for-each select="./mods:titleInfo[@usage='primary']">
-              <xsl:choose>
-                <xsl:when test="mods:partName or mods:partNumber">
-                  <tr><td>
-                    <xsl:value-of select="string-join((mods:nonSort, string-join((mods:title, mods:subTitle), ': ')),' ')" />
-                  </td></tr>
-                  <tr><td><strong>
-                    <xsl:value-of select="string-join((mods:partNumber, mods:partName),' ')" />
-                  </strong></td></tr>
-                </xsl:when>
-                <xsl:otherwise>
-                  <tr><td><strong>
-                    <xsl:value-of select="string-join((mods:nonSort, string-join((mods:title, mods:subTitle), ': ')),' ')" />
-                  </strong></td></tr>
-                </xsl:otherwise> 
-              </xsl:choose>
+              <xsl:call-template name="title" />
             </xsl:for-each>
           </table></td>
         </tr>
+        <xsl:if test="./mods:titleInfo[not(@usage='primary')]">
+          <tr>
+            <th>Weitere Titel:</th>
+            <td><table id="ir-table-docdetails-other-title" class="ir-table-docdetails-values">
+              <xsl:for-each select="./mods:titleInfo[not(@usage='primary')]">
+               <xsl:call-template name="title" />
+              </xsl:for-each>
+            </table></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="./mods:relatedItem[@type='host']">
+          <tr>
+            <th>Gesamttitel:</th>
+            <td>
+              <xsl:if test="./mods:relatedItem[@type='host']/mods:recordInfo/mods:recordIdentifier">
+                <span class="float-right">
+                  <a class="btn btn-outline-secondary btn-sm" href="{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(./mods:relatedItem[@type='host']/mods:recordInfo/mods:recordIdentifier, '/','_')}">Öffnen</a>
+                </span>
+              </xsl:if>
+              <table id="ir-table-docdetails-host-title" class="ir-table-docdetails-values">
+                 <xsl:for-each select="./mods:relatedItem[@type='host']/mods:titleInfo">
+                   <xsl:call-template name="title" />
+                </xsl:for-each>
+              </table>
+            </td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="./mods:relatedItem[@otherType='appears_in']>
+          <tr>
+            <th>In:</th>
+            <td>
+              <xsl:for-each select="./mods:relatedItem[@otherType='appears_in']">
+                <table id="ir-table-docdetails-host-title" class="ir-table-docdetails-values">
+                  <xsl:if test="mods:recordInfo/mods:recordIdentifier">
+                    <span class="float-right">
+                      <a class="btn btn-outline-secondary btn-sm" href="{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(mods:recordInfo/mods:recordIdentifier, '/','_')}">Öffnen</a>
+                    </span>
+                  </xsl:if>
+                  <xsl:for-each select="mods:titleInfo">
+                    <xsl:call-template name="title" />
+                  </xsl:for-each>
+                  <xsl:for-each select="mods:part">
+                    <tr><td>
+                      {string-join(.//text(), ' ')}
+                    </td></tr>
+                  </xsl:for-each>
+                  <xsl:for-each select="mods:originInfo[@eventType='publication']">
+                    <tr><td>
+                      {string-join((mods:publisher, mods:dateIssued[not(@encoding)]),', ')}
+                    </td></tr>
+                  </xsl:for-each>
+                </table>
+                <xsl:if test="mods:identifier">
+                  <table id="ir-table-docdetails-host-title" class="ir-table-docdetails-values">
+                    <xsl:call-template name="identifier2metadataTable" />
+                  </table>
+                </xsl:if>    
+              </xsl:for-each>
+            </td>
+          </tr>
+        </xsl:if>
+        
+        <xsl:if test="./mods:note[@type='statement of responsibility']">
+          <tr>
+            <th>Verantwortlichkeitsangabe:</th>
+            <td>
+              <table id="ir-table-docdetails-statement_of_responsibility" class="ir-table-docdetails-values">
+              <xsl:for-each select="./mods:note[@type='statement of responsibility']">
+                <tr><td>{.}</td></tr>
+              </xsl:for-each>
+            </table></td>
+          </tr>
+        </xsl:if>
+        
+        
         <xsl:if test="mods:name[@type='personal']">
           <tr>
             <th>Beteiligte Personen:</th>
