@@ -271,10 +271,10 @@
                   <td><a href="{.}">{.}</a></td>
               </tr>
             </xsl:for-each>
-              <xsl:variable name="categ_mcrid" select="mcrclass:category('identifier', 'mycore_object_id')" />
-              <tr><th><abbr title="{$categ_mcrid/label[@xml:lang=$CurrentLang]/@description}">{$categ_mcrid/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
-                  <td><a href="{/mycoreobject/@ID}">{/mycoreobject/@ID}</a></td>
-              </tr>
+            <xsl:variable name="categ_mcrid" select="mcrclass:category('identifier', 'mycore_object_id')" />
+            <tr><th><abbr title="{$categ_mcrid/label[@xml:lang=$CurrentLang]/@description}">{$categ_mcrid/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
+                <td><a href="{/mycoreobject/@ID}">{/mycoreobject/@ID}</a></td>
+            </tr>
           </table></td>
         </tr>
       </xsl:if>
