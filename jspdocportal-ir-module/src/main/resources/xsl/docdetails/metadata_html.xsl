@@ -237,9 +237,9 @@
           <th>Zusammenfassung:</th>
           <td><table id="ir-table-docdetails-summary" class="ir-table-docdetails-values">
             <xsl:for-each select="./mods:abstract[@type='summary']">
+              <tr><td class="text-right"><td>[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:rfc5646:',@xml:lang))//category)}]</td></td></tr>
               <tr>
                 <td>{.}</td>
-                <td>[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:rfc5646:',@xml:lang))//category)}]</td>
               </tr>                
             </xsl:for-each>
          </table></td>  
@@ -297,7 +297,7 @@
                   <xsl:for-each select="mods:publisher">
                     <tr>
                       <xsl:if test="position()=1">
-                        <th rowspan="{count(../mods:publisher)}">Verlage: </th>
+                        <th rowspan="{count(../mods:publisher)}">Verlage:</th>
                       </xsl:if>
                       <td>
                         <xsl:variable name="thePublisher" select="." />
@@ -306,13 +306,13 @@
                     </tr>
                   </xsl:for-each>
                   <xsl:if test="mods:place[@supplied='yes']/mods:placeTerm">
-                    <tr><th>Orte: </th>
+                    <tr><th>Orte:</th>
                         <td>(normiert: {string-join(mods:place[@supplied='yes']/mods:placeTerm,', ')})</td>
                     </tr>      
                   </xsl:if>
                 </xsl:when>
                 <xsl:when test="mods:place[not(@supplied='yes')]/mods:placeTerm">
-                  <tr><th>Orte: </th>
+                  <tr><th>Orte:</th>
                       <td>{string-join(mods:place[not(@supplied='yes')]/mods:placeTerm,', ')}
                         <xsl:if test="mods:place[@supplied='yes']/mods:placeTerm">
                          <br />(normiert: {string-join(mods:place[@supplied='yes']/mods:placeTerm,', ')})
@@ -322,7 +322,7 @@
                 </xsl:when>
               </xsl:choose>
               <xsl:if test="mods:dateIssued[not(@*)]">
-                <tr><th>Datum: </th>
+                <tr><th>Datum:</th>
                   <td>
                     {mods:dateIssued[not(@*)]}
                     <xsl:if test="mods:dateIssued[@keyDate='yes' or @point='start' or @point='end']">
@@ -347,7 +347,7 @@
       
       <xsl:if test="mods:originInfo[@eventType='digitization']">
         <tr>
-          <th>Digitalisierung: </th>
+          <th>Digitalisierung:</th>
           <td><table id="ir-table-docdetails-origininfo-digitization" class="ir-table-docdetails-values">
             <xsl:for-each select="mods:originInfo[@eventType='digitization']">
               <tr><td>{string-join((mods:place/mods:placeTerm, mods:publisher, mods:dateCaptured[not(@*)]), ', ')}</td></tr>
@@ -358,7 +358,7 @@
       
       <xsl:if test="mods:note[@type='source_note' or @type='other' or @type='reproduction']">
         <tr>
-          <th>Anmerkungen: </th>
+          <th>Anmerkungen:</th>
           <td><table id="ir-table-docdetails-notes" class="ir-table-docdetails-values">
             <xsl:for-each select="mods:note[@type='source_note' or @type='other' or @type='reproduction']">
               <tr><td>{.}</td></tr>
@@ -368,7 +368,7 @@
       </xsl:if>
       <xsl:if test="mods:note[@type='bibliographic_reference']">
         <tr>
-          <th>Biliographische Referenzen: </th>
+          <th>Biliographische Referenzen:</th>
           <td><table id="ir-table-docdetails-biblref" class="ir-table-docdetails-values">
             <xsl:for-each select="mods:note[@type='bibliographic_reference']">
               <tr><td>{.}</td></tr>
@@ -378,7 +378,7 @@
       </xsl:if>
       <xsl:if test="mods:note[@type='external_link']">
         <tr>
-          <th>Weitere Informationen: </th>
+          <th>Weitere Informationen:</th>
           <td><table id="ir-table-docdetails-notes-other" class="ir-table-docdetails-values">
             <xsl:for-each select="mods:note[@type='external_link']">
               <tr><td><a href="{./@xlink:href}">{if (string-length(.)=0) then ./@xlink:href else .}</a></td></tr>
@@ -393,7 +393,7 @@
           <td><table id="ir-table-docdetails-physicalLocation" class="ir-table-docdetails-values">
             <xsl:for-each select="mods:location[mods:physicalLocation[@type='current']]">
               <tr><td>
-                {concat(mods:physicalLocation,': ', mods:shelfLocator)}
+                {concat(mods:physicalLocation,':')}<br /><strong>{mods:shelfLocator}</strong>
               </td></tr>                
             </xsl:for-each>
          </table></td>  
@@ -404,10 +404,6 @@
           <th>Identifikatoren:</th>
           <td><table id="ir-table-docdetails-identifier" class="ir-table-docdetails-values">
             <xsl:call-template name="identifier2metadataTable" />
-            <xsl:variable name="categ_mcrid" select="mcrclass:category('identifier', 'mycore_object_id')" />
-            <tr><th><abbr title="{$categ_mcrid/label[@xml:lang=$CurrentLang]/@description}">{$categ_mcrid/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
-                <td><a href="{/mycoreobject/@ID}">{/mycoreobject/@ID}</a></td>
-            </tr>
           </table></td>
         </tr>
       </xsl:if>
@@ -431,28 +427,28 @@
       </xsl:if>
       
         <tr>
-          <th>Lizenzen/Rechtehinweis</th>
+          <th>Lizenzen/Rechtehinweis:</th>
           <td><table id="ir-table-docdetails-licenses" class="ir-table-docdetails-values">
-            <tr><th>Werk: </th>
+            <tr><th>Werk:</th>
                 <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#work')])" />
                 <td>
                   <a href="{$categ/label[@xml:lang='x-uri']/@text}"><img src="{$WebApplicationBaseURL}images{$categ/label[@xml:lang='x-icon']/@text}" /></a>
                   <br /><xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@description" disable-output-escaping="true" />
                  </td>
             </tr>
+            <tr><td colspan="2"><hr /></td></tr>
             <xsl:if test="mods:classification[contains(@valueURI, 'licenseinfo#digitisedimages')]">
-              <tr><th>Digitalisate: </th>
+              <tr><th>Digitalisate:</th>
                 <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#digitisedimages')])" />
                 <xsl:variable name="categ_icon" select="mcrclass:category('licenseinfo', 'work.cclicense.cc-by-sa.v40')" />
                 <td>
                   <a href="{$categ_icon/label[@xml:lang='x-uri']/@text}"><img src="{$WebApplicationBaseURL}images{$categ_icon/label[@xml:lang='x-icon']/@text}" /></a>
-                </td>
-                <td>
+                <br />
                   {$categ/label[@xml:lang=$CurrentLang]/@text}
                  </td>
               </tr>
             </xsl:if>
-            <tr><th>Metadaten: </th>
+            <tr><th>Metadaten:</th>
                  <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#metadata')])" />
                 <td>
                   <a href="{$categ/label[@xml:lang='x-uri']/@text}"><img src="{$WebApplicationBaseURL}images{$categ/label[@xml:lang='x-icon']/@text}" /></a>
@@ -462,6 +458,27 @@
             </tr>
           </table></td>
         </tr>
+        
+        
+        <tr>
+          <th>Technische Metadaten:</th>
+          <td><table id="ir-table-docdetails-technical" class="ir-table-docdetails-values">
+            <xsl:variable name="categ_mcrid" select="mcrclass:category('identifier', 'mycore_object_id')" />
+            <tr><th><abbr title="{$categ_mcrid/label[@xml:lang=$CurrentLang]/@description}">{$categ_mcrid/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
+                <td><a href="{/mycoreobject/@ID}">{/mycoreobject/@ID}</a></td>
+            </tr>
+            <tr><th>erstellt:</th>
+                <td>am {format-dateTime(/mycoreobject/service/servdates/servdate[@type='createdate'], '[D01].[M01].[Y0001]')}
+                    von {/mycoreobject/service/servflags/servflag[@type='createdby']}</td>
+            </tr>
+            <tr><th>geändert:</th>
+                <td>am {format-dateTime(/mycoreobject/service/servdates/servdate[@type='modifydate'], '[D01].[M01].[Y0001]')}
+                    von {/mycoreobject/service/servflags/servflag[@type='modifiedby']}</td>
+            </tr>
+          </table></td>
+        </tr>
+            
+          
       
       
       
