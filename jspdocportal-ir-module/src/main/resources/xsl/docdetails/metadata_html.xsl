@@ -11,6 +11,8 @@
   <xsl:import href="resource:xsl/functions/mods.xsl" />
   <xsl:import href="resource:xsl/functions/i18n.xsl" />
   <xsl:import href="resource:/xsl/docdetails/metadata/metadata_classifications_html.xsl" />
+  <xsl:import href="resource:/xsl/docdetails/metadata/metadata_title_html.xsl" />
+  <xsl:import href="resource:/xsl/docdetails/metadata/metadata_identifier_html.xsl" />
   
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="CurrentLang" />
@@ -159,15 +161,15 @@
           <th>Beteiligte Körperschaften:</th>
           <td><table id="ir-table-docdetails-name_corporate" class="ir-table-docdetails-values">
             <xsl:for-each select="./mods:name[@type='corporate'][not(contains('pbl|prt', mods:role/mods:roleTerm[@authority='marcrelator']))]">
-              <xsl:choose>
-                <xsl:when test="mods:role/mods:roleTerm[@authority='GBV']">
-                  <tr><td colspan="2">[{string-join(mods:role/mods:roleTerm[@authority='GBV'], ', ')}]</td></tr>
-                </xsl:when>
-                <xsl:when test="mods:role/mods:roleTerm[@authority='marcrelator']">
-                  <tr><td colspan="2">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:marcrelator:',mods:role/mods:roleTerm[@authority='marcrelator']))//category)}]</td></tr>                 
-                </xsl:when>
-              </xsl:choose>   
               <tr><td colspan="2">
+                <xsl:choose>
+                  <xsl:when test="mods:role/mods:roleTerm[@authority='GBV']">
+                    <span class="float-right">[{string-join(mods:role/mods:roleTerm[@authority='GBV'], ', ')}]</span>
+                  </xsl:when>
+                  <xsl:when test="mods:role/mods:roleTerm[@authority='marcrelator']">
+                    <span class="float-right">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:marcrelator:',mods:role/mods:roleTerm[@authority='marcrelator']))//category)}]</span>                 
+                  </xsl:when>
+                </xsl:choose>  
                 <strong><xsl:value-of select="string-join(mods:namePart,', ')" /></strong>
               </td></tr>    
               <xsl:if test="./mods:nameIdentifier[@type='gnd']">
@@ -278,60 +280,7 @@
         <tr>
           <th>Identifikatoren:</th>
           <td><table id="ir-table-docdetails-identifier" class="ir-table-docdetails-values">
-            <xsl:for-each select="mods:identifier[not(@type='purl')]">
-              <xsl:choose>
-                <xsl:when test="@type='uri'">
-                    <xsl:variable name="category" select="mcrclass:category('identifier', 'uri')" />
-                    <tr><th><abbr title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
-                    <td>
-                        <a href="{.}">{substring-after(.,':ppn:')}</a>
-                    </td></tr>
-                </xsl:when>
-                <xsl:when test="@type='rism'">
-                  <xsl:choose>
-                    <xsl:when test="contains(., 'ID no.:')">
-                      <xsl:variable name="category" select="mcrclass:category('identifier', 'rism')" />
-                      <tr>
-                      <th><abbr title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
-                      <xsl:variable name="rismID" select="substring-after(., 'ID no.:')" />
-                      <td><a href="{replace($category/label[@xml:lang='x-portal-url']/@text, '\{0\}',$rismID)}">{$rismID}</a></td>
-                      </tr>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:variable name="category" select="mcrclass:category('identifier', 'rism_series')" />
-                      <tr>
-                      <th><abbr title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
-                      <td>{.}</td>
-                      </tr>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:variable name="category" select="mcrclass:category('identifier', @type)" />
-                  <xsl:if test="$category">
-                    <tr>
-                      <th><abbr title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
-                      <td>
-                        <xsl:choose>
-                          <xsl:when test="$category/label[@xml:lang='x-portal-url']">
-                            <a href="{replace($category/label[@xml:lang='x-portal-url']/@text, '\{0\}',.)}">{.}</a>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            {.}
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </td>
-                    </tr>
-                  </xsl:if>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:for-each>
-            <xsl:for-each select="mods:identifier[@type='purl']">
-              <xsl:variable name="categ_purl" select="mcrclass:category('identifier', 'purl')" />
-              <tr><th><abbr title="{$categ_purl/label[@xml:lang=$CurrentLang]/@description}">{$categ_purl/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
-                  <td><a href="{.}">{.}</a></td>
-              </tr>
-            </xsl:for-each>
+            <xsl:call-template name="identifier2metadataTable" />
             <xsl:variable name="categ_mcrid" select="mcrclass:category('identifier', 'mycore_object_id')" />
             <tr><th><abbr title="{$categ_mcrid/label[@xml:lang=$CurrentLang]/@description}">{$categ_mcrid/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
                 <td><a href="{/mycoreobject/@ID}">{/mycoreobject/@ID}</a></td>
