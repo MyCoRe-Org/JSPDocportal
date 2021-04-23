@@ -44,20 +44,25 @@
         <xsl:if test="mods:name[@type='personal']">
           <tr>
             <th>Beteiligte Personen:</th>
-            <td><table id="ir-table-docdetails-name_personal" class="ir-table-docdetails-values">
+            <td><table id="ir-table-docdetails-name_personal" class="ir-table-docdetails-values w-100">
               <xsl:for-each select="./mods:name[@type='personal']">
-                <xsl:choose>
-                  <xsl:when test="mods:role/mods:roleTerm[@authority='GBV']">
-                    <tr><td colspan="2">[{string-join(mods:role/mods:roleTerm[@authority='GBV'], ', ')}]</td></tr>
-                  </xsl:when>
-                  <xsl:when test="mods:role/mods:roleTerm[@authority='marcrelator']">
-                    <tr><td colspan="2">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:marcrelator:',mods:role/mods:roleTerm[@authority='marcrelator']))//category)}]</td></tr>                 
-                  </xsl:when>
-                </xsl:choose>
-                      
                 <xsl:if test="mods:namePart[@type='given' or @type='family']">
                   <tr><td colspan="2">
-                    <strong><xsl:value-of select="string-join((mods:namePart[@type='given'], mods:namePart[@type='family']),' ')" /></strong>
+                    <strong>
+                      <xsl:value-of select="string-join((mods:namePart[@type='given'], mods:namePart[@type='family']),' ')" />
+                      <xsl:if test="mods:namePart[@type='termsOfAddress']">
+                       , <xsl:value-of select="string-join(mods:namePart[@type='termsOfAddress'], ', ')" />
+                      </xsl:if>
+                    </strong>
+                    <xsl:choose>
+                      <xsl:when test="mods:role/mods:roleTerm[@authority='GBV']">
+                        <span class="float-right">[{string-join(mods:role/mods:roleTerm[@authority='GBV'], ', ')}]</span>
+                      </xsl:when>
+                      <xsl:when test="mods:role/mods:roleTerm[@authority='marcrelator']">
+                        <span class="float-right">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:marcrelator:',mods:role/mods:roleTerm[@authority='marcrelator']))//category)}]</span>                 
+                      </xsl:when>
+                    </xsl:choose>                    
+                    
                   </td></tr>
                 </xsl:if>
                 <xsl:if test="mods:namePart[not(@type)]">
@@ -65,24 +70,20 @@
                     <strong><xsl:value-of select="string-join(mods:namePart[not(@type)],' ')" /></strong>
                   </td></tr>
                 </xsl:if>
-                <xsl:if test="mods:namePart[@type='termsOfAddress']">
-                  <tr><td colspan="2">
-                    <xsl:value-of select="string-join(mods:namePart[@type='termsOfAddress'], ', ')" />
-                  </td></tr>
-                 </xsl:if>
-                 <xsl:if test="./mods:nameIdentifier[@type='orcid']">
-                   <tr>
-                     <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/ORCIDiD_iconbwvector.svg"  style="height:1.5em" title="ORCID (Open Researcher and Contributor ID)" /></th>
-                     <td><a href="https://orcid.org/{./mods:nameIdentifier[@type='orcid']}">{./mods:nameIdentifier[@type='orcid']}</a></td>
-                   </tr>
-                 </xsl:if>
-                 <xsl:if test="./mods:nameIdentifier[@type='gnd']">
-                   <tr>
-                     <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Black_wabe.png" style="height:1.5em" title="GND (Gemeinsame Normdatei der Deutschen Nationalbiblitohek)" /></th>
-                     <td><a href="http://d-nb.info/gnd/{./mods:nameIdentifier[@type='gnd']}">{./mods:nameIdentifier[@type='gnd']}</a></td>
-                   </tr>
-                 </xsl:if>
-                 <xsl:for-each select="./mods:affiliation">
+                
+                <xsl:if test="./mods:nameIdentifier[@type='orcid']">
+                  <tr>
+                    <th class="text-center" style="width:3em"><img src="{$WebApplicationBaseURL}images/ir/ORCIDiD_iconbwvector.svg"  style="height:1.5em" title="ORCID (Open Researcher and Contributor ID)" /></th>
+                    <td><a href="https://orcid.org/{./mods:nameIdentifier[@type='orcid']}">{./mods:nameIdentifier[@type='orcid']}</a></td>
+                  </tr>
+                </xsl:if>
+                <xsl:if test="./mods:nameIdentifier[@type='gnd']">
+                  <tr>
+                    <th class="text-center" style="width:3em"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Black_wabe.png" style="height:1.5em" title="GND (Gemeinsame Normdatei der Deutschen Nationalbiblitohek)" /></th>
+                    <td><a href="http://d-nb.info/gnd/{./mods:nameIdentifier[@type='gnd']}">{./mods:nameIdentifier[@type='gnd']}</a></td>
+                  </tr>
+                </xsl:if>
+                <xsl:for-each select="./mods:affiliation">
                   <tr>
                     <th class="text-center align-text-top"><i class="fas fa-university" title="Einrichtung" style="font-size:1.5em"></i></th>
                     <td>{.}</td>
@@ -231,7 +232,7 @@
                       <xsl:variable name="category" select="mcrclass:category('identifier', 'rism')" />
                       <tr>
                       <th><abbr title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
-                      <xsl:variable name="rismID" select="substring-after(., '')" />
+                      <xsl:variable name="rismID" select="substring-after(., 'ID no.:')" />
                       <td><a href="{replace($category/label[@xml:lang='x-portal-url']/@text, '\{0\}',$rismID)}">{$rismID}</a></td>
                       </tr>
                     </xsl:when>

@@ -45,7 +45,7 @@
     <xsl:param name="items" />
     <xsl:if test="$items">
       <tr>
-        <th>{mcri18n:translate(concat('OMD.ir.docdetails.classifications.', $items[1]/@displayLabel))}</th>
+        <th>{mcri18n:translate(concat('OMD.ir.docdetails.classifications.', $items[1]/@displayLabel))}:</th>
         <td><table id="ir-table-docdetails-summary" class="ir-table-docdetails-values">
           <xsl:for-each select="$items">
             <tr>
