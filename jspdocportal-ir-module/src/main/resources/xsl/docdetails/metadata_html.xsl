@@ -24,7 +24,7 @@
       <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
         <tr>
           <th>Titel:</th>
-          <td><table id="ir-table-docdetails-title" class="ir-table-docdetails-values w-100">
+          <td><table id="ir-table-docdetails-title" class="ir-table-docdetails-values">
             <xsl:for-each select="./mods:titleInfo[@usage='primary']">
               <xsl:call-template name="title" />
             </xsl:for-each>
@@ -33,7 +33,7 @@
         <xsl:if test="./mods:titleInfo[not(@usage='primary')]">
           <tr>
             <th>Weitere Titel:</th>
-            <td><table id="ir-table-docdetails-other-title" class="ir-table-docdetails-values w-100">
+            <td><table id="ir-table-docdetails-other-title" class="ir-table-docdetails-values">
               <xsl:for-each select="./mods:titleInfo[not(@usage='primary')]">
                <xsl:call-template name="title" />
               </xsl:for-each>
@@ -49,7 +49,7 @@
                   <a class="btn btn-outline-secondary btn-sm" href="{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(./mods:relatedItem[@type='host']/mods:recordInfo/mods:recordIdentifier, '/','_')}">Öffnen</a>
                 </span>
               </xsl:if>
-              <table id="ir-table-docdetails-host-title" class="ir-table-docdetails-values w-100">
+              <table id="ir-table-docdetails-host-title" class="ir-table-docdetails-values">
                  <xsl:for-each select="./mods:relatedItem[@type='host']/mods:titleInfo">
                    <xsl:call-template name="title" />
                 </xsl:for-each>
@@ -173,32 +173,35 @@
         <xsl:if test="mods:name[@type='personal']">
           <tr>
             <th>Beteiligte Personen:</th>
-            <td><table id="ir-table-docdetails-name_personal" class="ir-table-docdetails-values w-100">
-              <xsl:call-template name="personal_name">
-                <xsl:with-param name="names" select="mods:name[@type='personal']" />
-              </xsl:call-template>
-          </table></td>
+            <td><table id="ir-table-docdetails-name_personal" class="ir-table-docdetails-values">
+                 <xsl:call-template name="personal_name">
+                   <xsl:with-param name="names" select="mods:name[@type='personal']" />
+                 </xsl:call-template>
+               </table>
+             </td>
         </tr>
       </xsl:if>
-      <xsl:if test="mods:name[@type='corporate'][not(contains('pbl|prt', mods:role/mods:roleTerm[@authority='marcrelator']))]">
+      <xsl:if test="mods:name[@type='corporate']">
+      <!-- wenn Verlage + Drucker ausgeschlossen werden sollen: [not(contains('pbl|prt', mods:role/mods:roleTerm[@authority='marcrelator']))] -->
         <tr>
           <th>Beteiligte Körperschaften:</th>
           <td><table id="ir-table-docdetails-name_corporate" class="ir-table-docdetails-values">
-            <xsl:for-each select="./mods:name[@type='corporate'][not(contains('pbl|prt', mods:role/mods:roleTerm[@authority='marcrelator']))]">
+            <xsl:for-each select="./mods:name[@type='corporate']">
               <tr><td colspan="2">
+                <strong><xsl:value-of select="string-join(mods:namePart,', ')" /></strong>
                 <xsl:choose>
                   <xsl:when test="mods:role/mods:roleTerm[@authority='GBV']">
-                    <span class="float-right">[{string-join(mods:role/mods:roleTerm[@authority='GBV'], ', ')}]</span>
+                    <span class="ir-table-docdetails-values-label">[{string-join(mods:role/mods:roleTerm[@authority='GBV'], ', ')}]</span>
                   </xsl:when>
                   <xsl:when test="mods:role/mods:roleTerm[@authority='marcrelator']">
-                    <span class="float-right">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:marcrelator:',mods:role/mods:roleTerm[@authority='marcrelator']))//category)}]</span>                 
+                    <span class="ir-table-docdetails-values-label">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:marcrelator:',mods:role/mods:roleTerm[@authority='marcrelator']))//category)}]</span>                 
                   </xsl:when>
                 </xsl:choose>  
-                <strong><xsl:value-of select="string-join(mods:namePart,', ')" /></strong>
+            
               </td></tr>    
               <xsl:if test="./mods:nameIdentifier[@type='gnd']">
                 <tr>
-                  <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Black_wabe.png" style="height:1.5em" title="GND (Gemeinsame Normdatei der Deutschen Nationalbiblitohek)" /></th>
+                  <th class="text-center" style="width:3em;"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Black_wabe.png" style="height:1.5em" title="GND (Gemeinsame Normdatei der Deutschen Nationalbiblitohek)" /></th>
                   <td><a href="http://d-nb.info/gnd/{./mods:nameIdentifier[@type='gnd']}">{./mods:nameIdentifier[@type='gnd']}</a></td>
                 </tr>
               </xsl:if>            
@@ -237,9 +240,11 @@
           <th>Zusammenfassung:</th>
           <td><table id="ir-table-docdetails-summary" class="ir-table-docdetails-values">
             <xsl:for-each select="./mods:abstract[@type='summary']">
-              <tr><td class="text-right"><td>[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:rfc5646:',@xml:lang))//category)}]</td></td></tr>
               <tr>
-                <td>{.}</td>
+                <td class="text-justify">
+                   {.}
+                  <span class="ir-table-docdetails-values-label">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:rfc5646:',@xml:lang))//category)}]</span>
+                </td>
               </tr>                
             </xsl:for-each>
          </table></td>  
@@ -431,31 +436,23 @@
           <td><table id="ir-table-docdetails-licenses" class="ir-table-docdetails-values">
             <tr><th>Werk:</th>
                 <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#work')])" />
-                <td>
+                <td class="text-justify">
                   <a href="{$categ/label[@xml:lang='x-uri']/@text}"><img src="{$WebApplicationBaseURL}images{$categ/label[@xml:lang='x-icon']/@text}" /></a>
                   <br /><xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@description" disable-output-escaping="true" />
                  </td>
             </tr>
-            <tr><td colspan="2"><hr /></td></tr>
             <xsl:if test="mods:classification[contains(@valueURI, 'licenseinfo#digitisedimages')]">
+              <tr><td colspan="2"><hr /></td></tr>
               <tr><th>Digitalisate:</th>
                 <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#digitisedimages')])" />
                 <xsl:variable name="categ_icon" select="mcrclass:category('licenseinfo', 'work.cclicense.cc-by-sa.v40')" />
-                <td>
+                <td class="text-justify">
                   <a href="{$categ_icon/label[@xml:lang='x-uri']/@text}"><img src="{$WebApplicationBaseURL}images{$categ_icon/label[@xml:lang='x-icon']/@text}" /></a>
                 <br />
                   {$categ/label[@xml:lang=$CurrentLang]/@text}
                  </td>
               </tr>
             </xsl:if>
-            <tr><th>Metadaten:</th>
-                 <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#metadata')])" />
-                <td>
-                  <a href="{$categ/label[@xml:lang='x-uri']/@text}"><img src="{$WebApplicationBaseURL}images{$categ/label[@xml:lang='x-icon']/@text}" /></a>
-                <br />
-                  <xsl:value-of select="replace(replace($categ/label[@xml:lang=$CurrentLang]/@description,'\{0\}', mcri18n:translate('OMD.ir.docdetails.license.metadata.owner')), '\{1\}', concat($WebApplicationBaseURL,'api/v1/objects/',/mycoreobject/@ID))" disable-output-escaping="true" />
-                 </td>
-            </tr>
           </table></td>
         </tr>
         
@@ -475,15 +472,20 @@
                 <td>am {format-dateTime(/mycoreobject/service/servdates/servdate[@type='modifydate'], '[D01].[M01].[Y0001]')}
                     von {/mycoreobject/service/servflags/servflag[@type='modifiedby']}</td>
             </tr>
+            <tr><th>Metadaten-<br/>Lizenz:</th>
+                 <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#metadata')])" />
+                <td class="text-justify">
+                <!-- Logo ausblenden -->
+                <!-- 
+                  <a href="{$categ/label[@xml:lang='x-uri']/@text}"><img src="{$WebApplicationBaseURL}images{$categ/label[@xml:lang='x-icon']/@text}" /></a>
+                <br />
+                -->
+                  <xsl:value-of select="replace(replace($categ/label[@xml:lang=$CurrentLang]/@description,'\{0\}', mcri18n:translate('OMD.ir.docdetails.license.metadata.owner')), '\{1\}', concat($WebApplicationBaseURL,'api/v1/objects/',/mycoreobject/@ID))" disable-output-escaping="true" />
+                 </td>
+            </tr>
           </table></td>
         </tr>
-            
-          
-      
-      
-      
-    </xsl:for-each>
-    
+      </xsl:for-each>
     </table>
   </xsl:template>
 </xsl:stylesheet>
