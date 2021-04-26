@@ -294,7 +294,7 @@
               </xsl:for-each>
             </xsl:otherwise>
           </xsl:choose>
-          <xsl:for-each select="mods:classification[@displayLabel='doctype']">
+          <xsl:for-each select="mods:*[@displayLabel='doctype']">
             <xsl:variable name="categid" select="translate(substring-after(@valueURI,'classifications/'),'#',':')" />
             <field name="ir.doctype_class.facet">
               <xsl:value-of select="$categid" />
