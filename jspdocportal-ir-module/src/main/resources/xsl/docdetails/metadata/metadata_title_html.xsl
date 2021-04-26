@@ -11,38 +11,32 @@
   <xsl:param name="WebApplicationBaseURL" />
   
   <xsl:template name="title">
-    <xsl:if test="@type">
-      <tr><td class="text-right ir-table-docdetails-values-label">
-      [{mcri18n:translate(concat('OMD.ir.docdetails.othertitle.type.', @type))}]
-      </td></tr>
-    </xsl:if>
-    <xsl:choose>
-      <xsl:when test="mods:partName or mods:partNumber">
-        <tr><td>
-          <xsl:if test="..[local-name()='relatedItem']/mods:recordInfo/mods:recordIdentifier">
-              <span class="float-right">
-               <a class="btn btn-outline-secondary btn-sm" href="{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(../mods:recordInfo/mods:recordIdentifier, '/','_')}">Öffnen</a>
-              </span>
-            </xsl:if>
-          <xsl:value-of select="string-join((mods:nonSort, string-join((mods:title, mods:subTitle), ': ')),' ')" />
+    <tr><td>
+      <xsl:if test="..[local-name()='relatedItem']/mods:recordInfo/mods:recordIdentifier">
+        <span class="float-right">
+          <a class="btn btn-outline-secondary btn-sm" href="{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(../mods:recordInfo/mods:recordIdentifier, '/','_')}">Öffnen</a>
+        </span>
+      </xsl:if>
 
-            <br />
-            <strong>
-              <xsl:value-of select="string-join((mods:partNumber, mods:partName),' ')" />
-            </strong>
-        </td></tr>
-      </xsl:when>
-      <xsl:otherwise>
-        <tr><td>
-          <xsl:if test="..[local-name()='relatedItem']/mods:recordInfo/mods:recordIdentifier">
-            <span class="float-right">
-              <a class="btn btn-outline-secondary btn-sm" href="{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(../mods:recordInfo/mods:recordIdentifier, '/','_')}">Öffnen</a>
-            </span>
-          </xsl:if>
-          <strong>
+      <xsl:choose>
+        <xsl:when test="mods:partName or mods:partNumber">
           <xsl:value-of select="string-join((mods:nonSort, string-join((mods:title, mods:subTitle), ': ')),' ')" />
-        </strong></td></tr>
-      </xsl:otherwise> 
-    </xsl:choose>
+          <br />
+          <xsl:element name="{if(usage='primary') then 'strong' else 'span'}">
+            <xsl:value-of select="string-join((mods:partNumber, mods:partName),' ')" />
+          </xsl:element>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:element name="{if(@usage='primary') then 'strong' else 'span'}">
+            <xsl:value-of select="string-join((mods:nonSort, string-join((mods:title, mods:subTitle), ': ')),' ')" />
+          </xsl:element>
+        </xsl:otherwise> 
+      </xsl:choose>
+      <xsl:if test="@type">
+        <span class="float-right ir-table-docdetails-values-label">
+          [{mcri18n:translate(concat('OMD.ir.docdetails.othertitle.type.', @type))}]
+        </span>
+      </xsl:if>
+    </td></tr>
   </xsl:template>    
 </xsl:stylesheet>
