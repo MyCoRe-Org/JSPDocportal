@@ -44,11 +44,6 @@
           <tr>
             <th>Gesamttitel:</th>
             <td>
-              <xsl:if test="./mods:relatedItem[@type='host']/mods:recordInfo/mods:recordIdentifier">
-                <span class="float-right">
-                  <a class="btn btn-outline-secondary btn-sm" href="{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(./mods:relatedItem[@type='host']/mods:recordInfo/mods:recordIdentifier, '/','_')}">Öffnen</a>
-                </span>
-              </xsl:if>
               <table id="ir-table-docdetails-host-title" class="ir-table-docdetails-values">
                  <xsl:for-each select="./mods:relatedItem[@type='host']/mods:titleInfo">
                    <xsl:call-template name="title" />
@@ -63,11 +58,6 @@
             <td>
               <xsl:for-each select="./mods:relatedItem[@otherType='appears_in']">
                 <table id="ir-table-docdetails-host-title" class="ir-table-docdetails-values">
-                  <xsl:if test="mods:recordInfo/mods:recordIdentifier">
-                    <span class="float-right">
-                      <a class="btn btn-outline-secondary btn-sm" href="{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(mods:recordInfo/mods:recordIdentifier, '/','_')}">Öffnen</a>
-                    </span>
-                  </xsl:if>
                   <xsl:if test="mods:note[@type='relation_label']">
                     <tr><td>{mods:note[@type='relation_label']}:</td></tr>
                   </xsl:if>
@@ -100,11 +90,6 @@
             <td>
               <xsl:for-each select="./mods:relatedItem[@type='series']">
                 <table id="ir-table-docdetails-series" class="ir-table-docdetails-values">
-                  <xsl:if test="mods:recordInfo/mods:recordIdentifier">
-                    <span class="float-right">
-                      <a class="btn btn-outline-secondary btn-sm" href="{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(mods:recordInfo/mods:recordIdentifier, '/','_')}">Öffnen</a>
-                    </span>
-                  </xsl:if>
                   <xsl:for-each select="mods:titleInfo">
                     <xsl:call-template name="title" />
                   </xsl:for-each>

@@ -12,21 +12,34 @@
   
   <xsl:template name="title">
     <xsl:if test="@type">
-      <tr><td class="text-right">
+      <tr><td class="text-right ir-table-docdetails-values-label">
       [{mcri18n:translate(concat('OMD.ir.docdetails.othertitle.type.', @type))}]
       </td></tr>
     </xsl:if>
     <xsl:choose>
       <xsl:when test="mods:partName or mods:partNumber">
         <tr><td>
+          <xsl:if test="..[local-name()='relatedItem']/mods:recordInfo/mods:recordIdentifier">
+              <span class="float-right">
+               <a class="btn btn-outline-secondary btn-sm" href="{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(../mods:recordInfo/mods:recordIdentifier, '/','_')}">Öffnen</a>
+              </span>
+            </xsl:if>
           <xsl:value-of select="string-join((mods:nonSort, string-join((mods:title, mods:subTitle), ': ')),' ')" />
+
+            <br />
+            <strong>
+              <xsl:value-of select="string-join((mods:partNumber, mods:partName),' ')" />
+            </strong>
         </td></tr>
-        <tr><td><strong>
-          <xsl:value-of select="string-join((mods:partNumber, mods:partName),' ')" />
-        </strong></td></tr>
       </xsl:when>
       <xsl:otherwise>
-        <tr><td><strong>
+        <tr><td>
+          <xsl:if test="..[local-name()='relatedItem']/mods:recordInfo/mods:recordIdentifier">
+            <span class="float-right">
+              <a class="btn btn-outline-secondary btn-sm" href="{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(../mods:recordInfo/mods:recordIdentifier, '/','_')}">Öffnen</a>
+            </span>
+          </xsl:if>
+          <strong>
           <xsl:value-of select="string-join((mods:nonSort, string-join((mods:title, mods:subTitle), ': ')),' ')" />
         </strong></td></tr>
       </xsl:otherwise> 
