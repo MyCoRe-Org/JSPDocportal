@@ -9,7 +9,7 @@
       $.ajax({
         type : "GET",
         url : $("meta[name='mcr:baseurl']").attr("content")
-               +"servlets/solr/select?q=category%3A%22doctype%3A${mask}%22%20-objectType:bundle"
+               +"servlets/solr/select?q=category%3A%22doctype%3A${mask}%22%20"
                    +"&rows=1&wt=json&indent=true"
                    +"&facet=true"
                    +facetFieldParams
