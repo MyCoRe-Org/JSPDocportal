@@ -25,15 +25,15 @@
   <xsl:param name="DefaultLang" />
 
   <xsl:template name="identifier2metadataTable">
+    <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
+      <xsl:variable name="category" select="mcrclass:category('identifier', 'k10plus')" />
+        <tr><th><abbr class="text-nowrap" title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
+            <td><a href="{replace($category/label[@xml:lang='x-portal-url']/@text, '\{0\}',.)}">{.}</a></td>
+        </tr>
+   </xsl:for-each>
+  
    <xsl:for-each select="mods:identifier[not(@type='purl')]">
               <xsl:choose>
-                <xsl:when test="@type='uri'">
-                    <xsl:variable name="category" select="mcrclass:category('identifier', 'uri')" />
-                    <tr><th><abbr class="text-nowrap" title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
-                    <td>
-                        <a href="{.}">{substring-after(.,':ppn:')}</a>
-                    </td></tr>
-                </xsl:when>
                 <xsl:when test="@type='rism'">
                   <xsl:choose>
                     <xsl:when test="contains(., 'ID no.:')">
