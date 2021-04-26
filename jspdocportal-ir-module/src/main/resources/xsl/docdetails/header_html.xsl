@@ -259,17 +259,17 @@
     <xsl:choose>
       <xsl:when test="./mods:classification[@displayLabel='accesscondition'][contains(@valueURI, 'restrictedaccess')]">
         <span class="badge ir-badge-restrictedaccess">
-          Restricted <img style="height:1.5em;padding:0 .25em"><xsl:attribute name="src"><xsl:value-of select="$WebApplicationBaseURL"></xsl:value-of>images/logo_Closed_Access.png</xsl:attribute></img>  Access           
+          Beschränkter <img style="height:1.5em;padding:0 .25em"><xsl:attribute name="src"><xsl:value-of select="$WebApplicationBaseURL"></xsl:value-of>images/logo_Closed_Access.png</xsl:attribute></img>  Zugang
         </span>
       </xsl:when>
       <xsl:when test="./mods:classification[@displayLabel='accesscondition'][contains(@valueURI, 'closedaccess')]">
         <span class="badge ir-badge-closedaccess">
-            Closed <img style="height:1.5em;padding:0 .25em"><xsl:attribute name="src"><xsl:value-of select="$WebApplicationBaseURL"></xsl:value-of>images/logo_Closed_Access.png</xsl:attribute></img>  Access
+            Kein <img style="height:1.5em;padding:0 .25em"><xsl:attribute name="src"><xsl:value-of select="$WebApplicationBaseURL"></xsl:value-of>images/logo_Closed_Access.png</xsl:attribute></img>  Zugang
         </span>
       </xsl:when> 
       <xsl:otherwise>
         <span class="badge ir-badge-openaccess">
-          Open <img style="height:1.5em;padding:0 .25em"><xsl:attribute name="src"><xsl:value-of select="$WebApplicationBaseURL"></xsl:value-of>images/logo_Open_Access.png</xsl:attribute></img> Access
+          Freier <img style="height:1.5em;padding:0 .25em"><xsl:attribute name="src"><xsl:value-of select="$WebApplicationBaseURL"></xsl:value-of>images/logo_Open_Access.png</xsl:attribute></img> Zugang
         </span>
       </xsl:otherwise>
     </xsl:choose>
