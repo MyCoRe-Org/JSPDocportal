@@ -427,15 +427,12 @@
                  </td>
             </tr>
             <xsl:if test="mods:classification[contains(@valueURI, 'licenseinfo#digitisedimages')]">
-              <tr><td colspan="2"><hr /></td></tr>
               <tr><th>Digitalisate:</th>
                 <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#digitisedimages')])" />
-                <xsl:variable name="categ_icon" select="mcrclass:category('licenseinfo', 'work.cclicense.cc-by-sa.v40')" />
+                <!-- <xsl:variable name="categ_icon" select="mcrclass:category('licenseinfo', 'work.cclicense.cc-by-sa.v40')" /> -->
                 <td class="text-justify">
-                  <a href="{$categ_icon/label[@xml:lang='x-uri']/@text}"><img src="{$WebApplicationBaseURL}images{$categ_icon/label[@xml:lang='x-icon']/@text}" /></a>
-                <br />
-                  {$categ/label[@xml:lang=$CurrentLang]/@text}
-                 </td>
+                  <xsl:value-of select="replace($categ/label[@xml:lang=$CurrentLang]/@description,'\{0\}', mcri18n:translate('OMD.ir.docdetails.license.metadata.owner'))" disable-output-escaping="true" />
+                </td>
               </tr>
             </xsl:if>
           </table></td>
