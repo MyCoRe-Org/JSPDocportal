@@ -58,43 +58,47 @@
     </div>
   
     <!-- Cover -->
-    <xsl:if test="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='cover']] 
-                       or contains(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='doctype']/@valueURI, '#data')">
-      <xsl:variable name="recordID" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']" />
+    <xsl:variable name="recordID" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']" />
+    <xsl:variable name="showViewer" select="exists(/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='MCRVIEWER_METS' or @categid='fulltext']])" />
+    <xsl:variable name="imageURL">    
       <xsl:choose>
-        <xsl:when test="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='cover']]">
-          <div class="ir-box ir-box-docdetails-image bg-light" style="position:relative">
-            <xsl:choose>
-              <xsl:when test="/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='MCRVIEWER_METS' or @categid='fulltext']]">
-                <a href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID,'/','_')}" title="Im MyCoRe Viewer anzeigen">
-                  <img src="{$WebApplicationBaseURL}api/iiif/image/v2/thumbnail/{/mycoreobject/@ID}/full/full/0/default.jpg" style="width:200px" />
-                </a>
-                <div class="text-center w-100" style="position:absolute;bottom:0.25em">
-                 <a class="btn btn-light btn-sm border border-secondary" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID, '/','_')}" title="Im MyCoRe Viewer anzeigen">
-                   <i class="far fa-eye text-primary"></i> Anzeigen
-                 </a>
-                </div>
-              </xsl:when>
-              <xsl:when test="/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='DV_METS' or @categid='METS']]">
-                <xsl:variable name="mcrid" select="/mycoreobject/@ID" />
-                <a href="{$WebApplicationBaseURL}resolve/id/{$mcrid}/dfgviewer" target="_blank" title="Im DFG Viewer anzeigen">
-                  <img src="{$WebApplicationBaseURL}api/iiif/image/v2/thumbnail/{/mycoreobject/@ID}/full/full/0/default.jpg" style="width:200px" />
-                </a>
-              </xsl:when>
-              <xsl:otherwise>
-                <img src="{$WebApplicationBaseURL}api/iiif/image/v2/thumbnail/{/mycoreobject/@ID}/full/full/0/default.jpg" style="width:200px" />
-              </xsl:otherwise>
-            </xsl:choose>
-          </div>
+        <xsl:when test="/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='cover' or @categid='fulltext']]">
+          <xsl:value-of select="concat($WebApplicationBaseURL,'api/iiif/image/v2/thumbnail/',/mycoreobject/@ID,'/full/full/0/default.jpg')" />
         </xsl:when>
-        <xsl:when test="contains(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='doctype']/@valueURI, '#data')">
-          <div class="ir-box ir-box-docdetails-image">
-            <img src="{$WebApplicationBaseURL}images/filetypeicons/data.png" alt="cover image for resarch data" />
-          </div>
+        <xsl:when test="/mycoreobject[contains(@ID, '_bundle_')]">
+          <xsl:value-of select="'{$WebApplicationBaseURL}images/filetypeicons/bundle.png'" />
         </xsl:when>
+        <xsl:when test="contains(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '#data')">
+           <xsl:value-of select="'{$WebApplicationBaseURL}images/filetypeicons/data.png'" />
+        </xsl:when>
+        <xsl:otherwise>
+			<xsl:value-of select="'{$WebApplicationBaseURL}images/filetypeicons/document.png'" />
+        </xsl:otherwise>
       </xsl:choose>
-    </xsl:if>
-    <xsl:if test="not(/mycoreobject/service/servstates/servstate/@categid='deleted')">
+    </xsl:variable>
+    
+    <xsl:choose>
+      <xsl:when test="$showViewer">
+        <div class="ir-box ir-box-docdetails-image text-center" style="position:relative">
+    	  <a href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID,'/','_')}" title="Im MyCoRe Viewer anzeigen">
+    	    <img class="border border-secondary" src="{$imageURL}" style="width:150px" />
+          </a>
+          <div class="text-center" style="position:absolute;bottom:0.25em;right:0;left:0">
+            <a class="btn btn-light btn-sm border border-secondary" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID, '/','_')}" title="Im MyCoRe Viewer anzeigen">
+              <i class="far fa-eye text-primary"></i> Anzeigen
+            </a>
+          </div>
+        </div>
+      </xsl:when>
+      <xsl:otherwise>
+        <div class="ir-box ir-box-docdetails-image" style="position:relative">
+          <img class="border border-secondary" src="{$imageURL}" style="width:150px" />
+        </div>
+      </xsl:otherwise>
+   </xsl:choose>
+ 
+   <!-- Dauerhaft zitieren -->
+     <xsl:if test="not(/mycoreobject/service/servstates/servstate/@categid='deleted')">
       <div class="ir-box ir-box-emph">
         <h4 class="text-primary">Dauerhaft zitieren</h4>
         <xsl:choose>
