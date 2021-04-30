@@ -186,7 +186,7 @@
               </td></tr>    
               <xsl:if test="./mods:nameIdentifier[@type='gnd']">
                 <tr>
-                  <th class="text-center" style="width:3em;"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Black_wabe.png" style="height:1.5em" title="GND (Gemeinsame Normdatei der Deutschen Nationalbiblitohek)" /></th>
+                  <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Black_wabe.png" style="height:1.25em" title="GND (Gemeinsame Normdatei der Deutschen Nationalbiblitohek)" /></th>
                   <td><a href="http://d-nb.info/gnd/{./mods:nameIdentifier[@type='gnd']}">{./mods:nameIdentifier[@type='gnd']}</a></td>
                 </tr>
               </xsl:if>            
