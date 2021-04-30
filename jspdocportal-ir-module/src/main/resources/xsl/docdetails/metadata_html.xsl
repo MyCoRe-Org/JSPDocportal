@@ -171,26 +171,9 @@
         <tr>
           <th>Beteiligte Körperschaften:</th>
           <td><table id="ir-table-docdetails-name_corporate" class="ir-table-docdetails-values">
-            <xsl:for-each select="./mods:name[@type='corporate']">
-              <tr><td colspan="2">
-                <strong><xsl:value-of select="string-join(mods:namePart,', ')" /></strong>
-                <xsl:choose>
-                  <xsl:when test="mods:role/mods:roleTerm[@authority='GBV']">
-                    <span class="ir-table-docdetails-values-label">[{string-join(mods:role/mods:roleTerm[@authority='GBV'], ', ')}]</span>
-                  </xsl:when>
-                  <xsl:when test="mods:role/mods:roleTerm[@authority='marcrelator']">
-                    <span class="ir-table-docdetails-values-label">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:marcrelator:',mods:role/mods:roleTerm[@authority='marcrelator']))//category)}]</span>                 
-                  </xsl:when>
-                </xsl:choose>  
-            
-              </td></tr>    
-              <xsl:if test="./mods:nameIdentifier[@type='gnd']">
-                <tr>
-                  <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Black_wabe.png" style="height:1.25em" title="GND (Gemeinsame Normdatei der Deutschen Nationalbiblitohek)" /></th>
-                  <td><a href="http://d-nb.info/gnd/{./mods:nameIdentifier[@type='gnd']}">{./mods:nameIdentifier[@type='gnd']}</a></td>
-                </tr>
-              </xsl:if>            
-            </xsl:for-each>
+            <xsl:call-template name="corporate_name">
+              <xsl:with-param name="names" select="mods:name[@type='corporate']" />
+            </xsl:call-template>
          </table></td>  
         </tr>
       </xsl:if>
