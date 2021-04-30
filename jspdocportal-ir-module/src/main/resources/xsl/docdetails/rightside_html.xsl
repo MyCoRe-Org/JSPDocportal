@@ -60,19 +60,19 @@
     <!-- Cover -->
     <xsl:variable name="recordID" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']" />
     <xsl:variable name="showViewer" select="exists(/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='MCRVIEWER_METS' or @categid='fulltext']])" />
-    <xsl:variable name="imageURL">    
+    <xsl:variable name="image">    
       <xsl:choose>
         <xsl:when test="/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='cover' or @categid='fulltext']]">
-          <xsl:value-of select="concat($WebApplicationBaseURL,'api/iiif/image/v2/thumbnail/',/mycoreobject/@ID,'/full/full/0/default.jpg')" />
+          <img style="width:150px" class="border border-secondary" src="{$WebApplicationBaseURL}api/iiif/image/v2/thumbnail/{/mycoreobject/@ID}/full/full/0/default.jpg" />
         </xsl:when>
         <xsl:when test="/mycoreobject[contains(@ID, '_bundle_')]">
-          <xsl:value-of select="'{$WebApplicationBaseURL}images/filetypeicons/bundle.png'" />
+          <img style="width:150px" src="{$WebApplicationBaseURL}images/filetypeicons/bundle.png" />
         </xsl:when>
         <xsl:when test="contains(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '#data')">
-           <xsl:value-of select="'{$WebApplicationBaseURL}images/filetypeicons/data.png'" />
+           <img style="width:150px" src="{$WebApplicationBaseURL}images/filetypeicons/data.png" />
         </xsl:when>
         <xsl:otherwise>
-			<xsl:value-of select="'{$WebApplicationBaseURL}images/filetypeicons/document.png'" />
+			<img style="width:150px" src="{$WebApplicationBaseURL}images/filetypeicons/document.png" />
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
@@ -81,7 +81,7 @@
       <xsl:when test="$showViewer">
         <div class="ir-box ir-box-docdetails-image text-center" style="position:relative">
     	  <a href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID,'/','_')}" title="Im MyCoRe Viewer anzeigen">
-    	    <img class="border border-secondary" src="{$imageURL}" style="width:150px" />
+    	   <xsl:copy-of select="$image" />  
           </a>
           <div class="text-center" style="position:absolute;bottom:0.25em;right:0;left:0">
             <a class="btn btn-light btn-sm border border-secondary" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID, '/','_')}" title="Im MyCoRe Viewer anzeigen">
@@ -92,7 +92,7 @@
       </xsl:when>
       <xsl:otherwise>
         <div class="ir-box ir-box-docdetails-image" style="position:relative">
-          <img class="border border-secondary" src="{$imageURL}" style="width:150px" />
+           <xsl:copy-of select="$image" />
         </div>
       </xsl:otherwise>
    </xsl:choose>
