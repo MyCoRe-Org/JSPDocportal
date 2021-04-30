@@ -1,0 +1,37 @@
+/* ----------------------------------- */
+/* --------- badges ------------------ */
+/* ----------------------------------- */
+.badge {
+  font-weight: normal;
+  padding: .25em .75em;
+}
+
+.ir-badge-header{
+ 	line-height:2em; 
+ 	display:inline-block;
+ 	vertical-align:middle;
+ 	height:2.5em;
+}
+
+.ir-badge-restrictedaccess {
+  background-color: darkred;
+  color: white;
+ 
+}
+.ir-badge-openaccess {
+  background-color: darkgreen;
+  color: white;
+}
+.ir-badge-ocr {
+  background-color: #004A99;
+  color: white;
+}
+
+/* ----------------------------------- */
+/* --------- docdetails -------------- */
+/* ----------------------------------- */
+
+table#ir-table-docdetails-name_personal th,
+table#ir-table-docdetails-name_corporate th{
+	width:3em;
+}
