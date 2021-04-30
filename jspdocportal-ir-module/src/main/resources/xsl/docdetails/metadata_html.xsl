@@ -265,7 +265,7 @@
                     <tr>
                       <td>
                         <xsl:variable name="thePublisher" select="." />
-                          {.} {string-join(./following-sibling::mods:place[not(@supplied='yes')][preceding-sibling::mods:publisher[1]=$thePublisher]/mods:placeTerm,', ')}
+                          {string-join(./following-sibling::mods:place[not(@supplied='yes')][preceding-sibling::mods:publisher[1]=$thePublisher]/mods:placeTerm,', ')}: {.}
                       </td>
                     </tr>
                   </xsl:for-each>
@@ -318,7 +318,7 @@
           <th>Digitalisierung:</th>
           <td><table id="ir-table-docdetails-origininfo-digitization" class="ir-table-docdetails-values">
             <xsl:for-each select="mods:originInfo[@eventType='digitization']">
-              <tr><td>{string-join((mods:place/mods:placeTerm, mods:publisher, mods:dateCaptured[not(@*)]), ', ')}</td></tr>
+              <tr><td>{string-join((mods:place/mods:placeTerm, string-join((mods:publisher, mods:dateCaptured[not(@*)]), ', ')),': ')}</td></tr>
             </xsl:for-each>
           </table></td>  
         </tr>
@@ -366,7 +366,9 @@
           </table></td>  
         </tr>
       </xsl:if>
-      
+        
+      <tr><td colspan="2" class="p-0" style="font-size:.5em">&#160;</td></tr>
+              
       <xsl:if test="mods:location/mods:physicalLocation[@type='current']">
         <tr>
           <th>Signatur:</th>
@@ -380,7 +382,6 @@
         </tr>
       </xsl:if>
       <xsl:if test="mods:identifier">
-        <tr><td colspan="2" class="p-0" style="font-size:.5em">&#160;</td></tr>
         <tr>
           <th>Identifikatoren:</th>
           <td><table id="ir-table-docdetails-identifier" class="ir-table-docdetails-values">
