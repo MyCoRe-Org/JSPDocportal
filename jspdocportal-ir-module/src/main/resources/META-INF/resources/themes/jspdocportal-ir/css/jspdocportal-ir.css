@@ -30,8 +30,48 @@
 /* ----------------------------------- */
 /* --------- docdetails -------------- */
 /* ----------------------------------- */
+table.ir-table-docdetails th{
+	font-variant: petite-caps;
+    font-weight:normal;
+}
+
+table.ir-table-docdetails:empty {
+    margin-bottom: 0px;
+}
+
+table.ir-table-docdetails{
+	margin-bottom:30px;
+}
+
+table.ir-table-docdetails > tbody > tr > th {
+	width: 175px;
+	font-weight: normal;
+	background-color: #e6e6e6;
+    vertical-align:top;
+	border: 5px solid white;
+	padding:5px;
+}
+
+table.ir-table-docdetails > tbody > tr > td {
+	border: 5px solid white;
+	padding:5px;
+}
+
+table.ir-table-docdetails-values{
+	width:100%;
+}
+
+table.ir-table-docdetails-values tr th{
+	vertical-align: baseline;
+	width:8em;
+}
 
 table#ir-table-docdetails-name_personal th,
 table#ir-table-docdetails-name_corporate th{
 	width:3em;
+}
+
+span.ir-table-docdetails-values-label{
+	font-style:italic;
+	padding-left:1em;
 }

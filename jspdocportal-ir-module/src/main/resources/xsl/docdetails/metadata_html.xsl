@@ -142,18 +142,6 @@
             </td>
           </tr>
         </xsl:if>
-        <xsl:if test="./mods:note[@type='statement of responsibility']">
-          <tr>
-            <th>Verantwortlichkeitsangabe:</th>
-            <td>
-              <table id="ir-table-docdetails-statement_of_responsibility" class="ir-table-docdetails-values">
-              <xsl:for-each select="./mods:note[@type='statement of responsibility']">
-                <tr><td>{.}</td></tr>
-              </xsl:for-each>
-            </table></td>
-          </tr>
-        </xsl:if>
-        
         
         <xsl:if test="mods:name[@type='personal']">
           <tr>
@@ -177,7 +165,7 @@
          </table></td>  
         </tr>
       </xsl:if>
-       <xsl:if test="mods:name[@type='conference']">
+      <xsl:if test="mods:name[@type='conference']">
         <tr>
           <th>Konferenz:</th>
           <td><table id="ir-table-docdetails-name_conference" class="ir-table-docdetails-values">
@@ -203,6 +191,9 @@
          </table></td>  
         </tr>
       </xsl:if>
+      
+      <tr><td colspan="2" class="p-0" style="font-size:.5em">&#160;</td></tr>
+      
       <xsl:if test="mods:abstract">
         <tr>
           <th>Zusammenfassung:</th>
@@ -260,6 +251,9 @@
          </table></td>  
         </tr>
       </xsl:if>
+      
+      <tr><td colspan="2" class="p-0" style="font-size:.5em">&#160;</td></tr>
+            
       <xsl:if test="mods:originInfo[@eventType='publication']">
         <tr>
           <th>Veröffentlichung /<br />Entstehung:</th>
@@ -269,9 +263,6 @@
                 <xsl:when test="mods:publisher">
                   <xsl:for-each select="mods:publisher">
                     <tr>
-                      <xsl:if test="position()=1">
-                        <th rowspan="{count(../mods:publisher)}">Verlage:</th>
-                      </xsl:if>
                       <td>
                         <xsl:variable name="thePublisher" select="." />
                           {.} {string-join(./following-sibling::mods:place[not(@supplied='yes')][preceding-sibling::mods:publisher[1]=$thePublisher]/mods:placeTerm,', ')}
@@ -279,27 +270,31 @@
                     </tr>
                   </xsl:for-each>
                   <xsl:if test="mods:place[@supplied='yes']/mods:placeTerm">
-                    <tr><th>Orte:</th>
-                        <td>(normiert: {string-join(mods:place[@supplied='yes']/mods:placeTerm,', ')})</td>
+                    <tr>
+                      <td>
+                        ({if (count(mods:place[@supplied='yes']/mods:placeTerm)=1) then 'normierter Ort: ' else 'normierte Orte: '}
+                        {string-join(mods:place[@supplied='yes']/mods:placeTerm,', ')})
+                      </td>
                     </tr>      
                   </xsl:if>
                 </xsl:when>
                 <xsl:when test="mods:place[not(@supplied='yes')]/mods:placeTerm">
-                  <tr><th>Orte:</th>
+                  <tr>
                       <td>{string-join(mods:place[not(@supplied='yes')]/mods:placeTerm,', ')}
                         <xsl:if test="mods:place[@supplied='yes']/mods:placeTerm">
-                         <br />(normiert: {string-join(mods:place[@supplied='yes']/mods:placeTerm,', ')})
+                          ({if (count(mods:place[@supplied='yes']/mods:placeTerm)=1) then 'normierter Ort: ' else 'normierte Orte: '}
+                          {string-join(mods:place[@supplied='yes']/mods:placeTerm,', ')})
                         </xsl:if>
                       </td>
                   </tr> 
                 </xsl:when>
               </xsl:choose>
               <xsl:if test="mods:dateIssued[not(@*)]">
-                <tr><th>Datum:</th>
+                <tr>
                   <td>
                     {mods:dateIssued[not(@*)]}
                     <xsl:if test="mods:dateIssued[@keyDate='yes' or @point='start' or @point='end']">
-                    <br />(normiert:
+                      (normiertes Datum:
                       <xsl:if test="mods:dateIssued[@keyDate='yes' and not(@point='start')]">
                        {mods:dateIssued[@keyDate='yes' and not(@point='start')]}
                       </xsl:if>
@@ -329,6 +324,18 @@
         </tr>
       </xsl:if>
       
+      <xsl:if test="./mods:note[@type='statement of responsibility']">
+          <tr>
+            <th>Verantwortlichkeitsangabe:</th>
+            <td>
+              <table id="ir-table-docdetails-statement_of_responsibility" class="ir-table-docdetails-values">
+              <xsl:for-each select="./mods:note[@type='statement of responsibility']">
+                <tr><td>{.}</td></tr>
+              </xsl:for-each>
+            </table></td>
+          </tr>
+      </xsl:if>
+        
       <xsl:if test="mods:note[@type='source_note' or @type='other' or @type='reproduction']">
         <tr>
           <th>Anmerkungen:</th>
@@ -373,6 +380,7 @@
         </tr>
       </xsl:if>
       <xsl:if test="mods:identifier">
+        <tr><td colspan="2" class="p-0" style="font-size:.5em">&#160;</td></tr>
         <tr>
           <th>Identifikatoren:</th>
           <td><table id="ir-table-docdetails-identifier" class="ir-table-docdetails-values">
@@ -380,6 +388,8 @@
           </table></td>
         </tr>
       </xsl:if>
+      
+      <tr><td colspan="2" class="p-0" style="font-size:.5em">&#160;</td></tr>
       
       <xsl:if test="mods:classification[@displayLabel='accesscondition']">
         <tr>
@@ -400,27 +410,36 @@
       </xsl:if>
       
         <tr>
-          <th>Lizenzen/Rechtehinweis:</th>
+          <th>Lizenzen/Rechtehinweise:</th>
           <td><table id="ir-table-docdetails-licenses" class="ir-table-docdetails-values">
-            <tr><th>Werk:</th>
-                <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#work')])" />
-                <td class="text-justify">
-                  <a href="{$categ/label[@xml:lang='x-uri']/@text}"><img src="{$WebApplicationBaseURL}images{$categ/label[@xml:lang='x-icon']/@text}" /></a>
-                  <br /><xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@description" disable-output-escaping="true" />
-                 </td>
+            <tr>
+              <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#work')])" />
+              <td class="text-justify">
+                <strong><xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text" disable-output-escaping="true" /> </strong><br />
+                <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@description" disable-output-escaping="true" />
+              </td>
             </tr>
             <xsl:if test="mods:classification[contains(@valueURI, 'licenseinfo#digitisedimages')]">
-              <tr><th>Digitalisate:</th>
+              <tr>
                 <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#digitisedimages')])" />
                 <!-- <xsl:variable name="categ_icon" select="mcrclass:category('licenseinfo', 'work.cclicense.cc-by-sa.v40')" /> -->
                 <td class="text-justify">
+                  <strong><xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text" disable-output-escaping="true" /></strong><br />
                   <xsl:value-of select="replace($categ/label[@xml:lang=$CurrentLang]/@description,'\{0\}', mcri18n:translate('OMD.ir.docdetails.license.metadata.owner'))" disable-output-escaping="true" />
                 </td>
               </tr>
             </xsl:if>
+             <tr>
+              <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#metadata')])" />
+              <td class="text-justify">
+                <strong><xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text" disable-output-escaping="true" /></strong><br />
+                <xsl:value-of select="replace(replace($categ/label[@xml:lang=$CurrentLang]/@description,'\{0\}', mcri18n:translate('OMD.ir.docdetails.license.metadata.owner')), '\{1\}', concat($WebApplicationBaseURL,'api/v1/objects/',/mycoreobject/@ID))" disable-output-escaping="true" />
+              </td>
+            </tr>
           </table></td>
         </tr>
         
+         <tr><td colspan="2" class="p-0" style="font-size:.5em">&#160;</td></tr>
         
         <tr>
           <th>Technische Metadaten:</th>
@@ -436,17 +455,6 @@
             <tr><th>geändert:</th>
                 <td>am {format-dateTime(/mycoreobject/service/servdates/servdate[@type='modifydate'], '[D01].[M01].[Y0001]')}
                     von {/mycoreobject/service/servflags/servflag[@type='modifiedby']}</td>
-            </tr>
-            <tr><th>Metadaten-<br/>Lizenz:</th>
-                 <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#metadata')])" />
-                <td class="text-justify">
-                <!-- Logo ausblenden -->
-                <!-- 
-                  <a href="{$categ/label[@xml:lang='x-uri']/@text}"><img src="{$WebApplicationBaseURL}images{$categ/label[@xml:lang='x-icon']/@text}" /></a>
-                <br />
-                -->
-                  <xsl:value-of select="replace(replace($categ/label[@xml:lang=$CurrentLang]/@description,'\{0\}', mcri18n:translate('OMD.ir.docdetails.license.metadata.owner')), '\{1\}', concat($WebApplicationBaseURL,'api/v1/objects/',/mycoreobject/@ID))" disable-output-escaping="true" />
-                 </td>
             </tr>
           </table></td>
         </tr>
