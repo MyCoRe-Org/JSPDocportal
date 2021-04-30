@@ -32,7 +32,7 @@
             <span class="ir-table-docdetails-values-label">[{string-join(mods:role/mods:roleTerm[@authority='GBV'], ', ')}]</span>
           </xsl:when>
           <xsl:when test="mods:role/mods:roleTerm[@authority='marcrelator']">
-            <span class="ir-table-docdetails-values-label">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:marcrelator:',mods:role/mods:roleTerm[@authority='marcrelator']))//category)}]</span>                 
+            <span class="ir-table-docdetails-values-label">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:marcrelator_mycore:',mods:role/mods:roleTerm[@authority='marcrelator']))//category)}]</span>                 
           </xsl:when>
         </xsl:choose>
       </td></tr>
@@ -68,7 +68,7 @@
             <span class="ir-table-docdetails-values-label">[{string-join(mods:role/mods:roleTerm[@authority='GBV'], ', ')}]</span>
           </xsl:when>
           <xsl:when test="mods:role/mods:roleTerm[@authority='marcrelator']">
-            <span class="ir-table-docdetails-values-label">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:marcrelator:',mods:role/mods:roleTerm[@authority='marcrelator']))//category)}]</span>                 
+            <span class="ir-table-docdetails-values-label">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:marcrelator_mycore:',mods:role/mods:roleTerm[@authority='marcrelator']))//category)}]</span>                 
           </xsl:when>
         </xsl:choose>
       </td></tr>
