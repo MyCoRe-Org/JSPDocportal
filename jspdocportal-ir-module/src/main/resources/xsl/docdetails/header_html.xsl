@@ -192,7 +192,7 @@
     
       <!-- Badges -->
       <xsl:if test="./mods:genre[@displayLabel='doctype']">
-        <span class="badge badge-secondary p-2">
+        <span class="badge ir-badge-header badge-secondary">
           <xsl:value-of select="mcrclass:current-label-text(mcrmods:to-category(./mods:genre[@displayLabel='doctype']))" />
         </span>
         <span>&#160;&#160;</span> 
@@ -203,11 +203,11 @@
       <xsl:if test="./mods:classification[contains(@valueURI, 'licenseinfo#work')]">
         <span>&#160;&#160;</span>
         <xsl:variable name="licecat" select="mcrmods:to-category(./mods:classification[contains(@valueURI, 'licenseinfo#work')])" />
-        <span id="badgeWorkLicense" class="badge" data-toggle="popover" data-placement="bottom" data-html="true">
+        <span id="badgeWorkLicense" class="badge ir-badge-header p-0" data-toggle="popover" data-placement="bottom" data-html="true">
           <xsl:attribute name="data-content"><xsl:value-of select="$licecat/label[@xml:lang=$CurrentLang]/@description" /></xsl:attribute>
           <xsl:choose>
             <xsl:when test="$licecat/label[@xml:lang='x-icon']">
-              <img style="height:2.5em" src="{concat($WebApplicationBaseURL,'images',$licecat/label[@xml:lang='x-icon']/@text)}" />&#160;
+              <img style="height:100%" src="{concat($WebApplicationBaseURL,'images',$licecat/label[@xml:lang='x-icon']/@text)}" />&#160;
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="$licecat/label[@xml:lang=$CurrentLang]/@text" />
@@ -219,7 +219,7 @@
       <xsl:if test="/mycoreobject/metadata/def.irControl/irControl/map/list[@key='mets_filegroups']/entry[text() = 'ALTO'] 
                     or /mycoreobject/structure/derobjects/derobject/classification[@categid='fulltext']">
         <span>&#160;&#160;</span>
-        <span class="badge badge-warning p-2">
+        <span class="badge ir-badge-header ir-badge-ocr">
           OCR
         </span>
       </xsl:if> 
@@ -259,18 +259,18 @@
   <xsl:template name="accessBadge">
     <xsl:choose>
       <xsl:when test="./mods:classification[@displayLabel='accesscondition'][contains(@valueURI, 'restrictedaccess')]">
-        <span class="badge ir-badge-restrictedaccess">
-          Beschränkter <img style="height:1.5em;padding:0 .25em"><xsl:attribute name="src"><xsl:value-of select="$WebApplicationBaseURL"></xsl:value-of>images/logo_Closed_Access.png</xsl:attribute></img>  Zugang
+        <span class="badge ir-badge-header ir-badge-restrictedaccess">
+          Beschränkter <img style="height:1.5em;padding:0 .25em" src="{$WebApplicationBaseURL}images/logo_Closed_Access.png"/>  Zugang
         </span>
       </xsl:when>
       <xsl:when test="./mods:classification[@displayLabel='accesscondition'][contains(@valueURI, 'closedaccess')]">
-        <span class="badge ir-badge-closedaccess">
-            Kein <img style="height:1.5em;padding:0 .25em"><xsl:attribute name="src"><xsl:value-of select="$WebApplicationBaseURL"></xsl:value-of>images/logo_Closed_Access.png</xsl:attribute></img>  Zugang
+        <span class="badge ir-badge-header ir-badge-closedaccess">
+            Kein <img style="height:1.5em;padding:0 .25em" src="{$WebApplicationBaseURL}images/logo_Closed_Access.png" />  Zugang
         </span>
       </xsl:when> 
       <xsl:otherwise>
-        <span class="badge ir-badge-openaccess">
-          Freier <img style="height:1.5em;padding:0 .25em"><xsl:attribute name="src"><xsl:value-of select="$WebApplicationBaseURL"></xsl:value-of>images/logo_Open_Access.png</xsl:attribute></img> Zugang
+        <span class="badge ir-badge-header ir-badge-openaccess">
+          Freier <img style="height:1.5em;padding:0 .25em" src="{$WebApplicationBaseURL}images/logo_Open_Access.png" /> Zugang
         </span>
       </xsl:otherwise>
     </xsl:choose>
