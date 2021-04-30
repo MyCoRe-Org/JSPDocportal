@@ -216,7 +216,8 @@
         </span>
       </xsl:if>
     
-      <xsl:if test="/mycoreobject/metadata/def.irControl/irControl/map/list[@key='mets_filegroups']/entry[text() = 'ALTO']">
+      <xsl:if test="/mycoreobject/metadata/def.irControl/irControl/map/list[@key='mets_filegroups']/entry[text() = 'ALTO'] 
+                    or /mycoreobject/structure/derobjects/derobject/classification[@categid='fulltext']">
         <span>&#160;&#160;</span>
         <span class="badge badge-warning p-2">
           OCR

@@ -83,11 +83,27 @@
     	  <a href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID,'/','_')}" title="Im MyCoRe Viewer anzeigen">
     	   <xsl:copy-of select="$image" />  
           </a>
-          <div class="text-center" style="position:absolute;bottom:0.25em;right:0;left:0">
+          <div class="text-center" style="position:absolute;top:.5em;right:0;left:0">
             <a class="btn btn-light btn-sm border border-secondary" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID, '/','_')}" title="Im MyCoRe Viewer anzeigen">
               <i class="far fa-eye text-primary"></i> Anzeigen
             </a>
           </div>
+          <xsl:if test="/mycoreobject/metadata/def.irControl/irControl/map/list[@key='mets_filegroups']/entry[text() = 'ALTO'] 
+                       or /mycoreobject/structure/derobjects/derobject/classification[@categid='fulltext']">
+            <div class="input-group input-group-sm mt-3 px-3">
+              <input id="input_search_in_doc" type="text" class="form-control" onKeyDown="searchInDoc(event)" placeholder="Im Dokument suchen..." aria-describedby="search-in-document-addon" />
+              <div class="input-group-append">
+                <button type="button" class="btn btn-secondary" id="search-in-document-addon" onclick="searchInDoc(event)" title="Im Dokument suchen"><i class="fa fa-search"></i></button>
+              </div>
+              <script>
+                function searchInDoc(e) {{
+                  if(e.target.type == "button"  || (e.target.type == "text" &amp;&amp; e.keyCode === 13)) {{
+                    window.open("{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID,'/','_')}?q="+document.getElementById("input_search_in_doc").value,"_self");
+                  }}
+               }}
+              </script>
+            </div>
+          </xsl:if>
         </div>
       </xsl:when>
       <xsl:otherwise>
