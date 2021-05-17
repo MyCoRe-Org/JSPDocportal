@@ -23,7 +23,7 @@
 	<div class="row">
       <div class="col">
         <h2><fmt:message key="Webpage.login.ChangeUserID" /></h2>
-        <p><fmt:message key="Webpage.login.info" /></p>
+        <div class="alert"><fmt:message key="Webpage.login.info" /></div>
       </div>
     </div> 
        
@@ -33,7 +33,7 @@
       <div class="row">
         <div class="col">
           <c:if test="${it.loginOK}">
-		    <p><fmt:message key="Webpage.login.YouAreLoggedInAs" />:&#160;	<strong><c:out value="${it.userID}"></c:out></strong></p>
+		    <div class="alert"><fmt:message key="Webpage.login.YouAreLoggedInAs" />:&#160;	<strong><c:out value="${it.userID}"></c:out></strong></div>
 		  </c:if>
 		  <c:if test="${not empty it.loginStatus}">
 		    <div class="alert alert-secondary" role="alert"><fmt:message key="Webpage.login.status.${it.loginStatus}" >
