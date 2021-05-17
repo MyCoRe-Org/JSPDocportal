@@ -63,7 +63,7 @@
                         data-target="#publish-dialog-task_${currentTask.executionId}">
                   <fmt:message key="WF.workspace.button.publish_all_objects" />
                 </button>
-                <h3><fmt:message key="WF.workspace.info.headline.assumed_tasks" /></h3>
+                <h3><fmt:message key="WF.workspace.info.headline.claimed_tasks" /></h3>
               </div>
               <div id="publish-dialog-task_${currentTask.executionId}" class="collapse">
                 <div class="card-body border border-secondary bg-warning">
@@ -79,7 +79,7 @@
                   <c:set var="currentVariables" value="${it.myVariables[currentTask.executionId]}" />
                   <c:choose>
                     <c:when test="${currentTask.name eq 'Objekt bearbeiten'}">
-                      <div class="card border border-primary m-3" id="task_${currentTask.executionId}">
+                      <div class="card border border-secondary m-3" id="task_${currentTask.executionId}" style="border-width:2px !important">
                         <div class="card-header">
                           <div class="row">
                             <div class="col-8">
