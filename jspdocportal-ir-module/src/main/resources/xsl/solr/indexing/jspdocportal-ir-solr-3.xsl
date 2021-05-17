@@ -14,6 +14,7 @@
 
     <xsl:apply-templates select="structure"/>
     <xsl:apply-templates select="metadata"/>
+     <xsl:apply-templates select="service"/>
  	</xsl:template>
 
 	<xsl:template match="structure">   
@@ -84,7 +85,7 @@
        </xsl:if>
        
        <!-- old documents (without new pica2mods) -->
-       <xsl:if test="mods:classification[@displayLabel='doctype']">
+       <xsl:if test="mods:genere[@displayLabel='doctype']">
          <xsl:if test="mcrmods:is-supported(mods:genre[@displayLabel='doctype'])">
             <field name="ir.doctype.result"><xsl:value-of select="mcrmods:to-mycoreclass(mods:classification[@displayLabel='doctype'], 'single')/categories/categories/category/label[@xml:lang='de']/@text" /></field>
          </xsl:if>
@@ -335,6 +336,11 @@
            <xsl:for-each select="mods:classification[@displayLabel='institution']">
                 <field name="ir.institution_class.facet"><xsl:value-of select="translate(substring-after(@valueURI,'classifications/'),'#',':')" /></field>
            </xsl:for-each>
+    </xsl:for-each>
+  </xsl:template>
+  <xsl:template match="service">   
+    <xsl:for-each select="servstates/servstate">
+      <field name="ir.state_class.facet"><xsl:value-of select="concat(@classid,':',@categid)" /></field>
     </xsl:for-each>
   </xsl:template>
 </xsl:stylesheet>

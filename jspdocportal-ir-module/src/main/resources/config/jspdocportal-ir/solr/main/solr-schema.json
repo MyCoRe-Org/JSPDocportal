@@ -17,6 +17,14 @@
 	},
 	{
 		"add-field": {
+			"name": "ir.state_class.facet",
+			"type": "string",
+			"multiValued": true,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
 			"name": "ir.collection_class.facet",
 			"type": "string",
 			"multiValued": true,
