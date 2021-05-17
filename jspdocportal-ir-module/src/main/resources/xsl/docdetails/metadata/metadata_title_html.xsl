@@ -33,7 +33,7 @@
         </xsl:otherwise> 
       </xsl:choose>
       <xsl:if test="@type">
-        <span class="float-right ir-table-docdetails-values-label">
+        <span class="float-right small">
           [{mcri18n:translate(concat('OMD.ir.docdetails.othertitle.type.', @type))}]
         </span>
       </xsl:if>

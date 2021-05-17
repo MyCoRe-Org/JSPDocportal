@@ -5,8 +5,8 @@
 
 <%@ attribute name="mode" required="true" type="java.lang.String"%>
 
-<div class="ir-latestdocs">
-	<h4 style="padding-top:">
+<div class="ir-latestdocs p-2">
+	<h4 style="mb-0">
 		<fmt:message key="Browse.latestdocs" />
 	</h4>
 	<div id="latest_documents" data-ir-mode="${mode}"></div>

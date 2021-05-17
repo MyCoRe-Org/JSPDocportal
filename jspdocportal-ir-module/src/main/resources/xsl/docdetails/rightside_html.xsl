@@ -52,7 +52,7 @@
             <img src="{$logo_url}"/>
             <br />
           </xsl:if>
-          <small><xsl:value-of select="$categ/category/label[@xml:lang=$CurrentLang]/@text" /></small>
+          <span class="small"><xsl:value-of select="$categ/category/label[@xml:lang=$CurrentLang]/@text" /></span>
         </a>
       </div>
     </div>
@@ -341,9 +341,9 @@
              <img align="left" src="{$WebApplicationBaseURL}images/download_other.png" title="{mcri18n:translate('Webpage.docdetails.otherdownload')}" />
            </xsl:otherwise>
          </xsl:choose>
-         <span class="float-right"><small>({mcrstring:pretty-filesize(./maindoc_size)})</small></span>
+         <span class="small float-right">({mcrstring:pretty-filesize(./maindoc_size)})</span>
          <strong>{mcrclass:current-label-text(./classification[@classid='derivate_types'])}</strong>
-         <br /><small>{mcrstring:abbreviate-center(./maindoc, 40)}</small>
+         <br /><span class="small">{mcrstring:abbreviate-center(./maindoc, 40)}</span>
       </a>
     </div>
   </xsl:template>

@@ -202,7 +202,7 @@
               <tr>
                 <td class="text-justify">
                    {.}
-                  <span class="ir-table-docdetails-values-label">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:rfc5646:',@xml:lang))//category)}]</span>
+                  <span class="small pl-2">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:rfc5646:',@xml:lang))//category)}]</span>
                 </td>
               </tr>                
             </xsl:for-each>
@@ -294,16 +294,20 @@
                   <td>
                     {mods:dateIssued[not(@*)]}
                     <xsl:if test="mods:dateIssued[@keyDate='yes' or @point='start' or @point='end']">
-                      (normiertes Datum:
-                      <xsl:if test="mods:dateIssued[@keyDate='yes' and not(@point='start')]">
-                       {mods:dateIssued[@keyDate='yes' and not(@point='start')]}
+                      <xsl:variable name="normalized_date">
+                        <xsl:if test="mods:dateIssued[@keyDate='yes' and not(@point='start')]">
+                         {mods:dateIssued[@keyDate='yes' and not(@point='start')]}
+                        </xsl:if>
+                        <xsl:if test="mods:dateIssued[@point='start']">
+                          von {mods:dateIssued[@point='start']}
+                        </xsl:if>
+                        <xsl:if test="mods:dateIssued[@point='end']">
+                          bis {mods:dateIssued[@point='end']}
+                        </xsl:if>
+                      </xsl:variable>
+                      <xsl:if test="mods:dateIssued[not(@*)] != normalize-space($normalized_date)">
+                        <span class="small pl-2">(normiertes Datum: {normalize-space($normalized_date)})</span>
                       </xsl:if>
-                      <xsl:if test="mods:dateIssued[@point='start']">
-                        von {mods:dateIssued[@point='start']}
-                      </xsl:if>
-                      <xsl:if test="mods:dateIssued[@point='end']">
-                        bis {mods:dateIssued[@point='end']}
-                      </xsl:if>)
                     </xsl:if>
                   </td>
                 </tr>      
@@ -375,7 +379,7 @@
           <td><table id="ir-table-docdetails-physicalLocation" class="ir-table-docdetails-values">
             <xsl:for-each select="mods:location[mods:physicalLocation[@type='current']]">
               <tr><td>
-                {concat(mods:physicalLocation,':')}<br /><strong>{mods:shelfLocator}</strong>
+                <span class="small">{concat(mods:physicalLocation,':')}</span><br />{mods:shelfLocator}
               </td></tr>                
             </xsl:for-each>
          </table></td>  

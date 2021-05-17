@@ -448,25 +448,21 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
             if (c == currentNode) {
                 sbOut.insert(0, INDENT + "   </li>");
                 sbOut.insert(0, INDENT + "      <span>" + msg + "</span>");
-                sbOut.insert(0, INDENT + "   <li>");
+                sbOut.insert(0, INDENT + "   <li class=\"breadcrumb-item active\">");
             } else {
                 sbOut.insert(0, INDENT + "   </li>");
                 sbOut.insert(0, INDENT + "      <a target=\"_self\" href=\"" + href + "\">" + msg + "</a>");
-                sbOut.insert(0, INDENT + "   <li>");
+                sbOut.insert(0, INDENT + "   <li class=\"breadcrumb-item\">");
             }
             c = c.getParent();
         }
         sbOut.insert(0, INDENT + "   </li>");
         sbOut.insert(0, INDENT + "      <a target=\"_self\" href=\"" + MCRFrontendUtil.getBaseURL() + "\">"
                 + retrieveI18N("Nav.Start") + "</a>");
-        sbOut.insert(0, INDENT + "   <li>");
+        sbOut.insert(0, INDENT + "   <li class=\"breadcrumb-item\">");
 
-        if (cssClass != null) {
-            sbOut.insert(0, INDENT + "<ul class=\"" + cssClass + "\">");
-        } else {
-            sbOut.insert(0, INDENT + "<ul>");
-        }
-
+        sbOut.insert(0, INDENT + "<ol class=\"breadcrumb\">");
+        
         try {
             out.append(sbOut.toString());
         } catch (IOException e) {

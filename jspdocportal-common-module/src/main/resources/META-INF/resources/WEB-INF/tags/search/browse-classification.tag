@@ -18,7 +18,8 @@
 	jspContext.setAttribute("rootCateg", rootCateg);
 %>
    <div class="mcr-facet card ir-browse-classification-card h-100" data-mcr-facet-field="${facetField}">
-     <div class="card-header"><h4>
+     <div class="card-header p-2">
+       <h4 class="mb-0">
       <c:if test="${not empty lang}">
         ${rootCateg.getLabel(lang).get().text}
       </c:if>

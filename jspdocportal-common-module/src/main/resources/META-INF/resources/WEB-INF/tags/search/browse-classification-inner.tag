@@ -22,7 +22,7 @@
 				</c:if>
 				<search:browse-classification-inner category="${c}" facetField="${facetField}" mask="${mask}" />
 			</li> --%>
-			<li class="list-group-item ir-facets-btn" style="display:block" 
+			<li class="list-group-item ir-facets-btn p-2" style="display:block" 
 					    onclick="changeFacetIncludeURL('${facetField}','${c.id.getRootID()}:${c.id.ID}', '${mask}', '${result.id}');">
 					<span class="ir-facets-btn-label">
                       <c:if test="${not empty lang}">
