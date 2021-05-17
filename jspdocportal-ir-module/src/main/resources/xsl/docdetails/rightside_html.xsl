@@ -300,7 +300,7 @@
                 <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" title="{mcri18n:translate('Webpage.tools.showREPOS_METS')}" 
                    href="{$WebApplicationBaseURL}api/v1/objects/${it.id}/derivates/{$derid}/open">METS</a>
               </xsl:if>
-              <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[contains(@valueURI, '#epub') or contains(@valueURI, '#data')]">
+              <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[contains(@valueURI, '#epub') or contains(@valueURI, '#data')]">
                 <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
                    href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}?XSL.Transformer=rosdok_datacite" rel="nofollow">Datacite</a>
               </xsl:if>

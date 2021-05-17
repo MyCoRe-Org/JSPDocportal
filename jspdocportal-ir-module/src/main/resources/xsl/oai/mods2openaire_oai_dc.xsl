@@ -150,7 +150,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="mods:classification">
+  <xsl:template match="mods:classification|mods:genre">
     <xsl:if test="@displayLabel='doctype'">
       <xsl:if test="contains(@valueURI, '#epub.')">
         <dc:type>

@@ -103,7 +103,7 @@
     <xsl:for-each select="./mods:classification[contains(@valueURI, 'licenseinfo#work')]/text()">
       <meta name="DC.rights" content="{.}" />
     </xsl:for-each>
-    <xsl:for-each select="./mods:classification[@displayLabel='doctype']/text()">
+    <xsl:for-each select="./mods:genre@displayLabel='doctype']/text()">
       <meta name="DC.type" content="{.}" />
     </xsl:for-each>
   </xsl:for-each>

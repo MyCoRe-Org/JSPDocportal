@@ -29,13 +29,13 @@
 	<fmt:param>${mcrid}</fmt:param>
 </fmt:message>
 
-<x:if select="contains($doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='doctype']/@valueURI, '#epub')">
+<x:if select="contains($doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '#epub')">
   <c:set var="org.mycore.navigation.path" scope="request">left.epub.epub_recherche</c:set>
 </x:if>
-<x:if select="contains($doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='doctype']/@valueURI, '#data')">
+<x:if select="contains($doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '#data')">
   <c:set var="org.mycore.navigation.path" scope="request">left.epub.epub_recherche</c:set>
 </x:if>
-<x:if select="contains($doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='doctype']/@valueURI, '#histbest')">
+<x:if select="contains($doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '#histbest')">
   <c:set var="org.mycore.navigation.path" scope="request">left.histbest.histbest_recherche</c:set>
 </x:if>
 

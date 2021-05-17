@@ -24,7 +24,7 @@ public class MCRWorkflowMgrEditData extends MCRAbstractWorkflowMgr implements MC
         + "        <mods:titleInfo xml:lang='de' usage='primary'>"
         + "           <mods:title>Neues DataObject</mods:title>"
         + "        </mods:titleInfo>"
-        + "            <mods:classification displayLabel='doctype' valueURI='#epub' />"
+        + "            <mods:genre displayLabel='doctype' valueURI='#epub' />"
         + "      </mods:mods>"
         + "    </modsContainer>"
         + "  </def.modsContainer>"
