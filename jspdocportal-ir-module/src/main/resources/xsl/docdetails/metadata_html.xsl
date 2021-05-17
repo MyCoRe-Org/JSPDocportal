@@ -417,13 +417,15 @@
         <tr>
           <th>Lizenzen/Rechtehinweise:</th>
           <td><table id="ir-table-docdetails-licenses" class="ir-table-docdetails-values">
-            <tr>
-              <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#work')])" />
-              <td class="text-justify">
-                <strong><xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text" disable-output-escaping="true" /> </strong><br />
-                <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@description" disable-output-escaping="true" />
-              </td>
-            </tr>
+            <xsl:if test="mods:classification[contains(@valueURI, 'licenseinfo#work')]">
+              <tr>
+                <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#work')])" />
+                <td class="text-justify">
+                  <strong><xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text" disable-output-escaping="true" /> </strong><br />
+                  <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@description" disable-output-escaping="true" />
+                </td>
+              </tr>
+            </xsl:if>
             <xsl:if test="mods:classification[contains(@valueURI, 'licenseinfo#digitisedimages')]">
               <tr>
                 <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#digitisedimages')])" />
@@ -434,13 +436,15 @@
                 </td>
               </tr>
             </xsl:if>
-             <tr>
-              <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#metadata')])" />
-              <td class="text-justify">
-                <strong><xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text" disable-output-escaping="true" /></strong><br />
-                <xsl:value-of select="replace(replace($categ/label[@xml:lang=$CurrentLang]/@description,'\{0\}', mcri18n:translate('OMD.ir.docdetails.license.metadata.owner')), '\{1\}', concat($WebApplicationBaseURL,'api/v1/objects/',/mycoreobject/@ID))" disable-output-escaping="true" />
-              </td>
-            </tr>
+            <xsl:if test="mods:classification[contains(@valueURI, 'licenseinfo#digitisedimages')]">
+              <tr>
+                <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#metadata')])" />
+                <td class="text-justify">
+                  <strong><xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text" disable-output-escaping="true" /></strong><br />
+                  <xsl:value-of select="replace(replace($categ/label[@xml:lang=$CurrentLang]/@description,'\{0\}', mcri18n:translate('OMD.ir.docdetails.license.metadata.owner')), '\{1\}', concat($WebApplicationBaseURL,'api/v1/objects/',/mycoreobject/@ID))" disable-output-escaping="true" />
+                </td>
+              </tr>
+            </xsl:if>
           </table></td>
         </tr>
         
