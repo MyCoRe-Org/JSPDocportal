@@ -64,6 +64,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
         }
         mcrObj.getService().setState(new MCRCategoryID(
             MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"), "new"));
+        mcrObj.getService().addFlag("editedby", MCRUserManager.getCurrentUser().getUserID());
         mcrObj.getStructure();
         try {
             MCRMetadataManager.create(mcrObj);
@@ -319,17 +320,12 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                 }
 
                 mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
-                if (mcrObj.getService().getState() != null) {
+                if (mcrObj.getService().getState() != null &&
+                    "new".equals(mcrObj.getService().getState().getID())) {
+                    MCRMetadataManager.delete(mcrObj);
+                } else {
                     mcrObj.getService().removeFlags("editedby");
-                    String state = mcrObj.getService().getState().getID();
-                    if (state.equals("new")) {
-                        MCRMetadataManager.delete(mcrObj);
-                    }
-                    if (state.equals("review")) {
-                        mcrObj.getService().setState(new MCRCategoryID(MCRConfiguration2
-                            .getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"), "published"));
-                        MCRMetadataManager.update(mcrObj);
-                    }
+                    MCRMetadataManager.update(mcrObj);
                 }
 
             } catch (MCRActiveLinkException | MCRAccessException e) {
