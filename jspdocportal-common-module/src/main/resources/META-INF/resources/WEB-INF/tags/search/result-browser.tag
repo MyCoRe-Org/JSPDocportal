@@ -18,7 +18,7 @@
 		<c:set var="pageNavi">
 			<%-- // 36.168 Treffer                   Erste Seite | 11-20 | 21-30 | 31-40 | 41-50 | Letzte Seite --%>
 		  <nav class="float-right">
-            <ul class="pagination ir-result-pagination">
+            <ul class="pagination ir-result-pagination mb-0">
 			<c:if test="${result.numPages> 1}">
 				<c:set var="page"><%= Math.round(Math.floor((double) result.getStart() / result.getRows()) + 1) %></c:set>
 				<c:set var="start">0</c:set>
@@ -76,7 +76,7 @@
 		</div>
 	</c:set>
   
-	<div class="card-header bg-light w-100 pb-0">
+	<div class="card-header bg-light w-100">
 		<c:out value="${pageNavi}" escapeXml="false"/>
 	</div>
 	<c:if test="${numHits eq 0}">
@@ -97,7 +97,7 @@
 			</c:forEach>
    		</ul>
 
-		<div class="card-footer bg-light w-100 pb-0">
+		<div class="card-footer bg-light w-100">
 			<c:out value="${pageNavi}" escapeXml="false"/>
 		</div>			
 	</c:if>
