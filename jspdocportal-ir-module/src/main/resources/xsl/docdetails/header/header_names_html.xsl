@@ -24,7 +24,7 @@
   <xsl:param name="DefaultLang" />
 
   <xsl:template name="headerNames">
-    <xsl:for-each select="./mods:name[@type='personal'][contains('aut edt', ./mods:role/mods:roleTerm[@authority='marcrelator'])]">
+    <xsl:for-each select="./mods:name[@type='personal'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
       <div id="popover_content_{generate-id(.)}" style="display: none">
         <div>
           <table class="w-100" style="min-width:15em">
@@ -67,7 +67,7 @@
       </div>
     </xsl:for-each>
     <p>
-      <xsl:for-each select="./mods:name[@type='personal'][contains('aut edt', ./mods:role/mods:roleTerm[@authority='marcrelator'])]">
+      <xsl:for-each select="./mods:name[@type='personal'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
         <nobr>
           {string-join((./mods:namePart[@type='given'], ./mods:namePart[@type='family'], ./mods:namePart[not(@type)], ./mods:namePart[@type='termsOfAddress']),' ')}
           <button class="btn btn-sm pl-1" type="button">
@@ -84,7 +84,7 @@
     </p>
     
     <!-- Körperschaften als Herausgeber -->
-    <xsl:for-each select="./mods:name[@type='corporate'][contains('aut edt', ./mods:role/mods:roleTerm[@authority='marcrelator'])]">
+    <xsl:for-each select="./mods:name[@type='corporate'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
       <div id="popover_content_{generate-id(.)}" style="display: none;">
         <div style="min-width:100em">
           <table class="w-100" style="min-width:15em">
@@ -114,7 +114,7 @@
       </div>
     </xsl:for-each>
     <p>
-      <xsl:for-each select="./mods:name[@type='corporate'][contains('aut edt', ./mods:role/mods:roleTerm[@authority='marcrelator'])]">
+      <xsl:for-each select="./mods:name[@type='corporate'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
         <nobr>
           {string-join((./mods:namePart[not(@type)]),' ')}
           <button class="btn btn-sm pl-1" type="button">
