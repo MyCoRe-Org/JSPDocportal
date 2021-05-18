@@ -36,14 +36,14 @@
           </div>
           <div class="card-body">
             <xsl:for-each select="./metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods">
-              <xsl:if test="./mods:titleInfo/mods:title">
+              <xsl:if test="./mods:note[@type='provisional_title']">
                 <h2>
-                  <xsl:value-of select="./mods:titleInfo/mods:title" />
+                  <xsl:value-of select="./mods:note[@type='provisional_title']" />
                 </h2>
               </xsl:if>
-              <xsl:if test="./mods:note">
+              <xsl:if test="./mods:note[@type='provisional_remarks']">
                 <p class="card-text">
-                  <xsl:value-of select="./mods:note" />
+                  <xsl:value-of select="./mods:note[@type='provisional_remarks']" />
                 </p>
               </xsl:if>
             </xsl:for-each>

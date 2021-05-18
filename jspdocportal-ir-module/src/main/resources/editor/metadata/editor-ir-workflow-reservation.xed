@@ -21,7 +21,7 @@
          <xed:output i18n="OMD.ir.editor.pi_reservation.DOI" />
        </label>
        <div class="col-10">
-         <xed:bind xpath="./../../modsContainer[1]/mods:mods/mods:identifier[@type='doi']">
+         <xed:bind xpath="./../../modsContainer/mods:mods/mods:identifier[@type='doi']">
             <input id="pireg_doi" type="text" readonly="readonly" disabled="disabled" class="form-control input-sm"   />
          </xed:bind>
        </div>
@@ -31,7 +31,7 @@
          <xed:output i18n="OMD.ir.editor.pi_reservation.provisional_title" />
        </label>
        <div class="col-10">
-         <xed:bind xpath="mods:titleInfo[@usage='primary']/mods:title">
+         <xed:bind xpath="mods:note[@type='provisional_title']">
             <input id="pireg_title_prov" type="text" class="form-control input-sm"   />
          </xed:bind>
        </div>
@@ -41,7 +41,7 @@
          <xed:output i18n="OMD.ir.editor.pi_reservation.provisional_remarks" />
        </label>
        <div class="col-10">
-         <xed:bind xpath="mods:note">
+         <xed:bind xpath="mods:note[@type='provisional_remarks']">
             <textarea rows="5" id="pireg_infor_prov" type="text" class="form-control input-sm"   />
          </xed:bind>
        </div>
