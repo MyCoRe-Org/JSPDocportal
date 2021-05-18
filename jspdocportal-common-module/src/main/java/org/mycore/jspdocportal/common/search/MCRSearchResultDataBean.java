@@ -48,6 +48,7 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Document;
+import org.mycore.access.MCRAccessManager;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.solr.MCRSolrClientFactory;
 
@@ -171,6 +172,11 @@ public class MCRSearchResultDataBean implements Serializable {
                 solrQuery.addFilterQuery(x[0] + ":" + ClientUtils.escapeQueryChars(x[1]));
             }
         }
+        
+        if(!MCRAccessManager.checkPermission("edit")) {
+            solrQuery.addFilterQuery("state:published");
+        }
+        
         String[] ffs = solrQuery.getFacetFields();
         if (ffs != null) {
             for (String ff : ffs) {
