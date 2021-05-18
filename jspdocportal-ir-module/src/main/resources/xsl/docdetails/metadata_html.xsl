@@ -21,7 +21,7 @@
   <xsl:output method="html" indent="yes" standalone="no" />
   <xsl:template match="/">
     <table class="ir-table-docdetails">
-      <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
+      <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='imported' or @type='created']/mods:mods">
         <tr>
           <th>Titel:</th>
           <td><table id="ir-table-docdetails-title" class="ir-table-docdetails-values">

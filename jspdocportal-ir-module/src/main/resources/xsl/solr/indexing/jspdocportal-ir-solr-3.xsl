@@ -43,44 +43,48 @@
 
   <xsl:template match="metadata">
     <xsl:apply-imports/>
-  <field name="ir.identifier">[xslt]Saxon</field>
+    <field name="ir.identifier">[xslt]Saxon</field>
   
-  	<xsl:for-each select="def.modsContainer/modsContainer/mods:mods">
-        <field name="recordIdentifier"><xsl:value-of select="mods:recordInfo/mods:recordIdentifier" /></field>
+  	<xsl:for-each select="def.modsContainer/modsContainer[@type='imported' or @type='created']/mods:mods">
+      <field name="recordIdentifier"><xsl:value-of select="mods:recordInfo/mods:recordIdentifier" /></field>
   		
       <xsl:if test="mods:identifier[@type='purl']">
-              <field name="purl"><xsl:value-of select="mods:identifier[@type='purl']" /></field>  
+        <field name="purl"><xsl:value-of select="mods:identifier[@type='purl']" /></field>  
       </xsl:if>
       <xsl:if test="mods:identifier[@type='PPN']">
-              <field name="ppn"><xsl:value-of select="mods:identifier[@type='PPN']" /></field>  
+        <field name="ppn"><xsl:value-of select="mods:identifier[@type='PPN']" /></field>  
       </xsl:if>
       <xsl:if test="mods:identifier[@type='urn']">
-              <field name="urn"><xsl:value-of select="mods:identifier[@type='urn']" /></field>  
+        <field name="urn"><xsl:value-of select="mods:identifier[@type='urn']" /></field>  
       </xsl:if>
         
-        <xsl:variable name="var_creator">
-  			<xsl:for-each select="mods:name[mods:role/mods:roleTerm/@valueURI='http://id.loc.gov/vocabulary/relators/aut' or mods:role/mods:roleTerm[@authority='marcrelator']='aut' or mods:role/mods:roleTerm[@authority='marcrelator']='cre'] ">
-  				<xsl:if test="position()> 1">; </xsl:if>
-                <xsl:if test="mods:namePart[@type='family']">
-                  <xsl:value-of select="mods:namePart[@type='family']" />
-  				  <xsl:value-of select="', '" />
-                </xsl:if>
-  				<xsl:value-of select="mods:namePart[@type='given']" />
-                <xsl:value-of select="mods:namePart[not(@type)]" />
-  			</xsl:for-each>
-  		</xsl:variable>
-  	
-  		<field name="ir.creator.result"><xsl:value-of select="normalize-space($var_creator)"></xsl:value-of></field>
-  		<xsl:for-each select="mods:titleInfo[1]">
-          <field name="ir.title.result"><xsl:if test="mods:nonSort"><xsl:value-of select="mods:nonSort" /><xsl:value-of select="' '" /></xsl:if><xsl:value-of select="mods:title" /><xsl:if test="mods:subTitle"><xsl:value-of select="' : '" /><xsl:value-of select="mods:subTitle" /></xsl:if></field>
-          <xsl:if test="mods:partNumber|mods:partName">
-            <field name="ir.partTitle.result"><xsl:if test="mods:partNumber"><xsl:value-of select="mods:partNumber" /><xsl:value-of select="' '" /></xsl:if><xsl:value-of select="mods:partName" /></field>
-          </xsl:if> 
-       </xsl:for-each>
+      <xsl:variable name="var_name">
+  		<xsl:for-each select="./mods:name[@type='personal'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
+  		  <xsl:if test="position()> 1"><xsl:value-of select="', '" /></xsl:if>
+          <xsl:value-of select="string-join((./mods:namePart[@type='given'], ./mods:namePart[@type='family'], ./mods:namePart[not(@type)], ./mods:namePart[@type='termsOfAddress']),' ')" />
+  	    </xsl:for-each>
+        <xsl:if test="./mods:name[@type='corporate'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
+          <xsl:value-of select="', '" />
+          <xsl:for-each select="./mods:name[@type='corporate'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
+            <xsl:if test="position()> 1"><xsl:value-of select="', '" /></xsl:if>
+            <xsl:value-of select="string-join((./mods:namePart[not(@type)]),' ')" />
+          </xsl:for-each>
+        </xsl:if>
+      </xsl:variable>
+  	  <field name="ir.creator.result"><xsl:value-of select="normalize-space($var_name)"></xsl:value-of></field>
+      
+      
+      
+  	  <xsl:for-each select="mods:titleInfo[1]">
+        <field name="ir.title.result"><xsl:if test="mods:nonSort"><xsl:value-of select="mods:nonSort" /><xsl:value-of select="' '" /></xsl:if><xsl:value-of select="mods:title" /><xsl:if test="mods:subTitle"><xsl:value-of select="' : '" /><xsl:value-of select="mods:subTitle" /></xsl:if></field>
+        <xsl:if test="mods:partNumber|mods:partName">
+          <field name="ir.partTitle.result"><xsl:if test="mods:partNumber"><xsl:value-of select="mods:partNumber" /><xsl:value-of select="' '" /></xsl:if><xsl:value-of select="mods:partName" /></field>
+        </xsl:if> 
+      </xsl:for-each>
        
-       <xsl:if test="mods:genre[@displayLabel='doctype']">
-	     <xsl:if test="mcrmods:is-supported(mods:genre[@displayLabel='doctype'])">
-       		<field name="ir.doctype.result"><xsl:value-of select="mcrmods:to-mycoreclass(mods:genre[@displayLabel='doctype'], 'single')/categories/categories/category/label[@xml:lang='de']/@text" /></field>
+      <xsl:if test="mods:genre[@displayLabel='doctype']">
+	    <xsl:if test="mcrmods:is-supported(mods:genre[@displayLabel='doctype'])">
+       	  <field name="ir.doctype.result"><xsl:value-of select="mcrmods:to-mycoreclass(mods:genre[@displayLabel='doctype'], 'single')/categories/categories/category/label[@xml:lang='de']/@text" /></field>
          </xsl:if>
        </xsl:if>
        
