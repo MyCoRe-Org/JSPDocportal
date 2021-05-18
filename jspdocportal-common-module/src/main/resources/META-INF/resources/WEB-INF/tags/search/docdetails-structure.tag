@@ -6,6 +6,7 @@
 <%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld"%>
 
 <%@ taglib prefix="search" tagdir="/WEB-INF/tags/search"%>
+<%@ taglib prefix="browse" tagdir="/WEB-INF/tags/ir/browse"%>
 
 <%@ attribute name="hostRecordIdentifier" required="true" type="java.lang.String" %>
 <%@ attribute name="hostMcrID" required="true" type="java.lang.String" %>
@@ -42,19 +43,8 @@
 				<c:set var="url"   value="${pageContext.request.contextPath}/resolve/id/${entry.mcrid}?_search=${result.id}&_hit=${entry.pos}" /> 
 				<li class="list-group-item">
 					<div class="ir-result-card">
-						<c:set var="doctype" value="${fn:substringBefore(fn:substringAfter(mcrid, '_'),'_')}" />
-						<c:choose>
-							<c:when test="${(doctype eq 'disshab') or (doctype eq 'thesis')}">
-								<search:result-entry-disshab entry="${entry}" url="${url}" />
-							</c:when>
-							<c:when test="${(doctype eq 'document') or (doctype eq 'bundle')}">
-								<search:result-entry-document entry="${entry}" url="${url}" />
-							</c:when>
-							<c:otherwise>
-								<search:result-entry entry="${entry}" url="${url}" />
-							</c:otherwise>
-						</c:choose>
-						<div style="clear:both"></div>
+					  <browse:result-entry entry="${entry}" url="${url}" />
+  			          <div style="clear:both"></div>
 					</div>
 				</li>				 
 			</c:forEach>

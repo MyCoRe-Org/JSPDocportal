@@ -6,6 +6,8 @@
 <%@ taglib prefix="mcr" 	uri="http://www.mycore.org/jspdocportal/base.tld"%>
 	
 <%@ taglib prefix="search" tagdir="/WEB-INF/tags/search"%>
+<%@ taglib prefix="browse" tagdir="/WEB-INF/tags/ir/browse"%>
+
 <c:set var="org.mycore.navigation.path" scope="request">left.histbest.histbest_recherche</c:set>
 <fmt:message var="pageTitle" key="Webpage.browse.title.${it.result.mask}" />
 
@@ -169,37 +171,7 @@
                               fields="score,ir.pubyear_start,modified,ir.creator.result,ir.title.result" mask="histbest" />
         
         <search:result-browser result="${it.result}">
-          <c:set var="doctype" value="${fn:substringBefore(fn:substringAfter(mcrid, '_'),'_')}" />
-          <c:choose>
-            <c:when test="${(doctype eq 'document') or (doctype eq 'bundle')}">
-              <search:result-entry-document entry="${entry}" url="${url}" />
-            </c:when>
-            <c:otherwise>
-              <search:result-entry entry="${entry}" url="${url}" />
-            </c:otherwise>
-          </c:choose>
-          <div class="row">
-            <div class="col-xs-12 col-md-12 mt-3">
-            <p class="card-text">
-            <%--
-              <search:show-edit-button mcrid="${mcrid}" cssClass="btn btn-sm btn-primary ir-edit-btn" />
-              --%>
-              <span class="badge badge-secondary">${entry.data['ir.doctype.result']}</span>
-              <c:choose>
-                <c:when test="${fn:contains(entry.data['ir.accesscondition_class.facet'], 'restrictedaccess')}">
-                  <span class="badge ir-badge-restrictedaccess">
-                    Restricted <img style="height:1.5em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Closed_Access.png"/>  Access            
-                  </span>
-                </c:when>
-               <c:otherwise>
-                <span class="badge ir-badge-openaccess">
-                    Open <img style="height:1.5em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Open_Access.png"/>  Access            
-                  </span>
-               </c:otherwise>
-             </c:choose>
-             </p>
-            </div>
-          </div>
+          <browse:result-entry entry="${entry}" url="${url}" />
         </search:result-browser>
       </div>
     </div>
