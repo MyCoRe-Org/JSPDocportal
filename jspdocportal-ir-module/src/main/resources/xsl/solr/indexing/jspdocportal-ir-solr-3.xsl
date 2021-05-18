@@ -342,5 +342,8 @@
     <xsl:for-each select="servstates/servstate">
       <field name="ir.state_class.facet"><xsl:value-of select="concat(@classid,':',@categid)" /></field>
     </xsl:for-each>
+    <xsl:if test="servflags/servflag[@type='editedby']">
+      <field name="ir.state_class.facet">state:editing</field>
+    </xsl:if>
   </xsl:template>
 </xsl:stylesheet>

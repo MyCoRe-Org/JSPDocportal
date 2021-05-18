@@ -30,11 +30,20 @@
 		
 <c:set var="facets" value="${result.facetResult}" />
 <c:forEach var="facetKey" items="${facets.keySet()}">
-	<c:if test="${facets.get(facetKey).size() gt 0}">
+    <c:set var="headerClass" value="" />
+    <c:set var="visible" value="true" />
+    
+    <c:if test="${facetKey eq 'ir.state_class.facet'}">
+       <mcr:hasAccess var="visible" permission="edit" />
+       <c:if test="${visible}">
+         <c:set var="headerClass" value=" bg-warning" />
+       </c:if>
+    </c:if>
+	<c:if test="${facets.get(facetKey).size() gt 0 and visible}">
         <c:set var="facetID" value="${fn:replace(facetKey, '.', '_')}" />
         <c:set var="toggleClass">toggle-${facetID}-top</c:set>
 		<div class="card ir-facets-card">
-				<div class="card-header"><h4><fmt:message key="Browse.Filter.${mask}.${facetKey}" /></h4></div>
+				<div class="card-header ${headerClass}"><h4><fmt:message key="Browse.Filter.${mask}.${facetKey}" /></h4></div>
                 <div class="card-body">
                 <div class="btn-group-vertical w-100">
                 <c:forEach var="countsKey" items="${facets.get(facetKey).keySet()}" varStatus="status">
