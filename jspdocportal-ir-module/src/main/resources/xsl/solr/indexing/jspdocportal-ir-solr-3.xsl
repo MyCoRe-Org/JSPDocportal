@@ -3,12 +3,16 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:mcrmods="http://www.mycore.de/xslt/mods"
-  xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="mods xlink">
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:mcrstring="http://www.mycore.de/xslt/stringutils" 
+  exclude-result-prefixes="mods xlink"
+  expand-text="yes">
   
   <xsl:import href="xslImport:solr-document-3:solr/indexing/jspdocportal-ir-solr-3.xsl" />
   <!-- already imported earlier in chain: -->
-  <!-- <xsl:import href="resource:xsl/functions/mods.xsl" /> -->
-
+  <!-- <xsl:import href="resource:xsl/functions/mods.xsl" />
+       <xsl:import href="resource:xsl/functions/stringutils.xsl" />
+  -->
   <xsl:template match="mycoreobject">
     <xsl:apply-imports />
 
@@ -64,7 +68,9 @@
           <xsl:value-of select="string-join((./mods:namePart[@type='given'], ./mods:namePart[@type='family'], ./mods:namePart[not(@type)], ./mods:namePart[@type='termsOfAddress']),' ')" />
   	    </xsl:for-each>
         <xsl:if test="./mods:name[@type='corporate'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
-          <xsl:value-of select="', '" />
+          <xsl:if test="./mods:name[@type='personal'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
+            <xsl:value-of select="', '" />
+          </xsl:if>  
           <xsl:for-each select="./mods:name[@type='corporate'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
             <xsl:if test="position()> 1"><xsl:value-of select="', '" /></xsl:if>
             <xsl:value-of select="string-join((./mods:namePart[not(@type)]),' ')" />
@@ -75,87 +81,63 @@
       
       
       
-  	  <xsl:for-each select="mods:titleInfo[1]">
-        <field name="ir.title.result"><xsl:if test="mods:nonSort"><xsl:value-of select="mods:nonSort" /><xsl:value-of select="' '" /></xsl:if><xsl:value-of select="mods:title" /><xsl:if test="mods:subTitle"><xsl:value-of select="' : '" /><xsl:value-of select="mods:subTitle" /></xsl:if></field>
+  	  <xsl:for-each select="mods:titleInfo[@usage='primary']">
+        <field name="ir.title.result">{string-join((string-join((./mods:nonSort, ./mods:title),' '), ./mods:subTitle),': ')}</field>
         <xsl:if test="mods:partNumber|mods:partName">
-          <field name="ir.partTitle.result"><xsl:if test="mods:partNumber"><xsl:value-of select="mods:partNumber" /><xsl:value-of select="' '" /></xsl:if><xsl:value-of select="mods:partName" /></field>
+          <field name="ir.partTitle.result">{string-join((./mods:partNumber, ./mods:partName), ' : ')}</field>
         </xsl:if> 
       </xsl:for-each>
        
       <xsl:if test="mods:genre[@displayLabel='doctype']">
 	    <xsl:if test="mcrmods:is-supported(mods:genre[@displayLabel='doctype'])">
        	  <field name="ir.doctype.result"><xsl:value-of select="mcrmods:to-mycoreclass(mods:genre[@displayLabel='doctype'], 'single')/categories/categories/category/label[@xml:lang='de']/@text" /></field>
-         </xsl:if>
-       </xsl:if>
-       
-       <!-- old documents (without new pica2mods) -->
-       <xsl:if test="mods:genere[@displayLabel='doctype']">
-         <xsl:if test="mcrmods:is-supported(mods:genre[@displayLabel='doctype'])">
-            <field name="ir.doctype.result"><xsl:value-of select="mcrmods:to-mycoreclass(mods:classification[@displayLabel='doctype'], 'single')/categories/categories/category/label[@xml:lang='de']/@text" /></field>
-         </xsl:if>
-       </xsl:if>
-       
-       <xsl:variable name="var_published">
-            <xsl:choose>
-              <xsl:when test="mods:originInfo[@eventType='publication']"> 
-                <xsl:for-each select="mods:originInfo[@eventType='publication'][1]">
-                  <xsl:if test="mods:edition"><xsl:value-of select="mods:edition" /><xsl:value-of select="' , '" /></xsl:if>    
-                  <xsl:if test="mods:place/mods:placeTerm"><xsl:value-of select="mods:place/mods:placeTerm" /><xsl:value-of select="' : '" /></xsl:if>
-                  <xsl:if test="mods:publisher"><xsl:value-of select="mods:publisher" /><xsl:value-of select="' , '" /></xsl:if>
-                  <xsl:value-of select="mods:dateIssued" />
-                    <xsl:value-of select="mods:dateCreated[@qualifier='approximate']" />
-                </xsl:for-each>  
-              </xsl:when>
-              <xsl:when test="mods:originInfo[@eventType='creation']"> 
-                <xsl:for-each select="mods:originInfo[@eventType='creation'][1]">
-                  <xsl:if test="mods:edition"><xsl:value-of select="mods:edition" /><xsl:value-of select="' , '" /></xsl:if>    
-                  <xsl:if test="mods:place/mods:placeTerm"><xsl:value-of select="mods:place/mods:placeTerm" /><xsl:value-of select="' : '" /></xsl:if>
-                  <xsl:if test="mods:publisher"><xsl:value-of select="mods:publisher" /><xsl:value-of select="' , '" /></xsl:if>
-                  <xsl:value-of select="mods:dateIssued" />
-                  <xsl:value-of select="mods:dateCreated[@qualifier='approximate']" />
-                </xsl:for-each>  
-              </xsl:when>
-            </xsl:choose>
- 			
-  		</xsl:variable>
-  		<field name="ir.originInfo.result"><xsl:value-of select="normalize-space($var_published)"></xsl:value-of></field>
-      
-        <xsl:if test="mods:abstract">
-  	  	<xsl:variable name="var_abstract" select="mods:abstract[1]" />
-  	  	<xsl:choose>
-  	  		<xsl:when test="string-length($var_abstract)>300">
-  	  			<field name="ir.abstract300.result"><xsl:value-of select="concat(substring($var_abstract, 1,300),' ...')" /></field>
-  	  		</xsl:when>
-  	  		<xsl:otherwise>
-  	  			<field name="ir.abstract300.result"><xsl:value-of select="normalize-space($var_abstract)" /></field>
-  	  		</xsl:otherwise>
-  	  	</xsl:choose>
         </xsl:if>
-        
-        <xsl:for-each select="mods:relatedItem[not(@displayLabel='appears_in')][1]">
-          <xsl:for-each select="mods:recordInfo[1]/mods:recordIdentifier[1]">
-              <field name="ir.host.recordIdentifier"><xsl:value-of select="." /></field> 
-            </xsl:for-each>
+      </xsl:if>
+       
+      <xsl:for-each select="./mods:originInfo[@eventType='publication']">
+        <xsl:choose>
+          <xsl:when test="contains(../mods:genre[@displayLabel='doctype']/@valueURI,'#histbest')">
+            <field name="ir.originInfo.result">{string-join((./mods:edition, 
+                            (string-join((./mods:place[not(@supplied='yes')]/mods:placeTerm, ./mods:publisher), ': ')),
+                            ./mods:dateIssued[not(@*)]),  
+                            ', ')}</field>
+          </xsl:when>
+          <xsl:otherwise>
+            <field name="ir.originInfo.result">{string-join((./mods:edition, ./mods:publisher, ./mods:dateIssued[not(@*)]), ', ')}</field>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each>
+      <xsl:if test="mods:abstract">
+        <field name="ir.abstract300.result">{mcrstring:shorten(mods:abstract[1],300)}</field>
+      </xsl:if>
+      
+      <xsl:for-each select="mods:relatedItem[@displayLabel='appears_in'][1]">
+        <xsl:for-each select="mods:titleInfo">
+          <field name="ir.host.title.result">{string-join((mods:nonSort, string-join((mods:title, mods:subTitle), ': ')),' ')}</field> 
         </xsl:for-each>
-        <xsl:for-each select="mods:relatedItem[not(@displayLabel='appears_in')][2]">
-          <xsl:for-each select="mods:recordInfo[1]/mods:recordIdentifier[1]">
-              <field name="ir.host.recordIdentifier2"><xsl:value-of select="." /></field> 
-            </xsl:for-each>
+        <xsl:for-each select="mods:part">
+          <field name="ir.host.part.result">{string-join((mods:partNumber, mods:partName),' ')}</field> 
         </xsl:for-each>
-		<xsl:for-each select="mods:relatedItem[not(@displayLabel='appears_in')][last()]">
-            <xsl:for-each select="mods:part/mods:text[@type='sortstring'][1]">
-              <field name="ir.sortstring"><xsl:value-of select="." /></field> 
-            </xsl:for-each>
+      </xsl:for-each>
+      
+      <xsl:for-each select="mods:relatedItem[not(@displayLabel='appears_in')][1]">
+        <xsl:for-each select="mods:recordInfo[1]/mods:recordIdentifier">
+          <field name="ir.host.recordIdentifier"><xsl:value-of select="." /></field> 
         </xsl:for-each>
-            
-        <xsl:for-each select="mods:relatedItem[@displayLabel='appears_in']">
-            <xsl:for-each select="mods:titleInfo">
-              <field name="ir.host.title.result"><xsl:if test="mods:nonSort"><xsl:value-of select="mods:nonSort" /><xsl:value-of select="' '" /></xsl:if><xsl:value-of select="mods:title" /><xsl:if test="mods:subTitle"><xsl:value-of select="' : '" /><xsl:value-of select="mods:subTitle" /></xsl:if></field> 
-            </xsl:for-each>
-            <xsl:for-each select="mods:part">
-              <field name="ir.host.part.result"><xsl:if test="mods:partNumber|mods:partName"><xsl:value-of select="' ['" /><xsl:value-of select="mods:partNumber" /><xsl:value-of select="' '" /><xsl:value-of select="mods:partName" /><xsl:value-of select="']'" /></xsl:if><xsl:if test="mods:extent[@unit='page']"><xsl:if test="mods:extent[@unit='page']/mods:total"><xsl:value-of select="', '" /><xsl:value-of select="mods:extent[@unit='page']/mods:total"/><xsl:value-of select="' Seiten'" /></xsl:if><xsl:if test="mods:extent[@unit='page']/mods:start"><xsl:value-of select="', S. '" /><xsl:value-of select="mods:extent[@unit='page']/mods:start"/></xsl:if><xsl:if test="mods:extent[@unit='page']/mods:end"><xsl:value-of select="' - '" /><xsl:value-of select="mods:extent[@unit='page']/mods:end"/></xsl:if></xsl:if></field> 
-            </xsl:for-each>
+      </xsl:for-each>
+      <xsl:for-each select="mods:relatedItem[not(@displayLabel='appears_in')][2]">
+        <xsl:for-each select="mods:recordInfo[1]/mods:recordIdentifier">
+          <field name="ir.host.recordIdentifier2"><xsl:value-of select="." /></field> 
         </xsl:for-each>
+      </xsl:for-each>
+      <xsl:for-each select="mods:relatedItem[not(@displayLabel='appears_in')][last()]">
+        <xsl:for-each select="mods:part/mods:text[@type='sortstring'][1]">
+          <field name="ir.sortstring"><xsl:value-of select="." /></field> 
+        </xsl:for-each>
+      </xsl:for-each>
+      
+      
+      <!-- ab hier ungeprüft: -->      
         
   	  	<xsl:for-each select="mods:name[mods:role/mods:roleTerm/@valueURI='http://id.loc.gov/vocabulary/relators/aut' or mods:role/mods:roleTerm[@authority='marcrelator']='aut' or mods:role/mods:roleTerm[@authority='marcrelator']='cre'] ">
   	  		<field name="ir.creator_all"><xsl:value-of select="mods:namePart[@type='termsOfAddress']" /><xsl:value-of select="' '"/><xsl:value-of select="mods:namePart[@type='given']" /><xsl:value-of select="' '"/><xsl:value-of select="mods:namePart[@type='family']" /></field>
