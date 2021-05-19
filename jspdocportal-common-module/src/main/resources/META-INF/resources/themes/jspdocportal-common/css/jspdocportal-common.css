@@ -325,3 +325,13 @@ div.ir-browse-classification ul{
 .ir-pagination{
 	margin-top:0px;
 }
+
+.ir-result-card h4{
+	margin-bottom:.33rem;
+}
+.ir-result-card h5{
+	margin-bottom:.33rem;
+}
+.ir-result-card p{
+	margin-bottom:.33rem;
+}
