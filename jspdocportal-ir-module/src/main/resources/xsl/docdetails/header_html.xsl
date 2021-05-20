@@ -168,7 +168,7 @@
               <span class="collapse" id="spanCollapseAbstract">
                 {substring(., string-length($text)+1)}
               </span>
-              <button id="btnCollapseAbstract" class="btn btn-info btn-sm py-0 px-1" type="button" data-toggle="collapse" data-target="#spanCollapseAbstract" aria-expanded="false" aria-controls="spanCollapseAbstract">
+              <button id="btnCollapseAbstract" class="btn btn-secondary btn-sm py-0 px-1" type="button" data-toggle="collapse" data-target="#spanCollapseAbstract" aria-expanded="false" aria-controls="spanCollapseAbstract">
                 <i class="fas fa-arrow-right"></i>
               </button>
               <script>
