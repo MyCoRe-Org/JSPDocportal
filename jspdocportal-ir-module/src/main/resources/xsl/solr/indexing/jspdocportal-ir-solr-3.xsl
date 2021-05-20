@@ -79,18 +79,23 @@
       </xsl:variable>
   	  <field name="ir.creator.result"><xsl:value-of select="normalize-space($var_name)"></xsl:value-of></field>
       
-      
-      
-  	  <xsl:for-each select="mods:titleInfo[@usage='primary']">
-        <field name="ir.title.result">{string-join((string-join((./mods:nonSort, ./mods:title),' '), ./mods:subTitle),': ')}</field>
-        <xsl:if test="mods:partNumber|mods:partName">
-          <field name="ir.partTitle.result">{string-join((./mods:partNumber, ./mods:partName), ' : ')}</field>
-        </xsl:if> 
-      </xsl:for-each>
+      <xsl:choose>
+        <xsl:when test="//service/servstates/servstate[@classid='state']/@categid='reserved'">
+          <field name="ir.title.result">{concat('[Reserviert] ', //metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods/mods:note[@type='provisional_title'])}</field>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:for-each select="mods:titleInfo[@usage='primary']">
+            <field name="ir.title.result">{string-join((string-join((./mods:nonSort, ./mods:title),' '), ./mods:subTitle),': ')}</field>
+            <xsl:if test="mods:partNumber|mods:partName">
+              <field name="ir.partTitle.result">{string-join((./mods:partNumber, ./mods:partName), ' : ')}</field>
+            </xsl:if> 
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
        
       <xsl:if test="mods:genre[@displayLabel='doctype']">
 	    <xsl:if test="mcrmods:is-supported(mods:genre[@displayLabel='doctype'])">
-       	  <field name="ir.doctype.result"><xsl:value-of select="mcrmods:to-mycoreclass(mods:genre[@displayLabel='doctype'], 'single')/categories/categories/category/label[@xml:lang='de']/@text" /></field>
+       	  <field name="ir.doctype.result"><xsl:value-of select="mcrmods:to-mycoreclass(mods:genre[@displayLabel='doctype'], 'single')//categories/category/label[@xml:lang='de']/@text" /></field>
         </xsl:if>
       </xsl:if>
        

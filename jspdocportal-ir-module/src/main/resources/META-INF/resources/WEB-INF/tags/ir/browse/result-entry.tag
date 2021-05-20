@@ -36,19 +36,33 @@
     <p class="card-text" style="font-size: 80%; text-align:justify">${entry.data['ir.abstract300.result']}</p>
     
     <p class="card-text">
-      <span class="badge badge-secondary">${entry.data['ir.doctype.result']}</span>
+      <span class="badge ir-badge badge-secondary">${entry.data['ir.doctype.result']}</span>
       <c:choose>
         <c:when test="${fn:contains(entry.data['ir.accesscondition_class.facet'], 'restrictedaccess')}">
-          <span class="badge ir-badge-restrictedaccess">
-            Restricted <img style="height:1.5em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Closed_Access.png"/>  Access            
+          <span class="badge ir-badge ir-badge-restrictedaccess">
+            Beschränkter <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Closed_Access.png"/>  Zugang            
+          </span>
+        </c:when>
+        <c:when test="${fn:contains(entry.data['ir.accesscondition_class.facet'], 'closedaccess')}">
+          <span class="badge ir-badge ir-badge-closeddaccess">
+            Kein <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Closed_Access.png"/>  Zugang            
           </span>
         </c:when>
         <c:otherwise>
-          <span class="badge ir-badge-openaccess">
-            Open <img style="height:1.5em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Open_Access.png"/>  Access            
+          <span class="badge ir-badge ir-badge-openaccess">
+            Freier <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Open_Access.png"/>  Zugang            
           </span>
         </c:otherwise>
       </c:choose>
+      
+      <mcr:hasAccess var="hasAccess" permission="edit" />
+      <c:if test="${hasAccess}">
+        <c:forEach var="s" items="${entry.data['ir.state_class.facet']}">
+          <c:if test="${not fn:contains(s, 'state:published')}">
+            <span class="badge ir-badge bg-warning">${fn:replace(fn:replace(fn:replace(s, ']',''), '[',''),'state:','')}</span>
+          </c:if>
+        </c:forEach>
+      </c:if>
     </p>
   </div>
   <div class="col-md-3 d-none d-md-block">
