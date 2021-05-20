@@ -52,15 +52,26 @@
     </p>
   </div>
   <div class="col-md-3 d-none d-md-block">
-    <c:if test="${not empty entry.coverURL}">
-      <div class="img-thumbnail pull-right ir-result-image">
-        <div style="position:relative;text-align:center">
-          <a href="${url}">
-            <img style="width:98%;padding:1%;" src="${pageContext.request.contextPath}/${entry.coverURL}" border="0" />
-          </a>
-        </div>
+    <div class="img-thumbnail pull-right ir-result-image">
+      <div style="position:relative;text-align:center">
+        <a href="${url}">
+          <c:choose>
+            <c:when test="${entry.data['category'].contains('derivate_types:cover') or entry.data['category'].contains('derivate_types:fulltext')}">
+              <img style="width:98%;padding:1%;" src="${pageContext.request.contextPath}/api/iiif/image/v2/thumbnail/${entry.mcrid}/full/full/0/default.jpg" border="0" />
+            </c:when>
+            <c:when test="${fn:contains(entry.mcrid, '_bundle_')}">
+              <img style="width:150px" src="${WebApplicationBaseURL}images/filetypeicons/bundle.png" />
+            </c:when>
+            <c:when test="${entry.data['category'].contains('doctype:data')}">
+              <img style="width:150px" src="${WebApplicationBaseURL}images/filetypeicons/data.png" />
+            </c:when>
+            <c:otherwise>
+              <img style="width:150px" src="${WebApplicationBaseURL}images/filetypeicons/document.png" />
+            </c:otherwise>
+          </c:choose>
+        </a>
       </div>
-    </c:if>
+    </div>
   </div>
 </div>
 

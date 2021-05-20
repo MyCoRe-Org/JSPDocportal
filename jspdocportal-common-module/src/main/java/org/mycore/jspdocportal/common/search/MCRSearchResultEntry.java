@@ -38,7 +38,6 @@ public class MCRSearchResultEntry {
     private int pos;
     private String mcrid;
     private String label;
-    private String coverURL;
     private LinkedHashMap<String, String> data = new LinkedHashMap<String, String>();
 
     public MCRSearchResultEntry(SolrDocument solrDoc, int pos) {
@@ -50,25 +49,9 @@ public class MCRSearchResultEntry {
         this.mcrid = String.valueOf(solrDoc.getFirstValue("returnId"));
         this.label = String.valueOf(solrDoc.getFirstValue(labelfield));
         for (String df : datafields) {
-            Object o = solrDoc.getFirstValue(df);
+            Object o = solrDoc.getFieldValue(df);
             if (o != null) {
                 data.put(df, String.valueOf(o));
-            }
-        }
-        Object o = solrDoc.getFirstValue("ir.cover_url");
-        if (o == null) {
-            o = solrDoc.getFirstValue("cover_url");
-        }
-        if (o != null) {
-            coverURL = (String.valueOf(o));
-        } else {
-            String coverField = MCRConfiguration2.getString("MCR.SearchResult." + objectType + ".DefaultCoverfield").orElse("");
-            if (solrDoc.getFirstValue(coverField) == null) {
-                coverURL = "images/cover/default.png";
-            } else if (solrDoc.getFieldValues("category.top").contains("doctype:data")) {
-                coverURL = "images/cover/default_data.png";
-            } else {
-                coverURL = "images/cover/default_" + String.valueOf(solrDoc.getFirstValue(coverField)) + ".png";
             }
         }
     }
@@ -87,10 +70,6 @@ public class MCRSearchResultEntry {
 
     public LinkedHashMap<String, String> getData() {
         return data;
-    }
-
-    public String getCoverURL() {
-        return coverURL;
     }
 
     public int getPos() {
