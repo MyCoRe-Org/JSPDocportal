@@ -26,7 +26,7 @@
     
   <xsl:template match="/">
     <!-- Provider -->
-    
+    <xsl:if test="contains(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '/doctype#histbest')">
     <div class="card border border-primary mb-3">
       <div class="card-body py-1 small">
         bereitgestellt durch:
@@ -56,6 +56,7 @@
         </a>
       </div>
     </div>
+    </xsl:if>
   
     <!-- Cover -->
     <xsl:variable name="recordID" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']" />
