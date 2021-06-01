@@ -121,15 +121,16 @@
         <xsl:choose>
           <xsl:when test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='doi']">
             <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='doi']">
-              <p><a href="https://doi.org/{.}">https://doi.org/<br class="visible-md-inline"/>{.}</a></p>
+              <p><a href="https://doi.org/{.}">https://doi.org/<br class="d-md-none"/>{.}</a></p>
             </xsl:for-each>
           </xsl:when>
           <xsl:when test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='purl']">
             <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='purl']">
-              <p><a href="{.}">
-                {substring-before(.,'.de/')}.de/
-                  <br class="visible-md-inline"/>
-                {substring-after(.,'.de/')}
+              <p class="d-none d-xl-block"><a href="{.}" style="transform: scaleX(96%) translate(-2%);display: inline-block;white-space: nowrap">
+                {substring-before(.,'.de/')}.de/<br class="d-md-none"/>{substring-after(.,'.de/')}
+              </a></p>
+              <p class="d-xl-none"><a href="{.}">
+                {substring-before(.,'.de/')}.de/<br />{substring-after(.,'.de/')}
               </a></p>
             </xsl:for-each>
           </xsl:when>
