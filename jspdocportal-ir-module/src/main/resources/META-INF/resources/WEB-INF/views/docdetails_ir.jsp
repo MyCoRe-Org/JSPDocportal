@@ -109,6 +109,11 @@
                       <a  id="nav_tab_structure" class="nav-link" data-toggle="collapse" href="#nav_content_structure">zugehörende Dokumente</a>
                    </li>
 				   </x:if>
+                   <x:if select="$doc/mycoreobject/metadata//*[@displayLabel='doctype'][contains(@valueURI, '/doctype#data')]">
+                      <li class="nav-item" role="presentation">
+                        <a id="nav_tab_fulltext" class="nav-link" data-toggle="collapse" href="#nav_content_data">Daten</a>
+                      </li>
+                   </x:if>
 				   <li class="nav-item" role="presentation">
                       <a id="nav_tab_metadata" class="nav-link" data-toggle="collapse" href="#nav_content_metadata">Metadaten</a>
                    </li>
@@ -171,6 +176,13 @@
 				      </div>
 			        </div>
 		          </x:if>
+                  <x:if select="$doc/mycoreobject/metadata//*[@displayLabel='doctype'][contains(@valueURI, '/doctype#data')]">
+                    <div id="nav_content_data" class="collapse" data-parent="#nav_content_root">
+                      <div style="font-size: 85%;min-height:600px">
+                        <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/download_html.xsl" />                 
+                      </div>
+                    </div>
+                  </x:if>
 		          <div id="nav_content_metadata" class="collapse" data-parent="#nav_content_root">
 			        <div class="ir-docdetails-data" style="min-height:600px">
 				       <x:choose>
