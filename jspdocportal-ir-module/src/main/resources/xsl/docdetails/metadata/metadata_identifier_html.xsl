@@ -33,52 +33,28 @@
    </xsl:for-each>
   
    <xsl:for-each select="mods:identifier[not(@type='purl')]">
-              <xsl:choose>
-                <xsl:when test="@type='rism'">
-                  <xsl:choose>
-                    <xsl:when test="contains(., 'ID no.:')">
-                      <xsl:variable name="category" select="mcrclass:category('identifier', 'rism')" />
-                      <tr>
-                      <th><abbr class="text-nowrap" title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
-                      <xsl:variable name="rismID" select="substring-after(., 'ID no.:')" />
-                      <td><a href="{replace($category/label[@xml:lang='x-portal-url']/@text, '\{0\}',$rismID)}">{$rismID}</a></td>
-                      </tr>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:variable name="category" select="mcrclass:category('identifier', 'rism_series')" />
-                      <tr>
-                      <th><abbr class="text-nowrap" title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
-                      <td>{.}</td>
-                      </tr>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:variable name="category" select="mcrclass:category('identifier', @type)" />
-                  <xsl:if test="$category">
-                    <tr>
-                      <th><abbr class="text-nowrap" title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
-                      <td>
-                        <xsl:choose>
-                          <xsl:when test="$category/label[@xml:lang='x-portal-url']">
-                            <a href="{replace($category/label[@xml:lang='x-portal-url']/@text, '\{0\}',.)}">{.}</a>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            {.}
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </td>
-                    </tr>
-                  </xsl:if>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:for-each>
-            <xsl:for-each select="mods:identifier[@type='purl']">
-              <xsl:variable name="categ_purl" select="mcrclass:category('identifier', 'purl')" />
-              <tr><th><abbr class="text-nowrap" title="{$categ_purl/label[@xml:lang=$CurrentLang]/@description}">{$categ_purl/label[@xml:lang=$CurrentLang]/@text}</abbr>: </th>
-                  <td><a href="{.}">{.}</a></td>
-              </tr>
-            </xsl:for-each>
-    
+     <xsl:variable name="category" select="mcrclass:category('identifier', @type)" />
+       <xsl:if test="$category">
+         <tr>
+           <th><abbr class="text-nowrap" title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
+           <td>
+             <xsl:choose>
+               <xsl:when test="$category/label[@xml:lang='x-portal-url']">
+                 <a href="{replace($category/label[@xml:lang='x-portal-url']/@text, '\{0\}',.)}">{.}</a>
+               </xsl:when>
+               <xsl:otherwise>
+                 {.}
+               </xsl:otherwise>
+             </xsl:choose>
+           </td>
+         </tr>
+       </xsl:if>
+     </xsl:for-each>
+     <xsl:for-each select="mods:identifier[@type='purl']">
+       <xsl:variable name="categ_purl" select="mcrclass:category('identifier', 'purl')" />
+         <tr><th><abbr class="text-nowrap" title="{$categ_purl/label[@xml:lang=$CurrentLang]/@description}">{$categ_purl/label[@xml:lang=$CurrentLang]/@text}</abbr>: </th>
+            <td><a href="{.}">{.}</a></td>
+         </tr>
+     </xsl:for-each>
   </xsl:template>
 </xsl:stylesheet>
