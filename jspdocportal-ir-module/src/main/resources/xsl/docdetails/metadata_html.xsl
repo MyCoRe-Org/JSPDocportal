@@ -144,7 +144,7 @@
                     <xsl:call-template name="identifier2metadataTable" />
                   </table>
                 </xsl:if>    
-                --!>
+                -->
               </xsl:for-each>
             </td>
           </tr>
