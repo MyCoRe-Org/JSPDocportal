@@ -81,9 +81,26 @@
     <xsl:choose>
       <xsl:when test="$showViewer">
         <div class="ir-box ir-box-docdetails-image text-center" style="position:relative">
-    	  <a href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID,'/','_')}" title="Im MyCoRe Viewer anzeigen">
-    	   <xsl:copy-of select="$image" />  
-          </a>
+    	  <a id="ir-thumbnail-image-link" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID,'/','_')}" title="Im MyCoRe Viewer anzeigen"></a>
+    	  <!-- curly bracets are quoted!!! -->
+          <script>
+             var image = new Image();
+             image.onload = function() {{
+                image.style.width = "150px";
+                image.classList.add("border");
+                image.classList.add("border-secondary");
+                document.getElementById("ir-thumbnail-image-link").appendChild(image);
+             }}
+             image.onerror = function() {{
+                // image did not load - show default image
+                var err = new Image();
+                err.style.width = "150px";
+                err.src = "{$WebApplicationBaseURL}images/filetypeicons/empty.png";
+                document.getElementById("ir-thumbnail-image-link").appendChild(err);
+             }}
+             image.src = "{$image/img/@src}";
+          </script>
+          
           <div class="text-center" style="position:absolute;top:.5em;right:0;left:0">
             <a class="btn btn-light btn-sm border border-secondary" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID, '/','_')}" title="Im MyCoRe Viewer anzeigen">
               <i class="far fa-eye text-primary"></i> Anzeigen
@@ -108,9 +125,26 @@
         </div>
       </xsl:when>
       <xsl:otherwise>
-        <div class="ir-box ir-box-docdetails-image" style="position:relative">
-           <xsl:copy-of select="$image" />
+        <div id="ir-thumbnail-image" class="ir-box ir-box-docdetails-image" style="position:relative">
         </div>
+        <!-- curly bracets are quoted!!! -->
+          <script>
+             var image = new Image();
+             image.onload = function() {{
+                image.style.width = "150px";
+                image.classList.add("border");
+                image.classList.add("border-secondary");
+                document.getElementById("ir-thumbnail-image").appendChild(image);
+             }}
+             image.onerror = function() {{
+                // image did not load - show default image
+                var err = new Image();
+                err.style.width = "150px";
+                err.src = "{$WebApplicationBaseURL}images/filetypeicons/empty.png";
+                document.getElementById("ir-thumbnail-image").appendChild(err);
+             }}
+             image.src = "{$image/img/@src}";
+          </script>
       </xsl:otherwise>
    </xsl:choose>
  
