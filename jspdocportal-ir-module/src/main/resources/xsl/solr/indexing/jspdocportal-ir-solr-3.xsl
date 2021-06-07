@@ -329,6 +329,11 @@
            </xsl:for-each>
     </xsl:for-each>
   </xsl:template>
+  <xsl:template match="def.irControl/irControl">   
+    <xsl:for-each select="map/list[@key='mets_filegroups']/entry[text()='ALTO'][1]">
+      <field name="ir.contains_msg.facet">ocr</field>
+    </xsl:for-each>
+  </xsl:template>
   <xsl:template match="service">   
     <xsl:for-each select="servstates/servstate">
       <field name="ir.state_class.facet"><xsl:value-of select="concat(@classid,':',@categid)" /></field>

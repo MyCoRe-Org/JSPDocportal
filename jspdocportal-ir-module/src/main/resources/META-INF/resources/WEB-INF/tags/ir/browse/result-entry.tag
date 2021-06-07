@@ -55,6 +55,12 @@
         </c:otherwise>
       </c:choose>
       
+      <c:if test="${fn:contains(entry.data['ir.contains_msg.facet'], 'ocr')}">
+        <span class="badge ir-badge ir-badge-ocr">
+          OCR-Volltext            
+        </span>
+      </c:if>
+      
       <mcr:hasAccess var="hasAccess" permission="edit" />
       <c:if test="${hasAccess}">
         <c:forEach var="s" items="${entry.data['ir.state_class.facet']}">

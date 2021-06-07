@@ -226,6 +226,14 @@
 	},
 	{
 		"add-field": {
+			"name": "ir.contains_msg.facet",
+			"type": "string",
+			"multiValued": true,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
 			"name": "ir.pubyear_end",
 			"type": "pint",
 			"multiValued": false,
