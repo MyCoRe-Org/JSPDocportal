@@ -1,4 +1,14 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html;charset=UTF-8"%>
+
+    <script type="text/javascript">
+      function changeFacetIncludeURL(key, value, mask) {
+        window.location=$("meta[name='mcr:baseurl']").attr("content")
+                 + "browse/"+mask+"?"
+                 + "&_add-filter="
+                 + encodeURIComponent("+" + key +":"+ value);
+      }
+    </script>
+    
 <%--TODO use SOLR-Parameter "&facet.mincount=1" --%>
     <script>
     $( document ).ready(function() {

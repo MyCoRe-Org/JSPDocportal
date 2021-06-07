@@ -21,7 +21,14 @@
      <div class="card-header p-2">
        <h4 class="mb-0">
       <c:if test="${not empty lang}">
-        ${rootCateg.getLabel(lang).get().text}
+        <c:choose>
+          <c:when test="${not rootCateg.getLabel('x-'.concat(lang).concat('-short')).isEmpty() }">
+            ${rootCateg.getLabel('x-'.concat(lang).concat('-short')).get().text}
+          </c:when> 
+          <c:otherwise>
+            ${rootCateg.getLabel(lang).get().text}
+          </c:otherwise>
+        </c:choose>
       </c:if>
       <c:if test="${empty lang}">
         ${rootCateg.currentLabel.get().text}

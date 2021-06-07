@@ -22,11 +22,18 @@
 				</c:if>
 				<search:browse-classification-inner category="${c}" facetField="${facetField}" mask="${mask}" />
 			</li> --%>
-			<li class="list-group-item ir-facets-btn p-2" style="display:block" 
+			<li class="list-group-item ir-facets-btn btn-sm px-2 py-1" style="display:block" 
 					    onclick="changeFacetIncludeURL('${facetField}','${c.id.getRootID()}:${c.id.ID}', '${mask}', '${result.id}');">
 					<span class="ir-facets-btn-label">
                       <c:if test="${not empty lang}">
-							${c.getLabel(lang).get().text}
+                            <c:choose>
+                              <c:when test="${not c.getLabel('x-'.concat(lang).concat('-short')).isEmpty() }">
+                                ${c.getLabel('x-'.concat(lang).concat('-short')).get().text}
+                              </c:when> 
+                              <c:otherwise>
+                                 ${c.getLabel(lang).get().text}
+                              </c:otherwise>
+                            </c:choose>
                       </c:if>
                       <c:if test="${empty lang}">
                           ${c.currentLabel.get().text}
@@ -38,7 +45,7 @@
 			</li>
             <c:if test="${c.hasChildren()}">
               <li class="list-group-item py-0">
-                <search:browse-classification-inner category="${c}" facetField="${facetField}" mask="${mask}" />
+                <search:browse-classification-inner category="${c}" facetField="${facetField}" mask="${mask}" lang="${lang}"/>
               </li>
             </c:if>
 		</c:forEach>
