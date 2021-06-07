@@ -143,11 +143,7 @@
                       ', ')}
         </p> 
       </xsl:for-each>
-     <xsl:for-each select="./mods:location[mods:physicalLocation[@type='current']]/mods:shelfLocator">
-     <p>
-      <small>Signatur der Vorlage:</small> {.}
-     </p>
-     </xsl:for-each>    
+    
       <!-- DOI / PURL -->
       <p>
         <xsl:choose>
