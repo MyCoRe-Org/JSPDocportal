@@ -115,10 +115,12 @@
         <p>
           <xsl:choose>
             <xsl:when test="contains(../mods:genre[@displayLabel='doctype']/@valueURI,'#histbest')">
-              {string-join((./mods:edition, 
-                            (string-join((./mods:place[not(@supplied='yes')]/mods:placeTerm, ./mods:publisher), ': ')),
-                            ./mods:dateIssued[not(@*)]),  
-                            ', ')}
+              <xsl:variable name="publisherPlace"
+                select="if (./mods:place[not(@supplied='yes')]/mods:placeTerm|./mods:publisher) 
+                        then (string-join((./mods:place[not(@supplied='yes')]/mods:placeTerm, ./mods:publisher), ': '))
+                        else ()" />
+              
+              {string-join((./mods:edition, $publisherPlace, ./mods:dateIssued[not(@*)]), ', ')}
             </xsl:when>
             <xsl:otherwise>
               {string-join((./mods:edition, ./mods:publisher, ./mods:dateIssued[not(@*)]), ', ')}

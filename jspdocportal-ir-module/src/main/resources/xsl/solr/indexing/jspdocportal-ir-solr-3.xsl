@@ -102,10 +102,11 @@
       <xsl:for-each select="./mods:originInfo[@eventType='publication']">
         <xsl:choose>
           <xsl:when test="contains(../mods:genre[@displayLabel='doctype']/@valueURI,'#histbest')">
-            <field name="ir.originInfo.result">{string-join((./mods:edition, 
-                            (string-join((./mods:place[not(@supplied='yes')]/mods:placeTerm, ./mods:publisher), ': ')),
-                            ./mods:dateIssued[not(@*)]),  
-                            ', ')}</field>
+            <xsl:variable name="publisherPlace"
+                select="if (./mods:place[not(@supplied='yes')]/mods:placeTerm|./mods:publisher) 
+                        then (string-join((./mods:place[not(@supplied='yes')]/mods:placeTerm, ./mods:publisher), ': '))
+                        else ()" />
+            <field name="ir.originInfo.result">{string-join((./mods:edition, $publisherPlace, ./mods:dateIssued[not(@*)]),  ', ')}</field>
           </xsl:when>
           <xsl:otherwise>
             <field name="ir.originInfo.result">{string-join((./mods:edition, ./mods:publisher, ./mods:dateIssued[not(@*)]), ', ')}</field>
