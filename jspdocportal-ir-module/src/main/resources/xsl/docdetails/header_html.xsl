@@ -191,6 +191,7 @@
       </xsl:if>
     
       <!-- Badges -->
+      <p class="mt-3">
       <xsl:if test="./mods:genre[@displayLabel='doctype']">
         <span class="badge ir-badge-header badge-secondary">
           <xsl:value-of select="mcrclass:current-label-text(mcrmods:to-category(./mods:genre[@displayLabel='doctype']))" />
@@ -221,7 +222,8 @@
         <span class="badge ir-badge-header ir-badge-ocr">
           OCR
         </span>
-      </xsl:if> 
+      </xsl:if>
+      </p> 
 
       <!-- weitere Versionen -->
       <xsl:call-template name="otherVersions" />

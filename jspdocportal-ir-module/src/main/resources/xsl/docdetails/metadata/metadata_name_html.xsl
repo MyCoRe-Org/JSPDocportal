@@ -15,14 +15,10 @@
     <xsl:for-each select="$names">
       <tr><td colspan="2">
         <xsl:if test="mods:namePart[@type='given' or @type='family']">
-          <strong>
             <xsl:value-of select="string-join((mods:namePart[@type='given'], mods:namePart[@type='family']),' ')" />
-          </strong>
         </xsl:if>
         <xsl:if test="mods:namePart[not(@type)]">
-          <strong>
             <xsl:value-of select="string-join(mods:namePart[not(@type)],' ')" />
-          </strong>
         </xsl:if>
         <xsl:if test="mods:namePart[@type='termsOfAddress']">
           , <xsl:value-of select="string-join(mods:namePart[@type='termsOfAddress'], ', ')" />
@@ -39,20 +35,20 @@
                
       <xsl:if test="./mods:nameIdentifier[@type='orcid']">
         <tr>
-          <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/ORCIDiD_iconbwvector.svg"  style="height:1.15em" title="ORCID (Open Researcher and Contributor ID)" /></th>
-          <td><a href="https://orcid.org/{./mods:nameIdentifier[@type='orcid']}">{./mods:nameIdentifier[@type='orcid']}</a></td>
+          <th class="text-center small"><img src="{$WebApplicationBaseURL}images/ir/ORCIDiD_iconbwvector.svg"  style="height:1.15em" title="ORCID (Open Researcher and Contributor ID)" /></th>
+          <td class="small"><a href="https://orcid.org/{./mods:nameIdentifier[@type='orcid']}">{./mods:nameIdentifier[@type='orcid']}</a></td>
         </tr>
       </xsl:if>
       <xsl:if test="./mods:nameIdentifier[@type='gnd']">
         <tr>
-          <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Black_wabe.png" style="height:1.25em" title="GND (Gemeinsame Normdatei der Deutschen Nationalbiblitohek)" /></th>
-          <td><a href="http://d-nb.info/gnd/{./mods:nameIdentifier[@type='gnd']}">{./mods:nameIdentifier[@type='gnd']}</a></td>
+          <th class="text-center small"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Black_wabe.png" style="height:1.25em" title="GND (Gemeinsame Normdatei der Deutschen Nationalbiblitohek)" /></th>
+          <td class="small"><a href="http://d-nb.info/gnd/{./mods:nameIdentifier[@type='gnd']}">{./mods:nameIdentifier[@type='gnd']}</a></td>
         </tr>
       </xsl:if>
       <xsl:for-each select="./mods:affiliation">
         <tr>
-          <th class="text-center align-text-top"><i class="fas fa-university" title="Einrichtung" style="font-size:1.25em"></i></th>
-          <td>{.}</td>
+          <th class="text-center align-text-top small"><i class="fas fa-university" title="Einrichtung" style="font-size:1.25em"></i></th>
+          <td class="small">{.}</td>
         </tr>
       </xsl:for-each>
     </xsl:for-each>
@@ -62,7 +58,7 @@
     <xsl:param name="names" />
     <xsl:for-each select="$names">
       <tr><td colspan="2">
-        <strong><xsl:value-of select="string-join(mods:namePart,', ')" /></strong>
+        <span><xsl:value-of select="string-join(mods:namePart,', ')" /></span>
         <xsl:choose>
           <xsl:when test="mods:role/mods:roleTerm[@authority='GBV']">
             <span class="small pl-2">[{string-join(mods:role/mods:roleTerm[@authority='GBV'], ', ')}]</span>
@@ -74,8 +70,8 @@
       </td></tr>
       <xsl:if test="./mods:nameIdentifier[@type='gnd']">
         <tr>
-          <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Black_wabe.png" style="height:1.25em" title="GND (Gemeinsame Normdatei der Deutschen Nationalbiblitohek)" /></th>
-          <td><a href="http://d-nb.info/gnd/{./mods:nameIdentifier[@type='gnd']}">{./mods:nameIdentifier[@type='gnd']}</a></td>
+          <th class="text-center small"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Black_wabe.png" style="height:1.25em" title="GND (Gemeinsame Normdatei der Deutschen Nationalbiblitohek)" /></th>
+          <td class="small"><a href="http://d-nb.info/gnd/{./mods:nameIdentifier[@type='gnd']}">{./mods:nameIdentifier[@type='gnd']}</a></td>
         </tr>
       </xsl:if>
     </xsl:for-each>

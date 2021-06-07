@@ -271,7 +271,7 @@
                   </xsl:for-each>
                   <xsl:if test="mods:place[@supplied='yes']/mods:placeTerm">
                     <tr>
-                      <td>
+                      <td class="small">
                         ({if (count(mods:place[@supplied='yes']/mods:placeTerm)=1) then 'normierter Ort: ' else 'normierte Orte: '}
                         {string-join(mods:place[@supplied='yes']/mods:placeTerm,', ')})
                       </td>
@@ -282,8 +282,10 @@
                   <tr>
                       <td>{string-join(mods:place[not(@supplied='yes')]/mods:placeTerm,', ')}
                         <xsl:if test="mods:place[@supplied='yes']/mods:placeTerm">
+                        <span class="small">
                           ({if (count(mods:place[@supplied='yes']/mods:placeTerm)=1) then 'normierter Ort: ' else 'normierte Orte: '}
                           {string-join(mods:place[@supplied='yes']/mods:placeTerm,', ')})
+                          </span>
                         </xsl:if>
                       </td>
                   </tr> 
@@ -401,15 +403,12 @@
           <th>Zugang:</th>
           <td><table id="ir-table-docdetails-identifier" class="ir-table-docdetails-values">
             <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[@displayLabel='accesscondition'][1])" />
-            <tr><td><strong>
-            {$categ/label[@xml:lang=$CurrentLang]/@text}
-            </strong></td></tr>
-            <xsl:if test="$categ/label[@xml:lang=$CurrentLang]/@description">
             <tr><td>
-              {$categ/label[@xml:lang=$CurrentLang]/@description}
+              <strong>{$categ/label[@xml:lang=$CurrentLang]/@text}</strong>
+              <xsl:if test="$categ/label[@xml:lang=$CurrentLang]/@description">
+                 <br />{$categ/label[@xml:lang=$CurrentLang]/@description}
+              </xsl:if>
             </td></tr>
-            </xsl:if>
-            
           </table></td>
         </tr>
       </xsl:if>
@@ -421,8 +420,10 @@
               <tr>
                 <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#work')])" />
                 <td class="text-justify">
-                  <strong><xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text" disable-output-escaping="true" /> </strong><br />
-                  <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@description" disable-output-escaping="true" />
+                  <strong><xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text" disable-output-escaping="true" /></strong><br />
+                  <span>
+                    <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@description" disable-output-escaping="true" />
+                  </span>
                 </td>
               </tr>
             </xsl:if>
