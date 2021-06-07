@@ -90,25 +90,29 @@
             <td>
               <xsl:for-each select="./mods:relatedItem[@type='series']">
                 <table id="ir-table-docdetails-series" class="ir-table-docdetails-values">
+                <xsl:variable name="theTitle">
                   <xsl:for-each select="mods:titleInfo">
                     <xsl:call-template name="title" />
                   </xsl:for-each>
+                  </xsl:variable>
+                  <tr><td>
+                    <xsl:copy-of select="$theTitle/tr/td/*" />
                   <xsl:for-each select="mods:part/mods:detail/mods:number">
-                    <tr><td>
-                      {string-join(.//text(), ' ')}
-                    </td></tr>
+                  <span>, {string-join(.//text(), ' ')}</span>
                   </xsl:for-each>
                   <xsl:for-each select="mods:originInfo[@eventType='publication']">
-                    <tr><td>
-                      {string-join((mods:publisher, mods:dateIssued[not(@encoding)]),', ')}
-                    </td></tr>
+                      <span>, {string-join((mods:publisher, mods:dateIssued[not(@encoding)]),', ')}</span>
                   </xsl:for-each>
+                  </td></tr>
                 </table>
+                <!-- Hide identifier for series -->
+                <!-- 
                 <xsl:if test="mods:identifier">
                   <table id="ir-table-docdetails-host-title" class="ir-table-docdetails-values">
                     <xsl:call-template name="identifier2metadataTable" />
                   </table>
-                </xsl:if>    
+                </xsl:if>
+                -->    
               </xsl:for-each>
             </td>
           </tr>
@@ -133,11 +137,14 @@
                   </xsl:if>
                   </td></tr>
                 </table>
+                <!-- Hide identifier for series -->
+                <!-- 
                 <xsl:if test="mods:identifier">
                   <table id="ir-table-docdetails-otherFormat-ids" class="ir-table-docdetails-values">
                     <xsl:call-template name="identifier2metadataTable" />
                   </table>
                 </xsl:if>    
+                --!>
               </xsl:for-each>
             </td>
           </tr>

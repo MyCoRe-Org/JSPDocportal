@@ -17,8 +17,8 @@
         <xsl:when test="mods:partName or mods:partNumber">
           <xsl:value-of select="string-join((mods:nonSort, string-join((mods:title, mods:subTitle), ': ')),' ')" />
           <br />
-          <xsl:element name="{if(usage='primary') then 'strong' else 'span'}">
-            <xsl:value-of select="string-join((mods:partNumber, mods:partName),' ')" />
+          <xsl:element name="{if(@usage='primary') then 'strong' else 'span'}">
+            <xsl:value-of select="string-join((mods:partNumber, mods:partName),': ')" />
           </xsl:element>
         </xsl:when>
         <xsl:otherwise>

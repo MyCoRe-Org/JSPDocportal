@@ -60,7 +60,7 @@
         <div class="text-right">
           <xsl:for-each select="./mods:relatedItem[@type='host' or @type='series'][./mods:recordInfo]">
             <xsl:element name="a">
-              <xsl:attribute name="class">btn btn-outline-secondary btn-sm</xsl:attribute>
+              <xsl:attribute name="class">btn btn-outline-secondary btn-sm ml-2</xsl:attribute>
               <xsl:if test="./mods:recordInfo/mods:recordIdentifier">
                 <xsl:attribute name="href">{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(./mods:recordInfo/mods:recordIdentifier, '/', '%252F')}</xsl:attribute>
               </xsl:if>
@@ -143,7 +143,11 @@
                       ', ')}
         </p> 
       </xsl:for-each>
-    
+     <xsl:for-each select="./mods:location[mods:physicalLocation[@type='current']]/mods:shelfLocator">
+     <p>
+      <small>Signatur der Vorlage:</small> {.}
+     </p>
+     </xsl:for-each>    
       <!-- DOI / PURL -->
       <p>
         <xsl:choose>
