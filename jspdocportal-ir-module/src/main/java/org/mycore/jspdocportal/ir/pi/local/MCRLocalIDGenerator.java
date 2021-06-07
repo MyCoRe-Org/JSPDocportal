@@ -39,7 +39,7 @@ public class MCRLocalIDGenerator extends MCRPIGenerator<MCRLocalID> {
 
     // _________________________________________________________________________________________________
     //
-    // TO Migrate to 2018 LTS just delete everything below and extend from
+    // TODO TO Migrate to 2018 LTS just delete everything below and extend from
     // MCRCountingDNBURNGenerator
     // _________________________________________________________________________________________________
     private static final Map<String, AtomicInteger> PATTERN_COUNT_MAP = new HashMap<>();
