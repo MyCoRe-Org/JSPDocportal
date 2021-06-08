@@ -182,7 +182,7 @@
         <xsl:variable name="recordID" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']" />
         <xsl:if test="$recordID">
           <a class="btn btn-primary ir-button-download"  
-             href="{$WebApplicationBaseURL}pdfdownload/recordIdentifier/{replace(recordID, '/','_')}" target="_blank">
+             href="{$WebApplicationBaseURL}do/pdfdownload/recordIdentifier/{replace(recordID, '/','_')}" target="_blank">
             <img align="left" src="{$WebApplicationBaseURL}images/download_pdf.png" title = "{mcri18n:translate('Webpage.docdetails.pdfdownload')}" />
             <strong>{mcri18n:translate('Webpage.docdetails.pdfdownload')}</strong>
           </a>
@@ -230,6 +230,65 @@
           </xsl:for-each>
           -->
        </div><!--Download area -->
+       
+       <div class="btn-group w-100 mt-5">
+         <div class="dropdown w-50">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuShow" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               <i class="far fa-eye pr-2"></i> Anzeigen
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuShow">
+              <!-- RosDok-Viewer -->
+              <xsl:variable name="url">{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier,'/','_')}</xsl:variable>
+              <xsl:variable name="startpagePath" select="if (//def.irControl/irControl/map[@key='ROOT']/entry[@key='start_image']) then (concat('/iview2/',//def.irControl/irControl/map[@key='ROOT']/entry[@key='start_image'],'.iview2')) else ()" />
+              <a class="dropdown-item" href="{$url}{$startpagePath}">
+                <img src="{$WebApplicationBaseURL}/themes/rosdok/images/rosdok_logo2.png" style="height:1.5em;padding-right:0.5em" />Viewer
+              </a>
+
+              <!-- DFG-Viewer -->
+              <xsl:if test="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='DV_METS' or @categid='METS']]">
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item background-primary" href="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}/dfgviewer">
+               <img src="{$WebApplicationBaseURL}images/dfgviewerLogo_blue.svg"  title="{mcri18n:translate('Webpage.docdetails.dfgviewer')}" style="height:1.5em;color:black"/>
+              </a>
+              </xsl:if>
+            </div>
+         </div>
+         <div class="dropdown w-50 text-right">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuDownload" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               <i class="fas fa-download pr-2"></i> Herunterladen
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuDownload">
+              <xsl:for-each select="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext']]">
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item px-2" >
+                  <xsl:call-template name="download-entry" />
+                </div>
+              </xsl:for-each>
+              <xsl:for-each select="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='data' or @categid='documentation' or @categid='supplement']]">
+                <xsl:variable name="derid" select="./@xlink:href" />
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item px-2" >
+                  <xsl:call-template name="download-entry" />
+                </div>
+              </xsl:for-each>
+              <xsl:if test="/mycoreobject[not(contains(@ID,'_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='DV_METS' or @categid='METS']]">
+                <xsl:variable name="recordID" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']" />
+                <xsl:if test="$recordID">
+                  <div class="dropdown-divider"></div>
+                  <div class="dropdown-item px-2" >
+                    <div style="width:350px">
+                      <img align="left" src="{$WebApplicationBaseURL}images/download_pdf.png" title="{mcri18n:translate('Webpage.docdetails.pdfdownload')}" style="height:1.5em;padding-right:0.5em;" />
+                      <a href="{$WebApplicationBaseURL}do/pdfdownload/recordIdentifier/{replace($recordID, '/','_')}" target="_blank">
+                        <strong>{mcri18n:translate('Webpage.docdetails.pdfdownload')}</strong>
+                      </a>
+                    </div>
+                  </div>
+                </xsl:if>
+              </xsl:if>
+            </div>
+         </div>
+       </div>
+       
        
        <xsl:if test="not(/mycoreobject/service/servstates/servstate/@categid='deleted')">
          <div class="ir-box mt-3">
@@ -382,6 +441,36 @@
          <br /><span class="small">{mcrstring:abbreviate-center(./maindoc, 40)}</span>
       </a>
     </div>
+  </xsl:template>
+  
+  <xsl:template name="download-entry">
+    <xsl:variable name="mcrid" select="/mycoreobject/@ID" />
+    <xsl:variable name="derid" select="./@xlink:href" />
+    <xsl:variable name="fulltext_url">{$WebApplicationBaseURL}file/{$mcrid}/{$derid}/{./maindoc/text()}</xsl:variable>
+      <div style="width:275px">
+         <xsl:choose>
+           <xsl:when test="ends-with(./maindoc, '.zip')">
+             <img align="left" src="{$WebApplicationBaseURL}images/download_zip.png" title="{mcri18n:translate('Webpage.docdetails.zipdownload')}" style="height:1.5em;padding-right:0.5em"/>
+           </xsl:when>
+           <xsl:when test="ends-with(./maindoc, '.pdf')">
+             <img align="left" src="{$WebApplicationBaseURL}images/download_pdf.png" title="{mcri18n:translate('Webpage.docdetails.pdfdownload')}" style="height:1.5em;padding-right:0.5em;margin-bottom:2em" />
+           </xsl:when>
+           <xsl:otherwise>
+             <img align="left" src="{$WebApplicationBaseURL}images/download_other.png" title="{mcri18n:translate('Webpage.docdetails.otherdownload')}" />
+           </xsl:otherwise>
+         </xsl:choose>
+         <a href="{$fulltext_url}" target="_blank">
+           <strong>{mcrclass:current-label-text(./classification[@classid='derivate_types'])}</strong>
+         </a>
+         <span class="small pl-2">({mcrstring:pretty-filesize(./maindoc_size)})</span> 
+         <a class="badge float-right py-1" download="{./maindoc}.md5" 
+            href="data:text/plain;charset=US-ASCII,{encode-for-uri(concat(./maindoc_md5,'  ', ./maindoc))}">
+            <i class="fas fa-download"></i> MD5</a>
+            <br />
+            <a href="{$fulltext_url}" target="_blank">
+             <span class="small">{mcrstring:abbreviate-center(./maindoc, 40)}</span>
+            </a>
+         </div>
   </xsl:template>
   
   <xsl:template name="biblio-formate">
