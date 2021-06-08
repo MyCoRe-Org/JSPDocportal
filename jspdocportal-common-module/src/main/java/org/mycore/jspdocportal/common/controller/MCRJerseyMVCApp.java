@@ -20,12 +20,14 @@ package org.mycore.jspdocportal.common.controller;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
+import org.mycore.common.config.MCRConfiguration2;
 
 public class MCRJerseyMVCApp extends ResourceConfig {
     public MCRJerseyMVCApp() {
         super();
         setApplicationName("MyCoRe Jersey MVC");
-        packages("org.mycore.jspdocportal.common.controller");
+        String packages = MCRConfiguration2.getString("MCR.JSPDocportal.MVCApp.packages").orElse("org.mycore.jspdocportal.common.controller");
+        packages(packages.split(","));
         property(JspMvcFeature.TEMPLATE_BASE_PATH, "/WEB-INF/views");
         register(MCRMakePathAbsoluteFilter.class);
         register(JspMvcFeature.class);
