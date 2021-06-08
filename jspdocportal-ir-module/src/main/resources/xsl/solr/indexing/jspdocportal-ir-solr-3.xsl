@@ -293,20 +293,23 @@
               <xsl:value-of select="$categid" />
             </field>
             <xsl:choose>
-              <xsl:when test="starts-with($categid,'doctype:histbest.print')">
-                <field name="ir.doctype_group_class.facet">doctype:histbest.print</field>
+              <xsl:when test="starts-with($categid,'doctype:histbest.print.')">
+                <field name="ir.material_class.facet">doctype:histbest.print</field>
               </xsl:when>
-              <xsl:when test="starts-with($categid,'doctype:histbest.manuscript')">
-                <field name="ir.doctype_group_class.facet">doctype:histbest.manuscript</field>
+              <xsl:when test="starts-with($categid,'doctype:histbest.newspaper.')">
+                <field name="ir.material_class.facet">doctype:histbest.newspaper</field>
               </xsl:when>
-              <xsl:when test="starts-with($categid,'doctype:histbest.musicalsource')">
-                <field name="ir.doctype_group_class.facet">doctype:histbest.musicalsource</field>
+              <xsl:when test="starts-with($categid,'doctype:histbest.manuscript.')">
+                <field name="ir.material_class.facet">doctype:histbest.manuscript</field>
               </xsl:when>
-              <xsl:when test="starts-with($categid,'doctype:histbest.personalpapers')">
-                <field name="ir.doctype_group_class.facet">doctype:histbest.personalpapers</field>
+              <xsl:when test="starts-with($categid,'doctype:histbest.musicalsource.')">
+                <field name="ir.material_class.facet">doctype:histbest.musicalsource</field>
               </xsl:when>
-              <xsl:when test="starts-with($categid,'doctype:histbest.archivalmaterial')">
-                <field name="ir.doctype_group_class.facet">doctype:histbest.archivalmaterial</field>
+              <xsl:when test="starts-with($categid,'doctype:histbest.personalpapers.')">
+                <field name="ir.material_class.facet">doctype:histbest.personalpapers</field>
+              </xsl:when>
+              <xsl:when test="starts-with($categid,'doctype:histbest.archivalmaterial.')">
+                <field name="ir.material_class.facet">doctype:histbest.archivalmaterial</field>
               </xsl:when>
             </xsl:choose>
           </xsl:for-each>

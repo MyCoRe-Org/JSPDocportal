@@ -106,7 +106,7 @@
 	},
 	{
 		"add-field": {
-			"name": "ir.doctype_group_class.facet",
+			"name": "ir.material_class.facet",
 			"type": "string",
 			"multiValued": true,
 			"stored": true
