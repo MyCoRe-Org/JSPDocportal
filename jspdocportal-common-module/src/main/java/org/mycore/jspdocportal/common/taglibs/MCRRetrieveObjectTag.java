@@ -160,7 +160,7 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
                 try {
                     SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
                     SolrQuery solrQuery = new SolrQuery();
-                    solrQuery.setQuery("query");
+                    solrQuery.setQuery(query);
                     solrQuery.setFields("id");
                     QueryResponse solrResponse = solrClient.query(solrQuery);
                     SolrDocumentList solrResults = solrResponse.getResults();

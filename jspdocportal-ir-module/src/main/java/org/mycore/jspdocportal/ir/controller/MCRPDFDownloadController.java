@@ -73,7 +73,7 @@ public class MCRPDFDownloadController {
         model.put("errorMessages",  errorMessages);
         model.put("requestURL", request.getRequestURL().toString());
         
-        String path = request.getPathInfo().replace("/actions/pdfdownload/recordIdentifier", "").replace("..",
+        String path = request.getPathInfo().replace("pdfdownload/recordIdentifier", "").replace("..",
                 "");
         while (path.startsWith("/")) {
             path = path.substring(1);

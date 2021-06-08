@@ -37,7 +37,7 @@
    
 	 
 	 <c:if test="${empty it.errorMessages}">
-        <mcr:retrieveObject query="recordIdentifier:${fn:replace(it.recordIdentifier, 'rosdok_', 'rosdok%252F')}" varDOM="doc" />
+        <mcr:retrieveObject query="recordIdentifier:${fn:replace(it.recordIdentifier, 'rosdok_', 'rosdok/')}" varDOM="doc" />
 		<mcrdd:setnamespace prefix="mods" uri="http://www.loc.gov/mods/v3" />
 		<x:choose>
    		<x:when select="$doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo">
@@ -47,7 +47,7 @@
                   <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/document2header_html.xsl" />      
                 </div>
                 <div class="col-xs-2 col-xs-offset-1">
-                  <search:derivate-image mcrid="${mcrid}" width="100%" labelContains="cover" />
+                  <search:derivate-image mcrobj="${doc}" width="100%" category="cover" />
                 </div>      
             </div>
      	</x:when>
