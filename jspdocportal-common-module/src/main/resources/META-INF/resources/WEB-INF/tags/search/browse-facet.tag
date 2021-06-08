@@ -1,9 +1,6 @@
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld"%>
-
 <%@ taglib prefix="search" tagdir="/WEB-INF/tags/search"%>
 
 <%@ attribute name="result" required="true" type="org.mycore.jspdocportal.common.search.MCRSearchResultDataBean"%>
