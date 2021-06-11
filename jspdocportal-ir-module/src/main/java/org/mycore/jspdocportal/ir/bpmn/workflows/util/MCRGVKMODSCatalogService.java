@@ -28,7 +28,7 @@ public abstract class MCRGVKMODSCatalogService implements MCRMODSCatalogService 
         Filters.element(), null, MODS_NAMESPACE);
 
     private static XPathExpression<Element> XP_PPN = XPathFactory.instance().compile(
-        "//mods:mods/mods:identifier[@type='PPN']",
+        "//mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']",
         Filters.element(), null, MODS_NAMESPACE);
 
     private static XPathExpression<Element> XP_RECORD_ID = XPathFactory.instance().compile(
