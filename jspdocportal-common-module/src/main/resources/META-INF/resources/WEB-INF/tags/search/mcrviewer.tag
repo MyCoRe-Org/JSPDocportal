@@ -83,7 +83,7 @@
                 permalink: {
                     enabled: true,
                     updateHistory: false,
-                    viewerLocationPattern:"{baseURL}/mcrviewer/id/{derivate}{file}"
+                    viewerLocationPattern:"{baseURL}/mcrviewer/id/{derivate}/{file}"
                 }
             });
         });
@@ -154,16 +154,16 @@
                 objId: "",
                 webApplicationBaseURL: "${applicationScope.WebApplicationBaseURL}",
                 imageOverview : {
-                    enabled: false
+                    enabled: true
                 },
                 chapter: {
-                    enabled: false,
+                    enabled: true,
                     showOnStart: false
                 },
                 permalink: {
                     enabled: true,
                     updateHistory: false,
-                    viewerLocationPattern:"{baseURL}/mcrviewer/recordIdentifier/${fn:replace(recordIdentifier,'/','_')}{file}"
+                    viewerLocationPattern:"{baseURL}/mcrviewer/recordIdentifier/${fn:replace(recordIdentifier,'/','_')}/{file}"
                 },
                 canvas: {
                     overview: {
