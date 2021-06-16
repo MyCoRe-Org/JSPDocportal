@@ -155,7 +155,7 @@
         <xsl:choose>
           <xsl:when test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='doi']">
             <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='doi']">
-              <p><a href="https://doi.org/{.}">https://doi.org/<br class="d-md-none"/>{.}</a></p>
+              <p><a href="https://doi.org/{.}">https://doi.org/<br class="d-xl-none"/>{.}</a></p>
             </xsl:for-each>
           </xsl:when>
           <xsl:when test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='purl']">
