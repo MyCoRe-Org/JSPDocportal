@@ -463,7 +463,7 @@
           <td><table id="ir-table-docdetails-technical" class="ir-table-docdetails-values">
             <xsl:variable name="categ_mcrid" select="mcrclass:category('identifier', 'mycore_object_id')" />
             <tr><th><abbr title="{$categ_mcrid/label[@xml:lang=$CurrentLang]/@description}">{$categ_mcrid/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
-                <td><a href="{/mycoreobject/@ID}">{/mycoreobject/@ID}</a></td>
+                <td><a href="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}">{/mycoreobject/@ID}</a></td>
             </tr>
             <tr><th>erstellt:</th>
                 <td>am {format-dateTime(/mycoreobject/service/servdates/servdate[@type='createdate'], '[D01].[M01].[Y0001]')}
