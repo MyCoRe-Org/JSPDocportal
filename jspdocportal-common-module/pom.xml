@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.mycore.jspdocportal</groupId>
     <artifactId>jspdocportal-parent</artifactId>
-    <version>2020.06-overhaul-SNAPSHOT</version>
+    <version>2021.06-SNAPSHOT</version>
   </parent>
   <artifactId>jspdocportal-common-module</artifactId>
   <packaging>jar</packaging>
