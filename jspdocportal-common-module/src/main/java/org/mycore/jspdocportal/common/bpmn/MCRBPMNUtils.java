@@ -25,6 +25,7 @@ import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.access.MCRRuleAccessInterface;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRPathContent;
@@ -55,7 +56,7 @@ public class MCRBPMNUtils {
             xmlOut.output(mcrObj.createXML(), bw);
         } catch (Exception ex) {
             throw new MCRException(
-                    "Cant save MCR Object " + mcrObj.getId().toString() + " as file " + wfObjFile.toString());
+                "Cant save MCR Object " + mcrObj.getId().toString() + " as file " + wfObjFile.toString());
         }
     }
 
@@ -80,7 +81,7 @@ public class MCRBPMNUtils {
             xmlOut.output(mcrDer.createXML(), bw);
         } catch (Exception ex) {
             throw new MCRException(
-                    "Could not save MCR Derivate " + mcrDer.getId().toString() + " into workfow directory.", ex);
+                "Could not save MCR Derivate " + mcrDer.getId().toString() + " into workfow directory.", ex);
         }
     }
 
@@ -272,22 +273,28 @@ public class MCRBPMNUtils {
         }
     }
 
+    //delete after migration to xml base access system
     public static Map<String, Element> getAccessRulesMap(String objid) {
         Iterator<String> it = MCRAccessManager.getPermissionsForID(objid).iterator();
         Map<String, Element> htRules = new Hashtable<String, Element>();
-        while (it.hasNext()) {
-            String s = it.next();
-            Element eRule = MCRAccessManager.getAccessImpl().getRule(objid, s);
-            htRules.put(s, eRule);
+        if (MCRAccessManager.getAccessImpl() instanceof MCRRuleAccessInterface) {
+            while (it.hasNext()) {
+                String s = it.next();
+                Element eRule = ((MCRRuleAccessInterface) MCRAccessManager.getAccessImpl()).getRule(objid, s);
+                htRules.put(s, eRule);
+            }
         }
         return htRules;
     }
 
+    //delete after migration to xml base access system
     public static void setAccessRulesMap(String objid, Map<String, Element> htRules) {
-        if (htRules != null) {
-            MCRAccessManager.getAccessImpl().removeAllRules(objid);
-            for (String perm : htRules.keySet()) {
-                MCRAccessManager.addRule(objid, perm, htRules.get(perm), "");
+        if (MCRAccessManager.getAccessImpl() instanceof MCRRuleAccessInterface) {
+            if (htRules != null) {
+                ((MCRRuleAccessInterface) MCRAccessManager.getAccessImpl()).removeAllRules(objid);
+                for (String perm : htRules.keySet()) {
+                    MCRAccessManager.addRule(objid, perm, htRules.get(perm), "");
+                }
             }
         }
     }

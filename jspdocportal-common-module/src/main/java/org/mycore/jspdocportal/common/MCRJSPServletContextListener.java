@@ -71,7 +71,6 @@ public class MCRJSPServletContextListener implements ServletContextListener {
         LOGGER.debug("Application " + sce.getServletContext().getServletContextName() + " started");
         MCRNavigationUtil.loadNavigation(sce.getServletContext());
         Navigations.loadNavigation(sce.getServletContext());
-        createNonExistingAdminPermissions();
         registerDefaultMessageBundle(sce.getServletContext());
         sce.getServletContext().setAttribute("WebApplicationBaseURL", MCRFrontendUtil.getBaseURL());
         MCRSessionMgr.releaseCurrentSession();
@@ -108,24 +107,6 @@ public class MCRJSPServletContextListener implements ServletContextListener {
      * @param userid
      * @return boolean false if there was an Exception
      */
-
-    private boolean createNonExistingAdminPermissions() {
-        try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
-            Collection<String> savedPermissions = MCRAccessManager.getAccessImpl().getPermissions();
-            String permissions = MCRConfiguration2.getString("MCR.AccessAdminInterfacePermissions")
-                    .orElse("admininterface-access,admininterface-user,admininterface-accessrules");
-            for (Iterator<?> it = Arrays.asList(permissions.split(",")).iterator(); it.hasNext();) {
-                String permission = ((String) it.next()).trim().toLowerCase(Locale.GERMAN);
-                if (!permission.equals("") && !savedPermissions.contains(permission)) {
-                    MCRAccessManager.getAccessImpl().addRule(permission, MCRAccessManager.getFalseRule(), "");
-                }
-            }
-        } catch (MCRException e) {
-            LOGGER.error("could not create admin interface permissions", e);
-            return false;
-        }
-        return true;
-    }
 
     private void registerDefaultMessageBundle(ServletContext sc) {
         Locale loc = new Locale(

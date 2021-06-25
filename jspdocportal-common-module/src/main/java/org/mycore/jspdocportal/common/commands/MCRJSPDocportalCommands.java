@@ -59,6 +59,7 @@ import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.access.MCRAccessException;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.access.MCRRuleAccessInterface;
 import org.mycore.backend.jpa.MCREntityManagerProvider;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
@@ -159,12 +160,17 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
             MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(id));
 
             //               add ACL's
-            Iterator<String> it = MCRAccessManager.getPermissionsForID(id.toString()).iterator();
-            while (it.hasNext()) {
-                String s = it.next();
-                Element rule = MCRAccessManager.getAccessImpl().getRule(id.toString(), s);
-                mcrObj.getService().addRule(s, rule);
+            if (MCRAccessManager.getAccessImpl() instanceof MCRRuleAccessInterface) {
+                Iterator<String> it = MCRAccessManager.getPermissionsForID(id.toString()).iterator();
+                while (it.hasNext()) {
+                    String s = it.next();
+
+                    Element rule = ((MCRRuleAccessInterface) MCRAccessManager.getAccessImpl()).getRule(id.toString(),
+                        s);
+                    mcrObj.getService().addRule(s, rule);
+                }
             }
+            
             // build JDOM
             Document xml = mcrObj.createXML();
 
