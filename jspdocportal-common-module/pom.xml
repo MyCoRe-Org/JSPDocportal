@@ -98,8 +98,6 @@
     <dependency>
       <groupId>org.glassfish.jersey.ext</groupId>
       <artifactId>jersey-mvc-jsp</artifactId>
-      <!-- starting in 2021.06LTS this version is magaged by MyCoRe -->
-      <version>2.32</version>
     </dependency>
     <dependency>
       <groupId>org.glassfish.jersey.media</groupId>
