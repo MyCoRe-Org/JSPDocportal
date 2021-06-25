@@ -8,8 +8,8 @@ import org.mycore.pi.MCRPersistentIdentifier;
 import org.mycore.pi.exceptions.MCRPersistentIdentifierException;
 
 public class MCRLocalIdentifierService extends MCRPIService<MCRLocalID> {
-    public MCRLocalIdentifierService(String registrationServiceID) {
-        super(registrationServiceID, MCRLocalID.TYPE);
+    public MCRLocalIdentifierService() {
+        super(MCRLocalID.TYPE);
     }
 
     @Override

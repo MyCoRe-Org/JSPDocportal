@@ -19,16 +19,9 @@ import org.mycore.pi.exceptions.MCRPersistentIdentifierException;
 
 public class MCRLocalIDGenerator extends MCRPIGenerator<MCRLocalID> {
 
-    //LTS 2017: initialize minimal ID to avoid conflicts on initial import
-    private static int MIN_ID = 251;
-
-    public MCRLocalIDGenerator(String generatorID) {
-        super(generatorID);
-    }
-
-    public MCRLocalIDGenerator() {
-        super("LocalIDGenerator");
-    }
+    // initialize minimal ID to avoid conflicts on initial import
+    // LTS 2017: 251 / LTS 2021: 3301
+    private static int MIN_ID = 3101;
 
     @Override
     public MCRLocalID generate(MCRBase mcrBase, String additional) throws MCRPersistentIdentifierException {

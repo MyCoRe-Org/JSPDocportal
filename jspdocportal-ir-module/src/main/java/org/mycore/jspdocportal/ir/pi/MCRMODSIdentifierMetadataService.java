@@ -13,9 +13,6 @@ import org.mycore.pi.exceptions.MCRPersistentIdentifierException;
 
 public class MCRMODSIdentifierMetadataService extends MCRAbstractMODSMetadataService {
     private Logger LOGGER = LogManager.getLogger();
-    public MCRMODSIdentifierMetadataService(String inscriberID) {
-        super(inscriberID);
-    }
 
     @Override
     public void insertIdentifier(MCRPersistentIdentifier identifier, MCRBase base, String additional)

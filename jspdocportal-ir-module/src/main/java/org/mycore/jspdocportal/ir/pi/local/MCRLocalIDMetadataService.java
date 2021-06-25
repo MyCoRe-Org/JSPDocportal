@@ -14,10 +14,6 @@ import org.mycore.pi.exceptions.MCRPersistentIdentifierException;
 
 public class MCRLocalIDMetadataService extends MCRPIMetadataService<MCRLocalID> {
 
-    public MCRLocalIDMetadataService(String inscriberID) {
-        super(inscriberID);
-    }
-
     @Override
     public void insertIdentifier(MCRLocalID identifier, MCRBase base, String additional)
         throws MCRPersistentIdentifierException {
