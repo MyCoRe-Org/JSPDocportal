@@ -167,7 +167,7 @@
                <i class="far fa-eye pr-2"></i> Anzeigen
             </button>
             
-            <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuShow">
+            <div class="dropdown-menu w-100 border-primary" aria-labelledby="dropdownMenuShow" style="border-width:2px">
               <!-- RosDok-Viewer -->
 
               <xsl:if test="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext' or @categid='MCRVIEWER_METS']]">
@@ -193,7 +193,7 @@
             <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="dropdownMenuDownload" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                <i class="fas fa-download pr-2"></i> Herunterladen
             </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuDownload">
+            <div class="dropdown-menu border-secondary" aria-labelledby="dropdownMenuDownload" style="border-width:2px">
               <xsl:for-each select="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext']]">
                 <div class="dropdown-divider"></div>
                 <xsl:call-template name="download-entry" />
