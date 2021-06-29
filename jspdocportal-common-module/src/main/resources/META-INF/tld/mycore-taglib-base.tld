@@ -767,7 +767,7 @@
 	</tag>
 
 	<tag>
-		<name>displayClassificationCategory</name>
+		<name>displayCategory</name>
 		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRDisplayClassificationCategoryTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
@@ -787,9 +787,15 @@
 		</attribute>
 		<attribute>
 			<name>lang</name>
-			<required>true</required>
+			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+        <attribute>
+           <name>showDescription</name>
+           <required>false</required>
+           <rtexprvalue>true</rtexprvalue>
+           <type>java.lang.Boolean</type>
+        </attribute>
 		<!-- A Tag, that displays the text of a category in a MCR classification -->
 	</tag>
 

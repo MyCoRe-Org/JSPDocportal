@@ -7,6 +7,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
@@ -14,20 +15,34 @@ import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 
 public class MCRDisplayClassificationCategoryTag extends SimpleTagSupport {
     private static MCRCategoryDAO categoryDAO = MCRCategoryDAOFactory.getInstance();
+
     private static Logger LOGGER = LogManager.getLogger(MCRDisplayClassificationCategoryTag.class.getName());
 
     private String lang;
+
     private String classid;
+
     private String categid;
 
+    private boolean showDescription = false;
+
     public void doTag() throws JspException, IOException {
+        if (lang == null) {
+            lang = MCRSessionMgr.getCurrentSession().getCurrentLanguage();
+        }
         if (classid != null && categid != null && lang != null) {
             try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
-                String text = categoryDAO.getCategory(new MCRCategoryID(classid, categid), 0).getLabel(lang).get()
+                if (showDescription) {
+                    String descr = categoryDAO.getCategory(new MCRCategoryID(classid, categid), 0).getLabel(lang).get()
+                        .getDescription();
+                    getJspContext().getOut().write(descr);
+                } else {
+                    String text = categoryDAO.getCategory(new MCRCategoryID(classid, categid), 0).getLabel(lang).get()
                         .getText();
-                getJspContext().getOut().write(text);
+                    getJspContext().getOut().write(text);
+                }
             } catch (Exception e) {
-                LOGGER.error("could not display classification", e);
+                LOGGER.error("could not display category " + classid + ":" + categid + "@" + lang, e);
             }
         }
     }
@@ -51,6 +66,10 @@ public class MCRDisplayClassificationCategoryTag extends SimpleTagSupport {
             this.classid = valueURI.substring(start + 1, sep);
             this.categid = valueURI.substring(sep + 1);
         }
+    }
+
+    public void setShowDescription(boolean b) {
+        showDescription = b;
     }
 
 }

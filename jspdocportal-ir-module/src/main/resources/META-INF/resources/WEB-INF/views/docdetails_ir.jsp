@@ -134,7 +134,7 @@
                           <c:if test="${not hasAccess}">
                            <c:set var="valueURI"><x:out select="$doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='accesscondition']/@valueURI" /></c:set>
                            <div class="ir-box ir-box-bordered-emph" style="margin-bottom:30px">
-                              <mcr:displayClassificationCategory valueURI="${valueURI}" lang="x-display-de"/>
+                              <mcr:displayCategory valueURI="${valueURI}" showDescription="true"/>
                             </div>
                           </c:if>
                           <c:if test="${hasAccess}">
@@ -149,7 +149,7 @@
                          <c:if test="${not hasAccess}">
                            <c:set var="valueURI"><x:out select="$doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='accesscondition']/@valueURI" /></c:set>
                            <div class="ir-box ir-box-bordered-emph" style="margin-bottom:30px">
-                             <mcr:displayClassificationCategory valueURI="${valueURI}" lang="x-display-de"/>
+                             <mcr:displayCategory valueURI="${valueURI}" showDescription="true"/>
                            </div>
                          </c:if>
                          <c:if test="${hasAccess}">
