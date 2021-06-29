@@ -7,6 +7,7 @@
   xmlns:mcrclass="http://www.mycore.de/xslt/classification"
   xmlns:mcrstring="http://www.mycore.de/xslt/stringutils"
   xmlns:mcrmods="http://www.mycore.de/xslt/mods"
+  xmlns:mcracl="http://www.mycore.de/xslt/acl"
   xmlns:json="http://www.w3.org/2005/xpath-functions"
   
   exclude-result-prefixes="mods xlink"
@@ -23,6 +24,7 @@
   <xsl:import href="resource:xsl/functions/classification.xsl" />
   <xsl:import href="resource:xsl/functions/stringutils.xsl" />
   <xsl:import href="resource:xsl/functions/mods.xsl" />
+  <xsl:import href="resource:xsl/functions/acl.xsl" />
     
   <xsl:template match="/">
     <!-- Provider -->
@@ -77,31 +79,16 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
+   
+    <xsl:variable name="derid" select="/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='MCRVIEWER_METS' or @categid='fulltext']]/@xlink:href" />
+    <xsl:variable name="access" select="mcracl:check-permission($derid, 'read')" />
     
     <xsl:choose>
-      <xsl:when test="$showViewer">
+      <xsl:when test="$showViewer and $access">
         <div class="ir-box ir-box-docdetails-image text-center" style="position:relative">
-    	  <a id="ir-thumbnail-image-link" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID,'/','_')}" title="Im MyCoRe Viewer anzeigen"></a>
-    	  <!-- curly bracets are quoted!!! -->
-          <script>
-             var image = new Image();
-             image.onload = function() {{
-                image.style.width = "150px";
-                image.classList.add("border");
-                image.classList.add("border-secondary");
-                document.getElementById("ir-thumbnail-image-link").appendChild(image);
-             }}
-             image.onerror = function() {{
-                // image did not load - show default image
-                var err = new Image();
-                err.style.width = "150px";
-                err.src = "{$WebApplicationBaseURL}images/filetypeicons/empty.png";
-                document.getElementById("ir-thumbnail-image-link").appendChild(err);
-             }}
-             image.src = "{$image/img/@src}";
-          </script>
-          
-          <div class="text-center" style="position:absolute;top:.5em;right:0;left:0">
+    	  <a id="ir-thumbnail-image-parent" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID,'/','_')}" 
+             style="display:inline-block;min-height:2em" title="Im MyCoRe Viewer anzeigen"></a>
+             <div class="text-center" style="position:absolute;top:.5em;right:0;left:0;">
             <a class="btn btn-light btn-sm border border-secondary" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID, '/','_')}" title="Im MyCoRe Viewer anzeigen">
               <i class="far fa-eye text-primary"></i> Anzeigen
             </a>
@@ -125,28 +112,28 @@
         </div>
       </xsl:when>
       <xsl:otherwise>
-        <div id="ir-thumbnail-image" class="ir-box ir-box-docdetails-image" style="position:relative">
+        <div id="ir-thumbnail-image-parent" class="ir-box ir-box-docdetails-image" style="position:relative">
         </div>
-        <!-- curly bracets are quoted!!! -->
-          <script>
-             var image = new Image();
-             image.onload = function() {{
-                image.style.width = "150px";
-                image.classList.add("border");
-                image.classList.add("border-secondary");
-                document.getElementById("ir-thumbnail-image").appendChild(image);
-             }}
-             image.onerror = function() {{
-                // image did not load - show default image
-                var err = new Image();
-                err.style.width = "150px";
-                err.src = "{$WebApplicationBaseURL}images/filetypeicons/empty.png";
-                document.getElementById("ir-thumbnail-image").appendChild(err);
-             }}
-             image.src = "{$image/img/@src}";
-          </script>
       </xsl:otherwise>
    </xsl:choose>
+   <!-- curly bracets are quoted!!! -->
+   <script>
+     var image = new Image();
+     image.onload = function() {{
+       image.style.width = "150px";
+       image.classList.add("border");
+       image.classList.add("border-secondary");
+       document.getElementById("ir-thumbnail-image-parent").appendChild(image);
+     }}
+     image.onerror = function() {{
+       // image did not load - show default image
+       var err = new Image();
+       err.style.width = "150px";
+       err.src = "{$WebApplicationBaseURL}images/filetypeicons/empty.png";
+       document.getElementById("ir-thumbnail-image-parent").appendChild(err);
+     }}
+     image.src = "{$image/img/@src}";
+   </script>
  
    <!-- Dauerhaft zitieren -->
      <xsl:if test="not(/mycoreobject/service/servstates/servstate/@categid='deleted')">
@@ -172,7 +159,8 @@
       </div>
     </xsl:if>
     
-    <div style="mb-3">
+    <xsl:if test="$access">
+      <div style="mb-3">
        <xsl:if test="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext' or contains(@categid, 'METS')]]">
          <div class="dropdown w-100 mt-3">
             <button class="btn btn-primary dropdown-toggle w-100" type="button" id="dropdownMenuShow" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -229,7 +217,7 @@
                   </div>
                 </xsl:if>
               </xsl:if>
-              
+             
                <!-- called by: rosdok_document_0000015736 ->
       NEU + ÜBERARBEITEN: aus 2. MODS-Sektion auslesen ... 
       <xsl:for-each select="/mycoreobject/service/servflags/servflag[@type='external-content']">
@@ -259,12 +247,12 @@
           -->
               
               
-            </div>
+             </div>
+           </div>
          </div>
-       </div>
+    </xsl:if>
        
-       
-       <xsl:if test="not(/mycoreobject/service/servstates/servstate/@categid='deleted')">
+    <xsl:if test="not(/mycoreobject/service/servstates/servstate/@categid='deleted')">
          <div class="ir-box mt-3">
            <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
              <xsl:variable name="class_provider" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" />
@@ -325,14 +313,14 @@
            <div class="shariff" data-url="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}"
              data-services="[&quot;twitter&quot;, &quot;facebook&quot;, &quot;linkedin&quot;, &quot;xing&quot;, &quot;whatsapp&quot;, &quot;telegram&quot;, &quot;mail&quot;, &quot;info&quot;]"
              data-mail-url="mailto:" data-mail-subject="{mcri18n:translate('OMD.ir.shariff.subject')}" data-mail-body="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}"
-             data-orientation="horizontal" data-theme="standard">
+             data-orientation="horizontal" data-theme="white">
            </div> <!-- data-theme=standard|grey|white --> 
            <script src="{$WebApplicationBaseURL}modules/shariff_3.2.1/shariff.min.js"></script>
            <p></p>
          </div>
-       </xsl:if>
+    </xsl:if>
         
-       <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='licenseinfo'][contains(@valueURI, 'licenseinfo#work')]">
+    <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='licenseinfo'][contains(@valueURI, 'licenseinfo#work')]">
          <div class="ir-box">
            <h4>Rechte</h4>
            <xsl:variable name="categ" select="mcrmods:to-mycoreclass(., 'single')/categories/category" />
@@ -346,10 +334,10 @@
              <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@description" disable-output-escaping="true" />
            </p>
          </div>
-       </xsl:for-each>
+    </xsl:for-each>
 
-       <!--Tools -->
-       <div class="my-3"> 
+    <!--Tools -->
+    <div class="my-3"> 
           <div class="float-right">
             <button type="button" class="btn btn-sm ir-button-tools hidden-xs" data-toggle="collapse" data-target="#hiddenTools"
                     title="{mcri18n:translate('Webpage.tools.menu4experts')}">
@@ -383,7 +371,7 @@
               </xsl:if>
             </div>
           </div>
-       </div>  
+    </div>  
   </xsl:template>
   
   <xsl:template name="download-entry">
