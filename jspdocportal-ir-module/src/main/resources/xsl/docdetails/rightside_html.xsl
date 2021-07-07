@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="3.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:fn="http://www.w3.org/2005/xpath-functions"
   xmlns:mods="http://www.loc.gov/mods/v3" 
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
@@ -254,6 +255,12 @@
        
     <xsl:if test="not(/mycoreobject/service/servstates/servstate/@categid='deleted')">
          <div class="ir-box mt-3">
+           <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='edited']/mods:mods/mods:abstract[@type='advice']">
+             <h4>Hinweise</h4>
+              <xsl:variable name="dataURLcontent" select="document(./@altFormat)" />
+              <xsl:value-of select="fn:serialize($dataURLcontent/*/node())" disable-output-escaping="true"/>
+           </xsl:for-each>
+         
            <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
              <xsl:variable name="class_provider" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" />
              <xsl:variable name="catalogs">
@@ -266,7 +273,7 @@
                    <xsl:value-of select="document('classification:metadata:-1:children:provider')//category[label[@xml:lang='x-isil']/@text=$isil]/label[@xml:lang='x-catalog']/@text" />                 
                  </xsl:otherwise>
                </xsl:choose>
-             </xsl:variable> 
+             </xsl:variable>
            
              <h4>Export</h4>
              <p>
