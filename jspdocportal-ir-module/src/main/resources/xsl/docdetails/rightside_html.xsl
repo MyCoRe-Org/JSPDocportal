@@ -218,37 +218,12 @@
                   </div>
                 </xsl:if>
               </xsl:if>
-             
-               <!-- called by: rosdok_document_0000015736 ->
-      NEU + ÜBERARBEITEN: aus 2. MODS-Sektion auslesen ... 
-      <xsl:for-each select="/mycoreobject/service/servflags/servflag[@type='external-content']">
-        <c:set var="theXML"><xsl:out select="./text()" escapeXml="false" /></c:set>
-            <xsl:parse var="theFileDoc" xml="${theXML}" />
-            <xsl:set var="theFile" select="$theFileDoc/file" />
-            <a class="btn btn-default ir-button ir-button-download" style="text-align:left" title="MD5: <xsl:out select="$theFile/@MD5" />" 
-               href="<xsl:out select="$theFile/@URL" />" target="_blank">
-              <xsl:choose>
-                <xsl:when test="contains($theFile/@URL, '.zip')">
-                  <img style="vertical-align:middle;height: 38px;margin-right:12px;float:left" src="{$WebApplicationBaseURL}images/download_zip.png" />  
-                </xsl:when>
-                <xsl:when test="contains($theFile/@URL, '.pdf')">
-                  <img style="vertical-align:middle;height: 38px;margin-right:12px;float:left" src="{$WebApplicationBaseURL}images/download_pdf.png" />  
-                </xsl:when>
-                <xsl:otherwise>
-                  <img style="vertical-align:middle;height: 38px;margin-right:12px;float:left" src="{$WebApplicationBaseURL}images/download_other.png" />
-                </xsl:otherwise>
-              </xsl:choose>
-              <c:set var="mesKey">OMD.derivatedisplay.<xsl:out select="$theFile/@USE"/></c:set>
-              <strong>mcri18n:translate('${mesKey}" /></strong><br />
-              <span style="font-size: 85%">
-                <xsl:out select="$theFile/@OWNERID" />&nbsp;&nbsp;&nbsp;(<xsl:out select="round($theFile/@SIZE div 1024 div 1024 * 10) div 10" /> MB)<br />
-              </span>
-            </a>
-          </xsl:for-each>
-          -->
-              
-              
-             </div>
+              <!-- external downlaod files (large data) configured in mods:extension[@displayLabel='external_content'] -->
+              <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='edited']/mods:mods/mods:extension[@displayLabel='external_content']/file">
+                <div class="dropdown-divider"></div>
+                 <xsl:call-template name="download-external" />
+              </xsl:for-each>
+            </div>
            </div>
          </div>
     </xsl:if>
@@ -407,6 +382,32 @@
       <br />
       <a href="{$fulltext_url}" target="_blank">
         <span class="small">{mcrstring:abbreviate-center(./maindoc, 40)}</span>
+      </a>
+    </div>
+  </xsl:template>
+  
+  <xsl:template name="download-external">
+    <div class="dropdown-item px-2 d-inline-block" onclick="location.href='{./@URL}'">
+      <xsl:choose>
+        <xsl:when test="./@MIMETYPE='application/zip'">
+          <img align="left" src="{$WebApplicationBaseURL}images/download_zip.png" title="{mcri18n:translate('Webpage.docdetails.zipdownload')}" style="height:1.5em;padding-right:0.5em"/>
+        </xsl:when>
+        <xsl:when test="./@MIMETYPE='application/pdf'">
+          <img align="left" src="{$WebApplicationBaseURL}images/download_pdf.png" title="{mcri18n:translate('Webpage.docdetails.pdfdownload')}" style="height:1.5em;padding-right:0.5em;margin-bottom:2em" />
+        </xsl:when>
+        <xsl:otherwise>
+          <img align="left" src="{$WebApplicationBaseURL}images/download_other.png" title="{mcri18n:translate('Webpage.docdetails.otherdownload')}" />
+        </xsl:otherwise>
+      </xsl:choose>
+      <strong>{mcrclass:current-label-text(document(concat('classification:metadata:0:children:derivate_types:',@USE))//category)}</strong>
+      <span class="small pl-2">({mcrstring:pretty-filesize(./@SIZE)})</span> 
+      <a class="float-right py-1 small" download="{./@OWNERID}.md5" onclick="event.stopPropagation();"
+           href="data:text/plain;charset=US-ASCII,{encode-for-uri(concat(./@CHECKSUM,'  ', ./@OWNERID))}">
+        <i class="fas fa-download"></i> MD5
+      </a>
+      <br />
+      <a href="{./@URL}" target="_blank">
+        <span class="small">{mcrstring:abbreviate-center(./@OWNERID, 40)}</span>
       </a>
     </div>
   </xsl:template>
