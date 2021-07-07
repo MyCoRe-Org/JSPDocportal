@@ -14,11 +14,11 @@
 
   <xsl:template match="/mycoreobject">
   <xsl:choose>
+    <xsl:when test="./metadata/def.modsContainer/modsContainer[@type='imported' or @type='created']/mods:mods/mods:titleInfo[@usage='primary']/mods:title">
+      <xsl:value-of select="./metadata/def.modsContainer/modsContainer[@type='imported' or @type='created']/mods:mods/mods:titleInfo[@usage='primary']/mods:title" />
+    </xsl:when>
     <xsl:when test="./metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods/mods:titleInfo/mods:title">
       <xsl:value-of select="./metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods/mods:titleInfo/mods:title" />
-    </xsl:when>
-    <xsl:when test="./metadata/def.modsContainer/modsContainer[@type='imported']/mods:mods/mods:titleInfo/mods:title[@type='primary']">
-      <xsl:value-of select="./metadata/def.modsContainer/modsContainer[@type='imported']/mods:mods/mods:titleInfo/mods:title[@type='primary']" />
     </xsl:when>
     <xsl:otherwise>
       <xsl:value-of select="mcri18n:translate('WF.common.newObject')" />
