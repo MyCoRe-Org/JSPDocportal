@@ -23,10 +23,6 @@ public abstract class MCRGVKMODSCatalogService implements MCRMODSCatalogService 
     private static Logger LOGGER = LogManager.getLogger(MCRGVKMODSCatalogService.class);
     public static final Namespace MODS_NAMESPACE = Namespace.getNamespace("mods", "http://www.loc.gov/mods/v3");
 
-    private static XPathExpression<Element> XP_URN = XPathFactory.instance().compile(
-        "//mods:mods/mods:identifier[@type='urn']",
-        Filters.element(), null, MODS_NAMESPACE);
-
     private static XPathExpression<Element> XP_PPN = XPathFactory.instance().compile(
         "//mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']",
         Filters.element(), null, MODS_NAMESPACE);
@@ -35,31 +31,13 @@ public abstract class MCRGVKMODSCatalogService implements MCRMODSCatalogService 
         "//mods:mods/mods:recordInfo/mods:recordIdentifier",
         Filters.element(), null, MODS_NAMESPACE);
 
-    private static XPathExpression<Element> XP_MODS_ROOT = XPathFactory.instance().compile("//*[./mods:mods]",
+    private static XPathExpression<Element> XP_MODS_ROOT = XPathFactory.instance().compile("//modsContainer[@type='created' or @type='imported'][./mods:mods]",
         Filters.element(), null, MODS_NAMESPACE);
     
     public void updateWorkflowFile(Path mcrFile, Document docJdom) {
         try {
             
             Element eModsContainer = XP_MODS_ROOT.evaluateFirst(docJdom);
-
-            Element eURN = XP_URN.evaluateFirst(docJdom);
-            if (eModsContainer != null && eURN != null) {
-                Element eMODS = retrieveMODSByURN(eURN.getTextTrim());
-                if (eMODS != null) {
-                    updateWorkflowMetadataFile(mcrFile, docJdom, eModsContainer, eMODS);
-                    return;
-                }
-            }
-
-            Element eRecordInfo = XP_RECORD_ID.evaluateFirst(docJdom);
-            if (eModsContainer != null && eRecordInfo != null) {
-                Element eMODS = retrieveMODSByPURL(eRecordInfo.getTextTrim());
-                if (eMODS != null) {
-                    updateWorkflowMetadataFile(mcrFile, docJdom, eModsContainer, eMODS);
-                    return;
-                }
-            }
 
             Element ePPN = XP_PPN.evaluateFirst(docJdom);
             if (eModsContainer != null && ePPN != null) {
@@ -69,6 +47,16 @@ public abstract class MCRGVKMODSCatalogService implements MCRMODSCatalogService 
                     return;
                 }
             }
+            
+            Element eRecordInfo = XP_RECORD_ID.evaluateFirst(docJdom);
+            if (eModsContainer != null && eRecordInfo != null) {
+                Element eMODS = retrieveMODSByPURL(eRecordInfo.getTextTrim());
+                if (eMODS != null) {
+                    updateWorkflowMetadataFile(mcrFile, docJdom, eModsContainer, eMODS);
+                    return;
+                }
+            }
+
 
             if (eModsContainer != null) {
                 Element eMODS = retrieveMODSByMyCoReID(docJdom.getRootElement().getAttributeValue("ID"));
@@ -86,19 +74,15 @@ public abstract class MCRGVKMODSCatalogService implements MCRMODSCatalogService 
         throws IOException {
         eModsContainer.removeContent();
         eModsContainer.addContent(eMODS.detach());
+        eModsContainer.setAttribute("type", "imported");
         XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
         try (BufferedWriter bw = Files.newBufferedWriter(mcrFile)) {
             outputter.output(docJdom, bw);
         }
     }
 
-    private Element retrieveMODSByURN(String urn) {
-        String query = "pica.urn=" + urn;
-        return retrieveMODSFromCatalogue(query);
-    }
-
     private Element retrieveMODSByPURL(String recordIdentifer) {
-        String query = "pica.url=purl*" + recordIdentifer.replace("/", "");
+        String query = "pica.url=purl*" + recordIdentifer.replace("/", "") + " and pica.abr=\""+getABLPrefix()+" doctype\"";
         return retrieveMODSFromCatalogue(query);
     }
 
@@ -116,6 +100,11 @@ public abstract class MCRGVKMODSCatalogService implements MCRMODSCatalogService 
     //RosDok: rosdok*resolveid
     //DBHSNB: digibib.hsnb.deresolveid
     public abstract String getResolvingURLPrefix();
+
+    
+    //RosDok: ROSDOK
+    //DBHSNB: DBHSNB
+    public abstract String getABLPrefix();
         
         
     public abstract Element retrieveMODSFromCatalogue(String sruQuery);

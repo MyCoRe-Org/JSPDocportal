@@ -1,8 +1,10 @@
 package org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -16,7 +18,9 @@ import org.apache.logging.log4j.Logger;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.variable.value.StringValue;
+import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.input.SAXBuilder;
 import org.mycore.access.MCRAccessException;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRException;
@@ -177,13 +181,20 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
         return false;
     }
 
-    /**
-     * provide default metadata = initial metadata for new mycore object null is
-     * allowed;
-     * 
-     * @return
-     */
-    public abstract MCRObjectMetadata getDefaultMetadata(String mcrBase);
+    public MCRObjectMetadata getDefaultMetadata(String mcrBase) {
+        SAXBuilder sax = new SAXBuilder();
+        try {
+            String xml = getDefaultMetadataXML(mcrBase);
+            Document doc = sax.build(new StringReader(xml));
+            MCRObjectMetadata mcrOMD = new MCRObjectMetadata();
+            mcrOMD.setFromDOM(doc.getRootElement());
+            return mcrOMD;
+        } catch (Exception e) {
+            throw new MCRException("Could not create default metadata", e);
+        }
+    }
+
+    protected abstract String getDefaultMetadataXML(String mcrBase);
 
     @Override
     public boolean commitMCRObject(DelegateExecution execution) {
@@ -290,7 +301,26 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
         return false;
     }
 
-    protected abstract String validate(MCRObjectID mcrObjID);
+    /**
+     * validation for the MyCoRe Object
+     * Subclasses may override this method for enhanced validation
+     * @param mcrObjID
+     * @return null if correct, error message otherwise
+     */
+
+    protected String validate(MCRObjectID mcrObjID) {
+        Path wfFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);
+        try {
+            @SuppressWarnings("unused")
+            MCRObject mcrWFObj = new MCRObject(wfFile.toUri());
+        } catch (SAXParseException e) {
+            return "XML Error: " + e.getMessage();
+        } catch (IOException e) {
+            return "I/O-Error: " + e.getMessage();
+        }
+        return null;
+
+    }
 
     private boolean resetMetadataAndCleanupWorkflowDir(MCRObjectID mcrObjID) {
         if (MCRMetadataManager.exists(mcrObjID)) {
