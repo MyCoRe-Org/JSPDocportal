@@ -46,19 +46,19 @@
             </xsl:if>
             <xsl:if test="./mods:nameIdentifier[@type='orcid']">
               <tr>
-                <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/ORCIDiD_iconvector.svg"  style="height:1.5em" title="ORCID (Open Researcher and Contributor ID)" /></th>
+                <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/ORCIDiD_iconvector.svg"  style="height:1.5em" title="{mcri18n:translate('OMD.ir.docdetails.common.label.orcid')}" /></th>
                 <td><a href="https://orcid.org/{./mods:nameIdentifier[@type='orcid']}">{./mods:nameIdentifier[@type='orcid']}</a></td>
               </tr>
             </xsl:if>
             <xsl:if test="./mods:nameIdentifier[@type='gnd']">
               <tr>
-                <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Wabe.png" style="height:1.5em" title="GND (Gemeinsame Normdatei der Deutschen Nationalbiblitohek)" /></th>
+                <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Wabe.png" style="height:1.5em" title="{mcri18n:translate('OMD.ir.docdetails.common.label.gnd')}" /></th>
                 <td><a href="http://d-nb.info/gnd/{./mods:nameIdentifier[@type='gnd']}">{./mods:nameIdentifier[@type='gnd']}</a></td>
               </tr>
             </xsl:if>
             <xsl:for-each select="./mods:affiliation">
               <tr>
-                <th class="text-center align-text-top"><i class="fas fa-university" title="Einrichtung" style="font-size:1.5em"></i></th>
+                <th class="text-center align-text-top"><i class="fas fa-university" title="{mcri18n:translate('OMD.ir.docdetails.common.label.affiliation')}" style="font-size:1.5em"></i></th>
                 <td>{.}</td>
               </tr>
             </xsl:for-each>
@@ -105,7 +105,7 @@
             </xsl:if>
             <xsl:if test="./mods:nameIdentifier[@type='gnd']">
               <tr>
-                <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Wabe.png" style="height:1.5em" title="GND (Gemeinsame Normdatei der Deutschen Nationalbiblitohek)" /></th>
+                <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Wabe.png" style="height:1.5em" title="{mcri18n:translate('OMD.ir.docdetails.common.label.gnd')}" /></th>
                 <td><a href="http://d-nb.info/gnd/{./mods:nameIdentifier[@type='gnd']}">{./mods:nameIdentifier[@type='gnd']}</a></td>
               </tr>
             </xsl:if>

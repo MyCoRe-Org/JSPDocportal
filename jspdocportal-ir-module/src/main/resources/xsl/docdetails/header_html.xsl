@@ -32,7 +32,7 @@
       <xsl:if test="./service/servstates/servstate[@categid='reserved']">
         <div class="card card-info border border-info mb-3">
           <div class="card-header bg-info">
-            <h4 class="text-white">ID Reservierung</h4>
+            <h4 class="text-white">{mcri18n:translate('OMD.ir.docdetails.header.title.reserved')}</h4>
           </div>
           <div class="card-body">
             <xsl:for-each select="./metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods">
@@ -131,7 +131,7 @@
     
       <!-- erschienen in -->
       <xsl:for-each select="./mods:relatedItem[@otherType='appears_in']">
-        <p>In:
+        <p>{mcri18n:translate('OMD.ir.docdetails.header.label.appears_in')}
         <xsl:variable name="title">
           <xsl:for-each select="./mods:titleInfo">
             {./mods:nonSort} {./mods:title}
@@ -222,7 +222,7 @@
       <xsl:if test="/mycoreobject/metadata/def.irControl/irControl/map/list[@key='mets_filegroups']/entry[text() = 'ALTO']">
         <span>&#160;&#160;</span>
         <span class="badge ir-badge-header ir-badge-ocr">
-          OCR-Volltext
+          {mcri18n:translate('OMD.ir.docdetails.header.label.ocr')}
         </span>
       </xsl:if>
       </p> 
@@ -263,17 +263,17 @@
     <xsl:choose>
       <xsl:when test="./mods:classification[@displayLabel='accesscondition'][contains(@valueURI, 'restrictedaccess')]">
         <span class="badge ir-badge-header ir-badge-restrictedaccess">
-          Beschränkter <img style="height:1.5em;padding:0 .25em" src="{$WebApplicationBaseURL}images/logo_Closed_Access.png"/>  Zugang
+          {mcri18n:translate('OMD.ir.docdetails.header.restricted')} <img style="height:1.5em;padding:0 .25em" src="{$WebApplicationBaseURL}images/logo_Closed_Access.png"/>  {mcri18n:translate('OMD.ir.docdetails.header.access')}
         </span>
       </xsl:when>
       <xsl:when test="./mods:classification[@displayLabel='accesscondition'][contains(@valueURI, 'closedaccess')]">
         <span class="badge ir-badge-header ir-badge-closedaccess">
-            Kein <img style="height:1.5em;padding:0 .25em" src="{$WebApplicationBaseURL}images/logo_Closed_Access.png" />  Zugang
+            {mcri18n:translate('OMD.ir.docdetails.header.closed')} <img style="height:1.5em;padding:0 .25em" src="{$WebApplicationBaseURL}images/logo_Closed_Access.png" />  {mcri18n:translate('OMD.ir.docdetails.header.access')}
         </span>
       </xsl:when> 
       <xsl:otherwise>
         <span class="badge ir-badge-header ir-badge-openaccess">
-          Freier <img style="height:1.5em;padding:0 .25em" src="{$WebApplicationBaseURL}images/logo_Open_Access.png" /> Zugang
+          {mcri18n:translate('OMD.ir.docdetails.header.open')} <img style="height:1.5em;padding:0 .25em" src="{$WebApplicationBaseURL}images/logo_Open_Access.png" /> {mcri18n:translate('OMD.ir.docdetails.header.access')}
         </span>
       </xsl:otherwise>
     </xsl:choose>

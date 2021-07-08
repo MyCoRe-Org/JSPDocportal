@@ -31,7 +31,7 @@
     <xsl:if test="contains(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '/doctype#histbest')">
     <div class="card border border-primary mb-3">
       <div class="card-body py-1 small">
-        bereitgestellt durch:
+        {mcri18n:translate('OMD.ir.docdetails.rightside.label.provider')}
       </div>
       <div class="card-body text-center py-2">
         <xsl:variable name="class_provider" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" />
@@ -89,16 +89,19 @@
     	  <a id="ir-thumbnail-image-parent" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID,'/','_')}" 
              style="display:inline-block;min-height:2em" title="Im MyCoRe Viewer anzeigen"></a>
              <div class="text-center" style="position:absolute;top:.5em;right:0;left:0;">
-            <a class="btn btn-light btn-sm border border-secondary" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID, '/','_')}" title="Im MyCoRe Viewer anzeigen">
-              <i class="far fa-eye text-primary"></i> Anzeigen
+            <a class="btn btn-light btn-sm border border-secondary" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID, '/','_')}" 
+            title="{mcri18n:translate('OMD.ir.docdetails.rightside.title.mcrviewer')}">
+              <i class="far fa-eye text-primary"></i> {mcri18n:translate('OMD.ir.docdetails.rightside.label.mcrviewer')}
             </a>
           </div>
           <xsl:if test="/mycoreobject/metadata/def.irControl/irControl/map/list[@key='mets_filegroups']/entry[text() = 'ALTO'] 
                        or /mycoreobject/structure/derobjects/derobject/classification[@categid='fulltext']">
             <div class="input-group input-group-sm mt-3 px-3">
-              <input id="input_search_in_doc" type="text" class="form-control" onKeyDown="searchInDoc(event)" placeholder="Im Dokument suchen..." aria-describedby="search-in-document-addon" />
+              <input id="input_search_in_doc" type="text" class="form-control" onKeyDown="searchInDoc(event)" 
+              placeholder="{mcri18n:translate('OMD.ir.docdetails.rightside.placeholder.search_in_doc')}" aria-describedby="search-in-document-addon" />
               <div class="input-group-append">
-                <button type="button" class="btn btn-secondary" id="search-in-document-addon" onclick="searchInDoc(event)" title="Im Dokument suchen"><i class="fa fa-search"></i></button>
+                <button type="button" class="btn btn-secondary" id="search-in-document-addon" onclick="searchInDoc(event)" 
+                title="{mcri18n:translate('OMD.ir.docdetails.rightside.title.search_in_doc')}"><i class="fa fa-search"></i></button>
               </div>
               <script>
                 function searchInDoc(e) {{
@@ -138,7 +141,7 @@
    <!-- Dauerhaft zitieren -->
      <xsl:if test="not(/mycoreobject/service/servstates/servstate/@categid='deleted')">
       <div class="ir-box ir-box-emph">
-        <h4 class="text-primary">Dauerhaft zitieren</h4>
+        <h4 class="text-primary">{mcri18n:translate('OMD.ir.docdetails.rightside.headline.persistent_url')}</h4>
         <xsl:choose>
           <xsl:when test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='doi']">
             <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='doi']">
@@ -164,7 +167,7 @@
        <xsl:if test="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext' or contains(@categid, 'METS')]]">
          <div class="dropdown w-100 mt-3">
             <button class="btn btn-primary dropdown-toggle w-100" type="button" id="dropdownMenuShow" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               <i class="far fa-eye pr-2"></i> Anzeigen
+               <i class="far fa-eye pr-2"></i> {mcri18n:translate('OMD.ir.docdetails.rightside.menue.view')}
             </button>
             
             <div class="dropdown-menu w-100 border-primary" aria-labelledby="dropdownMenuShow" style="border-width:2px">
@@ -175,7 +178,7 @@
               <xsl:variable name="url">{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier,'/','_')}</xsl:variable>
               <xsl:variable name="startpagePath" select="if (//def.irControl/irControl/map[@key='ROOT']/entry[@key='start_image']) then (concat('/iview2/',//def.irControl/irControl/map[@key='ROOT']/entry[@key='start_image'],'.iview2')) else ()" />
               <a class="dropdown-item" href="{$url}{$startpagePath}">
-                <img src="{$WebApplicationBaseURL}/themes/rosdok/images/rosdok_logo2.png" style="height:1.5em;padding-right:0.5em" />Viewer
+                <img src="{$WebApplicationBaseURL}/themes/rosdok/images/rosdok_logo2.png" style="height:1.5em;padding-right:0.5em" />{mcri18n:translate('OMD.ir.docdetails.rightside.link.view')}
               </a>
               </xsl:if>
 
@@ -183,7 +186,7 @@
               <xsl:if test="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='DV_METS' or @categid='METS']]">
               <div class="dropdown-divider"></div>
               <a class="dropdown-item background-primary" href="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}/dfgviewer">
-               <img src="{$WebApplicationBaseURL}images/dfgviewerLogo_blue.svg"  title="{mcri18n:translate('Webpage.docdetails.dfgviewer')}" style="height:1.5em;color:black"/>
+               <img src="{$WebApplicationBaseURL}images/dfgviewerLogo_blue.svg"  title="{mcri18n:translate('OMD.ir.docdetails.rightside.dfgviewer')}" style="height:1.5em;color:black"/>
               </a>
               </xsl:if>
             </div>
@@ -191,7 +194,7 @@
        </xsl:if>
          <div class="dropdown w-100 mt-3">
             <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="dropdownMenuDownload" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               <i class="fas fa-download pr-2"></i> Herunterladen
+               <i class="fas fa-download pr-2"></i> {mcri18n:translate('OMD.ir.docdetails.rightside.menue.download')}
             </button>
             <div class="dropdown-menu border-secondary" aria-labelledby="dropdownMenuDownload" style="border-width:2px">
               <xsl:for-each select="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext']]">
@@ -209,9 +212,9 @@
                   <div class="dropdown-divider"></div>
                   <div class="dropdown-item px-2" >
                     <div style="width:350px">
-                      <img align="left" src="{$WebApplicationBaseURL}images/download_pdf.png" title="{mcri18n:translate('Webpage.docdetails.pdfdownload')}" style="height:1.5em;padding-right:0.5em;" />
+                      <img align="left" src="{$WebApplicationBaseURL}images/download_pdf.png" title="{mcri18n:translate('OMD.ir.rightside.docdetails.pdfdownload')}" style="height:1.5em;padding-right:0.5em;" />
                       <a href="{$WebApplicationBaseURL}do/pdfdownload/recordIdentifier/{replace($recordID, '/','_')}" target="_blank">
-                        <strong>{mcri18n:translate('Webpage.docdetails.pdfdownload')}</strong>
+                        <strong>{mcri18n:translate('OMD.ir.rightside.docdetails.pdfdownload')}</strong>
                       </a>
                     </div>
                   </div>
@@ -268,7 +271,7 @@
                </xsl:choose>
              </xsl:variable> 
            
-             <h4>Export</h4>
+             <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.export')}</h4>
              <p>
                <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
                  <xsl:if test="$catalogs">
@@ -281,7 +284,7 @@
               </xsl:for-each>
             </p>
             
-            <h4>Portale</h4>
+            <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.portals')}</h4>
             <p>
               <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
                 <xsl:variable name="json_urls" select="replace($catalogs, '''', '&quot;')" />
@@ -309,7 +312,7 @@
                 </xsl:for-each>  
               </p>
            </xsl:if>
-           <h4>Teilen</h4>
+           <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.share')}</h4>
            <div class="shariff" data-url="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}"
              data-services="[&quot;twitter&quot;, &quot;facebook&quot;, &quot;linkedin&quot;, &quot;xing&quot;, &quot;whatsapp&quot;, &quot;telegram&quot;, &quot;mail&quot;, &quot;info&quot;]"
              data-mail-url="mailto:" data-mail-subject="{mcri18n:translate('OMD.ir.shariff.subject')}" data-mail-body="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}"
@@ -322,7 +325,7 @@
         
     <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='licenseinfo'][contains(@valueURI, 'licenseinfo#work')]">
          <div class="ir-box">
-           <h4>Rechte</h4>
+           <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.licenseinfo')}</h4>
            <xsl:variable name="categ" select="mcrmods:to-mycoreclass(., 'single')/categories/category" />
            <span class="clearfix">
              <img src="{$WebApplicationBaseURL}images{$categ/label[@xml:lang='x-icon']/@text}" class="float-left pr-3" />
@@ -381,13 +384,13 @@
     <div class="dropdown-item px-2 d-inline-block" onclick="location.href='{$fulltext_url}'">
       <xsl:choose>
         <xsl:when test="ends-with(./maindoc, '.zip')">
-          <img align="left" src="{$WebApplicationBaseURL}images/download_zip.png" title="{mcri18n:translate('Webpage.docdetails.zipdownload')}" style="height:1.5em;padding-right:0.5em"/>
+          <img align="left" src="{$WebApplicationBaseURL}images/download_zip.png" style="height:1.5em;padding-right:0.5em"/>
         </xsl:when>
         <xsl:when test="ends-with(./maindoc, '.pdf')">
-          <img align="left" src="{$WebApplicationBaseURL}images/download_pdf.png" title="{mcri18n:translate('Webpage.docdetails.pdfdownload')}" style="height:1.5em;padding-right:0.5em;margin-bottom:2em" />
+          <img align="left" src="{$WebApplicationBaseURL}images/download_pdf.png" style="height:1.5em;padding-right:0.5em;margin-bottom:2em" />
         </xsl:when>
         <xsl:otherwise>
-          <img align="left" src="{$WebApplicationBaseURL}images/download_other.png" title="{mcri18n:translate('Webpage.docdetails.otherdownload')}" />
+          <img align="left" src="{$WebApplicationBaseURL}images/download_other.png" />
         </xsl:otherwise>
       </xsl:choose>
       <strong>{mcrclass:current-label-text(./classification[@classid='derivate_types'])}</strong>
