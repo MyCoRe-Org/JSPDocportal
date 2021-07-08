@@ -191,6 +191,18 @@
       </xsl:if>
     
       <!-- Badges -->
+      <xsl:if test="./mods:classification[contains(@valueURI, 'licenseinfo#work')]">
+        <xsl:variable name="licecat" select="mcrmods:to-category(./mods:classification[contains(@valueURI, 'licenseinfo#work')])" />
+        <div id="popover_content_{generate-id(./mods:classification[contains(@valueURI, 'licenseinfo#work')])}" style="display: none">
+        <div style="min-width:100em">
+            <button type="button" id="close_popover_content_{generate-id(./mods:classification[contains(@valueURI, 'licenseinfo#work')])}" class="close float-right" aria-label="Close">
+              <span aria-hidden="true">&#215;</span>
+            </button>
+            <xsl:value-of select="$licecat/label[@xml:lang=$CurrentLang]/@description" disable-output-escaping="true" />
+            </div>
+        </div>
+      </xsl:if> 
+      
       <p class="mt-3">
       <xsl:if test="./mods:genre[@displayLabel='doctype']">
         <span class="badge ir-badge-header badge-secondary">
@@ -204,8 +216,9 @@
       <xsl:if test="./mods:classification[contains(@valueURI, 'licenseinfo#work')]">
         <span>&#160;&#160;</span>
         <xsl:variable name="licecat" select="mcrmods:to-category(./mods:classification[contains(@valueURI, 'licenseinfo#work')])" />
-        <span id="badgeWorkLicense" class="badge ir-badge-header p-0" data-toggle="popover" data-placement="bottom" data-html="true">
-          <xsl:attribute name="data-content"><xsl:value-of select="$licecat/label[@xml:lang=$CurrentLang]/@description" /></xsl:attribute>
+
+        <span id="badgeWorkLicense" class="badge ir-badge-header p-0" data-toggle="popover" data-placement="bottom" data-html="true"
+              data-content-ref="#popover_content_{generate-id(./mods:classification[contains(@valueURI, 'licenseinfo#work')])}">
           <xsl:choose>
             <xsl:when test="$licecat/label[@xml:lang='x-icon']">
               <img style="height:100%" src="{concat($WebApplicationBaseURL,'images',$licecat/label[@xml:lang='x-icon']/@text)}" />&#160;
