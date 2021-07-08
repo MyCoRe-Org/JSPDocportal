@@ -6,8 +6,8 @@
     </div>
   </div>
   
-  <xed:cleanup-rule xpath="//*" relevant-if="true()" />
-  <xed:cleanup-rule xpath="/mycoreobject/metadata//*" relevant-if="@* or * or (string-length(text()) &gt; 0)" />
+  <xed:cleanup-rule xpath="//modsContainer[@type='reserved']/mods:mods/mods:note" relevant-if="string-length(text()) &gt; 0" />
+  <xed:cleanup-rule xpath="//modsContainer[@type='reserved']" relevant-if="./mods:mods/*" />
 
   <xed:include uri="resource:editor/metadata/includes-generic.xed" ref="in.out" />
   

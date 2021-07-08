@@ -10,6 +10,9 @@
   <xed:cleanup-rule xpath="//modsContainer[@type='edited']/mods:mods/mods:abstract[@type='advice']" relevant-if="string-length(text()) &gt; 0" />
   <xed:cleanup-rule xpath="//modsContainer[@type='edited']/mods:mods/mods:extension[@displayLabel='external_content']" relevant-if="string-length(./file/@OWNERID) &gt; 0 or string-length(./file/@URL) &gt; 0 " />
   <xed:cleanup-rule xpath="//modsContainer[@type='edited']" relevant-if="./mods:mods/*" />
+  
+  <xed:cleanup-rule xpath="//modsContainer[@type='imported']/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']" relevant-if="string-length(text()) &gt; 0" />
+  <xed:cleanup-rule xpath="//modsContainer[@type='imported']" relevant-if="./mods:mods/*" />
 
   <xed:include uri="resource:editor/metadata/includes-generic.xed" ref="in.out" />
   
