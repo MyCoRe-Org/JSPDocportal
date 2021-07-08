@@ -18,7 +18,7 @@
   <xsl:param name="WebApplicationBaseURL"></xsl:param>
 
   <xsl:template match="/">
-    <h2><xsl:value-of select="mcri18n:translate('Webpage.docdetails.deleted.header')" /></h2>
+    <h2><xsl:value-of select="mcri18n:translate('OMD.ir.docdetails.deleted.header')" /></h2>
   </xsl:template>
 
 </xsl:stylesheet>

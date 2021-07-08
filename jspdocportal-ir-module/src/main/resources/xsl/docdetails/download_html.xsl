@@ -21,7 +21,7 @@
     <table class="ir-table-docdetails w-100">
       <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='imported' or @type='created']/mods:mods">
         <tr>
-          <th>Download:</th>
+          <th>{mcri18n:translate('OMD.ir.docdetails.download.label')}</th>
           <td>
              <table id="ir-table-docdetails-download" class="ir-table-docdetails-values">
              
@@ -47,13 +47,13 @@
          href="{$fulltext_url}" target="_blank">
          <xsl:choose>
            <xsl:when test="ends-with(./maindoc, '.zip')">
-             <img align="left" src="{$WebApplicationBaseURL}images/download_zip.png" title="{mcri18n:translate('Webpage.docdetails.zipdownload')}" />
+             <img align="left" src="{$WebApplicationBaseURL}images/download_zip.png" />
            </xsl:when>
            <xsl:when test="ends-with(./maindoc, '.pdf')">
-             <img align="left" src="{$WebApplicationBaseURL}images/download_pdf.png" title="{mcri18n:translate('Webpage.docdetails.pdfdownload')}" />
+             <img align="left" src="{$WebApplicationBaseURL}images/download_pdf.png" />
            </xsl:when>
            <xsl:otherwise>
-             <img align="left" src="{$WebApplicationBaseURL}images/download_other.png" title="{mcri18n:translate('Webpage.docdetails.otherdownload')}" />
+             <img align="left" src="{$WebApplicationBaseURL}images/download_other.png" />
            </xsl:otherwise>
          </xsl:choose>
          <span class="small float-right">({mcrstring:pretty-filesize(./maindoc_size)})</span>

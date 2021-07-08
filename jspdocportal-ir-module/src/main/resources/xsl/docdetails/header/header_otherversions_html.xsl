@@ -27,7 +27,7 @@
     <!-- andere Versionen -->
     <xsl:if test="./mods:relatedItem[@type='otherVersion' or @type='otherFormat' or @type='preceding' or @type='succeeding']">
       <p style="margin-top:2em">
-        <xsl:value-of select="mcri18n:translate('Webpage.docdetails.header.otherVersions')" />: 
+        <xsl:value-of select="mcri18n:translate('OMD.ir.docdetails.header.otherVersions')" />: 
           <xsl:for-each select="./mods:relatedItem[@type='otherVersion' or @type='otherFormat'or @type='preceding' or @type='succeeding']">
             <xsl:element name="a">
               <xsl:attribute name="class">btn btn-sm btn-outline-secondary</xsl:attribute>

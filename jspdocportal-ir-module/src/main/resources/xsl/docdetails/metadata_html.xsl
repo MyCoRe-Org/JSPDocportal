@@ -23,7 +23,7 @@
     <table class="ir-table-docdetails">
       <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='imported' or @type='created']/mods:mods">
         <tr>
-          <th>Titel:</th>
+          <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.title')}</th>
           <td><table id="ir-table-docdetails-title" class="ir-table-docdetails-values">
             <xsl:for-each select="./mods:titleInfo[@usage='primary']">
               <xsl:call-template name="title" />
@@ -32,7 +32,7 @@
         </tr>
         <xsl:if test="./mods:titleInfo[not(@usage='primary')]">
           <tr>
-            <th>Weitere Titel:</th>
+            <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.other_title')}</th>
             <td><table id="ir-table-docdetails-other-title" class="ir-table-docdetails-values">
               <xsl:for-each select="./mods:titleInfo[not(@usage='primary')]">
                <xsl:call-template name="title" />
@@ -42,7 +42,7 @@
         </xsl:if>
         <xsl:if test="./mods:relatedItem[@type='host']">
           <tr>
-            <th>Gesamttitel:</th>
+            <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.host_title')}</th>
             <td>
               <table id="ir-table-docdetails-host-title" class="ir-table-docdetails-values">
                  <xsl:for-each select="./mods:relatedItem[@type='host']/mods:titleInfo">
@@ -54,7 +54,7 @@
         </xsl:if>
         <xsl:if test="./mods:relatedItem[@otherType='appears_in']">
           <tr>
-            <th>In:</th>
+            <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.appears_in')}</th>
             <td>
               <xsl:for-each select="./mods:relatedItem[@otherType='appears_in']">
                 <table id="ir-table-docdetails-host-title" class="ir-table-docdetails-values">
@@ -86,7 +86,7 @@
         </xsl:if>
         <xsl:if test="./mods:relatedItem[@type='series']">
           <tr>
-            <th>Schriftenreihe:</th>
+            <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.series')}</th>
             <td>
               <xsl:for-each select="./mods:relatedItem[@type='series']">
                 <table id="ir-table-docdetails-series" class="ir-table-docdetails-values">
@@ -119,14 +119,15 @@
         </xsl:if>
         <xsl:if test="./mods:relatedItem[@type='otherFormat']">
           <tr>
-            <th>Weitere Publikation:</th>
+            <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.other_format')}</th>
             <td>
               <xsl:for-each select="./mods:relatedItem[@type='otherFormat']">
                 <table id="ir-table-docdetails-otherformat" class="ir-table-docdetails-values">
                 <tr><td>
                   <xsl:if test="mods:recordInfo/mods:recordIdentifier">
                     <span class="float-right">
-                      <a class="btn btn-outline-secondary btn-sm" href="{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(mods:recordInfo/mods:recordIdentifier, '/','_')}">Öffnen</a>
+                      <a class="btn btn-outline-secondary btn-sm" href="{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(mods:recordInfo/mods:recordIdentifier, '/','_')}">
+                      {mcri18n:translate('OMD.ir.docdetails.metadata.label.open')}</a>
                     </span>
                   </xsl:if>
                   <xsl:if test="mods:note[@type='relation_label']">
@@ -152,7 +153,7 @@
         
         <xsl:if test="mods:name[@type='personal']">
           <tr>
-            <th>Beteiligte Personen:</th>
+            <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.personal_name')}</th>
             <td><table id="ir-table-docdetails-name_personal" class="ir-table-docdetails-values">
                  <xsl:call-template name="personal_name">
                    <xsl:with-param name="names" select="mods:name[@type='personal']" />
@@ -164,7 +165,7 @@
       <xsl:if test="mods:name[@type='corporate']">
       <!-- wenn Verlage + Drucker ausgeschlossen werden sollen: [not(contains('pbl|prt', mods:role/mods:roleTerm[@authority='marcrelator']))] -->
         <tr>
-          <th>Beteiligte Körperschaften:</th>
+          <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.corporate_name')}</th>
           <td><table id="ir-table-docdetails-name_corporate" class="ir-table-docdetails-values">
             <xsl:call-template name="corporate_name">
               <xsl:with-param name="names" select="mods:name[@type='corporate']" />
@@ -174,7 +175,7 @@
       </xsl:if>
       <xsl:if test="mods:name[@type='conference']">
         <tr>
-          <th>Konferenz:</th>
+          <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.conference_name')}</th>
           <td><table id="ir-table-docdetails-name_conference" class="ir-table-docdetails-values">
             <xsl:for-each select="./mods:name[@type='conference']">
               <xsl:choose>
@@ -191,7 +192,8 @@
             </xsl:for-each>
             <xsl:if test="./mods:nameIdentifier[@type='gnd']">
               <tr>
-                <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Black_wabe.png" style="height:1.5em" title="GND (Gemeinsame Normdatei der Deutschen Nationalbiblitohek)" /></th>
+                <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Black_wabe.png" style="height:1.5em" 
+                title="{mcri18n:translate('OMD.ir.docdetails.common.label.gnd')}" /></th>
                 <td><a href="http://d-nb.info/gnd/{./mods:nameIdentifier[@type='gnd']}">{./mods:nameIdentifier[@type='gnd']}</a></td>
               </tr>
             </xsl:if> 
@@ -203,7 +205,7 @@
       
       <xsl:if test="mods:abstract">
         <tr>
-          <th>Zusammenfassung:</th>
+          <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.abstract')}</th>
           <td><table id="ir-table-docdetails-summary" class="ir-table-docdetails-values">
             <xsl:for-each select="./mods:abstract[@type='summary']">
               <tr>
@@ -235,7 +237,7 @@
       
       <xsl:if test="mods:language">
         <tr>
-          <th>Sprache:</th>
+          <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.language')}</th>
           <td><table id="ir-table-docdetails-language" class="ir-table-docdetails-values">
             <xsl:for-each select="./mods:language/mods:languageTerm">
               <tr><td>
@@ -248,7 +250,7 @@
       
      <xsl:if test="mods:physicalDescription">
         <tr>
-          <th>Umfang:</th>
+          <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.physical_description')}</th>
           <td><table id="ir-table-docdetails-language" class="ir-table-docdetails-values">
             <xsl:for-each select="./mods:physicalDescription">
               <tr><td>
@@ -263,7 +265,7 @@
             
       <xsl:if test="mods:originInfo[@eventType='publication']">
         <tr>
-          <th>Veröffentlichung /<br />Entstehung:</th>
+          <th><xsl:value-of select="mcri18n:translate('OMD.ir.docdetails.metadata.label.origin_info_publication')" disable-output-escaping="yes" /></th>
           <td><table id="ir-table-docdetails-origininfo-publication" class="ir-table-docdetails-values">
             <xsl:for-each select="mods:originInfo[@eventType='publication']">
               <xsl:choose>
@@ -279,7 +281,9 @@
                   <xsl:if test="mods:place[@supplied='yes']/mods:placeTerm">
                     <tr>
                       <td class="small">
-                        ({if (count(mods:place[@supplied='yes']/mods:placeTerm)=1) then 'normierter Ort: ' else 'normierte Orte: '}
+                        ({if (count(mods:place[@supplied='yes']/mods:placeTerm)=1) 
+                          then mcri18n:translate('OMD.ir.docdetails.metadata.label.supplied_place') 
+                          else mcri18n:translate('OMD.ir.docdetails.metadata.label.supplied_places')}
                         {string-join(mods:place[@supplied='yes']/mods:placeTerm,', ')})
                       </td>
                     </tr>      
@@ -290,7 +294,9 @@
                       <td>{string-join(mods:place[not(@supplied='yes')]/mods:placeTerm,', ')}
                         <xsl:if test="mods:place[@supplied='yes']/mods:placeTerm">
                         <span class="small">
-                          ({if (count(mods:place[@supplied='yes']/mods:placeTerm)=1) then 'normierter Ort: ' else 'normierte Orte: '}
+                          ({if (count(mods:place[@supplied='yes']/mods:placeTerm)=1) 
+                            then mcri18n:translate('OMD.ir.docdetails.metadata.label.supplied_place') 
+                            else mcri18n:translate('OMD.ir.docdetails.metadata.label.supplied_places')}
                           {string-join(mods:place[@supplied='yes']/mods:placeTerm,', ')})
                           </span>
                         </xsl:if>
@@ -308,14 +314,14 @@
                          {mods:dateIssued[@keyDate='yes' and not(@point='start')]}
                         </xsl:if>
                         <xsl:if test="mods:dateIssued[@point='start']">
-                          von {mods:dateIssued[@point='start']}
+                          {mcri18n:translate('OMD.ir.docdetails.metadata.label.start_date')} {mods:dateIssued[@point='start']}
                         </xsl:if>
                         <xsl:if test="mods:dateIssued[@point='end']">
-                          bis {mods:dateIssued[@point='end']}
+                          {mcri18n:translate('OMD.ir.docdetails.metadata.label.end_date')} {mods:dateIssued[@point='end']}
                         </xsl:if>
                       </xsl:variable>
                       <xsl:if test="mods:dateIssued[not(@*)] != normalize-space($normalized_date)">
-                        <span class="small pl-2">(normiertes Datum: {normalize-space($normalized_date)})</span>
+                        <span class="small pl-2">({mcri18n:translate('OMD.ir.docdetails.metadata.label.normalized_date')} {normalize-space($normalized_date)})</span>
                       </xsl:if>
                     </xsl:if>
                   </td>
@@ -328,7 +334,7 @@
       
       <xsl:if test="mods:originInfo[@eventType='digitization']">
         <tr>
-          <th>Digitalisierung:</th>
+          <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.origin_info_digitization')}</th>
           <td><table id="ir-table-docdetails-origininfo-digitization" class="ir-table-docdetails-values">
             <xsl:for-each select="mods:originInfo[@eventType='digitization']">
               <tr><td>{string-join((mods:place/mods:placeTerm, string-join((mods:publisher, mods:dateCaptured[not(@*)]), ', ')),': ')}</td></tr>
@@ -339,7 +345,7 @@
       
       <xsl:if test="./mods:note[@type='statement of responsibility']">
           <tr>
-            <th>Verantwortlichkeitsangabe:</th>
+            <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.statement_of_responsibility')}</th>
             <td>
               <table id="ir-table-docdetails-statement_of_responsibility" class="ir-table-docdetails-values">
               <xsl:for-each select="./mods:note[@type='statement of responsibility']">
@@ -351,7 +357,7 @@
         
       <xsl:if test="mods:note[@type='source_note' or @type='other' or @type='reproduction']">
         <tr>
-          <th>Anmerkungen:</th>
+          <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.other_note')}</th>
           <td><table id="ir-table-docdetails-notes" class="ir-table-docdetails-values">
             <xsl:for-each select="mods:note[@type='source_note' or @type='other' or @type='reproduction']">
               <tr><td>{.}</td></tr>
@@ -361,7 +367,7 @@
       </xsl:if>
       <xsl:if test="mods:note[@type='bibliographic_reference']">
         <tr>
-          <th>Biliographische Referenzen:</th>
+          <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.bibliographic_reference')}</th>
           <td><table id="ir-table-docdetails-biblref" class="ir-table-docdetails-values">
             <xsl:for-each select="mods:note[@type='bibliographic_reference']">
               <tr><td>{.}</td></tr>
@@ -371,7 +377,7 @@
       </xsl:if>
       <xsl:if test="mods:note[@type='external_link']">
         <tr>
-          <th>Weitere Informationen:</th>
+          <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.external_link')}</th>
           <td><table id="ir-table-docdetails-notes-other" class="ir-table-docdetails-values">
             <xsl:for-each select="mods:note[@type='external_link']">
               <tr><td><a href="{./@xlink:href}">{if (string-length(.)=0) then ./@xlink:href else .}</a></td></tr>
@@ -384,7 +390,7 @@
               
       <xsl:if test="mods:location/mods:physicalLocation[@type='current']">
         <tr>
-          <th>Signatur:</th>
+          <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.current_location')}</th>
           <td><table id="ir-table-docdetails-physicalLocation" class="ir-table-docdetails-values">
             <xsl:for-each select="mods:location[mods:physicalLocation[@type='current']]">
               <tr><td>
@@ -396,7 +402,7 @@
       </xsl:if>
       <xsl:if test="mods:identifier">
         <tr>
-          <th>Identifikatoren:</th>
+          <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.identifier')}</th>
           <td><table id="ir-table-docdetails-identifier" class="ir-table-docdetails-values">
             <xsl:call-template name="identifier2metadataTable" />
           </table></td>
@@ -407,7 +413,7 @@
       
       <xsl:if test="mods:classification[@displayLabel='accesscondition']">
         <tr>
-          <th>Zugang:</th>
+          <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.accesscondition')}</th>
           <td><table id="ir-table-docdetails-identifier" class="ir-table-docdetails-values">
             <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[@displayLabel='accesscondition'][1])" />
             <tr><td>
@@ -421,7 +427,7 @@
       </xsl:if>
       
         <tr>
-          <th>Lizenzen/Rechtehinweise:</th>
+          <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.licenses')}</th>
           <td><table id="ir-table-docdetails-licenses" class="ir-table-docdetails-values">
             <xsl:if test="mods:classification[contains(@valueURI, 'licenseinfo#work')]">
               <tr>
@@ -459,19 +465,19 @@
          <tr><td colspan="2" class="p-0" style="font-size:.5em">&#160;</td></tr>
         
         <tr>
-          <th>Technische Metadaten:</th>
+          <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.technical')}</th>
           <td><table id="ir-table-docdetails-technical" class="ir-table-docdetails-values">
             <xsl:variable name="categ_mcrid" select="mcrclass:category('identifier', 'mycore_object_id')" />
             <tr><th><abbr title="{$categ_mcrid/label[@xml:lang=$CurrentLang]/@description}">{$categ_mcrid/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
                 <td><a href="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}">{/mycoreobject/@ID}</a></td>
             </tr>
-            <tr><th>erstellt:</th>
-                <td>am {format-dateTime(/mycoreobject/service/servdates/servdate[@type='createdate'], '[D01].[M01].[Y0001]')}
-                    von {/mycoreobject/service/servflags/servflag[@type='createdby']}</td>
+            <tr><th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.createdate')}</th>
+                <td>{mcri18n:translate('OMD.ir.docdetails.metadata.label.at')} {format-dateTime(/mycoreobject/service/servdates/servdate[@type='createdate'], '[D01].[M01].[Y0001]')}
+                    {mcri18n:translate('OMD.ir.docdetails.metadata.label.by')} {/mycoreobject/service/servflags/servflag[@type='createdby']}</td>
             </tr>
-            <tr><th>geändert:</th>
-                <td>am {format-dateTime(/mycoreobject/service/servdates/servdate[@type='modifydate'], '[D01].[M01].[Y0001]')}
-                    von {/mycoreobject/service/servflags/servflag[@type='modifiedby']}</td>
+            <tr><th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.modifydate')}</th>
+                <td>{mcri18n:translate('OMD.ir.docdetails.metadata.label.at')} {format-dateTime(/mycoreobject/service/servdates/servdate[@type='modifydate'], '[D01].[M01].[Y0001]')}
+                    {mcri18n:translate('OMD.ir.docdetails.metadata.label.by')} {/mycoreobject/service/servflags/servflag[@type='modifiedby']}</td>
             </tr>
           </table></td>
         </tr>

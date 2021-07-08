@@ -19,7 +19,7 @@
       <table class="table ir-table-docdetails">
       <xsl:if test="./mods:titleInfo">
           <tr>
-            <th>Titel:</th>
+            <th>{mcri18n:translate('OMD.ir.docdetails.deleted_details.titleinfo')}</th>
             <td>
                <table class="ir-table-docdetails-values">
                   <tr>
@@ -89,7 +89,7 @@
         </xsl:if>
         <xsl:if test="/mycoreobject/service/servdates/servdate[@type='mcr-delete:date']">
           <tr>
-            <th>Löschdatum:</th>
+            <th>{mcri18n:translate('OMD.ir.docdetails.deleted_details.delete_date')}</th>
             <td>
                <table class="ir-table-docdetails-values">
                   <tr>
@@ -103,7 +103,7 @@
         </xsl:if>
         <xsl:if test="/mycoreobject/service/servflags/servflag[@type='mcr-delete:note']">
           <tr>
-            <th>Löschgrund:</th>
+            <th>{mcri18n:translate('OMD.ir.docdetails.deleted_details.delete_note')}</th>
             <td>
                <table class="ir-table-docdetails-values">
                   <tr>

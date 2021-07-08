@@ -2,8 +2,11 @@
 <xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" 
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
      xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" 
+     xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
      version="1.0" exclude-result-prefixes="mods xlink">
 <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />     
+
+<xsl:import href="resource:xsl/functions/i18n.xsl" />
 
 <xsl:template name="mods-title">
   <xsl:for-each select="./mods:titleInfo[@usage='primary']">
@@ -56,7 +59,7 @@
             <xsl:if test="$name/mods:affiliation">
               <xsl:attribute name="data-mcr-value-affiliation"><xsl:value-of select="$name/mods:affiliation" /></xsl:attribute>
             </xsl:if>
-            <xsl:attribute name="title">Weitere Informationen ...</xsl:attribute>
+            <xsl:attribute name="title">{mcri18n:translate('OMD.ir.docdetails.mods_util.name_info')}</xsl:attribute>
             <xsl:element name="span">
               <xsl:attribute name="class">fa fa-info-circle</xsl:attribute>
             </xsl:element>
@@ -82,7 +85,7 @@
             <xsl:if test="$name/mods:affiliation">
               <xsl:attribute name="data-mcr-value-affiliation"><xsl:value-of select="$name/mods:affiliation" /></xsl:attribute>
             </xsl:if>
-            <xsl:attribute name="title">Weitere Informationen ...</xsl:attribute>
+            <xsl:attribute name="title">{mcri18n:translate('OMD.ir.docdetails.mods_util.name_info')}</xsl:attribute>
             <xsl:element name="span">
               <xsl:attribute name="class">fa fa-info-circle</xsl:attribute>
             </xsl:element>
