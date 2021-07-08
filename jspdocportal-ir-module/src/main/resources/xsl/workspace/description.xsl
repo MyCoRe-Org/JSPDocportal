@@ -17,11 +17,10 @@
   <xsl:param name="MCR.Identifier.PURL.BaseURL"></xsl:param>
 
  <xsl:template match="/mycoreobject">
-  <xsl:if test="./metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods/mods:note">
-    <span class="badge badge-info">ID-Reservierung</span>
-    <p>
-      <em><xsl:value-of select="./metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods/mods:note" /></em>
-    </p>
+  <xsl:if test="./metadata/def.modsContainer/modsContainer[@type='reserved']">
+    <span class="badge badge-info mr-3">ID-Reservierung</span><strong><xsl:value-of select="./metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods/mods:note[@type='provisional_title']" /></strong>
+    <pre><xsl:value-of select="./metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods/mods:note[@type='provisional_remarks']" /></pre>
+    
     <xsl:for-each select="//mods:name[./mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='aut'][1]">
     <p>
       <xsl:value-of select="concat(/mods:namePart[@type='given'],' ',./mods:namePart[@type='family'])" />
