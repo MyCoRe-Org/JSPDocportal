@@ -435,7 +435,8 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
             try {
                 MCRObjectID derIDObj = MCRObjectID.getInstance(derID);
                 if (MCRMetadataManager.exists(derIDObj)) {
-                    ruleMap = MCRBPMNUtils.getAccessRulesMap(derID);
+                    //disabled for new fact-based access system
+                    //ruleMap = MCRBPMNUtils.getAccessRulesMap(derID);
                     MCRBPMNUtils.deleteDirectoryContent(MCRPath.getPath(derID, "/"));
                     MCRDerivateCommands.updateFromFile(filename, false);
                 } else {

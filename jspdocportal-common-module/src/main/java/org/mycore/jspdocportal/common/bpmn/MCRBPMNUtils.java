@@ -274,6 +274,7 @@ public class MCRBPMNUtils {
     }
 
     //delete after migration to xml base access system
+    @Deprecated
     public static Map<String, Element> getAccessRulesMap(String objid) {
         Iterator<String> it = MCRAccessManager.getPermissionsForID(objid).iterator();
         Map<String, Element> htRules = new Hashtable<String, Element>();
@@ -288,6 +289,7 @@ public class MCRBPMNUtils {
     }
 
     //delete after migration to xml base access system
+    @Deprecated
     public static void setAccessRulesMap(String objid, Map<String, Element> htRules) {
         if (MCRAccessManager.getAccessImpl() instanceof MCRRuleAccessInterface) {
             if (htRules != null) {
