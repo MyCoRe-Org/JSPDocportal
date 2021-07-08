@@ -19,6 +19,17 @@
   <xed:bind xpath="/mycoreobject">
     <xed:include uri="resource:editor/metadata/includes-generic.xed" ref="failed-validation-messages" />
 
+    <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer[@type='imported']/mods:mods">
+      <h3><xed:output i18n="OMD.ir.editor.ppn.headline" /></h3>
+      <div class="form-group row">
+        <div class="col-3">
+          <xed:bind xpath="mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
+             <input id="ppn" type="text" class="form-control input-sm" />
+          </xed:bind>         
+        </div>
+      </div>
+    </xed:bind>
+    
     <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer[@type='edited']/mods:mods">
       <h3><xed:output i18n="OMD.ir.editor.description.headline" /></h3>
       <div class="form-group row">
