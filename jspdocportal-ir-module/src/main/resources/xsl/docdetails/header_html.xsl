@@ -97,17 +97,15 @@
           {./mods:nonSort} {./mods:title}
           <xsl:if test="./mods:subTitle"> : {./mods:subTitle}</xsl:if>
         </xsl:variable>
-        <h2>
-         <xsl:choose>
+        <xsl:choose>
             <xsl:when test="./mods:partNumber or ./mods:partName">
-              <small>{$title_primary}</small><br />
-              <xsl:value-of select="string-join((./mods:partNumber, ./mods:partName), ' : ')" />
+              <h3>{$title_primary}</h3>
+              <h2><xsl:value-of select="string-join((./mods:partNumber, ./mods:partName), ' : ')" /></h2>
             </xsl:when>
             <xsl:otherwise>
-               {$title_primary}
+               <h2>{$title_primary}</h2>
             </xsl:otherwise>
           </xsl:choose>
-        </h2>
       </xsl:for-each>
     
       <!-- Veröffentlichungsangabe -->
