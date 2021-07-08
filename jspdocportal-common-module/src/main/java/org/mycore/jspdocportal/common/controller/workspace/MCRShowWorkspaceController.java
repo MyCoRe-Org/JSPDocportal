@@ -138,7 +138,7 @@ public class MCRShowWorkspaceController {
                 String mcrObjID = id.substring(id.indexOf("-") + 1);
                 return editObject(mcrObjID, taskID);
             }
-            
+
             // doEditReservation-task_[ID]-[mcrObjID]
             if (s.startsWith("doEditReservation-task_")) {
                 String id = s.substring(s.indexOf("-") + 1);
@@ -171,17 +171,19 @@ public class MCRShowWorkspaceController {
             for (Task t : myTasks) {
                 updateWFObjectMetadata(t);
                 updateWFDerivateList(t);
-                myVariables.put(t.getExecutionId(), MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getVariables(t.getExecutionId()));
+                myVariables.put(t.getExecutionId(),
+                    MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getVariables(t.getExecutionId()));
             }
             model.put("myVariables", myVariables);
 
             List<Task> availableTasks = ts.createTaskQuery().taskCandidateUser(user.getUserID())
                 .orderByTaskCreateTime().desc().list();
             model.put("availableTasks", availableTasks);
-            
+
             Map<String, Object> availableVariables = new HashMap<>();
             for (Task t : availableTasks) {
-                availableVariables.put(t.getExecutionId(), MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getVariables(t.getExecutionId()));
+                availableVariables.put(t.getExecutionId(),
+                    MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getVariables(t.getExecutionId()));
             }
             model.put("availableVariables", availableVariables);
         }
@@ -236,7 +238,7 @@ public class MCRShowWorkspaceController {
     private void acceptTask(String taskId) {
         LOGGER.debug("Accepted Task" + taskId);
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
-        for(Task t: ts.createTaskQuery().executionId(taskId).list()) {
+        for (Task t : ts.createTaskQuery().executionId(taskId).list()) {
             //should be only one item
             ts.setAssignee(t.getId(), MCRUserManager.getCurrentUser().getUserID());
         }
@@ -245,7 +247,7 @@ public class MCRShowWorkspaceController {
     private void releaseTask(String taskId) {
         LOGGER.debug("Release Task" + taskId);
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
-        for(Task t: ts.createTaskQuery().executionId(taskId).list()) {
+        for (Task t : ts.createTaskQuery().executionId(taskId).list()) {
             //should be only one item
             ts.setAssignee(t.getId(), null);
         }
@@ -288,7 +290,7 @@ public class MCRShowWorkspaceController {
 
         return Response.ok(v).build();
     }
-    
+
     private Response editReservation(String mcrID, String taskID) {
         MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
 
@@ -341,21 +343,24 @@ public class MCRShowWorkspaceController {
         MCRObjectID mcrObjID = null;
         MCRObject mcrObj;
         try {
-            mcrObjID = MCRObjectID.getInstance(String.valueOf(ts.getVariable(t.getId(), MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID)));
+            mcrObjID = MCRObjectID
+                .getInstance(String.valueOf(ts.getVariable(t.getId(), MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID)));
             if (mcrObjID == null) {
                 LOGGER.error("WFObject could not be read.");
             }
 
             // Title
             mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
-            
+
             Class<? extends TransformerFactory> tfClass = MCRClassTools.forName("net.sf.saxon.TransformerFactoryImpl");
-            MCRXSLTransformer xsltTitle = MCRXSLTransformer.getInstance(tfClass, MCRConfiguration2.getString("MCR.Workflow.MCRObject.Display.Title.XSL").orElseThrow());
+            MCRXSLTransformer xsltTitle = MCRXSLTransformer.getInstance(tfClass,
+                MCRConfiguration2.getString("MCR.Workflow.MCRObject.Display.Title.XSL").orElseThrow());
             ByteArrayOutputStream baosTitle = new ByteArrayOutputStream();
             xsltTitle.transform(new MCRJDOMContent(mcrObj.createXML()), baosTitle);
             ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_TITLE, baosTitle.toString());
-            
-            MCRXSLTransformer xsltDescription = MCRXSLTransformer.getInstance(tfClass, MCRConfiguration2.getString("MCR.Workflow.MCRObject.Display.Description.XSL").orElseThrow());
+
+            MCRXSLTransformer xsltDescription = MCRXSLTransformer.getInstance(tfClass,
+                MCRConfiguration2.getString("MCR.Workflow.MCRObject.Display.Description.XSL").orElseThrow());
             ByteArrayOutputStream baosDescription = new ByteArrayOutputStream();
             xsltDescription.transform(new MCRJDOMContent(mcrObj.createXML()), baosDescription);
             ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_DESCRIPTION, baosDescription.toString());
@@ -367,7 +372,7 @@ public class MCRShowWorkspaceController {
             ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_DESCRIPTION, "");
             return;
         }
-        
+
         // RecordIdentifier
         try {
             String xpPI = "concat(//mods:mods//mods:recordInfo/mods:recordIdentifier,'')";
@@ -383,7 +388,7 @@ public class MCRShowWorkspaceController {
         } else {
             ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_RECORD_IDENTIFIER, "");
         }
-        
+
         // LicenceInfo ... TODO MOVE TO XSLT for Description
         ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_LICENCE_HTML, "");
         String xpLic = "//mods:mods/mods:classification[contains(@valueURI, 'licenseinfo#work')]/@valueURI";
@@ -428,7 +433,8 @@ public class MCRShowWorkspaceController {
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
         MCRObjectID mcrObjID = null;
         try {
-            mcrObjID = MCRObjectID.getInstance(String.valueOf(ts.getVariable(t.getId(), MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID)));
+            mcrObjID = MCRObjectID
+                .getInstance(String.valueOf(ts.getVariable(t.getId(), MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID)));
             if (mcrObjID == null) {
                 LOGGER.error("WFObject could not be read.");
             }
@@ -505,7 +511,7 @@ public class MCRShowWorkspaceController {
         Path mcrFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);
         Document docJdom = MCRBPMNUtils.getWorkflowObjectXML(mcrObjID);
         modsCatService.updateWorkflowFile(mcrFile, docJdom);
-        
+
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
         Task t = ts.createTaskQuery().executionId(executionId).list().get(0);
         updateWFObjectMetadata(t);
