@@ -28,39 +28,7 @@
   <xsl:import href="resource:xsl/functions/acl.xsl" />
     
   <xsl:template match="/">
-    <!-- Provider -->
-    <xsl:if test="contains(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '/doctype#histbest')">
-    <div class="card border border-primary mb-3">
-      <div class="card-body py-1 small">
-        {mcri18n:translate('OMD.ir.docdetails.rightside.label.provider')}
-      </div>
-      <div class="card-body text-center py-2">
-        <xsl:variable name="class_provider" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" />
-        <xsl:variable name="categ">
-          <xsl:choose>
-            <xsl:when test="$class_provider">
-              <xsl:copy-of select="mcrmods:to-mycoreclass($class_provider, 'single')/categories/category" />
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:variable name="isil" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier/@source" />
-              <xsl:copy-of select="document('classification:metadata:-1:children:provider')//category[label[@xml:lang='x-isil']/@text=$isil]" />                 
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable> 
-        <xsl:variable name="homepage" select="$categ/category/label[@xml:lang='x-homepage']/@text" />
-        <a href="{$homepage}">
-          <xsl:variable name="json_viewer" select="replace($categ/category/label[@xml:lang='x-dfg-viewer']/@text, '''', '&quot;')" />
-          <xsl:variable name="logo_url" select="replace(json-to-xml($json_viewer)/json:map/json:string[@key='logo_url'], 'http://rosdok.uni-rostock.de/',$WebApplicationBaseURL)" />
-          <xsl:if test="$logo_url">
-            <img src="{$logo_url}"/>
-            <br />
-          </xsl:if>
-          <span class="small"><xsl:value-of select="$categ/category/label[@xml:lang=$CurrentLang]/@text" /></span>
-        </a>
-      </div>
-    </div>
-    </xsl:if>
-  
+      
     <!-- Cover -->
     <xsl:variable name="recordID" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']" />
     <xsl:variable name="showViewer" select="exists(/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='MCRVIEWER_METS' or @categid='fulltext']])" />
@@ -87,14 +55,18 @@
     <xsl:choose>
       <xsl:when test="$showViewer and $access">
         <div class="ir-box ir-box-docdetails-image text-center" style="position:relative">
-    	  <a id="ir-thumbnail-image-parent" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID,'/','_')}" 
-             style="display:inline-block;min-height:2em" title="Im MyCoRe Viewer anzeigen"></a>
+          <xsl:variable name="startpagePath" select="if (//def.irControl/irControl/map[@key='ROOT']/entry[@key='start_image']) then (concat('/iview2/',//def.irControl/irControl/map[@key='ROOT']/entry[@key='start_image'],'.iview2')) else ()" />
+    	  <a id="ir-thumbnail-image-parent" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID,'/','_')}{$startpagePath}" 
+             style="display:inline-block;min-height:2em" title="{mcri18n:translate('OMD.ir.docdetails.rightside.title.mcrviewer')}"></a>
+             <!-- Anzeigen:Button -->
+             <!-- 
              <div class="text-center" style="position:absolute;top:.5em;right:0;left:0;">
-            <a class="btn btn-light btn-sm border border-secondary" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID, '/','_')}" 
-            title="{mcri18n:translate('OMD.ir.docdetails.rightside.title.mcrviewer')}">
-              <i class="far fa-eye text-primary"></i> {mcri18n:translate('OMD.ir.docdetails.rightside.label.mcrviewer')}
-            </a>
-          </div>
+               <a class="btn btn-light btn-sm border border-secondary" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID, '/','_')}" 
+                  title="{mcri18n:translate('OMD.ir.docdetails.rightside.title.mcrviewer')}">
+                 <i class="far fa-eye text-primary"></i> {mcri18n:translate('OMD.ir.docdetails.rightside.label.mcrviewer')}
+               </a>
+             </div>
+             -->
           <xsl:if test="/mycoreobject/metadata/def.irControl/irControl/map/list[@key='mets_filegroups']/entry[text() = 'ALTO'] 
                        or /mycoreobject/structure/derobjects/derobject/classification[@categid='fulltext']">
             <div class="input-group input-group-sm mt-3 px-3">
@@ -151,10 +123,10 @@
           </xsl:when>
           <xsl:when test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='purl']">
             <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='purl']">
-              <p class="d-none d-xl-block"><a href="{.}" style="transform: scaleX(96%) translate(-2%);display: inline-block;white-space: nowrap">
+              <p class="d-none d-xl-block mb-0"><a href="{.}" style="transform: scaleX(96%) translate(-2%);display: inline-block;white-space: nowrap">
                 {substring-before(.,'.de/')}.de/<br class="d-md-none"/>{substring-after(.,'.de/')}
               </a></p>
-              <p class="d-xl-none"><a href="{.}">
+              <p class="d-xl-none mb-0"><a href="{.}">
                 {substring-before(.,'.de/')}.de/<br />{substring-after(.,'.de/')}
               </a></p>
             </xsl:for-each>
@@ -234,7 +206,7 @@
     <xsl:if test="not(/mycoreobject/service/servstates/servstate/@categid='deleted')">
          <div class="ir-box mt-3">
            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='edited']/mods:mods/mods:abstract[@type='advice']">
-             <h4>Hinweise</h4>
+             <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.advice')}</h4>
               <xsl:variable name="dataURLcontent" select="document(./@altFormat)" />
               <xsl:value-of select="fn:serialize($dataURLcontent/*/node())" disable-output-escaping="true"/>
            </xsl:for-each>
@@ -304,7 +276,47 @@
            <p></p>
          </div>
     </xsl:if>
-        
+    
+        <!-- Provider (bereitgestellt durch:) -->
+    <xsl:if test="contains(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '/doctype#histbest')">
+      <div class="card border border-primary mb-3">
+        <div class="card-body">
+          <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.provider')}</h4>
+          <xsl:variable name="class_provider" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" />
+          <xsl:variable name="categ">
+            <xsl:choose>
+              <xsl:when test="$class_provider">
+                <xsl:copy-of select="mcrmods:to-mycoreclass($class_provider, 'single')/categories/category" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:variable name="isil" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier/@source" />
+                <xsl:copy-of select="document('classification:metadata:-1:children:provider')//category[label[@xml:lang='x-isil']/@text=$isil]" />                 
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable> 
+          <xsl:variable name="homepage" select="$categ/category/label[@xml:lang='x-homepage']/@text" />
+          <xsl:variable name="json_viewer" select="replace($categ/category/label[@xml:lang='x-dfg-viewer']/@text, '''', '&quot;')" />
+          <xsl:variable name="logo_url" select="replace(json-to-xml($json_viewer)/json:map/json:string[@key='logo_url'], 'http://rosdok.uni-rostock.de/',$WebApplicationBaseURL)" />
+          <table style="table-layout:fixed">
+            <tr>
+              <xsl:if test="$logo_url">
+                <td class="pr-3">
+                  <a href="{$homepage}"><img src="{$logo_url}"/></a>
+                </td>
+              </xsl:if>
+              <td>
+                <a href="{$homepage}" class="small" style="line-height:normal">
+                  <xsl:value-of select="$categ/category/label[@xml:lang=$CurrentLang]/@text" />
+                </a>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </xsl:if>
+    
+    
+    <!-- Rechte -->
     <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='licenseinfo'][contains(@valueURI, 'licenseinfo#work')]">
          <div class="ir-box">
            <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.licenseinfo')}</h4>
