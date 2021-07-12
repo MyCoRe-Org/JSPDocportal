@@ -43,6 +43,11 @@ table.ir-table-docdetails{
 	margin-bottom:30px;
 }
 
+table.ir-table-docdetails hr{
+	margin-top: 0.5rem;
+	margin-bottom: 0.5rem;
+}
+
 table.ir-table-docdetails > tbody > tr > th {
 	width: 175px;
 	font-weight: normal;
@@ -67,11 +72,25 @@ table.ir-table-docdetails-values tr th{
 }
 
 table#ir-table-docdetails-name_personal th,
-table#ir-table-docdetails-name_corporate th{
+table#ir-table-docdetails-name_corporate th,
+table#ir-table-docdetails-name_conference th{
 	width:3em;
+}
+
+table#ir-table-docdetails-name_personal tr:first-of-type td,
+table#ir-table-docdetails-name_corporate tr:first-of-type td,
+table#ir-table-docdetails-name_conference tr:first-of-type td{
+	padding-bottom:0px !important;
 }
 
 span.ir-table-docdetails-values-label{
 	font-style:italic;
 	padding-left:1em;
+}
+
+table.ir-table-docdetails-values tr td{
+	padding-bottom:5px;
+}
+table.ir-table-docdetails-values tr:last-of-type td {
+	padding-bottom:0px;
 }
