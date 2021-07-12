@@ -199,7 +199,10 @@
          </p>
       </xsl:for-each>
       </xsl:if>
-    
+      <xsl:call-template name="preceding_succeeding_buttons" />
+            <!-- weitere Versionen -->
+      <xsl:call-template name="otherVersions" />
+        
       <!-- Badges -->
       <xsl:if test="./mods:classification[contains(@valueURI, 'licenseinfo#work')]">
         <xsl:variable name="licecat" select="mcrmods:to-category(./mods:classification[contains(@valueURI, 'licenseinfo#work')])" />
@@ -247,9 +250,6 @@
         </span>
       </xsl:if>
       </p> 
-
-      <!-- weitere Versionen -->
-      <xsl:call-template name="otherVersions" />
        
       <!-- popover javascript -->
       <script>

@@ -25,10 +25,10 @@
 
   <xsl:template name="otherVersions">
     <!-- andere Versionen -->
-    <xsl:if test="./mods:relatedItem[@type='otherVersion' or @type='otherFormat' or @type='preceding' or @type='succeeding']">
-      <p style="margin-top:2em">
-        <xsl:value-of select="mcri18n:translate('OMD.ir.docdetails.header.otherVersions')" />: 
-          <xsl:for-each select="./mods:relatedItem[@type='otherVersion' or @type='otherFormat'or @type='preceding' or @type='succeeding']">
+    <xsl:if test="./mods:relatedItem[@type='otherVersion' or @type='otherFormat']">
+       <div class="float-right">
+       <p class="mt-3">
+            <xsl:for-each select="./mods:relatedItem[@type='otherVersion' or @type='otherFormat']">
             <xsl:element name="a">
               <xsl:attribute name="class">btn btn-sm btn-outline-secondary</xsl:attribute>
               <xsl:choose>
@@ -62,11 +62,72 @@
                   &lt;br/&gt;({./mods:note[@type='format_type']})
                 </xsl:if>
               </xsl:attribute>
-              <xsl:value-of select="mcri18n:translate(concat('OMD.ir.docdetails.versions.',@type))" />
+              <i class="fas fa-external-link-alt"></i>
+         
             </xsl:element>
             &#160;
           </xsl:for-each>            
         </p>
+        </div>
      </xsl:if>
   </xsl:template>
+  
+    <xsl:template name="preceding_succeeding_buttons">
+    <!-- Vorgänger, Nachfolger -->
+    <xsl:if test="./mods:relatedItem[@type='preceding' or @type='succeeding']">
+      <div class="float-right">
+       <p class="mt-3">
+
+          <xsl:for-each select="./mods:relatedItem[@type='preceding' or @type='succeeding']">
+            <xsl:element name="a">
+              <xsl:attribute name="class">btn btn-sm btn-outline-secondary ml-3</xsl:attribute>
+              <xsl:choose>
+                <xsl:when test="./mods:recordInfo/mods:recordIdentifier[@source='DE-28']">
+                  <xsl:attribute name="href" select="concat($WebApplicationBaseURL, 'resolve/recordIdentifier/', replace(./mods:recordInfo/mods:recordIdentifier[@source='DE-28'],'/', '%252F'))" />   
+                </xsl:when>
+                <xsl:when test="./mods:identifier[@type='doi']">
+                  <xsl:attribute name="href" select="concat('https://doi.org/', ./mods:identifier[@type='doi'])" />   
+                </xsl:when>
+                <xsl:when test="./mods:identifier[@type='purl']">
+                  <xsl:attribute name="href" select="./mods:identifier[@type='purl']" />   
+                </xsl:when>
+              </xsl:choose>
+              <xsl:attribute name="data-toggle">popover</xsl:attribute>
+              <xsl:attribute name="data-placement">bottom</xsl:attribute>
+              <xsl:attribute name="data-html">true</xsl:attribute>
+              <xsl:attribute name="data-content">
+                <xsl:value-of select="concat(./mods:note[@type='relation_label'], ': &lt;br/&gt;')" />
+                &lt;strong&gt;
+                <xsl:choose>
+                  <xsl:when test="./mods:titleInfo">
+                   {string-join((./mods:titleInfo, ./mods:subTitle), ': ')}
+                    </xsl:when>
+                    <xsl:when test="./mods:identifier[@type='doi']">
+                      &lt;a href=&apos;{concat("https://doi.org/", ./mods:identifier[@type="doi"])}&apos;&gt;
+                      {concat('https://doi.org/', ./mods:identifier[@type='doi'])}&lt;/a&gt;
+                    </xsl:when>
+                </xsl:choose>
+                &lt;/strong&gt;
+                <xsl:if test="./mods:note[@type='format_type']">
+                  &lt;br/&gt;({./mods:note[@type='format_type']})
+                </xsl:if>
+              </xsl:attribute>
+              
+              <xsl:choose>
+                <xsl:when test="./@type='preceding'">
+                  <i class="fas fa-step-backward"></i>   
+                </xsl:when>
+                <xsl:when test="./@type='succeeding'">
+                  <i class="fas fa-step-forward"></i>
+                </xsl:when>
+              </xsl:choose>
+            </xsl:element>
+            
+          </xsl:for-each>
+          </p>            
+        </div>
+     </xsl:if>
+  </xsl:template>
+  
+  
 </xsl:stylesheet>
