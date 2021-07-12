@@ -266,16 +266,46 @@
                 </xsl:for-each>  
               </p>
            </xsl:if>
-           <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.share')}</h4>
-           <div class="shariff" data-url="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}"
-             data-services="[&quot;twitter&quot;, &quot;facebook&quot;, &quot;linkedin&quot;, &quot;xing&quot;, &quot;whatsapp&quot;, &quot;telegram&quot;, &quot;mail&quot;, &quot;info&quot;]"
-             data-mail-url="mailto:" data-mail-subject="{mcri18n:translate('OMD.ir.shariff.subject')}" data-mail-body="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}"
-             data-orientation="horizontal" data-theme="white">
-           </div> <!-- data-theme=standard|grey|white --> 
-           <script src="{$WebApplicationBaseURL}modules/shariff_3.2.1/shariff.min.js"></script>
-           <p></p>
+
          </div>
     </xsl:if>
+    
+        <!--Tools -->
+    <div class="my-0" style="position:relative"> 
+          <div style="position:absolute; top:-3em;right:0em">
+            <button type="button" class="btn btn-sm ir-button-tools hidden-xs" data-toggle="collapse" data-target="#hiddenTools"
+                    title="{mcri18n:translate('Webpage.tools.menu4experts')}">
+              <i class="fa fa-cog" style="opacity:.33"></i>
+            </button>
+          </div>
+          <div id="hiddenTools" class="collapse">
+            <div style="padding-bottom:6px">
+              <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" title="{mcri18n:translate('Webpage.tools.showXML')}"
+                   href="{$WebApplicationBaseURL}api/v1/objects/{/mycoreobject/@ID}" rel="nofollow">XML</a>
+              <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" title="{mcri18n:translate('Webpage.tools.showSOLR')}"
+                  href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}?XSL.Style=solrdocument-3" rel="nofollow">SOLR in</a>
+              <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" title="{mcri18n:translate('Webpage.tools.showSOLR')}"
+                  href="{$WebApplicationBaseURL}api/v1/search?q=id:{/mycoreobject/@ID}" rel="nofollow">SOLR doc</a>
+              <xsl:if test="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='REPOS_METS']]">
+                <xsl:variable name="derid" select="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='REPOS_METS']]/@xlink:href" />
+                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" title="{mcri18n:translate('Webpage.tools.showREPOS_METS')}" 
+                   href="{$WebApplicationBaseURL}api/v1/objects/${it.id}/derivates/{$derid}/open">METS</a>
+              </xsl:if>
+              <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[contains(@valueURI, '#epub') or contains(@valueURI, '#data')]">
+                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
+                   href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}?XSL.Transformer=rosdok_datacite" rel="nofollow">Datacite</a>
+              </xsl:if>
+              <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']">
+                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
+                   href="{$WebApplicationBaseURL}oai?verb=GetRecord&amp;metadataPrefix=oai_dc&amp;identifier=oai:oai.rosdok.uni-rostock.de:{/mycoreobject/@ID}" rel="nofollow">OAI</a>
+                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
+                   href="{$WebApplicationBaseURL}oai/dnb-urn?verb=GetRecord&amp;metadataPrefix=epicur&amp;identifier=oai:oai-dnb-urn.rosdok.uni-rostock.de:{/mycoreobject/@ID}" rel="nofollow">OAI:DNB_URN</a>
+                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
+                   href="{$WebApplicationBaseURL}oai/dnb-epflicht?verb=GetRecord&amp;metadataPrefix=xMetaDissPlus&amp;identifier=oai:oai-dnb-epflicht.rosdok.uni-rostock.de:{/mycoreobject/@ID}" rel="nofollow">OAI:DNB_EPFLICHT</a>
+              </xsl:if>
+            </div>
+          </div>
+    </div> 
     
         <!-- Provider (bereitgestellt durch:) -->
     <xsl:if test="contains(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '/doctype#histbest')">
@@ -315,7 +345,6 @@
       </div>
     </xsl:if>
     
-    
     <!-- Rechte -->
     <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='licenseinfo'][contains(@valueURI, 'licenseinfo#work')]">
          <div class="ir-box">
@@ -332,43 +361,17 @@
            </p>
          </div>
     </xsl:for-each>
-
-    <!--Tools -->
-    <div class="my-3"> 
-          <div class="float-right">
-            <button type="button" class="btn btn-sm ir-button-tools hidden-xs" data-toggle="collapse" data-target="#hiddenTools"
-                    title="{mcri18n:translate('Webpage.tools.menu4experts')}">
-              <i class="fa fa-cog"></i>
-            </button>
-          </div>
-          <div id="hiddenTools" class="collapse">
-            <div style="padding-bottom:6px">
-              <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" title="{mcri18n:translate('Webpage.tools.showXML')}"
-                   href="{$WebApplicationBaseURL}api/v1/objects/{/mycoreobject/@ID}" rel="nofollow">XML</a>
-              <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" title="{mcri18n:translate('Webpage.tools.showSOLR')}"
-                  href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}?XSL.Style=solrdocument-3" rel="nofollow">SOLR in</a>
-              <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" title="{mcri18n:translate('Webpage.tools.showSOLR')}"
-                  href="{$WebApplicationBaseURL}api/v1/search?q=id:{/mycoreobject/@ID}" rel="nofollow">SOLR doc</a>
-              <xsl:if test="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='REPOS_METS']]">
-                <xsl:variable name="derid" select="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='REPOS_METS']]/@xlink:href" />
-                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" title="{mcri18n:translate('Webpage.tools.showREPOS_METS')}" 
-                   href="{$WebApplicationBaseURL}api/v1/objects/${it.id}/derivates/{$derid}/open">METS</a>
-              </xsl:if>
-              <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[contains(@valueURI, '#epub') or contains(@valueURI, '#data')]">
-                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
-                   href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}?XSL.Transformer=rosdok_datacite" rel="nofollow">Datacite</a>
-              </xsl:if>
-              <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']">
-                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
-                   href="{$WebApplicationBaseURL}oai?verb=GetRecord&amp;metadataPrefix=oai_dc&amp;identifier=oai:oai.rosdok.uni-rostock.de:{/mycoreobject/@ID}" rel="nofollow">OAI</a>
-                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
-                   href="{$WebApplicationBaseURL}oai/dnb-urn?verb=GetRecord&amp;metadataPrefix=epicur&amp;identifier=oai:oai-dnb-urn.rosdok.uni-rostock.de:{/mycoreobject/@ID}" rel="nofollow">OAI:DNB_URN</a>
-                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
-                   href="{$WebApplicationBaseURL}oai/dnb-epflicht?verb=GetRecord&amp;metadataPrefix=xMetaDissPlus&amp;identifier=oai:oai-dnb-epflicht.rosdok.uni-rostock.de:{/mycoreobject/@ID}" rel="nofollow">OAI:DNB_EPFLICHT</a>
-              </xsl:if>
-            </div>
-          </div>
-    </div>  
+    <!-- Teilen -->
+    <div class="ir-box">
+        <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.share')}</h4>
+        <div class="shariff" data-url="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}"
+             data-services="[&quot;twitter&quot;, &quot;facebook&quot;, &quot;linkedin&quot;, &quot;xing&quot;, &quot;whatsapp&quot;, &quot;telegram&quot;, &quot;mail&quot;, &quot;info&quot;]"
+             data-mail-url="mailto:" data-mail-subject="{mcri18n:translate('OMD.ir.shariff.subject')}" data-mail-body="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}"
+             data-orientation="horizontal" data-theme="white">
+        </div> <!-- data-theme=standard|grey|white --> 
+        <script src="{$WebApplicationBaseURL}modules/shariff_3.2.1/shariff.min.js"></script>
+        <p></p>
+    </div>
   </xsl:template>
   
   <xsl:template name="download-entry">
