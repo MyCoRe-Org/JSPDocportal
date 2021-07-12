@@ -21,6 +21,12 @@
 <fmt:message key="Browse.Filter.${mode}.allMeta" var="lblAllMeta" />
 <fmt:message key="Browse.Filter.${mode}.content" var="lblContent" />
 
+ <div class="custom-control custom-control-inline float-right mr-0">
+    <a class="btn btn-outline-secondary btn-sm" href="${WebApplicationBaseURL}browse/${mode}">
+      alle Dokumente
+    </a>
+ </div>
+ 
 <div class="custom-control custom-radio custom-control-inline">
 	<input type="radio" checked="checked" id="filterField1"
 		name="filterField" value="allMeta" class="custom-control-input">
