@@ -65,7 +65,7 @@
     <script>
     window.addEventListener("load", function(){
             new mycore.viewer.MyCoReViewer(jQuery("#${id}"), {
-                "mobile": false,
+                mobile: false,
                 pdfProviderURL: "${applicationScope.WebApplicationBaseURL}file/${mcrid}/${derid}/${maindoc}",
                 derivate: "${mcrid}",
                 filePath: "${maindoc}",
@@ -75,11 +75,22 @@
                 lang: "de",
                 webApplicationBaseURL: "${applicationScope.WebApplicationBaseURL}",
                 pdfWorkerURL: "${iviewBaseURL}js/lib/pdf.worker.js",
-                "canvas.startup.fitWidth": false,
-                "canvas.overview.enabled": false,
-                "chapter.showOnStart": false,
-                "chapter.enabled" : false,
-                "imageOverview.enabled" : false,
+                canvas: {
+                	startup:{
+                		fitWidth: true
+                	},
+                	overview:{
+                		enabled:true,
+                		minVisibleSize: 600
+                	}
+                }
+                chapter: {
+                	showOnStart: false,
+                    enabled: false
+                },
+                imageOverview: {
+                	enabled" : false
+                },
                 permalink: {
                     enabled: true,
                     updateHistory: false,
@@ -140,7 +151,7 @@
     <script>
     window.addEventListener("load", function(){
             new mycore.viewer.MyCoReViewer(jQuery("#${id}"),  {
-            	"mobile": false,
+            	mobile: false,
                 doctype: "mets",
                 metsURL: "${applicationScope.WebApplicationBaseURL}file/${mcrid}/${derid}/${maindoc}",
                 imageXmlPath: "${applicationScope.WebApplicationBaseURL}tiles/${fn:replace(recordIdentifier,'/','_')}/",
@@ -150,9 +161,18 @@
                 i18nURL: "${applicationScope.WebApplicationBaseURL}rsc/locale/translate/{lang}/component.viewer.*",
                 lang: "de",
                 metadataURL: "",
-                derivateURL : "${applicationScope.WebApplicationBaseURL}depot/${fn:replace(recordIdentifier,'/','_')}/",
+                derivateURL: "${applicationScope.WebApplicationBaseURL}depot/${fn:replace(recordIdentifier,'/','_')}/",
                 objId: "",
                 webApplicationBaseURL: "${applicationScope.WebApplicationBaseURL}",
+                canvas: {
+                	startup:{
+                		fitWidth: true
+                	},
+                	overview:{
+                		enabled:true,
+                		minVisibleSize: 600
+                	}
+                },
                 imageOverview : {
                     enabled: true
                 },
@@ -164,11 +184,6 @@
                     enabled: true,
                     updateHistory: false,
                     viewerLocationPattern:"{baseURL}/mcrviewer/recordIdentifier/${fn:replace(recordIdentifier,'/','_')}/{file}"
-                },
-                canvas: {
-                    overview: {
-                        enabled: true
-                    }
                 },
                 text: {
                 	enabled: false
