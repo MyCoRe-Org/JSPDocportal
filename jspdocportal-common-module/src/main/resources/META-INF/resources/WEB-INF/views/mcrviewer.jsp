@@ -59,6 +59,10 @@
         display:none;
       }
       
+      div[data-id='ActionControlGroup']{
+        display:none;
+      }
+      
     </style>
 	<script>
 		window.onload = function() {
