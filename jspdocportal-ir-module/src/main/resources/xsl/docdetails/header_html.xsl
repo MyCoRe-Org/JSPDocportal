@@ -168,7 +168,7 @@
           </xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-        <xsl:for-each select="$abstract">
+        <xsl:for-each select="$abstract[string-length(.)>0]">
         <p class="text-justify small pt-2">
           <strong>Abstract:  </strong>
           <xsl:variable name="text" select="mcrstring:shorten(., 400)" />
