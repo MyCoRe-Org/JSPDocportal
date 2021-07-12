@@ -11,18 +11,21 @@
   <xsl:param name="WebApplicationBaseURL" />
   
   <xsl:template name="title">
+    <xsl:if test="mods:partName or mods:partNumber">
+    <tr><td>
+        <xsl:value-of select="string-join((mods:nonSort, string-join((mods:title, mods:subTitle), ': ')),' ')" />
+    </td></tr>
+    </xsl:if>
     <tr><td>
       <xsl:variable name="theTitle">
       <xsl:choose>
         <xsl:when test="mods:partName or mods:partNumber">
-          <xsl:value-of select="string-join((mods:nonSort, string-join((mods:title, mods:subTitle), ': ')),' ')" />
-          <br />
-          <xsl:element name="{if(@usage='primary') then 'strong' else 'span'}">
+          <xsl:element name="{if(@usage='primary') then 'span' else 'span'}">
             <xsl:value-of select="string-join((mods:partNumber, mods:partName),': ')" />
           </xsl:element>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:element name="{if(@usage='primary') then 'strong' else 'span'}">
+          <xsl:element name="{if(@usage='primary') then 'span' else 'span'}">
             <xsl:value-of select="string-join((mods:nonSort, string-join((mods:title, mods:subTitle), ': ')),' ')" />
           </xsl:element>
         </xsl:otherwise> 
@@ -38,7 +41,6 @@
           <xsl:copy-of select="$theTitle" />
         </xsl:otherwise>
       </xsl:choose>
-      
       <xsl:if test="@type">
         <span class="float-right small">
           [{mcri18n:translate(concat('OMD.ir.docdetails.othertitle.type.', @type))}]
