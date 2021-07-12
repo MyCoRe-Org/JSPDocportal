@@ -202,42 +202,23 @@
            </div>
          </div>
     </xsl:if>
+    
+    <xsl:variable name="class_provider" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" />
+    <xsl:variable name="catalogs">
+      <xsl:choose>
+        <xsl:when test="$class_provider">
+          <xsl:value-of select="mcrmods:to-mycoreclass($class_provider, 'single')/categories/category/label[@xml:lang='x-catalog']/@text" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="isil" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier/@source" />
+          <xsl:value-of select="document('classification:metadata:-1:children:provider')//category[label[@xml:lang='x-isil']/@text=$isil]/label[@xml:lang='x-catalog']/@text" />                 
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
        
     <xsl:if test="not(/mycoreobject/service/servstates/servstate/@categid='deleted')">
          <div class="ir-box mt-3">
-           <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='edited']/mods:mods/mods:abstract[@type='advice']">
-             <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.advice')}</h4>
-              <xsl:variable name="dataURLcontent" select="document(./@altFormat)" />
-              <xsl:value-of select="fn:serialize($dataURLcontent/*/node())" disable-output-escaping="true"/>
-           </xsl:for-each>
-         
            <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
-             <xsl:variable name="class_provider" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" />
-             <xsl:variable name="catalogs">
-               <xsl:choose>
-                 <xsl:when test="$class_provider">
-                   <xsl:value-of select="mcrmods:to-mycoreclass($class_provider, 'single')/categories/category/label[@xml:lang='x-catalog']/@text" />
-                 </xsl:when>
-                 <xsl:otherwise>
-                   <xsl:variable name="isil" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier/@source" />
-                   <xsl:value-of select="document('classification:metadata:-1:children:provider')//category[label[@xml:lang='x-isil']/@text=$isil]/label[@xml:lang='x-catalog']/@text" />                 
-                 </xsl:otherwise>
-               </xsl:choose>
-             </xsl:variable>
-           
-             <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.export')}</h4>
-             <p>
-               <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
-                 <xsl:if test="$catalogs">
-                   <xsl:call-template name="biblio-formate">
-                     <xsl:with-param name="catalogs" select="$catalogs" />
-                     <xsl:with-param name="ppn" select="." />
-                   </xsl:call-template>
-                 </xsl:if>
-               
-              </xsl:for-each>
-            </p>
-            
             <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.portals')}</h4>
             <p>
               <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
@@ -266,51 +247,21 @@
                 </xsl:for-each>  
               </p>
            </xsl:if>
+           
+           <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='edited']/mods:mods/mods:abstract[@type='advice']">
+             <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.advice')}</h4>
+              <xsl:variable name="dataURLcontent" select="document(./@altFormat)" />
+              <xsl:value-of select="fn:serialize($dataURLcontent/*/node())" disable-output-escaping="true"/>
+           </xsl:for-each>
 
          </div>
     </xsl:if>
     
-        <!--Tools -->
-    <div class="my-0" style="position:relative"> 
-          <div style="position:absolute; top:-3em;right:0em">
-            <button type="button" class="btn btn-sm ir-button-tools hidden-xs" data-toggle="collapse" data-target="#hiddenTools"
-                    title="{mcri18n:translate('Webpage.tools.menu4experts')}">
-              <i class="fa fa-cog" style="opacity:.33"></i>
-            </button>
-          </div>
-          <div id="hiddenTools" class="collapse">
-            <div style="padding-bottom:6px">
-              <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" title="{mcri18n:translate('Webpage.tools.showXML')}"
-                   href="{$WebApplicationBaseURL}api/v1/objects/{/mycoreobject/@ID}" rel="nofollow">XML</a>
-              <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" title="{mcri18n:translate('Webpage.tools.showSOLR')}"
-                  href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}?XSL.Style=solrdocument-3" rel="nofollow">SOLR in</a>
-              <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" title="{mcri18n:translate('Webpage.tools.showSOLR')}"
-                  href="{$WebApplicationBaseURL}api/v1/search?q=id:{/mycoreobject/@ID}" rel="nofollow">SOLR doc</a>
-              <xsl:if test="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='REPOS_METS']]">
-                <xsl:variable name="derid" select="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='REPOS_METS']]/@xlink:href" />
-                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" title="{mcri18n:translate('Webpage.tools.showREPOS_METS')}" 
-                   href="{$WebApplicationBaseURL}api/v1/objects/${it.id}/derivates/{$derid}/open">METS</a>
-              </xsl:if>
-              <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[contains(@valueURI, '#epub') or contains(@valueURI, '#data')]">
-                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
-                   href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}?XSL.Transformer=rosdok_datacite" rel="nofollow">Datacite</a>
-              </xsl:if>
-              <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']">
-                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
-                   href="{$WebApplicationBaseURL}oai?verb=GetRecord&amp;metadataPrefix=oai_dc&amp;identifier=oai:oai.rosdok.uni-rostock.de:{/mycoreobject/@ID}" rel="nofollow">OAI</a>
-                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
-                   href="{$WebApplicationBaseURL}oai/dnb-urn?verb=GetRecord&amp;metadataPrefix=epicur&amp;identifier=oai:oai-dnb-urn.rosdok.uni-rostock.de:{/mycoreobject/@ID}" rel="nofollow">OAI:DNB_URN</a>
-                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
-                   href="{$WebApplicationBaseURL}oai/dnb-epflicht?verb=GetRecord&amp;metadataPrefix=xMetaDissPlus&amp;identifier=oai:oai-dnb-epflicht.rosdok.uni-rostock.de:{/mycoreobject/@ID}" rel="nofollow">OAI:DNB_EPFLICHT</a>
-              </xsl:if>
-            </div>
-          </div>
-    </div> 
-    
-        <!-- Provider (bereitgestellt durch:) -->
+
+        
+    <!-- Provider (bereitgestellt durch:) -->
     <xsl:if test="contains(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '/doctype#histbest')">
-      <div class="card border border-primary mb-3">
-        <div class="card-body">
+     <div class="ir-box">
           <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.provider')}</h4>
           <xsl:variable name="class_provider" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" />
           <xsl:variable name="categ">
@@ -341,13 +292,14 @@
               </td>
             </tr>
           </table>
-        </div>
       </div>
+      
     </xsl:if>
     
     <!-- Rechte -->
-    <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='licenseinfo'][contains(@valueURI, 'licenseinfo#work')]">
-         <div class="ir-box">
+    <div class="ir-box">
+      <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='licenseinfo'][contains(@valueURI, 'licenseinfo#work')]">
+      
            <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.licenseinfo')}</h4>
            <xsl:variable name="categ" select="mcrmods:to-mycoreclass(., 'single')/categories/category" />
            <span class="clearfix">
@@ -359,10 +311,25 @@
            <p class="text-justify form-text text-muted small">
              <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@description" disable-output-escaping="true" />
            </p>
-         </div>
-    </xsl:for-each>
+
+      </xsl:for-each>
+    </div>
+
     <!-- Teilen -->
     <div class="ir-box">
+       <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
+        <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.export')}</h4>
+        <p>
+          <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
+            <xsl:if test="$catalogs">
+              <xsl:call-template name="biblio-formate">
+                <xsl:with-param name="catalogs" select="$catalogs" />
+                <xsl:with-param name="ppn" select="." />
+              </xsl:call-template>
+            </xsl:if>
+          </xsl:for-each>
+        </p>
+        </xsl:if>
         <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.share')}</h4>
         <div class="shariff" data-url="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}"
              data-services="[&quot;twitter&quot;, &quot;facebook&quot;, &quot;linkedin&quot;, &quot;xing&quot;, &quot;whatsapp&quot;, &quot;telegram&quot;, &quot;mail&quot;, &quot;info&quot;]"
@@ -372,6 +339,42 @@
         <script src="{$WebApplicationBaseURL}modules/shariff_3.2.1/shariff.min.js"></script>
         <p></p>
     </div>
+    <!--Tools -->
+    <div class="my-0" style="position:relative"> 
+          <div style="position:absolute; top:-3em;right:0em">
+            <button type="button" class="btn btn-sm ir-button-tools hidden-xs" data-toggle="collapse" data-target="#hiddenTools"
+                    title="{mcri18n:translate('Webpage.tools.menu4experts')}">
+              <i class="fa fa-cog" style="opacity:.05"></i>
+            </button>
+          </div>
+          <div id="hiddenTools" class="collapse">
+            <div style="padding-bottom:6px">
+              <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" title="{mcri18n:translate('Webpage.tools.showXML')}"
+                   href="{$WebApplicationBaseURL}api/v1/objects/{/mycoreobject/@ID}" rel="nofollow">XML</a>
+              <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" title="{mcri18n:translate('Webpage.tools.showSOLR')}"
+                  href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}?XSL.Style=solrdocument-3" rel="nofollow">SOLR in</a>
+              <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" title="{mcri18n:translate('Webpage.tools.showSOLR')}"
+                  href="{$WebApplicationBaseURL}api/v1/search?q=id:{/mycoreobject/@ID}" rel="nofollow">SOLR doc</a>
+              <xsl:if test="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='REPOS_METS']]">
+                <xsl:variable name="derid" select="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='REPOS_METS']]/@xlink:href" />
+                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" title="{mcri18n:translate('Webpage.tools.showREPOS_METS')}" 
+                   href="{$WebApplicationBaseURL}api/v1/objects/${it.id}/derivates/{$derid}/open">METS</a>
+              </xsl:if>
+              <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[contains(@valueURI, '#epub') or contains(@valueURI, '#data')]">
+                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
+                   href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}?XSL.Transformer=rosdok_datacite" rel="nofollow">Datacite</a>
+              </xsl:if>
+              <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']">
+                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
+                   href="{$WebApplicationBaseURL}oai?verb=GetRecord&amp;metadataPrefix=oai_dc&amp;identifier=oai:oai.rosdok.uni-rostock.de:{/mycoreobject/@ID}" rel="nofollow">OAI</a>
+                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
+                   href="{$WebApplicationBaseURL}oai/dnb-urn?verb=GetRecord&amp;metadataPrefix=epicur&amp;identifier=oai:oai-dnb-urn.rosdok.uni-rostock.de:{/mycoreobject/@ID}" rel="nofollow">OAI:DNB_URN</a>
+                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
+                   href="{$WebApplicationBaseURL}oai/dnb-epflicht?verb=GetRecord&amp;metadataPrefix=xMetaDissPlus&amp;identifier=oai:oai-dnb-epflicht.rosdok.uni-rostock.de:{/mycoreobject/@ID}" rel="nofollow">OAI:DNB_EPFLICHT</a>
+              </xsl:if>
+            </div>
+          </div>
+    </div> 
   </xsl:template>
   
   <xsl:template name="download-entry">
