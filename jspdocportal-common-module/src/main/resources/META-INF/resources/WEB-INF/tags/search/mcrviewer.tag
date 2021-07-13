@@ -83,13 +83,13 @@
                 		enabled:true,
                 		minVisibleSize: 600
                 	}
-                }
+                },
                 chapter: {
                 	showOnStart: false,
                     enabled: false
                 },
                 imageOverview: {
-                	enabled" : false
+                	enabled: false
                 },
                 permalink: {
                     enabled: true,
