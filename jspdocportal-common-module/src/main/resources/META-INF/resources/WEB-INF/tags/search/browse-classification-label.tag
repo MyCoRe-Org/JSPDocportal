@@ -11,11 +11,14 @@
         <c:when test="${empty lang}">
           ${category.currentLabel.get().text}
         </c:when>
-        <c:when test="${not category.getLabel('x-'.concat(lang).concat('-short')).isEmpty() }">
+        <c:when test="${category.getLabel('x-'.concat(lang).concat('-short')).isPresent() }">
           ${category.getLabel('x-'.concat(lang).concat('-short')).get().text}
-        </c:when> 
-        <c:otherwise>
+        </c:when>
+        <c:when test="${category.getLabel(lang).isPresent() }">
           ${category.getLabel(lang).get().text}
+        </c:when>
+        <c:otherwise>
+          ???${category.getId()}@${lang}???
         </c:otherwise>
       </c:choose>
 	</span>
