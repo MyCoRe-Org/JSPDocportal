@@ -19,6 +19,7 @@
 package org.mycore.jspdocportal.common;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.UUID;
 
 import javax.servlet.Filter;
@@ -29,11 +30,14 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.jstl.core.Config;
+import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
+import org.mycore.services.i18n.MCRTranslation;
 
 /**
  * ServletFilter which initializes a MyCoRe Session for JSPs
@@ -74,10 +78,15 @@ public class MCRSessionInitializationFilter implements Filter {
         //this would set the current locale into the JSP Standard Taglib Configuration,
         //but switching the language seems to work without this command
         //import javax.servlet.jsp.jstl.core.Config;
-        //Config.set(httpRequest.getSession(), Config.FMT_LOCALE, mcrSession.getLocale());
+        Locale currentLocale = (Locale) Config.get(httpRequest.getSession(), Config.FMT_LOCALE);
+        if(currentLocale == null || !currentLocale.equals(mcrSession.getLocale())) {
+            Config.set(httpRequest.getSession(), Config.FMT_LOCALE, mcrSession.getLocale());
+            LocalizationContext locCtxt = new LocalizationContext(MCRTranslation.getResourceBundle("messages", mcrSession.getLocale()));
+            Config.set(httpRequest.getSession(), Config.FMT_LOCALIZATION_CONTEXT, locCtxt);
+        }
 
         chain.doFilter(request, response);
-
+        
         MCRServlet.cleanupMCRSession(httpRequest, name);
     }
 
