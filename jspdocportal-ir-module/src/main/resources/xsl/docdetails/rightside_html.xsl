@@ -378,6 +378,7 @@
   </xsl:template>
   
   <xsl:template name="download-entry">
+   <xsl:if test="./maindoc/text()">
     <xsl:variable name="mcrid" select="/mycoreobject/@ID" />
     <xsl:variable name="derid" select="./@xlink:href" />
     <xsl:variable name="fulltext_url">{$WebApplicationBaseURL}file/{$mcrid}/{$derid}/{./maindoc/text()}</xsl:variable>
@@ -405,6 +406,7 @@
         <span class="small">{mcrstring:abbreviate-center(./maindoc, 40)}</span>
       </a>
     </div>
+   </xsl:if> 
   </xsl:template>
   
   <xsl:template name="download-external">
