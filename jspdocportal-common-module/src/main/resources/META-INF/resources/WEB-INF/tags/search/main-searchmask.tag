@@ -6,9 +6,13 @@
 <%@ attribute name="mode" required="true" type="java.lang.String"%>
 
 
-<div class="input-group mb-3" data-ir-mode="${mode}">
+  <fmt:message var="lblAllMeta" key="Browse.ir.Filter.${mode}.allMeta" />
+  <fmt:message var="lblContent" key="Browse.ir.Filter.${mode}.content"  />
+  <fmt:message var="lblSearch" key="Browse.ir.Search.placeholder"  />
+
+  <div class="input-group mb-3" data-ir-mode="${mode}">
 	<input type="text" class="form-control ir-form-control"
-		id="filterValue" name="filterValue" placeholder="Suche "
+		id="filterValue" name="filterValue" placeholder="${lblSearch} "
 		onkeypress="if (event.keyCode == 13) { changeFilterIncludeURL($('input[name=\'filterField\']:checked').val(), $('#filterValue').val(), $('#filterValue').parent().data('ir-mode'));}" />
 	<div class="input-group-append">
 		<button id="filterInclude" class="btn btn-primary" type="button"
@@ -16,35 +20,32 @@
 			<i class="fa fa-search"></i>
 		</button>
 	</div>
-</div>
+  </div>
 
-<fmt:message key="Browse.Filter.${mode}.allMeta" var="lblAllMeta" />
-<fmt:message key="Browse.Filter.${mode}.content" var="lblContent" />
-
- <div class="custom-control custom-control-inline float-right mr-0">
+  <div class="custom-control custom-control-inline float-right mr-0">
     <a class="btn btn-outline-secondary btn-sm" href="${WebApplicationBaseURL}browse/${mode}">
-      alle Dokumente
+      <fmt:message key="Browse.ir.Search.alldocuments" />
     </a>
- </div>
+  </div>
  
-<div class="custom-control custom-radio custom-control-inline">
+  <div class="custom-control custom-radio custom-control-inline">
 	<input type="radio" checked="checked" id="filterField1"
 		name="filterField" value="allMeta" class="custom-control-input">
 	<label class="custom-control-label" for="filterField1">
 	<c:out escapeXml="false" value="${fn:replace(lblAllMeta,'<br />', ' ')}" /></label>
-</div>
+  </div>
 
-<div class="custom-control custom-radio custom-control-inline">
+  <div class="custom-control custom-radio custom-control-inline">
 	<input type="radio" id="filterField2" name="filterField"
 		value="content" class="custom-control-input"> <label
 		class="custom-control-label" for="filterField2">
 		<c:out escapeXml="false" value="${fn:replace(lblContent,'<br />', ' ')}" /></label>
-</div>
-<script>
-function changeFilterIncludeURL(key, value, mask) {
-	window.location=$("meta[name='mcr:baseurl']").attr("content")
+  </div>
+  <script>
+    function changeFilterIncludeURL(key, value, mask) {
+	  window.location=$("meta[name='mcr:baseurl']").attr("content")
 		+ "browse/"+mask+"?"
     	+ "&_add-filter="
     	+ encodeURIComponent("+" + key+":"+value);
-}
-</script>
+    }
+  </script>

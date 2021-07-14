@@ -1,5 +1,5 @@
-
 <%@ page pageEncoding="UTF-8" contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="fmt"     uri="http://java.sun.com/jsp/jstl/fmt"%>
 
     <script type="text/javascript">
       function changeFacetIncludeURL(key, value, mask) {
@@ -9,6 +9,8 @@
                  + encodeURIComponent("+" + key +":"+ value);
       }
     </script>
+    
+    <fmt:message var="lblPlaceholder" key="Browse.ir.Search.placeholder.count" />
     
 <%--TODO use SOLR-Parameter "&facet.mincount=1" --%>
     <script>
@@ -31,7 +33,7 @@
         success : function(data) {
           <%-- num found --%>
                 var x = data.response.numFound;
-                $('#filterValue').attr('placeholder', 'Suche in ' + x.toLocaleString() + ' Dokumenten');
+                $('#filterValue').attr('placeholder', '${lblPlaceholder}'.replace('[x]', x.toLocaleString()));
                 
                 <%-- facets --%>
           var fc = data.facet_counts.facet_fields;
