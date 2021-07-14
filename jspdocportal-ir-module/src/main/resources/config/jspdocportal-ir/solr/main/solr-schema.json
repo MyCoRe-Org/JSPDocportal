@@ -140,15 +140,7 @@
 		"add-field": {
 			"name": "ir.host.recordIdentifier",
 			"type": "string",
-			"multiValued": false,
-			"stored": true
-		}
-	},
-	{
-		"add-field": {
-			"name": "ir.host.recordIdentifier2",
-			"type": "string",
-			"multiValued": false,
+			"multiValued": true,
 			"stored": true
 		}
 	},
@@ -202,7 +194,23 @@
 	},
 	{
 		"add-field": {
-			"name": "ir.partTitle.result",
+			"name": "ir.partName.result",
+			"type": "string",
+			"multiValued": false,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "ir.partNumber.result",
+			"type": "string",
+			"multiValued": false,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "ir.seriesNumber.result",
 			"type": "string",
 			"multiValued": false,
 			"stored": true

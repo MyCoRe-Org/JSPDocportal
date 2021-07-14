@@ -172,7 +172,10 @@
 			        <div id="nav_content_structure" class="collapse" data-parent="#nav_content_root">
 				      <div style="font-size: 85%;min-height:600px">
 			    	    <c:set var="recordIdentifier"><x:out select="$doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier"/></c:set>
-					    <browse:docdetails-structure hostRecordIdentifier="${recordIdentifier}" hostMcrID="${it.id}" />
+                        <c:set var="doctype"><x:out select="substring-after($doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI,'#')"/></c:set>
+                        <c:set var="zdbid"><x:out select="$doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='zdb']"/></c:set>
+  
+                        <browse:docdetails-structure hostRecordIdentifier="${recordIdentifier}" hostMcrID="${it.id}" hostDoctype="${doctype}" hostZDBID="${zdbid}" />
 				      </div>
 			        </div>
 		          </x:if>

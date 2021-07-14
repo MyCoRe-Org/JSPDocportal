@@ -86,9 +86,12 @@
         <xsl:otherwise>
           <xsl:for-each select="mods:titleInfo[@usage='primary']">
             <field name="ir.title.result">{string-join((string-join((./mods:nonSort, ./mods:title),' '), ./mods:subTitle),': ')}</field>
-            <xsl:if test="mods:partNumber|mods:partName">
-              <field name="ir.partTitle.result">{string-join((./mods:partNumber, ./mods:partName), ' : ')}</field>
+            <xsl:if test="mods:partNumber">
+              <field name="ir.partNumber.result">{./mods:partNumber}</field>
             </xsl:if> 
+            <xsl:if test="mods:partNumber|mods:partName">
+              <field name="ir.partName.result">{./mods:partName}</field>
+            </xsl:if>
           </xsl:for-each>
         </xsl:otherwise>
       </xsl:choose>
@@ -126,14 +129,9 @@
         </xsl:for-each>
       </xsl:for-each>
       
-      <xsl:for-each select="mods:relatedItem[not(@displayLabel='appears_in')][1]">
+      <xsl:for-each select="mods:relatedItem[not(@displayLabel='appears_in')]">
         <xsl:for-each select="mods:recordInfo[1]/mods:recordIdentifier">
           <field name="ir.host.recordIdentifier"><xsl:value-of select="." /></field> 
-        </xsl:for-each>
-      </xsl:for-each>
-      <xsl:for-each select="mods:relatedItem[not(@displayLabel='appears_in')][2]">
-        <xsl:for-each select="mods:recordInfo[1]/mods:recordIdentifier">
-          <field name="ir.host.recordIdentifier2"><xsl:value-of select="." /></field> 
         </xsl:for-each>
       </xsl:for-each>
       <xsl:for-each select="mods:relatedItem[not(@displayLabel='appears_in')][last()]">
@@ -141,7 +139,9 @@
           <field name="ir.sortstring"><xsl:value-of select="." /></field> 
         </xsl:for-each>
       </xsl:for-each>
-      
+      <xsl:for-each select="mods:relatedItem[@type='series']/mods:part/mods:detail[@type='volume']/mods:number">
+        <field name="ir.seriesNumber.result"><xsl:value-of select="." /></field> 
+      </xsl:for-each>
       
       <!-- ab hier ungeprüft: -->      
         

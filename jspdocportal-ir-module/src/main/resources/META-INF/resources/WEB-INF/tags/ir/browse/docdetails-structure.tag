@@ -10,6 +10,8 @@
 
 <%@ attribute name="hostRecordIdentifier" required="true" type="java.lang.String" %>
 <%@ attribute name="hostMcrID" required="true" type="java.lang.String" %>
+<%@ attribute name="hostDoctype" required="true" type="java.lang.String" %>
+<%@ attribute name="hostZDBID" required="false" type="java.lang.String" %>
 
 <%--make variables available in body: 
 <%@ variable name-given="mcrid" %>
@@ -35,19 +37,30 @@
 <c:set var="numHits" value="${result.numFound}" />
 
 <div class="panel panel-default ir-searchresult-panel">
-	<c:if test="${numHits > 0}">	
-		<ul class="list-group">
-			<c:forEach var="entry" items="${result.entries}">
-				<c:set var="mcrid" value="${entry.mcrid}" />
-				<c:set var="entry" value="${entry}" />
-				<c:set var="url"   value="${pageContext.request.contextPath}/resolve/id/${entry.mcrid}?_search=${result.id}&_hit=${entry.pos}" /> 
-				<li class="list-group-item">
-					<div class="ir-result-card">
-					  <browse:result-entry entry="${entry}" url="${url}" />
-  			          <div style="clear:both"></div>
-					</div>
-				</li>				 
-			</c:forEach>
-   		</ul>
-	</c:if>
+  <c:if test="${numHits > 0}">
+    <ul class="list-group">
+      <c:forEach var="entry" items="${result.entries}">
+        <c:set var="mcrid" value="${entry.mcrid}" />
+        <c:set var="entry" value="${entry}" />
+        <c:set var="url"   value="${pageContext.request.contextPath}/resolve/id/${entry.mcrid}?_search=${result.id}&_hit=${entry.pos}" />
+        <li class="list-group-item">
+          <div class="ir-result-card">
+            <browse:result-entry entry="${entry}" url="${url}" mode="${hostDoctype}" />
+            <div style="clear:both"></div>
+		  </div>
+		</li>				 
+	  </c:forEach>
+           
+      <c:if test="${(hostDoctype eq 'histbest.print.journal') and not(empty(hostZDBID))}">
+        <li class="list-group-item">
+          <div class="ir-result-card">
+            <fmt:message var="outZDB" key="OMD.ir.docdetails.structure.zdb_hint">
+              <fmt:param value="${hostZDBID}" />
+            </fmt:message>
+            <c:out value="${outZDB}" escapeXml="false" />
+          </div>
+        </li>
+      </c:if>        
+    </ul>
+  </c:if>
 </div>

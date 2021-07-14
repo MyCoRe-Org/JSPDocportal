@@ -7,17 +7,32 @@
 
 <%@ attribute name="url" required="true" type="java.lang.String"%>
 <%@ attribute name="entry" required="true" type="org.mycore.jspdocportal.common.search.MCRSearchResultEntry"%>
+<%@ attribute name="mode" required="false" type="java.lang.String"%>
 
 <div class="row">
-  <div class="col-sm-9">
+  <div class="col-sm-9" style="position:relative">
+    <c:if test="${fn:endsWith(mode,'series')}">
+      <c:if test="${not empty entry.data['ir.seriesNumber.result']}">
+        <div style="position:absolute;top:-5px;left:0px" class="border border-dark px-2" title="${mode}">
+          <strong>${entry.data['ir.seriesNumber.result']}</strong>
+        </div>
+        <p class="card-text">&nbsp;</p>
+      </c:if>
+    </c:if>
     <p class="card-text">${entry.data['ir.creator.result']}</p>
     <c:choose>
-      <c:when test="${empty(entry.data['ir.partTitle.result'])}">
+      <c:when test="${empty(entry.data['ir.partNumber.result']) and empty(entry.data['ir.partName.result'])}">
         <h4 class="card-title"><a href="${url}">${entry.label}</a></h4>
       </c:when>
       <c:otherwise>
-        <h5 class="card-title"><a href="${url}">${entry.label}</a></h5>
-        <h4 class="card-title"><a href="${url}">${entry.data['ir.partTitle.result']}</a></h4>
+        <c:if test="${not (fn:endsWith(mode,'journal') or fn:endsWith(mode,'multipart'))}">
+          <h5 class="card-title"><a href="${url}">${entry.label}</a></h5>
+        </c:if>
+        <h4 class="card-title"><a href="${url}">
+          <c:if test="${not empty entry.data['ir.partNumber.result']}">${entry.data['ir.partNumber.result']}</c:if>
+          <c:if test="${(not empty entry.data['ir.partNumber.result']) and not empty entry.data['ir.partName.result']}"><br /></c:if>
+          <c:if test="${not empty entry.data['ir.partName.result']}">${entry.data['ir.partName.result']}</c:if>
+        </a></h4>
       </c:otherwise>
     </c:choose>
     <c:if test="${not empty(entry.data['ir.host.title.result'])}">
