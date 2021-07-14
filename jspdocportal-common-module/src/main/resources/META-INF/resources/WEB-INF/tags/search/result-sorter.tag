@@ -25,7 +25,7 @@
 		<fmt:message key="Webpage.Searchresult.resort-label" />
 		  <select id="sortField" class="form-control ir-form-control form-control-sm" onchange="changeSortURL('asc')" style="width: auto; display: inline; margin: 0px 12px">
 			<c:forEach var="f" items="${fn:split(fields,',')}">
-				<option value="${f}" ${fn:startsWith(result.sort,f.concat(' ')) ? 'selected="selected"' : ''}><fmt:message key="Browse.Sort.${f}" /></option>
+				<option value="${f}" ${fn:startsWith(result.sort,f.concat(' ')) ? 'selected="selected"' : ''}><fmt:message key="Webpage.Searchresult.Sort.Label.${f}" /></option>
 			</c:forEach>
 		  </select>
     

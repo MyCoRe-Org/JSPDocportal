@@ -9,7 +9,7 @@
 <%@ taglib prefix="browse" tagdir="/WEB-INF/tags/ir/browse"%>
 
 <c:set var="org.mycore.navigation.path" scope="request">left.histbest.histbest_recherche</c:set>
-<fmt:message var="pageTitle" key="Webpage.browse.title.${it.result.mask}" />
+<fmt:message var="pageTitle" key="Browse.Title.${it.result.mask}" />
 
 <!doctype html>
 <html>
@@ -187,6 +187,6 @@
         </div>
       </div>
     </div>
-  <%@ include file="../fragments/footer.jspf" %>
+   <%@ include file="../fragments/footer.jspf" %>
   </body>
 </html>

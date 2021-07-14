@@ -9,6 +9,8 @@
 <%@ attribute name="mask" required="true" type="java.lang.String"%>
 <%@ attribute name="top" required="false" type="java.lang.Integer" %>
 
+<fmt:message var="btnMore" key="Browse.Filter.Buttons.more" />
+<fmt:message var="btnLess" key="Browse.Filter.Buttons.less" />
 
 <c:set var="top" value="${(empty top) ? 1000 : top}" />
 <script type="text/javascript">
@@ -76,13 +78,13 @@
 					</c:if>
 					<c:if test="${status.index >= top and status.last}">
 						<button id="moreFacets_btn_${facetID}" class="btn btn-primary btn-sm" style="width:unset;align-self:end" 
-                                data-toggle="collapse" data-target=".toggle-${facetID}-collapse"  >mehr ...</button>
+                                data-toggle="collapse" data-target=".toggle-${facetID}-collapse"  >${btnMore}</button>
 						<script type="text/javascript">
 						$('.toggle-${facetID}-collapse:first').on('shown.bs.collapse', function () {
-							$('#moreFacets_btn_${facetID}').text('weniger ...');
+							$('#moreFacets_btn_${facetID}').text('${btnLess}');
 						});
 						$('.toggle-${facetID}-collapse:first').on('hidden.bs.collapse', function () {
-							$('#moreFacets_btn_${facetID}').text('mehr ...')
+							$('#moreFacets_btn_${facetID}').text('${btnMore}')
 						});
 						</script>
 					</c:if>

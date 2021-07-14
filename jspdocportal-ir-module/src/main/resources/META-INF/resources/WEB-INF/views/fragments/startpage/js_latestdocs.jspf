@@ -10,7 +10,7 @@
       }
     </script>
     
-    <fmt:message var="lblPlaceholder" key="Browse.ir.Search.placeholder.count" />
+    <fmt:message var="lblPlaceholder" key="Browse.Search.placeholder.count" />
     
 <%--TODO use SOLR-Parameter "&facet.mincount=1" --%>
     <script>

@@ -6,9 +6,9 @@
 <%@ attribute name="mode" required="true" type="java.lang.String"%>
 
 
-  <fmt:message var="lblAllMeta" key="Browse.ir.Filter.${mode}.allMeta" />
-  <fmt:message var="lblContent" key="Browse.ir.Filter.${mode}.content"  />
-  <fmt:message var="lblSearch" key="Browse.ir.Search.placeholder"  />
+  <fmt:message var="lblAllMeta" key="Browse.Filter.${mode}.allMeta" />
+  <fmt:message var="lblContent" key="Browse.Filter.${mode}.content"  />
+  <fmt:message var="lblSearch" key="Browse.Search.placeholder"  />
 
   <div class="input-group mb-3" data-ir-mode="${mode}">
 	<input type="text" class="form-control ir-form-control"
@@ -24,7 +24,7 @@
 
   <div class="custom-control custom-control-inline float-right mr-0">
     <a class="btn btn-outline-secondary btn-sm" href="${WebApplicationBaseURL}browse/${mode}">
-      <fmt:message key="Browse.ir.Search.alldocuments" />
+      <fmt:message key="Browse.Search.alldocuments" />
     </a>
   </div>
  
