@@ -155,9 +155,10 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
             }
             String indent = indentBuffer.toString();
             if (cssClass != null) {
-                out.append(indent).append("  <ul class=\"" + cssClass + "\">");
+                out.append(indent)
+                    .append("  <ul class=\"" + cssClass + " level-" + Integer.toString(level + 1) + "\">");
             } else {
-                out.append(indent).append("  <ul>");
+                out.append(indent).append("  <ul class=\"level-" + Integer.toString(level + 1) + "\">");
             }
             for (NavigationItem el : printableElements) {
                 String id = el.getId();
@@ -217,9 +218,10 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
             }
             String indent = indentBuffer.toString();
             if (cssClass != null) {
-                out.append(indent).append("  <ul class=\"" + cssClass + "\">");
+                out.append(indent)
+                    .append("  <ul class=\"" + cssClass + " level-" + Integer.toString(level + 1) + "\">");
             } else {
-                out.append(indent).append("  <ul class=\"nav flex-column\">");
+                out.append(indent).append("  <ul class=\"nav flex-column level-" + Integer.toString(level + 1) + "\">");
             }
             for (NavigationItem el : printableElements) {
                 String id = el.getId();

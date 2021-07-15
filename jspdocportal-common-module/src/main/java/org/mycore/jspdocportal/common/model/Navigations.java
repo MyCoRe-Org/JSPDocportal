@@ -121,7 +121,7 @@ public class Navigations {
     private static void annotate(Navigation nav) {
         for (NavigationItem ni : nav.getChildren()) {
             ni.setParent(nav);
-            annotate(ni, 0, "");
+            annotate(ni, 1, "");
         }
     }
 
