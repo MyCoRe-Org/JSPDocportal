@@ -423,11 +423,10 @@
             </table></td>
           </tr>
         </xsl:if>
-      
-        <tr>
-          <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.licenses')}</th>
-          <td><table id="ir-table-docdetails-licenses" class="ir-table-docdetails-values">
-            <xsl:if test="mods:classification[contains(@valueURI, 'licenseinfo#work')]">
+        <xsl:if test="mods:classification[contains(@valueURI, 'licenseinfo#work')]">
+          <tr>
+            <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.licenses')}</th>
+            <td><table id="ir-table-docdetails-licenses" class="ir-table-docdetails-values">
               <tr>
                 <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[contains(@valueURI, 'licenseinfo#work')])" />
                 <td class="text-justify">
@@ -437,9 +436,9 @@
                   </span>
                 </td>
               </tr>
-            </xsl:if>
-          </table></td>
-        </tr>
+            </table></td>
+          </tr>
+        </xsl:if>
         <xsl:if test="mods:classification[contains(@valueURI, 'licenseinfo#digitisedimages')]">
           <tr>
             <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.licenses.digitisedimages')}</th>
