@@ -7,7 +7,7 @@
 	
 <%@ taglib prefix="search" tagdir="/WEB-INF/tags/search"%>
 <%@ taglib prefix="browse" tagdir="/WEB-INF/tags/ir/browse"%>
-<c:set var="org.mycore.navigation.path" scope="request">left.epub.epub_recherche</c:set>
+<c:set var="org.mycore.navigation.path" scope="request">left.epub.epub_browse</c:set>
 <fmt:message var="pageTitle" key="Browse.Title.${it.result.mask}" />
 
 
