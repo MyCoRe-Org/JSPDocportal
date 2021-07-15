@@ -16,8 +16,13 @@
 .ir-badge-restrictedaccess {
   background-color: darkred;
   color: white;
- 
 }
+
+.ir-badge-closedaccess {
+  background-color: darkred;
+  color: white;
+}
+
 .ir-badge-openaccess {
   background-color: darkgreen;
   color: white;
