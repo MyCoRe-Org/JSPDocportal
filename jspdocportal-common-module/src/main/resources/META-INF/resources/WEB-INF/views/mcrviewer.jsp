@@ -100,8 +100,12 @@
 								id : "pdf_download",
 								type : "button",
 								label : "buttons.pdf_download",
-								href : "${applicationScope.WebApplicationBaseURL}${it.pdfProviderURL}",
-								icon: "fa-download",
+								tooltip : "buttons.pdf_download.tooltip",
+								action : function(obj, evt){
+                    	   			window.open("${applicationScope.WebApplicationBaseURL}${it.pdfProviderURL}", '_blank');
+                                },
+								
+								icon: "download",
 								inGroup: "addOns"
 							} ]
 			};
@@ -184,27 +188,35 @@
 				        	   id: "addOns",
 		                       type: "group"
 	                       },
+	                       {
+				        	   id: "addOns2",
+		                       type: "group"
+	                       },
 				           {
 	                    	   id : "btn_pdf_download",
 	                    	   type : "button",
 	                    	   label : "buttons.pdf_download",
-	                    	   href : "${applicationScope.WebApplicationBaseURL}pdfdownload/recordIdentifier/${fn:replace(it.recordIdentifier,'/','_')}",
-	                    	   icon: "fa-download",
+	                    	   tooltip : "buttons.pdf_download.tooltip",
+	                    	   action : function(obj, evt){
+		                    	   			window.open("${applicationScope.WebApplicationBaseURL}pdfdownload/recordIdentifier/${fn:replace(it.recordIdentifier,'/','_')}", '_blank');
+		                       },
+	                       	   icon: "download",
 	                    	   inGroup: "addOns"
 				           },
 		                   {
 		                       id : "btn_page_download",
 		                       type : "button",
 		                       label : "buttons.page_download",
+		                       tooltip : "buttons.page_download.tooltip",
 		                    
 		                       action : function(obj, evt){
 		                    	   <%-- Alternativ müsste man die Komponenten Liste des Viewer nach der MyCoReImageScrollComponent suchen. 
                                         Diese hat das Property _currentImage --%>
 		                    	   			var s = $("div[data-id='ImageChangeControllGroup'] > select > option:selected");
-		                    	   			window.location.href="${applicationScope.WebApplicationBaseURL}depot/${fn:replace(it.recordIdentifier,'/','_')}/images/"+s.data('id')+".jpg";
+		                    	   			window.open("${applicationScope.WebApplicationBaseURL}depot/${fn:replace(it.recordIdentifier,'/','_')}/images/"+s.data('id')+".jpg", '_blank');
 		                       },
-		                       icon: "fa-download",
-		                       inGroup: "addOns"
+		                       icon: "download",
+		                       inGroup: "addOns2"
 		                   	}],
 	                   	  
 				objId : ""
