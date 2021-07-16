@@ -185,9 +185,9 @@
                   <div class="dropdown-divider"></div>
                   <div class="dropdown-item px-2" >
                     <div style="width:350px">
-                      <img align="left" src="{$WebApplicationBaseURL}images/download_pdf.png" title="{mcri18n:translate('OMD.ir.rightside.docdetails.pdfdownload')}" style="height:1.5em;padding-right:0.5em;" />
+                      <img align="left" src="{$WebApplicationBaseURL}images/download_pdf.png" title="{mcri18n:translate('OMD.ir.docdetails.rightside.pdfdownload')}" style="height:1.5em;padding-right:0.5em;" />
                       <a href="{$WebApplicationBaseURL}do/pdfdownload/recordIdentifier/{replace($recordID, '/','_')}" target="_blank">
-                        <strong>{mcri18n:translate('OMD.ir.rightside.docdetails.pdfdownload')}</strong>
+                        <strong>{mcri18n:translate('OMD.ir.docdetails.rightside.pdfdownload')}</strong>
                       </a>
                     </div>
                   </div>
