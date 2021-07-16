@@ -226,36 +226,7 @@
       </xsl:for-each>
         
       <div class="ir-box mt-3">
-        <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
-          <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.portals')}</h4>
-          <p>
-            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
-              <xsl:variable name="json_urls" select="replace($catalogs, '''', '&quot;')" />
-              <xsl:variable name="opac_url" select="json-to-xml($json_urls)/json:map/json:string[@key='opac']" />
-              <a class="badge px-1" target="_blank" href="{replace($opac_url, '\{0\}',.)}">OPAC</a>
-              <a class="badge px-1" href="https://gso.gbv.de/DB=2.1/PPNSET?PPN={.}">GVK</a>
-            </xsl:for-each>
-            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='vd16']">
-              <a class="badge px-1" target="_blank" href="http://gateway-bayern.de/VD16+{replace(.,' ','+')}">VD16</a>
-            </xsl:for-each>
-            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='vd17']">
-              <a class="badge px-1" target="_blank" href="https://kxp.k10plus.de/DB=1.28/CMD?ACT=SRCHA&amp;IKT=8079&amp;TRM=%27{.}%27">VD17</a>
-            </xsl:for-each>
-            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='vd18']">
-              <a class="badge px-1" target="_blank" href="https://kxp.k10plus.de/DB=1.65/CMD?ACT=SRCHA&amp;IKT=8080&amp;TRM=VD18{replace(.,' ','+')}&amp;ADI_MAT=B&amp;MATCFILTER=Y&amp;MATCSET=Y">VD18</a>
-            </xsl:for-each>
-            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='zdb']">
-              <a class="badge px-1" target="_blank" href="https://zdb-katalog.de/list.xhtml?key=cql&amp;t={.}">ZDB</a>
-            </xsl:for-each>
-            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='kalliope']">
-              <a class="badge px-1" target="_blank" href="http://kalliope-verbund.info/{.}">Kalliope-Verbundkatalog</a>
-            </xsl:for-each>
-            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='doi']">
-              <a class="badge px-1" target="_blank" href="https://search.datacite.org/works/{.}">DataCite Search</a>
-            </xsl:for-each>
-          </p>
-        </xsl:if>
-        
+      
         <!-- Provider (bereitgestellt durch:) -->
         <xsl:if test="contains(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '/doctype#histbest')">
           <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.provider')}</h4>
@@ -288,6 +259,37 @@
               </td>
             </tr>
           </table>
+          <p></p>
+        </xsl:if>
+      
+        <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
+          <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.portals')}</h4>
+          <p>
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
+              <xsl:variable name="json_urls" select="replace($catalogs, '''', '&quot;')" />
+              <xsl:variable name="opac_url" select="json-to-xml($json_urls)/json:map/json:string[@key='opac']" />
+              <a class="badge px-1" target="_blank" href="{replace($opac_url, '\{0\}',.)}">OPAC</a>
+              <a class="badge px-1" href="https://gso.gbv.de/DB=2.1/PPNSET?PPN={.}">GVK</a>
+            </xsl:for-each>
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='vd16']">
+              <a class="badge px-1" target="_blank" href="http://gateway-bayern.de/VD16+{replace(.,' ','+')}">VD16</a>
+            </xsl:for-each>
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='vd17']">
+              <a class="badge px-1" target="_blank" href="https://kxp.k10plus.de/DB=1.28/CMD?ACT=SRCHA&amp;IKT=8079&amp;TRM=%27{.}%27">VD17</a>
+            </xsl:for-each>
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='vd18']">
+              <a class="badge px-1" target="_blank" href="https://kxp.k10plus.de/DB=1.65/CMD?ACT=SRCHA&amp;IKT=8080&amp;TRM=VD18{replace(.,' ','+')}&amp;ADI_MAT=B&amp;MATCFILTER=Y&amp;MATCSET=Y">VD18</a>
+            </xsl:for-each>
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='zdb']">
+              <a class="badge px-1" target="_blank" href="https://zdb-katalog.de/list.xhtml?key=cql&amp;t={.}">ZDB</a>
+            </xsl:for-each>
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='kalliope']">
+              <a class="badge px-1" target="_blank" href="http://kalliope-verbund.info/{.}">Kalliope-Verbundkatalog</a>
+            </xsl:for-each>
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='doi']">
+              <a class="badge px-1" target="_blank" href="https://search.datacite.org/works/{.}">DataCite Search</a>
+            </xsl:for-each>
+          </p>
         </xsl:if>
     
         <!-- Rechte -->
