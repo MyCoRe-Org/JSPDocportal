@@ -52,20 +52,20 @@
        </c:if>
         <c:if test="${not empty requestScope['org.mycore.navigation.side.path']}">
          <c:if test="${pageScope.navSide == 'left'}">
-           <div id="left-side-nav" class="col col-md-3 ir-content-side">
+           <div id="left-side-nav" class="col col-md-3 ir-content-left">
               <mcr:outputNavigation mode="side" id="${fn:substringBefore(requestScope['org.mycore.navigation.side.path'], '.')}"></mcr:outputNavigation>
               <c:if test="${not empty it.infoBox}">
                 <mcr:includeWebcontent id="${fn:replace(it.infoBox, '/', '.')}" file="${it.infoBox}.html" />
               </c:if>
             </div>
           </c:if>
-          <div id="main" class="col col-md-9 ir-content-main">
-              <div class="ir-box">
+          <div id="main" class="col col-md-9 ir-content-main card">
+              <div class="card-body">
                 <mcr:includeWebcontent id="${fn:replace(it.path, '/', '.')}" file="${it.path}.html" />
               </div>
           </div>
           <c:if test="${pageScope.navSide == 'right'}">
-            <div class="col col-md-3 ir-content-side" id="left-side-nav">
+            <div id="right-side-nav" class="col col-md-3 ir-content-right">
               <mcr:outputNavigation mode="side" id="${fn:substringBefore(requestScope['org.mycore.navigation.side.path'], '.')}"></mcr:outputNavigation>
               <c:if test="${not empty it.infoBox}">
                 <mcr:includeWebcontent id="${fn:replace(it.infoBox, '/', '.')}" file="${it.infoBox}.html" />
