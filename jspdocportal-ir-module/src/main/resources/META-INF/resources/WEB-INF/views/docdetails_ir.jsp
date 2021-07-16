@@ -27,7 +27,7 @@
 
 <mcr:retrieveObject mcrid="${mcrid}" fromWorkflow="${param.fromWF}" varDOM="doc" cache="true" />
 
-<fmt:message var="pageTitle" key="OMD.headline">
+<fmt:message var="pageTitle" key="OMD.docdetails">
 	<fmt:param>${mcrid}</fmt:param>
 </fmt:message>
 
