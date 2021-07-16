@@ -217,6 +217,14 @@
     </xsl:variable>
        
     <xsl:if test="not(/mycoreobject/service/servstates/servstate/@categid='deleted')">
+      <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='edited']/mods:mods/mods:abstract[@type='advice']">
+        <div class="ir-box mt-3">
+          <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.advice')}</h4>
+          <xsl:variable name="dataURLcontent" select="document(./@altFormat)" />
+          <xsl:value-of select="fn:serialize($dataURLcontent/*/node())" disable-output-escaping="true"/>
+        </div>
+      </xsl:for-each>
+        
       <div class="ir-box mt-3">
         <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
           <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.portals')}</h4>
@@ -247,12 +255,6 @@
             </xsl:for-each>
           </p>
         </xsl:if>
-           
-        <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='edited']/mods:mods/mods:abstract[@type='advice']">
-          <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.advice')}</h4>
-          <xsl:variable name="dataURLcontent" select="document(./@altFormat)" />
-          <xsl:value-of select="fn:serialize($dataURLcontent/*/node())" disable-output-escaping="true"/>
-        </xsl:for-each>
         
         <!-- Provider (bereitgestellt durch:) -->
         <xsl:if test="contains(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '/doctype#histbest')">
