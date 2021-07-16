@@ -217,51 +217,45 @@
     </xsl:variable>
        
     <xsl:if test="not(/mycoreobject/service/servstates/servstate/@categid='deleted')">
-         <div class="ir-box mt-3">
-           <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
-            <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.portals')}</h4>
-            <p>
-              <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
-                <xsl:variable name="json_urls" select="replace($catalogs, '''', '&quot;')" />
-                <xsl:variable name="opac_url" select="json-to-xml($json_urls)/json:map/json:string[@key='opac']" />
-                <a class="badge px-1" target="_blank" href="{replace($opac_url, '\{0\}',.)}">OPAC</a>
-                <a class="badge px-1" href="https://gso.gbv.de/DB=2.1/PPNSET?PPN={.}">GVK</a>
-              </xsl:for-each>              
-              <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='vd16']">
-                <a class="badge px-1" target="_blank" href="http://gateway-bayern.de/VD16+{replace(.,' ','+')}">VD16</a>
-                </xsl:for-each>
-                <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='vd17']">
-                  <a class="badge px-1" target="_blank" href="https://kxp.k10plus.de/DB=1.28/CMD?ACT=SRCHA&amp;IKT=8079&amp;TRM=%27{.}%27">VD17</a>
-                </xsl:for-each>
-                <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='vd18']">
-                  <a class="badge px-1" target="_blank" href="https://kxp.k10plus.de/DB=1.65/CMD?ACT=SRCHA&amp;IKT=8080&amp;TRM=VD18{replace(.,' ','+')}&amp;ADI_MAT=B&amp;MATCFILTER=Y&amp;MATCSET=Y">VD18</a>
-                </xsl:for-each>
-                <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='zdb']">
-                  <a class="badge px-1" target="_blank" href="https://zdb-katalog.de/list.xhtml?key=cql&amp;t={.}">ZDB</a>
-                </xsl:for-each>
-                <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='kalliope']">
-                  <a class="badge px-1" target="_blank" href="http://kalliope-verbund.info/{.}">Kalliope-Verbundkatalog</a>
-                </xsl:for-each>
-                <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='doi']">
-                  <a class="badge px-1" target="_blank" href="https://search.datacite.org/works/{.}">DataCite Search</a>
-                </xsl:for-each>  
-              </p>
-           </xsl:if>
+      <div class="ir-box mt-3">
+        <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
+          <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.portals')}</h4>
+          <p>
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
+              <xsl:variable name="json_urls" select="replace($catalogs, '''', '&quot;')" />
+              <xsl:variable name="opac_url" select="json-to-xml($json_urls)/json:map/json:string[@key='opac']" />
+              <a class="badge px-1" target="_blank" href="{replace($opac_url, '\{0\}',.)}">OPAC</a>
+              <a class="badge px-1" href="https://gso.gbv.de/DB=2.1/PPNSET?PPN={.}">GVK</a>
+            </xsl:for-each>
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='vd16']">
+              <a class="badge px-1" target="_blank" href="http://gateway-bayern.de/VD16+{replace(.,' ','+')}">VD16</a>
+            </xsl:for-each>
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='vd17']">
+              <a class="badge px-1" target="_blank" href="https://kxp.k10plus.de/DB=1.28/CMD?ACT=SRCHA&amp;IKT=8079&amp;TRM=%27{.}%27">VD17</a>
+            </xsl:for-each>
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='vd18']">
+              <a class="badge px-1" target="_blank" href="https://kxp.k10plus.de/DB=1.65/CMD?ACT=SRCHA&amp;IKT=8080&amp;TRM=VD18{replace(.,' ','+')}&amp;ADI_MAT=B&amp;MATCFILTER=Y&amp;MATCSET=Y">VD18</a>
+            </xsl:for-each>
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='zdb']">
+              <a class="badge px-1" target="_blank" href="https://zdb-katalog.de/list.xhtml?key=cql&amp;t={.}">ZDB</a>
+            </xsl:for-each>
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='kalliope']">
+              <a class="badge px-1" target="_blank" href="http://kalliope-verbund.info/{.}">Kalliope-Verbundkatalog</a>
+            </xsl:for-each>
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='doi']">
+              <a class="badge px-1" target="_blank" href="https://search.datacite.org/works/{.}">DataCite Search</a>
+            </xsl:for-each>
+          </p>
+        </xsl:if>
            
-           <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='edited']/mods:mods/mods:abstract[@type='advice']">
-             <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.advice')}</h4>
-              <xsl:variable name="dataURLcontent" select="document(./@altFormat)" />
-              <xsl:value-of select="fn:serialize($dataURLcontent/*/node())" disable-output-escaping="true"/>
-           </xsl:for-each>
-
-         </div>
-    </xsl:if>
-    
-
+        <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='edited']/mods:mods/mods:abstract[@type='advice']">
+          <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.advice')}</h4>
+          <xsl:variable name="dataURLcontent" select="document(./@altFormat)" />
+          <xsl:value-of select="fn:serialize($dataURLcontent/*/node())" disable-output-escaping="true"/>
+        </xsl:for-each>
         
-    <!-- Provider (bereitgestellt durch:) -->
-    <xsl:if test="contains(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '/doctype#histbest')">
-     <div class="ir-box">
+        <!-- Provider (bereitgestellt durch:) -->
+        <xsl:if test="contains(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '/doctype#histbest')">
           <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.provider')}</h4>
           <xsl:variable name="class_provider" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" />
           <xsl:variable name="categ">
@@ -292,43 +286,38 @@
               </td>
             </tr>
           </table>
-      </div>
-      
-    </xsl:if>
+        </xsl:if>
     
-    <!-- Rechte -->
-    <div class="ir-box">
-      <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='licenseinfo'][contains(@valueURI, 'licenseinfo#work')]">
-      
-           <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.licenseinfo')}</h4>
-           <xsl:variable name="categ" select="mcrmods:to-mycoreclass(., 'single')/categories/category" />
-           <span class="clearfix">
-             <img src="{$WebApplicationBaseURL}images{$categ/label[@xml:lang='x-icon']/@text}" class="float-left pr-3" />
-             <a href="{$categ/label[@xml:lang='x-uri']/@text}" class="strong">
-               <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text"/>
-             </a>  
-           </span>
-           <p class="text-justify form-text text-muted small">
-             <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@description" disable-output-escaping="true" />
-           </p>
+        <!-- Rechte -->
+        <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='licenseinfo'][contains(@valueURI, 'licenseinfo#work')]">
+          <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.licenseinfo')}</h4>
+          <xsl:variable name="categ" select="mcrmods:to-mycoreclass(., 'single')/categories/category" />
+          <span class="clearfix">
+            <img src="{$WebApplicationBaseURL}images{$categ/label[@xml:lang='x-icon']/@text}" class="float-left pr-3" />
+            <a href="{$categ/label[@xml:lang='x-uri']/@text}" class="strong">
+              <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text"/>
+            </a>
+          </span>
+          <p class="text-justify form-text text-muted small">
+            <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@description" disable-output-escaping="true" />
+          </p>
+        </xsl:for-each>
+      </div>
 
-      </xsl:for-each>
-    </div>
-
-    <!-- Teilen -->
-    <div class="ir-box">
-       <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
-        <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.export')}</h4>
-        <p>
-          <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
-            <xsl:if test="$catalogs">
-              <xsl:call-template name="biblio-formate">
-                <xsl:with-param name="catalogs" select="$catalogs" />
-                <xsl:with-param name="ppn" select="." />
-              </xsl:call-template>
-            </xsl:if>
-          </xsl:for-each>
-        </p>
+      <!-- Export, Teilen -->
+      <div class="ir-box">
+        <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
+          <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.export')}</h4>
+          <p>
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
+              <xsl:if test="$catalogs">
+                <xsl:call-template name="biblio-formate">
+                  <xsl:with-param name="catalogs" select="$catalogs" />
+                  <xsl:with-param name="ppn" select="." />
+                </xsl:call-template>
+              </xsl:if>
+            </xsl:for-each>
+          </p>
         </xsl:if>
         <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.share')}</h4>
         <div class="shariff" data-url="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}"
@@ -338,7 +327,8 @@
         </div> <!-- data-theme=standard|grey|white --> 
         <script src="{$WebApplicationBaseURL}modules/shariff_3.2.1/shariff.min.js"></script>
         <p></p>
-    </div>
+      </div>
+    </xsl:if>
     <!--Tools -->
     <div class="my-0" style="position:relative"> 
           <div style="position:absolute; top:-3em;right:0em">
