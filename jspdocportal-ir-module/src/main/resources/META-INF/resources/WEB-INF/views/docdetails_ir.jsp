@@ -138,8 +138,8 @@
                             </div>
                           </c:if>
                           <c:if test="${hasAccess}">
-                            <search:mcrviewer mcrid="${it.id}" recordIdentifier="${it.id}" doctype="pdf" id="divMCRViewer_2" />
                             <div id="divMCRViewer_2" style="height:80vh; margin:0px 16px; position:relative;"></div>
+                            <search:mcrviewer mcrid="${it.id}" recordIdentifier="${it.id}" doctype="pdf" id="divMCRViewer_2" />
                           </c:if> 
 				       </x:if>
 				       <x:if select="$doc/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='MCRVIEWER_METS']]">
@@ -153,8 +153,8 @@
                            </div>
                          </c:if>
                          <c:if test="${hasAccess}">
-					       <search:mcrviewer mcrid="${it.id}" recordIdentifier="${recordidentifier}" doctype="mets" id="divMCRViewer_1" />
                            <div id="divMCRViewer_1" style="height:80vh; margin:0px 16px; position:relative;"></div>
+                           <search:mcrviewer mcrid="${it.id}" recordIdentifier="${recordidentifier}" doctype="mets" id="divMCRViewer_1" />
                          </c:if>
                          <script type="text/javascript">
 
