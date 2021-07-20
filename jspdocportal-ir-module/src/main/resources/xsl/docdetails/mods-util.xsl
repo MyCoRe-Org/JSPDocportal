@@ -190,8 +190,8 @@
 <xsl:template name="language">
     <xsl:param name="term"  />
     <xsl:param name="lang"  />
-    <!-- <xsl:variable name="url"><xsl:value-of select="$WebApplicationBaseURL" />api/v1/classifications/rfc4646</xsl:variable> -->
-    <xsl:variable name="url">classification:metadata:-1:children:rfc4646</xsl:variable>
+    <!-- <xsl:variable name="url"><xsl:value-of select="$WebApplicationBaseURL" />api/v1/classifications/rfc5656</xsl:variable> -->
+    <xsl:variable name="url">classification:metadata:-1:children:rfc5656</xsl:variable>
     <xsl:value-of select="document($url)/mycoreclass/categories/category[./label[@xml:lang='x-bibl']/@text=$term]/label[@xml:lang=$lang]/@text" />
 </xsl:template>
   
