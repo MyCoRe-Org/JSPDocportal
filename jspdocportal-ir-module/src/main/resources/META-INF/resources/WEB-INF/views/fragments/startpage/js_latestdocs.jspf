@@ -11,6 +11,7 @@
     </script>
     
     <fmt:message var="lblPlaceholder" key="Browse.Search.placeholder.count" />
+    <mcr:session var="lang" info="language" />
     
 <%--TODO use SOLR-Parameter "&facet.mincount=1" --%>
     <script>
@@ -27,7 +28,7 @@
                    +"&rows=5&wt=json&indent=true"
                    +"&facet=true"
                    +facetFieldParams
-                   +"&sort=created+DESC&rows=5&fl=id,created,ir.cover_url,ir.creator.result,ir.title.result,ir.doctype.result,ir.originInfo.result"
+                   +"&sort=created+DESC&rows=5&fl=id,created,ir.cover_url,ir.creator.result,ir.title.result,ir.doctype.result,ir.doctype_en.result,ir.originInfo.result"
                    +"&wt=json&json.wrf=?",
         dataType : "jsonp",
         success : function(data) {
@@ -104,9 +105,11 @@
                     if(entry.hasOwnProperty("ir.originInfo.result")){
                       cardBodyTDData.append($("<p></p>").addClass("card-text").text(entry["ir.originInfo.result"]));
                     }
-                    if(entry.hasOwnProperty("ir.doctype.result")){
+                    if("${lang}"=="en" && entry.hasOwnProperty("ir.doctype_en.result")){
+                      cardBodyTDData.append($("<p></p>").addClass("card-text text-secondary font-weight-bold").text(entry["ir.doctype_en.result"]));
+                    } else if(entry.hasOwnProperty("ir.doctype.result")){
                       cardBodyTDData.append($("<p></p>").addClass("card-text text-secondary font-weight-bold").text(entry["ir.doctype.result"]));
-                    }
+                  	}
                     
                     var datum = entry["created"];
                     cardBodyTDData.append($("<p></p>").addClass("card-text text-secondary").text(

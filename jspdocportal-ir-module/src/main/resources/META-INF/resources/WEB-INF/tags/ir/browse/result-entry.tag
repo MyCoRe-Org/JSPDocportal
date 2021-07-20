@@ -36,7 +36,7 @@
       </c:otherwise>
     </c:choose>
     <c:if test="${not empty(entry.data['ir.host.title.result'])}">
-      <p class="card-text"><span class="display-label">in:</span> ${entry.data['ir.host.title.result']}
+      <p class="card-text"><span class="display-label"><fmt:message key="OMD.ir.docdetails.header.label.appears_in" /></span> ${entry.data['ir.host.title.result']}
         <c:if test="${not empty(entry.data['ir.host.part.result'])}">
           ${entry.data['ir.host.part.result']}
         </c:if>
@@ -51,28 +51,34 @@
     <p class="card-text" style="font-size: 80%; text-align:justify">${entry.data['ir.abstract300.result']}</p>
     
     <p class="card-text">
-      <span class="badge ir-badge badge-secondary">${entry.data['ir.doctype.result']}</span>
+      <mcr:session var="lang" info="language" />
+      <span class="badge ir-badge badge-secondary">
+        <c:choose>
+          <c:when test="${lang eq 'en'}">${entry.data['ir.doctype_en.result']}</c:when>
+          <c:otherwise>${entry.data['ir.doctype.result']}</c:otherwise>
+        </c:choose>
+      </span>
       <c:choose>
         <c:when test="${fn:contains(entry.data['ir.accesscondition_class.facet'], 'restrictedaccess')}">
           <span class="badge ir-badge ir-badge-restrictedaccess">
-            Beschränkter <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Closed_Access.png"/>  Zugang            
+            <fmt:message key="OMD.ir.docdetails.header.access.restricted" /> <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Closed_Access.png"/> <fmt:message key="OMD.ir.docdetails.header.access" />            
           </span>
         </c:when>
         <c:when test="${fn:contains(entry.data['ir.accesscondition_class.facet'], 'closedaccess')}">
           <span class="badge ir-badge ir-badge-closeddaccess">
-            Kein <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Closed_Access.png"/>  Zugang            
+            <fmt:message key="OMD.ir.docdetails.header.access.closed" /> <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Closed_Access.png"/> <fmt:message key="OMD.ir.docdetails.header.access" />
           </span>
         </c:when>
         <c:otherwise>
           <span class="badge ir-badge ir-badge-openaccess">
-            Freier <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Open_Access.png"/>  Zugang            
+            <fmt:message key="OMD.ir.docdetails.header.access.open" /> <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Open_Access.png"/> <fmt:message key="OMD.ir.docdetails.header.access" />
           </span>
         </c:otherwise>
       </c:choose>
       
       <c:if test="${fn:contains(entry.data['ir.contains_msg.facet'], 'ocr')}">
         <span class="badge ir-badge ir-badge-ocr">
-          OCR-Volltext            
+          <fmt:message key="OMD.ir.docdetails.header.label.ocr" />
         </span>
       </c:if>
       

@@ -74,6 +74,14 @@
 	},
 	{
 		"add-field": {
+			"name": "ir.doctype_en.result",
+			"type": "string",
+			"multiValued": false,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
 			"name": "ir.identifier",
 			"type": "string",
 			"multiValued": true,

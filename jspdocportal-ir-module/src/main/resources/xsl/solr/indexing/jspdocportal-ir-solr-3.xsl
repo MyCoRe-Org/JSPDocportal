@@ -99,6 +99,7 @@
       <xsl:if test="mods:genre[@displayLabel='doctype']">
 	    <xsl:if test="mcrmods:is-supported(mods:genre[@displayLabel='doctype'])">
        	  <field name="ir.doctype.result"><xsl:value-of select="mcrmods:to-mycoreclass(mods:genre[@displayLabel='doctype'], 'single')//categories/category/label[@xml:lang='de']/@text" /></field>
+          <field name="ir.doctype_en.result"><xsl:value-of select="mcrmods:to-mycoreclass(mods:genre[@displayLabel='doctype'], 'single')//categories/category/label[@xml:lang='en']/@text" /></field>
         </xsl:if>
       </xsl:if>
        
