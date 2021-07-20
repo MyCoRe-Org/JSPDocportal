@@ -101,25 +101,25 @@
                  <ul id="nav_bar_root" class="nav nav-tabs ir-docdetails-tabs">
                    <x:if select="$doc/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext' or @categid='MCRVIEWER_METS']]">
 					<li class="nav-item" role="presentation">
-                      <a id="nav_tab_fulltext" class="nav-link" data-toggle="collapse" href="#nav_content_fulltext">Viewer</a>
+                      <a id="nav_tab_fulltext" class="nav-link" data-toggle="collapse" href="#nav_content_fulltext"><fmt:message key="Browse.Tabs.viewer" /></a>
                     </li>
   				    </x:if>
   				   <x:if select="contains($doc/mycoreobject/@ID, '_bundle_')">
   				   <li class="nav-item" role="presentation">
-                      <a  id="nav_tab_structure" class="nav-link" data-toggle="collapse" href="#nav_content_structure">zugehörende Dokumente</a>
+                      <a  id="nav_tab_structure" class="nav-link" data-toggle="collapse" href="#nav_content_structure"><fmt:message key="Browse.Tabs.structure" /></a>
                    </li>
 				   </x:if>
                    <x:if select="$doc/mycoreobject/metadata//*[@displayLabel='doctype'][contains(@valueURI, '/doctype#data')]">
                       <li class="nav-item" role="presentation">
-                        <a id="nav_tab_fulltext" class="nav-link" data-toggle="collapse" href="#nav_content_data">Daten</a>
+                        <a id="nav_tab_fulltext" class="nav-link" data-toggle="collapse" href="#nav_content_data"><fmt:message key="Browse.Tabs.data" /></a>
                       </li>
                    </x:if>
 				   <li class="nav-item" role="presentation">
-                      <a id="nav_tab_metadata" class="nav-link" data-toggle="collapse" href="#nav_content_metadata">Metadaten</a>
+                      <a id="nav_tab_metadata" class="nav-link" data-toggle="collapse" href="#nav_content_metadata"><fmt:message key="Browse.Tabs.metadata" /></a>
                    </li>
 				   <x:if select="$doc/mycoreobject/structure/derobjects/derobject">
 					  <li class="nav-item" role="presentation">
-                        <a id="nav_tab_files" class="nav-link" data-toggle="collapse" href="#nav_content_files">Dateien</a>
+                        <a id="nav_tab_files" class="nav-link" data-toggle="collapse" href="#nav_content_files"><fmt:message key="Browse.Tabs.files" /></a>
                       </li>
 				   </x:if>
 				  </ul>
