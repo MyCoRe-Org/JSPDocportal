@@ -29,10 +29,10 @@
 			</c:forEach>
 		  </select>
     
-		  <button class="btn btn-sm ${fn:endsWith(result.sort,' asc') ? 'active' : 'btn-secondary'}" ${fn:endsWith(result.sort,' asc') ? 'disabled': ''} role="button" onclick="changeSortURL('asc')">
+		  <button class="btn btn-sm ${fn:endsWith(result.sort,' asc') ?  'btn-secondary' : 'btn-link active'}" ${fn:endsWith(result.sort,' asc') ? 'disabled': ''} title="<fmt:message key="Webpage.Searchresult.order.asc" />" role="button" onclick="changeSortURL('asc')">
             <i class="fas fa-sort-amount-down"></i> A-Z
 		  </button>
-		  <button class="btn btn-sm ${fn:endsWith(result.sort,' desc') ? 'active' : 'btn-secondary'}" ${fn:endsWith(result.sort,' desc') ? 'disabled': ''} role="button" onclick="changeSortURL('desc')">
+		  <button class="btn btn-sm ${fn:endsWith(result.sort,' desc') ? 'btn-secondary' : 'btn-link active'}" ${fn:endsWith(result.sort,' desc') ? 'disabled': ''} title="<fmt:message key="Webpage.Searchresult.order.desc" />" role="button" onclick="changeSortURL('desc')">
 		    <i class="fas fa-sort-amount-up" onclick="changeSortURL('desc')"></i> Z-A
 		  </button>
 	</div>
