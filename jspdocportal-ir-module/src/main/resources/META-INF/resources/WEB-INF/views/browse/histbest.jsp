@@ -81,8 +81,8 @@
 					}
 										<%-- for select box use: $("#filterField option:selected").val() --%>
 				</script>
-
-                <input class="form-control border-secondary" id="filterValue" name="filterValue" placeholder="Wert"
+                <fmt:message var="lblTerm" key="Browse.Filter.term" />
+                <input class="form-control border-secondary" id="filterValue" name="filterValue" placeholder="${lblTerm}"
                     type="text" onkeypress="if (event.keyCode == 13) { changeFilterIncludeURL();}">
                      <div class="input-group-prepend">
                       <button id="filterInclude" class="btn btn-primary" onclick="changeFilterIncludeURL();">
