@@ -94,12 +94,18 @@
                     var cardBodyTR = $("<tr></tr>").appendTo($("<table></table>").appendTo(cardBody));
                     var cardBodyTDData = $("<td></td>").css("vertical-align","top").appendTo(cardBodyTR);
                     
-                    if(entry.hasOwnProperty("ir.cover_url")){
+                    if(entry.hasOwnProperty("id") && entry["id"].indexOf('_bundle') == -1 && entry["ir.doctype.result"]!="Datenpublikation"){
+                        cardBodyTDData.css("width", "67%")
+                        var coverImg = $("<a></a>").attr("href",  $("meta[name='mcr:baseurl']").attr("content") + "resolve/id/"+entry["id"]).append(
+                        $("<img />").addClass("ir-latestdocs-cover").css("max-width", "100%").css("max-height","180px").css("object-fit","contain")
+                        .attr("src", $("meta[name='mcr:baseurl']").attr("content") + "api/iiif/image/v2/thumbnail/" + entry["id"] + "/full/full/0/default.jpg"));
+                        cardBodyTR.append($("<td></td>").css("vertical-align","bottom").css("width", "33%").css("padding-left","15px").append(coverImg));
+                    } else if(entry.hasOwnProperty("ir.cover_url")){
                       cardBodyTDData.css("width", "67%")
                       var coverImg = $("<a></a>").attr("href",  $("meta[name='mcr:baseurl']").attr("content") + "resolve/id/"+entry["id"]).append(
                       $("<img />").addClass("ir-latestdocs-cover").css("max-width", "100%").css("max-height","180px").css("object-fit","contain")
-                      .attr("src", "../"+entry["ir.cover_url"]));
-                  cardBodyTR.append($("<td></td>").css("vertical-align","bottom").css("width", "33%").css("padding-left","15px").append(coverImg));
+                      .attr("src", $("meta[name='mcr:baseurl']").attr("content") + entry["ir.cover_url"]));
+                      cardBodyTR.append($("<td></td>").css("vertical-align","bottom").css("width", "33%").css("padding-left","15px").append(coverImg));
                     }
                     
                     if(entry.hasOwnProperty("ir.originInfo.result")){
