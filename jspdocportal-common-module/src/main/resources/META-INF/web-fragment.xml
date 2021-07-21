@@ -58,6 +58,7 @@
     <url-pattern>/indexbrowser/*</url-pattern>
     <url-pattern>/site/*</url-pattern>
     <url-pattern>/rsc/iiif/*</url-pattern>
+    <url-pattern>/mcrviewer/*</url-pattern>
     <!-- <url-pattern>/file/*</url-pattern> exclude MCRFileNodeServlet = MCRServlet -->
   </filter-mapping>
 

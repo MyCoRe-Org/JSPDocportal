@@ -11,6 +11,7 @@
 <%@tag import="org.mycore.datamodel.metadata.MCRObject"%>
 <%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld"%>
 
 <%@ attribute name="id" required="true" type="java.lang.String" %>
 <%@ attribute name="mcrid" required="true" type="java.lang.String" %>
@@ -61,7 +62,7 @@
 	    //do nothing
 	}
 %>
-
+  <mcr:session var="lang" info="language" />
     <script>
     window.addEventListener("load", function(){
             new mycore.viewer.MyCoReViewer(jQuery("#${id}"), {
@@ -72,7 +73,7 @@
                 doctype: "${doctype}",
                 startImage: "1",
                 i18nURL: "${applicationScope.WebApplicationBaseURL}rsc/locale/translate/{lang}/component.viewer.*",
-                lang: "de",
+                lang: "${lang}",
                 webApplicationBaseURL: "${applicationScope.WebApplicationBaseURL}",
                 pdfWorkerURL: "${iviewBaseURL}js/lib/pdf.worker.js",
                 canvas: {
@@ -159,7 +160,7 @@
                 filePath: "iview2/${startImage}.iview2",
                 derivate: "${derid}",
                 i18nURL: "${applicationScope.WebApplicationBaseURL}rsc/locale/translate/{lang}/component.viewer.*",
-                lang: "de",
+                lang: "${lang}",
                 metadataURL: "",
                 derivateURL: "${applicationScope.WebApplicationBaseURL}depot/${fn:replace(recordIdentifier,'/','_')}/",
                 objId: "",

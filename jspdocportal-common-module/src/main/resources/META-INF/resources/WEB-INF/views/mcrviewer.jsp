@@ -46,6 +46,8 @@
       }
 </style>
 
+<mcr:session var="lang" info="language" />
+
 <c:if test="${it.doctype eq 'pdf'}">
 	<script type="text/javascript" src="${iviewBaseURL}js/iview-client-pdf.js"></script>
 	<script type="text/javascript" src="${iviewBaseURL}js/lib/pdf.js"></script>
@@ -75,7 +77,7 @@
 				doctype : "pdf",
 				startImage : "1",
 				i18nURL : "${applicationScope.WebApplicationBaseURL}rsc/locale/translate/{lang}/component.viewer.*",
-				lang : "de",
+				lang : "${lang}",
 				webApplicationBaseURL : "${applicationScope.WebApplicationBaseURL}",
 				pdfWorkerURL : "${iviewBaseURL}js/lib/pdf.worker.js",
 				"canvas.startup.fitWidth" : true,
@@ -153,7 +155,7 @@
 				tileProviderPath : "${applicationScope.WebApplicationBaseURL}tiles/${fn:replace(it.recordIdentifier,'/','_')}/",
 
 				i18nURL : "${applicationScope.WebApplicationBaseURL}rsc/locale/translate/{lang}/component.viewer.*",
-				lang : "de",
+				lang : "${lang}",
 				webApplicationBaseURL : "${applicationScope.WebApplicationBaseURL}",
 				// derivateURL : "${applicationScope.WebApplicationBaseURL}depot/${fn:replace(it.recordIdentifier,'/','%25252F')}/",
 				derivateURL : "${applicationScope.WebApplicationBaseURL}file/${mcrid}/${derid}/",
