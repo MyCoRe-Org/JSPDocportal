@@ -171,7 +171,7 @@
       
       <div class="col-xs-12 col-md-9">
         <search:result-sorter result="${it.result}" mode="browse"
-                              fields="score,ir.pubyear_start,modified,ir.creator.result,ir.title.result" mask="epub" />
+                              fields="score,ir.pubyear_start,modified,ir.creator.sort,ir.title.result" mask="epub" />
                               
         <search:result-browser result="${it.result}">
           <browse:result-entry entry="${entry}" url="${url}" />

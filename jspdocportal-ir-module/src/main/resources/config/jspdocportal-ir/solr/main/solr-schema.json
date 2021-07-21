@@ -55,6 +55,13 @@
 			"multiValued": false,
 			"stored": true
 		}
+	},	{
+		"add-field": {
+			"name": "ir.creator.sort",
+			"type": "string",
+			"multiValued": false,
+			"stored": true
+		}
 	},
 	{
 		"add-field": {

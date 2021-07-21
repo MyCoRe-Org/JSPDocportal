@@ -79,6 +79,23 @@
       </xsl:variable>
   	  <field name="ir.creator.result"><xsl:value-of select="normalize-space($var_name)"></xsl:value-of></field>
       
+     <xsl:variable name="var_name_sort">
+      <xsl:for-each select="./mods:name[@type='personal'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
+        <xsl:if test="position()> 1"><xsl:value-of select="', '" /></xsl:if>
+          <xsl:value-of select="string-join((./mods:namePart[@type='family'], ./mods:namePart[@type='given'], ./mods:namePart[not(@type)], ./mods:namePart[@type='termsOfAddress']),' ')" />
+        </xsl:for-each>
+        <xsl:if test="./mods:name[@type='corporate'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
+          <xsl:if test="./mods:name[@type='personal'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
+            <xsl:value-of select="', '" />
+          </xsl:if>  
+          <xsl:for-each select="./mods:name[@type='corporate'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
+            <xsl:if test="position()> 1"><xsl:value-of select="', '" /></xsl:if>
+            <xsl:value-of select="string-join((./mods:namePart[not(@type)]),' ')" />
+          </xsl:for-each>
+        </xsl:if>
+      </xsl:variable>
+      <field name="ir.creator.sort"><xsl:value-of select="normalize-space($var_name_sort)"></xsl:value-of></field>
+      
       <xsl:choose>
         <xsl:when test="//service/servstates/servstate[@classid='state']/@categid='reserved'">
           <field name="ir.title.result">{concat('[Reserviert] ', //metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods/mods:note[@type='provisional_title'])}</field>

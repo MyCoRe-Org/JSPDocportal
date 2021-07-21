@@ -27,6 +27,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.util.ClientUtils;
@@ -97,7 +98,9 @@ public class BrowseController {
             result.setSort(request.getParameter("_sort"));
             result.setStart(0);
         } else {
-            result.setSort("modified desc");
+            if(StringUtils.isEmpty(result.getSort())) {
+                result.setSort("modified desc");
+            }
         }
 
         if (mask == null) {
