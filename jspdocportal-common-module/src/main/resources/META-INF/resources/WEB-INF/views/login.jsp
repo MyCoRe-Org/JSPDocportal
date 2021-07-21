@@ -46,13 +46,15 @@
           <div class="row">  
 		    <label for="inputUserID" class="col-sm-4 control-label"><fmt:message key="Webpage.login.UserLogin" />:</label>
 		    <div class="col-sm-8">
-			  <input type="text" id="inputUserID" name="userID" placeholder="User ID"  class="form-control" />
+              <fmt:message var="userPlaceholder" key="Webpage.login.placeholder.ChangeUserID" />
+			  <input type="text" id="inputUserID" name="userID" placeholder="${userPlaceholder}"  class="form-control" />
 		    </div>
 		  </div>
 		  <div class="row mt-3">
 		    <label for="inputPassword" class="col-sm-4 control-label"><fmt:message key="Webpage.login.Password" />:</label>
 		    <div class="col-sm-8">
-			  <input type="password" id="inputPassword" name="password" placeholder="Passwort" class="form-control" />
+              <fmt:message var="passwordPlaceholder" key="Webpage.login.placeholder.Password" />
+			  <input type="password" id="inputPassword" name="password" placeholder="${passwordPlaceholder}" class="form-control" />
 		    </div>
 	      </div>
 
