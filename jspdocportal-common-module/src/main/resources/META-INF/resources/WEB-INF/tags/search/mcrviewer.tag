@@ -19,6 +19,7 @@
 <%@ attribute name="doctype" required="true" type="java.lang.String" %>
 
 <c:set var="iviewBaseURL" value="${applicationScope.WebApplicationBaseURL}modules/iview2/" />
+<mcr:session var="lang" info="language" />
 
     <link href="${iviewBaseURL}css/default.css" type="text/css" rel="stylesheet">
     <script src="${iviewBaseURL}js/iview-client-base.js"></script>
@@ -62,7 +63,7 @@
 	    //do nothing
 	}
 %>
-  <mcr:session var="lang" info="language" />
+
     <script>
     window.addEventListener("load", function(){
             new mycore.viewer.MyCoReViewer(jQuery("#${id}"), {
