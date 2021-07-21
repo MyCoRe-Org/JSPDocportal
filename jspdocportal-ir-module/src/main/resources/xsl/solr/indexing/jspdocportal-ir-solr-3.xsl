@@ -273,7 +273,7 @@
           <!-- more facets -->
           
           <xsl:for-each select="mods:language/mods:languageTerm">
-               <field name="ir.language_class.facet">rfc5656:<xsl:value-of select="." /></field>
+               <field name="ir.language_class.facet">rfc5646:<xsl:value-of select="." /></field>
           </xsl:for-each>
           
           <xsl:choose>
