@@ -87,6 +87,9 @@
                                 <span class="badge badge-pill badge-secondary mr-3" style="height: auto">${currentTask.executionId}</span>
                                 ${currentVariables.wfHeadline} 
                                 <span class="badge badge-pill badge-primary ml-3" style="height: auto">${currentVariables.mcrObjectID}</span>
+                                <c:if test="${not empty currentVariables.wfObjectDisplayRecordIdentifier}">
+                                  <span class="badge badge-pill badge-info ml-3" style="height: auto">${currentVariables.wfObjectDisplayRecordIdentifier}</span>
+                                </c:if>
                               </h4>
                             </div>
                             <div class="col-4">
