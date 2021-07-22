@@ -46,7 +46,7 @@
           <div class="row">  
 		    <label for="inputUserID" class="col-sm-4 control-label"><fmt:message key="Webpage.login.UserLogin" />:</label>
 		    <div class="col-sm-8">
-              <fmt:message var="userPlaceholder" key="Webpage.login.placeholder.ChangeUserID" />
+              <fmt:message var="userPlaceholder" key="Webpage.login.placeholder.UserLogin" />
 			  <input type="text" id="inputUserID" name="userID" placeholder="${userPlaceholder}"  class="form-control" />
 		    </div>
 		  </div>
