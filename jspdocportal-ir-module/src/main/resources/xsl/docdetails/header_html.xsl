@@ -42,9 +42,9 @@
                 </h2>
               </xsl:if>
               <xsl:if test="./mods:note[@type='provisional_remarks']">
-                <p class="card-text">
+                <pre>
                   <xsl:value-of select="./mods:note[@type='provisional_remarks']" />
-                </p>
+                </pre>
               </xsl:if>
             </xsl:for-each>
           </div>
