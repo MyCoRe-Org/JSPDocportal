@@ -507,13 +507,20 @@ public class MCRShowWorkspaceController {
     }
 
     private void importMODSFromGVK(String mcrID, String executionId) {
+        TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
+        Task t = ts.createTaskQuery().executionId(executionId).list().get(0);
+        ts.removeVariable(t.getId(), MCRBPMNMgr.WF_VAR_VALIDATION_MESSAGE);
+        
         MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
         Path mcrFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);
         Document docJdom = MCRBPMNUtils.getWorkflowObjectXML(mcrObjID);
-        modsCatService.updateWorkflowFile(mcrFile, docJdom);
+        try {
+            modsCatService.updateWorkflowFile(mcrFile, docJdom);
+        } catch (Exception e) {
+            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_VALIDATION_MESSAGE, e.getMessage());
+            LOGGER.error(e);
+        }
 
-        TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
-        Task t = ts.createTaskQuery().executionId(executionId).list().get(0);
         updateWFObjectMetadata(t);
     }
 
