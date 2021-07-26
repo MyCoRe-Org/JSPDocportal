@@ -136,7 +136,7 @@ public class MCROutputLanguageSelectorTag extends MCRAbstractTag {
             lv.setLabel(getLabel(l));
             lv.setTitle(getTitle(l));
             StringBuilder imageURL = new StringBuilder(MCRFrontendUtil.getBaseURL());
-            lv.setImageURL(imageURL.append("images/lang-").append(l).append(".png").toString());
+            lv.setImageURL(imageURL.append("images/lang-").append(l).append(".svg").toString());
             l = l.trim();
             if (first) {
                 first = false;
