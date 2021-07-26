@@ -243,13 +243,16 @@
             </xsl:choose>
           </xsl:variable> 
           <xsl:variable name="homepage" select="$categ/category/label[@xml:lang='x-homepage']/@text" />
+          <!--
           <xsl:variable name="json_viewer" select="replace($categ/category/label[@xml:lang='x-dfg-viewer']/@text, '''', '&quot;')" />
           <xsl:variable name="logo_url" select="replace(json-to-xml($json_viewer)/json:map/json:string[@key='logo_url'], 'http://rosdok.uni-rostock.de/',$WebApplicationBaseURL)" />
+          -->
+          <xsl:variable name="logo_url" select="concat($WebApplicationBaseURL, substring($categ/category/label[@xml:lang='x-logo']/@text,1))" />
           <table style="table-layout:fixed">
             <tr>
               <xsl:if test="$logo_url">
-                <td class="pr-3">
-                  <a href="{$homepage}"><img src="{$logo_url}"/></a>
+                <td class="pr-2">
+                  <a href="{$homepage}"><img src="{$logo_url}" style="max-height:60px;max-width:120px;"/></a>
                 </td>
               </xsl:if>
               <td>
