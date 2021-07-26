@@ -64,7 +64,6 @@ import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRPathContent;
 import org.mycore.datamodel.metadata.MCRMetaEnrichedLinkID;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -368,8 +367,9 @@ public class MCRResolvingController  {
         StringBuffer sbURL = new StringBuffer(MCRFrontendUtil.getBaseURL() + "resolve/id/" + mcrID);
         try {
             MCRObject o = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrID));
-            for (MCRMetaLinkID derMetaLink : o.getStructure().getDerivates()) {
-                if ("MCRVIEWER_METS".equals(derMetaLink.getXLinkTitle())) {
+            for (MCRMetaEnrichedLinkID derMetaLink : o.getStructure().getDerivates()) {
+                if (derMetaLink.getClassifications().size() > 0 && 
+                    "MCRVIEWER_METS".equals(derMetaLink.getClassifications().get(0).getID())) {
                     MCRObjectID derID = derMetaLink.getXLinkHrefID();
                     Path root = MCRPath.getPath(derID.toString(), "/");
                     try (DirectoryStream<Path> ds = Files.newDirectoryStream(root)) {
@@ -463,8 +463,9 @@ public class MCRResolvingController  {
         StringBuffer sbURL = new StringBuffer("");
         try {
             MCRObject o = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrID));
-            for (MCRMetaLinkID derMetaLink : o.getStructure().getDerivates()) {
-                if ("METS".equals(derMetaLink.getXLinkTitle()) || "DV_METS".equals(derMetaLink.getXLinkTitle())) {
+            for (MCRMetaEnrichedLinkID derMetaLink : o.getStructure().getDerivates()) {
+                if (derMetaLink.getClassifications().size() > 0 && 
+                    "DV_METS".equals(derMetaLink.getClassifications().get(0).getID())) {
                     MCRObjectID derID = derMetaLink.getXLinkHrefID();
                     Path root = MCRPath.getPath(derID.toString(), "/");
                     try (DirectoryStream<Path> ds = Files.newDirectoryStream(root)) {
