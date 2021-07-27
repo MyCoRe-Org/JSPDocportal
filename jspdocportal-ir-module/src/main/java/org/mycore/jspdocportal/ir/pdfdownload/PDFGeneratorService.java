@@ -29,6 +29,7 @@ import java.util.concurrent.Executors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.events.MCRShutdownHandler;
+import org.mycore.util.concurrent.MCRTransactionableRunnable;
 
 public class PDFGeneratorService {
     private static Logger LOGGER = LogManager.getLogger(PDFGeneratorService.class);
@@ -54,7 +55,7 @@ public class PDFGeneratorService {
     }
 
     public static void execute(PDFGenerator run) {
-        PDFGENERATOR_SERVICE.execute(run);
+        PDFGENERATOR_SERVICE.execute(new MCRTransactionableRunnable(run));
     }
 
 }

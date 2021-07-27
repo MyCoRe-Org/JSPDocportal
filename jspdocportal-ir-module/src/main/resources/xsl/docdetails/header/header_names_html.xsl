@@ -17,7 +17,7 @@
   <xsl:import href="resource:xsl/functions/classification.xsl" />
   <xsl:import href="resource:xsl/functions/mods.xsl" />
   
-  <xsl:output method="html" indent="yes" standalone="no" encoding="UTF-8"/>
+  <xsl:output method="xhtml" indent="yes" standalone="omit" encoding="UTF-8"/>
 
   <xsl:param name="WebApplicationBaseURL"></xsl:param>
   <xsl:param name="CurrentLang" />
@@ -25,12 +25,12 @@
 
   <xsl:template name="headerNames">
     <xsl:for-each select="./mods:name[@type='personal'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
-      <div id="popover_content_{generate-id(.)}" style="display: none">
+      <div id="popover_content_{generate-id(.)}" style="display: none" class="ir-popover">
         <div>
           <table class="w-100" style="min-width:15em">
             <colgroup>
-              <col span="1" style="width: 15%" />
-              <col span="1" style="width: 85%;" />
+              <col style="width: 15%" />
+              <col style="width: 85%" />
             </colgroup>
             <xsl:if test="./mods:role/mods:roleTerm[@authority='GBV']">
               <tr>
@@ -85,12 +85,12 @@
     
     <!-- Körperschaften als Herausgeber -->
     <xsl:for-each select="./mods:name[@type='corporate'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
-      <div id="popover_content_{generate-id(.)}" style="display: none;">
+      <div id="popover_content_{generate-id(.)}" style="display: none;" class="ir-popover">
         <div style="min-width:100em">
           <table class="w-100" style="min-width:15em">
             <colgroup>
-              <col span="1" style="width: 15%" />
-              <col span="1" style="width: 85%;" />
+              <col style="width: 15%" />
+              <col style="width: 85%" />
             </colgroup>
             <xsl:if test="./mods:role/mods:roleTerm[@authority='GBV']">
               <tr>
@@ -129,4 +129,40 @@
       </xsl:for-each>
     </p>
   </xsl:template>
+  
+  <xsl:template name="headerNames_noPopup">
+    <p>
+      <xsl:for-each select="./mods:name[@type='personal'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
+        <span style="white-space:nowrap;">
+          {string-join((./mods:namePart[@type='given'], ./mods:namePart[@type='family'], ./mods:namePart[not(@type)], ./mods:namePart[@type='termsOfAddress']),' ')}
+          <button class="btn btn-sm pl-1" type="button">
+            <xsl:attribute name="data-toggle">popover</xsl:attribute>
+            <xsl:attribute name="data-placement">bottom</xsl:attribute>
+            <xsl:attribute name="data-html">true</xsl:attribute>
+            <xsl:attribute name="data-content-ref">#popover_content_{generate-id(.)}</xsl:attribute>
+            <i class="fas fa-user-circle"></i>
+          </button>
+        </span>
+        <xsl:if test="not(position() = last())">&#160;&#160;&#160;</xsl:if>
+      </xsl:for-each>
+    </p>
+    
+    <!-- Körperschaften als Herausgeber -->
+    <p>
+      <xsl:for-each select="./mods:name[@type='corporate'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
+        <span style="white-space:nowrap;">
+          {string-join((./mods:namePart[not(@type)]),' ')}
+          <button class="btn btn-sm pl-1" type="button">
+            <xsl:attribute name="data-toggle">popover</xsl:attribute>
+            <xsl:attribute name="data-placement">bottom</xsl:attribute>
+            <xsl:attribute name="data-html">true</xsl:attribute>
+            <xsl:attribute name="data-content-ref">#popover_content_{generate-id(.)}</xsl:attribute>
+            <i class="fas fa-university"></i>
+          </button>
+        </span>
+        <xsl:if test="not(position() = last())">&#160;&#160;&#160;</xsl:if>
+      </xsl:for-each>
+    </p>
+  </xsl:template>
+  
 </xsl:stylesheet>

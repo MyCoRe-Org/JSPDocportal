@@ -27,20 +27,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.net.URL;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
 
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.TransformerFactory;
 
 import org.apache.logging.log4j.LogManager;
-import org.jdom2.transform.JDOMSource;
-import org.mycore.common.xsl.MCRParameterCollector;
-import org.mycore.common.xsl.MCRTemplatesSource;
-import org.mycore.common.xsl.MCRXSLTransformerFactory;
+import org.mycore.common.MCRClassTools;
+import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.common.content.transformer.MCRXSLTransformer;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -63,10 +58,10 @@ import com.itextpdf.tool.xml.XMLWorkerHelper;
 
 public class PDFFrontpageUtil {
     public static void createFrontPage(PdfWriter writer, Document document, String recordIdentifier, String mcrid)
-            throws DocumentException {
+        throws DocumentException {
         byte[] buffer = new byte[4096];
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                InputStream is = PDFFrontpageUtil.class.getResourceAsStream("/rosdok_schriftzug.png")) {
+            InputStream is = PDFFrontpageUtil.class.getResourceAsStream("/rosdok_schriftzug.png")) {
 
             int read = 0;
             while ((read = is.read(buffer)) != -1) {
@@ -84,11 +79,11 @@ public class PDFFrontpageUtil {
 
         Font font = FontFactory.getFont(Font.FontFamily.HELVETICA.name(), 10, Font.NORMAL);
         document.add(new Paragraph(
-                "Dieses Werk wurde Ihnen durch die Universitätsbibliothek Rostock zum Download bereitgestellt.", font));
+            "Dieses Werk wurde Ihnen durch die Universitätsbibliothek Rostock zum Download bereitgestellt.", font));
         document.add(
-                new Paragraph("Für Fragen und Hinweise wenden Sie sich bitte an: digibib.ub@uni-rostock.de", font));
+            new Paragraph("Für Fragen und Hinweise wenden Sie sich bitte an: digibib.ub@uni-rostock.de", font));
         Rectangle rect = new Rectangle(document.left(), document.top() - 25 * 2.54f,
-                document.getPageSize().getWidth() - document.rightMargin(), 10);
+            document.getPageSize().getWidth() - document.rightMargin(), 10);
         rect.setBorder(Rectangle.BOTTOM);
         rect.setBorderColor(BaseColor.BLACK);
         rect.setBorderWidth(1f);
@@ -104,12 +99,12 @@ public class PDFFrontpageUtil {
             for (MCRMetaLinkID derID : mcrObj.getStructure().getDerivates()) {
                 if ("cover".equals(derID.getXLinkTitle())) {
                     MCRDerivate der = MCRMetadataManager
-                            .retrieveMCRDerivate(MCRObjectID.getInstance(derID.getXLinkHref()));
+                        .retrieveMCRDerivate(MCRObjectID.getInstance(derID.getXLinkHref()));
                     String mainDoc = der.getDerivate().getInternals().getMainDoc();
                     document.add(Chunk.NEWLINE);
                     document.add(Chunk.NEWLINE);
                     Image img = Image.getInstance(new URL(MCRFrontendUtil.getBaseURL() + "file/" + mcrid + "/"
-                            + der.getId().toString() + "/" + mainDoc));
+                        + der.getId().toString() + "/" + mainDoc));
                     img.scaleToFit(document.getPageSize().getWidth() * .33f, document.getPageSize().getHeight() * .33f);
                     img.setAlignment(Image.MIDDLE);
 
@@ -125,37 +120,40 @@ public class PDFFrontpageUtil {
 
         //Metadata
         org.jdom2.Document jdomObj = mcrObj.createXML();
-        StringWriter sw = new StringWriter();
-        String xslt = "xsl/docdetails/" + mcrObjID.getTypeId() + "2header_html.xsl";
+        String xslt = "xsl/docdetails/pdffrontpage_html.xsl";
         try {
-            MCRTemplatesSource source = new MCRTemplatesSource(xslt);
-            //  source.getSource().setSystemId(xslt);
-            Transformer t = MCRXSLTransformerFactory.getTransformer(source);
-            Map<String, Object> params = MCRParameterCollector.getInstanceFromUserSession().getParameterMap();
-            for (String k : params.keySet()) {
-                t.setParameter(k, params.get(k));
-            }
-            Source input = new JDOMSource(jdomObj);
-            Result output = new StreamResult(sw);
-            t.transform(input, output);
-            String htmlContent = cleanUpHTML(sw.toString());
+            Class<? extends TransformerFactory> tfClass = MCRClassTools.forName("net.sf.saxon.TransformerFactoryImpl");
+            MCRXSLTransformer t = MCRXSLTransformer.getInstance(tfClass, xslt);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            t.transform(new MCRJDOMContent(jdomObj), baos);
+            String htmlContent = cleanUpHTML(baos.toString(StandardCharsets.UTF_8));
             System.out.println(htmlContent);
             XMLWorkerHelper.getInstance().parseXHtml(writer, document, new StringReader(htmlContent));
 
         } catch (Exception e) {
             LogManager.getLogger(MCRTransformXslTag.class).error("Something went wrong processing the XSLT: " + xslt,
-                    e);
+                e);
         }
 
     }
 
     private static String cleanUpHTML(String content) {
-        String result = "<html>" + "\n  <head>" + "\n    <style>" + "\n      body{font-size:16px;}"
-                + "\n      h4{color: rgb(0, 74, 153);font-family: Verdana;font-size: 120%}"
-                + "\n      a {text-decoration: none !important; font-size:120%;font-weight:bold;color:black;}"
-                + "\n      a.ir-btn-goto-top{font-size:0.01% !important;}" + "\n      span.label {color: #777;}"
-                + "\n      p {margin-bottom:0.5em;}" + "\n    </style>" + "\n  </head>" + "\n  <body>" + content
-                + "\n</body></html>";
+        String result = ""
+            + "<html xmlns='http://www.w3.org/1999/xhtml'>                                                        "
+            + "\n  <head>                                                                                         "
+            + "\n    <style>                                                                                      "
+            + "\n      body{font-size:12px;}                                                                      "
+            + "\n      h4{color: rgb(0, 74, 153);font-family: Verdana;font-size: 120%}                            "
+            + "\n      a {text-decoration: none !important; font-size:120%;font-weight:bold;color:black;}         "
+            + "\n      span.label {color: #777;}                                                                  "
+            + "\n      span.ir-badge-license img{height:20px !important;}                                         "
+            + "\n      p {margin-bottom:0.5em;}                                                                   "
+            + "\n    </style>                                                                                     "
+            + "\n  </head>                                                                                        "
+            + "\n  <body>" + content + "</body>                                                                   "
+            + "\n</html>";
+
         return result;
     }
 }

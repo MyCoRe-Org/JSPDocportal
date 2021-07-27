@@ -17,7 +17,7 @@
   <xsl:import href="resource:xsl/functions/classification.xsl" />
   <xsl:import href="resource:xsl/functions/mods.xsl" />
   
-  <xsl:output method="html" indent="yes" standalone="no" encoding="UTF-8"/>
+  <xsl:output method="xhtml" indent="yes" standalone="omit" encoding="UTF-8"/>
 
   <xsl:param name="WebApplicationBaseURL"></xsl:param>
   <xsl:param name="CurrentLang" />

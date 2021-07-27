@@ -163,7 +163,7 @@ public class MCRPDFDownloadController {
 
 
 
-        model.put("progresss",  getProgress(servletContext, recordIdentifier));
+        model.put("progress",  getProgress(servletContext, recordIdentifier));
         model.put("recordIdentifier",  recordID.replace("/", "_"));
     
         Viewable v = new Viewable("/pdfdownload", model);
