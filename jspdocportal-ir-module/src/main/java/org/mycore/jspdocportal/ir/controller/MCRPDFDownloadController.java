@@ -39,7 +39,6 @@ import java.util.Locale;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -65,8 +64,8 @@ public class MCRPDFDownloadController {
     private static final Logger LOGGER = LogManager.getLogger(MCRPDFDownloadController.class);
 
     @GET
-    @javax.ws.rs.Path("recordIdentifier/{recordID}")
-    public Response get(@PathParam("recordID") String recordID, @Context HttpServletRequest request, @Context ServletContext servletContext) {
+    @javax.ws.rs.Path("recordIdentifier/{path:.*}")
+    public Response get(@Context HttpServletRequest request, @Context ServletContext servletContext) {
         HashMap<String, Object> model = new HashMap<>();
         
         List<String> errorMessages = new ArrayList<String>();
@@ -134,9 +133,8 @@ public class MCRPDFDownloadController {
 
                     return Response.ok(stream)
                         .header("Content-Type", "application/pdf")
-                        .header("Content-Type", "application/x-download")
-                        .header("Content-Disposition", "attachment; filename=" + filename).
-                        build();
+                        .header("Content-Disposition", "attachment; filename=" + filename)
+                        .build();
                 }
 
                 String mcrid = String.valueOf(solrResults.get(0).getFirstValue("returnId"));
@@ -164,13 +162,11 @@ public class MCRPDFDownloadController {
 
 
         model.put("progress",  getProgress(servletContext, recordIdentifier));
-        model.put("recordIdentifier",  recordID.replace("/", "_"));
+        model.put("recordIdentifier",  recordIdentifier.replace("/", "_"));
     
         Viewable v = new Viewable("/pdfdownload", model);
         return Response.ok(v).build();
     }
-
-
 
     public int getProgress(ServletContext servletContext, String recordIdentifier) {
         Integer num = (Integer) servletContext

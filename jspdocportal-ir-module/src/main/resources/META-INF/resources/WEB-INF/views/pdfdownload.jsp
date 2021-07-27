@@ -65,7 +65,7 @@
 			<c:choose>
 				<c:when test="${it.ready}">
 					<div>
-                       <c:url var="url" value="/pdfdownload/recordIdentifier/${it.recordIdentifier}/${it.filename}" />
+                       <c:url var="url" value="/do/pdfdownload/recordIdentifier/${it.recordIdentifier}/${it.filename}" />
 					   <a href="${url}" class="btn btn-primary ir-button-download" style="font-size:150%;padding:15px;">
                           <img src="${imgIconUrl}" style="height:60px;"/>&nbsp;&nbsp;${it.filename} &nbsp;&nbsp;&nbsp; <small>(${it.filesize})</small>
                        </a>
@@ -81,7 +81,7 @@
 					<c:set var="progress" value="${it.progress}" />
 					<c:choose>
 						<c:when test="${progress < 0}">
-					     	<c:url var="url" value="/pdfdownload/recordIdentifier/${it.recordIdentifier}/${it.filename}" />
+					     	<c:url var="url" value="/do/pdfdownload/recordIdentifier/${it.recordIdentifier}/${it.filename}" />
 							<div>
 								<a href="${url}"><img src="${imgIconUrl}" style="vertical-align:middle;" />&nbsp;&nbsp;<fmt:message key="PDF.download.generate" /></a>
 							</div>
