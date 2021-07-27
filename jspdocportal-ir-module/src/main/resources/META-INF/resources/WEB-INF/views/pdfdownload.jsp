@@ -9,7 +9,7 @@
 
 <c:set var="WebApplicationBaseURL" value="${applicationScope.WebApplicationBaseURL}" />
 
-<c:set var="pageTitle"><fmt:message key="PDF.download.pageTitle" /></c:set>
+<c:set var="pageTitle"><fmt:message key="Webpage.PDFDownload.pageTitle" /></c:set>
 
 <!doctype html>
 <html>
@@ -23,7 +23,7 @@
   <div class="container">
      <div class="row" style="margin-bottom:30px;">
       <div class="col-sm-12">
-        <h2><fmt:message key="PDF.download.headline.download" /></h2>   
+        <h2><fmt:message key="Webpage.PDFDownload.headline.download" /></h2>   
       </div>
     </div>
     
@@ -71,9 +71,9 @@
                        </a>
 					</div>
                     <div class="ir-box-teaser mt-5">
-					 <h3><fmt:message key="PDF.download.headline.hint" /></h3>
+					 <h3><fmt:message key="Webpage.PDFDownload.headline.hint" /></h3>
 					   <ul style="padding-left:24px">
-                         <fmt:message key="PDF.download.hint" />
+                         <fmt:message key="Webpage.PDFDownload.hint" />
 					   </ul>
                     </div>
 				</c:when>
@@ -83,24 +83,24 @@
 						<c:when test="${progress < 0}">
 					     	<c:url var="url" value="/do/pdfdownload/recordIdentifier/${it.recordIdentifier}/${it.filename}" />
 							<div>
-								<a href="${url}"><img src="${imgIconUrl}" style="vertical-align:middle;" />&nbsp;&nbsp;<fmt:message key="PDF.download.generate" /></a>
+								<a href="${url}"><img src="${imgIconUrl}" style="vertical-align:middle;" />&nbsp;&nbsp;<fmt:message key="Webpage.PDFDownload.generate" /></a>
 							</div>
 							<div class="ir-box-teaser mt-5">
-							<h3><fmt:message key="PDF.download.headline.hint" /></h3>
+							<h3><fmt:message key="Webpage.PDFDownload.headline.hint" /></h3>
 							<ul style="padding-left:30px">
-								<li><fmt:message key="PDF.download.generate.hint" /></li>
+								<li><fmt:message key="Webpage.PDFDownload.generate.hint" /></li>
 								</ul>
                             </div>
 						</c:when>
 						<c:otherwise>
                           <div class="ir-box-teaser mt-3">
-							<h3><fmt:message key="PDF.download.generate.file" /></h3>
+							<h3><fmt:message key="Webpage.PDFDownload.generate.file" /></h3>
 							<progress style="width:100%" id="progressBar" max="100" value="${progress}"></progress>
 						  </div>
                           <div class="ir-box-teaser mt-5">
-							 <h3><fmt:message key="PDF.download.headline.hint" /></h3>
+							 <h3><fmt:message key="Webpage.PDFDownload.headline.hint" /></h3>
 							 <ul style="padding-left:30px">
-								    <li><fmt:message key="PDF.download.patient.hint" /></li>
+								    <li><fmt:message key="Webpage.PDFDownload.patient.hint" /></li>
 							 </ul>
                           </div>
 						</c:otherwise>
