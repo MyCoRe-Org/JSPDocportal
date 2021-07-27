@@ -120,9 +120,16 @@ public class BrowseController {
             if (request.getParameter("_add-filter") != null) {
                 for (String s : request.getParameterValues("_add-filter")) {
                 	if(!s.trim().endsWith(":")) {
-                		if (!result.getFilterQueries().contains(s)) {
-                			result.getFilterQueries().add(s);
-                    	}
+                	    if(s.contains(":")) {
+                	        String key = s.substring(0, s.indexOf(":"));
+                	        String values = s.substring(s.indexOf(":")+1);
+                	        for(String val: values.split("\\s")) {
+                	            String f = key+":"+val;
+                	            if (!result.getFilterQueries().contains(f)) {
+                                    result.getFilterQueries().add(f);
+                                }
+                	        }
+                	    }
                 	}
                 }
             }
