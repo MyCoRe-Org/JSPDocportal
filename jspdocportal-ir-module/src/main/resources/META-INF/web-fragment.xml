@@ -10,7 +10,6 @@
 
   <ordering>
     <before>
-      <name>mycore</name>
       <name>jspdocportal_common_module</name>
     </before>
   </ordering>
