@@ -251,7 +251,7 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
             // +mcrID).forward(request, response);
             if (key.equals("recordIdentifier")) {
                 response.sendRedirect(response
-                    .encodeRedirectURL(request.getContextPath() + "/pdfdownload/recordIdentifier/" + value));
+                    .encodeRedirectURL(request.getContextPath() + "/do/pdfdownload/recordIdentifier/" + value));
             } else {
                 response.sendRedirect(response.encodeRedirectURL(request.getContextPath()));
             }

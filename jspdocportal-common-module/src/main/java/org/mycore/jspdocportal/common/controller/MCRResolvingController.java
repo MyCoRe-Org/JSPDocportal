@@ -252,7 +252,7 @@ public class MCRResolvingController  {
             // this.getServletContext().getRequestDispatcher("/content/pdfdownload.jsp?id="
             // +mcrID).forward(request, response);
             if (key.equals("recordIdentifier")) {
-                String url = request.getContextPath() + "/pdfdownload/recordIdentifier/" + value; 
+                String url = request.getContextPath() + "/do/pdfdownload/recordIdentifier/" + value; 
                 return Response.temporaryRedirect(URI.create(url)).build();
                 
             } else {

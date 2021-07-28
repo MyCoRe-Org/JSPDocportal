@@ -200,7 +200,7 @@
 	                    	   label : "buttons.pdf_download",
 	                    	   tooltip : "buttons.pdf_download.tooltip",
 	                    	   action : function(obj, evt){
-		                    	   			window.open("${applicationScope.WebApplicationBaseURL}pdfdownload/recordIdentifier/${fn:replace(it.recordIdentifier,'/','_')}", '_blank');
+		                    	   			window.open("${applicationScope.WebApplicationBaseURL}do/pdfdownload/recordIdentifier/${fn:replace(it.recordIdentifier,'/','_')}", '_blank');
 		                       },
 	                       	   icon: "download",
 	                    	   inGroup: "addOns"
