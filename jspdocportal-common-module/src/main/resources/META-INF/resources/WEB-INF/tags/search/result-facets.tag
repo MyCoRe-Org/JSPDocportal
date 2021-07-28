@@ -77,7 +77,7 @@
 						</button>
 					</c:if>
 					<c:if test="${status.index >= top and status.last}">
-						<button id="moreFacets_btn_${facetID}" class="btn btn-primary btn-sm" style="width:unset;align-self:end" 
+						<button id="moreFacets_btn_${facetID}" class="btn btn-secondary btn-sm" style="width:unset;align-self:end" 
                                 data-toggle="collapse" data-target=".toggle-${facetID}-collapse"  >${btnMore}</button>
 						<script type="text/javascript">
 						$('.toggle-${facetID}-collapse:first').on('shown.bs.collapse', function () {
