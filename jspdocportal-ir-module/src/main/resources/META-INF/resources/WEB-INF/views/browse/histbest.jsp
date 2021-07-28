@@ -22,13 +22,13 @@
   <%@ include file="../fragments/header.jspf" %>
   <div class="container">
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col">
         <h2>${pageTitle}</h2>
       </div>
     </div>
     
     <div class="row">
-      <div class="col-xs-12 col-md-3 ">
+      <div class="col col-md-3 ">
         <div class="ir-facets h-100">
           <h3><fmt:message key="Browse.Filter.headline" /></h3>
           <script type="text/javascript">
@@ -53,91 +53,83 @@
           <form class="form-horizontal" onsubmit="return false;">
             <div class="form-group">
               <div class="form-row">
-              <%--
-                 <select id="filterField" name="filterField" class="form-control input-sm" style="width:12em;border-radius:0px;background-color:#777777;color:white;margin-bottom:-1px">
-                    <option value="allMeta"><fmt:message key="Browse.Filter.histbest.allMeta" /></option>
-                    <option value="content"><fmt:message key="Browse.Filter.histbest.content" /></option>
-                    <option value="ir.title_all"><fmt:message key="Browse.Filter.histbest.ir.title_all" /></option>
-                    <option value="ir.creator_all"><fmt:message key="Browse.Filter.histbest.ir.creator_all" /></option>
-                    <option value="ir.pubyear_start"><fmt:message key="Browse.Filter.histbest.ir.pubyear_start" /></option>
-                    <option value="ir.pubyear_end"><fmt:message key="Browse.Filter.histbest.ir.pubyear_end" /></option>
-                  </select>
-                --%>
-                <div class="input-group input-group-sm">
-                  <script type="text/javascript">
-					function changeFilterIncludeURL() {
-						window.location=$("meta[name='mcr:baseurl']").attr("content")
+                <div class="col">
+                  <div class="input-group input-group-sm">
+                    <script type="text/javascript">
+					    function changeFilterIncludeURL() {
+						  window.location=$("meta[name='mcr:baseurl']").attr("content")
 				 				    + "browse/histbest?_search="
 				        			+ $("meta[name='mcr:search.id']").attr("content")
 					    			+ "&_add-filter="
 					    			+ encodeURIComponent("+" + $("input[name='filterField']:checked").val()+":"+$("#filterValue").val());
-					}
-					function changeFilterExcludeURL() {
-						window.location=$("meta[name='mcr:baseurl']").attr("content")
+						}
+						function changeFilterExcludeURL() {
+						  window.location=$("meta[name='mcr:baseurl']").attr("content")
 					    		   + "browse/histbest?_search="
 				      	   	       + $("meta[name='mcr:search.id']").attr("content")
 					   	   		   + "&_add-filter="
 					   	   		   + encodeURIComponent("-" + $("input[name='filterField']:checked").val()+":"+$("#filterValue").val());
-					}
-										<%-- for select box use: $("#filterField option:selected").val() --%>
-				</script>
-                <fmt:message var="lblTerm" key="Browse.Filter.term" />
-                <input class="form-control border-secondary" id="filterValue" name="filterValue" placeholder="${lblTerm}"
-                    type="text" onkeypress="if (event.keyCode == 13) { changeFilterIncludeURL();}">
-                     <div class="input-group-prepend">
-                      <button id="filterInclude" class="btn btn-primary" onclick="changeFilterIncludeURL();">
-                        <i class="fas fa-plus"></i>
-                      </button>
-                     </div>
+						}
+					  <%-- for select box use: $("#filterField option:selected").val() --%>
+					</script>
+                    <fmt:message var="lblTerm" key="Browse.Filter.term" />
+                      <input class="form-control border-secondary" id="filterValue" name="filterValue" placeholder="${lblTerm}"
+                             type="text" onkeypress="if (event.keyCode == 13) { changeFilterIncludeURL();}">
+                      <div class="input-group-prepend">
+                        <button id="filterInclude" class="btn btn-primary" onclick="changeFilterIncludeURL();">
+                          <i class="fas fa-plus"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-</div>
-             <div class="form-row">   
-              <div class="col">
-                <table class="w-100">
-                  <tr>
-                    <td>
-                      <div class="form-check form-control-sm">
-                        <input id="filterField1"  type="radio" class="form-check-input" name="filterField" value="allMeta" checked="checked">
-                        <label for="filterField1" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.allMeta" /></label>
-                      </div>
-                    <td>
-                    <td>
-                      <div class="form-check form-control-sm">
-                        <input id="filterField2"  type="radio" class="form-check-input" name="filterField" value="content" >
-                        <label for="filterField2" class="form-check-label" style="line-height:1em;" ><fmt:message key="Browse.Filter.histbest.content" /></label>
-                      </div>
-                    <td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="form-check form-control-sm">
-                        <input id="filterField3"  type="radio" class="form-check-input" name="filterField" value="ir.title_all" >
-                        <label for="filterField3" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.title_all" /></label>
-                      </div>
-                    <td>
-                    <td>
-                      <div class="form-check form-control-sm">
-                        <input id="filterField4"  type="radio" class="form-check-input" name="filterField" value="ir.pubyear_start" >
-                        <label for="filterField4" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.pubyear_start" /></label>
-                      </div>
-                    <td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="form-check form-control-sm">
-                        <input id="filterField5"  type="radio" class="form-check-input" name="filterField" value="ir.creator_all" >
-                        <label for="filterField5" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.creator_all" /></label>
-                      </div>
-                    <td>
-                    <td>
-                      <div class="form-check form-control-sm">
-                        <input id="filterField6"  type="radio" class="form-check-input" name="filterField" value="ir.pubyear_end" >
-                        <label for="filterField6" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.pubyear_end" /></label>
-                      </div>
-                    <td>
-                  </tr>
-                </table>
+              <div class="form-row">   
+                <div class="col">
+                  <table class="w-100">
+                    <tr>
+                      <td>
+                        <div class="form-check form-control-sm">
+                          <input id="filterField1"  type="radio" class="form-check-input" name="filterField" value="allMeta" checked="checked">
+                          <label for="filterField1" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.allMeta" /></label>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check form-control-sm">
+                          <input id="filterField2"  type="radio" class="form-check-input" name="filterField" value="content" >
+                          <label for="filterField2" class="form-check-label" style="line-height:1em;" ><fmt:message key="Browse.Filter.histbest.content" /></label>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="form-check form-control-sm">
+                          <input id="filterField3"  type="radio" class="form-check-input" name="filterField" value="ir.title_all" >
+                          <label for="filterField3" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.title_all" /></label>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check form-control-sm">
+                          <input id="filterField4"  type="radio" class="form-check-input" name="filterField" value="ir.pubyear_start" >
+                          <label for="filterField4" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.pubyear_start" /></label>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="form-check form-control-sm">
+                          <input id="filterField5"  type="radio" class="form-check-input" name="filterField" value="ir.creator_all" >
+                          <label for="filterField5" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.creator_all" /></label>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check form-control-sm">
+                          <input id="filterField6"  type="radio" class="form-check-input" name="filterField" value="ir.pubyear_end" >
+                          <label for="filterField6" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.pubyear_end" /></label>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
               </div>
             </div>
           </form>
