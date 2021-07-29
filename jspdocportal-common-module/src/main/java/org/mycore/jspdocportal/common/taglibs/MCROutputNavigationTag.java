@@ -231,7 +231,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
                 String msg = retrieveI18N(el.getI18n());
                 out.append(indent)
                     .append(" <li id=\"" + retrieveNavPath(el) + "\" class=\"nav-item"
-                        + (doExpand ? " ir-nav-item-expanded" : "") + "\">");
+                        + (doExpand ? " expanded" : "") + "\">");
 
                 out.append(indent);
                 String href = el.getHref();
