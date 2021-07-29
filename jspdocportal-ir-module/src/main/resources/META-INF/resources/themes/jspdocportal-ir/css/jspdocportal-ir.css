@@ -14,17 +14,17 @@
 }
 
 .ir-badge-restrictedaccess {
-  background-color: darkred;
+  background-color: #bb1e10; /* verkehrsrot */
   color: white;
 }
 
 .ir-badge-closedaccess {
-  background-color: darkred;
+  background-color: #bb1e10; /* verkehrsrot */
   color: white;
 }
 
 .ir-badge-openaccess {
-  background-color: darkgreen;
+  background-color: #008351; /* verkehrsgrün */
   color: white;
 }
 .ir-badge-ocr {
