@@ -272,7 +272,7 @@
                       <tr>
                         <td>
                           <xsl:variable name="thePublisher" select="." />
-                            {string-join(./following-sibling::mods:place[not(@supplied='yes')][preceding-sibling::mods:publisher[1]=$thePublisher]/mods:placeTerm,', ')}: {.}
+                          {string-join(./following-sibling::mods:place[not(@supplied='yes')][preceding-sibling::mods:publisher[1]=$thePublisher]/mods:placeTerm,', ')}: {.}
                         </td>
                       </tr>
                     </xsl:for-each>
