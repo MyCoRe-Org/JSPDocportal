@@ -52,7 +52,7 @@
        </c:if>
         <c:if test="${not empty requestScope['org.mycore.navigation.side.path']}">
          <c:if test="${pageScope.navSide == 'left'}">
-           <div id="left-side-nav" class="col col-md-3 ir-content-left">
+           <div id="left-side-nav" class="col col-md-3 ir-content-left pt-3">
               <mcr:outputNavigation mode="side" id="${fn:substringBefore(requestScope['org.mycore.navigation.side.path'], '.')}"></mcr:outputNavigation>
               <c:if test="${not empty it.infoBox}">
                 <mcr:includeWebcontent id="${fn:replace(it.infoBox, '/', '.')}" file="${it.infoBox}.html" />
@@ -65,7 +65,7 @@
               </div>
           </div>
           <c:if test="${pageScope.navSide == 'right'}">
-            <div id="right-side-nav" class="col col-md-3 ir-content-right">
+            <div id="right-side-nav" class="col col-md-3 ir-content-right pt-3">
               <mcr:outputNavigation mode="side" id="${fn:substringBefore(requestScope['org.mycore.navigation.side.path'], '.')}"></mcr:outputNavigation>
               <c:if test="${not empty it.infoBox}">
                 <mcr:includeWebcontent id="${fn:replace(it.infoBox, '/', '.')}" file="${it.infoBox}.html" />
