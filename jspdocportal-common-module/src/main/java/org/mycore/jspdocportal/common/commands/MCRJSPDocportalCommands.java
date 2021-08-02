@@ -318,6 +318,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                         MCRDerivateCommands.loadFromFile(f.getAbsolutePath());
                     }
 
+                    /*
                     //set ACLs
                     while (mcrDer.getService().getRulesSize() > 0) {
                         MCRMetaAccessRule rule = mcrDer.getService().getRule(0);
@@ -325,16 +326,25 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                         MCRAccessManager.updateRule(derID, permission, rule.getCondition(), "");
                         mcrDer.getService().removeRule(0);
                     }
+                    */
+                    if(mcrDer.getService().getRulesSize() > 0) {
+                        LOGGER.warn("ACLS for " + mcrDer.getId().toString() + " ignored.");
+                    }
                 }
             }
 
             //set AccessRules
+            /*
             while (mcrObj.getService().getRulesSize() > 0) {
                 MCRMetaAccessRule rule = mcrObj.getService().getRule(0);
                 String permission = mcrObj.getService().getRulePermission(0);
 
                 MCRAccessManager.updateRule(id, permission, rule.getCondition(), "");
                 mcrObj.getService().removeRule(0);
+            }
+            */
+            if(mcrObj.getService().getRulesSize() > 0) {
+                LOGGER.warn("ACLS for " + mcrObj.getId().toString() + " ignored.");
             }
         } catch (MCRActiveLinkException | MCRAccessException | SAXParseException | IOException e) {
             LOGGER.error(e);
