@@ -98,7 +98,7 @@
         <a href="${url}">
           <c:choose>
             <c:when test="${entry.data['category'].contains('derivate_types:cover') or entry.data['category'].contains('derivate_types:fulltext')}">
-              <img style="width:98%;padding:1%;" src="${pageContext.request.contextPath}/api/iiif/image/v2/thumbnail/${entry.mcrid}/full/full/0/default.jpg" border="0" />
+              <img style="width:98%;padding:1%;" src="${pageContext.request.contextPath}/api/iiif/image/v2/thumbnail/${entry.mcrid}/full/1024,/0/default.jpg" border="0" />
             </c:when>
             <c:when test="${fn:contains(entry.mcrid, '_bundle_')}">
               <img style="width:150px" src="${WebApplicationBaseURL}images/filetypeicons/bundle.png" />
