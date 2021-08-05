@@ -193,15 +193,15 @@
              <field name="ir.oai.setspec.open_access">open_access</field>
           </xsl:if>
           
-          <xsl:variable name="pubyear_start" select="mods:originInfo[@eventType='publication']/mods:dateIssued[@keydate and @encoding]" />
+          <xsl:variable name="pubyear_start" select="mods:originInfo[@eventType='publication']/mods:dateIssued[@keyDate and @encoding]" />
           
           <xsl:variable name="pubyear_end">
             <xsl:choose>
               <xsl:when test="mods:originInfo[@eventType='publication']/mods:dateIssued[@encoding and @point='end']">
                 <xsl:value-of select="mods:originInfo[@eventType='publication']/mods:dateIssued[@encoding and @point='end']" />
               </xsl:when>
-              <xsl:when test="mods:originInfo[@eventType='publication']/mods:dateIssued[@keydate and @encoding]">
-                <xsl:value-of select="mods:originInfo[@eventType='publication']/mods:dateIssued[@keydate and @encoding]" />
+              <xsl:when test="mods:originInfo[@eventType='publication']/mods:dateIssued[@keyDate and @encoding]">
+                <xsl:value-of select="mods:originInfo[@eventType='publication']/mods:dateIssued[@keyDate and @encoding]" />
               </xsl:when>
             <xsl:otherwise>0</xsl:otherwise>
           </xsl:choose>  
