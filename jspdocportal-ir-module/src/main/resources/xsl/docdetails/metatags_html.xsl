@@ -7,7 +7,7 @@
 
   <xsl:param name="WebApplicationBaseURL" select="'http://rosdok.uni-rostock.de/'"/>
   <xsl:param name="WebApplicationTitle" select="'RosDok'"/>
-  <xsl:output method="html" indent="yes" standalone="no" />
+  <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" />
   
   <xsl:template match="/">
   <xsl:for-each select="//modsContainer[1]/mods:mods">
