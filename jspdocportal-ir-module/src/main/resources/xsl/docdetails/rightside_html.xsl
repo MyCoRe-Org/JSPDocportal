@@ -35,7 +35,7 @@
     <xsl:variable name="image">    
       <xsl:choose>
         <xsl:when test="/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='cover' or @categid='fulltext']]">
-          <img style="width:150px" class="border border-secondary" src="{$WebApplicationBaseURL}api/iiif/image/v2/thumbnail/{/mycoreobject/@ID}/full/1024,/0/default.jpg" />
+          <img style="width:150px" class="border border-secondary" src="{$WebApplicationBaseURL}api/iiif/image/v2/thumbnail/{/mycoreobject/@ID}/full/!512,512/0/default.jpg" />
         </xsl:when>
         <xsl:when test="/mycoreobject[contains(@ID, '_bundle_')]">
           <img style="width:150px" src="{$WebApplicationBaseURL}images/filetypeicons/bundle.png" />

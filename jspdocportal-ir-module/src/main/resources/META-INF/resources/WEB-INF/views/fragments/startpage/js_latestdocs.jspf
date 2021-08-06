@@ -98,7 +98,7 @@
                         cardBodyTDData.css("width", "67%")
                         var coverImg = $("<a></a>").attr("href",  $("meta[name='mcr:baseurl']").attr("content") + "resolve/id/"+entry["id"]).append(
                         $("<img />").addClass("ir-latestdocs-cover").css("max-width", "100%").css("max-height","180px").css("object-fit","contain")
-                        .attr("src", $("meta[name='mcr:baseurl']").attr("content") + "api/iiif/image/v2/thumbnail/" + entry["id"] + "/full/1024,/0/default.jpg"));
+                        .attr("src", $("meta[name='mcr:baseurl']").attr("content") + "api/iiif/image/v2/thumbnail/" + entry["id"] + "/full/!512,512/0/default.jpg"));
                         cardBodyTR.append($("<td></td>").css("vertical-align","bottom").css("width", "33%").css("padding-left","15px").append(coverImg));
                     } else if(entry.hasOwnProperty("ir.cover_url")){
                       cardBodyTDData.css("width", "67%")
