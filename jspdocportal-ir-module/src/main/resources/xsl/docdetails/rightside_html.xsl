@@ -301,7 +301,7 @@
           <xsl:variable name="categ" select="mcrmods:to-mycoreclass(., 'single')/categories/category" />
           <span class="clearfix">
             <img src="{$WebApplicationBaseURL}images{$categ/label[@xml:lang='x-icon']/@text}" class="float-left pr-3" />
-            <a href="{$categ/label[@xml:lang='x-uri']/@text}" class="strong">
+            <a href="{$categ/label[@xml:lang='x-uri']/@text}" class="font-weight-bold small">
               <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text"/>
             </a>
           </span>
