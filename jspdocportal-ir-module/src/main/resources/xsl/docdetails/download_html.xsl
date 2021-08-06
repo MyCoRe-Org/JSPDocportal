@@ -24,12 +24,16 @@
           <th>{mcri18n:translate('OMD.ir.docdetails.download.label')}</th>
           <td>
              <table id="ir-table-docdetails-download" class="ir-table-docdetails-values">
-             
-             <xsl:for-each select="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='data' or @categid='documentation' or @categid='supplement']]">
-             <tr><td> 
-              <xsl:call-template name="download-button" />
-              </td></tr>
-            </xsl:for-each>
+               <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='edited']/mods:mods/mods:extension[@displayLabel='external_content']/file">
+                 <tr><td> 
+                   <xsl:call-template name="download-button-extern" />
+                 </td></tr>
+               </xsl:for-each>
+               <xsl:for-each select="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='data' or @categid='documentation' or @categid='supplement']]">
+                 <tr><td>
+                   <xsl:call-template name="download-button" />
+                 </td></tr>
+               </xsl:for-each>
             </table>
           </td>
         </tr>
@@ -41,10 +45,8 @@
     <xsl:variable name="mcrid" select="/mycoreobject/@ID" />
     <xsl:variable name="derid" select="./@xlink:href" />
     <xsl:variable name="fulltext_url">{$WebApplicationBaseURL}file/{$mcrid}/{$derid}/{./maindoc/text()}</xsl:variable>
-        
-    
       <a class="btn btn-primary ir-button-download d-inline-block"
-         href="{$fulltext_url}" target="_blank">
+          href="{$fulltext_url}" target="_blank">
          <xsl:choose>
            <xsl:when test="ends-with(./maindoc, '.zip')">
              <img align="left" src="{$WebApplicationBaseURL}images/download_zip.png" />
@@ -58,7 +60,7 @@
          </xsl:choose>
          <span class="small float-right">({mcrstring:pretty-filesize(./maindoc_size)})</span>
          <strong>{mcrclass:current-label-text(./classification[@classid='derivate_types'])}</strong>
-         <br /><span class="small">{mcrstring:abbreviate-center(./maindoc, 40)}</span>
+         <br /><span class="small">{mcrstring:abbreviate-center(./maindoc, 80)}</span>
       </a>
       <br />
       <div class="mt-3 mb-4 text-right">
@@ -70,4 +72,35 @@
       </a>
       </div>
   </xsl:template>
+  
+  <xsl:template name="download-button-extern">
+      <xsl:variable name="fulltext_url" select="./@URL" />
+      <a class="btn btn-primary ir-button-download d-inline-block"
+         href="{$fulltext_url}" target="_blank">
+         <xsl:choose>
+           <xsl:when test="ends-with(./@OWNERID, '.zip')">
+             <img align="left" src="{$WebApplicationBaseURL}images/download_zip.png" />
+           </xsl:when>
+           <xsl:when test="ends-with(./@OWNERID, '.pdf')">
+             <img align="left" src="{$WebApplicationBaseURL}images/download_pdf.png" />
+           </xsl:when>
+           <xsl:otherwise>
+             <img align="left" src="{$WebApplicationBaseURL}images/download_other.png" />
+           </xsl:otherwise>
+         </xsl:choose>
+         <span class="small float-right">({mcrstring:pretty-filesize(./@SIZE)})</span>
+         <strong>{mcrclass:current-label-text(document(concat('classification:metadata:0:children:derivate_types:',./@USE))//category)}</strong>
+         <br /><span class="small">{mcrstring:abbreviate-center(./@OWNERID, 80)}</span>
+      </a>
+      <br />
+      <div class="mt-3 mb-4 text-right">
+      <span class="pr-3" style="font-variant: petite-caps;">MD5-Prüfsumme:</span>
+      <a class="btn btn-sm btn-outline-secondary" 
+         style=""  download="{./@OWNERID}.md5" 
+         href="data:text/plain;charset=US-ASCII,{encode-for-uri(concat(./@CHECKSUM,'  ', ./@OWNERID))}">
+         <i class="fas fa-download pr-2"></i> {./@CHECKSUM}
+      </a>
+      </div>
+  </xsl:template>
+  
 </xsl:stylesheet>
