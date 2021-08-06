@@ -10,6 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -189,7 +191,8 @@ public class MCRShowWorkspaceController {
         }
 
         LinkedHashMap<String, String> newActions = new LinkedHashMap<>();
-        for (String role : MCRUserManager.getCurrentUser().getSystemRoleIDs()) {
+        Set<String> roles = new TreeSet<String>(MCRUserManager.getCurrentUser().getSystemRoleIDs());
+        for (String role : roles) {
             if (role.startsWith("wf_")) {
                 newActions.put(role,
                     MCRCategoryDAOFactory.getInstance().getCategory(new MCRCategoryID("mcr-roles", role), 0)
