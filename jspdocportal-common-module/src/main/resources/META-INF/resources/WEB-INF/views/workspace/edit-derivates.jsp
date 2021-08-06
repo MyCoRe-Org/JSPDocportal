@@ -148,7 +148,7 @@
                                     <div class="card-body border-top border-secondary bg-warning">
   											<fmt:message key="WF.derivates.delete" var="titleDelete"/>
   											<button id="btnDeleteDerivate_${derID}_${f}" title="${titleDelete}" name="doDeleteDerivate-task_${it.taskid}-derivate_${derID}" 
-    										        class="btn btn-primary btn-sm"><i class="fas fa-trash"></i><fmt:message key="WF.workspace.button.delete" /></button>
+    										        class="btn btn-danger btn-sm"><i class="fas fa-trash"></i><fmt:message key="WF.workspace.button.delete" /></button>
     										<label class="ml-3"><fmt:message key="WF.derivates.delete.message" /></label>
   									</div>
   							   </div>
