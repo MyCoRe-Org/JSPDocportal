@@ -70,7 +70,7 @@
 		window.onload = function() {
 			var config = {
 				logoURL:"${applicationScope.WebApplicationBaseURL}images/mcrviewer/mcrviewer.png",
-				"mobile" : false,
+				mobile: false,
 				pdfProviderURL : "${applicationScope.WebApplicationBaseURL}${it.pdfProviderURL}",
 				derivate : "${it.recordIdentifier}",
 				filePath : "${it.filePath}",
@@ -80,8 +80,15 @@
 				lang : "${lang}",
 				webApplicationBaseURL : "${applicationScope.WebApplicationBaseURL}",
 				pdfWorkerURL : "${iviewBaseURL}js/lib/pdf.worker.js",
-				"canvas.startup.fitWidth" : true,
-				"canvas.overview.enabled" : false,
+				canvas: {
+                	startup:{
+                		fitWidth: true
+                	},
+                	overview:{
+                		enabled:true,
+                		minVisibleSize: 600
+                	}
+                },
 				permalink : {
 					enabled : true,
 					updateHistory : true,
@@ -159,8 +166,15 @@
 				webApplicationBaseURL : "${applicationScope.WebApplicationBaseURL}",
 				// derivateURL : "${applicationScope.WebApplicationBaseURL}depot/${fn:replace(it.recordIdentifier,'/','%25252F')}/",
 				derivateURL : "${applicationScope.WebApplicationBaseURL}file/${mcrid}/${derid}/",
-				"canvas.startup.fitWidth" : true,
-				"canvas.overview.enabled" : false,
+				canvas: {
+                	startup:{
+                		fitWidth: true
+                	},
+                	overview:{
+                		enabled:true,
+                		minVisibleSize: 600
+                	}
+                },
 				permalink : {
 					enabled : true,
 					updateHistory : true,
