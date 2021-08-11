@@ -43,10 +43,10 @@
         	});
           });
           </script>
-          <div style="position:absolute;top:0px;right:15px" class="d-block d-md-none">
+          <div style="position:absolute;top:-15px; right:0px" class="d-block d-md-none">
              <button id="btnToogleFilter" class="btn btn-lg btn-link" data-toggle="collapse" data-target="#facetInfo">
-               <i id="btnToogleFilterTextOn" class="fa fa-toggle-on" style="color:#004a99;"></i>
-               <i id="btnToogleFilterTextOff" class="fa fa-toggle-off d-none" style="color: #FFA100;"></i>
+               <i id="btnToogleFilterTextOn" class="fa fa-toggle-on text-primary"></i>
+               <i id="btnToogleFilterTextOff" class="fa fa-toggle-off d-none text-warning"></i>
              </button>
           </div>
           <div id="facetInfo" class="collapse show">
