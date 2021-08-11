@@ -12,7 +12,8 @@
 <%@ attribute name="mode" required="true" type="java.lang.String"%>
 
 <div class="row">
-	<div class="col-sm-12 text-right" style="margin-bottom:12px">
+	<div class="col mb-2">
+      <div class="float-right">
 		<script type="text/javascript">
 			function changeSortURL(value) {
 				window.location = $("meta[name='mcr:baseurl']").attr("content")
@@ -22,8 +23,9 @@
 						+ encodeURIComponent($("#sortField option:selected").val() + " " + value);
 			}
 		</script>
-		<fmt:message key="Webpage.Searchresult.resort-label" />
-		  <select id="sortField" class="form-control ir-form-control form-control-sm" onchange="changeSortURL('asc')" style="width: auto; display: inline; margin: 0px 12px">
+		<span class="pr-2"><fmt:message key="Webpage.Searchresult.resort-label" /></span>
+        <br class="d-sm-none" />
+		  <select id="sortField" class="form-control ir-form-control form-control-sm mr-2 d-inline w-auto" onchange="changeSortURL('asc')">
 			<c:forEach var="f" items="${fn:split(fields,',')}">
 				<option value="${f}" ${fn:startsWith(result.sort,f.concat(' ')) ? 'selected="selected"' : ''}><fmt:message key="Webpage.Searchresult.Sort.Label.${f}" /></option>
 			</c:forEach>
@@ -35,5 +37,6 @@
 		  <button class="btn btn-sm ${fn:endsWith(result.sort,' desc') ? 'btn-secondary' : 'btn-link active'}" ${fn:endsWith(result.sort,' desc') ? 'disabled': ''} title="<fmt:message key="Webpage.Searchresult.order.desc" />" role="button" onclick="changeSortURL('desc')">
 		    <i class="fas fa-sort-amount-up" onclick="changeSortURL('desc')"></i> Z-A
 		  </button>
+      </div>
 	</div>
 </div>
