@@ -10,7 +10,7 @@
 <%@ attribute name="mode" required="false" type="java.lang.String"%>
 
 <div class="row">
-  <div class="col-sm-9" style="position:relative">
+  <div class="col-md-9" style="position:relative">
     <c:if test="${fn:endsWith(mode,'series')}">
       <c:if test="${not empty entry.data['ir.seriesNumber.result']}">
         <div style="position:absolute;top:-5px;left:0px" class="border border-dark px-2" title="${mode}">
