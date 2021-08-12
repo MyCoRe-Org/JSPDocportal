@@ -62,12 +62,6 @@
     <div class="container">
       <div class="row d-block d-lg-none" style="padding: 0px 15px">
         <div class="col-12" style="padding-top:45px">
-		  <div class="ir-nav-search-back ir-nav-search ir-box text-right" style="padding:0px 0px 30px 0px">
-             <a class="btn btn-primary" href="${WebApplicationBaseURL}/browse/epub" class="btn btn-primary btn-sm">
-			    <i class="fas fa-search"></i>
-				<fmt:message key="Webpage.docdetails.newsearch" />
-			</a>
- 		  </div>
           <search:result-navigator mcrid="${mcrid}" mode="one_line"/>
         </div>
       </div>
@@ -246,22 +240,13 @@
        </div>
        --%>
     </div><%-- main area --%>
-    <div class="col-xs-12 col-md-4"> <%-- right area --%>
-       <div class="ir-right_side h-100">
-         <div class="d-none d-lg-block">
-     	    <c:if test="${empty param._search and (fn:contains(WebApplicationBaseURL, 'dbhsnb') or fn:contains(WebApplicationBaseURL, 'hs-nb'))}">
-				<div class="ir-nav-search ir-box text-right" style="padding:0px 0px 30px 0px">
-					<a class="btn btn-primary" href="${WebApplicationBaseURL}/browse/epub" class="btn btn-primary btn-sm">
-						<i class="fas fa-search"></i>
-						<fmt:message key="Webpage.docdetails.newsearch" />
-					</a>
-				</div>
-         	</c:if>
-            <search:result-navigator mcrid="${mcrid}" mode="one_line"/>
-        
-        <mcr:showEditMenu mcrid="${mcrid}" cssClass="text-right pb-3" />
-        <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/rightside_html.xsl" />
-       </div>
+    <div class="col col-md-4"> <%-- right area --%>
+      <div class="ir-right_side h-100">
+        <div class="d-none d-lg-block">
+          <search:result-navigator mcrid="${mcrid}" mode="one_line"/>
+          <mcr:showEditMenu mcrid="${mcrid}" cssClass="text-right pb-3" />
+          <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/rightside_html.xsl" />
+        </div>
       </div>
     </div><%-- right area --%>
   </div><%--row --%>
