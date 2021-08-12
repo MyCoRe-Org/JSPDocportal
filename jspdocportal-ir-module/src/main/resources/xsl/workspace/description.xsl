@@ -20,19 +20,17 @@
   <xsl:if test="./metadata/def.modsContainer/modsContainer[@type='reserved']">
     <span class="badge badge-info mr-3">ID-Reservierung</span><strong><xsl:value-of select="./metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods/mods:note[@type='provisional_title']" /></strong>
     <pre><xsl:value-of select="./metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods/mods:note[@type='provisional_remarks']" /></pre>
-    
-    <xsl:for-each select="//mods:name[./mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='aut'][1]">
+  </xsl:if>
+  <xsl:for-each select="//mods:name[./mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='aut'][1]">
     <p>
-      <xsl:value-of select="concat(/mods:namePart[@type='given'],' ',./mods:namePart[@type='family'])" />
+      <xsl:value-of select="concat(./mods:namePart[@type='given'],' ',./mods:namePart[@type='family'])" />
     </p>
-    </xsl:for-each>
-    <p>
-      DOI: https://doi.org/{$MCR.DOI.Prefix}/{translate(//mods:mods/mods:recordInfo/mods:recordIdentifier,'/','_')}
-      <br />URN: {//mods:mods/mods:identifier[@type='urn']}
-      <br />PURL: {$MCR.Identifier.PURL.BaseURL}{//mods:mods/mods:recordInfo/mods:recordIdentifier}
-    </p>
-    </xsl:if>
-    
+  </xsl:for-each>
+  <p>
+    DOI: https://doi.org/{$MCR.DOI.Prefix}/{translate(//mods:mods/mods:recordInfo/mods:recordIdentifier,'/','_')}
+    <br />URN: {//mods:mods/mods:identifier[@type='urn']}
+    <br />PURL: {$MCR.Identifier.PURL.BaseURL}{//mods:mods/mods:recordInfo/mods:recordIdentifier}
+  </p>
   </xsl:template>
 
 </xsl:stylesheet>

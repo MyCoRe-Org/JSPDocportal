@@ -20,6 +20,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.xml.transform.TransformerFactory;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.camunda.bpm.engine.RuntimeService;
@@ -386,11 +387,19 @@ public class MCRShowWorkspaceController {
             LOGGER.error(e);
             txt = e.getMessage();
         }
-        if (txt != null) {
-            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_RECORD_IDENTIFIER, txt);
-        } else {
-            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_RECORD_IDENTIFIER, "");
+        ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_RECORD_IDENTIFIER, StringUtils.defaultString(txt, ""));
+
+        //Persistent Identifier (URN für Pica)
+        try {
+            String xpPI = "concat(//mods:mods/mods:identifier[@type='urn'],'')";
+            XPathExpression<String> xpath = XPathFactory.instance().compile(xpPI, Filters.fstring(), null,
+                MCRConstants.MODS_NAMESPACE);
+            txt = xpath.evaluateFirst(mcrObj.createXML());
+        } catch (Exception e) {
+            LOGGER.error(e);
+            txt = e.getMessage();
         }
+        ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_PERSISTENT_IDENTIFIER, StringUtils.defaultString(txt, ""));
 
         // LicenceInfo ... TODO MOVE TO XSLT for Description
         ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_LICENCE_HTML, "");
@@ -513,7 +522,7 @@ public class MCRShowWorkspaceController {
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
         Task t = ts.createTaskQuery().executionId(executionId).list().get(0);
         ts.removeVariable(t.getId(), MCRBPMNMgr.WF_VAR_VALIDATION_MESSAGE);
-        
+
         MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
         Path mcrFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);
         Document docJdom = MCRBPMNUtils.getWorkflowObjectXML(mcrObjID);
