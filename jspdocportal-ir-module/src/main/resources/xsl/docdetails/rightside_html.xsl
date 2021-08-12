@@ -165,6 +165,7 @@
             </div>
          </div>
        </xsl:if>
+       <xsl:if test="/mycoreobject[not(contains(@ID,'_bundle_'))]">
          <div class="dropdown w-100 mt-3">
             <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="dropdownMenuDownload" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                <i class="fas fa-download pr-2"></i> {mcri18n:translate('OMD.ir.docdetails.rightside.menue.download')}
@@ -200,7 +201,8 @@
               </xsl:for-each>
             </div>
            </div>
-         </div>
+         </xsl:if>
+       </div>
     </xsl:if>
     
     <xsl:variable name="class_provider" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" />
