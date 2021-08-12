@@ -27,8 +27,8 @@
     </p>
   </xsl:for-each>
   <p>
-    DOI: https://doi.org/{$MCR.DOI.Prefix}/{translate(//mods:mods/mods:recordInfo/mods:recordIdentifier,'/','_')}
-    <br />URN: {//mods:mods/mods:identifier[@type='urn']}
+    URN: {//mods:mods/mods:identifier[@type='urn']}
+    <br />DOI: https://doi.org/{$MCR.DOI.Prefix}/{translate(//mods:mods/mods:recordInfo/mods:recordIdentifier,'/','_')}
     <br />PURL: {$MCR.Identifier.PURL.BaseURL}{//mods:mods/mods:recordInfo/mods:recordIdentifier}
   </p>
   </xsl:template>

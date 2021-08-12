@@ -26,16 +26,16 @@
   <xsl:param name="CurrentLang" />
   <xsl:param name="DefaultLang" />
   <xsl:param name="MCR.DOI.Prefix" />
+  <xsl:param name="MCR.Identifier.PURL.BaseURL"></xsl:param>
 
   <xsl:template match="/mycoreobject">
     <!-- ID reservation header -->
     <xsl:if test="mcracl:check-permission(@ID, 'writedb')">
       <xsl:if test="./service/servstates/servstate[@categid='reserved']">
         <div class="card card-info border border-info mb-3">
-          <div class="card-header bg-info">
-             <h4 class="text-white">
+          <div class="card-header bg-info py-2">
+             <h4 class="text-white my-0">
                {mcri18n:translate('OMD.ir.docdetails.header.title.reserved')}:
-               <input value="https://doi.org/{$MCR.DOI.Prefix}/{replace(./metadata/def.modsContainer/modsContainer[@type='imported']/mods:mods/mods:recordInfo/mods:recordIdentifier, '/','_')}" class="ml-3 px-3" style="width:21em" /> 
              </h4>
           </div>
           <div class="card-body">
@@ -51,6 +51,20 @@
                 </pre>
               </xsl:if>
             </xsl:for-each>
+          </div>
+          <div class="card-footer">
+            <!-- TODO use real DOI from mods:identifier after the PI-component works as expected and show only if DOI is present -->
+            <span class="d-inline-block" style="width:4em">URN: </span>
+            <input id="input_urn" readonly="readonly" style="width:22em;margin-bottom:5px" value="{./metadata/def.modsContainer/modsContainer[@type='imported']/mods:mods/mods:identifier[type='urn']}" />
+            <button class="btn btn-sm btn-outline-secondary ml-3" title="URN kopieren" onclick="navigator.clipboard.writeText(document.getElementById('input_urn').value);"><i class="fas fa-clipboard"></i></button>
+            <br />
+            <span class="d-inline-block" style="width:4em">DOI: </span>
+            <input id="input_doi" readonly="readonly" style="width:22em;margin-bottom:5px" value="https://doi.org/{$MCR.DOI.Prefix}/{replace(./metadata/def.modsContainer/modsContainer[@type='imported']/mods:mods/mods:recordInfo/mods:recordIdentifier, '/','_')}" />
+            <button class="btn btn-sm btn-outline-secondary ml-3" title="DOI kopieren" onclick="navigator.clipboard.writeText(document.getElementById('input_doi').value);"><i class="fas fa-clipboard"></i></button>
+            <br />
+            <span class="d-inline-block" style="width:4em">PURL: </span>
+            <input id="input_purl" readonly="readonly" style="width:22em" value="{$MCR.Identifier.PURL.BaseURL}{./metadata/def.modsContainer/modsContainer[@type='imported']/mods:mods/mods:recordInfo/mods:recordIdentifier}" />
+            <button class="btn btn-sm btn-outline-secondary ml-3" title="PURL kopieren" onclick="navigator.clipboard.writeText(document.getElementById('input_purl').value);"><i class="fas fa-clipboard"></i></button>
           </div>
         </div>
       </xsl:if>
