@@ -25,6 +25,7 @@
   <xsl:param name="WebApplicationBaseURL"></xsl:param>
   <xsl:param name="CurrentLang" />
   <xsl:param name="DefaultLang" />
+  <xsl:param name="MCR.DOI.Prefix" />
 
   <xsl:template match="/mycoreobject">
     <!-- ID reservation header -->
@@ -32,7 +33,10 @@
       <xsl:if test="./service/servstates/servstate[@categid='reserved']">
         <div class="card card-info border border-info mb-3">
           <div class="card-header bg-info">
-            <h4 class="text-white">{mcri18n:translate('OMD.ir.docdetails.header.title.reserved')}</h4>
+             <h4 class="text-white">
+               {mcri18n:translate('OMD.ir.docdetails.header.title.reserved')}:
+               <input value="https://doi.org/{$MCR.DOI.Prefix}/{replace(./metadata/def.modsContainer/modsContainer[@type='imported']/mods:mods/mods:recordInfo/mods:recordIdentifier, '/','_')}" class="ml-3 px-3" style="width:21em" /> 
+             </h4>
           </div>
           <div class="card-body">
             <xsl:for-each select="./metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods">
