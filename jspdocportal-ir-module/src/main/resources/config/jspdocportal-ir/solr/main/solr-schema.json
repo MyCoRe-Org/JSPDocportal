@@ -1,23 +1,15 @@
 [
 	{
 		"add-field": {
-			"name": "ir.doi",
+			"name": "doi",
 			"type": "string",
 			"multiValued": false,
 			"stored": true
 		}
 	},
-	{
-        "add-field": {
-            "name": "ir.urn",
-            "type": "string",
-            "multiValued": false,
-            "stored": true
-         }
-    },
     {
 		"add-field": {
-			"name": "ir.ppn",
+			"name": "ppn",
 			"type": "string",
 			"multiValued": false,
 			"stored": true

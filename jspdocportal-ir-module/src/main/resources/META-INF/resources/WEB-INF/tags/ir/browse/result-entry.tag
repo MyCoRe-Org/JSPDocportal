@@ -50,8 +50,8 @@
         </c:if>
       </c:when>
       <c:otherwise>
-        <c:if test="${not empty(entry.data['ir.doi'])}">
-          <p class="card-text">https://doi.org/${entry.data['ir.doi']}</p>
+        <c:if test="${not empty(entry.data['doi'])}">
+          <p class="card-text">https://doi.org/${entry.data['doi']}</p>
         </c:if>
       </c:otherwise>  
     </c:choose>
