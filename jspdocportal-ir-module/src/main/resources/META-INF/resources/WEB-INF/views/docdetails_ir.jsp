@@ -71,7 +71,7 @@
             <div class="col">
 			  <div class="ir-docdetails-header">
                 <x:choose>
-                  <x:when select="$doc/mycoreobject/service/servstates/servstate/@categid='deleted'">
+                  <x:when select="$doc/mycoreobject/service/servstates/servstate[@categid='deleted']">
                     <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/deleted_header_html.xsl" />
                   </x:when>
                   <x:otherwise>
