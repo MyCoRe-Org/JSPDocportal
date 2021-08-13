@@ -65,7 +65,7 @@
           </span>
         </c:when>
         <c:when test="${fn:contains(entry.data['ir.accesscondition_class.facet'], 'closedaccess')}">
-          <span class="badge ir-badge ir-badge-closeddaccess">
+          <span class="badge ir-badge ir-badge-closedaccess">
             <fmt:message key="OMD.ir.docdetails.header.access.closed" /> <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Closed_Access.png"/> <fmt:message key="OMD.ir.docdetails.header.access" />
           </span>
         </c:when>
