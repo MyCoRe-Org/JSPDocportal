@@ -11,6 +11,8 @@
   exclude-result-prefixes="mods xlink xalan i18n mcrmods mcrxsl mcr">
 
   <xsl:import href="mods-util.xsl" />
+  <xsl:import href="resource:xsl/functions/i18n.xsl" />
+  
   <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />
   <xsl:param name="WebApplicationBaseURL" />
 
