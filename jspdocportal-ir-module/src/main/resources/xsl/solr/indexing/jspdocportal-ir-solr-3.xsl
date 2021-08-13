@@ -290,11 +290,7 @@
             </xsl:choose>
           </xsl:for-each>
            <xsl:for-each select="mods:classification[@displayLabel='collection']">
-                <xsl:variable name="c" select="translate(substring-after(@valueURI,'classifications/'),'#',':')" />
-                <!-- issue [RosDok:#33] temporary dissable deprecated collections until they are removed from metadata -->
-                <xsl:if test="not($c = ('collection:SchwerinMuess', 'collection:HistBibGuestrow', 'collection:KHMRostock', 'collection:LBMV', 'collection:RBNeubrandenburg', 'collection:StadtarchivMalchow', 'collection:StadtarchivRostock'))">
-                  <field name="ir.collection_class.facet"><xsl:value-of select="translate(substring-after(@valueURI,'classifications/'),'#',':')" /></field>
-                </xsl:if>
+              <field name="ir.collection_class.facet"><xsl:value-of select="translate(substring-after(@valueURI,'classifications/'),'#',':')" /></field>
            </xsl:for-each>
            <xsl:for-each select="mods:classification[@displayLabel='provider']">
                 <field name="ir.provider_class.facet"><xsl:value-of select="translate(substring-after(@valueURI,'classifications/'),'#',':')" /></field>
