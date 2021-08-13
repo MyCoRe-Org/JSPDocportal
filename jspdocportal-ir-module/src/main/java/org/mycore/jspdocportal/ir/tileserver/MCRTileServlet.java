@@ -73,6 +73,10 @@ public class MCRTileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         final TileInfo tileInfo = getTileInfo(getPathInfo(req));
         Path iviewFile = getTileFile(tileInfo);
+        if (iviewFile == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "File does not exist - Invalid request!");
+            return;
+        }
         if (!Files.exists(iviewFile)) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, "File does not exist: " + iviewFile.toString());
             return;
@@ -114,13 +118,12 @@ public class MCRTileServlet extends HttpServlet {
     protected long getLastModified(final HttpServletRequest req) {
         final TileInfo tileInfo = getTileInfo(getPathInfo(req));
         try {
-        	Path p = getTileFile(tileInfo);
-        	 if(Files.exists(p)) {
-        		 return Files.getLastModifiedTime(p).toMillis();
-        	 }
-        	 else {
-        		 return -1;
-        	 }
+            Path p = getTileFile(tileInfo);
+            if (p!=null && Files.exists(p)) {
+                return Files.getLastModifiedTime(p).toMillis();
+            } else {
+                return -1;
+            }
         } catch (IOException e) {
             LOGGER.warn("Could not get lastmodified time.", e);
             return -1;
@@ -147,25 +150,31 @@ public class MCRTileServlet extends HttpServlet {
     static TileInfo getTileInfo(final String pathInfo) {
         LOGGER.debug("Starting MCRTileServlet: " + pathInfo);
         String path = pathInfo.startsWith("/") ? pathInfo.substring(1) : pathInfo;
-        final String derivate = path.substring(0, path.indexOf('/'));
-        String imagePath = path.substring(derivate.length());
-        String tile;
-        if (imagePath.endsWith(".xml")) {
-            tile = imagePath.substring(imagePath.lastIndexOf('/') + 1);
-            imagePath = imagePath.substring(0, imagePath.length() - tile.length() - 1);
-        } else {
-            int pos = imagePath.length();
-            int cnt = 0;
-            while (--pos > 0 && cnt < 3) {
-                switch (imagePath.charAt(pos)) {
-                case '/':
-                    cnt++;
-                    break;
-                default:
+        String tile = "";
+        String imagePath = "";
+        String derivate = "";
+        if (path.contains("/")) {
+            derivate = path.substring(0, path.indexOf('/'));
+            imagePath = path.substring(derivate.length());
+            if (imagePath.endsWith(".xml")) {
+                tile = imagePath.substring(imagePath.lastIndexOf('/') + 1);
+                imagePath = imagePath.substring(0, imagePath.length() - tile.length() - 1);
+            } else {
+                int pos = imagePath.length();
+                int cnt = 0;
+                while (--pos > 0 && cnt < 3) {
+                    switch (imagePath.charAt(pos)) {
+                        case '/':
+                            cnt++;
+                            break;
+                        default:
+                    }
+                }
+                if (imagePath.length() > pos + 1) {
+                    tile = imagePath.substring(pos + 2);
+                    imagePath = imagePath.substring(0, pos + 1);
                 }
             }
-            tile = imagePath.substring(pos + 2);
-            imagePath = imagePath.substring(0, ++pos);
         }
         final TileInfo tileInfo = new TileInfo(derivate, imagePath, tile);
         return tileInfo;
@@ -204,7 +213,7 @@ public class MCRTileServlet extends HttpServlet {
         URI uri = URI.create("jar:" + iviewFile.toUri().toString());
         try {
             return FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap(),
-                    MCRTileServlet.class.getClassLoader());
+                MCRTileServlet.class.getClassLoader());
         } catch (FileSystemAlreadyExistsException exc) {
             // block until file system is closed
             try {
@@ -231,7 +240,8 @@ public class MCRTileServlet extends HttpServlet {
         if (clazz != null) {
             try {
                 tfp = (MCRTileFileProvider) Class.forName(clazz).getDeclaredConstructor(new Class[] {}).newInstance();
-            } catch (IllegalAccessException | ClassNotFoundException | InstantiationException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+            } catch (IllegalAccessException | ClassNotFoundException | InstantiationException | IllegalArgumentException
+                | InvocationTargetException | NoSuchMethodException | SecurityException e) {
                 //ignore;
             }
         }

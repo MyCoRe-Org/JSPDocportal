@@ -27,6 +27,7 @@ import java.net.URLDecoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration2;
@@ -45,18 +46,19 @@ public class MCRJSPTileFileProvider implements MCRTileFileProvider {
 
     public Path getTileFile(String derivate, String image) {
         try {
-            Path depotDir = Paths.get(MCRConfiguration2.getString("MCR.depotdir").orElseThrow());
-            String recordIdentifier = URLDecoder.decode(URLDecoder.decode(derivate, "UTF-8"), "UTF-8");
-            Path outputDir = HashedDirectoryStructure.createOutputDirectory(depotDir, recordIdentifier);
-            image = image.replaceFirst("(\\w+)(_derivate_)(\\d+)(/)", "");
+            if (StringUtils.isNotEmpty(derivate) && StringUtils.isNotEmpty(image)) {
+                Path depotDir = Paths.get(MCRConfiguration2.getString("MCR.depotdir").orElseThrow());
+                String recordIdentifier = URLDecoder.decode(URLDecoder.decode(derivate, "UTF-8"), "UTF-8");
+                Path outputDir = HashedDirectoryStructure.createOutputDirectory(depotDir, recordIdentifier);
+                image = image.replaceFirst("(\\w+)(_derivate_)(\\d+)(/)", "");
 
-            return MCRImage.getTiledFile(outputDir, ".", image);
+                return MCRImage.getTiledFile(outputDir, ".", image);
+            }
         } catch (MCRConfigurationException cfe) {
             LOGGER.error("Property \"MCR.depotdir\" not defined!", cfe);
-            return null;
         } catch (UnsupportedEncodingException uee) {
             LOGGER.error(uee);
-            return null;
         }
+        return null;
     }
 }
