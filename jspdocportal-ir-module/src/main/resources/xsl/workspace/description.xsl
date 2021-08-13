@@ -26,10 +26,18 @@
       <xsl:value-of select="concat(./mods:namePart[@type='given'],' ',./mods:namePart[@type='family'])" />
     </p>
   </xsl:for-each>
-  <p>
-    URN: {//mods:mods/mods:identifier[@type='urn']}
-    <br />DOI: https://doi.org/{$MCR.DOI.Prefix}/{translate(//mods:mods/mods:recordInfo/mods:recordIdentifier,'/','_')}
-    <br />PURL: {$MCR.Identifier.PURL.BaseURL}{//mods:mods/mods:recordInfo/mods:recordIdentifier}
+  <p class="small">
+     <span class="d-inline-block" style="width:4em">URN: </span>
+     <input id="input_urn_{./@ID}" readonly="readonly" style="width:22em;margin-bottom:5px" value="{//mods:mods/mods:identifier[@type='urn']}" />
+     <button class="btn btn-sm ml-1" title="URN kopieren" onclick="navigator.clipboard.writeText(document.getElementById('input_urn_{./@ID}').value);"><i class="fas fa-clipboard"></i></button>
+     <br />
+     <span class="d-inline-block" style="width:4em">DOI: </span>
+     <input id="input_doi_{./@ID}" readonly="readonly" style="width:22em;margin-bottom:5px" value="https://doi.org/{$MCR.DOI.Prefix}/{translate(//mods:mods/mods:recordInfo/mods:recordIdentifier,'/','_')}" />
+     <button class="btn btn-sm ml-1" title="DOI kopieren" onclick="navigator.clipboard.writeText(document.getElementById('input_doi_{./@ID}').value);"><i class="fas fa-clipboard"></i></button>
+     <br />
+     <span class="d-inline-block" style="width:4em">PURL: </span>
+     <input id="input_purl_{./@ID}" readonly="readonly" style="width:22em" value="{$MCR.Identifier.PURL.BaseURL}{//mods:mods/mods:recordInfo/mods:recordIdentifier}" />
+     <button class="btn btn-sm ml-1" title="PURL kopieren" onclick="navigator.clipboard.writeText(document.getElementById('input_purl_{./@ID}').value);"><i class="fas fa-clipboard"></i></button>
   </p>
   </xsl:template>
 
