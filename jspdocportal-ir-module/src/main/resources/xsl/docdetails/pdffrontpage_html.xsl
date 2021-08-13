@@ -143,10 +143,6 @@
       </xsl:if>
 
       <!-- Badges -->
-      <xsl:if test="./mods:classification[contains(@valueURI, 'licenseinfo#work')]">
-        <xsl:variable name="licecat" select="mcrmods:to-category(./mods:classification[contains(@valueURI, 'licenseinfo#work')])" />
-      </xsl:if> 
-      
       <p class="mt-3">
       <xsl:if test="./mods:genre[@displayLabel='doctype']">
         <span class="badge ir-badge-header badge-secondary">
