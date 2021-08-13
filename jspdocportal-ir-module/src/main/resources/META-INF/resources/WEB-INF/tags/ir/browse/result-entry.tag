@@ -43,11 +43,18 @@
       </p>
     </c:if>
     <p class="card-text">${entry.data['ir.originInfo.result']}</p>
-    <p class="card-text">${entry.data['purl']}</p>
-    <!-- temporary during migration: -->
-    <c:if test="${empty entry.data['purl']}">
-      <p class="card-text">${WebApplicationBaseURL}resolve/id/${entry.mcrid}</p>
-    </c:if>
+    <c:choose>
+      <c:when test="${entry.data['category'].contains('doctype:histbest')}">
+        <c:if test="${not empty(entry.data['purl'])}">
+          <p class="card-text">${entry.data['purl']}</p>
+        </c:if>
+      </c:when>
+      <c:otherwise>
+        <c:if test="${not empty(entry.data['ir.doi'])}">
+          <p class="card-text">https://doi.org/${entry.data['ir.doi']}</p>
+        </c:if>
+      </c:otherwise>  
+    </c:choose>
     <p class="card-text" style="font-size: 80%; text-align:justify">${entry.data['ir.abstract300.result']}</p>
     
     <p class="card-text">

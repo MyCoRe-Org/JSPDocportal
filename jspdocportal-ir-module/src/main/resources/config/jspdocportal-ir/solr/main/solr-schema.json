@@ -1,6 +1,30 @@
 [
 	{
 		"add-field": {
+			"name": "ir.doi",
+			"type": "string",
+			"multiValued": false,
+			"stored": true
+		}
+	},
+	{
+        "add-field": {
+            "name": "ir.urn",
+            "type": "string",
+            "multiValued": false,
+            "stored": true
+         }
+    },
+    {
+		"add-field": {
+			"name": "ir.ppn",
+			"type": "string",
+			"multiValued": false,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
 			"name": "ir.abstract300.result",
 			"type": "string",
 			"multiValued": false,

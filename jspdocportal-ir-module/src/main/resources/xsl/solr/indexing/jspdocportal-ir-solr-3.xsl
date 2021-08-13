@@ -49,19 +49,22 @@
     <xsl:apply-imports/>
     <field name="ir.identifier">[xslt]Saxon</field>
   
-  	<xsl:for-each select="def.modsContainer/modsContainer[@type='imported' or @type='created']/mods:mods">
+  	<xsl:for-each select="def.modsContainer/modsContainer[@type='imported' or @type='created'][1]/mods:mods">
       <field name="recordIdentifier"><xsl:value-of select="mods:recordInfo/mods:recordIdentifier" /></field>
   		
       <xsl:if test="mods:identifier[@type='purl']">
         <field name="purl"><xsl:value-of select="mods:identifier[@type='purl']" /></field>  
       </xsl:if>
-      <xsl:if test="mods:identifier[@type='PPN']">
-        <field name="ppn"><xsl:value-of select="mods:identifier[@type='PPN']" /></field>  
+      <xsl:if test="mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
+        <field name="ir.ppn"><xsl:value-of select="mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']" /></field>  
+      </xsl:if>
+      <xsl:if test="mods:identifier[@type='doi']">
+        <field name="ir.doi"><xsl:value-of select="mods:identifier[@type='doi'][1]" /></field>  
       </xsl:if>
       <xsl:if test="mods:identifier[@type='urn']">
-        <field name="urn"><xsl:value-of select="mods:identifier[@type='urn']" /></field>  
+        <field name="ir.urn"><xsl:value-of select="mods:identifier[@type='urn'][1]" /></field>
       </xsl:if>
-        
+
       <xsl:variable name="var_name">
   		<xsl:for-each select="./mods:name[@type='personal'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
   		  <xsl:if test="position()> 1"><xsl:value-of select="', '" /></xsl:if>

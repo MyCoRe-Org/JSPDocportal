@@ -23,14 +23,6 @@
 	},
 	{
 		"add-field": {
-			"name": "ppn",
-			"type": "string",
-			"multiValued": false,
-			"stored": true
-		}
-	},
-	{
-		"add-field": {
 			"name": "purl",
 			"type": "string",
 			"multiValued": false,
