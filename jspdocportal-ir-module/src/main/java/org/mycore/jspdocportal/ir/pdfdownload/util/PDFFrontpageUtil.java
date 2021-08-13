@@ -33,6 +33,7 @@ import java.nio.charset.StandardCharsets;
 import javax.xml.transform.TransformerFactory;
 
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRClassTools;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
@@ -57,6 +58,8 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 
 public class PDFFrontpageUtil {
+    private static Logger LOGGER = LogManager.getLogger();
+    
     public static void createFrontPage(PdfWriter writer, Document document, String recordIdentifier, String mcrid)
         throws DocumentException {
         byte[] buffer = new byte[4096];
@@ -128,7 +131,7 @@ public class PDFFrontpageUtil {
 
             t.transform(new MCRJDOMContent(jdomObj), baos);
             String htmlContent = cleanUpHTML(baos.toString(StandardCharsets.UTF_8));
-            System.out.println(htmlContent);
+            LOGGER.debug(htmlContent);
             XMLWorkerHelper.getInstance().parseXHtml(writer, document, new StringReader(htmlContent));
 
         } catch (Exception e) {

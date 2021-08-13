@@ -24,6 +24,7 @@
 package org.mycore.jspdocportal.ir.pdfdownload.util;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +39,7 @@ import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.mycore.common.config.MCRConfiguration2;
 
 public class PDFTOCUtil {
     private static Namespace NS_METS = Namespace.getNamespace("mets", "http://www.loc.gov/METS/");
@@ -48,27 +50,31 @@ public class PDFTOCUtil {
 
     static {
         xpStructMapPhysical = XPathFactory.instance().compile("//mets:structMap[@TYPE='PHYSICAL']//mets:div",
-                Filters.element(), null, NS_METS);
+            Filters.element(), null, NS_METS);
         xpStructLink = XPathFactory.instance().compile("//mets:structLink/mets:smLink", Filters.element(), null,
-                NS_METS);
+            NS_METS);
         xpRootDivLogical = XPathFactory.instance().compile("//mets:structMap[@TYPE='LOGICAL']/mets:div",
-                Filters.element(), null, NS_METS);
+            Filters.element(), null, NS_METS);
     }
 
     public static ArrayList<HashMap<String, Object>> createTOC(Path dataDir, int offset) {
         ArrayList<HashMap<String, Object>> outlines = new ArrayList<HashMap<String, Object>>();
-        Path metsFile = dataDir.resolve(dataDir.getFileName() + ".repos.mets.xml");
-
-        SAXBuilder sb = new SAXBuilder();
-        try {
-            Document metsDoc = sb.build(metsFile.toFile());
-            outlines = createTOC(metsDoc, offset);
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        Path metsFile = dataDir.resolve(
+            MCRConfiguration2.getString("MCR.SWF.Project.ID").get() + "_" + dataDir.getFileName() + ".repos.mets.xml");
+        if (Files.exists(metsFile)) {
+            SAXBuilder sb = new SAXBuilder();
+            try {
+                Document metsDoc = sb.build(metsFile.toFile());
+                outlines = createTOC(metsDoc, offset);
+            } catch (JDOMException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return outlines;
+        } else {
+            return new ArrayList<HashMap<String, Object>>();
         }
-        return outlines;
     }
 
     public static ArrayList<HashMap<String, Object>> createTOC(Document metsDoc, int offset) {
@@ -106,7 +112,7 @@ public class PDFTOCUtil {
     }
 
     private static void addTocEntry(ArrayList<HashMap<String, Object>> parent, Element logElem,
-            HashMap<String, Integer> logDiv2PageMap) {
+        HashMap<String, Integer> logDiv2PageMap) {
         HashMap<String, Object> data = new HashMap<String, Object>();
         parent.add(data);
 
