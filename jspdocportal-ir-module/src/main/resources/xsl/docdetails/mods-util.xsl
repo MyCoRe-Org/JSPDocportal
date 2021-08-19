@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" 
-     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-     xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" 
+<xsl:stylesheet version="1.0" 
+     xmlns="http://www.w3.org/1999/xhtml" 
+     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:mods="http://www.loc.gov/mods/v3"
      xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
-     version="1.0" exclude-result-prefixes="mods xlink">
-<xsl:output method="xml" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />     
+     exclude-result-prefixes="mods xlink">
 
+<xsl:output method="xml" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />     
 <xsl:import href="resource:xsl/functions/i18n.xsl" />
 
 <xsl:template name="mods-title">

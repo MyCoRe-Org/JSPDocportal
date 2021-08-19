@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<xsl:stylesheet version="1.0" xmlns:oai="http://www.openarchives.org/OAI/2.0/" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:mods="http://www.loc.gov/mods/v3" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mcr="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xalan xsl xlink mods mcr">
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:oai="http://www.openarchives.org/OAI/2.0/"
+  xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:mods="http://www.loc.gov/mods/v3"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  exclude-result-prefixes="xsl xlink mods">
+  
   <xsl:param name="WebApplicationBaseURL" select="''"/>
   <xsl:param name="ServletsBaseURL" select="''"/>
   <xsl:param name="HttpSession" select="''"/>
