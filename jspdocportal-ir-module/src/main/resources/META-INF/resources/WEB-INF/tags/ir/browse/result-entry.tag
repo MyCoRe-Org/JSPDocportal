@@ -102,22 +102,43 @@
   <div class="col-md-3 d-none d-md-block">
     <div class="img-thumbnail pull-right ir-result-image">
       <div style="position:relative;text-align:center">
-        <a href="${url}">
           <c:choose>
             <c:when test="${entry.data['category'].contains('derivate_types:cover') or entry.data['category'].contains('derivate_types:fulltext')}">
-              <img style="width:98%;padding:1%;" src="${pageContext.request.contextPath}/api/iiif/image/v2/thumbnail/${entry.mcrid}/full/!1024,1024/0/default.jpg" border="0" />
-            </c:when>
-            <c:when test="${fn:contains(entry.mcrid, '_bundle_')}">
-              <img style="width:150px" src="${WebApplicationBaseURL}images/filetypeicons/bundle.png" />
-            </c:when>
-            <c:when test="${entry.data['category'].contains('doctype:data')}">
-              <img style="width:150px" src="${WebApplicationBaseURL}images/filetypeicons/data.png" />
-            </c:when>
-            <c:otherwise>
-              <img style="width:150px" src="${WebApplicationBaseURL}images/filetypeicons/document.png" />
-            </c:otherwise>
-          </c:choose>
-        </a>
+              <a href="${url}" id="thumbnail_${entry.mcrid}" style="display:inline-block;min-height:2em"></a>
+              <script>
+     	        let image_${entry.mcrid} = new Image();
+     	        image_${entry.mcrid}.onload = function() {
+       	          image_${entry.mcrid}.style.width = "128px";
+                  image_${entry.mcrid}.classList.add("border");
+                  image_${entry.mcrid}.classList.add("border-secondary");
+                  document.getElementById("thumbnail_${entry.mcrid}").appendChild(image_${entry.mcrid});
+                }
+                image_${entry.mcrid}.onerror = function() {
+                  // image did not load - show default image
+                  let err_${entry.mcrid} = new Image();
+                  err_${entry.mcrid}.style.width = "128px";
+                  err_${entry.mcrid}.src = "${WebApplicationBaseURL}images/filetypeicons/empty.png";
+                  document.getElementById("thumbnail_${entry.mcrid}").appendChild(err_${entry.mcrid});
+                }
+                image_${entry.mcrid}.src = "${WebApplicationBaseURL}api/iiif/image/v2/thumbnail/${entry.mcrid}/full/!512,512/0/default.jpg";
+              </script>
+          </c:when>
+          <c:when test="${fn:contains(entry.mcrid, '_bundle_')}">
+            <a href="${url}">
+              <img style="width:128px" src="${WebApplicationBaseURL}images/filetypeicons/bundle.png" />
+            </a>
+          </c:when>
+          <c:when test="${entry.data['category'].contains('doctype:data')}">
+            <a href="${url}">
+              <img style="width:128px" src="${WebApplicationBaseURL}images/filetypeicons/data.png" />
+            </a>
+          </c:when>
+          <c:otherwise>
+            <a href="${url}">
+              <img style="width:128px" src="${WebApplicationBaseURL}images/filetypeicons/document.png" />
+            </a>
+          </c:otherwise>
+        </c:choose>
       </div>
     </div>
   </div>
