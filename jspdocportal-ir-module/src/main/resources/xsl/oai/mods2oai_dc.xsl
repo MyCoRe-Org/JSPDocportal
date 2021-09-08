@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0"
+<xsl:stylesheet version="3.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:oai="http://www.openarchives.org/OAI/2.0/"
   xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
@@ -7,7 +7,9 @@
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  exclude-result-prefixes="xsl xlink mods">
+  xmlns:mcrmods="http://www.mycore.de/xslt/mods"
+  exclude-result-prefixes="xsl xlink mods"
+  expand-text="true">
   
   <xsl:param name="WebApplicationBaseURL" select="''"/>
   <xsl:param name="ServletsBaseURL" select="''"/>
@@ -16,9 +18,9 @@
 <!-- /mycore/mycore-mods/src/main/resources/xsl/mods2dc.xsl -->
 <!-- <xsl:include href="mods2dc.xsl" -->
 
+  <xsl:import href="resource:xsl/functions/mods.xsl" />
+
   <xsl:include href="mods2record.xsl"/>
-  <xsl:include href="mods-utils.xsl"/>
-  <xsl:include href="../docdetails/mods-util.xsl"/>
 
   <xsl:template match="mycoreobject" mode="metadata">
 	<!-- 
@@ -205,26 +207,20 @@
     </dc:identifier>
   </xsl:template>
 
-  <xsl:template match="mods:classification">
+  <xsl:template match="mods:classification[@valueURI]|mods:genre[@valueURI]">
     <xsl:if test="@displayLabel='doctype'">
       <dc:type>
-        <xsl:call-template name="classLabel">
-          <xsl:with-param name="valueURI" select="@valueURI"/>
-        </xsl:call-template>
+        {mcrmods:to-category(.)/label[@xml:lang='en']/@text}
       </dc:type>
     </xsl:if>
     <xsl:if test="@displayLabel='sdnb'">
       <dc:subject>
-        <xsl:call-template name="classLabel">
-          <xsl:with-param name="valueURI" select="@valueURI"/>
-        </xsl:call-template>
+        {mcrmods:to-category(.)/label[@xml:lang='en']/@text}
       </dc:subject>
     </xsl:if>
     <xsl:if test="contains(@valueURI,'licenseinfo#work') or @displayLabel='accesscondition'">
       <dc:rights>
-        <xsl:call-template name="classLabel">
-          <xsl:with-param name="valueURI" select="@valueURI"/>
-        </xsl:call-template>
+        {mcrmods:to-category(.)/label[@xml:lang='en']/@text}
       </dc:rights>
     </xsl:if>
   </xsl:template>
