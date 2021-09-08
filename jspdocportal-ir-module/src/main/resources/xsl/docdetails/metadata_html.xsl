@@ -105,14 +105,6 @@
                   </xsl:for-each>
                   </td></tr>
                 </table>
-                <!-- Hide identifier for series -->
-                <!-- 
-                <xsl:if test="mods:identifier">
-                  <table id="ir-table-docdetails-host-title" class="ir-table-docdetails-values">
-                    <xsl:call-template name="identifier2metadataTable" />
-                  </table>
-                </xsl:if>
-                -->    
               </xsl:for-each>
             </td>
           </tr>
@@ -138,14 +130,6 @@
                   </xsl:if>
                   </td></tr>
                 </table>
-                <!-- Hide identifier for series -->
-                <!-- 
-                <xsl:if test="mods:identifier">
-                  <table id="ir-table-docdetails-otherFormat-ids" class="ir-table-docdetails-values">
-                    <xsl:call-template name="identifier2metadataTable" />
-                  </table>
-                </xsl:if>    
-                -->
               </xsl:for-each>
             </td>
           </tr>
@@ -402,6 +386,7 @@
           <tr>
             <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.identifier')}</th>
             <td><table id="ir-table-docdetails-identifier" class="ir-table-docdetails-values">
+              <xsl:call-template name="identifier_k10plus_ppn" />
               <xsl:call-template name="identifier2metadataTable" />
             </table></td>
           </tr>
