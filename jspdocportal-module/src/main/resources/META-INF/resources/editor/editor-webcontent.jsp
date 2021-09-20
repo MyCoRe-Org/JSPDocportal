@@ -42,7 +42,7 @@
 
 		    $(document).ready( function() {$('textarea#taedit_${jsid}').ckeditor(config); });
 		</script>
-		  <div class="card">  
+		  <div class="card">
 		    <div class="card-body bg-warning">
 		        <input type="submit"  name="doSave_${actionBean.id}" class="btn btn-primary" 
 		               title="<fmt:message key="Webpage.editwebcontent.save"/>" value="Speichern" /> 
