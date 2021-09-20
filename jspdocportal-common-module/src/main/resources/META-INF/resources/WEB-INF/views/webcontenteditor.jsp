@@ -38,7 +38,9 @@
 				entities:false,
 				entities_latin:false,
 				entities_greek:false,
-				allowedContent:true
+				allowedContent:true,
+				format_tags:'p;h1;h2;h3;h4;h5;h6;pre;address;div'
+				
          	};
 		 	CKEDITOR.dtd.$removeEmpty.span = false;
 		 	CKEDITOR.dtd.$removeEmpty.i = false;
