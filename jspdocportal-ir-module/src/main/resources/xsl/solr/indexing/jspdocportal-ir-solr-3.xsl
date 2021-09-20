@@ -103,7 +103,7 @@
       
       <xsl:choose>
         <xsl:when test="//service/servstates/servstate[@classid='state']/@categid='reserved'">
-          <field name="ir.title.result">{concat('[Reserviert] ', //metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods/mods:note[@type='provisional_title'])}</field>
+          <field name="ir.title.result">{concat('[Reserviert] ', (//metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods/mods:note[@type='provisional_title'])[1])}</field>
         </xsl:when>
         <xsl:otherwise>
           <xsl:for-each select="mods:titleInfo[@usage='primary']">
