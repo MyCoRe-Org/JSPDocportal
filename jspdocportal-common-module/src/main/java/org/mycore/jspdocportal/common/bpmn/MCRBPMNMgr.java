@@ -112,7 +112,8 @@ public class MCRBPMNMgr {
         }
         email.setSSLOnConnect(MCRConfiguration2.getBoolean("MCR.Workflow.Email.MailServerUseSSL").orElse(false));
         email.setStartTLSEnabled(MCRConfiguration2.getBoolean("MCR.Workflow.Email.MailServerUseTLS").orElse(false));
-
+        email.setStartTLSRequired(MCRConfiguration2.getBoolean("MCR.Workflow.Email.MailServerUseTLS").orElse(false));
+        
         Optional<String> user = MCRConfiguration2.getString("MCR.Workflow.Email.MailServerUsername");
         Optional<String> pw = MCRConfiguration2.getString("MailServerPassword");
         if (user.isPresent() && pw.isPresent()) {
@@ -136,6 +137,9 @@ public class MCRBPMNMgr {
                     email.addCc(s.trim());
                 }
             }
+    		if(email.isStartTLSEnabled()) {
+				email.getMailSession().getProperties().put("mail.smtp.ssl.protocols", "TLSv1.2");
+			}
         } catch (EmailException e) {
             LOGGER.error(e);
         }
