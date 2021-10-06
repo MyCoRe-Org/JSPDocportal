@@ -139,6 +139,11 @@ public class MCRActivitiMgr {
 					email.addCc(s.trim());
 				}
 			}
+			//add aditional property for tls (use recent SSL protocol)
+			if(email.isTLS()) {
+				email.getMailSession().getProperties().put("mail.smtp.starttls.required", "true");
+				email.getMailSession().getProperties().put("mail.smtp.ssl.protocols", "TLSv1.2");
+			}
 		} catch (EmailException e) {
 			LOGGER.error(e);
 		}
