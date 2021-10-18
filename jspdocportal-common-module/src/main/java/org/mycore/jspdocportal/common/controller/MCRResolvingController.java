@@ -138,6 +138,9 @@ public class MCRResolvingController  {
         String mcrID = null;
         if ("id".equals(key)) {
             mcrID = recalculateMCRObjectID(value);
+            if (mcrID == null) {
+                return Response.status(Status.NOT_FOUND).build();
+            }
         } else {
             try {
                 value = URLDecoder.decode(URLDecoder.decode(value, "UTF-8"), "UTF-8");
@@ -311,10 +314,15 @@ public class MCRResolvingController  {
         if (oldID == null) {
             return null;
         }
-        String newID = oldID.replace("cpr_staff_0000", "cpr_person_").replace("cpr_professor_0000", "cpr_person_");
-        newID = newID.replace("_series_", "_bundle_");
-        MCRObjectID mcrObjID = MCRObjectID.getInstance(newID);
-        return mcrObjID.toString();
+        String newID = oldID
+            .replace("cpr_staff_0000", "cpr_person_")
+            .replace("cpr_professor_0000", "cpr_person_")
+            .replace("_series_", "_bundle_");
+        if (MCRObjectID.isValid(newID)) {
+            MCRObjectID mcrObjID = MCRObjectID.getInstance(newID);
+            return mcrObjID.toString();
+        }
+        return null;
     }
     
     protected StringBuffer createURLForMainDocInDerivateWithLabel(HttpServletRequest request, String mcrID,
