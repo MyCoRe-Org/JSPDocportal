@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -70,6 +72,7 @@ public class MCRViewerAction extends MCRAbstractStripesAction implements ActionB
         solrQuery.setRows(1);
 
         try {
+            HttpServletRequest request = getContext().getRequest();
             QueryResponse solrResponse = solrClient.query(solrQuery);
             SolrDocumentList solrResults = solrResponse.getResults();
             if (solrResults.size() > 0) {
@@ -82,8 +85,13 @@ public class MCRViewerAction extends MCRAbstractStripesAction implements ActionB
                     filePath = pdfProviderURL.substring(pdfProviderURL.lastIndexOf("/") + 1);
                 } else {
                     doctype = "mets";
-                    if(StringUtils.isEmpty(filePath)) {
-                    	 filePath= "iview2/phys_0001.iview2";
+                    if (StringUtils.isEmpty(filePath)) {
+                        String startFile = request.getParameter("_mcrviewer_start");
+                        if (startFile != null && startFile.length() > 0) {
+                            filePath = "iview2/" + startFile + ".iview2";
+                        } else {
+                            filePath = "iview2/phys_0001.iview2";
+                        }
                     }
                 }
             }
