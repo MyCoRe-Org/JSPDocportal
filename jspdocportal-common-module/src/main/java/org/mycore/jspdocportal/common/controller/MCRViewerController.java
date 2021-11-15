@@ -7,9 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
@@ -39,8 +41,13 @@ public class MCRViewerController {
     @GET
     @Path("/{field}/{identifier}")
     public Response doGetFirstImage(@PathParam("field") String field, @PathParam("identifier") String identifier_,
+        @DefaultValue("") @QueryParam("_mcrviewer_start") String startPage,
         @Context HttpServletRequest request) {
-        return doGetWithFile(field, identifier_, "", request);
+        if ("".equals(startPage)) {
+            return doGetWithFile(field, identifier_, "", request);
+        } else {
+            return doGetWithFile(field, identifier_, "iview2/" + startPage + ".iview2", request);
+        }
     }
 
     @GET
