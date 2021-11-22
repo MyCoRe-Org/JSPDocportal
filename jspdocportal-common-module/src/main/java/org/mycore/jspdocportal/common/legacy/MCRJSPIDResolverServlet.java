@@ -387,8 +387,9 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
         StringBuffer sbURL = new StringBuffer(MCRFrontendUtil.getBaseURL() + "resolve/id/" + mcrID);
         try {
             MCRObject o = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrID));
-            for (MCRMetaLinkID derMetaLink : o.getStructure().getDerivates()) {
-                if ("MCRVIEWER_METS".equals(derMetaLink.getXLinkTitle())) {
+            for (MCRMetaEnrichedLinkID derMetaLink : o.getStructure().getDerivates()) {
+                if (derMetaLink.getClassifications().size() > 0 && 
+                    "MCRVIEWER_METS".equals(derMetaLink.getClassifications().get(0).getID())) {
                     MCRObjectID derID = derMetaLink.getXLinkHrefID();
                     Path root = MCRPath.getPath(derID.toString(), "/");
                     try (DirectoryStream<Path> ds = Files.newDirectoryStream(root)) {
