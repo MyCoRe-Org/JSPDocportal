@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.mycore</groupId>
     <artifactId>mycore-parent</artifactId>
-    <version>46</version>
+    <version>48-SNAPSHOT</version>
   </parent>
   <groupId>org.mycore.jspdocportal</groupId>
   <artifactId>jspdocportal-parent</artifactId>
