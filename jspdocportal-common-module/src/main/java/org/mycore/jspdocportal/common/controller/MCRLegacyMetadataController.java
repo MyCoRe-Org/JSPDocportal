@@ -20,6 +20,6 @@ public class MCRLegacyMetadataController {
     @GET
     public Response defaultRes(@PathParam("mcrid") String mcrid,
         @Context HttpServletRequest request) {
-        return Response.temporaryRedirect(URI.create(request.getContextPath() + "resolve/id/" + mcrid)).build();
+        return Response.temporaryRedirect(URI.create(request.getContextPath() + "/resolve/id/" + mcrid)).build();
     }
 }

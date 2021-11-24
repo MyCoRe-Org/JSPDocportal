@@ -73,6 +73,7 @@ import org.mycore.solr.MCRSolrUtils;
  * @deprecated
  */
 
+@Deprecated
 public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
 
     private static final long serialVersionUID = 1L;

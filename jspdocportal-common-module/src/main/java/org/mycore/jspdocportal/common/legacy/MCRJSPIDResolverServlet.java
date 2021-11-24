@@ -72,7 +72,7 @@ import org.mycore.solr.MCRSolrClientFactory;
  * @see MCRResolvingController
  * @deprecated
  */
-
+@Deprecated
 public class MCRJSPIDResolverServlet extends HttpServlet {
     protected enum OpenBy {
         page, nr, part, empty
