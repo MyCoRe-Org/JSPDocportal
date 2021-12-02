@@ -4,6 +4,8 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 >
 <!-- based on: https://github.com/MyCoRe-Org/mir/blob/master/mir-module/src/main/resources/xsl/mods2record.xsl -->
+<!-- DEPRECATED: we should create the structure <record><metadata> directly where it is used 
+                 Delete after completed migration! -->
 <xsl:template match="/">
   <record>
     <metadata>
