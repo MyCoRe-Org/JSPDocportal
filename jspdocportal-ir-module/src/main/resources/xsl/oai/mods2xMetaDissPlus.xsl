@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- ============================================== -->
-<!-- $Revision: 1.8 $ $Date: 2007-04-20 15:18:23 $ -->
-<!-- ============================================== -->
 <xsl:stylesheet 
-  version="1.0"
+  version="3.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:exslt="http://exslt.org/common"
   xmlns:mods="http://www.loc.gov/mods/v3"
-  xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:oai="http://www.openarchives.org/OAI/2.0/"
+  xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
 
   xmlns:cmd="http://www.cdlib.org/inside/diglib/copyrightMD"
   xmlns:gndo="http://d-nb.info/standards/elementset/gnd#"
@@ -28,14 +23,13 @@
   xmlns:dini="http://www.d-nb.de/standards/xmetadissplus/type/"
   xmlns:sub="http://www.d-nb.de/standards/subject/"
 
-  exclude-result-prefixes="xalan mcrxsl cc dc dcmitype dcterms pc urn thesis ddb dini xlink exslt mods i18n xsl gndo rdf cmd"
+  exclude-result-prefixes="cc dc dcmitype dcterms pc urn thesis ddb dini xlink mods xsl gndo rdf cmd"
   xsi:schemaLocation="http://www.d-nb.de/standards/xmetadissplus/  http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd">
 
   <xsl:output method="xml" encoding="UTF-8" />
 
-  <xsl:include href="mods2record.xsl" />
-  <xsl:include href="mods-utils.xsl" />
-
+  <xsl:import href="resource:xsl/functions/i18n.xsl" />
+  
   <xsl:param name="ServletsBaseURL" select="''" />
   <xsl:param name="WebApplicationBaseURL" select="''" />
   <xsl:param name="MCR.OAIDataProvider.RepositoryPublisherName" select="''" />
@@ -52,20 +46,19 @@
 
   <xsl:variable name="language" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:language/mods:languageTerm[@authority='iso639-2b']/text()" />
   <xsl:variable name="mcrId" select="/mycoreobject/@ID" />
-  <xsl:variable name="ifsTemp">
-    <xsl:for-each select="mycoreobject/structure/derobjects/derobject[@xlink:title='fulltext']">
+  <xsl:variable name="ifs">
+    <xsl:for-each select="mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types' and @categid='fulltext']][1]">
       <der id="{@xlink:href}">
         <xsl:copy-of select="document(concat('xslStyle:mcr_directory-recursive:ifs:',@xlink:href,'/'))" />
       </der>
     </xsl:for-each>
   </xsl:variable>
-  <xsl:variable name="ifs" select="xalan:nodeset($ifsTemp)" />
 
-  <xsl:template match="mycoreobject" mode="metadata">
-  	
-
-    <xsl:text disable-output-escaping="yes">
-      &#60;xMetaDiss:xMetaDiss xmlns:xMetaDiss=&quot;http://www.d-nb.de/standards/xmetadissplus/&quot;
+  <xsl:template match="mycoreobject">
+    <oai:record>
+      <oai:metadata>
+        <xsl:text disable-output-escaping="yes">
+          &#60;xMetaDiss:xMetaDiss xmlns:xMetaDiss=&quot;http://www.d-nb.de/standards/xmetadissplus/&quot;
                                xmlns:cc=&quot;http://www.d-nb.de/standards/cc/&quot;
                                xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot;
                                xmlns:dcmitype=&quot;http://purl.org/dc/dcmitype/&quot;
@@ -81,31 +74,34 @@
                                xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
                                xsi:schemaLocation=&quot;http://www.d-nb.de/standards/xmetadissplus/
                                http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd&quot;&#62;
-    </xsl:text>
-    <xsl:variable name="mods" select="metadata/def.modsContainer/modsContainer/mods:mods" />
-
-    <xsl:apply-templates select="$mods" mode="title" />
-    <!-- <xsl:apply-templates select="$mods" mode="alternative" /> -->
-    <xsl:apply-templates select="$mods" mode="creator" />
-    <xsl:apply-templates select="$mods" mode="subject" />
-    <xsl:apply-templates select="$mods" mode="abstract" />
-    <xsl:apply-templates select="$mods" mode="repositoryPublisher" />
-    <xsl:apply-templates select="$mods" mode="contributor" />
-    <xsl:apply-templates select="$mods" mode="date" />
-    <xsl:apply-templates select="$mods" mode="type" />
-    <xsl:apply-templates select="$mods" mode="identifier" />
-    <xsl:apply-templates select="$mods" mode="format" />
-    <!-- <xsl:apply-templates select="$mods" mode="publisher" /> --> <!-- erzeugt dc:source mit Herausgeber und nicht dem Hinweis zum Original -->
-    <!-- <xsl:apply-templates select="$mods" mode="relatedItem2source" />-->
-    <xsl:call-template name="language" />
-    <!-- <xsl:apply-templates select="$mods" mode="relatedItem2ispartof" /> -->
-    <xsl:apply-templates select="$mods" mode="degree" />
-    <xsl:call-template name="file" />
-    <xsl:apply-templates select="." mode="frontpage" />
-    <xsl:apply-templates select="$mods" mode="rights" />
-    <xsl:text disable-output-escaping="yes">
-      &#60;/xMetaDiss:xMetaDiss&#62;
-    </xsl:text>
+        </xsl:text>
+        <xsl:variable name="mods" select="metadata/def.modsContainer/modsContainer/mods:mods" />
+        
+        <xsl:apply-templates select="$mods" mode="title" />
+        <!-- <xsl:apply-templates select="$mods" mode="alternative" /> -->
+        <xsl:apply-templates select="$mods" mode="creator" />
+        <xsl:apply-templates select="$mods" mode="subject" />
+        <xsl:apply-templates select="$mods" mode="abstract" />
+        <xsl:apply-templates select="$mods" mode="repositoryPublisher" />
+        <xsl:apply-templates select="$mods" mode="contributor" />
+        <xsl:apply-templates select="$mods" mode="date" />
+        <xsl:apply-templates select="$mods" mode="type" />
+        <xsl:apply-templates select="$mods" mode="identifier" />
+        <xsl:apply-templates select="$mods" mode="format" />
+        <!-- <xsl:apply-templates select="$mods" mode="publisher" /> --> <!-- erzeugt dc:source mit Herausgeber und nicht dem Hinweis zum Original -->
+        <!-- <xsl:apply-templates select="$mods" mode="relatedItem2source" />-->
+        <xsl:call-template name="language" />
+        <!-- <xsl:apply-templates select="$mods" mode="relatedItem2ispartof" /> -->
+        <xsl:apply-templates select="$mods" mode="degree" />
+        <xsl:call-template name="file" />
+        <xsl:apply-templates select="." mode="frontpage" />
+        <xsl:apply-templates select="$mods" mode="rights" />
+        
+        <xsl:text disable-output-escaping="yes">
+          &#60;/xMetaDiss:xMetaDiss&#62;
+        </xsl:text>
+      </oai:metadata>
+    </oai:record>
   </xsl:template>
 
   <xsl:template name="replaceSubSupTags">
@@ -425,23 +421,22 @@
   <xsl:template mode="type" match="mods:mods">
     <dc:type xsi:type="dini:PublType">
       <xsl:choose>
-        <xsl:when test="contains(mods:classification/@authorityURI,'diniPublType')">
+        <xsl:when test="mods:classification[contains(@authorityURI,'diniPublType')]">
           <xsl:value-of select="substring-after(mods:classification[contains(@authorityURI,'diniPublType')]/@valueURI,'diniPublType#')" />
         </xsl:when>
-        <xsl:when test="contains(mods:genre/@valueURI, 'article')">
+        <xsl:when test="mods:genre[contains(@valueURI, 'article')]">
           <xsl:text>contributionToPeriodical</xsl:text>
         </xsl:when>
-        <xsl:when test="contains(mods:genre/@valueURI, 'issue')">
+        <xsl:when test="mods:genre[contains(@valueURI, 'issue')]">
           <xsl:text>PeriodicalPart</xsl:text>
         </xsl:when>
-        <xsl:when test="contains(mods:genre/@valueURI, 'journal')">
+        <xsl:when test="mods:genre[contains(@valueURI, 'journal')]">
           <xsl:text>Periodical</xsl:text>
         </xsl:when>
-        <xsl:when test="contains(mods:genre/@valueURI, 'book')">
+        <xsl:when test="mods:genre[contains(@valueURI, 'book')]">
           <xsl:text>book</xsl:text>
         </xsl:when>
-        <xsl:when test="contains(mods:genre/@valueURI, 'dissertation') or
-                contains(mods:genre/@valueURI, 'habilitation')">
+        <xsl:when test="mods:genre[contains(@valueURI, 'dissertation') or contains(@valueURI, 'habilitation')]">
           <xsl:text>doctoralThesis</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -550,7 +545,7 @@
               <xsl:value-of
                 select="concat(normalize-space(mods:relatedItem[@type='host']/mods:part/mods:detail[@type='volume']),
                   ', ',
-                  i18n:translate('component.mods.metaData.dictionary.issue'),
+                  mcri18n:translate('component.mods.metaData.dictionary.issue'),
                   ' ',
                   normalize-space(mods:relatedItem[@type='host']/mods:part/mods:detail[@type='issue']))" />
             </xsl:when>
@@ -640,7 +635,7 @@
                   <xsl:apply-templates select="." mode="repositoryPublisher" />
                 </xsl:variable>
                 <xsl:comment>value of dc:publisher</xsl:comment>
-                <xsl:copy-of select="xalan:nodeset($repositoryPublisher)/dc:publisher/cc:universityOrInstitution/*" />
+                <xsl:copy-of select="$repositoryPublisher/dc:publisher/cc:universityOrInstitution/*" />
               </xsl:otherwise>
             </xsl:choose>
           </cc:universityOrInstitution>
