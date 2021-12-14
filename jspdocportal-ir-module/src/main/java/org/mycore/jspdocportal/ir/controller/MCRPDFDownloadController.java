@@ -126,7 +126,13 @@ public class MCRPDFDownloadController {
                             try {
                                 Files.copy(resultPDF, output);
                             } catch (Exception e) {
-                                throw new WebApplicationException(e);
+                                if (e instanceof IOException && "Connection reset by peer".equals(e.getMessage())) {
+                                    LOGGER.warn("PDF-Download of " + resultPDF.toString()
+                                        + "incomplete - 'Connection reset by peer'");
+                                } else {
+                                    throw new WebApplicationException(
+                                        "PDF-Download of " + resultPDF.toString() + " failed.", e);
+                                }
                             }
                         }
                     };
