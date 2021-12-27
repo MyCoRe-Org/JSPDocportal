@@ -3,10 +3,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
   <bean id="processEngineConfiguration" class="org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration">
-    <property name="jdbcUrl" value="jdbc:postgresql://127.0.0.1/mycoredb?currentSchema=myapp_bpmn" />
+    <property name="jdbcUrl" value="jdbc:postgresql://127.0.0.1/mycoredb?currentSchema=myapp_bpm" />
     <property name="jdbcDriver" value="org.postgresql.Driver" />
     <property name="jdbcUsername" value="mcradmin" />
-    <property name="jdbcPassword" value="" />
+    <property name="jdbcPassword" value="***" />
 
     <property name="databaseSchemaUpdate" value="true" />
     <property name="jobExecutorActivate" value="false" />
