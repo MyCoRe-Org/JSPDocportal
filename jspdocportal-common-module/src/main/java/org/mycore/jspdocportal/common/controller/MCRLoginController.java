@@ -154,6 +154,7 @@ import org.mycore.user2.MCRUserManager;
                 LOGGER.debug("User " /*+ userName */+ " with ID " + userID + " is allready logged in");
                 model.put("loginOK",  true);
                 model.put("loginStatus", "user.exists");
+                updateData(mcrSession, model);
                 return r;
             }
 
@@ -230,6 +231,8 @@ import org.mycore.user2.MCRUserManager;
             name.append(" ");
             name.append(mcrUser.getRealName());
             model.put("userName",  name.toString());
+            model.put("userID", mcrUser.getUserID()); 
+           
 
             for (String groupID : mcrUser.getSystemRoleIDs()) {
                 MCRRole mcrgroup = MCRRoleManager.getRole(groupID);
