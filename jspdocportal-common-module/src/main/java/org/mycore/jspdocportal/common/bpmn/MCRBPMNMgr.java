@@ -59,10 +59,8 @@ public class MCRBPMNMgr {
     // Workflow Engine
     public static synchronized ProcessEngine getWorfklowProcessEngine() {
         if (processEngine == null) {
-
-            processEngine = getWorkflowProcessEngineConfiguration()
-                .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE)
-                .buildProcessEngine();
+            ProcessEngineConfiguration cfg = getWorkflowProcessEngineConfiguration();
+            processEngine = cfg.buildProcessEngine();
         }
         return processEngine;
     }

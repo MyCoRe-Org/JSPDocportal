@@ -1,9 +1,15 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <bean id="processEngineConfiguration" class="org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration">
+  <bean id="processEngineConfiguration"
+    class="org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration">
+    <!-- Database schema needs to be set at all 3 properties: jdbcURL, databaseSchema, databaseTablePrefix 
+         Pay attention: databaseTablePrefix = databaseSchema + '.' -->
+
     <property name="jdbcUrl" value="jdbc:postgresql://127.0.0.1/mycoredb?currentSchema=myapp_bpm" />
+    <property name="databaseSchema" value="myapp_bpm" />
+    <property name="databaseTablePrefix" value="myapp_bpm." />
+
     <property name="jdbcDriver" value="org.postgresql.Driver" />
     <property name="jdbcUsername" value="mcradmin" />
     <property name="jdbcPassword" value="***" />
@@ -11,16 +17,17 @@
     <property name="databaseSchemaUpdate" value="true" />
     <property name="jobExecutorActivate" value="false" />
 
+    <!-- mail feature is currently not used -->
     <property name="mailServerHost" value="mail.my-corp.com" />
     <property name="mailServerPort" value="5025" />
-    
+
     <property name="processEnginePlugins">
       <list>
         <ref bean="mycoreIdentityProviderPlugin" />
       </list>
     </property>
   </bean>
-  
+
   <bean id="mycoreIdentityProviderPlugin" class="org.mycore.jspdocportal.common.bpmn.identity.MCRMyCoReIDMPlugin" />
 
 </beans>
