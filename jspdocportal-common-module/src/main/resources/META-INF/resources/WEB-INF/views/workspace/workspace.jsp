@@ -29,7 +29,7 @@
               <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownNewActionsMenu"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <fmt:message key="WF.workspace.info.headline.new_task" />
+                  <fmt:message key="WF.workspace.info.menu.new_task" />
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownNewActionsMenu">
                   <c:forEach var="base" items="${it.newActions}">
