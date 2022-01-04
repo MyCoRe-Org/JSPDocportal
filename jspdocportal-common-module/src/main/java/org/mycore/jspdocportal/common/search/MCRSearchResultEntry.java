@@ -39,12 +39,14 @@ public class MCRSearchResultEntry {
     private String mcrid;
     private String label;
     private LinkedHashMap<String, String> data = new LinkedHashMap<String, String>();
+    private LinkedHashMap<String, String> internal = new LinkedHashMap<String, String>();
 
     public MCRSearchResultEntry(SolrDocument solrDoc, int pos) {
         this.pos = pos;
         String objectType = String.valueOf(solrDoc.getFirstValue("objectType"));
         String labelfield = MCRConfiguration2.getString("MCR.SearchResult." + objectType + ".Headerfield").orElse("");
         String[] datafields = MCRConfiguration2.getString("MCR.SearchResult." + objectType + ".Datafields").orElse("").split(",");
+        String[] internalfields = MCRConfiguration2.getString("MCR.SearchResult." + objectType + ".Internalfields").orElse("").split(",");
 
         this.mcrid = String.valueOf(solrDoc.getFirstValue("returnId"));
         this.label = String.valueOf(solrDoc.getFirstValue(labelfield));
@@ -52,6 +54,12 @@ public class MCRSearchResultEntry {
             Object o = solrDoc.getFieldValue(df);
             if (o != null) {
                 data.put(df, String.valueOf(o));
+            }
+        }
+        for (String intfld : internalfields) {
+            Object o = solrDoc.getFieldValue(intfld);
+            if (o != null) {
+                internal.put(intfld, String.valueOf(o));
             }
         }
     }
@@ -71,6 +79,11 @@ public class MCRSearchResultEntry {
     public LinkedHashMap<String, String> getData() {
         return data;
     }
+    
+    public LinkedHashMap<String, String> getInternal() {
+        return internal;
+    }
+
 
     public int getPos() {
         return pos;
