@@ -77,7 +77,7 @@
         <div class="card ir-result-card">       
           <c:forEach var="r" items="${actionBean.result.entries}">
             <div class="card-body">
-              <search:result-entry entry="${r}" url="${WebApplicationBaseURL}resolve/id/${r.mcrid}?_search=${actionBean.result.id}" protectDownload="true" />
+              <search:result-entry entry="${r}" url="${WebApplicationBaseURL}resolve/id/${r.mcrid}?_search=${actionBean.result.id}" />
             </div>
           </c:forEach>
         </div>

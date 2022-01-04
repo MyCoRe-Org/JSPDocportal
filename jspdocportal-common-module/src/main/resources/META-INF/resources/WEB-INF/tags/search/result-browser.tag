@@ -22,31 +22,31 @@
 			<c:if test="${result.numPages> 1}">
 				<c:set var="page"><%= Math.round(Math.floor((double) result.getStart() / result.getRows()) + 1) %></c:set>
 				<c:set var="start">0</c:set>
-				<li class="page-item"><a class="page-link h-100" href="${pageContext.request.contextPath}/${result.action}?_search=${result.id}&amp;_start=${start}"><fmt:message key="Webpage.Searchresult.firstPage" /></a></li>
+				<li class="page-item"><a class="page-link h-100" href="${pageContext.request.contextPath}/do/${result.action}?_search=${result.id}&amp;_start=${start}"><fmt:message key="Webpage.Searchresult.firstPage" /></a></li>
 			
 				<c:if test="${page - 2 > 0}">
 					<c:set var="start">${result.start - result.rows - result.rows}</c:set>
-					<li class="page-item"><a class="page-link"  href="${pageContext.request.contextPath}/${result.action}?_search=${result.id}&amp;_start=${start}">${start + 1}-${start + result.rows}</a></li>
+					<li class="page-item"><a class="page-link"  href="${pageContext.request.contextPath}/do/${result.action}?_search=${result.id}&amp;_start=${start}">${start + 1}-${start + result.rows}</a></li>
 				</c:if>
 				<c:if test="${page - 1 > 0}">
 					<c:set var="start">${result.start - result.rows}</c:set>
-					<li class="page-item"><a class="page-link"  href="${pageContext.request.contextPath}/${result.action}?_search=${result.id}&amp;_start=${start}">${start + 1}-${start + result.rows}</a></li>
+					<li class="page-item"><a class="page-link"  href="${pageContext.request.contextPath}/do/${result.action}?_search=${result.id}&amp;_start=${start}">${start + 1}-${start + result.rows}</a></li>
 				</c:if>
 
 				<c:set var="start">${result.start}</c:set>
-				<li class="page-item"><a  class="page-link active" href="${pageContext.request.contextPath}/${result.action}?_search=${result.id}&amp;_start=${start}">${start + 1}-<%=Math.min(Integer.parseInt(jspContext.getAttribute("start").toString()) + result.getRows(), result.getNumFound())%></a></li>
+				<li class="page-item"><a  class="page-link active" href="${pageContext.request.contextPath}/do/${result.action}?_search=${result.id}&amp;_start=${start}">${start + 1}-<%=Math.min(Integer.parseInt(jspContext.getAttribute("start").toString()) + result.getRows(), result.getNumFound())%></a></li>
 
 				<c:if test="${page + 1 <= result.numPages}">
 					<c:set var="start">${result.start + result.rows}</c:set>
-					<li class="page-item"><a  class="page-link" href="${pageContext.request.contextPath}/${result.action}?_search=${result.id}&amp;_start=${start}">${start + 1}-<%=Math.min(Integer.parseInt(jspContext.getAttribute("start").toString()) + result.getRows(), result.getNumFound())%></a></li>
+					<li class="page-item"><a  class="page-link" href="${pageContext.request.contextPath}/do/${result.action}?_search=${result.id}&amp;_start=${start}">${start + 1}-<%=Math.min(Integer.parseInt(jspContext.getAttribute("start").toString()) + result.getRows(), result.getNumFound())%></a></li>
 				</c:if>
 				<c:if test="${page + 2 <= result.numPages}">
 					<c:set var="start">${result.start + result.rows + result.rows}</c:set>
-					<li class="page-item"><a  class="page-link" href="${pageContext.request.contextPath}/${result.action}?_search=${result.id}&amp;_start=${start}">${start + 1}-<%=Math.min(Integer.parseInt(jspContext.getAttribute("start").toString()) + result.getRows(), result.getNumFound())%></a></li>
+					<li class="page-item"><a  class="page-link" href="${pageContext.request.contextPath}/do/${result.action}?_search=${result.id}&amp;_start=${start}">${start + 1}-<%=Math.min(Integer.parseInt(jspContext.getAttribute("start").toString()) + result.getRows(), result.getNumFound())%></a></li>
 				</c:if>
 			
 				<c:set var="start"><%= Math.round((result.getNumPages() - 1) * result.getRows()) %></c:set>
-				<li class="page-item"><a class="page-link h-100" href="${pageContext.request.contextPath}/${result.action}?_search=${result.id}&amp;_start=${start}"><fmt:message key="Webpage.Searchresult.lastPage" /></a></li>
+				<li class="page-item"><a class="page-link h-100" href="${pageContext.request.contextPath}/do/${result.action}?_search=${result.id}&amp;_start=${start}"><fmt:message key="Webpage.Searchresult.lastPage" /></a></li>
 		  </c:if>
 		  </ul>
         </nav>
