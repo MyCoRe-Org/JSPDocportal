@@ -95,7 +95,7 @@ public class MCRIndexBrowserController {
 
                 mcrSearchResult.doSearch();
                 mcrSearchResult.setBackURL(
-                    request.getContextPath() + "/indexbrowser/" + modus + "?select=" + select);
+                    request.getContextPath() + "do/indexbrowser/" + modus + "?select=" + select);
                 MCRSearchResultDataBean.addSearchresultToSession(request, mcrSearchResult);
 
                 QueryResponse response = mcrSearchResult.getSolrQueryResponse();
