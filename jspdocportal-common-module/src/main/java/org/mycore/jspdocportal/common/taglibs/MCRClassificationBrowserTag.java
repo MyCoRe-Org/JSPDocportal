@@ -168,7 +168,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
         HttpServletRequest request = (HttpServletRequest) context.getRequest();
         String requestPath = request.getParameter("select");
         StringBuffer url = new StringBuffer(MCRFrontendUtil.getBaseURL());
-        url.append("classbrowser/" + mode + "?");
+        url.append("do/classbrowser/" + mode + "?");
 
         @SuppressWarnings("rawtypes")
         Enumeration paramNames = request.getParameterNames();
