@@ -63,9 +63,11 @@
         {mcri18n:translate($labelkey)}:
       </span>
       </xsl:if>
-      <table class="docdetails-table {$css_class}">
-        <xsl:copy-of select="$items" />
-      </table>
+      <div class="docdetails-table-div">
+        <table class="docdetails-table {$css_class}">
+          <xsl:copy-of select="$items" />
+        </table>
+      </div>
     </div>
     
   </xsl:template>
