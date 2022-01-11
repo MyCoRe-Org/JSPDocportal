@@ -60,7 +60,7 @@
       
       <xsl:if test="$labelkey"> 
       <span id="docdetails-label-{$key}" class="docdetails-label">
-        {replace(mcri18n:translate($labelkey),'&lt;br /&gt;','')}:
+        <xsl:value-of select="replace(mcri18n:translate($labelkey),'&lt;br /&gt;','')" disable-output-escaping="true" />:
       </span>
       </xsl:if>
       <div class="docdetails-table-div">
