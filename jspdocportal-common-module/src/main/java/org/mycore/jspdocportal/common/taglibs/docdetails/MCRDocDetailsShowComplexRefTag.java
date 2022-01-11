@@ -41,6 +41,7 @@ import org.jdom2.input.SAXBuilder;
  * 
  * @author Robert Stephan
  *
+ * @deprecated Migrated to XSLT3
  */
 public class MCRDocDetailsShowComplexRefTag extends SimpleTagSupport {
     private static Logger LOGGER = LogManager.getLogger(MCRDocDetailsLinkItemTag.class);
