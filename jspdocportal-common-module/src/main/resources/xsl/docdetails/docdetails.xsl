@@ -60,7 +60,7 @@
       
       <xsl:if test="$labelkey"> 
       <span id="docdetails-label-{$key}" class="docdetails-label">
-        {mcri18n:translate($labelkey)}:
+        {replace(mcri18n:translate($labelkey),'&lt;br /&gt;','')}:
       </span>
       </xsl:if>
       <div class="docdetails-table-div">
