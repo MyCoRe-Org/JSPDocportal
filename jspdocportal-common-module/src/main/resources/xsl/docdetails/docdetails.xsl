@@ -22,7 +22,8 @@
     <div id="docdetails-{$key}"  class="docdetails-block">
        <!-- printInfoLabel(ctx, out); -->
        <span class="docdetails-info">
-          <xsl:if test="$showInfo">
+         <xsl:choose>
+          <xsl:when test="$showInfo">
             <xsl:variable name="info" select="mcri18n:translate(concat($labelkey, '.info'))" />
               <a id="infoButton_{$key}" class="float-left docdetails-info-btn" data-toggle="popover">
                 <i class="fa fa-info-circle"></i>
@@ -55,7 +56,9 @@
                 }});
               }});
             </script>
-        </xsl:if>
+          </xsl:when>
+          <xsl:otherwise>&#160;</xsl:otherwise>
+        </xsl:choose>
       </span>
       
       <xsl:if test="$labelkey"> 
