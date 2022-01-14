@@ -6,8 +6,8 @@
 <%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld"%>
 <%@ taglib prefix="search" tagdir="/WEB-INF/tags/search"%>
 
-<fmt:message var="pageTitle"
-	key="Webpage.indexbrowser.${it.modus}.title" />
+<c:set var="org.mycore.navigation.path" scope="request">left.indexbrowser_${it.modus}</c:set>
+<fmt:message var="pageTitle" key="Webpage.indexbrowser.${it.modus}.title" />
 
 <!doctype html>
 <html>

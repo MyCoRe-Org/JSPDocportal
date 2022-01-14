@@ -10,6 +10,7 @@
 <% 
     pageContext.setAttribute("navSide", MCRConfiguration2.getString("MCR.JSPDocportal.Navigation.Side").orElse("left"));
 %>
+<c:set var="org.mycore.navigation.path" scope="request">left.search._${it.mask}</c:set>
 
 <!doctype html>
 <html>
