@@ -23,21 +23,19 @@
   <div class="container">
     <c:if test="${not empty it.info}">
       <div class="row">
-        <div class="col col-md-8">
-          <div class="ir-box">
+        <div class="col col-md-9">
             <mcr:includeWebcontent id="${fn:replace(it.path, '/', '.')}" file="${it.path}.html" />
-          </div>
         </div>
-        <div class="col col-md-4">
-          <div class="row">
-            <c:forEach var="id" items="${fn:split(it.info,',')}">
+        <div class="col col-md-3">
+          <c:forEach var="id" items="${fn:split(it.info,',')}">
+            <div class="row">
               <div class="col">
                 <div class="ir-box ir-box-bordered">
                   <mcr:includeWebcontent id="${id}" file="${fn:replace(id, '.', '/')}.html" />
                 </div>
               </div>
-            </c:forEach>
-          </div>
+            </div>
+          </c:forEach>
         </div>
       </div>
     </c:if>
@@ -45,9 +43,7 @@
       <div class="row">
         <c:if test="${empty requestScope['org.mycore.navigation.side.path']}">
           <div id="main" class="col ir-content-main">
-              <div class="ir-box">
-                <mcr:includeWebcontent id="${fn:replace(it.path, '/', '.')}" file="${it.path}.html" />
-              </div>
+            <mcr:includeWebcontent id="${fn:replace(it.path, '/', '.')}" file="${it.path}.html" />
           </div>
        </c:if>
         <c:if test="${not empty requestScope['org.mycore.navigation.side.path']}">
