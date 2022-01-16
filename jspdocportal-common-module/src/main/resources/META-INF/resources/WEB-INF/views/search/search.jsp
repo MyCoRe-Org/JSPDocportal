@@ -45,7 +45,7 @@
 					<mcr:includeWebcontent id="search_intro" file="search/${it.result.mask}_intro.html" />
 				</div>
 
-				<div class="card ${classCollapse}" id="searchmask">
+				<div class="searchmask ${classCollapse}" id="searchmask">
 					<c:out value="${it.xeditorHtml}" escapeXml="false" />
 				</div>
 				<script type="text/javascript">

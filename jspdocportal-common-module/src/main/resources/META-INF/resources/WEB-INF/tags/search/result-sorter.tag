@@ -12,7 +12,7 @@
 <%@ attribute name="mode" required="true" type="java.lang.String"%>
 
 <div class="row">
-	<div class="col mb-2">
+	<div class="col mt-3 mb-2">
       <div class="float-right">
 		<script type="text/javascript">
 			function changeSortURL(value) {

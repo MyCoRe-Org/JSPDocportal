@@ -25,39 +25,31 @@
 </head>
 <body>
   <%@ include file="fragments/header.jspf" %>
-    <div class="container">
-      <div class="row indexbrowser-row">
-        <div class="col">
-    <div>
-      <mcr:includeWebcontent id="indexbrowser_intro" file="indexbrowser/${it.modus}_intro.html" />
-    </div>
-    <div class="row">
-      <div class="col-12">
+  <div class="container">
+    <div class="row indexbrowser-row">
+      <div class="col-9">
+        <mcr:includeWebcontent id="indexbrowser_intro" file="indexbrowser/${it.modus}_intro.html" />
         <div class="indexbrowser-navbar">
-        <div class="navbar navbar-default indexbrowser-navbar-primary">
-        <c:forEach var="x" items="${it.firstSelector}">
-          <c:set var="active"></c:set>
-          <c:if test="${fn:startsWith(it.select, x)}"><c:set var="active">active</c:set></c:if>
-            <a href="${WebApplicationBaseURL}do/indexbrowser/${it.modus}?select=${x}"
-           class="btn btn-outline-secondary navbar-btn indexbrowser-btn ${active}" role="button">${x}</a>
-          </c:forEach>
-        </div>
-        <c:if test="${not empty it.secondSelector}">
-        <div class="navbar navbar-default indexbrowser-navbar-secondary">
-          <c:forEach var="x" items="${it.secondSelector}">
-            <c:set var="active"></c:set>
-            <c:if test="${fn:startsWith(it.select, x.key)}"><c:set var="active">active</c:set></c:if>
-            <a href="${WebApplicationBaseURL}do/indexbrowser/${it.modus}?select=${x.key}"
-               class="btn btn-outline-secondary btn-sm indexbrowser-btn ${active}" role="button">${x.key} 
-               <span class="badge badge-pill badge-secondary" style="font-size:80%;margin-left:8px">${x.value}</span></a>
-          </c:forEach>
+          <div class="navbar navbar-default indexbrowser-navbar-primary">
+            <c:forEach var="x" items="${it.firstSelector}">
+              <c:set var="active"></c:set>
+              <c:if test="${fn:startsWith(it.select, x)}"><c:set var="active">active</c:set></c:if>
+              <a href="${WebApplicationBaseURL}do/indexbrowser/${it.modus}?select=${x}"
+                 class="btn btn-outline-secondary navbar-btn indexbrowser-btn ${active}" role="button">${x}</a>
+            </c:forEach>
           </div>
-        </c:if>
-      </div>
+          <c:if test="${not empty it.secondSelector}">
+            <div class="navbar navbar-default indexbrowser-navbar-secondary">
+              <c:forEach var="x" items="${it.secondSelector}">
+                <c:set var="active"></c:set>
+                <c:if test="${fn:startsWith(it.select, x.key)}"><c:set var="active">active</c:set></c:if>
+                <a href="${WebApplicationBaseURL}do/indexbrowser/${it.modus}?select=${x.key}"
+                   class="btn btn-outline-secondary btn-sm indexbrowser-btn ${active}" role="button">${x.key} 
+               <span class="badge badge-pill badge-secondary" style="font-size:80%;margin-left:8px">${x.value}</span></a>
+              </c:forEach>
+            </div>
+          </c:if>
         </div>
-    </div>
-    <div class="row">
-      <div class="col-12">
         <div class="card indexbrowser-searchbar">
           <div class="card-body">
             <form action="${applicationScope.WebApplicationBaseURL}do/indexbrowser/${it.modus}"
@@ -69,10 +61,6 @@
             </form>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12">
         <div class="card ir-result-card">       
           <c:forEach var="r" items="${it.result.entries}">
             <div class="card-body">
@@ -81,10 +69,8 @@
           </c:forEach>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="col-3">
-    </div>
+      <div class="col-3">
+      </div>
     </div>
     </div>
   <%@ include file="fragments/footer.jspf" %>

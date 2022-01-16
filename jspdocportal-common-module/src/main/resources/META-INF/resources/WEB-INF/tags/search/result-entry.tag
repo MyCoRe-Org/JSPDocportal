@@ -11,7 +11,7 @@
 
 <div class="row">
   <div class="col-md-9" style="position:relative">
-    <h4 class="card-title"><a href="${url}">${entry.label}</a></h4>
+    <h4><a href="${url}">${entry.label}</a></h4>
     <table>
       <c:forEach items="${entry.data}" var="field">
         <tr>
