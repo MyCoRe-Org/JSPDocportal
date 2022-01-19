@@ -51,11 +51,6 @@
               </fmt:message>
             </div>
 		    <div class="d-flex justify-content-end">
-			  <c:set var="backURL" value="${pageContext.request.contextPath}/${result.action}?_search=${result.id}" />
-			  <c:if test="${fn:contains(result.backURL, 'indexbrowser')}">
-               <c:set var="backURL" value="${result.backURL}" />	
-			  </c:if>
-
 		     <div class="btn-group" style="width:101%; margin:5px">
 			   <a style="font-size:1.25em" class="btn btn-primary btn-sm ${result.current == 0 ? 'disabled invisible' :''}" 
 			      href="${pageContext.request.contextPath}/do/search?_search=${result.id}&amp;_hit=${result.current-1}"
