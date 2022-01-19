@@ -180,35 +180,7 @@
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
-	</tag>
-  
-  <tag>
-    <description>A Tag, that loads the content (directory listing) of a derivate as XML</description>
-    <name>retrieveDerivateContentsXML</name>
-    <tag-class>org.mycore.jspdocportal.common.taglibs.MCRRetrieveDerivateContentsXMLTag</tag-class>
-    <body-content>empty</body-content>
-    <attribute>
-      <name>derid</name>
-      <required>true</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>depth</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>varDOM</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>varJDOM</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
   </tag>
-  
   <tag>
     <description>A tag, that makes an XSLT transformation</description>
     <name>transformXSL</name>
@@ -691,81 +663,6 @@
 			</attribute> -->
 		<!-- A Tag, that includes MyCoRe-Editor-Pages (also Search Masks) -->
 	</tag>
-
-
-
-
-
-
-
-
-
-	<tag>
-		<name>getFreeUserIDs</name>
-		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRGetFreeUserIDs</tag-class>
-		<body-content>empty</body-content>
-		<attribute>
-			<name>var</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>count</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>userid</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<!-- A Tag, that returns a list of proposals for free UserIDs -->
-	</tag>
-	<tag>
-		<name>ifSorted</name>
-		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRIfSortedTag</tag-class>
-		<body-content>scriptless</body-content>
-		<attribute>
-			<name>query</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>attributeName</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>attributeValue</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>sortorder</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<!-- A Tag, that evaluates whether a query-result was sorted by a given 
-			field or a given order. an example is given below. (needed for sort form) -->
-	</tag>
-	<tag>
-		<name>setQueryAsString</name>
-		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRSetQueryAsStringTag</tag-class>
-		<body-content>empty</body-content>
-		<attribute>
-			<name>jdom</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>var</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<!-- A Tag, that converts a MyCoRe Jdom-Query to the String-Representation 
-			and sets the String to a given Variable -->
-	</tag>
-
 	<tag>
 		<name>displayCategory</name>
 		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRDisplayClassificationCategoryTag</tag-class>
@@ -798,84 +695,6 @@
         </attribute>
 		<!-- A Tag, that displays the text of a category in a MCR classification -->
 	</tag>
-
-	<tag>
-		<name>simpleXpath</name>
-		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRSimpleXpathTag</tag-class>
-		<body-content>empty</body-content>
-		<attribute>
-			<name>jdom</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>xpath</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<!-- A Tag, that delivers a single xpath-value in a given jdom-Document -->
-	</tag>
-
-
-	<tag>
-		<name>getConfigProperty</name>
-		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRGetConfigPropertyTag</tag-class>
-		<body-content>empty</body-content>
-		<attribute>
-			<name>prop</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>var</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>defaultValue</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<!-- A Tag, that sets the value of a Configuration Property to a specific 
-			value -->
-	</tag>
-	<tag>
-		<description>A Tag, that outputs debug information</description>
-		<name>debugInfo</name>
-		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRDebugInfoTag</tag-class>
-		<body-content>empty</body-content>
-
-	</tag>
-
-	<tag>
-		<description>A Tag, that retrieves the main file from a derivate</description>
-		<name>receiveMainDoc</name>
-		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRReceiveMainDocTag</tag-class>
-		<body-content>empty</body-content>
-		<attribute>
-			<name>derid</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>var</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-	</tag>
-
-	<tag>
-		<description>A Tag, that formats published-in information</description>
-		<name>formatPublishedIn</name>
-		<tag-class>org.mycore.jspdocportal.common.taglibs.MCRFormatPublishedInTag</tag-class>
-		<body-content>empty</body-content>
-		<attribute>
-			<name>xml</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-	</tag>
-
 	<tag>
 		<description>A Tag, that includes a classification browser for MyCoRe (state: new, still experimental)</description>
 		<name>classificationBrowser</name>
