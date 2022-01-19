@@ -26,7 +26,6 @@
 	<link type="text/css" rel="stylesheet" href="${applicationScope.WebApplicationBaseURL}css/style_reset.css" />
 	<link type="text/css" rel="stylesheet" href="${applicationScope.WebApplicationBaseURL}css/style_layout.css" />
 	<link type="text/css" rel="stylesheet" href="${applicationScope.WebApplicationBaseURL}css/style_content.css" />
-	<link type="text/css" rel="stylesheet" href="${applicationScope.WebApplicationBaseURL}css/style_docdetails_headlines.css" />
 	<style type="text/css">
 		body{
 		background: white;
