@@ -24,15 +24,13 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link rel="shortcut icon" href="${applicationScope.WebApplicationBaseURL}images/icon_cpr.ico" />
 	<link type="text/css" rel="stylesheet" href="${applicationScope.WebApplicationBaseURL}css/style_reset.css" />
-	<link type="text/css" rel="stylesheet" href="${applicationScope.WebApplicationBaseURL}css/style_layout.css" />
-	<link type="text/css" rel="stylesheet" href="${applicationScope.WebApplicationBaseURL}css/style_content.css" />
 	<style type="text/css">
 		body{
 		background: white;
 		}
 	</style>
 </head>
-<body bgcolor="#FFFFFF">
+<body>
 <%
     Transaction tx  = MCRHIBConnection.instance().getSession().beginTransaction();
 	try{
