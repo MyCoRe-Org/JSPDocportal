@@ -7,10 +7,9 @@
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld" %>
-<%@ taglib prefix="mcrdd" uri="http://www.mycore.org/jspdocportal/docdetails.tld" %>
 
 <fmt:message var="pageTitle" key="WF.derivates.headline" /> 
-<mcrdd:setnamespace prefix="xlink" uri="http://www.w3.org/1999/xlink" />
+<mcr:setNamespace prefix="xlink" uri="http://www.w3.org/1999/xlink" />
 
 <!doctype html>
 <html>

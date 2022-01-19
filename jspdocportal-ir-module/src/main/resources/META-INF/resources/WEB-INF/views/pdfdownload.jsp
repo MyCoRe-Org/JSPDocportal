@@ -4,7 +4,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld" %>
-<%@ taglib prefix="mcrdd" uri="http://www.mycore.org/jspdocportal/docdetails.tld" %>
 <%@ taglib prefix="search" tagdir="/WEB-INF/tags/search"%>
 
 <c:set var="WebApplicationBaseURL" value="${applicationScope.WebApplicationBaseURL}" />
@@ -38,7 +37,7 @@
 	 
 	 <c:if test="${empty it.errorMessages}">
         <mcr:retrieveObject query="recordIdentifier:${fn:replace(it.recordIdentifier, 'rosdok_', 'rosdok/')}" varDOM="doc" />
-		<mcrdd:setnamespace prefix="mods" uri="http://www.loc.gov/mods/v3" />
+		<mcr:setNamespace prefix="mods" uri="http://www.loc.gov/mods/v3" />
 		<x:choose>
    		<x:when select="$doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo">
             <div class="row">

@@ -5,10 +5,9 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld"%>
 <%@ taglib prefix="search" tagdir="/WEB-INF/tags/search"%>
-<%@ taglib prefix="mcrdd" 	uri="http://www.mycore.org/jspdocportal/docdetails.tld"%>
 
-<mcrdd:setnamespace prefix="mods" uri="http://www.loc.gov/mods/v3" />
-<mcrdd:setnamespace prefix="xlink" uri="http://www.w3.org/1999/xlink" />
+<mcr:setNamespace prefix="mods" uri="http://www.loc.gov/mods/v3" />
+<mcr:setNamespace prefix="xlink" uri="http://www.w3.org/1999/xlink" />
   
 <c:set var="WebApplicationBaseURL" value="${applicationScope.WebApplicationBaseURL}" />
 <c:set var="mcrid">
