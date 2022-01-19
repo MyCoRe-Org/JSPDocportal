@@ -33,7 +33,7 @@
                   $('#infoButton_{$key}').popover({{
                     title: "{mcri18n:translate-with-params('Webpage.docdetails.infodialog.title',
                                 (replace(mcri18n:translate($labelkey), '&lt;br /&gt;', '')))}",
-                    content : "{$info}",
+                    content : "{replace($info,'"', '&amp;quot;')}",
                     placement :  function(context, src) {{
                         $(context).addClass('po_{$key}');
                         return 'left'; 
