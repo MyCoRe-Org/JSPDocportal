@@ -301,7 +301,7 @@ public class MCRSearchController {
 
                     MCRContent newContent = MCRStaticXEditorFileServlet.doExpandEditorElements(editorContent, request,
                         response, sessionID,
-                        MCRFrontendUtil.getBaseURL() + "search");
+                        MCRFrontendUtil.getBaseURL() + "do/search/"+result.getMask());
                     String content = null;
                     if (newContent != null) {
                         content = newContent.asString().replaceAll("<\\?xml.*?\\?>", "");
