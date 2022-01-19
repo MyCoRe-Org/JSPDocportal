@@ -29,7 +29,6 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 import org.jdom2.Element;
 import org.jdom2.input.DOMBuilder;
-import org.mycore.jspdocportal.common.taglibs.docdetails.helper.MCRPublishedInFormatter;
 import org.w3c.dom.NodeList;
 
 /**
@@ -56,7 +55,7 @@ public class MCRFormatPublishedInTag extends SimpleTagSupport {
 
             DOMBuilder domBuilder = new DOMBuilder();
             Element el = domBuilder.build((org.w3c.dom.Element) xml.item(0));
-            getJspContext().getOut().append(MCRPublishedInFormatter.format(el));
+            getJspContext().getOut().append(el.getText());
         }
     }
 }
