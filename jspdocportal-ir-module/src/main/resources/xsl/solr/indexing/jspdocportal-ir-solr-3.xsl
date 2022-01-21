@@ -9,10 +9,11 @@
   expand-text="yes">
   
   <xsl:import href="xslImport:solr-document-3:solr/indexing/jspdocportal-ir-solr-3.xsl" />
+  <xsl:import href="resource:xsl/functions/stringutils.xsl" />
+  
   <!-- already imported earlier in chain: -->
-  <!-- <xsl:import href="resource:xsl/functions/mods.xsl" />
-       <xsl:import href="resource:xsl/functions/stringutils.xsl" />
-  -->
+  <!-- <xsl:import href="resource:xsl/functions/mods.xsl" /> -->
+
   <xsl:template match="mycoreobject">
     <xsl:apply-imports />
 
