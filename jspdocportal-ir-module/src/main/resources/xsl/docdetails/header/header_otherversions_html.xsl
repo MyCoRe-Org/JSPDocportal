@@ -25,10 +25,10 @@
 
   <xsl:template name="otherVersions">
     <!-- andere Versionen -->
-    <xsl:if test="./mods:relatedItem[@type='otherVersion' or @type='otherFormat']">
+    <xsl:if test="./mods:relatedItem[@type='otherVersion']">
        <div class="float-right">
        <p class="mt-3">
-            <xsl:for-each select="./mods:relatedItem[@type='otherVersion' or @type='otherFormat']">
+            <xsl:for-each select="./mods:relatedItem[@type='otherVersion']">
             <xsl:element name="a">
               <xsl:attribute name="class">btn btn-sm btn-outline-secondary</xsl:attribute>
               <xsl:choose>
