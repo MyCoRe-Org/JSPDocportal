@@ -129,6 +129,8 @@ public class MCRPDFDownloadController {
                                 if (e instanceof IOException && "Connection reset by peer".equals(e.getMessage())) {
                                     LOGGER.warn("PDF-Download of " + resultPDF.toString()
                                         + "incomplete - 'Connection reset by peer'");
+                                } else if (e.getCause()!=null && e.getCause() instanceof IOException && "Connection reset by peer".equals(e.getCause().getMessage())) {
+                                    LOGGER.warn("PDF-Download of " + resultPDF.toString() + "incomplete - 'Connection reset by peer'"); 
                                 } else {
                                     throw new WebApplicationException(
                                         "PDF-Download of " + resultPDF.toString() + " failed.", e);
