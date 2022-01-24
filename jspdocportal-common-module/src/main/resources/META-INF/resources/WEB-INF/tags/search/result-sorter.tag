@@ -17,7 +17,7 @@
 		<script type="text/javascript">
 			function changeSortURL(value) {
 				window.location = $("meta[name='mcr:baseurl']").attr("content")
-						+ "do/${mode}/${mask}?_search="
+						+ "${mode}/${mask}?_search="
 						+ $("meta[name='mcr:search.id']").attr("content")
 						+ "&_sort="
 						+ encodeURIComponent($("#sortField option:selected").val() + " " + value);
