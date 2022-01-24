@@ -59,7 +59,7 @@
               <xsl:for-each select="./mods:relatedItem[@otherType='appears_in']">
                 <table id="ir-table-docdetails-host-title" class="ir-table-docdetails-values">
                   <xsl:if test="mods:note[@type='relation_label']">
-                    <tr><td>{mods:note[@type='relation_label']}:</td></tr>
+                    <tr><td class="small">{mods:note[@type='relation_label']}:</td></tr>
                   </xsl:if>
                   <xsl:for-each select="mods:titleInfo">
                     <xsl:call-template name="title" />
@@ -109,32 +109,6 @@
             </td>
           </tr>
         </xsl:if>
-        <xsl:if test="./mods:relatedItem[@type='otherFormat']">
-          <tr>
-            <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.other_format')}</th>
-            <td>
-              <xsl:for-each select="./mods:relatedItem[@type='otherFormat']">
-                <table id="ir-table-docdetails-otherformat" class="ir-table-docdetails-values">
-                <tr><td>
-                  <xsl:if test="mods:recordInfo/mods:recordIdentifier">
-                    <span class="float-right">
-                      <a class="btn btn-outline-secondary btn-sm" href="{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(mods:recordInfo/mods:recordIdentifier, '/','_')}">
-                      {mcri18n:translate('OMD.ir.docdetails.metadata.label.open')}</a>
-                    </span>
-                  </xsl:if>
-                  <xsl:if test="mods:note[@type='relation_label']">
-                    <span>{mods:note[@type='relation_label']}: </span>
-                  </xsl:if>
-                  <xsl:if test="mods:note[@type='format_type']">
-                    <strong>{mods:note[@type='format_type']}</strong>
-                  </xsl:if>
-                  </td></tr>
-                </table>
-              </xsl:for-each>
-            </td>
-          </tr>
-        </xsl:if>
-        
         <xsl:if test="mods:name[@type='personal']">
           <tr>
             <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.personal_name')}</th>
@@ -389,6 +363,39 @@
               <xsl:call-template name="identifier_k10plus_ppn" />
               <xsl:call-template name="identifier2metadataTable" />
             </table></td>
+          </tr>
+        </xsl:if>
+        
+        <xsl:if test="./mods:relatedItem[@type='isReferencedBy' or @type='references' or @type='otherFormat' or @type='otherVersion']">
+          <tr>
+            <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.references')}</th>
+            <td>
+              <table id="ir-table-docdetails-references" class="ir-table-docdetails-values">
+                <xsl:for-each select="./mods:relatedItem[@type='isReferencedBy' or @type='references' or @type='otherFormat' or @type='otherVersion']">
+                  <tr><td>
+                    <xsl:if test="./mods:note[@type='relation_label']">
+                      <span class="small">{./mods:note[@type='relation_label']}:</span><br />
+                    </xsl:if>
+                    <xsl:if test="./mods:note[@type='format_type']">
+                      {mods:note[@type='format_type']}
+                    </xsl:if>
+                    {./mods:titleInfo/mods:title}
+                    <table>
+                      <xsl:for-each select="./mods:identifier[@type='doi']">
+                        <tr><th><abbr class="text-nowrap" title="Digital Object Identifier">DOI</abbr>:</th>
+                            <td><a href="https://doi.org/{.}">{.}</a></td>
+                        </tr>
+                      </xsl:for-each>
+                      <xsl:for-each select="./mods:recordInfo/mods:recordIdentifier">     
+                        <tr><th><abbr class="text-nowrap" title="Persistente URL">PURL</abbr>: </th>
+                            <td><a href="http://purl.uni-rostock.de/{.}">http://purl.uni-rostock.de/{.}</a></td>
+                        </tr>
+                      </xsl:for-each>
+                    </table>
+                  </td></tr>
+                </xsl:for-each>
+              </table>
+            </td>
           </tr>
         </xsl:if>
       
