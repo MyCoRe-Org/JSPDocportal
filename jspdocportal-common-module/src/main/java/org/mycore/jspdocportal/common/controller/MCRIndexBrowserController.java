@@ -87,7 +87,7 @@ public class MCRIndexBrowserController {
                 mcrSearchResult.setSolrQuery(query);
                 mcrSearchResult.setRows(Integer.MAX_VALUE);
                 mcrSearchResult.setStart(0);
-                mcrSearchResult.setAction("search");
+                mcrSearchResult.setAction("do/search");
                 mcrSearchResult.getFacetFields().add(facetfield);
                 if (filterQuery != null && filterQuery.length() > 0) {
                     mcrSearchResult.getFilterQueries().add(filterQuery);

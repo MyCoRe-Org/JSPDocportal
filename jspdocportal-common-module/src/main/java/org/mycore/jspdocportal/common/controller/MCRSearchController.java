@@ -124,7 +124,7 @@ public class MCRSearchController {
         if (request.getParameter("q") != null) {
             result = new MCRSearchResultDataBean();
             result.setRows(DEFAULT_ROWS);
-            result.setAction("search");
+            result.setAction("do/search");
             result.setQuery(request.getParameter("q"));
             result.setMask("");
             showMask = false;
@@ -134,7 +134,7 @@ public class MCRSearchController {
         if (StringUtils.isNoneEmpty(request.getParameter("searchField"))) {
             result = new MCRSearchResultDataBean();
             result.setRows(DEFAULT_ROWS);
-            result.setAction("search");
+            result.setAction("do/search");
             String value = request.getParameter("searchValue");
             if (StringUtils.isNotBlank(value)) {
                 result.setQuery("+" + request.getParameter("searchField") + ":" + value);
@@ -165,9 +165,9 @@ public class MCRSearchController {
         if (mask == null) {
             showMask = false;
             showResults = true;
-            result.setAction("search");
+            result.setAction("do/search");
         } else {
-            result.setAction("search/" + mask);
+            result.setAction("do/search/" + mask);
         }
 
         String referrer = request.getHeader("referer");
