@@ -20,6 +20,7 @@
 </head>
 <body>
   <%@ include file="fragments/header.jspf" %>
+  <div id="content_area">
   <div class="container">
     <div class="row">	
        <c:if test="${pageScope.navSide == 'left'}">
@@ -40,6 +41,7 @@
             </div>
         </c:if>
 	 </div>
+  </div>
   </div>
   <%@ include file="fragments/footer.jspf" %>
   </body>

@@ -19,6 +19,7 @@
 </head>
 <body>
   <%@ include file="fragments/header.jspf" %>
+  <div id="content_area">
   <div class="container">
      <div class="row" style="margin-bottom:30px;">
       <div class="col-sm-12">
@@ -121,8 +122,8 @@
 			</script>	
 		</c:if>
  	</c:if>
-
-   </div>
+    </div>
+  </div>
   <%@ include file="fragments/footer.jspf" %>
   </body>
 </html>

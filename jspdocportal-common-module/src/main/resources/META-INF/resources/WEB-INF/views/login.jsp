@@ -16,6 +16,7 @@
 </head>
 <body>
   <%@ include file="fragments/header.jspf" %>
+  <div id="content_area">
   <div class="container">
       <!-- available user status:  
 	 	  it.loginStatus = { user.login, user.invalid_password, user.welcome, user.disabled, user.unknown, user.unkwnown_error }
@@ -91,6 +92,7 @@
     </form>
 	</div>
    <div style="height: 75px;">&nbsp;</div>
+   </div>
   <%@ include file="fragments/footer.jspf" %>
   </body>
 </html>

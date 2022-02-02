@@ -15,6 +15,7 @@
 </head>
 <body>
   <%@ include file="fragments/header.jspf" %>
+  <div id="content_area">
   <div class="container">
   <div class="row">
   <div class="col">
@@ -93,6 +94,7 @@
 				}
 			</script>
 		 </div>
+     </div>
      </div>
      </div>
      </div>

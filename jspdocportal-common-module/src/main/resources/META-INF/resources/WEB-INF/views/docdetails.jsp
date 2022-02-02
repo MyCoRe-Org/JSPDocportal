@@ -43,6 +43,7 @@
 </head>
 <body>
   <%@ include file="fragments/header.jspf" %>
+  <div id="content_area">
     <div class="container">
       <div class="row d-block d-lg-none" style="padding: 0px 15px">
         <div class="col-12" style="padding-top:45px">
@@ -89,7 +90,8 @@
       </div>
     </div><%-- right area --%>
   </div><%--row --%>
-</div>
+  </div>
+  </div>
 <%@ include file="fragments/footer.jspf" %>
 </body>
 </html>

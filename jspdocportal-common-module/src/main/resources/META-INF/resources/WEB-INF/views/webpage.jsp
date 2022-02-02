@@ -20,6 +20,7 @@
 </head>
 <body>
   <%@ include file="fragments/header.jspf" %>
+  <div id="content_area">
   <div class="container">
     <c:if test="${not empty it.info}">
       <div class="row">
@@ -71,6 +72,7 @@
        </c:if>
       </div>
     </c:if>
+  </div>
   </div>
   <%@ include file="fragments/footer.jspf" %>
   </body>

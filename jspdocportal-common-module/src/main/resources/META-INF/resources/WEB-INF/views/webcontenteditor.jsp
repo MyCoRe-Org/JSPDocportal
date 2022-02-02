@@ -19,6 +19,7 @@
 </head>
 <body>
   <%@ include file="fragments/header.jspf" %>
+  <div id="content_area">
   <div class="container">
     <div class="row">
 		<div class="col ir-box">
@@ -61,6 +62,7 @@
 		  </div>
 		</form>
 		</div>
+    </div>
     </div>
     </div>
   <%@ include file="fragments/footer.jspf" %>
