@@ -23,9 +23,7 @@
 
 package org.mycore.jspdocportal.common.legacy;
 
-import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -46,14 +44,8 @@ import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Document;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.datamodel.ifs.MCRDirectory;
-import org.mycore.datamodel.ifs.MCRFile;
-import org.mycore.datamodel.ifs.MCRFileNodeServlet;
-import org.mycore.datamodel.ifs.MCRFilesystemNode;
-import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
@@ -305,97 +297,6 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
             }
             response.sendRedirect(sbURL.toString());
             return;
-        }
-    }
-
-    // CODE under development - try to solve the "Open Large PDF file" problem
-    // MyCoRe FileNodeServlet could do the job
-    @Deprecated
-    @SuppressWarnings("unused")
-    private void showDerivateFile(MCRObjectID mcrID, MCRObjectID mcrDerID, String path, HttpServletRequest request,
-        HttpServletResponse response) throws IOException, ServletException {
-        // OLD CODE
-        // the urn with information about the MCRObjectID
-        MCRFilesystemNode mainFile = null;
-        if (mcrDerID != null) {
-            MCRDirectory root = MCRDirectory.getRootDirectory(mcrDerID.toString());
-            if (path != null) {
-                mainFile = root.getChildByPath(path);
-            } else {
-                MCRDerivate der = MCRMetadataManager.retrieveMCRDerivate(mcrDerID);
-                String mainDoc = der.getDerivate().getInternals().getMainDoc();
-                if (mainDoc != null) {
-                    mainFile = root.getChildByPath(mainDoc);
-                }
-                if (mainFile == null) {
-                    MCRFilesystemNode[] myfiles = root.getChildren(MCRDirectory.SORT_BY_NAME);
-                    if (myfiles.length == 1) {
-                        mainFile = myfiles[0];
-                    }
-                }
-            }
-        }
-        if (mainFile != null) {
-            String accessErrorPage = MCRConfiguration2.getString("MCR.Access.Page.Error").orElse("");
-            if (!MCRAccessManager.checkPermissionForReadingDerivate(mainFile.getOwnerID())) {
-                LOGGER.info("MCRFileNodeServlet: AccessForbidden to " + mainFile.getName());
-                response.sendRedirect(response.encodeRedirectURL(MCRFrontendUtil.getBaseURL() + accessErrorPage));
-                return;
-            }
-
-            if (mainFile.getPath().endsWith(".pdf")) {
-                openPDF(request, response, mcrID.toString(), (MCRFile) mainFile);
-                return;
-            }
-            sendFile(request, response, (MCRFile) mainFile);
-            return;
-        }
-
-        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        getServletContext()
-            .getRequestDispatcher("/nav?path=~mycore-error&messageKey=MCRJSPGlobalResolver.error.notfound")
-            .forward(request, response);
-    }
-
-    // openPDF
-    private void openPDF(HttpServletRequest request, HttpServletResponse response, String mcrid, MCRFile mcrFile)
-        throws IOException {
-        String page = request.getParameter("page");
-        String nr = request.getParameter("nr");
-
-        StringBuffer sbURL = new StringBuffer(MCRFrontendUtil.getBaseURL());
-        sbURL.append("file/").append(mcrid).append("/").append(mcrFile.getPath());
-        if (page != null) {
-            sbURL.append("#page=").append(page);
-        } else if (nr != null) {
-            sbURL.append("#page=").append(nr);
-        }
-        String url = sbURL.toString();
-        if (url.length() > 0) {
-            response.sendRedirect(url);
-        }
-
-    }
-
-       /**
-     * Sends the contents of an MCRFile to the client.
-     * 
-     * @see MCRFileNodeServlet for implementation details
-     * 
-     * 
-     */
-    private void sendFile(HttpServletRequest req, HttpServletResponse res, MCRFile file) throws IOException {
-        LOGGER.info("Sending file " + file.getName());
-
-        res.setContentType(file.getContentType().getMimeType());
-        res.setContentLength((int) file.getSize());
-        res.addHeader("Accept-Ranges", "none"); // Advice client not to attempt
-                                                // range requests
-
-        // no transaction needed to copy long streams over slow connections
-
-        try (OutputStream out = new BufferedOutputStream(res.getOutputStream())) {
-            file.getContentTo(out);
         }
     }
 }
