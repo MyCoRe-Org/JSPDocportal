@@ -22,6 +22,7 @@
     <%@ include file="../fragments/header.jspf"%>
     <form method="post" id="workspaceForm" accept-charset="UTF-8"
           action="${applicationScope.WebApplicationBaseURL}do/workspace/tasks">
+    <div id="content_area">
       <div class="container">
         <div class="row">
           <div class="col">
@@ -270,6 +271,7 @@
           </div>
         </div>
       </div>
+    </div>  
     </form>
    <div style="height: 75px;">&nbsp;</div>
    <%@ include file="../fragments/footer.jspf"%>

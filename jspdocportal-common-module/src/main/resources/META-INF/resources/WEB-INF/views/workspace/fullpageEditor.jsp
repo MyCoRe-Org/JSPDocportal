@@ -19,12 +19,14 @@
 </head>
 <body>
   <%@ include file="../fragments/header.jspf" %>
-  <div class="container">
+  <div id="content_area">
+    <div class="container">
       <div class="row">
         <div class="col">
 		  <mcr:includeXEditor editorPath="${it.editorPath}" cancelURL="${it.cancelURL}" sourceURI="${it.sourceURI}" />
         </div>
       </div>
+    </div>
   </div>
   <%@ include file="../fragments/footer.jspf" %>
 </body>
