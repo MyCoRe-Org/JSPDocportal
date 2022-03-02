@@ -188,7 +188,14 @@
                           <button name="doGoto-task_${currentTask.executionId}-edit_object.do_save" value=""
                                   class="btn btn-sm btn-primary" type="submit">
                             <i class="fa fa-check"></i>
-                            <fmt:message key="WF.workspace.button.publish" />
+                            <c:choose>
+                              <c:when test="${fn:startsWith(currentVariables.wfMode, 'wf_register')}">
+                                <fmt:message key="WF.workspace.button.save_reservation" />
+                              </c:when>
+                              <c:otherwise>
+                                <fmt:message key="WF.workspace.button.publish" />
+                              </c:otherwise>
+                            </c:choose>                            
                           </button>
                           <button name="doGoto-task_${currentTask.executionId}-edit_object.do_cancel" value=""
                                   class="btn btn-sm btn-secondary" type="submit">
