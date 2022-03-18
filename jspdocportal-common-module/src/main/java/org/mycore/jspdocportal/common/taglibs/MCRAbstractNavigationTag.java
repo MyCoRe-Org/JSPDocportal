@@ -86,7 +86,7 @@ public abstract class MCRAbstractNavigationTag extends MCRAbstractTag {
 
 		currentPath = (String) mcrSession.get("navPath");
 		if (currentPath == null) {
-			currentPath = (String) getJspContext().getAttribute("org.mycore.navigation." + type + ".path",
+			currentPath = (String) getJspContext().getAttribute("org.mycore.navigation." + id + ".path",
 					PageContext.REQUEST_SCOPE);
 		}
 		if (currentPath == null) {
