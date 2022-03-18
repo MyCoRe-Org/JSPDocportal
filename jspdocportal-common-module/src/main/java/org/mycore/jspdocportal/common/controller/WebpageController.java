@@ -69,6 +69,11 @@ public class WebpageController {
                 if (navPath != null) {
                     request.setAttribute("org.mycore.navigation.navbar.path", navPath);
                 }
+                navPath = MCRConfiguration2.getString("MCR.Webpage.Navigation.main." + path.replace("/", "."))
+                    .orElse(null);
+                if (navPath != null) {
+                    request.setAttribute("org.mycore.navigation.main.path", navPath);
+                }
                 navPath = MCRConfiguration2.getString("MCR.Webpage.Navigation.side." + path.replace("/", "."))
                     .orElse(null);
                 if (navPath != null) {

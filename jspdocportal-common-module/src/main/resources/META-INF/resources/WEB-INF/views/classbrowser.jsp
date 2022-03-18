@@ -5,6 +5,8 @@
 
 <%@ page import = "org.mycore.common.config.MCRConfiguration2" %>
 <% pageContext.setAttribute("navSide", MCRConfiguration2.getString("MCR.JSPDocportal.Navigation.Side").orElse("left")); %>
+<c:set var="org.mycore.navigation.main.path" scope="request">main.search</c:set>
+<c:set var="org.mycore.navigation.search.path" scope="request">search.classbrowser_${it.modus}</c:set>
 
 <fmt:message var="pageTitle" key="Nav.ClassificationsSearch" />
 

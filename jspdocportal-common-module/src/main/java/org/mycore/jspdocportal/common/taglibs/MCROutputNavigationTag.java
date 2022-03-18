@@ -242,7 +242,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
                     + "\">" + msg + "</a>");
                 if (doExpand) {
                     String[] subpath = path;
-                    if (path.length > 0) {
+                    if (path.length > 0 && path[0].equals(currentNode.getId())) {
                         subpath = Arrays.copyOfRange(path, 1, path.length);
                     }
                     printSideNav(subpath, el, null, out);
