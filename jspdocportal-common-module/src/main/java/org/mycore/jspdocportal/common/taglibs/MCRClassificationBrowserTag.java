@@ -190,7 +190,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
             out.write("\n\n<!-- ClassificationBrowser ("+rootClassifID.getRootID()+") START  -->");
             if (!MCRCategoryDAOFactory.getInstance().exist(rootClassifID)) {
                 LOGGER.error("Classification does not exist" + rootClassifID.getRootID());
-                out.write(rootClassifID.getRootID() + "does not exist!");
+                out.write("Classification " + rootClassifID.getRootID() + " does not exist!");
                 return;
             }
 
