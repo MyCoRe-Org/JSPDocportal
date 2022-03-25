@@ -23,12 +23,12 @@
     <form method="post" id="workspaceForm" accept-charset="UTF-8"
           action="${applicationScope.WebApplicationBaseURL}do/workspace/tasks">
     <div id="content_area">
-      <div class="container">
+      <div id="workspace" class="container">
         <div class="row">
           <div class="col">
-            <div class="card mt-3 float-right">
+            <div class="float-right">
               <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownNewActionsMenu"
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownNewActionsMenu"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <fmt:message key="WF.workspace.info.menu.new_task" />
                 </button>
@@ -44,13 +44,13 @@
               </div>
             </div>
             
-            <h2>
+            <h2 class="text-dark">
               <fmt:message key="WF.workspace.headline" />
             </h2>
           </div>
         </div>
 
-        <div class="row mt-3">
+        <div class="row">
           <div class="col">
             <c:set var="baseURL" value="${applicationScope.WebApplicationBaseURL}" />
             <c:forEach var="msg" items="${it.messages}">
@@ -64,7 +64,7 @@
                         data-target="#publish-dialog-task_${currentTask.executionId}">
                   <fmt:message key="WF.workspace.button.publish_all_objects" />
                 </button>
-                <h3><fmt:message key="WF.workspace.info.headline.claimed_tasks" /></h3>
+                <h3 class="text-light mb-0"><fmt:message key="WF.workspace.info.headline.claimed_tasks" /></h3>
               </div>
               <div id="publish-dialog-task_${currentTask.executionId}" class="collapse">
                 <div class="card-body border border-secondary bg-warning">
@@ -84,23 +84,23 @@
                         <div class="card-header">
                           <div class="row">
                             <div class="col-8">
-                              <h4>
+                              <h5>
                                 <span class="badge badge-pill badge-secondary mr-3" style="height: auto">${currentTask.executionId}</span>
                                 ${currentVariables.wfHeadline} 
                                 <span class="badge badge-pill badge-primary ml-3" style="height: auto">${currentVariables.mcrObjectID}</span>
                                 <c:if test="${not empty currentVariables.wfObjectDisplayRecordIdentifier}">
                                   <span class="badge badge-pill badge-info ml-3" style="height: auto">${currentVariables.wfObjectDisplayRecordIdentifier}</span>
                                 </c:if>
-                              </h4>
+                              </h5>
                             </div>
                             <div class="col-4">
                               <button class="btn btn-sm btn-secondary float-right" name="doReleaseTask-task_${currentTask.executionId}">
                                 <fmt:message key="WF.workspace.submit.task" />
                               </button>
-                              <span class="btn btn-none btn-sm float-right">
-                                <strong><fmt:message key="WF.workspace.start" /></strong> 
+                              <small class="text-left mr-3 float-right">
+                                <strong><fmt:message key="WF.workspace.start" /> </strong><br />
                                 <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${currentTask.createTime}" />
-                              </span>
+                              </small>
                             </div>
                           </div>
                         </div>
@@ -111,7 +111,7 @@
                           </c:if>
                           <div class="row">
                             <div class="col-9">
-                              <h3 style="margin-top: 0px">${currentVariables.wfObjectDisplayTitle}</h3>
+                              <h4 class="mt-0">${currentVariables.wfObjectDisplayTitle}</h4>
                               <c:out value="${currentVariables.wfObjectDisplayDescription}" escapeXml="false" />
                             </div>
                             <div class="col-3 text-right">
@@ -230,7 +230,7 @@
 
             <div class="card border border-dark my-3 w-100">
               <div class="card-header bg-dark">
-                <h3>
+                <h3 class="text-light mb-0">
                   <fmt:message key="WF.workspace.info.headline.available_tasks" />
                 </h3>
               </div>
@@ -241,21 +241,21 @@
                     <div class="card-header">
                       <div class="row">
                         <div class="col-8">
-                          <h4>
+                          <h5>
                              <span class="badge badge-pill badge-secondary mr-3" style="height: auto">${currentTask.executionId}</span>
                              ${currentVariables.wfHeadline} 
                              <span class="badge badge-pill badge-primary ml-3" style="height: auto">${currentVariables.mcrObjectID}</span>
-                          </h4>
+                          </h5>
                         </div>
                         <div class="col-4">
                           <button class="btn btn-secondary btn-sm float-right"
                                   name="doAcceptTask-task_${currentTask.executionId}">
                             <fmt:message key="WF.workspace.submit.accept_task" />
                           </button>
-                          <span class="btn btn-none btn-sm float-right">
-                            <strong><fmt:message key="WF.workspace.start" /> </strong>
+                          <small class="text-left mr-3 float-right">
+                            <strong><fmt:message key="WF.workspace.start" /> </strong><br />
                             <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${currentTask.createTime}" />
-                          </span>
+                          </small>
                         </div>
                       </div>
                     </div>
@@ -266,7 +266,7 @@
                           <c:if test="${not empty currentVariables.validationMessage}">
                             <div class="alert alert-danger" role="alert">${currentVariables.validationMessage}</div>
                           </c:if>
-                          <h3 style="margin-top: 0px">${currentVariables.wfObjectDisplayTitle}</h3>
+                          <h4 style="margin-top: 0px">${currentVariables.wfObjectDisplayTitle}</h4>
                           <c:out value="${currentVariables.wfObjectDisplayDescription}" escapeXml="false" />
                         </div>
                       </div>
