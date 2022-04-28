@@ -2,12 +2,9 @@ package org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,14 +30,12 @@ import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaClassification;
 import org.mycore.datamodel.metadata.MCRMetaEnrichedLinkIDFactory;
 import org.mycore.datamodel.metadata.MCRMetaIFS;
-import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectMetadata;
-import org.mycore.datamodel.metadata.MCRObjectService;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.cli.MCRDerivateCommands;
 import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
@@ -230,7 +225,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                 }
 
                 // set/update delete information from <service>
-                removeServDate(mcrObj, "mcr-delete:date");
+                mcrObj.getService().removeDate("mcr-delete:date");
                 if (mcrWFObj.getService().getDate("mcr-delete:date") != null) {
                     mcrObj.getService().setDate("mcr-delete:date", mcrWFObj.getService().getDate("mcr-delete:date"));
                 }
@@ -472,30 +467,5 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
             return resetMetadataAndCleanupWorkflowDir(MCRObjectID.getInstance(id));
         }
         return false;
-    }
-
-    //use reflection to delete a servdate from MyCoRe-Object
-    //remove in LTS 2019 (use new method removeDate(String type)
-    private void removeServDate(MCRObject mcrObj, String type) {
-        if (mcrObj != null && mcrObj.getService() != null) {
-            Method methodGetDates;
-            try {
-                methodGetDates = MCRObjectService.class.getDeclaredMethod("getDates");
-                methodGetDates.setAccessible(true);
-
-                @SuppressWarnings("unchecked")
-                ArrayList<MCRMetaISO8601Date> servDates = (ArrayList<MCRMetaISO8601Date>) methodGetDates
-                    .invoke(mcrObj.getService());
-                Iterator<MCRMetaISO8601Date> it = servDates.iterator();
-                while (it.hasNext()) {
-                    if (it.next().getType().equals(type)) {
-                        it.remove();
-                    }
-                }
-
-            } catch (NoSuchMethodException | SecurityException | InvocationTargetException | IllegalAccessException e) {
-                LOGGER.error(e);
-            }
-        }
     }
 }
