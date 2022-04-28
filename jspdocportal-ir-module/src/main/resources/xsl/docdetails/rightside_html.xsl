@@ -30,7 +30,7 @@
   <xsl:template match="/">
       
     <!-- Cover -->
-    <xsl:variable name="recordID" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']" />
+    <xsl:variable name="recordID" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28' or @source='DE-519']" />
     <xsl:variable name="showViewer" select="exists(/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='MCRVIEWER_METS' or @categid='fulltext']])" />
     <xsl:variable name="image">    
       <xsl:choose>
@@ -67,8 +67,9 @@
                </a>
              </div>
              -->
-          <xsl:if test="/mycoreobject/metadata/def.irControl/irControl/map/list[@key='mets_filegroups']/entry[text() = 'ALTO'] 
-                       or /mycoreobject/structure/derobjects/derobject/classification[@categid='fulltext']">
+          <xsl:if test="$recordID 
+                        and (/mycoreobject/metadata/def.irControl/irControl/map/list[@key='mets_filegroups']/entry[text() = 'ALTO'] 
+                             or /mycoreobject/structure/derobjects/derobject/classification[@categid='fulltext'])">
             <div class="input-group input-group-sm mt-3 px-3">
               <input id="input_search_in_doc" type="text" class="form-control" onKeyDown="searchInDoc(event)" 
               placeholder="{mcri18n:translate('OMD.ir.docdetails.rightside.placeholder.search_in_doc')}" aria-describedby="search-in-document-addon" />
@@ -131,6 +132,13 @@
               </a></p>
             </xsl:for-each>
           </xsl:when>
+          <xsl:when test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:location[mods:physicalLocation[@type='online']]/mods:url[@usage='primary']">
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:location[mods:physicalLocation[@type='online']]/mods:url[@usage='primary']">
+              <p><a href="{.}">
+                {substring-before(.,'.de/')}.de/<br />{substring-after(.,'.de/')}
+              </a></p>
+            </xsl:for-each>
+          </xsl:when>
         </xsl:choose>
       </div>
     </xsl:if>
@@ -151,7 +159,13 @@
               <xsl:variable name="url">{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier,'/','_')}</xsl:variable>
               <xsl:variable name="startpagePath" select="if (//def.irControl/irControl/map[@key='ROOT']/entry[@key='start_image']) then (concat('/iview2/',//def.irControl/irControl/map[@key='ROOT']/entry[@key='start_image'],'.iview2')) else ()" />
               <a class="dropdown-item" href="{$url}{$startpagePath}">
-                <img src="{$WebApplicationBaseURL}/themes/rosdok/images/rosdok_logo2.png" style="height:1.5em;padding-right:0.5em" />{mcri18n:translate('OMD.ir.docdetails.rightside.link.view')}
+                <xsl:if test="$recordID/@source='DE-28'">
+                  <img src="{$WebApplicationBaseURL}/themes/rosdok/images/rosdok_logo2.png" style="height:1.5em;padding-right:0.5em" />
+                </xsl:if>
+                <xsl:if test="$recordID/@source='DE-519'">
+                  DigiBib NB
+                </xsl:if>
+                {mcri18n:translate('OMD.ir.docdetails.rightside.link.view')}
               </a>
               </xsl:if>
 
@@ -363,7 +377,7 @@
                 <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
                    href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}?XSL.Transformer=rosdok_datacite" rel="nofollow">Datacite</a>
               </xsl:if>
-              <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']">
+              <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28' or @source='DE-519']">
                 <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
                    href="{$WebApplicationBaseURL}oai?verb=GetRecord&amp;metadataPrefix=oai_dc&amp;identifier=oai:oai.rosdok.uni-rostock.de:{/mycoreobject/@ID}" rel="nofollow">OAI</a>
                 <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
