@@ -33,9 +33,12 @@
    </xsl:for-each>
   </xsl:template>
   <xsl:template name="identifier2metadataTable">
+   <xsl:variable name="recordID" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28' or @source='DE-519']" />
    <xsl:for-each select="mods:identifier[not(@type='purl')]">
      <xsl:variable name="category" select="mcrclass:category('identifier', @type)" />
        <xsl:if test="$category">
+       <!-- Hide URN for DBHSNB -->
+       <xsl:if test="not($category/@ID='urn' and $recordID/@source='DE-519')">
          <tr>
            <th><abbr class="text-nowrap" title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
            <td>
@@ -49,6 +52,7 @@
              </xsl:choose>
            </td>
          </tr>
+       </xsl:if>
        </xsl:if>
      </xsl:for-each>
      <xsl:for-each select="mods:identifier[@type='purl']">

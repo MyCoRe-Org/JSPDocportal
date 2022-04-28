@@ -58,7 +58,7 @@
     <xsl:param name="names" />
     <xsl:for-each select="$names">
       <tr><td colspan="2">
-        <span><xsl:value-of select="string-join(mods:namePart,', ')" /></span>
+        <span><xsl:value-of select="string-join(mods:namePart[not(@type='date')],', ')" /></span>
         <xsl:choose>
           <xsl:when test="mods:role/mods:roleTerm[@authority='GBV']">
             <span class="small pl-2">[{string-join(mods:role/mods:roleTerm[@authority='GBV'], ', ')}]</span>

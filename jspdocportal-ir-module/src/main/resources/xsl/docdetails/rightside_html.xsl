@@ -195,7 +195,6 @@
                 <xsl:call-template name="download-entry" />
               </xsl:for-each>
               <xsl:if test="/mycoreobject[not(contains(@ID,'_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='DV_METS' or @categid='METS']]">
-                <xsl:variable name="recordID" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28']" />
                 <xsl:if test="$recordID">
                   <div class="dropdown-divider"></div>
                   <div class="dropdown-item px-2" >
