@@ -419,6 +419,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
         for (String derID : wfDerivateIDs) {
             MCRDerivate der = MCRBPMNUtils.loadMCRDerivateFromWorkflowDirectory(mcrObj.getId(),
                 MCRObjectID.getInstance(derID));
+            der.setOrder(wfDerivateIDs.indexOf(derID)+1);
             if ("deleted".equals(mcrObj.getService().getState().getID())) {
                 der.getService().setState(new MCRCategoryID(
                     MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"),
@@ -445,13 +446,6 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                 } else {
                     MCRDerivateCommands.loadFromFile(filename, false);
                 }
-                /*
-                if (MCRMetadataManager.exists(derIDObj)) {
-                	ruleMap = MCRBPMNUtils.getAccessRulesMap(derID);
-                	MCRDerivateCommands.delete(derID);
-                }
-                MCRDerivateCommands.loadFromFile(filename, false);
-                */
             } catch (SAXParseException | IOException | MCRAccessException e) {
                 LOGGER.error(e);
             }
@@ -460,9 +454,11 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
             }
         }
 
+        // RS: 29.04.22 use order-Attribut to reorder derivates 
         // update order of derivates and labels in mcrobject
-        mcrObj.getStructure().getDerivates().clear();
-        mcrObj.getStructure().getDerivates().addAll(mcrWFObj.getStructure().getDerivates());
+        
+        //mcrObj.getStructure().getDerivates().clear();
+        //mcrObj.getStructure().getDerivates().addAll(mcrWFObj.getStructure().getDerivates());
     }
 
     @Override
