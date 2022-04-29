@@ -321,6 +321,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
     }
 
     private boolean resetMetadataAndCleanupWorkflowDir(MCRObjectID mcrObjID) {
+        boolean result = true;
         if (MCRMetadataManager.exists(mcrObjID)) {
             try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
                 MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
@@ -337,11 +338,14 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                         if (state.equals("new")) {
                             MCRMetadataManager.delete(derObj);
                         }
-                        derObj.getService().removeFlags("editedby");
-                        try {
-                            MCRMetadataManager.update(derObj);
-                        } catch (MCRAccessException e) {
-                            LOGGER.error(e);
+                        else {
+                            derObj.getService().removeFlags("editedby");
+                            try {
+                                MCRMetadataManager.update(derObj);
+                            } catch (MCRAccessException e) {
+                                LOGGER.error(e);
+                                result = false;
+                            }
                         }
 
                     }
@@ -358,11 +362,12 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
 
             } catch (MCRActiveLinkException | MCRAccessException e) {
                 LOGGER.error(e);
+                result = false;
             }
         }
         MCRBPMNUtils.cleanUpWorkflowDirForObject(mcrObjID);
 
-        return false;
+        return result;
     }
 
     // stores changes on Derivates in Workflow into the MyCoRe Object
