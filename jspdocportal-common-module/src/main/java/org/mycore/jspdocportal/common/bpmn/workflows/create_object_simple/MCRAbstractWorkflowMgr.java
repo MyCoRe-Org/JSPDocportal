@@ -204,6 +204,8 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                 MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
                 processDerivatesOnCommit(mcrObj, mcrWFObj);
 
+                //reload mcrObject, because it was change in processDerivatesOnCommit
+                mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
                 MCRObjectMetadata mcrObjMeta = mcrObj.getMetadata();
                 mcrObjMeta.removeInheritedMetadata();
                 while (mcrObjMeta.size() > 0) {
