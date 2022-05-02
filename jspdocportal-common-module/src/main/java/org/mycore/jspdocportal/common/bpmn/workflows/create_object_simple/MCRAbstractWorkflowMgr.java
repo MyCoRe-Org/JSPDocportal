@@ -339,9 +339,9 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                         String state = derObj.getService().getState().getID();
                         if (state.equals("new")) {
                             MCRMetadataManager.delete(derObj);
-                        }
-                        else {
+                        } else {
                             derObj.getService().removeFlags("editedby");
+                            derObj.getDerivate().getInternals().setSourcePath(null);
                             try {
                                 MCRMetadataManager.update(derObj);
                             } catch (MCRAccessException e) {
@@ -421,7 +421,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
         for (String derID : wfDerivateIDs) {
             MCRDerivate der = MCRBPMNUtils.loadMCRDerivateFromWorkflowDirectory(mcrObj.getId(),
                 MCRObjectID.getInstance(derID));
-            der.setOrder(wfDerivateIDs.indexOf(derID)+1);
+            der.setOrder(wfDerivateIDs.indexOf(derID) + 1);
             if ("deleted".equals(mcrObj.getService().getState().getID())) {
                 der.getService().setState(new MCRCategoryID(
                     MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"),
