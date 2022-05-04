@@ -86,12 +86,6 @@ table#ir-table-docdetails-name_conference th{
 	width:3em;
 }
 
-table#ir-table-docdetails-name_personal tr:first-of-type td,
-table#ir-table-docdetails-name_corporate tr:first-of-type td,
-table#ir-table-docdetails-name_conference tr:first-of-type td{
-	padding-bottom:0px !important;
-}
-
 span.ir-table-docdetails-values-label{
 	font-style:italic;
 	padding-left:1em;
