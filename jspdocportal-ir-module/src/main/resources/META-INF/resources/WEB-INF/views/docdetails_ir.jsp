@@ -31,13 +31,13 @@
 </fmt:message>
 
 <x:if select="contains($doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '#epub')">
-  <c:set var="org.mycore.navigation.path" scope="request">left.epub.epub_recherche</c:set>
+  <c:set var="org.mycore.navigation.path" scope="request">left.epub.epub_browse.epub_details</c:set>
 </x:if>
 <x:if select="contains($doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '#data')">
-  <c:set var="org.mycore.navigation.path" scope="request">left.epub.epub_recherche</c:set>
+  <c:set var="org.mycore.navigation.path" scope="request">left.epub.epub_browse.epub_details</c:set>
 </x:if>
 <x:if select="contains($doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '#histbest')">
-  <c:set var="org.mycore.navigation.path" scope="request">left.histbest.histbest_recherche</c:set>
+  <c:set var="org.mycore.navigation.path" scope="request">left.histbest.histbest_browse.histbest_details</c:set>
 </x:if>
 
 <!doctype html>
