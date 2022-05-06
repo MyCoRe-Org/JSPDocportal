@@ -1,6 +1,30 @@
+/*
+ * This file is part of ***  M y C o R e  ***
+ * See http://www.mycore.de/ for details.
+ *
+ * This program is free software; you can use it, redistribute it
+ * and / or modify it under the terms of the GNU General Public License
+ * (GPL) as published by the Free Software Foundation; either version 2
+ * of the License or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program, in a file called gpl.txt or license.txt.
+ * If not, write to the Free Software Foundation Inc.,
+ * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
+ * 
+ */
 package org.mycore.jspdocportal.common.taglibs;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
@@ -14,7 +38,14 @@ import org.mycore.common.MCRSessionMgr;
 public class MCRSessionTag extends SimpleTagSupport {
     private static Logger LOGGER = LogManager.getLogger(MCRSessionTag.class);
 
+    /** 
+     * Time when the webapp was deployed 
+     * coded as base32 String
+     */
+    private static String DEPLOY_TIME_BASE32 = null;
+
     private String info;
+
     private String var;
 
     public void setInfo(String info) {
@@ -29,25 +60,36 @@ public class MCRSessionTag extends SimpleTagSupport {
         PageContext pageContext = (PageContext) getJspContext();
 
         MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
-        if (info != null && !info.equals("")) {
-            if (info.equals("userID")) {
-
+        switch (info) {
+            case "userID":
                 pageContext.setAttribute(var, mcrSession.getUserInformation().getUserID());
-
-            } else if (info.equals("language")) {
-
+                break;
+            case "language":
                 pageContext.setAttribute(var, mcrSession.getCurrentLanguage());
-            } else if (info.equals("IP")) {
-
+                break;
+            case "IP":
                 pageContext.setAttribute(var, mcrSession.getCurrentIP());
-            } else if (info.equals("ID")) {
-
+                break;
+            case "ID":
                 pageContext.setAttribute(var, mcrSession.getID());
-            } else {
-                LOGGER.error("unknown information: " + info);
-            }
+                break;
+            case "deployTimeBase32":
+                if (DEPLOY_TIME_BASE32 == null) {
+                    //set the deploy time of the web application as base32 String
+                    String path2WEBINF = pageContext.getServletContext().getRealPath("/WEB-INF");
+                    if (path2WEBINF != null) {
+                        Path p = Paths.get(path2WEBINF);
+                        if (Files.exists(p)) {
+                            BasicFileAttributes attr = Files.readAttributes(p, BasicFileAttributes.class);
+                            DEPLOY_TIME_BASE32 = Long.toString(attr.creationTime().toMillis(), 32);
+                        }
+                    }
+                }
+                pageContext.setAttribute(var, DEPLOY_TIME_BASE32);
+                break;
+            default:
+                LOGGER.info("unknown information key: " + info);
+                break;
         }
-        return;
     }
-
 }
