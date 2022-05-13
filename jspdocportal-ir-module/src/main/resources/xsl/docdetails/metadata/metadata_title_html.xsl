@@ -46,6 +46,11 @@
           [{mcri18n:translate(concat('OMD.ir.docdetails.othertitle.type.', @type))}]
         </span>
       </xsl:if>
+      <xsl:if test="@otherType">
+        <span class="float-right small">
+          [{mcri18n:translate(concat('OMD.ir.docdetails.othertitle.otherType.', @otherType))}]
+        </span>
+      </xsl:if>
     </td></tr>
   </xsl:template>    
 </xsl:stylesheet>
