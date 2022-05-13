@@ -126,7 +126,7 @@
         </xsl:if>
       </xsl:if>
        
-      <xsl:for-each select="./mods:originInfo[@eventType='publication']">
+      <xsl:for-each select="./mods:originInfo[@eventType='publication' or @eventType='production']">
         <xsl:choose>
           <xsl:when test="contains(../mods:genre[@displayLabel='doctype']/@valueURI,'#histbest')">
             <xsl:variable name="publisherPlace">
@@ -142,10 +142,10 @@
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:variable>
-              <field name="ir.originInfo.result">{if (normalize-space($publisherPlace)='') then string-join((./mods:edition, ./mods:dateIssued[not(@*)]), ', ') else string-join((./mods:edition, $publisherPlace, ./mods:dateIssued[not(@*)]), ', ')}</field>
+              <field name="ir.originInfo.result">{if (normalize-space($publisherPlace)='') then string-join((./mods:edition, ./mods:dateIssued[not(@*)], ./mods:dateCreated[not(@*)]), ', ') else string-join((./mods:edition, $publisherPlace, ./mods:dateIssued[not(@*)], ./mods:dateCreated[not(@*)]), ', ')}</field>
           </xsl:when>
           <xsl:otherwise>
-            <field name="ir.originInfo.result">{string-join((./mods:edition, ./mods:publisher, ./mods:dateIssued[not(@*)]), ', ')}</field>
+            <field name="ir.originInfo.result">{string-join((./mods:edition, ./mods:publisher, ./mods:dateIssued[not(@*)], ./mods:dateCreated[not(@*)]), ', ')}</field>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:for-each>
@@ -206,8 +206,17 @@
              <field name="ir.oai.setspec.open_access">open_access</field>
           </xsl:if>
           
-          <xsl:variable name="pubyear_start" select="mods:originInfo[@eventType='publication']/mods:dateIssued[@keyDate and @encoding]" />
-          
+          <xsl:variable name="pubyear_start">
+            <xsl:choose>
+              <xsl:when test="mods:originInfo[@eventType='publication']">
+                <xsl:value-of select="mods:originInfo[@eventType='publication']/mods:dateIssued[@keyDate and @encoding]" />
+              </xsl:when>
+              <xsl:when test="mods:originInfo[@eventType='production']">
+                <xsl:value-of select="mods:originInfo[@eventType='production']/mods:dateCreated[@keyDate and @encoding]" />
+              </xsl:when>
+              <xsl:otherwise>0</xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
           <xsl:variable name="pubyear_end">
             <xsl:choose>
               <xsl:when test="mods:originInfo[@eventType='publication']/mods:dateIssued[@encoding and @point='end']">
@@ -215,6 +224,12 @@
               </xsl:when>
               <xsl:when test="mods:originInfo[@eventType='publication']/mods:dateIssued[@keyDate and @encoding]">
                 <xsl:value-of select="mods:originInfo[@eventType='publication']/mods:dateIssued[@keyDate and @encoding]" />
+              </xsl:when>
+              <xsl:when test="mods:originInfo[@eventType='production']/mods:dateCreated[@encoding and @point='end']">
+                <xsl:value-of select="mods:originInfo[@eventType='production']/mods:dateCreated[@encoding and @point='end']" />
+              </xsl:when>
+              <xsl:when test="mods:originInfo[@eventType='production']/mods:dateCreated[@keyDate and @encoding]">
+                <xsl:value-of select="mods:originInfo[@eventType='production']/mods:dateCreated[@keyDate and @encoding]" />
               </xsl:when>
             <xsl:otherwise>0</xsl:otherwise>
           </xsl:choose>  
