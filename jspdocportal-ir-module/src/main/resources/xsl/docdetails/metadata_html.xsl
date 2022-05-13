@@ -66,7 +66,7 @@
                   </xsl:for-each>
                   <xsl:for-each select="mods:part">
                     <tr><td>
-                      {string-join(.//text(), ' ')}
+                      {string-join(.//*[not(@type='sortstring')]/text(), ' ')}
                     </td></tr>
                   </xsl:for-each>
                   <xsl:for-each select="mods:originInfo[@eventType='publication']">
