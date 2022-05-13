@@ -203,6 +203,9 @@
            </table></td>
           </tr>
         </xsl:if>
+        <xsl:call-template name="classification2metadataTable">
+          <xsl:with-param name="items" select="./mods:classification[@displayLabel='sdnb']" />
+        </xsl:call-template>
       
         <xsl:if test="mods:physicalDescription">
           <tr>
