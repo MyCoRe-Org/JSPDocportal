@@ -127,7 +127,7 @@
       </xsl:for-each>
     
       <!-- Veröffentlichungsangabe -->
-      <xsl:for-each select="./mods:originInfo[@eventType='publication']">
+      <xsl:for-each select="./mods:originInfo[@eventType='publication' or @eventType='production']">
         <p>
           <xsl:choose>
             <xsl:when test="contains(../mods:genre[@displayLabel='doctype']/@valueURI,'#histbest')">
@@ -144,10 +144,10 @@
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:variable>
-                {if (normalize-space($publisherPlace)='') then string-join((./mods:edition, ./mods:dateIssued[not(@*)]), ', ') else string-join((./mods:edition, $publisherPlace, ./mods:dateIssued[not(@*)]), ', ')}
+                {if (normalize-space($publisherPlace)='') then string-join((./mods:edition, ./mods:dateIssued[not(@*)], ./mods:dateCreated[not(@*)]), ', ') else string-join((./mods:edition, $publisherPlace, ./mods:dateIssued[not(@*)], ./mods:dateCreated[not(@*)]), ', ')}
             </xsl:when>
             <xsl:otherwise>
-              {string-join((./mods:edition, ./mods:publisher, ./mods:dateIssued[not(@*)]), ', ')}
+              {string-join((./mods:edition, ./mods:publisher, ./mods:dateIssued[not(@*)], ./mods:dateCreated[not(@*)]), ', ')}
             </xsl:otherwise>
           </xsl:choose>
         </p>
@@ -164,8 +164,9 @@
         </xsl:variable>
         {string-join(($title, 
                       ./mods:part/mods:detail[@type='article']/mods:number,
-                      ./mods:originInfo[@eventType="publication"]/mods:publisher,
-                      ./mods:originInfo[@eventType='publication']/mods:dateIssued[not(@*)]),
+                      ./mods:originInfo[@eventType='publication' or @eventType='production']/mods:publisher,
+                      ./mods:originInfo[@eventType='publication']/mods:dateIssued[not(@*)],
+                      ./mods:originInfo[@eventType='production']/mods:dateCreated[not(@*)]),
                       ', ')}
         </p> 
       </xsl:for-each>

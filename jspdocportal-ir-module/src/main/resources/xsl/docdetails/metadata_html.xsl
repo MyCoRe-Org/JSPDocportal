@@ -69,9 +69,9 @@
                       {string-join(.//*[not(@type='sortstring')]/text(), ' ')}
                     </td></tr>
                   </xsl:for-each>
-                  <xsl:for-each select="mods:originInfo[@eventType='publication']">
+                  <xsl:for-each select="mods:originInfo[@eventType='publication' or @eventType='production']">
                     <tr><td>
-                      {string-join((mods:publisher, mods:dateIssued[not(@encoding)]),', ')}
+                      {string-join((mods:publisher, mods:dateIssued[not(@encoding)], mods:dateCreated[not(@encoding)]),', ')}
                     </td></tr>
                   </xsl:for-each>
                 </table>
@@ -100,8 +100,8 @@
                   <xsl:for-each select="mods:part/mods:detail/mods:number">
                   <span>, {string-join(.//text(), ' ')}</span>
                   </xsl:for-each>
-                  <xsl:for-each select="mods:originInfo[@eventType='publication']">
-                      <span>, {string-join((mods:publisher, mods:dateIssued[not(@encoding)]),', ')}</span>
+                  <xsl:for-each select="mods:originInfo[@eventType='publication' or @eventType='production']">
+                      <span>, {string-join((mods:publisher, mods:dateIssued[not(@encoding)], mods:dateCreated[not(@encoding)]),', ')}</span>
                   </xsl:for-each>
                   </td></tr>
                 </table>
@@ -221,12 +221,14 @@
         </xsl:if>
       
         <tr><td colspan="2" class="p-0" style="font-size:.5em">&#160;</td></tr>
-            
-        <xsl:if test="mods:originInfo[@eventType='publication']">
+        <xsl:variable name="ctx" select="."/>
+        <xsl:for-each select="('publication', 'production')">    
+        <xsl:variable name="type" select="."/>
+        <xsl:if test="$ctx/mods:originInfo[@eventType=$type]">
           <tr>
-            <th><xsl:value-of select="mcri18n:translate('OMD.ir.docdetails.metadata.label.origin_info_publication')" disable-output-escaping="yes" /></th>
+            <th><xsl:value-of select="mcri18n:translate(concat('OMD.ir.docdetails.metadata.label.origin_info_',$type))" disable-output-escaping="yes" /></th>
             <td><table id="ir-table-docdetails-origininfo-publication" class="ir-table-docdetails-values">
-              <xsl:for-each select="mods:originInfo[@eventType='publication']">
+              <xsl:for-each select="$ctx/mods:originInfo[@eventType=$type]">
                 <xsl:choose>
                   <xsl:when test="mods:publisher">
                     <xsl:for-each select="mods:publisher">
@@ -263,33 +265,40 @@
                     </tr>
                   </xsl:when>
                 </xsl:choose>
-                <xsl:if test="mods:dateIssued[not(@*)]">
+                
+                <xsl:variable name="ctx" select="." />
+                <xsl:for-each select="('dateIssued', 'dateCreated')">
+                <xsl:variable name="dateX" select="." />
+                    
+                <xsl:if test="$ctx/*[local-name()=$dateX][not(@*)]">
                   <tr>
                     <td>
-                      {mods:dateIssued[not(@*)]}
-                      <xsl:if test="mods:dateIssued[@keyDate='yes' or @point='start' or @point='end']">
+                      {$ctx/*[local-name()=$dateX][not(@*)]}
+                      <xsl:if test="$ctx/*[local-name()=$dateX][@keyDate='yes' or @point='start' or @point='end']">
                         <xsl:variable name="normalized_date">
-                        <xsl:if test="mods:dateIssued[@keyDate='yes' and not(@point='start')]">
-                         {mods:dateIssued[@keyDate='yes' and not(@point='start')]}
+                        <xsl:if test="$ctx/*[local-name()=$dateX][@keyDate='yes' and not(@point='start')]">
+                         {$ctx/*[local-name()=$dateX][@keyDate='yes' and not(@point='start')]}
                         </xsl:if>
-                        <xsl:if test="mods:dateIssued[@point='start']">
-                          {mcri18n:translate('OMD.ir.docdetails.metadata.label.start_date')} {mods:dateIssued[@point='start']}
+                        <xsl:if test="$ctx/*[local-name()=$dateX][@point='start']">
+                          {mcri18n:translate('OMD.ir.docdetails.metadata.label.start_date')} {$ctx/*[local-name()=$dateX][@point='start']}
                         </xsl:if>
-                        <xsl:if test="mods:dateIssued[@point='end']">
-                          {mcri18n:translate('OMD.ir.docdetails.metadata.label.end_date')} {mods:dateIssued[@point='end']}
+                        <xsl:if test="$ctx/*[local-name()=$dateX][@point='end']">
+                          {mcri18n:translate('OMD.ir.docdetails.metadata.label.end_date')} {$ctx/*[local-name()=$dateX][@point='end']}
                         </xsl:if>
                         </xsl:variable>
-                        <xsl:if test="mods:dateIssued[not(@*)] != normalize-space($normalized_date)">
+                        <xsl:if test="$ctx/*[local-name()=$dateX][not(@*)] != normalize-space($normalized_date)">
                           <span class="small pl-2">({mcri18n:translate('OMD.ir.docdetails.metadata.label.normalized_date')} {normalize-space($normalized_date)})</span>
                         </xsl:if>
                       </xsl:if>
                     </td>
                   </tr>
                 </xsl:if>
+                </xsl:for-each>
               </xsl:for-each>
             </table></td>
           </tr>
         </xsl:if>
+        </xsl:for-each>
       
         <xsl:if test="mods:originInfo[@eventType='digitization']">
           <tr>
