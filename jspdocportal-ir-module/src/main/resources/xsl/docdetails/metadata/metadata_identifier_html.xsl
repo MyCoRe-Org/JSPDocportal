@@ -28,7 +28,13 @@
     <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
       <xsl:variable name="category" select="mcrclass:category('identifier', 'k10plus')" />
         <tr><th><abbr class="text-nowrap" title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
-            <td><a href="{replace($category/label[@xml:lang='x-portal-url']/@text, '\{0\}',.)}">{.}</a></td>
+            <td><span class="ir-identifier-text">{.}</span></td>
+            <td class="text-right">
+              <a class="ir-identifier-portal text-dark small" title="{mcri18n:translate('OMD.ir.docdetails.metadata.tooltip.identifier')}" 
+                 href="{replace($category/label[@xml:lang='x-portal-url']/@text, '\{0\}',.)}">
+                <i class="fas fa-sliders-h"></i>
+              </a>
+            </td>
         </tr>
    </xsl:for-each>
   </xsl:template>
@@ -43,13 +49,21 @@
            <th><abbr class="text-nowrap" title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
            <td>
              <xsl:choose>
-               <xsl:when test="$category/label[@xml:lang='x-portal-url']">
-                 <a href="{replace($category/label[@xml:lang='x-portal-url']/@text, '\{0\}',.)}">{.}</a>
+               <xsl:when test="$category/label[@xml:lang='x-resolve-url']">
+                 <a class="ir-identifier-resolve" href="{replace($category/label[@xml:lang='x-resolve-url']/@text, '\{0\}',.)}">{.}</a>
                </xsl:when>
                <xsl:otherwise>
-                 {.}
+                 <span class="ir-identifier-text">{.}</span>
                </xsl:otherwise>
              </xsl:choose>
+           </td>
+           <td class="text-right">
+             <xsl:if test="$category/label[@xml:lang='x-portal-url']">
+               <a class="ir-identifier-portal text-dark small" title="{mcri18n:translate('OMD.ir.docdetails.metadata.tooltip.identifier')}" 
+                  href="{replace($category/label[@xml:lang='x-portal-url']/@text, '\{0\}',.)}">
+                 <i class="fas fa-sliders-h"></i>
+               </a>
+             </xsl:if>
            </td>
          </tr>
        </xsl:if>

@@ -47,6 +47,29 @@
   <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/metatags_html.xsl" />
   <link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}modules/shariff_3.2.1/shariff.min.css">
   <script>
+  var resolveDOIMetadataPage = function(doi) {
+     //retrieve DOI Registration Agency as JSON:
+     //[{ "DOI": "10.29085/9781783304868",
+     //    "RA": "Crossref" }]
+     $.ajax({
+	    url: "https://doi.org/doiRA/"+doi,
+	  })
+	  .done(function( json ) {
+	  	if(json[0].RA ==='DataCite'){
+	  	  window.location.assign("https://search.datacite.org/works/"+doi);
+	  	}
+	  	else if(json[0].RA =='Crossref'){
+	  	  window.location.assign("https://search.crossref.org/?from_ui=yes&q="+doi);
+	  	}
+	  	else if(json[0].RA =='mEDRA'){
+	  		window.location.assign("https://www.medra.org/servlet/view?doi="+doi);
+	  	}
+	  	else{
+	  	  window.location.assign("https://doi.org/doiRA/"+doi);
+	  	}
+	  });
+   }
+   
    var urlParam = function(name){
 		 var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
 		 if(results){
