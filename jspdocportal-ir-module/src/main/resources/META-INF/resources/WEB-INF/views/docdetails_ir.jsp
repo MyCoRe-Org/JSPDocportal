@@ -112,7 +112,7 @@
           </div>
           
 		  <div class="row">
-		    <div class="col">
+		    <div id="content_viewer_area" class="col">
 			  <div class="mb-3">
                  <ul id="nav_bar_root" class="nav nav-tabs ir-docdetails-tabs">
                    <x:if select="$doc/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext' or @categid='MCRVIEWER_METS']]">
@@ -177,7 +177,7 @@
                       	   window.addEventListener("load", function(){
 							 if(urlParam('_mcrviewer_start')){
 	                    		//[0] get Javascript object from Jquery object
-	                    		$("#main_navbar")[0].scrollIntoView();
+	                    		$("#content_viewer_area")[0].scrollIntoView();
                     		 }
                   		   });
                          </script>
