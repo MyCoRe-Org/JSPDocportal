@@ -80,27 +80,21 @@ public class MCRPDFDownloadController {
         if (path.length() == 0) {
             return Response.temporaryRedirect(URI.create(request.getContextPath())).build();
         }
-        path = path.replace("%25", "%").replace("%2F", "/");
-        String recordIdentifier = "";
-        if (path.endsWith(".pdf")) {
-            // download file if it exists or show progress html
-            recordIdentifier = path.substring(0, path.lastIndexOf("/"));
-        } else {
-            recordIdentifier = path;
-        }
-        if(!recordIdentifier.contains("/")) {
-            recordIdentifier = recordIdentifier.replaceFirst("_", "/");
-        }
+
+        String recordIdentifier = path.endsWith(".pdf") ?
+            path.substring(0, path.lastIndexOf("/")) : path;
+        recordIdentifier = recordIdentifier.replace("/", "_");
+        
         SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
         SolrQuery query = new SolrQuery();
-        query.setQuery("recordIdentifier:" + recordIdentifier);
+        query.setQuery("recordIdentifier:" + recordIdentifier.replaceFirst("_", "/"));
 
         try {
             QueryResponse response = solrClient.query(query);
             SolrDocumentList solrResults = response.getResults();
 
             if (solrResults.getNumFound() > 0) {
-                String filename = recordIdentifier.replace("/", "_") + ".pdf";
+                String filename = recordIdentifier + ".pdf";
                 model.put("filename",  filename);
 
                 final Path resultPDF = calculateCacheDir().resolve(recordIdentifier).resolve(filename);
