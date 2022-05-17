@@ -319,11 +319,11 @@
             {mcri18n:translate('OMD.ir.docdetails.header.access.closed')} <img style="height:1.5em;padding:0 .25em" src="{$WebApplicationBaseURL}images/logo_Closed_Access.png" />  {mcri18n:translate('OMD.ir.docdetails.header.access')}
         </span>
       </xsl:when> 
-      <xsl:otherwise>
+      <xsl:when test="./mods:classification[@displayLabel='accesscondition'][contains(@valueURI, 'openaccess')]">
         <span class="badge ir-badge-header ir-badge-openaccess">
           {mcri18n:translate('OMD.ir.docdetails.header.access.open')} <img style="height:1.5em;padding:0 .25em" src="{$WebApplicationBaseURL}images/logo_Open_Access.png" /> {mcri18n:translate('OMD.ir.docdetails.header.access')}
         </span>
-      </xsl:otherwise>
+      </xsl:when>
     </xsl:choose>
   </xsl:template>
 
