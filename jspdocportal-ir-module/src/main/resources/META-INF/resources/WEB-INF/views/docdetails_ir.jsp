@@ -48,9 +48,11 @@
   <link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}modules/shariff_3.2.1/shariff.min.css">
   <script>
   var resolveDOIMetadataPage = function(doi) {
-     //retrieve DOI Registration Agency as JSON:
+     <%--
+	 //retrieve DOI Registration Agency as JSON:
      //[{ "DOI": "10.29085/9781783304868",
      //    "RA": "Crossref" }]
+     --%>
      $.ajax({
 	    url: "https://doi.org/doiRA/"+doi,
 	  })
@@ -117,33 +119,33 @@
                  <ul id="nav_bar_root" class="nav nav-tabs ir-docdetails-tabs">
                    <x:if select="$doc/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext' or @categid='MCRVIEWER_METS']]">
 					<li class="nav-item" role="presentation">
-                      <a id="nav_tab_fulltext" class="nav-link" data-toggle="collapse" href="#nav_content_fulltext"><fmt:message key="Browse.Tabs.viewer" /></a>
+                      <a id="nav_tab_fulltext" class="nav-link active" data-toggle="tab" data-target="#nav_content_fulltext" href="#tab_fulltext"><fmt:message key="Browse.Tabs.viewer" /></a>
                     </li>
   				    </x:if>
   				   <x:if select="contains($doc/mycoreobject/@ID, '_bundle_')">
   				   <li class="nav-item" role="presentation">
-                      <a  id="nav_tab_structure" class="nav-link" data-toggle="collapse" href="#nav_content_structure"><fmt:message key="Browse.Tabs.structure" /></a>
+                      <a  id="nav_tab_structure" class="nav-link active" data-toggle="tab" data-target="#nav_content_structure" href="#tab_structure"><fmt:message key="Browse.Tabs.structure" /></a>
                    </li>
 				   </x:if>
                    <x:if select="$doc/mycoreobject/metadata//*[@displayLabel='doctype'][contains(@valueURI, '/doctype#data')]">
                       <li class="nav-item" role="presentation">
-                        <a id="nav_tab_fulltext" class="nav-link" data-toggle="collapse" href="#nav_content_data"><fmt:message key="Browse.Tabs.data" /></a>
+                        <a id="nav_tab_fulltext" class="nav-link active" data-toggle="tab" data-target="#nav_content_data" href="#tab_data"><fmt:message key="Browse.Tabs.data" /></a>
                       </li>
                    </x:if>
 				   <li class="nav-item" role="presentation">
-                      <a id="nav_tab_metadata" class="nav-link" data-toggle="collapse" href="#nav_content_metadata"><fmt:message key="Browse.Tabs.metadata" /></a>
+                      <a id="nav_tab_metadata" class="nav-link" data-toggle="tab" data-target="#nav_content_metadata" href="#tab_metadata"><fmt:message key="Browse.Tabs.metadata" /></a>
                    </li>
 				   <x:if select="$doc/mycoreobject/structure/derobjects/derobject">
 					  <li class="nav-item" role="presentation">
-                        <a id="nav_tab_files" class="nav-link" data-toggle="collapse" href="#nav_content_files"><fmt:message key="Browse.Tabs.files" /></a>
+                        <a id="nav_tab_files" class="nav-link" data-toggle="tab" data-target="#nav_content_files" href="#tab_files"><fmt:message key="Browse.Tabs.files" /></a>
                       </li>
 				   </x:if>
 				  </ul>
 			  </div>
 			
-              <div id="nav_content_root" style="padding-bottom:75px">
+              <div id="nav_content_root" class="tab-content" style="padding-bottom:75px">
 		          <x:if select="$doc/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext' or @categid='MCRVIEWER_METS']]">
-			        <div id="nav_content_fulltext" class="collapse" data-parent="#nav_content_root">
+			        <div id="nav_content_fulltext" class="tab-pane active" data-parent="#nav_content_root">
 				       <x:if select="$doc/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext']]">
                          <c:set var="derid"><x:out select="$doc/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext']]/@xlink:href" /></c:set>
 					      <mcr:hasAccess var="hasAccess" permission="read" mcrid="${derid}" />
@@ -172,20 +174,11 @@
                            <div id="divMCRViewer" style="height:80vh; margin:0px 16px; position:relative;"></div>
                            <search:mcrviewer mcrid="${it.id}" recordIdentifier="${recordidentifier}" doctype="mets" id="divMCRViewer" />
                          </c:if>
-                         <script type="text/javascript">
-
-                      	   window.addEventListener("load", function(){
-							 if(urlParam('_mcrviewer_start')){
-	                    		//[0] get Javascript object from Jquery object
-	                    		$("#content_viewer_area")[0].scrollIntoView();
-                    		 }
-                  		   });
-                         </script>
 				       </x:if>
 			        </div>
 		          </x:if>
 		          <x:if select="contains($doc/mycoreobject/@ID, '_bundle_')">
-			        <div id="nav_content_structure" class="collapse" data-parent="#nav_content_root">
+			        <div id="nav_content_structure" class="tab-pane active" data-parent="#nav_content_root">
 				      <div style="font-size: 85%;min-height:600px">
 			    	    <c:set var="recordIdentifier"><x:out select="$doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier"/></c:set>
                         <c:set var="doctype"><x:out select="substring-after($doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI,'#')"/></c:set>
@@ -196,13 +189,13 @@
 			        </div>
 		          </x:if>
                   <x:if select="$doc/mycoreobject/metadata//*[@displayLabel='doctype'][contains(@valueURI, '/doctype#data')]">
-                    <div id="nav_content_data" class="collapse" data-parent="#nav_content_root">
+                    <div id="nav_content_data" class="tab-pane active" data-parent="#nav_content_root">
                       <div style="font-size: 85%;min-height:600px">
                         <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/download_html.xsl" />                 
                       </div>
                     </div>
                   </x:if>
-		          <div id="nav_content_metadata" class="collapse" data-parent="#nav_content_root">
+		          <div id="nav_content_metadata" class="tab-pane" data-parent="#nav_content_root">
 			        <div class="ir-docdetails-data" style="min-height:600px">
 				       <x:choose>
 				         <x:when select="$doc/mycoreobject/service/servstates/servstate/@categid='deleted'">
@@ -215,7 +208,7 @@
 			        </div>
 		          </div>
 		          <x:if select="$doc/mycoreobject/structure/derobjects/derobject">
-			        <div id="nav_content_files" class="collapse" data-parent="#nav_content_root">
+			        <div id="nav_content_files" class="tab-pane" data-parent="#nav_content_root">
 				      <div style="min-height:600px">
                         <table class="ir-table-docdetails">
                           <tbody>
@@ -230,28 +223,24 @@
 		          </x:if>
 		     </div><%--END: nav_content_root --%>
              <script type="text/javascript">
-	           $(document).ready(function(){
-		          $('#nav_content_root > div').on('shown.bs.collapse', function() {
-		        	  $("a.nav-link[href='#"+ $(this).attr("id") +"']").addClass('active');
-		        	  if($(this).attr('id') == 'nav_content_fulltext'){
-		        		  <%--refresh viewer --%>
-		        		  $('#divMCRViewer').trigger('resize');
-		        	  }
-                  });
-		
-		         $('#nav_content_root > div').on('hidden.bs.collapse', function() {
-		        	 $("a.nav-link[href='#"+ $(this).attr("id") +"']").removeClass("active");
-		         });
-
-		         if(urlParam('_tab')){
-             		var tab = urlParam('_tab');
-             		$('#nav_content_root > div#nav_content_'+tab).addClass('show');
-		         	$('#nav_bar_root > li > a#nav_tab_'+tab).addClass('active');
-         		 }else{
-		         	$('#nav_content_root > div:first-child').addClass('show');
-		         	$('#nav_bar_root > li:first-child a').addClass('active');
-         		 }
-		       });
+               $(window).on('load', function(){
+                 if(urlParam('_mcrviewer_start')){
+                   //[0] get Javascript object from Jquery object
+                   $("#content_viewer_area")[0].scrollIntoView();
+                 }
+               });
+               
+               $(function() {
+                 $('#nav_tab_fulltext').on('shown.bs.tab', function() {
+                   <%--refresh viewer --%>
+                   $('#divMCRViewer').trigger('resize');
+                 });
+                 
+                 var hash = window.location.hash;
+                 if(hash.startsWith('#tab_')){
+                   $('#nav_'+hash.substr(1)).tab('show');
+                 }
+               });
              </script>
           </div>
        </div>
