@@ -55,6 +55,13 @@
             <c:set var="sort_param"><%= ((org.apache.solr.common.util.NamedList<Object>)result.getSolrQueryResponse().getHeader().get("params")).get("sort") %></c:set>
             <c:url var="csv_url" value="${WebApplicationBaseURL}api/v1/search">
               <c:param name="q"><%= ((org.apache.solr.common.util.NamedList<Object>)result.getSolrQueryResponse().getHeader().get("params")).get("q") %></c:param>
+              <%
+                //pageContext is not available in JSP tags -> use jspContext instead
+                jspContext.setAttribute("filterQueries", ((org.apache.solr.common.util.NamedList<Object>)result.getSolrQueryResponse().getHeader().get("params")).get("fq"));
+              %>
+              <c:forEach var="fq" items="${pageScope.filterQueries}">
+                <c:param name="fq">${fq}</c:param>
+              </c:forEach>  
               <c:if test="${sort_param}">
                 <c:param name="sort">${sort_param}</c:param>
               </c:if>
@@ -62,10 +69,18 @@
               <c:param name="wt">csv</c:param>
               <c:param name="fl">${result.csvDownloadFields}</c:param>
             </c:url>
-            <c:set var="download_btn_title"><fmt:message key="Webpage.Searchresult.csvDownload" /></c:set>
-            <a class="ir-btn-download-csv btn btn-outline-primary page-item mr-3" rel="nofollow" href="${csv_url}" download="${result.csvDownloadFilename}" title="${download_btn_title}">
-              <i style="font-size:1.5em" class="fas fa-file-csv"></i>
-            </a>
+            <c:set var="i18n_download"><fmt:message key="Webpage.Searchresult.download" /></c:set>
+            <c:set var="i18n_download_csv_title"><fmt:message key="Webpage.Searchresult.csvDownload.title" /></c:set>
+            
+            <div id="ir-drownload-dropdown" class="dropdown float-left">
+              <button class="btn btn-outline-primary page-item mr-3 dropdown-toggle" href="#" type="button" id="dropdownMenuDownload" 
+                 title="${i18n_download}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                 <i class="fas fa-download"></i>
+               </button>
+               <div class="dropdown-menu" aria-labelledby="dropdownMenuDownload">
+                <a class="dropdown-item" rel="nofollow" href="${csv_url}" download="${result.csvDownloadFilename}" title="${i18n_download_csv_title}"><fmt:message key="Webpage.Searchresult.csvDownload" /></a>
+              </div>
+            </div>
           </c:if>
 
 		<c:if test="${fn:length(result.backURL) >0}">
