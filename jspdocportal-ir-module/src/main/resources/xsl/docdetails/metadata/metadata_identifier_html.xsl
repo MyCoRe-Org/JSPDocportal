@@ -32,7 +32,7 @@
             <td class="text-right">
               <a class="ir-identifier-portal text-dark small" title="{mcri18n:translate('OMD.ir.docdetails.metadata.tooltip.identifier')}" 
                  href="{replace($category/label[@xml:lang='x-portal-url']/@text, '\{0\}',.)}">
-                <i class="fas fa-sliders-h"></i>
+                <i class="fas fa-external-link-alt"></i>
               </a>
             </td>
         </tr>
@@ -61,7 +61,7 @@
              <xsl:if test="$category/label[@xml:lang='x-portal-url']">
                <a class="ir-identifier-portal text-dark small" title="{mcri18n:translate('OMD.ir.docdetails.metadata.tooltip.identifier')}" 
                   href="{replace($category/label[@xml:lang='x-portal-url']/@text, '\{0\}',.)}">
-                 <i class="fas fa-sliders-h"></i>
+                 <i class="fas fa-external-link-alt"></i>
                </a>
              </xsl:if>
            </td>
