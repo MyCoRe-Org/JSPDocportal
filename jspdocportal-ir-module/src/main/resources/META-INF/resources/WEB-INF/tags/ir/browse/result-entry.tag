@@ -76,11 +76,11 @@
             <fmt:message key="OMD.ir.docdetails.header.access.closed" /> <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Closed_Access.png"/> <fmt:message key="OMD.ir.docdetails.header.access" />
           </span>
         </c:when>
-        <c:otherwise>
+        <c:when test="${fn:contains(entry.data['ir.accesscondition_class.facet'], 'openaccess')}">
           <span class="badge ir-badge ir-badge-openaccess">
             <fmt:message key="OMD.ir.docdetails.header.access.open" /> <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Open_Access.png"/> <fmt:message key="OMD.ir.docdetails.header.access" />
           </span>
-        </c:otherwise>
+        </c:when>
       </c:choose>
       
       <c:if test="${fn:contains(entry.data['ir.contains_msg.facet'], 'ocr')}">
