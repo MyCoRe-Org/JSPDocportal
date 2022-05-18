@@ -142,7 +142,7 @@
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:variable>
-              <field name="ir.originInfo.result">{if (normalize-space($publisherPlace)='') then string-join((./mods:edition, ./mods:dateIssued[not(@*)], ./mods:dateCreated[not(@*)]), ', ') else string-join((./mods:edition, $publisherPlace, ./mods:dateIssued[not(@*)], ./mods:dateCreated[not(@*)]), ', ')}</field>
+              <field name="ir.originInfo.result">{if (normalize-space($publisherPlace)='') then normalize-space(string-join((./mods:edition, ./mods:dateIssued[not(@*)], ./mods:dateCreated[not(@*)]), ', ')) else normalize-space(string-join((./mods:edition, $publisherPlace, ./mods:dateIssued[not(@*)], ./mods:dateCreated[not(@*)]), ', '))}</field>
           </xsl:when>
           <xsl:otherwise>
             <field name="ir.originInfo.result">{string-join((./mods:edition, ./mods:publisher, ./mods:dateIssued[not(@*)], ./mods:dateCreated[not(@*)]), ', ')}</field>
