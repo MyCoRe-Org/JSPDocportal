@@ -24,6 +24,8 @@
     <link href="${iviewBaseURL}css/default.css" type="text/css" rel="stylesheet">
     <script src="${iviewBaseURL}js/iview-client-base.js"></script>
     <script src="${iviewBaseURL}js/iview-client-frame.js"></script>
+    
+    
 <c:if test="${doctype eq 'pdf' }">
     <script src="${iviewBaseURL}js/iview-client-pdf.js"></script>
     <script src="${iviewBaseURL}js/lib/pdf.js"></script>
@@ -82,8 +84,8 @@
                 		fitWidth: true
                 	},
                 	overview:{
-                		enabled:true,
-                		minVisibleSize: 600
+                		enabled: true,
+                		minVisibleSize: 9999
                 	}
                 },
                 chapter: {
@@ -172,7 +174,7 @@
                 	},
                 	overview:{
                 		enabled:true,
-                		minVisibleSize: 600
+                		minVisibleSize: 9999
                 	}
                 },
                 imageOverview : {
