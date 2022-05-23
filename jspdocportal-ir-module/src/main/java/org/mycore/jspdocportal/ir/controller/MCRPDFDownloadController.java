@@ -97,7 +97,7 @@ public class MCRPDFDownloadController {
                 String filename = recordIdentifier + ".pdf";
                 model.put("filename",  filename);
 
-                final Path resultPDF = calculateCacheDir().resolve(recordIdentifier).resolve(filename);
+                final Path resultPDF = HashedDirectoryStructure.createOutputDirectory(calculateCacheDir(), recordIdentifier).resolve(filename);
                 boolean ready = Files.exists(resultPDF);
                 model.put("ready",  ready);
 
@@ -164,7 +164,7 @@ public class MCRPDFDownloadController {
 
 
         model.put("progress",  getProgress(servletContext, recordIdentifier));
-        model.put("recordIdentifier",  recordIdentifier.replace("/", "_"));
+        model.put("recordIdentifier", recordIdentifier);
     
         Viewable v = new Viewable("/pdfdownload", model);
         return Response.ok(v).build();
