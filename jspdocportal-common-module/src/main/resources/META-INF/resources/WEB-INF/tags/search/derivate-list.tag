@@ -123,10 +123,15 @@
                         out.write("  </li>");
                     }
                 }
-                out.write("      </ul>");
-                out.write("    </td>");
-                out.write("  </tr>");
 			}
+            catch(Exception e){
+                out.write("  <li><span class=\"alert alert-danger\">");
+                out.write("      <i class=\"fas fa-exclamation-triangle\"></i> "+e.getMessage());
+                out.write("  </span></li>");
+            }
+            out.write("      </ul>");
+            out.write("    </td>");
+            out.write("  </tr>");
         }
 	}
 }
