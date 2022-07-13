@@ -3,9 +3,19 @@
 
   <bean id="processEngineConfiguration"
     class="org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration">
-    <!-- Database schema needs to be set at all 3 properties: jdbcURL, databaseSchema, databaseTablePrefix 
-         Pay attention: databaseTablePrefix = databaseSchema + '.' -->
 
+    <!-- H2 (Test and Debugging) -->
+    <!-- Please copy the JAR file for H2 version 1.4.199 (last version tested for compatibility with MyCoRe)
+         from https://repo1.maven.org/maven2/com/h2database/h2/1.4.199/h2-1.4.199.jar
+         into /lib folder of the configuration directory -->
+    <property name="jdbcDriver" value="org.h2.Driver" />
+    <property name="jdbcUrl" value="jdbc:h2:file:c:/Users/mcradmin/AppData/Local/MyCoRe/myapp/data/h2/bpm" />
+    
+    <!--  PostgreSQL -->
+    <!-- Database schema needs to be set in all 3 properties: 
+           jdbcURL, databaseSchema, databaseTablePrefix 
+         Pay attention: databaseTablePrefix = databaseSchema + '.' -->
+    <!-- 
     <property name="jdbcUrl" value="jdbc:postgresql://127.0.0.1/mycoredb?currentSchema=myapp_bpm" />
     <property name="databaseSchema" value="myapp_bpm" />
     <property name="databaseTablePrefix" value="myapp_bpm." />
@@ -13,7 +23,8 @@
     <property name="jdbcDriver" value="org.postgresql.Driver" />
     <property name="jdbcUsername" value="mcradmin" />
     <property name="jdbcPassword" value="***" />
-
+    -->
+    
     <property name="databaseSchemaUpdate" value="true" />
     <property name="jobExecutorActivate" value="false" />
 
