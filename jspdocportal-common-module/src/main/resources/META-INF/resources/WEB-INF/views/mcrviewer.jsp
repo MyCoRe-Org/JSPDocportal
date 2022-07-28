@@ -208,6 +208,7 @@
 				        	   id: "addOns2",
 		                       type: "group"
 	                       },
+	                     <c:if test="${not(fn:contains(mcrid, '_object_'))}">
 				           {
 	                    	   id : "btn_pdf_download",
 	                    	   type : "button",
@@ -219,6 +220,7 @@
 	                       	   icon: "download",
 	                    	   inGroup: "addOns"
 				           },
+				         </c:if>
 		                   {
 		                       id : "btn_page_download",
 		                       type : "button",
