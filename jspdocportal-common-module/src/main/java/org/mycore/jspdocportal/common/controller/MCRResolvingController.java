@@ -379,7 +379,7 @@ public class MCRResolvingController  {
                 if (derMetaLink.getClassifications().size() > 0 && 
                     "MCRVIEWER_METS".equals(derMetaLink.getClassifications().get(0).getID())) {
                     MCRObjectID derID = derMetaLink.getXLinkHrefID();
-                    Path root = MCRPath.getPath(derID.toString(), "/");
+                    Path root = MCRPath.getRootPath(derID.toString());
                     try (DirectoryStream<Path> ds = Files.newDirectoryStream(root)) {
                         for (Path p : ds) {
                             if (Files.isRegularFile(p) && p.getFileName().toString().endsWith(".mets.xml")) {
@@ -475,7 +475,7 @@ public class MCRResolvingController  {
                 if (derMetaLink.getClassifications().size() > 0 && 
                     "DV_METS".equals(derMetaLink.getClassifications().get(0).getID())) {
                     MCRObjectID derID = derMetaLink.getXLinkHrefID();
-                    Path root = MCRPath.getPath(derID.toString(), "/");
+                    Path root = MCRPath.getRootPath(derID.toString());
                     try (DirectoryStream<Path> ds = Files.newDirectoryStream(root)) {
                         for (Path p : ds) {
                             if (Files.isRegularFile(p) && p.getFileName().toString().endsWith(".mets.xml")) {

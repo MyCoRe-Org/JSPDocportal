@@ -443,7 +443,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                 if (MCRMetadataManager.exists(derIDObj)) {
                     //disabled for new fact-based access system
                     //ruleMap = MCRBPMNUtils.getAccessRulesMap(derID);
-                    MCRBPMNUtils.deleteDirectoryContent(MCRPath.getPath(derID, "/"));
+                    MCRBPMNUtils.deleteDirectoryContent(MCRPath.getRootPath(derID));
                     MCRDerivateCommands.updateFromFile(filename, false);
                 } else {
                     MCRDerivateCommands.loadFromFile(filename, false);

@@ -262,7 +262,7 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
             for (MCRMetaLinkID derMetaLink : o.getStructure().getDerivates()) {
                 if ("METS".equals(derMetaLink.getXLinkTitle()) || "DV_METS".equals(derMetaLink.getXLinkTitle())) {
                     MCRObjectID derID = derMetaLink.getXLinkHrefID();
-                    Path root = MCRPath.getPath(derID.toString(), "/");
+                    Path root = MCRPath.getRootPath(derID.toString());
                     try (DirectoryStream<Path> ds = Files.newDirectoryStream(root)) {
                         for (Path p : ds) {
                             if (Files.isRegularFile(p) && p.getFileName().toString().endsWith(".mets.xml")) {
@@ -391,7 +391,7 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
                 if (derMetaLink.getClassifications().size() > 0 && 
                     "MCRVIEWER_METS".equals(derMetaLink.getClassifications().get(0).getID())) {
                     MCRObjectID derID = derMetaLink.getXLinkHrefID();
-                    Path root = MCRPath.getPath(derID.toString(), "/");
+                    Path root = MCRPath.getRootPath(derID.toString());
                     try (DirectoryStream<Path> ds = Files.newDirectoryStream(root)) {
                         for (Path p : ds) {
                             if (Files.isRegularFile(p) && p.getFileName().toString().endsWith(".mets.xml")) {
