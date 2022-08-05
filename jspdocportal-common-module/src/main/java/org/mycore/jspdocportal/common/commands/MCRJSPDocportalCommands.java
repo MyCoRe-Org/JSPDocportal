@@ -185,7 +185,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                 String derID = derivate.getXLinkHref();
                 File subdir = new File(dirname, mcrObj.getId().toString());
                 subdir.mkdir();
-                MCRDerivateCommands.export(derID, subdir.getPath(), null);
+                MCRDerivateCommands.exportWithStylesheet(derID, subdir.getPath(), null);
             }
 
             LOGGER.info("Object " + id.toString() + " saved to " + xmlOutput.getCanonicalPath() + ".");
