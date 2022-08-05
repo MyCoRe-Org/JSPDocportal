@@ -36,14 +36,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.GET;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -58,13 +50,21 @@ import org.mycore.jspdocportal.ir.pdfdownload.PDFGenerator;
 import org.mycore.jspdocportal.ir.pdfdownload.PDFGeneratorService;
 import org.mycore.solr.MCRSolrClientFactory;
 
-@javax.ws.rs.Path("/do/pdfdownload")
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.StreamingOutput;
+
+@jakarta.ws.rs.Path("/do/pdfdownload")
 public class MCRPDFDownloadController {
    
     private static final Logger LOGGER = LogManager.getLogger(MCRPDFDownloadController.class);
 
     @GET
-    @javax.ws.rs.Path("recordIdentifier/{path:.*}")
+    @jakarta.ws.rs.Path("recordIdentifier/{path:.*}")
     public Response get(@Context HttpServletRequest request, @Context ServletContext servletContext) {
         HashMap<String, Object> model = new HashMap<>();
         

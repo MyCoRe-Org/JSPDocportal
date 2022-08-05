@@ -25,8 +25,6 @@ package org.mycore.jspdocportal.common.taglibs;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.SimpleTagSupport;
 import javax.xml.transform.TransformerFactory;
 
 import org.apache.logging.log4j.LogManager;
@@ -38,6 +36,9 @@ import org.mycore.common.content.transformer.MCRXSLTransformer;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.w3c.dom.Document;
+
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.tagext.SimpleTagSupport;
 
 /**
  * This class will add namespace declarations (prefix-uri pairs) to the XPathUtil class

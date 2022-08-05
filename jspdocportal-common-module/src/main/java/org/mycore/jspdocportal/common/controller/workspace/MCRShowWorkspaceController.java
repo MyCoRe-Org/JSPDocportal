@@ -13,11 +13,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
 import javax.xml.transform.TransformerFactory;
 
 import org.apache.commons.lang.StringUtils;
@@ -61,7 +56,13 @@ import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserManager;
 
-@javax.ws.rs.Path("/do/workspace/tasks")
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.Response;
+
+@jakarta.ws.rs.Path("/do/workspace/tasks")
 public class MCRShowWorkspaceController {
     private static Logger LOGGER = LogManager.getLogger(MCRShowWorkspaceController.class);
 

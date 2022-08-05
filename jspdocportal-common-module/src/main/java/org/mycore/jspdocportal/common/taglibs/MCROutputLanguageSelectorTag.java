@@ -23,20 +23,18 @@
 
 package org.mycore.jspdocportal.common.taglibs;
 
-import static javax.servlet.jsp.PageContext.PAGE_SCOPE;
-
 import java.io.IOException;
 import java.util.Enumeration;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspContext;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.JspFragment;
-
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.jspdocportal.common.MCRSessionInitializationFilter;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.jsp.JspContext;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspWriter;
+import jakarta.servlet.jsp.PageContext;
+import jakarta.servlet.jsp.tagext.JspFragment;
 
 /**
  * <p>Tag that supports rendering the language selector. See below for two usage examples</p>
@@ -142,7 +140,7 @@ public class MCROutputLanguageSelectorTag extends MCRAbstractTag {
                 first = false;
             }
 
-            context.setAttribute(var, lv, PAGE_SCOPE);
+            context.setAttribute(var, lv, PageContext.PAGE_SCOPE);
             body.invoke(out);
         }
     }

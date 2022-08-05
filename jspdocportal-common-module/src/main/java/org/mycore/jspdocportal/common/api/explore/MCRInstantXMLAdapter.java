@@ -20,7 +20,7 @@ package org.mycore.jspdocportal.common.api.explore;
 
 import java.time.Instant;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * an XmlAdapter which maps an Instant object to the proper string representation

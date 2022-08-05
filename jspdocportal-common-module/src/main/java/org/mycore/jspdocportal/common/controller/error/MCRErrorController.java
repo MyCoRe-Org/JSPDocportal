@@ -3,15 +3,15 @@ package org.mycore.jspdocportal.common.controller.error;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-
 import org.glassfish.jersey.server.mvc.Viewable;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.services.i18n.MCRTranslation;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.Response;
 
 @Path("/do/error")
 public class MCRErrorController {

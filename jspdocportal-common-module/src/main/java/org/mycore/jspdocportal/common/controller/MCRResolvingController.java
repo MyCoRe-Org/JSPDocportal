@@ -36,14 +36,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.GET;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -74,6 +66,14 @@ import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.MCRSolrUtils;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
+
 
 /**
  * Resolver vor different identifiers 
@@ -82,7 +82,7 @@ import org.mycore.solr.MCRSolrUtils;
  * @see org.mycore.frontend.servlets.MCRServlet
  */
 
-@javax.ws.rs.Path("/resolve/{path: .*}")
+@jakarta.ws.rs.Path("/resolve/{path: .*}")
 public class MCRResolvingController  {
     private static Logger LOGGER = LogManager.getLogger(MCRResolvingController.class);
     

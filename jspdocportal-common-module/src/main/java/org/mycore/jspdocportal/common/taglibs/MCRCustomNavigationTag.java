@@ -1,19 +1,18 @@
 package org.mycore.jspdocportal.common.taglibs;
 
-import static javax.servlet.jsp.PageContext.PAGE_SCOPE;
-
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.servlet.jsp.JspContext;
-import javax.servlet.jsp.JspException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.jspdocportal.common.navigation.model.NavigationItem;
 import org.mycore.jspdocportal.common.navigation.model.NavigationObject;
+
+import jakarta.servlet.jsp.JspContext;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.PageContext;
 
 /**
  * <p>
@@ -72,7 +71,7 @@ public class MCRCustomNavigationTag extends MCRAbstractNavigationTag {
         if (nav.getChildren().size() == 0) {
             return;
         }
-        context.setAttribute(var, getNavigation(nav), PAGE_SCOPE);
+        context.setAttribute(var, getNavigation(nav), PageContext.PAGE_SCOPE);
 
     }
 

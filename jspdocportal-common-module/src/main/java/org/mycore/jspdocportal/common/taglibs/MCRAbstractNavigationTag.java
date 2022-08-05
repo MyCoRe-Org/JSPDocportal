@@ -26,8 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.servlet.jsp.PageContext;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,6 +34,8 @@ import org.mycore.jspdocportal.common.model.Navigations;
 import org.mycore.jspdocportal.common.navigation.model.Navigation;
 import org.mycore.jspdocportal.common.navigation.model.NavigationItem;
 import org.mycore.jspdocportal.common.navigation.model.NavigationObject;
+
+import jakarta.servlet.jsp.PageContext;
 
 /**
  * Even though this class extends the SimpleTagSupport class,

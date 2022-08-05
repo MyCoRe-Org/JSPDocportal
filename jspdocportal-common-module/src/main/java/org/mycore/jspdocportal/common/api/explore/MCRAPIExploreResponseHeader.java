@@ -17,10 +17,10 @@
  */
 package org.mycore.jspdocportal.common.api.explore;
 
-import javax.xml.bind.annotation.XmlType;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * The header object of a REST /explore response object

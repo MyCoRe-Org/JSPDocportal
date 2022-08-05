@@ -26,9 +26,6 @@ package org.mycore.jspdocportal.common.taglibs;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
-
 import org.jdom2.Document;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
@@ -46,6 +43,9 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.user2.MCRUserManager;
+
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspWriter;
 
 /**
  * <p>Tag that displays a hamburger menu for editing an object in workspace</p>

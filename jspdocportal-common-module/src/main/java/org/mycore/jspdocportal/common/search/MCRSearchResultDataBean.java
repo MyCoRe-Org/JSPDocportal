@@ -32,8 +32,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.collections4.map.LRUMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -51,6 +49,8 @@ import org.jdom2.Document;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.solr.MCRSolrClientFactory;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * bean that holds searchresult data

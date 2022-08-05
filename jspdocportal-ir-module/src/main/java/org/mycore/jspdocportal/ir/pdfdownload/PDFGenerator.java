@@ -36,8 +36,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.servlet.ServletContext;
-
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
@@ -62,6 +60,8 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfWriter;
+
+import jakarta.servlet.ServletContext;
 
 /**
  * use PDFGeneratorService to run (ensures proper shutdown)

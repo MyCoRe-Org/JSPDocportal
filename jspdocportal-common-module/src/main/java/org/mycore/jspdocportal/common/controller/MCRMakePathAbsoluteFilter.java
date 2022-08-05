@@ -20,11 +20,11 @@ package org.mycore.jspdocportal.common.controller;
 import java.io.IOException;
 import java.net.URI;
 
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.container.PreMatching;
-
 import org.glassfish.jersey.server.ContainerRequest;
+
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.container.ContainerRequestFilter;
+import jakarta.ws.rs.container.PreMatching;
 
 /**
  * This Filter overrides the base uri of the Jersey RequestContext with its parent uri.

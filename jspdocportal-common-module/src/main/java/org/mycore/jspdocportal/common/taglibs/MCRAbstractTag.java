@@ -25,12 +25,12 @@ package org.mycore.jspdocportal.common.taglibs;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import javax.servlet.jsp.tagext.SimpleTagSupport;
-
 import org.apache.commons.lang3.StringUtils;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.services.i18n.MCRTranslation;
+
+import jakarta.servlet.jsp.tagext.SimpleTagSupport;
 
 /**
  * Even though this class extends the SimpleTagSupport class, it is not meant to use it as one.
