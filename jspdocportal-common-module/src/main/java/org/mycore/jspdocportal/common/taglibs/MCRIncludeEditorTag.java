@@ -2,12 +2,7 @@ package org.mycore.jspdocportal.common.taglibs;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.net.URL;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.SimpleTagSupport;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -27,6 +22,10 @@ import org.mycore.common.content.MCRURLContent;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xsl.MCRParameterCollector;
 import org.xml.sax.SAXException;
+
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.PageContext;
+import jakarta.servlet.jsp.tagext.SimpleTagSupport;
 
 public class MCRIncludeEditorTag extends SimpleTagSupport {
     private static Logger logger = LogManager.getLogger(MCRIncludeEditorTag.class);
@@ -54,8 +53,6 @@ public class MCRIncludeEditorTag extends SimpleTagSupport {
         StringWriter out = new StringWriter();
 
         try {
-            HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
-            URL editorXML = getClass().getResource(editorPath);
             MCRContent editorContent = new MCRURLContent(getClass().getResource(editorPath));
             Document xml = editorContent.asXML();
             // TODO use MCRStaticXEditorFileServlet.doExpandEditorElements
