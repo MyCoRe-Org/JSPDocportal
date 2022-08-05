@@ -8,7 +8,7 @@
   </parent>
   <groupId>org.mycore.jspdocportal</groupId>
   <artifactId>jspdocportal-parent</artifactId>
-  <version>2021.06-SNAPSHOT</version>
+  <version>2022.06-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>JSPDocportal</name>
   <description>JSP based front-end for MyCoRe Repositories</description>
@@ -24,7 +24,7 @@
       <dependency>
         <groupId>org.mycore</groupId>
         <artifactId>mycore-application-starter</artifactId>
-        <version>2021.06.2-SNAPSHOT</version>
+        <version>2022.06.0-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
