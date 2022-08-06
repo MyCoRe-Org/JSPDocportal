@@ -38,7 +38,7 @@ import jakarta.ws.rs.core.Response;
  * @author Robert Stephan
  */
 
-@javax.ws.rs.Path("/resolve")
+@jakarta.ws.rs.Path("/resolve")
 public class MCRLegacyResolvingController {
     @GET
     public Response doGet(@PathParam("path") String uri, @Context HttpServletRequest request) {
