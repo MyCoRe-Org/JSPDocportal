@@ -23,12 +23,9 @@
 package org.mycore.jspdocportal.common.taglibs;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.taglibs.standard.tag.common.xml.JSTLXPathNamespaceContext;
 
 import jakarta.servlet.jsp.JspException;
 import jakarta.servlet.jsp.tagext.SimpleTagSupport;
@@ -65,7 +62,14 @@ public class MCRSetNamespaceTag extends SimpleTagSupport {
         this.uri = uri;
     }
 
-    /* Sun Glassfish implementaton  */
+    public void doTag() throws JspException, IOException {
+        LOGGER.fatal("The tag <mcr:setNamespace> is currently not implemented");
+    }
+    
+    /* Sun Glassfish implementation  */
+    
+    // TODO Update to the current implementation!!
+    /*
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void doTag() throws JspException, IOException {
         try {
@@ -74,11 +78,14 @@ public class MCRSetNamespaceTag extends SimpleTagSupport {
             // private static JSTLXPathNamespaceContext jstlXPathNamespaceContext = null;
             Field field = c_XPathUtil.getDeclaredField("jstlXPathNamespaceContext");
             field.setAccessible(true);
-            JSTLXPathNamespaceContext nsContext = (JSTLXPathNamespaceContext) field.get(null);
-            if (nsContext == null) {
-                nsContext = new JSTLXPathNamespaceContext();
-                field.set(null, nsContext);
-            }
+          
+       
+            //
+            // JSTLXPathNamespaceContext nsContext = (JSTLXPathNamespaceContext) field.get(null);
+            // if (nsContext == null) {
+            //    nsContext = new JSTLXPathNamespaceContext();
+            //    field.set(null, nsContext);
+            // }
 
             // JSTLXPathNamespaceContext
             // protected void addNamespace(String prefix, String uri ) {
@@ -92,7 +99,7 @@ public class MCRSetNamespaceTag extends SimpleTagSupport {
             LOGGER.error("Something went wrong adding the namespace", e);
         }
     }
-
+    */
     /* Apache Tomcat Taglib implementation  */
     /*
     @SuppressWarnings("unchecked")
