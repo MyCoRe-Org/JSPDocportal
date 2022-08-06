@@ -1,9 +1,10 @@
 package org.mycore.jspdocportal.common.bpmn;
 
-import java.util.Optional;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Properties;
 
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.SimpleEmail;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.camunda.bpm.engine.ProcessEngine;
@@ -14,11 +15,21 @@ import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple.MCRWorkflowMgr;
 
+import jakarta.mail.Authenticator;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
+
 public class MCRBPMNMgr {
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(MCRBPMNMgr.class);
 
     public static final String WF_VAR_MODE = "wfMode";
-    
+
     public static final String WF_VAR_HEADLINE = "wfHeadline";
 
     public static final String WF_VAR_PROJECT_ID = "projectID";
@@ -90,58 +101,67 @@ public class MCRBPMNMgr {
         return mgr;
     }
 
-    public static SimpleEmail createNewEmailFromConfig() {
-        SimpleEmail email = new SimpleEmail();
-        email.setCharset("UTF-8");
+    public static void sendMail(List<InternetAddress> to, String subject, String body, List<InternetAddress> cc,
+        List<InternetAddress> replyTo) {
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        MCRConfiguration2.getString("MCR.Workflow.Email.MailServerSslProtocols")
+            .ifPresent(p -> props.put("mail.smtp.ssl.protocols", p));
 
-        Optional<String> host = MCRConfiguration2.getString("MCR.Workflow.Email.MailServerHost");
-        if (host.isEmpty()) {
-            LOGGER.error("Email is not configured!");
-            return null;
-        }
-        email.setHostName(host.get());
-        Optional<Integer> port = MCRConfiguration2.getInt("MCR.Workflow.Email.MailServerPort");
-        if (port.isPresent()) {
-            try {
-                email.setSmtpPort(port.get());
-            } catch (NumberFormatException nfe) {
-                LOGGER.debug(nfe);
-            }
-        }
-        email.setSSLOnConnect(MCRConfiguration2.getBoolean("MCR.Workflow.Email.MailServerUseSSL").orElse(false));
-        email.setStartTLSEnabled(MCRConfiguration2.getBoolean("MCR.Workflow.Email.MailServerUseTLS").orElse(false));
-        email.setStartTLSRequired(MCRConfiguration2.getBoolean("MCR.Workflow.Email.MailServerUseTLS").orElse(false));
-        
-        Optional<String> user = MCRConfiguration2.getString("MCR.Workflow.Email.MailServerUsername");
-        Optional<String> pw = MCRConfiguration2.getString("MailServerPassword");
-        if (user.isPresent() && pw.isPresent()) {
-            email.setAuthentication(user.get(), pw.get());
-        }
+        props.put("mail.smtp.host", MCRConfiguration2.getString("MCR.Workflow.Email.MailServerHost").get());
+        props.put("mail.smtp.port", MCRConfiguration2.getInt("MCR.Workflow.Email.MailServerPort").get());
+
+        //create the Session object
+        Session session = Session.getInstance(props,
+            new Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(
+                        MCRConfiguration2.getString(" MCR.Workflow.Email.MailServerUsername").get(),
+                        MCRConfiguration2.getString("MCR.Workflow.Email.MailServerPassword").get());
+                }
+            });
 
         try {
-            Optional<String> emailFrom = MCRConfiguration2.getString("MCR.Workflow.Email.From");
-            if (emailFrom.isPresent()) {
-                Optional<String> emailSender = MCRConfiguration2.getString("MCR.Workflow.Email.Sender");
+            //create a MimeMessage object
+            Message message = new MimeMessage(session);
 
-                if (emailSender.isPresent()) {
-                    email.setFrom(emailFrom.get(), emailSender.get());
-                } else {
-                    email.setFrom(emailFrom.get());
-                }
+            //set From:
+            InternetAddress addrFrom = new InternetAddress();
+            MCRConfiguration2.getString("MCR.Workflow.Email.From")
+                .ifPresent(from -> addrFrom.setAddress(from));
+            MCRConfiguration2.getString("MCR.Workflow.Email.Sender")
+                .ifPresent(name -> {
+                    try {
+                        addrFrom.setPersonal(name, StandardCharsets.UTF_8.toString());
+                    } catch (UnsupportedEncodingException e) {
+                        // does not happen
+                    }
+                });
+            message.setFrom(addrFrom);
+
+            //set To:
+            message.setRecipients(Message.RecipientType.TO, to.toArray(InternetAddress[]::new));
+
+            //set CC:
+            if (!cc.isEmpty()) {
+                message.setRecipients(Message.RecipientType.CC, cc.toArray(InternetAddress[]::new));
             }
-            Optional<String> emailCCs = MCRConfiguration2.getString("MCR.Workflow.Email.CC");
-            if (emailCCs.isPresent()) {
-                for (String s : emailCCs.get().split(",")) {
-                    email.addCc(s.trim());
-                }
+            if (replyTo.isEmpty()) {
+                message.setReplyTo(replyTo.toArray(InternetAddress[]::new));
             }
-    		if(email.isStartTLSEnabled()) {
-				email.getMailSession().getProperties().put("mail.smtp.ssl.protocols", "TLSv1.2");
-			}
-        } catch (EmailException e) {
-            LOGGER.error(e);
+
+            //set email subject field
+            message.setSubject(subject);
+
+            //set the content of the email message
+            message.setText(body);
+
+            //send the email message
+            Transport.send(message);
+
+        } catch (MessagingException e) {
+            throw new MCRException("Email could not be sent!", e);
         }
-
-        return email;
     }
 }

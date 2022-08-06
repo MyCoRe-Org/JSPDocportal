@@ -3,14 +3,20 @@ package org.mycore.jspdocportal.common.controller;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import jakarta.mail.internet.AddressException;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.glassfish.jersey.server.mvc.Viewable;
+import org.mycore.common.config.MCRConfiguration2;
+import org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr;
+import org.mycore.services.i18n.MCRTranslation;
+
 import jakarta.mail.internet.InternetAddress;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.DefaultValue;
@@ -23,16 +29,6 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.SimpleEmail;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.glassfish.jersey.server.mvc.Viewable;
-import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr;
-import org.mycore.services.i18n.MCRTranslation;
-
 /**
  * 
  * TODO cleanup which properties can be changed from form and which can be modified in form!
@@ -40,7 +36,7 @@ import org.mycore.services.i18n.MCRTranslation;
  *
  */
 @Path("/do/feedback")
-public class MCRSendFeedbackController{
+public class MCRSendFeedbackController {
     private static Logger LOGGER = LogManager.getLogger(MCRSendFeedbackController.class);
 
     private static final Pattern EMAIL_PATTERN = Pattern
@@ -51,7 +47,7 @@ public class MCRSendFeedbackController{
     //&topicHeader=Kr%C3%BCger%2C+Friedrich+Karl+von
 
     @GET
-    public Response defaultRes(@Context HttpServletRequest request, 
+    public Response defaultRes(@Context HttpServletRequest request,
         @QueryParam("topicURL") String topicURL, @QueryParam("topicHeader") String topicHeader,
         @QueryParam("returnURL") @DefaultValue("") String returnURL) {
         Map<String, Object> model = new HashMap<>();
@@ -65,15 +61,14 @@ public class MCRSendFeedbackController{
         model.put("topicURL", topicURL);
         model.put("topicHeader", topicHeader);
         model.put("returnURL", returnURL);
-        model.put("csrfToken",  csrfToken); 
-       
+        model.put("csrfToken", csrfToken);
 
         return Response.ok(v).build();
     }
 
     @POST
     public Response doSend(@Context HttpServletRequest request,
-        @FormParam("fromName") String fromName,
+        @FormParam("fromName") @DefaultValue("") String fromName,
         @FormParam("fromEmail") String fromEmail,
         @FormParam("topicURL") String topicURL,
         @FormParam("topicHeader") String topicHeader,
@@ -93,11 +88,8 @@ public class MCRSendFeedbackController{
             return Response.status(Status.UNAUTHORIZED).entity(v).build();
         }
 
-        SimpleEmail email = MCRBPMNMgr.createNewEmailFromConfig();
         try {
-            if (StringUtils.isNotBlank(message)) {
-                email.setMsg(message);
-            } else {
+            if (StringUtils.isBlank(message)) {
                 messages.add(MCRTranslation.translate("WF.messages.feedback.noMessage"));
             }
             boolean isEmailValid = true;
@@ -108,11 +100,12 @@ public class MCRSendFeedbackController{
                 }
             }
 
-            if (StringUtils.isNotBlank(fromName)) {
-                if (StringUtils.isNotBlank(fromEmail)) {
-                    email.setCc(Arrays.asList(new InternetAddress[] { new InternetAddress(fromEmail, fromName) }));
-                    email.setReplyTo(Arrays.asList(new InternetAddress[] { new InternetAddress(fromEmail) }));
-                }
+            List<InternetAddress> cc = new ArrayList<>();
+            List<InternetAddress> replyTo = new ArrayList<>();
+
+            if (StringUtils.isNotBlank(fromName) && StringUtils.isNotBlank(fromEmail)) {
+                cc.add(new InternetAddress(fromEmail, fromName));
+                replyTo.add(new InternetAddress(fromEmail, fromName));
             } else {
                 messages.add(MCRTranslation.translate("WF.messages.feedback.noName"));
             }
@@ -122,56 +115,50 @@ public class MCRSendFeedbackController{
                     .orElse("Feedbackformular zu {0}");
                 subject = subject.replace("{0}", topicHeader);
 
-                StringBuilder sbMsg = new StringBuilder();
-                sbMsg.append(subject);
-                sbMsg.append("\n" + StringUtils.repeat("=", subject.length()));
-                sbMsg.append("\n");
-                sbMsg.append("\nAngaben zu:");
-                sbMsg.append("\n-----------");
-                sbMsg.append("\n" + topicHeader);
-                sbMsg.append("\n(" + topicURL + ")");
-                sbMsg.append("\n");
-                sbMsg.append("\nAbsender:");
-                sbMsg.append("\n---------");
-                sbMsg.append("\n" + fromName);
+                StringBuilder sbMailBody = new StringBuilder();
+                sbMailBody.append(subject);
+                sbMailBody.append("\n" + StringUtils.repeat("=", subject.length()));
+                sbMailBody.append("\n");
+                sbMailBody.append("\nAngaben zu:");
+                sbMailBody.append("\n-----------");
+                sbMailBody.append("\n" + topicHeader);
+                sbMailBody.append("\n(" + topicURL + ")");
+                sbMailBody.append("\n");
+                sbMailBody.append("\nAbsender:");
+                sbMailBody.append("\n---------");
+                sbMailBody.append("\n" + fromName);
                 if (StringUtils.isNotBlank(fromEmail)) {
-                    sbMsg.append(" (" + fromEmail + ")");
+                    sbMailBody.append(" (" + fromEmail + ")");
                 }
-                sbMsg.append("\n");
-                sbMsg.append("\nNachricht:");
-                sbMsg.append("\n----------");
-                sbMsg.append("\n" + message);
+                sbMailBody.append("\n");
+                sbMailBody.append("\nNachricht:");
+                sbMailBody.append("\n----------");
+                sbMailBody.append("\n" + message);
 
-                recipient = MCRConfiguration2.getString("MCRWorkflow.Email.Feedback.Recipient").orElse("");
-                email.getToAddresses().add(new InternetAddress(recipient));
-                String[] cc = MCRConfiguration2.getString("MCR.Workflow.Email.CC").orElse("").split(",");
-                for (String s : cc) {
+                List<InternetAddress> receiver = List
+                    .of(new InternetAddress(MCRConfiguration2.getString("MCRWorkflow.Email.Feedback.Recipient").get()));
+                String[] ccProp = MCRConfiguration2.getString("MCR.Workflow.Email.CC").orElse("").split(",");
+                for (String s : ccProp) {
                     s = s.trim();
                     if (StringUtils.isNotBlank(s)) {
-                        email.getCcAddresses().add(new InternetAddress(s.trim()));
+                        cc.add(new InternetAddress(s.trim()));
                     }
                 }
                 if (StringUtils.isNotBlank(fromEmail)) {
-                    email.getCcAddresses().add(new InternetAddress(fromEmail));
+                    cc.add(new InternetAddress(fromEmail, fromName));
                 }
-                email.setMsg(sbMsg.toString());
-                email.setSubject(subject);
 
-                email.send();
+                MCRBPMNMgr.sendMail(receiver, subject, sbMailBody.toString(), replyTo, cc);
 
                 if (StringUtils.isNotBlank(returnURL)) {
                     Response.temporaryRedirect(URI.create(returnURL)).build();
                 }
             }
-        } catch (EmailException e) {
-            LOGGER.error(e);
-            messages.add(e.getMessage());
-
-        } catch (AddressException e) {
-            LOGGER.error(e);
-            messages.add(e.getMessage());
         } catch (UnsupportedEncodingException e) {
 
+        } catch (Exception e) {
+            LOGGER.error(e);
+            messages.add(e.getMessage());
         }
         return Response.ok(v).build();
     }
