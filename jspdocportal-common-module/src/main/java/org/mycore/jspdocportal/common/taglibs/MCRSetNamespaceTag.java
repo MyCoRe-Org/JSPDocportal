@@ -23,6 +23,8 @@
 package org.mycore.jspdocportal.common.taglibs;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,6 +46,7 @@ public class MCRSetNamespaceTag extends SimpleTagSupport {
     private static Logger LOGGER = LogManager.getLogger(MCRSetNamespaceTag.class);
 
     private String prefix = "";
+
     private String uri = "";
 
     /**
@@ -62,14 +65,7 @@ public class MCRSetNamespaceTag extends SimpleTagSupport {
         this.uri = uri;
     }
 
-    public void doTag() throws JspException, IOException {
-        LOGGER.fatal("The tag <mcr:setNamespace> is currently not implemented");
-    }
-    
-    /* Sun Glassfish implementation  */
-    
-    // TODO Update to the current implementation!!
-    /*
+    /* Eclipse EE4J implementation  */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void doTag() throws JspException, IOException {
         try {
@@ -78,10 +74,9 @@ public class MCRSetNamespaceTag extends SimpleTagSupport {
             // private static JSTLXPathNamespaceContext jstlXPathNamespaceContext = null;
             Field field = c_XPathUtil.getDeclaredField("jstlXPathNamespaceContext");
             field.setAccessible(true);
-          
-       
-            //
-            // JSTLXPathNamespaceContext nsContext = (JSTLXPathNamespaceContext) field.get(null);
+            Object nsContext = field.get(null); // param null for static fields
+
+            // //should not happen, because the class should be properly initialized 
             // if (nsContext == null) {
             //    nsContext = new JSTLXPathNamespaceContext();
             //    field.set(null, nsContext);
@@ -90,17 +85,17 @@ public class MCRSetNamespaceTag extends SimpleTagSupport {
             // JSTLXPathNamespaceContext
             // protected void addNamespace(String prefix, String uri ) {
             Class c_JSTLXPathNamespaceContext = Class
-                    .forName("org.apache.taglibs.standard.tag.common.xml.JSTLXPathNamespaceContext");
+                .forName("org.apache.taglibs.standard.tag.common.xml.JSTLXPathNamespaceContext");
             Method m_addNamespace = c_JSTLXPathNamespaceContext.getDeclaredMethod("addNamespace", String.class,
-                    String.class);
+                String.class);
             m_addNamespace.setAccessible(true);
             m_addNamespace.invoke(nsContext, prefix, uri);
         } catch (Exception e) {
             LOGGER.error("Something went wrong adding the namespace", e);
         }
     }
-    */
-    /* Apache Tomcat Taglib implementation  */
+
+    /* OLD Apache Tomcat Taglib implementation  */
     /*
     @SuppressWarnings("unchecked")
     public void doTag() throws JspException, IOException {
