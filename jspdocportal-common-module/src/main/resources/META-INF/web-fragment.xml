@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-fragment metadata-complete="false" version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+<web-fragment version="5.0" xmlns="https://jakarta.ee/xml/ns/jakartaee"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd">
-  <!-- @metadata-complete -> do not process annotations -->
+  xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-fragment_5_0.xsd"
+  metadata-complete="true">
+  <!-- @metadata-complete="true" -> do not process annotations, such as @WebServlet, @WebFilter, and @WebListener -->
+
   <display-name>JSP DOCPORTAL</display-name>
   <description>(A MyCoRe Sample)</description>
   <name>jspdocportal_common_module</name>
@@ -21,10 +23,8 @@
   <listener>
     <listener-class>org.mycore.common.events.MCRHttpSessionListener</listener-class>
   </listener>
-  <!-- <listener> 
-    <listener-class> org.mycore.frontend.cli.server.MCRCLIServerServletContextListener </listener-class>
-  </listener> -->
- 
+  <!-- <listener> <listener-class> org.mycore.frontend.cli.server.MCRCLIServerServletContextListener </listener-class> </listener> -->
+
   <filter>
     <filter-name>SetChacterEncodingFilter</filter-name>
     <filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
@@ -123,14 +123,8 @@
   <!-- MyCoRe OAI -->
   <!-- **************************************************************** -->
 
-  <!-- <servlet id="OAI2Provider"> 
-    <servlet-name>OAI2</servlet-name> 
-       <servlet-class>org.mycore.oai.MCROAIDataProvider</servlet-class> 
-    </servlet> 
-    <servlet-mapping> 
-      <servlet-name>OAI2</servlet-name> 
-      <url-pattern>/oai</url-pattern> 
-    </servlet-mapping> -->
+  <!-- <servlet id="OAI2Provider"> <servlet-name>OAI2</servlet-name> <servlet-class>org.mycore.oai.MCROAIDataProvider</servlet-class> 
+    </servlet> <servlet-mapping> <servlet-name>OAI2</servlet-name> <url-pattern>/oai</url-pattern> </servlet-mapping> -->
   <!-- defined in mycore-base - you cannot override this value -->
 
   <session-config>
@@ -138,7 +132,7 @@
   </session-config>
 
   <!-- <error-page> <exception-type>java.lang.Throwable</exception-type> <location>/error.jsp</location> </error-page> -->
-  
+
   <!-- default resource bundle -->
   <context-param>
     <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
