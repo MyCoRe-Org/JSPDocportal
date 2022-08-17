@@ -81,14 +81,6 @@
     <dependency>
       <groupId>jakarta.mail</groupId>
       <artifactId>jakarta.mail-api</artifactId>
-      <version>2.1.0</version>
-    </dependency>
-    <dependency>
-      <!-- implements jarkarta.mail API -->
-      <groupId>org.eclipse.angus</groupId>
-      <artifactId>angus-mail</artifactId>
-      <version>1.0.0</version>
-     <scope>runtime</scope>
     </dependency>
     
     <dependency>
