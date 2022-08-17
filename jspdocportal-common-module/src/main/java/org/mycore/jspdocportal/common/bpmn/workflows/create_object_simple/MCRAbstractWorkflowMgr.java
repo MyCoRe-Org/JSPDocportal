@@ -437,12 +437,9 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
 
             String filename = MCRBPMNUtils.getWorkflowDerivateFile(mcrObj.getId(), MCRObjectID.getInstance(derID))
                 .toString();
-            Map<String, Element> ruleMap = null;
             try {
                 MCRObjectID derIDObj = MCRObjectID.getInstance(derID);
                 if (MCRMetadataManager.exists(derIDObj)) {
-                    //disabled for new fact-based access system
-                    //ruleMap = MCRBPMNUtils.getAccessRulesMap(derID);
                     MCRBPMNUtils.deleteDirectoryContent(MCRPath.getRootPath(derID));
                     MCRDerivateCommands.updateFromFile(filename, false);
                 } else {
@@ -451,16 +448,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
             } catch (SAXParseException | IOException | MCRAccessException e) {
                 LOGGER.error(e);
             }
-            if (ruleMap != null) {
-                MCRBPMNUtils.setAccessRulesMap(derID, ruleMap);
-            }
         }
-
-        // RS: 29.04.22 use order-Attribut to reorder derivates 
-        // update order of derivates and labels in mcrobject
-        
-        //mcrObj.getStructure().getDerivates().clear();
-        //mcrObj.getStructure().getDerivates().addAll(mcrWFObj.getStructure().getDerivates());
     }
 
     @Override

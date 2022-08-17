@@ -272,32 +272,4 @@ public class MCRBPMNUtils {
             e.printStackTrace();
         }
     }
-
-    //delete in 2022.06LTS after migration to xml base access system
-    @Deprecated
-    public static Map<String, Element> getAccessRulesMap(String objid) {
-        Iterator<String> it = MCRAccessManager.getPermissionsForID(objid).iterator();
-        Map<String, Element> htRules = new Hashtable<String, Element>();
-        if (MCRAccessManager.getAccessImpl() instanceof MCRRuleAccessInterface) {
-            while (it.hasNext()) {
-                String s = it.next();
-                Element eRule = ((MCRRuleAccessInterface) MCRAccessManager.getAccessImpl()).getRule(objid, s);
-                htRules.put(s, eRule);
-            }
-        }
-        return htRules;
-    }
-
-    //delete in 2022.06LTS after migration to xml base access system
-    @Deprecated
-    public static void setAccessRulesMap(String objid, Map<String, Element> htRules) {
-        if (MCRAccessManager.getAccessImpl() instanceof MCRRuleAccessInterface) {
-            if (htRules != null) {
-                ((MCRRuleAccessInterface) MCRAccessManager.getAccessImpl()).removeAllRules(objid);
-                for (String perm : htRules.keySet()) {
-                    MCRAccessManager.addRule(objid, perm, htRules.get(perm), "");
-                }
-            }
-        }
-    }
 }
