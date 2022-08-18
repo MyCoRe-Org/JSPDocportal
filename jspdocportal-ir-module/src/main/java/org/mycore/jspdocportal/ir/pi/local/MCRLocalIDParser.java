@@ -8,27 +8,26 @@ import org.mycore.pi.MCRPIParser;
 
 public class MCRLocalIDParser implements MCRPIParser<MCRLocalID> {
 
-    private static final String ID_REGEX = "([a-zA-Z]+)\\/([a-zA-Z]+)([0-9]+)([xX]?)";
-
-    private static final Pattern ID_PATTERN = Pattern.compile(ID_REGEX);
+    private static final Pattern ID_PATTERN = Pattern.compile(
+        "^(?<project>[a-zA-Z]+)[\\/_]"
+            + "(?:(?<prefix>ppn)(?<num>[0-9]{8,9})(?<check>[0-9xX](?:[_]*))"
+            + "|(?:(?<prefix2>(?!ppn)[a-zA-Z]*|[a-zA-Z]*[0-9]{4}-)(?<num2>[0-9]*)(?<check2>[_]*)))$");
 
     @Override
     public Optional<MCRLocalID> parse(String input) {
         Matcher m = ID_PATTERN.matcher(input);
-        if (m.matches() && m.groupCount() >= 3) {
-            String project = m.group(1);
-            String prefix = m.group(2);
-            long num = Long.parseLong(m.group(3));
-            String check = "";
-            if (m.groupCount() == 4) {
-                check = m.group(4);
+        if (m.find()) {
+            if (m.group("prefix2") == null || m.group("prefix2").isEmpty()) {
+                return Optional.of(new MCRLocalID(m.group("project"), m.group("prefix"), Long.parseLong(m.group("num")),
+                    m.group("check")));
+            } else {
+                return Optional.of(new MCRLocalID(m.group("project"), m.group("prefix2"), Long.parseLong(m.group("num2")),
+                    m.group("check2")));
             }
-
-            return Optional.of(new MCRLocalID(project, prefix, num, check));
         } else {
             return Optional.empty();
-
         }
+
     }
 
     public static void main(String[] args) {

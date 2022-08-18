@@ -1,13 +1,14 @@
 package org.mycore.jspdocportal.ir.pi.local;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.mycore.datamodel.metadata.MCRBase;
-import org.mycore.pi.MCRPIService;
+import org.mycore.pi.MCRPIJobService;
 import org.mycore.pi.MCRPersistentIdentifier;
 import org.mycore.pi.exceptions.MCRPersistentIdentifierException;
 
-public class MCRLocalIdentifierService extends MCRPIService<MCRLocalID> {
+public class MCRLocalIdentifierService extends MCRPIJobService<MCRLocalID> {
     public MCRLocalIdentifierService() {
         super(MCRLocalID.TYPE);
     }
@@ -34,5 +35,28 @@ public class MCRLocalIdentifierService extends MCRPIService<MCRLocalID> {
         throws MCRPersistentIdentifierException {
         // do nothing
 
+    }
+
+    @Override
+    protected void deleteJob(Map<String, String> parameters) throws MCRPersistentIdentifierException {
+        // do nothing
+        
+    }
+
+    @Override
+    protected void updateJob(Map<String, String> parameters) throws MCRPersistentIdentifierException {
+        // do nothing
+        
+    }
+
+    @Override
+    protected void registerJob(Map<String, String> parameters) throws MCRPersistentIdentifierException {
+        // do nothing
+        
+    }
+
+    @Override
+    protected Optional<String> getJobInformation(Map<String, String> contextParameters) {
+        return Optional.empty();
     }
 }
