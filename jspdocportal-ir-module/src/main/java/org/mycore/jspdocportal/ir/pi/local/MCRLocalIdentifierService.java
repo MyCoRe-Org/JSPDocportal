@@ -9,6 +9,8 @@ import org.mycore.pi.MCRPersistentIdentifier;
 import org.mycore.pi.exceptions.MCRPersistentIdentifierException;
 
 public class MCRLocalIdentifierService extends MCRPIJobService<MCRLocalID> {
+    public static final String DEFAULT_ID = "MCRLocalID";
+    
     public MCRLocalIdentifierService() {
         super(MCRLocalID.TYPE);
     }
