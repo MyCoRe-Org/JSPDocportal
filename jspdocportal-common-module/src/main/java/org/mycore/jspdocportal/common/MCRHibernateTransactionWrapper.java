@@ -23,14 +23,11 @@
 package org.mycore.jspdocportal.common;
 
 import org.mycore.common.MCRException;
-import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.MCRTransactionHelper;
 
 /**
  * This AutoClosable can be used to begin and commit
- * a Hibernate transaction in the current MyCoRe Session
- * 
- * TODO Migration 2021.06LTS - use MCRJPATransactionWrapper instead.
- * @see org.mycore.backend.jpa.MCRJPATransactionWrapper (MCR-2364) 
+ * a JPA (Hibernate) transaction in the current MyCoRe Session
  * 
  * @author Robert Stephan
  */
@@ -38,16 +35,16 @@ public class MCRHibernateTransactionWrapper implements AutoCloseable {
     private boolean responsibleForTransaction = false;
 
     public MCRHibernateTransactionWrapper() {
-        if (!MCRSessionMgr.getCurrentSession().isTransactionActive()) {
+        if (!MCRTransactionHelper.isTransactionActive()) {
             responsibleForTransaction = true;
-            MCRSessionMgr.getCurrentSession().beginTransaction();
+            MCRTransactionHelper.beginTransaction();
         }
     }
 
     @Override
     public void close() throws MCRException {
         if (responsibleForTransaction) {
-            MCRSessionMgr.getCurrentSession().commitTransaction();
+            MCRTransactionHelper.commitTransaction();
             responsibleForTransaction = false;
         }
     }
