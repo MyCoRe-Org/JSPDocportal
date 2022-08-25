@@ -55,15 +55,15 @@
           <div class="card-footer">
             <!-- TODO use real DOI from mods:identifier after the PI-component works as expected and show only if DOI is present -->
             <span class="d-inline-block" style="width:4em">URN: </span>
-            <input id="input_urn" readonly="readonly" style="width:22em;margin-bottom:5px" value="{./metadata/def.modsContainer/modsContainer[@type='imported']/mods:mods/mods:identifier[@type='urn']}" />
+            <input id="input_urn" readonly="readonly" style="width:25em;margin-bottom:5px" value="{./metadata/def.modsContainer/modsContainer[@type='imported']/mods:mods/mods:identifier[@type='urn']}" />
             <button class="btn btn-sm ml-1" title="URN kopieren" onclick="navigator.clipboard.writeText(document.getElementById('input_urn').value);"><i class="fas fa-clipboard"></i></button>
             <br />
             <span class="d-inline-block" style="width:4em">DOI: </span>
-            <input id="input_doi" readonly="readonly" style="width:22em;margin-bottom:5px" value="https://doi.org/{$MCR.DOI.Prefix}/{replace(./metadata/def.modsContainer/modsContainer[@type='imported']/mods:mods/mods:recordInfo/mods:recordIdentifier, '/','_')}" />
+            <input id="input_doi" readonly="readonly" style="width:25em;margin-bottom:5px" value="https://doi.org/{$MCR.DOI.Prefix}/{replace(./metadata/def.modsContainer/modsContainer[@type='imported']/mods:mods/mods:recordInfo/mods:recordIdentifier, '/','_')}" />
             <button class="btn btn-sm ml-1" title="DOI kopieren" onclick="navigator.clipboard.writeText(document.getElementById('input_doi').value);"><i class="fas fa-clipboard"></i></button>
             <br />
             <span class="d-inline-block" style="width:4em">PURL: </span>
-            <input id="input_purl" readonly="readonly" style="width:22em" value="{$MCR.Identifier.PURL.BaseURL}{./metadata/def.modsContainer/modsContainer[@type='imported']/mods:mods/mods:recordInfo/mods:recordIdentifier}" />
+            <input id="input_purl" readonly="readonly" style="width:25em" value="{$MCR.Identifier.PURL.BaseURL}{./metadata/def.modsContainer/modsContainer[@type='imported']/mods:mods/mods:recordInfo/mods:recordIdentifier}" />
             <button class="btn btn-sm ml-1" title="PURL kopieren" onclick="navigator.clipboard.writeText(document.getElementById('input_purl').value);"><i class="fas fa-clipboard"></i></button>
           </div>
         </div>
