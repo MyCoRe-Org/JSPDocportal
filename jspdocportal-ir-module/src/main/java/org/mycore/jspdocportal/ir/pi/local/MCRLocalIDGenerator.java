@@ -39,33 +39,33 @@ public class MCRLocalIDGenerator extends MCRPIGenerator<MCRLocalID> {
         Element eMods = (Element) mcrMODS.getContent().stream().filter(x -> x.getClass().equals(Element.class))
             .findFirst().get();
 
-        Optional<Element> eRecordID = eMods.getChild("recordInfo", MCRConstants.MODS_NAMESPACE)
-            .getChildren("recordIdentifier", MCRConstants.MODS_NAMESPACE).stream()
-            .filter(x -> source.equals(x.getAttributeValue("source")))
-            .findFirst();
-        if (eRecordID.isPresent()) {
-            MCRPIParser<MCRLocalID> parser = MCRPIManager.getInstance().getParserForType(MCRLocalID.TYPE);
-            Optional<MCRLocalID> optID = parser.parse(eRecordID.get().getText());
-            while (true) {
-                if (optID.isPresent()) {
-                    MCRLocalID id = optID.get();
-                    //TODO replace with MCRPIManager.getInstance().getInfo(id, MCRLocalID.TYPE);
-                    Optional<MCRPIRegistrationInfo> optInfo = MCRPIManager.getInstance().getInfo(id.asString(),
-                        MCRLocalID.TYPE);
-                    if (optInfo.isPresent() && !optInfo.get().getMycoreID().equals(mcrBase.getId().toString())) {
-                        optID = parser.parse(id.asString() + "_");
+        Element eRecordInfo = eMods.getChild("recordInfo", MCRConstants.MODS_NAMESPACE);
+        if (eRecordInfo != null) {
+            Optional<Element> eRecordID = eRecordInfo.getChildren("recordIdentifier", MCRConstants.MODS_NAMESPACE)
+                .stream()
+                .filter(x -> source.equals(x.getAttributeValue("source")))
+                .findFirst();
+            if (eRecordID.isPresent()) {
+                MCRPIParser<MCRLocalID> parser = MCRPIManager.getInstance().getParserForType(MCRLocalID.TYPE);
+                Optional<MCRLocalID> optID = parser.parse(eRecordID.get().getText());
+                while (true) {
+                    if (optID.isPresent()) {
+                        MCRLocalID id = optID.get();
+                        //TODO replace with MCRPIManager.getInstance().getInfo(id, MCRLocalID.TYPE);
+                        Optional<MCRPIRegistrationInfo> optInfo = MCRPIManager.getInstance().getInfo(id.asString(),
+                            MCRLocalID.TYPE);
+                        if (optInfo.isPresent() && !optInfo.get().getMycoreID().equals(mcrBase.getId().toString())) {
+                            optID = parser.parse(id.asString() + "_");
+                        } else {
+                            return id;
+                        }
                     } else {
-                        return id;
+                        throw new MCRPersistentIdentifierException("Could not generate ID for " + eRecordID.get());
                     }
                 }
-                else {
-                    throw new MCRPersistentIdentifierException("Could not generate ID for " + eRecordID.get());
-                }
             }
-        } else {
-            return new MCRLocalID(mcrBase.getId().getProjectId(), "id",
-                getNextCount(mcrBase.getId().getProjectId(), "id"));
         }
+        return new MCRLocalID(mcrBase.getId().getProjectId(), "id", getNextCount(mcrBase.getId().getProjectId(), "id"));
     }
 
     private static final Map<String, AtomicInteger> PATTERN_COUNT_MAP = new HashMap<>();
