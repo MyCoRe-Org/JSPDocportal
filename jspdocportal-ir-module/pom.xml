@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.mycore.jspdocportal</groupId>
@@ -33,7 +34,7 @@
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
               <addExtensions />
             </manifest>
-             <manifestEntries>
+            <manifestEntries>
               <MCR-Artifact-Id>${project.artifactId}</MCR-Artifact-Id>
               <MCR-Application-Module>${project.name}</MCR-Application-Module>
               <Priority>${manifest.priority}</Priority>
@@ -82,12 +83,23 @@
       </plugin>
     </plugins>
   </build>
-  
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.mycore.jspdocportal</groupId>
+        <artifactId>jspdocportal-bom</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
-    	<groupId>org.mycore.jspdocportal</groupId>
-    	<artifactId>jspdocportal-common-module</artifactId>
-    	<version>${project.version}</version>
+      <groupId>org.mycore.jspdocportal</groupId>
+      <artifactId>jspdocportal-common-module</artifactId>
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
@@ -109,7 +121,7 @@
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-mods</artifactId>
-    </dependency>    
+    </dependency>
     <dependency>
       <!-- contains fulltext search via ALTO -->
       <groupId>org.mycore</groupId>
@@ -120,7 +132,7 @@
       <artifactId>mycore-oai</artifactId>
       <scope>runtime</scope>
     </dependency>
-     <dependency>
+    <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-viewer</artifactId>
       <scope>runtime</scope>
