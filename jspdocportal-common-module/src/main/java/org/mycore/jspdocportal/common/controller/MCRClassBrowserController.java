@@ -34,10 +34,11 @@ public class MCRClassBrowserController {
         }
     }
 
-    public static List<MCRCategory> flattenClassification(MCRCategory categ) {
+    public static void flattenChildren(MCRCategory categ) {
         List<MCRCategory> newChildren = new ArrayList<MCRCategory>();
         collect(newChildren, categ);
-        return newChildren;
+        categ.getChildren().clear();
+        categ.getChildren().addAll(newChildren);
     }
 
     private static void collect(List<MCRCategory> target, MCRCategory source) {

@@ -20,10 +20,7 @@
    jspContext.setAttribute("rootCateg", rootCateg);
    
    if(Boolean.valueOf((String)jspContext.getAttribute("flatten"))){
-     jspContext.setAttribute("categChildren", MCRClassBrowserController.flattenClassification(rootCateg));
-   }
-   else{
-       jspContext.setAttribute("categChildren", null);
+     MCRClassBrowserController.flattenChildren(rootCateg);
    }
 %>
   <div class="mcr-facet card ir-browse-classification-card h-100" data-mcr-facet-field="${facetField}">
@@ -32,21 +29,6 @@
         <search:browse-classification-label category="${rootCateg}" lang="${lang}" />
       </h4>
     </div>
-    <c:choose>
-      <c:when test="${not empty categChildren}">
-        <ul class="list-group list-group-flush">
-          <c:forEach var="c" items="${categChildren}">
-            <li class="list-group-item ir-facets-btn btn-sm px-2 py-1" style="display:block" 
-                onclick="changeFacetIncludeURL('${facetField}','${c.id.getRootID()}:${c.id.ID}', '${mask}', '${result.id}');">
-              <search:browse-classification-label category="${c}" lang="${lang}" />
-              <span class="ir-facets-btn-count mcr-facet-count" data-mcr-facet-field="${facetField}" data-mcr-facet-value="${c.id.getRootID()}:${c.id.ID}"></span>
-            </li>
-          </c:forEach>
-        </ul>
-      </c:when>
-      <c:otherwise>
-        <search:browse-classification-inner category="${rootCateg}" facetField="${facetField}" mask="${mask}" lang="${lang}"/>
-      </c:otherwise>
-    </c:choose>
+    <search:browse-classification-inner category="${rootCateg}" facetField="${facetField}" mask="${mask}" lang="${lang}"/>
   </div>
   
