@@ -306,7 +306,11 @@
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
       </attribute>
-    <!-- A Tag, that gets Information of the current mcrSession -->
+      <attribute>
+        <name>attribute</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+      </attribute>
     </tag>
 	
 <!-- *************************************************************************
