@@ -12,6 +12,7 @@
     
     <fmt:message var="lblPlaceholder" key="Browse.Search.placeholder.count" />
     <mcr:session var="lang" info="language" />
+    <c:set var="mask" value="${it.path}" />
     
 <%--TODO use SOLR-Parameter "&facet.mincount=1" --%>
     <script>
