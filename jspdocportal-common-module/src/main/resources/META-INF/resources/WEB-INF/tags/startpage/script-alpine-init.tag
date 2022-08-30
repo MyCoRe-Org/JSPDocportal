@@ -25,14 +25,15 @@
           var facetElements = Array.from(document.getElementsByClassName('mcr-facet'));
           var facetFieldParams = 
 		        facetElements.map(x => '&facet.field=' + x.getAttribute('data-mcr-facet-field')).join("");
-
           var url = this.baseurl + "servlets/solr/select"
                 +"?q=category%3A%22doctype%3A"+this.mask+"%22"
 			    +"&fq=state%3Apublished"
+			    +"&sort=created+DESC"
 			    +"&rows=5&wt=json&indent=true"
 			    +"&facet=true"
 			    +facetFieldParams
-			    +"&sort=created+DESC&rows=5&fl=id,created,ir.cover_url,ir.creator.result,ir.title.result,ir.doctype.result,ir.doctype_en.result,ir.originInfo.result"
+			    +"&fl=id,created,ir.cover_url,ir.creator.result,ir.title.result,"
+			      +"ir.doctype.result,ir.doctype_en.result,ir.originInfo.result"
 			    +"&wt=json";
 			                     
 		  console.log(url); 
