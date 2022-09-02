@@ -41,7 +41,7 @@ public class MCRJSPMetsIIIFModsMetadataExtractor implements MCRMetsIIIFMetadataE
 
         elementLabelMap.put("title", "mods:mods/mods:titleInfo/mods:title/text()");
         elementLabelMap.put("genre", "mods:mods/mods:genre/text()");
-        // TODO: add some more metadata
+        // TODO: Here we need more more metadata
 
         return elementLabelMap.entrySet().stream().map(entry -> {
             XPathExpression<Text> pathExpression = XPathFactory.instance().compile(entry.getValue(), Filters.text(),

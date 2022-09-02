@@ -19,45 +19,41 @@
 package org.mycore.jspdocportal.ir.iiif;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
+import org.jdom2.Element;
 import org.jdom2.JDOMException;
-import org.jdom2.Namespace;
+import org.jdom2.filter.Filters;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
-import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.common.content.MCRContent;
-import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.MCRPathContent;
-import org.mycore.common.content.transformer.MCRContentTransformer;
-import org.mycore.common.content.transformer.MCRContentTransformerFactory;
-import org.mycore.common.content.transformer.MCRParameterizedTransformer;
-import org.mycore.common.xsl.MCRParameterCollector;
-import org.mycore.datamodel.common.MCRLinkTableManager;
-import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetaEnrichedLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.iiif.presentation.impl.MCRIIIFPresentationImpl;
 import org.mycore.iiif.presentation.model.basic.MCRIIIFManifest;
-import org.mycore.mets.model.MCRMETSGeneratorFactory;
-import org.mycore.mets.tools.MCRMetsSave;
+import org.mycore.jspdocportal.ir.pi.local.MCRLocalID;
+import org.mycore.pi.MCRPIManager;
+import org.mycore.pi.MCRPIRegistrationInfo;
 import org.xml.sax.SAXException;
 
 public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
 
-    private static final String TRANSFORMER_ID_CONFIGURATION_KEY = "Transformer";
-
     private static final Logger LOGGER = LogManager.getLogger();
-
-    public static final boolean STORE_METS_ON_GENERATE = MCRConfiguration2
-        .getOrThrow("MCR.Mets.storeMetsOnGenerate", Boolean::parseBoolean);
 
     public MCRJSPMetsIIIFPresentationImpl(String implName) {
         super(implName);
@@ -67,6 +63,28 @@ public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
     public MCRIIIFManifest getManifest(String id) {
         try {
             Document metsDocument = getMets(id);
+            metsDocument.getRootElement().setAttribute("schemaLocation",
+                "http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd http://www.w3.org/1999/xlink http://www.loc.gov/standards/xlink/xlink.xsd",
+                MCRConstants.XSI_NAMESPACE);
+
+            //temporary fixes
+            //remove all <mets:note> elements
+            XPathExpression<Element> xpathNote = XPathFactory.instance().compile(
+                ".//mets:note", Filters.element(), null, MCRConstants.METS_NAMESPACE);
+            for (Element e : xpathNote.evaluate(metsDocument)) {
+                e.getParentElement().removeContent(e);
+            }
+
+            XPathExpression<Element> xpathFileGrp = XPathFactory.instance().compile(
+                ".//mets:fileGrp[@ID='IMAGES']", Filters.element(), null, MCRConstants.METS_NAMESPACE);
+            Element eFileGrp = xpathFileGrp.evaluateFirst(metsDocument);
+            eFileGrp.setAttribute("USE", "IMAGES");
+
+            XPathExpression<Element> xpathStructMapPhysDiv = XPathFactory.instance().compile(
+                ".//mets:structMap[@TYPE='PHYSICAL']/mets:div", Filters.element(), null, MCRConstants.METS_NAMESPACE);
+            Element eStructMapPhysDiv = xpathStructMapPhysDiv.evaluateFirst(metsDocument);
+            eStructMapPhysDiv.removeChildren("fptr", MCRConstants.METS_NAMESPACE);
+
             LOGGER.debug(() -> new XMLOutputter(Format.getPrettyFormat()).outputString(metsDocument));
             return getConverter(id, metsDocument).convert();
         } catch (IOException | JDOMException | SAXException e) {
@@ -78,45 +96,32 @@ public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
         return new MCRJSPMetsMods2IIIFConverter(metsDocument, id);
     }
 
-    protected MCRContentTransformer getTransformer() {
-        String transformerID = getProperties().get(TRANSFORMER_ID_CONFIGURATION_KEY);
-        MCRContentTransformer transformer = MCRContentTransformerFactory.getTransformer(transformerID);
+    private Document getMets(String id) throws IOException, JDOMException, SAXException {
 
-        if (transformer == null) {
-            throw new MCRConfigurationException("Could not resolve transformer with id : " + transformerID);
+        String normalizedIdentifier = URLDecoder
+            .decode(URLDecoder.decode(id, StandardCharsets.UTF_8), StandardCharsets.UTF_8)
+            .replace("..", "");
+
+        Optional<MCRPIRegistrationInfo> optRegInfo = MCRPIManager.getInstance().getInfo(normalizedIdentifier,
+            MCRLocalID.TYPE);
+        if (optRegInfo.isPresent()) {
+            String mcrid = optRegInfo.get().getMycoreID();
+            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrid));
+            Optional<MCRMetaEnrichedLinkID> optMCRViewerDerLink = mcrObj.getStructure().getDerivates().stream()
+                .filter(x -> x.getClassifications().stream()
+                    .filter(c -> "REPOS_METS".equals(c.getID()))
+                    .findFirst().isPresent())
+                .findFirst();
+            if (optMCRViewerDerLink.isPresent()) {
+                MCRMetaEnrichedLinkID derLink = optMCRViewerDerLink.get();
+                Path p = MCRPath.getPath(derLink.getXLinkHref(), derLink.getMainDoc());
+                if (Files.exists(p)) {
+                    MCRContent content = new MCRPathContent(p);
+                    return content.asXML();
+                }
+            }
         }
+        return null;
 
-        return transformer;
-    }
-
-    public Document getMets(String id) throws IOException, JDOMException, SAXException {
-
-        String objectid = MCRLinkTableManager.instance().getSourceOf(id).iterator().next();
-        MCRContentTransformer transformer = getTransformer();
-        MCRParameterCollector parameter = new MCRParameterCollector();
-
-        if (objectid != null && objectid.length() != 0) {
-            MCRDerivate derObj = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(id));
-            MCRObjectID ownerID = derObj.getOwnerID();
-            objectid = ownerID.toString();
-
-            parameter.setParameter("objectID", objectid);
-            parameter.setParameter("derivateID", id);
-        }
-
-        final MCRPath metsPath = MCRPath.getPath(id, "mets.xml");
-        MCRContent source = Files.exists(metsPath) ? new MCRPathContent(metsPath) : generateMets(id);
-        MCRContent content = transformer instanceof MCRParameterizedTransformer
-            ? ((MCRParameterizedTransformer) transformer).transform(source, parameter)
-            : transformer.transform(source);
-        return content.asXML();
-    }
-
-    private synchronized MCRJDOMContent generateMets(String id) {
-        final Document document = MCRMETSGeneratorFactory.create(MCRPath.getPath(id, "/")).generate().asDocument();
-        if (STORE_METS_ON_GENERATE) {
-            MCRMetsSave.saveMets(document, MCRObjectID.getInstance(id));
-        }
-        return new MCRJDOMContent(document);
     }
 }

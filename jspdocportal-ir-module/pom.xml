@@ -120,10 +120,14 @@
       <artifactId>mycore-oai</artifactId>
       <scope>runtime</scope>
     </dependency>
-     <dependency>
+    <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-viewer</artifactId>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-iiif</artifactId>
     </dependency>
   </dependencies>
 </project>
