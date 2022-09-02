@@ -18,8 +18,6 @@
 
 package org.mycore.jspdocportal.ir.iiif;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -53,7 +51,6 @@ import org.mycore.iiif.presentation.model.basic.MCRIIIFManifest;
 import org.mycore.iiif.presentation.model.basic.MCRIIIFRange;
 import org.mycore.iiif.presentation.model.basic.MCRIIIFSequence;
 import org.mycore.mets.model.Mets;
-import org.mycore.mets.model.files.File;
 import org.mycore.mets.model.files.FileGrp;
 import org.mycore.mets.model.sections.DmdSec;
 import org.mycore.mets.model.struct.LogicalDiv;
@@ -89,16 +86,7 @@ public class MCRJSPMetsMods2IIIFConverter {
         this.mets = new Mets(metsDocument);
         this.identifier = identifier;
 
-        FileGrp imageGrp = mets.getFileSec().getFileGroup("MASTER");
-        if (imageGrp == null) {
-            imageGrp = mets.getFileSec().getFileGroup("IVIEW");
-        }
-        if (imageGrp == null) {
-            imageGrp = mets.getFileSec().getFileGroup("MAX");
-        }
-        if (imageGrp == null) {
-            imageGrp = mets.getFileSec().getFileGroup("DEFAULT");
-        }
+        FileGrp imageGrp = mets.getFileSec().getFileGroup("IMAGES");
         if (imageGrp == null) {
             throw new MCRException("Could not find a image file group in mets!");
         }
@@ -154,15 +142,16 @@ public class MCRJSPMetsMods2IIIFConverter {
         sequence.canvases = children.stream().map(physicalSubDiv -> {
             String order = physicalSubDiv.asElement().getAttributeValue("ORDER");
             String orderLabel = physicalSubDiv.getOrderLabel();
-            String contentIds = physicalSubDiv.getContentIds();
-            String label = Stream.of(order, orderLabel, contentIds)
+            //String contentIds = physicalSubDiv.getContentIds();
+            String label = Stream.of(order, orderLabel)
                 .filter(o -> o != null && !o.isEmpty())
                 .collect(Collectors.joining(" - "));
             label = ("".equals(label)) ? physicalSubDiv.getId() : label;
 
             String identifier = this.physicalIdentifierMap.get(physicalSubDiv);
             try {
-                MCRIIIFImageInformation information = imageImpl.getInformation(new URI(identifier).getPath());
+                MCRIIIFImageInformation information = imageImpl.getInformation(
+                    physicalSubDiv.getContentIds().replace("http://purl.uni-rostock.de/", "").replace("/", "%252F"));
                 MCRIIIFCanvas canvas = new MCRIIIFCanvas(identifier, label, information.width, information.height);
 
                 MCRIIIFAnnotation annotation = new MCRIIIFAnnotation(identifier, canvas);
@@ -179,7 +168,7 @@ public class MCRJSPMetsMods2IIIFConverter {
                 annotation.setResource(resource);
 
                 return canvas;
-            } catch (MCRIIIFImageNotFoundException | MCRIIIFImageProvidingException | URISyntaxException e) {
+            } catch (MCRIIIFImageNotFoundException | MCRIIIFImageProvidingException e) {
                 throw new MCRException("Error while providing ImageInfo for " + identifier, e);
             } catch (MCRAccessException e) {
                 LOGGER.warn("User has no access to {}", identifier);
@@ -193,9 +182,7 @@ public class MCRJSPMetsMods2IIIFConverter {
         List<MCRIIIFRange> complete = new ArrayList<>();
         processDivContainer(complete, divContainer);
         manifest.structures.addAll(complete);
-
-        manifest.setLabel(
-            metadata.stream().filter(m -> m.getLabel().equals("title")).findFirst().get().getStringValue().get());
+        manifest.setLabel(logicalStructMap.getDivContainer().getLabel());
 
         return manifest;
     }
@@ -225,21 +212,13 @@ public class MCRJSPMetsMods2IIIFConverter {
     }
 
     protected String getIIIFIdentifier(PhysicalSubDiv subDiv) {
-        File file = subDiv.getChildren()
-            .stream()
-            .map(fptr -> imageGrp.getFileById(fptr.getFileId()))
-            .filter(Objects::nonNull)
-            .findAny().get();
-
-        String cleanHref = file.getFLocat().getHref();
-        cleanHref = cleanHref.substring(cleanHref.indexOf(this.identifier));
-
-        return cleanHref;
+        return subDiv.getId();
     }
 
     protected List<MCRIIIFMetadata> extractMedataFromLogicalDiv(Mets mets, LogicalDiv divContainer) {
         String dmdId = divContainer.getDmdId();
         if (dmdId != null && !dmdId.isEmpty()) {
+            dmdId = dmdId.split("\\s")[0];
             DmdSec dmdSec = mets.getDmdSecById(dmdId);
             if (dmdSec != null) {
                 MdWrap mdWrap = dmdSec.getMdWrap();
