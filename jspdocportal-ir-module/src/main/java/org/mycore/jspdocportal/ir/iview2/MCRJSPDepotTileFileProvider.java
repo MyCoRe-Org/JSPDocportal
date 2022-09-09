@@ -86,6 +86,9 @@ public class MCRJSPDepotTileFileProvider implements MCRTileFileProvider {
                 .replace("..", "");
 
             if (!normalizedIdentifier.contains("/")) {
+                normalizedIdentifier = normalizedIdentifier.replace("_phys", "/phys");
+            }
+            if (!normalizedIdentifier.contains("/")) {
                 return Optional.empty();
             }
 
