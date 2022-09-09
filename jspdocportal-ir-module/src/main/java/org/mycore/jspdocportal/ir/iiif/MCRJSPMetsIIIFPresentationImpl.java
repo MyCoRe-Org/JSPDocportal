@@ -23,6 +23,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
@@ -102,16 +103,11 @@ public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
     }
 
     protected MCRJSPMetsMods2IIIFConverter getConverter(String id, Document metsDocument) {
-        return new MCRJSPMetsMods2IIIFConverter(metsDocument, id);
+        return new MCRJSPMetsMods2IIIFConverter(metsDocument, normalizeIdentifier(id));
     }
 
     private Document getMets(String id) throws IOException, JDOMException, SAXException {
-
-        String normalizedIdentifier = URLDecoder
-            .decode(URLDecoder.decode(id, StandardCharsets.UTF_8), StandardCharsets.UTF_8)
-            .replace("..", "");
-
-        Optional<MCRPIRegistrationInfo> optRegInfo = MCRPIManager.getInstance().getInfo(normalizedIdentifier,
+        Optional<MCRPIRegistrationInfo> optRegInfo = MCRPIManager.getInstance().getInfo(normalizeIdentifier(id),
             MCRLocalID.TYPE);
         if (optRegInfo.isPresent()) {
             String mcrid = optRegInfo.get().getMycoreID();
@@ -132,5 +128,15 @@ public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
         }
         return null;
 
+    }
+
+    private String normalizeIdentifier(String id) {
+        String normalizedIdentifier = URLDecoder
+            .decode(URLDecoder.decode(id, StandardCharsets.UTF_8), StandardCharsets.UTF_8)
+            .replace("..", "");
+        if (!normalizedIdentifier.contains("/")) {
+            normalizedIdentifier = normalizedIdentifier.replaceFirst("_", "/");
+        }
+        return normalizedIdentifier;
     }
 }
