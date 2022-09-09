@@ -75,6 +75,29 @@ public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
             for (Element e : xpathNote.evaluate(metsDocument)) {
                 e.getParentElement().removeContent(e);
             }
+            
+            //temporary fixes
+            //remove all <mets:mptr> elements
+            XPathExpression<Element> xpathMptr = XPathFactory.instance().compile(
+                ".//mets:mptr", Filters.element(), null, MCRConstants.METS_NAMESPACE);
+            for (Element e : xpathMptr.evaluate(metsDocument)) {
+                e.getParentElement().removeContent(e);
+            }
+            
+            //temporary fixes
+            //make div of item with DMDLOG_0000 to root div in structMap[Logical]
+            XPathExpression<Element> xpathSMLogical = XPathFactory.instance().compile(
+                ".//mets:structMap[@TYPE='LOGICAL']", Filters.element(), null, MCRConstants.METS_NAMESPACE);
+            Element eSMLogical = xpathSMLogical.evaluateFirst(metsDocument);
+            if(eSMLogical!=null) {
+                XPathExpression<Element> xpathDiv0000 = XPathFactory.instance().compile(
+                    ".//mets:div[contains(@DMDID, 'DMDLOG_0000')]", Filters.element(), null, MCRConstants.METS_NAMESPACE);
+                Element eDiv0000 = xpathDiv0000.evaluateFirst(eSMLogical);
+                if(eDiv0000!=null) {
+                    eSMLogical.removeContent();
+                    eSMLogical.addContent(eDiv0000.detach());
+                }
+            }
 
             XPathExpression<Element> xpathFileGrp = XPathFactory.instance().compile(
                 ".//mets:fileGrp[@ID='IMAGES']", Filters.element(), null, MCRConstants.METS_NAMESPACE);
