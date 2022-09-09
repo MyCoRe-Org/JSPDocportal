@@ -34,6 +34,7 @@ import org.jdom2.Document;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.iiif.image.MCRIIIFImageUtil;
 import org.mycore.iiif.image.impl.MCRIIIFImageImpl;
 import org.mycore.iiif.image.impl.MCRIIIFImageNotFoundException;
@@ -42,6 +43,7 @@ import org.mycore.iiif.image.model.MCRIIIFImageInformation;
 import org.mycore.iiif.image.model.MCRIIIFImageProfile;
 import org.mycore.iiif.presentation.model.additional.MCRIIIFAnnotation;
 import org.mycore.iiif.presentation.model.attributes.MCRDCMIType;
+import org.mycore.iiif.presentation.model.attributes.MCRIIIFLDURI;
 import org.mycore.iiif.presentation.model.attributes.MCRIIIFMetadata;
 import org.mycore.iiif.presentation.model.attributes.MCRIIIFResource;
 import org.mycore.iiif.presentation.model.attributes.MCRIIIFService;
@@ -151,7 +153,9 @@ public class MCRJSPMetsMods2IIIFConverter {
             String identifier = this.physicalIdentifierMap.get(physicalSubDiv);
             try {
                 MCRIIIFImageInformation information = imageImpl.getInformation(
-                    physicalSubDiv.getContentIds().replace("http://purl.uni-rostock.de/", "").replace("/", "%252F"));
+                    physicalSubDiv.getContentIds()
+                        .replace(MCRConfiguration2.getStringOrThrow("MCR.Identifier.PURL.BaseURL"), "")
+                        .replace("/", "_"));
                 MCRIIIFCanvas canvas = new MCRIIIFCanvas(identifier, label, information.width, information.height);
 
                 MCRIIIFAnnotation annotation = new MCRIIIFAnnotation(identifier, canvas);
@@ -184,6 +188,11 @@ public class MCRJSPMetsMods2IIIFConverter {
         manifest.structures.addAll(complete);
         manifest.setLabel(logicalStructMap.getDivContainer().getLabel());
 
+        //link to frontpage - use "homepage" in IIIF presentation 3.0
+        MCRIIIFLDURI seealsoHTML = new MCRIIIFLDURI(MCRConfiguration2.getStringOrThrow("MCR.Identifier.PURL.BaseURL")
+            + metsDocument.getRootElement().getAttributeValue("OBJID"), null, "text/html");
+        seealsoHTML.setContext(null);
+        manifest.seeAlso = new ArrayList<MCRIIIFLDURI>(List.of(seealsoHTML));
         return manifest;
     }
 
