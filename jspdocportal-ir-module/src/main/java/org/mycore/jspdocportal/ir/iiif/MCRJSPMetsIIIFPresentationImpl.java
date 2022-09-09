@@ -80,6 +80,15 @@ public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
             Element eFileGrp = xpathFileGrp.evaluateFirst(metsDocument);
             eFileGrp.setAttribute("USE", "IMAGES");
 
+            XPathExpression<Element> xpathAmdSec = XPathFactory.instance().compile(
+                ".//mets:amdSec", Filters.element(), null, MCRConstants.METS_NAMESPACE);
+            List<Element> eAmdSecs = xpathAmdSec.evaluate(metsDocument);
+            for (Element e : eAmdSecs) {
+                if (e.getAttribute("ID") == null) {
+                    e.setAttribute("ID", "AMDSEC_0" + eAmdSecs.indexOf(e));
+                }
+            }
+
             XPathExpression<Element> xpathStructMapPhysDiv = XPathFactory.instance().compile(
                 ".//mets:structMap[@TYPE='PHYSICAL']/mets:div", Filters.element(), null, MCRConstants.METS_NAMESPACE);
             Element eStructMapPhysDiv = xpathStructMapPhysDiv.evaluateFirst(metsDocument);
