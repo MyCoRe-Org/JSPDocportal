@@ -24,17 +24,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jdom2.Attribute;
 import org.jdom2.Document;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
+import org.mycore.datamodel.classifications2.MCRCategory;
+import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.MCRCategoryID;
+import org.mycore.datamodel.classifications2.MCRLabel;
+import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.iiif.image.MCRIIIFImageUtil;
 import org.mycore.iiif.image.impl.MCRIIIFImageImpl;
 import org.mycore.iiif.image.impl.MCRIIIFImageNotFoundException;
@@ -193,6 +203,28 @@ public class MCRJSPMetsMods2IIIFConverter {
             + metsDocument.getRootElement().getAttributeValue("OBJID"), null, "text/html");
         seealsoHTML.setContext(null);
         manifest.seeAlso = new ArrayList<MCRIIIFLDURI>(List.of(seealsoHTML));
+
+        // does not work because we removed the mets:note elements with additional attributes: 
+        //  XPathExpression<Attribute> xpathProvider = XPathFactory.instance().compile(
+        //     ".//mets:agent[@OTHERROLE='PROVIDER']/mets:note/@ubr:uri", Filters.attribute(), null,
+        //     MCRConstants.METS_NAMESPACE, Namespace.getNamespace("ubr", "http://ub.uni-rostock.de"));
+
+        XPathExpression<Attribute> xpathProvider = XPathFactory.instance().compile(
+            ".//mets:dmdSec[@ID='DMDLOG_0000']//mods:classification[@displayLabel='provider']/@valueURI",
+            Filters.attribute(), null, MCRConstants.METS_NAMESPACE, MCRConstants.MODS_NAMESPACE);
+        Attribute attrProvider = xpathProvider.evaluateFirst(metsDocument);
+        if (attrProvider != null) {
+            String providerID = attrProvider.getValue().toString();
+            providerID = providerID.substring(providerID.lastIndexOf("#") + 1);
+            MCRCategory categ = MCRCategoryDAOFactory.getInstance()
+                .getCategory(new MCRCategoryID("provider", providerID), 0);
+            Optional<MCRLabel> oLabel = categ.getLabel("x-logo");
+            if (oLabel.isPresent()) {
+                MCRIIIFResource logo = new MCRIIIFResource(MCRFrontendUtil.getBaseURL() + oLabel.get().getText(),
+                    MCRDCMIType.Image);
+                manifest.setLogo(logo);
+            }
+        }
         return manifest;
     }
 
