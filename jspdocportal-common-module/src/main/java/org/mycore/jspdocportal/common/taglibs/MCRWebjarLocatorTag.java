@@ -50,6 +50,8 @@ public class MCRWebjarLocatorTag extends SimpleTagSupport {
     private String file;
     
     private String htmlElement;
+    
+    private String attribute;
 
     /**
      * the variable where the relative path should be written to.
@@ -84,6 +86,14 @@ public class MCRWebjarLocatorTag extends SimpleTagSupport {
     public void setFile(String file) {
         this.file = file;
     }
+    
+    /**
+     * additional attribute (especially 'async' or 'defer' for &lt;script&gt;)
+     * @param file as String
+     */
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
+    }
 
     public void doTag() throws JspException, IOException {
         PageContext pageContext = (PageContext) getJspContext();
@@ -95,7 +105,14 @@ public class MCRWebjarLocatorTag extends SimpleTagSupport {
             }
             if(htmlElement!=null) {
                 if(htmlElement.equals("script")) {
-                    pageContext.getOut().print("<script src=\"" + MCRFrontendUtil.getBaseURL() + url + "\"></script>");
+                    pageContext.getOut().print("<script src=\"" + MCRFrontendUtil.getBaseURL() + url + "\"");
+                    if(attribute!=null && attribute.toLowerCase().contains("defer")) {
+                        pageContext.getOut().print(" defer=\"defer\"");
+                    }
+                    if(attribute!=null && attribute.toLowerCase().contains("async")) {
+                        pageContext.getOut().print(" async=\"async\"");
+                    }
+                    pageContext.getOut().print("></script>");
                 }
                 if(htmlElement.equals("stylesheet") || htmlElement.equals("css"))  {
                     pageContext.getOut().print("<link href=\"" + MCRFrontendUtil.getBaseURL() + url + "\" rel=\"stylesheet\">");
