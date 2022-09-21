@@ -19,7 +19,6 @@
           x-on:click="window.location=baseurl + 'browse/' + mask
               + '?_add-filter=' + encodeURIComponent('+${facetField}:${c.id.getRootID()}:${c.id.ID}')"
           x-effect="updateHiddenStateForParents($el)">
-         
         <startpage:classification-label category="${c}" lang="${lang}" />
         <span class="ir-facets-btn-count mcr-facet-count"
               data-mcr-facet-field="${facetField}" data-mcr-facet-value="${c.id.getRootID()}:${c.id.ID}"
