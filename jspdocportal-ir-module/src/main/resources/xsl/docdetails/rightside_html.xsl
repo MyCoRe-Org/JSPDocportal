@@ -373,7 +373,7 @@
               <xsl:if test="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='REPOS_METS']]">
                 <xsl:variable name="derid" select="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='REPOS_METS']]/@xlink:href" />
                 <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" title="{mcri18n:translate('Webpage.tools.showREPOS_METS')}" 
-                   href="{$WebApplicationBaseURL}api/v1/objects/${it.id}/derivates/{$derid}/open">METS</a>
+                   href="{$WebApplicationBaseURL}api/v1/objects/{/mycoreobject/@ID}/derivates/{$derid}/open">METS</a>
               </xsl:if>
               <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[contains(@valueURI, '#epub') or contains(@valueURI, '#data')]">
                 <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
@@ -386,6 +386,10 @@
                    href="{$WebApplicationBaseURL}oai/dnb-urn?verb=GetRecord&amp;metadataPrefix=epicur&amp;identifier=oai:oai-dnb-urn.rosdok.uni-rostock.de:{/mycoreobject/@ID}" rel="nofollow">OAI:DNB_URN</a>
                 <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
                    href="{$WebApplicationBaseURL}oai/dnb-epflicht?verb=GetRecord&amp;metadataPrefix=xMetaDissPlus&amp;identifier=oai:oai-dnb-epflicht.rosdok.uni-rostock.de:{/mycoreobject/@ID}" rel="nofollow">OAI:DNB_EPFLICHT</a>
+                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
+                   href="{$WebApplicationBaseURL}oai/dbmv?verb=GetRecord&amp;metadataPrefix=mets&amp;identifier=oai:oai-dbmv.rosdok.uni-rostock.de:{/mycoreobject/@ID}" rel="nofollow">OAI:DBMV</a>
+                <a class="btn btn-warning btn-sm ir-button-warning" style="margin:3px" target="_blank" 
+                   href="{$WebApplicationBaseURL}api/iiif/presentation/v2/{replace($recordID,'/','_')}/manifest" rel="nofollow">IIIF-Manifest</a>
               </xsl:if>
             </div>
           </div>
