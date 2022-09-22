@@ -75,7 +75,7 @@ public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
             for (Element e : xpathNote.evaluate(metsDocument)) {
                 e.getParentElement().removeContent(e);
             }
-            
+
             //temporary fixes
             //remove all <mets:mptr> elements
             XPathExpression<Element> xpathMptr = XPathFactory.instance().compile(
@@ -83,17 +83,18 @@ public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
             for (Element e : xpathMptr.evaluate(metsDocument)) {
                 e.getParentElement().removeContent(e);
             }
-            
+
             //temporary fixes
             //make div of item with DMDLOG_0000 to root div in structMap[Logical]
             XPathExpression<Element> xpathSMLogical = XPathFactory.instance().compile(
                 ".//mets:structMap[@TYPE='LOGICAL']", Filters.element(), null, MCRConstants.METS_NAMESPACE);
             Element eSMLogical = xpathSMLogical.evaluateFirst(metsDocument);
-            if(eSMLogical!=null) {
+            if (eSMLogical != null) {
                 XPathExpression<Element> xpathDiv0000 = XPathFactory.instance().compile(
-                    ".//mets:div[contains(@DMDID, 'DMDLOG_0000')]", Filters.element(), null, MCRConstants.METS_NAMESPACE);
+                    ".//mets:div[contains(@DMDID, 'DMDLOG_0000')]", Filters.element(), null,
+                    MCRConstants.METS_NAMESPACE);
                 Element eDiv0000 = xpathDiv0000.evaluateFirst(eSMLogical);
-                if(eDiv0000!=null) {
+                if (eDiv0000 != null) {
                     eSMLogical.removeContent();
                     eSMLogical.addContent(eDiv0000.detach());
                 }
@@ -126,12 +127,12 @@ public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
     }
 
     protected MCRJSPMetsMods2IIIFConverter getConverter(String id, Document metsDocument) {
-        return new MCRJSPMetsMods2IIIFConverter(metsDocument, normalizeIdentifier(id));
+        return new MCRJSPMetsMods2IIIFConverter(metsDocument, id);
     }
 
     private Document getMets(String id) throws IOException, JDOMException, SAXException {
-        Optional<MCRPIRegistrationInfo> optRegInfo = MCRPIManager.getInstance().getInfo(normalizeIdentifier(id),
-            MCRLocalID.TYPE);
+        String localID = id.contains("/") ? id : id.replaceFirst("_", "/");
+        Optional<MCRPIRegistrationInfo> optRegInfo = MCRPIManager.getInstance().getInfo(localID, MCRLocalID.TYPE);
         if (optRegInfo.isPresent()) {
             String mcrid = optRegInfo.get().getMycoreID();
             MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrid));
@@ -153,13 +154,11 @@ public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
 
     }
 
-    private String normalizeIdentifier(String id) {
-        String normalizedIdentifier = URLDecoder
-            .decode(URLDecoder.decode(id, StandardCharsets.UTF_8), StandardCharsets.UTF_8)
+    public String normalizeIdentifier(String id) {
+        String normalizedIdentifier = URLDecoder.decode(
+            URLDecoder.decode(id, StandardCharsets.UTF_8), StandardCharsets.UTF_8)
             .replace("..", "");
-        if (!normalizedIdentifier.contains("/")) {
-            normalizedIdentifier = normalizedIdentifier.replaceFirst("_", "/");
-        }
+        normalizedIdentifier = normalizedIdentifier.replace("/", "_");
         return normalizedIdentifier;
     }
 }

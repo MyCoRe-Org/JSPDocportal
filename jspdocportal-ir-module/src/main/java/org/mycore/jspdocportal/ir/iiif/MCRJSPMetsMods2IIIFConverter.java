@@ -94,6 +94,9 @@ public class MCRJSPMetsMods2IIIFConverter {
 
     protected final Map<String, PhysicalSubDiv> idPhysicalMetsMap = new ConcurrentHashMap<>();
 
+    private final String idSeparator = MCRConfiguration2.getString("MCR.IIIFImage.Iview.IdentifierSeparator")
+        .orElse("__");
+
     public MCRJSPMetsMods2IIIFConverter(Document metsDocument, String identifier) {
         this.metsDocument = metsDocument;
         this.mets = new Mets(metsDocument);
@@ -164,9 +167,8 @@ public class MCRJSPMetsMods2IIIFConverter {
             String identifier = this.physicalIdentifierMap.get(physicalSubDiv);
             try {
                 MCRIIIFImageInformation information = imageImpl.getInformation(
-                    physicalSubDiv.getContentIds()
-                        .replace(MCRConfiguration2.getStringOrThrow("MCR.Identifier.PURL.BaseURL"), "")
-                        .replace("/", "_"));
+                    metsDocument.getRootElement().getAttributeValue("OBJID").replace("/", "_")
+                        + idSeparator + physicalSubDiv.getId());
                 MCRIIIFCanvas canvas = new MCRIIIFCanvas(identifier, label, information.width, information.height);
 
                 MCRIIIFAnnotation annotation = new MCRIIIFAnnotation(identifier, canvas);

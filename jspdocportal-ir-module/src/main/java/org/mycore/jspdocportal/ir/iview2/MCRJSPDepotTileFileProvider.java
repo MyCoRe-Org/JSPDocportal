@@ -79,33 +79,40 @@ public class MCRJSPDepotTileFileProvider implements MCRTileFileProvider {
         }
     }
 
+    @Override
     public Optional<Path> getTileFile(MCRTileInfo tileInfo) {
         try {
-            String normalizedIdentifier = URLDecoder
-                .decode(URLDecoder.decode(tileInfo.getImagePath(), "UTF-8"), "UTF-8")
-                .replace("..", "");
+            String recordIdentifier = null;
+            String imagePath = null;
+            if (!StringUtils.isEmpty(tileInfo.getDerivate())) {
+                recordIdentifier = URLDecoder
+                    .decode(URLDecoder.decode(tileInfo.getDerivate(), "UTF-8"), "UTF-8")
+                    .replace("..", "");
+                imagePath = "iview2/" + tileInfo.getImagePath() + ".iview2";
+            } else {
+                //fallback for image ids like: rosdok%252Fppn642329060%252Fphys_0002
+                String normalizedIdentifier = URLDecoder
+                    .decode(URLDecoder.decode(tileInfo.getImagePath(), "UTF-8"), "UTF-8")
+                    .replace("..", "");
 
-            if (!normalizedIdentifier.contains("/")) {
-                normalizedIdentifier = normalizedIdentifier.replace("_phys", "/phys");
-            }
-            if (!normalizedIdentifier.contains("/")) {
-                return Optional.empty();
+                if (!normalizedIdentifier.contains("/")) {
+                    normalizedIdentifier = normalizedIdentifier.replace("_phys", "/phys");
+                }
+                if (!normalizedIdentifier.contains("/")) {
+                    return Optional.empty();
+                }
+
+                recordIdentifier = normalizedIdentifier.substring(0, normalizedIdentifier.lastIndexOf("/"));
+                imagePath = normalizedIdentifier.substring(normalizedIdentifier.lastIndexOf("/") + 1);
+                if (imagePath.contains(".")) {
+                    imagePath = imagePath.substring(0, imagePath.lastIndexOf("."));
+                }
+
+                imagePath = "iview2/" + imagePath + ".iview2";
             }
 
-            String recordIdentifier = normalizedIdentifier.substring(0, normalizedIdentifier.lastIndexOf("/"));
-            String imagePath = normalizedIdentifier.substring(normalizedIdentifier.lastIndexOf("/") + 1);
-            if (imagePath.contains(".")) {
-                imagePath = imagePath.substring(0, imagePath.lastIndexOf("."));
-            }
-
-            imagePath = "iview2/" + imagePath + ".iview2";
-
-            if (StringUtils.isNotEmpty(tileInfo.getDerivate())) {
-                recordIdentifier = URLDecoder.decode(URLDecoder.decode(tileInfo.getDerivate(), "UTF-8"), "UTF-8");
-            }
             Path subPath = retrieveDepotDir(recordIdentifier);
             if (subPath != null) {
-                imagePath = imagePath.replaceFirst("(\\w+)(_derivate_)(\\d+)(/)", "");
                 return Optional.of(MCRImage.getTiledFile(subPath, ".", imagePath));
             }
         } catch (Exception e) {
