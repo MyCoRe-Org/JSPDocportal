@@ -339,6 +339,9 @@
                 </xsl:call-template>
               </xsl:if>
             </xsl:for-each>
+            <xsl:if test="/mycoreobject/structure/derobjects/derobject/classification[@classid='derivate_types']/@categid='REPOS_METS'">
+              <a class="badge px-1" target="_blank" href="{$WebApplicationBaseURL}api/iiif/presentation/v2/{replace($recordID,'/','_')}/manifest">IIIF-Manifest</a>            
+            </xsl:if>
           </p>
         </xsl:if>
         <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.share')}</h4>
