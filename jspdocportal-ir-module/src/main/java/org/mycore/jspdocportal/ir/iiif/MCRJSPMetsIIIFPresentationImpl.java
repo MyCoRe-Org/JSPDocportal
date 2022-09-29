@@ -31,6 +31,7 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
 import org.jdom2.filter.Filters;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -56,6 +57,8 @@ public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private static final Namespace NS_UBR = Namespace.getNamespace("ubr", "http://ub.uni-rostock.de");
+    
     public MCRJSPMetsIIIFPresentationImpl(String implName) {
         super(implName);
     }
@@ -82,6 +85,14 @@ public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
                 ".//mets:mptr", Filters.element(), null, MCRConstants.METS_NAMESPACE);
             for (Element e : xpathMptr.evaluate(metsDocument)) {
                 e.getParentElement().removeContent(e);
+            }
+            
+            //temporary fixes
+            //remove all ubr:etag attributes from files
+            XPathExpression<Element> xpathFile = XPathFactory.instance().compile(
+                ".//mets:file[@ubr:etag]", Filters.element(), null, MCRConstants.METS_NAMESPACE, NS_UBR);
+            for (Element e : xpathFile.evaluate(metsDocument)) {
+                e.removeAttribute("etag", NS_UBR);
             }
 
             //temporary fixes
