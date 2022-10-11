@@ -112,27 +112,28 @@
               <hr/>
             </div>
           </div>
-          
+          <c:set var="class_structure_active">
+            <x:if select="contains($doc/mycoreobject/@ID, '_bundle_')"> active </x:if>
+          </c:set>
 		  <div class="row">
 		    <div id="content_viewer_area" class="col">
 			  <div class="mb-3">
                  <ul id="nav_bar_root" class="nav nav-tabs ir-docdetails-tabs">
                    <x:if select="$doc/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext' or @categid='MCRVIEWER_METS']]">
-					<li class="nav-item" role="presentation">
+					<li id="nav_item_fulltext" class="nav-item" role="presentation">
                       <a id="nav_tab_fulltext" class="nav-link active" data-toggle="tab" data-target="#nav_content_fulltext" href="#tab_fulltext"><fmt:message key="Browse.Tabs.viewer" /></a>
                     </li>
   				    </x:if>
-  				   <x:if select="contains($doc/mycoreobject/@ID, '_bundle_')">
-  				   <li class="nav-item" role="presentation">
-                      <a  id="nav_tab_structure" class="nav-link active" data-toggle="tab" data-target="#nav_content_structure" href="#tab_structure"><fmt:message key="Browse.Tabs.structure" /></a>
+                   
+  				   <li id="nav_item_structure" class="nav-item d-none" role="presentation">
+                      <a id="nav_tab_structure" class="nav-link ${class_structure_active}" data-toggle="tab" data-target="#nav_content_structure" href="#tab_structure"><fmt:message key="Browse.Tabs.structure" /></a>
                    </li>
-				   </x:if>
                    <x:if select="$doc/mycoreobject/metadata//*[@displayLabel='doctype'][contains(@valueURI, '/doctype#data')]">
-                      <li class="nav-item" role="presentation">
-                        <a id="nav_tab_fulltext" class="nav-link active" data-toggle="tab" data-target="#nav_content_data" href="#tab_data"><fmt:message key="Browse.Tabs.data" /></a>
+                      <li id="nav_item_data" class="nav-item" role="presentation">
+                        <a id="nav_tab_data" class="nav-link active" data-toggle="tab" data-target="#nav_content_data" href="#tab_data"><fmt:message key="Browse.Tabs.data" /></a>
                       </li>
                    </x:if>
-				   <li class="nav-item" role="presentation">
+				   <li id="nav_item_metadata" class="nav-item" role="presentation">
                       <a id="nav_tab_metadata" class="nav-link" data-toggle="tab" data-target="#nav_content_metadata" href="#tab_metadata"><fmt:message key="Browse.Tabs.metadata" /></a>
                    </li>
 				   <x:if select="$doc/mycoreobject/structure/derobjects/derobject">
@@ -177,8 +178,7 @@
 				       </x:if>
 			        </div>
 		          </x:if>
-		          <x:if select="contains($doc/mycoreobject/@ID, '_bundle_')">
-			        <div id="nav_content_structure" class="tab-pane active" data-parent="#nav_content_root">
+			        <div id="nav_content_structure" class="tab-pane d-none ${class_structure_active}" data-parent="#nav_content_root">
 				      <div style="font-size: 85%;min-height:600px">
 			    	    <c:set var="recordIdentifier"><x:out select="$doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier"/></c:set>
                         <c:set var="doctype"><x:out select="substring-after($doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI,'#')"/></c:set>
@@ -187,7 +187,18 @@
                         <browse:docdetails-structure hostRecordIdentifier="${recordIdentifier}" hostMcrID="${it.id}" hostDoctype="${doctype}" hostZDBID="${zdbid}" />
 				      </div>
 			        </div>
-		          </x:if>
+                  <script type="text/javascript">
+                    //show structure tab and structure content area if children are available
+                    window.addEventListener('DOMContentLoaded',function(){
+                      let elemNavContentStructure = document.getElementById("nav_content_structure");
+                  	  if(elemNavContentStructure.querySelector('.ir-structure-has-children')){
+                  	    let elemNavItemStructure = document.getElementById("nav_item_structure");
+                  	    elemNavItemStructure.classList.remove("d-none");
+                        elemNavContentStructure.classList.remove("d-none");
+                  	  }
+                    });
+                  </script>
+
                   <x:if select="$doc/mycoreobject/metadata//*[@displayLabel='doctype'][contains(@valueURI, '/doctype#data')]">
                     <div id="nav_content_data" class="tab-pane active" data-parent="#nav_content_root">
                       <div style="font-size: 85%;min-height:600px">
