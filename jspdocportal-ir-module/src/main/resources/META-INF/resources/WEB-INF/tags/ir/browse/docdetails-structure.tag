@@ -38,7 +38,7 @@
 
 <div class="panel panel-default ir-searchresult-panel">
   <c:if test="${numHits > 0}">
-    <ul class="list-group">
+    <ul class="list-group ir-structure-has-children">
       <c:forEach var="entry" items="${result.entries}">
         <c:set var="mcrid" value="${entry.mcrid}" />
         <c:set var="entry" value="${entry}" />
