@@ -21,7 +21,8 @@
 <% 
 	MCRSearchResultDataBean result = new MCRSearchResultDataBean();
 	result.setQuery("ir.host.recordIdentifier:"+hostRecordIdentifier+" OR ir.host.recordIdentifier:"+hostMcrID);
-	result.setSort("ir.sortstring asc");
+    String sortOrder = hostMcrID.contains("_document_") ? "desc" : "asc";
+	result.setSort("ir.sortstring " + sortOrder);
     result.setRows(999);
 	StringBuffer sb = new StringBuffer(MCRFrontendUtil.getBaseURL());
     //sb.append("resolve/recordIdentifier/"+recordIdentifier.replace("/", "%252F")+"?");
