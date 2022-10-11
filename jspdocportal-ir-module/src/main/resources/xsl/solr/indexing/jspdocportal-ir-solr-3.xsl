@@ -108,7 +108,7 @@
         </xsl:when>
         <xsl:otherwise>
           <xsl:for-each select="mods:titleInfo[@usage='primary']">
-            <field name="ir.title.result">{string-join((string-join((./mods:nonSort, ./mods:title),' '), ./mods:subTitle),': ')}</field>
+            <field name="ir.title.result">{string-join((string-join((./mods:nonSort, ./mods:title),' '), ./mods:subTitle),' : ')}</field>
             <xsl:if test="mods:partNumber">
               <field name="ir.partNumber.result">{./mods:partNumber}</field>
             </xsl:if> 
@@ -153,21 +153,21 @@
         <field name="ir.abstract300.result">{mcrstring:shorten(mods:abstract[1],300)}</field>
       </xsl:if>
       
-      <xsl:for-each select="mods:relatedItem[@otherType='hierarchical' and @displayLabel='appears_in'][1]">
+      <xsl:for-each select="mods:relatedItem[(@otherType='hierarchical' or @otherType='appears_in') and @displayLabel='appears_in'][1]">
         <xsl:for-each select="mods:titleInfo">
-          <field name="ir.host.title.result">{string-join((mods:nonSort, string-join((mods:title, mods:subTitle), ': ')),' ')}</field> 
+          <field name="ir.host.title.result">{string-join((mods:nonSort, string-join((mods:title, mods:subTitle), ' : ')),' ')}</field> 
         </xsl:for-each>
         <xsl:for-each select="mods:part">
           <field name="ir.host.part.result">{string-join((mods:partNumber, mods:partName),' ')}</field> 
         </xsl:for-each>
       </xsl:for-each>
       
-      <xsl:for-each select="mods:relatedItem[@otherType='hierarchical' and not(@displayLabel='appears_in')]">
+      <xsl:for-each select="mods:relatedItem[(@otherType='hierarchical' or @otherType='appears_in') and not(@displayLabel='appears_in')]">
         <xsl:for-each select="mods:recordInfo[1]/mods:recordIdentifier">
           <field name="ir.host.recordIdentifier"><xsl:value-of select="." /></field> 
         </xsl:for-each>
       </xsl:for-each>
-      <xsl:for-each select="mods:relatedItem[@otherType='hierarchical' and not(@displayLabel='appears_in')][last()]">
+      <xsl:for-each select="mods:relatedItem[(@otherType='hierarchical' or @otherType='appears_in') and not(@displayLabel='appears_in')][last()]">
         <xsl:for-each select="mods:part/mods:text[@type='sortstring'][1]">
           <field name="ir.sortstring"><xsl:value-of select="." /></field> 
         </xsl:for-each>
