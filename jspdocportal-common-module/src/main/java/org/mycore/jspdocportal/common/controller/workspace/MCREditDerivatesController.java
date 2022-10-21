@@ -23,6 +23,7 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.variable.value.StringValue;
 import org.glassfish.jersey.media.multipart.BodyPart;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -109,7 +110,7 @@ public class MCREditDerivatesController {
                 mcrobjid = sv.getValue();
                 start = s.indexOf("derivate_") + 9;
                 String derid = s.substring(start);
-                saveDerivateMetadata(taskid, mcrobjid, derid, request);
+                saveDerivateMetadata(taskid, mcrobjid, derid, multiPart);
             }
 
             //doAddFile-task_${actionBean.taskid}-derivate_${derID}
@@ -146,7 +147,7 @@ public class MCREditDerivatesController {
                 String derid = s.substring(start, s.indexOf("-", start));
                 start = s.indexOf("file_") + 5;
                 String file = s.substring(start);
-                renameFileInDerivate(taskid, mcrobjid, derid, file, request);
+                renameFileInDerivate(taskid, mcrobjid, derid, file, multiPart);
             }
 
             //doDeleteDerivate-task_${actionBean.taskid}-derivate_${derID}
@@ -192,9 +193,18 @@ public class MCREditDerivatesController {
     //Submit: doSaveDerivateMeta-task_${actionBean.taskid}-derivate_${derID}
     //Label: saveDerivateMeta_label-task_${actionBean.taskid}-derivate_${derID}
     //Title: saveDerivateMeta_title-task_${actionBean.taskid}-derivate_${derID}
-    private void saveDerivateMetadata(String taskid, String mcrobjid, String derid, HttpServletRequest request) {
-        String label = request.getParameter("saveDerivateMeta_label-task_" + taskid + "-derivate_" + derid);
-        String title = request.getParameter("saveDerivateMeta_title-task_" + taskid + "-derivate_" + derid);
+    private void saveDerivateMetadata(String taskid, String mcrobjid, String derid, FormDataMultiPart multiPart) {
+        String label = null;
+        String title = null;
+
+        FormDataBodyPart fdbpLabel = multiPart.getField("saveDerivateMeta_label-task_" + taskid + "-derivate_" + derid);
+        if (fdbpLabel != null) {
+            label = StringUtils.trimToEmpty(fdbpLabel.getValue());
+        }
+        FormDataBodyPart fdbpTitle = multiPart.getField("saveDerivateMeta_title-task_" + taskid + "-derivate_" + derid);
+        if (fdbpTitle != null) {
+            title = StringUtils.trimToEmpty(fdbpTitle.getValue());
+        }
 
         MCRDerivate der = MCRBPMNUtils.loadMCRDerivateFromWorkflowDirectory(MCRObjectID.getInstance(mcrobjid),
             MCRObjectID.getInstance(derid));
@@ -267,13 +277,14 @@ public class MCREditDerivatesController {
 
     //File: renameFile_new-task_${actionBean.taskid}-derivate_${derID}-file_${f}
     private void renameFileInDerivate(String taskid, String mcrobjid, String derid, String fileName,
-        HttpServletRequest request) {
+        FormDataMultiPart multiPart) {
         MCRDerivate der = MCRBPMNUtils.loadMCRDerivateFromWorkflowDirectory(MCRObjectID.getInstance(mcrobjid),
             MCRObjectID.getInstance(derid));
         Path derDir = MCRBPMNUtils.getWorkflowDerivateDir(MCRObjectID.getInstance(mcrobjid), der.getId());
         Path f = derDir.resolve(fileName);
-        String newName = request
-            .getParameter("renameFile_new-task_" + taskid + "-derivate_" + derid + "-file_" + fileName);
+        String newName = multiPart
+            .getField("renameFile_new-task_" + taskid + "-derivate_" + derid + "-file_" + fileName).getValue();
+
         if (!StringUtils.isBlank(newName)) {
             newName = cleanupFileName(newName);
 
@@ -388,9 +399,10 @@ public class MCREditDerivatesController {
                 .getWorkflowMgr(ts.createTaskQuery().executionId(taskid).singleResult().getProcessInstanceId());
 
             String label = multiPart.getField("newDerivate_label-task_" + taskid).getValue();
+            String title = multiPart.getField("newDerivate_title-task_" + taskid).getValue();
             String fileName = multiPart.getField("newDerivate_file-task_" + taskid).getFormDataContentDisposition()
                 .getFileName();
-            der = wfm.createMCRDerivate(MCRObjectID.getInstance(mcrobjid), label, null);
+            der = wfm.createMCRDerivate(MCRObjectID.getInstance(mcrobjid), label, title);
 
             try (InputStream is = multiPart.getField("newDerivate_file-task_" + taskid).getValueAs(InputStream.class)) {
                 Path derDir = MCRBPMNUtils.getWorkflowDerivateDir(MCRObjectID.getInstance(mcrobjid), der.getId());

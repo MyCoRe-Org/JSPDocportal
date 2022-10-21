@@ -2,11 +2,11 @@ package org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +16,6 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.variable.value.StringValue;
 import org.jdom2.Document;
-import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
 import org.mycore.access.MCRAccessException;
 import org.mycore.access.MCRAccessManager;
@@ -37,6 +36,7 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectMetadata;
 import org.mycore.datamodel.niofs.MCRPath;
+import org.mycore.datamodel.niofs.utils.MCRTreeCopier;
 import org.mycore.frontend.cli.MCRDerivateCommands;
 import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr;
@@ -390,9 +390,14 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                 } catch (MCRAccessException e) {
                     LOGGER.error(e);
                 }
-                MCRBPMNUtils.cleanupWorkflowDirForDerivate(mcrObj.getId(), mcrDerID);
-                MCRDerivateCommands.show(mcrDerID.toString(),
-                    MCRBPMNUtils.getWorkflowObjectDir(mcrObj.getId()).toString());
+                MCRBPMNUtils.cleanupWorkflowDirForDerivate(mcrObj.getId(), mcrDer.getId());
+                MCRBPMNUtils.saveMCRDerivateToWorkflowDirectory(mcrDer);
+                MCRPath rootPath = MCRPath.getRootPath(mcrDerID.toString());
+                try {
+                    Files.walkFileTree(rootPath, new MCRTreeCopier(rootPath, MCRBPMNUtils.getWorkflowDerivateDir(mcrObj.getId(), mcrDer.getId())));
+                } catch (IOException e) {
+                    LOGGER.error(e);
+                }
             }
         }
     }

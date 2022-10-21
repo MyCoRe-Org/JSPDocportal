@@ -112,13 +112,9 @@
                                               </c:if>
                                             </c:forEach>
                                         </select>
-                                        <c:if test="${fn:contains(objID,'_person_')}">
-                                            <c:set var="derTitle"><x:out select="$derDoc/mycorederivate/derivate/titles/title/text()" /></c:set>
-                                            <input id="txtEditDerMetaTitle_${derID}" name="saveDerivateMeta_title-task_${it.taskid}-derivate_${derID}" type="text" class="form-control" disabled="disabled" value="${derTitle}" data-original-value="${derTitle}" />
-                                        </c:if>
                                         </h4> 
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-4 text-right">
   										 <button id="btnEditDerMetaSave_${derID}" name="doSaveDerivateMeta-task_${it.taskid}-derivate_${derID}" style="display:none;" class="btn btn-primary"><i class="fas fa-save"></i> <fmt:message key="WF.derivates.button.save"/></button>
   										 <button id="btnEditDerMetaCancel_${derID}" type="button" style="display:none;" class="btn btn-secondary" onclick="disableDerMetaEditing('${derID}')"><i class="fas fa-times"></i> <fmt:message key="WF.derivates.button.cancel"/></button>
   										 <button id="btnEditDerMetaEdit_${derID}" type="button" class="btn btn-secondary" onclick="enableDerMetaEditing('${derID}')"><i class="fas fa-pencil-alt"></i> <fmt:message key="WF.derivates.button.edit"/></button>
@@ -142,6 +138,16 @@
                                         class="btn btn-danger pull-right" type="button"><i class="fas fa-trash"></i></button>
   									</div>
                                   </div>
+                                  
+                                  <c:if test="${fn:contains(objID,'_person_')}">
+                                    <div class="row">
+                                      <div class="offset-2 col-9">
+                                         <c:set var="derTitle"><x:out select="$derDoc/mycorederivate/derivate/titles/title/text()" /></c:set>
+                                         <input id="txtEditDerMetaTitle_${derID}" name="saveDerivateMeta_title-task_${it.taskid}-derivate_${derID}" type="text" class="form-control" disabled="disabled" value="${derTitle}" data-original-value="${derTitle}" />
+                                      </div>
+                                     </div>
+                                  </c:if>
+                                  
                                 </div>
                       			<div id="deleteDerivate_${derID}" class="collapse">
                                     <div class="card-body border-top border-secondary bg-warning">
