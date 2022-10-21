@@ -468,6 +468,11 @@ public class MCRShowWorkspaceController {
                 MCRDerivate der = MCRBPMNUtils.loadMCRDerivateFromWorkflowDirectory(mcrObjID,
                     derID.getXLinkHrefID());
                 result.append("\n  <div class=\"col-8\">");
+                if(der==null) {
+                    result.append("\n  <div class=\"alert alert-danger\" role=\"alert\">");
+                    result.append("\n    " + MCRTranslation.translate("Editor.Common.derivate.error"));
+                    result.append("\n  </div>");
+                } else {
                 if (!der.getDerivate().getClassifications().isEmpty()) {
                     result.append("\n    <strong>");
                     for (MCRMetaClassification c : der.getDerivate().getClassifications()) {
@@ -500,6 +505,7 @@ public class MCRShowWorkspaceController {
                     result.append("\n    </li>");
                 }
                 result.append("\n    </ul>");
+                }
                 result.append("\n  </div>"); // col
                 result.append("\n</div>"); // row
             }
