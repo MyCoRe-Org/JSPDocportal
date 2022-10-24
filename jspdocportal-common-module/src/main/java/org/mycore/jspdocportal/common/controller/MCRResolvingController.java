@@ -185,6 +185,27 @@ public class MCRResolvingController  {
             }
 
         String action = path[2];
+        if(action.equals("print")) {
+         // show metadata as print preview
+            try {
+                MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
+                if (!MCRMetadataManager.exists(mcrObjID)) {
+                    throw new MCRException("No object with id '" + mcrID + "' found.");
+                }
+                String view = MCRConfiguration2.getString("MCR.JSPDocportal.Doctails.Print").orElse("/printdetails");
+                
+                Map<String, Object> model = new HashMap<>();
+                model.put("id", mcrID);
+                Viewable v = new Viewable(view, model);
+                return Response.ok(v).build();
+                
+            } catch (MCRException ex) {
+                return Response.status(Status.NOT_FOUND)
+                    .entity("No object with id '" + mcrID + "' found.")
+                    .type(MediaType.TEXT_PLAIN_TYPE)
+                    .build();
+            }   
+        }
         if (action.equals("dfgviewer")) {
             String url = "";
             if (path.length == 3 || path.length == 4) {
