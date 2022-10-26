@@ -24,7 +24,7 @@
   <div class="col-md-3 d-none d-md-block">
     <c:if test="${not empty entry.internal['ir.cover_url']}">
       <div class="img-thumbnail ir-result-image">
-          <a href="${url}" id="thumbnail_${entry.mcrid}" style="display:inline-block;min-height:2em">
+          <a href="${url}" id="thumbnail_${entry.mcrid}" style="display:inline-block">
             <img style="width:100%" src="${WebApplicationBaseURL}${entry.internal['ir.cover_url']}" />
           </a>
       </div>
