@@ -17,6 +17,7 @@
 <head>
   <title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
   <%@ include file="fragments/html_head.jspf" %>
+  <base href="${WebApplicationBaseURL}" />
 </head>
 <body>
   <%@ include file="fragments/header.jspf" %>
