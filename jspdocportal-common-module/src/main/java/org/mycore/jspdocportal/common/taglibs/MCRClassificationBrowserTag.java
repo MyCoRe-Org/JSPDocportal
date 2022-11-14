@@ -466,7 +466,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
                 url.append("?q=").append(query);
                         
                 if (cb.sortResult != null) {
-                    url.append("&sort=").append(cb.sortResult.trim());
+                    url.append("&_sort=").append(cb.sortResult.trim());
                 }
             }
             out.write("<a class=\"btn btn-sm btn-outline-secondary cb-btn\" href=\"" + url.toString() + "\">");
