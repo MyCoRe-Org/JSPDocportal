@@ -50,7 +50,7 @@
                 .on('mouseleave', function () {{
                     setTimeout(function () {{
                          if (!$('.po_{$key}:hover').length) {{ 
-                           $('#infoButton_/{$labelkey}').popover('hide'); 
+                           $('#infoButton_{$key}').popover('hide'); 
                          }}
                      }}, 500);
                 }});
