@@ -68,7 +68,8 @@
       </xsl:if>
       <div class="docdetails-table-div">
         <table class="docdetails-table {$css_class}">
-          <xsl:copy-of select="$items" />
+          <!-- <xsl:copy-of select="$items" /> -->
+          <xsl:apply-templates select="$items" mode="output_html"/>
         </table>
       </div>
     </div>
@@ -79,6 +80,17 @@
     <div class="docdetails-separator">
        <hr />
     </div>
+  </xsl:template>
+  
+  <xsl:template match="text()" mode="output_html">
+    <xsl:value-of select="." disable-output-escaping="yes"/>
+  </xsl:template>
+
+  <xsl:template match="*|@*" mode="output_html">
+    <xsl:copy>
+      <xsl:apply-templates select="@*" mode="output_html"/>
+      <xsl:apply-templates mode="output_html"/>
+    </xsl:copy>
   </xsl:template>
 
 </xsl:stylesheet>
