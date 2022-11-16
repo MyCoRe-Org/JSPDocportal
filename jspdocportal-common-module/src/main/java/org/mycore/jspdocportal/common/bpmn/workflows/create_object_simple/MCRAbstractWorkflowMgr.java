@@ -247,8 +247,6 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
 
                 mcrObj.getService().removeFlags("editedby");
                 
-                //override validation of modified-date when saving the object into the repository (MCR-2603)
-                mcrObj.getService().removeDate("modifydate");
                 MCRMetadataManager.update(mcrObj);
             } catch (MCRAccessException | MCRException e) {
                 LOGGER.error(e);
