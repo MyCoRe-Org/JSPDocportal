@@ -10,7 +10,9 @@
                 expand-text="yes">
   <xsl:output method="html" indent="yes" standalone="yes" encoding="UTF-8"/>
   
+  <!-- ensure that the i18n functions are imported before docdetails.xsl in your stylesheet:
   <xsl:import href="resource:xsl/functions/i18n.xsl" />
+   -->
 
   <xsl:template name="dd_block">
     <xsl:param name="key" as="xs:string" />
