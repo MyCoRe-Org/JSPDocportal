@@ -115,9 +115,9 @@
                               <c:out value="${currentVariables.wfObjectDisplayDescription}" escapeXml="false" />
                             </div>
                             <div class="col-3 text-right">
-                              <a href="${WebApplicationBaseURL}resolve/id/${currentVariables.mcrObjectID}?fromWF=true"
-                                class="btn btn-sm btn-outline-secondary"> <i class="far fa-newspaper"></i> <fmt:message
-                                  key="WF.workspace.preview" />
+                              <a href="${WebApplicationBaseURL}resolve/id/${currentVariables.mcrObjectID}?fromWF=true&anchor=task_${currentTask.executionId}"
+                                class="btn btn-sm btn-outline-secondary"> 
+                                <i class="far fa-newspaper"></i> <fmt:message key="WF.workspace.preview" />
                               </a>
                             </div>
                           </div>
