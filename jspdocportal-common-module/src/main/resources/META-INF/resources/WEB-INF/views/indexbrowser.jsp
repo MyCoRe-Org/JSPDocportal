@@ -20,7 +20,7 @@
   <div id="content_area">
   <div class="container indexbrowser">
     <div class="row">
-      <div class="col-9">
+      <div class="col-12 col-xl-9">
         <mcr:includeWebcontent id="indexbrowser_intro" file="indexbrowser/${it.modus}_intro.html" />
         <div class="card indexbrowser-card ir-result-card">
           <div class="card-header">
