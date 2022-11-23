@@ -286,6 +286,12 @@ public class MCRShowWorkspaceController {
 
         //MCR.Workflow.Meta.dataEditor.Path.create_object_simple.wf_register_data
 
+        
+        if(taskID==null) {
+            TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
+            Task t = ts.createTaskQuery().processVariableValueEquals(MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID, mcrID).singleResult();
+            taskID = t.getExecutionId();
+        }
         RuntimeService rs = MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService();
         String mode = ((StringValue) rs.getVariableLocalTyped(taskID, MCRBPMNMgr.WF_VAR_MODE)).getValue();
 
