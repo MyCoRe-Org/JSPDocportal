@@ -323,9 +323,9 @@ public class MCREditDerivatesController {
 
     //File: addFile_file-task_${actionBean.taskid}-derivate_${derID}
     private void addFileToDerivate(String taskid, String mcrobjid, String derid, FormDataMultiPart multiPart) {
-        String fileName = multiPart.getField("addFile_file-task_" + taskid + "-derivate_" + derid)
-            .getFormDataContentDisposition().getFileName();
-        try (InputStream is = multiPart.getField("newDerivate_file-task_" + taskid).getValueAs(InputStream.class)) {
+        String field = "addFile_file-task_" + taskid + "-derivate_" + derid;
+        String fileName = multiPart.getField(field).getFormDataContentDisposition().getFileName();
+        try (InputStream is = multiPart.getField(field).getValueAs(InputStream.class)) {
             MCRDerivate der = MCRBPMNUtils.loadMCRDerivateFromWorkflowDirectory(MCRObjectID.getInstance(mcrobjid),
                 MCRObjectID.getInstance(derid));
             Path derDir = MCRBPMNUtils.getWorkflowDerivateDir(MCRObjectID.getInstance(mcrobjid), der.getId());
