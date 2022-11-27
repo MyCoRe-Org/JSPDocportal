@@ -18,5 +18,3 @@ You can use the following dependency:
   <version>2020.06-SNAPSHOT</version>
 </dependency>
 ```
-
-
