@@ -39,14 +39,14 @@ public abstract class MCRGVKMODSCatalogService implements MCRMODSCatalogService 
             throw new MCRException("Could not retrieve MODS for " + docJdom.getRootElement().getAttributeValue("ID"));
         }
         if (eNewMODS.getName().equals("error")) {
-            if(eNewMODS.getContentSize()>0) {
+            if (eNewMODS.getContentSize() > 0) {
                 throw new MCRException(eNewMODS.getContent(0).getValue());
-            }
-            else {
-                throw new MCRException("Could not retrieve MODS for " + docJdom.getRootElement().getAttributeValue("ID"));
+            } else {
+                throw new MCRException(
+                    "Could not retrieve MODS for " + docJdom.getRootElement().getAttributeValue("ID"));
             }
         }
-        
+
         updateWorkflowMetadataFile(mcrFile, docJdom, eModsContainer, eNewMODS);
     }
 
@@ -62,9 +62,8 @@ public abstract class MCRGVKMODSCatalogService implements MCRMODSCatalogService 
         Element eRecordInfo = XP_RECORD_ID.evaluateFirst(docJdom);
         if (eModsContainer != null && eRecordInfo != null) {
             // retrieve MODS by PURL
-            String query = "pica.url=purl*" + eRecordInfo.getTextTrim().replace("/", "") + " and pica.abr=\""
-                + getABLPrefix()
-                + " doctype\"";
+            String query = "pica.url=purl*" + eRecordInfo.getTextTrim().replace("/", "")
+                + " and pica.bib=" + getELN();
             return retrieveMODSFromCatalogue(query);
         }
 
@@ -99,6 +98,11 @@ public abstract class MCRGVKMODSCatalogService implements MCRMODSCatalogService 
     //RosDOK: opac-de-28
     //DBHSNB: opac-de-519
     public abstract String getCatalogID();
+
+    //RosDOK: 0028
+    //DBHSNB: 0519
+    /**return external library number **/
+    public abstract String getELN();
 
     public abstract Element retrieveMODSFromCatalogue(String sruQuery);
 }
