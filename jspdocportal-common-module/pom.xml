@@ -54,6 +54,10 @@
       <artifactId>jackson-core</artifactId>
     </dependency>
     <dependency>
+ 	  <groupId>com.fasterxml.jackson.core</groupId>
+ 	  <artifactId>jackson-annotations</artifactId>
+ 	</dependency>
+    <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
     </dependency>
@@ -76,9 +80,17 @@
       <artifactId>commons-net</artifactId>
     </dependency>
     <dependency>
+ 	  <groupId>io.swagger.core.v3</groupId>
+ 	  <artifactId>swagger-annotations-jakarta</artifactId>
+ 	</dependency>
+    <dependency>
       <groupId>jakarta.mail</groupId>
       <artifactId>jakarta.mail-api</artifactId>
     </dependency>
+    <dependency>
+ 	  <groupId>jakarta.persistence</groupId>
+ 	  <artifactId>jakarta.persistence-api</artifactId>
+ 	</dependency>
     <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
@@ -87,6 +99,14 @@
       <groupId>jakarta.servlet.jsp.jstl</groupId>
       <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
     </dependency>
+  	<dependency>
+ 	  <groupId>jakarta.ws.rs</groupId>
+ 	  <artifactId>jakarta.ws.rs-api</artifactId>
+ 	</dependency>
+    <dependency>
+ 	  <groupId>jakarta.xml.bind</groupId>
+ 	  <artifactId>jakarta.xml.bind-api</artifactId>
+ 	</dependency>
     <dependency>
       <groupId>net.sf.saxon</groupId>
       <artifactId>Saxon-HE</artifactId>
@@ -115,6 +135,18 @@
       <groupId>org.camunda.bpm</groupId>
       <artifactId>camunda-engine</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.camunda.commons</groupId>
+ 	  <artifactId>camunda-commons-typed-values</artifactId>
+ 	</dependency>
+ 	<dependency>
+ 	  <groupId>org.glassfish.jersey.core</groupId>
+ 	  <artifactId>jersey-server</artifactId>
+ 	</dependency>
+    <dependency>
+ 	  <groupId>org.glassfish.jersey.ext</groupId>
+ 	  <artifactId>jersey-mvc</artifactId>
+ 	</dependency>
     <dependency>
       <groupId>org.glassfish.jersey.ext</groupId>
       <artifactId>jersey-mvc-jsp</artifactId>
