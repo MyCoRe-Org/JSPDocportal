@@ -14,12 +14,6 @@
   <description>JSP based front-end for MyCoRe Repositories</description>
   <inceptionYear>2004</inceptionYear>
 
-  <modules>
-    <module>jspdocportal-bom</module>
-    <module>jspdocportal-common-module</module>
-    <module>jspdocportal-ir-module</module>
-  </modules>
-
   <repositories>
     <repository>
       <releases>
@@ -32,5 +26,11 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </repository>
   </repositories>
+  
+  <modules>
+    <module>jspdocportal-bom</module>
+    <module>jspdocportal-common-module</module>
+    <module>jspdocportal-ir-module</module>
+  </modules>
 
 </project>
