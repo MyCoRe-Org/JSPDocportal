@@ -48,17 +48,6 @@
     </plugins>
   </build>
   
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.mycore.jspdocportal</groupId>
-        <artifactId>jspdocportal-bom</artifactId>
-        <version>${project.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -206,5 +195,15 @@
       <artifactId>webjars-locator-core</artifactId>
     </dependency>
   </dependencies>
-
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.mycore.jspdocportal</groupId>
+        <artifactId>jspdocportal-bom</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 </project>
