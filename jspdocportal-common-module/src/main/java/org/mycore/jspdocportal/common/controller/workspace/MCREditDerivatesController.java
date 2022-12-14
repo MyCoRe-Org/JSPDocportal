@@ -354,7 +354,7 @@ public class MCREditDerivatesController {
 
     /** 
      * the first file in the directory becomes the main file of the derivate
-     * @param path - the derivate directory
+     * @param parent - the derivate directory
      * @return
      */
     protected static String getPathOfMainFile(Path parent) {

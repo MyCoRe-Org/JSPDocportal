@@ -137,7 +137,7 @@ public class MCRMetaHistoryEvent extends MCRMetaHistoryDate {
      * <li>the von is null or</li>
      * <li>the bis is null</li>
      * <li>the event is null</li>
-     * <li the classification is null</li>
+     * <li>the classification is null</li>
      * </ul>
      * otherwise the method returns <em>true</em>.
      * 
