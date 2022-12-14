@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -155,10 +156,10 @@ public class MCRAPIExplore {
     private void processSortParam(String sort, SolrQuery q) {
         if (sort != null) {
             Arrays.stream(sort.split(",")).map(String::trim).forEach(s -> {
-                if (s.toLowerCase().endsWith(" asc")) {
+                if (s.toLowerCase(Locale.getDefault()).endsWith(" asc")) {
                     q.addSort(s.substring(0, s.length() - 4).trim(), SolrQuery.ORDER.asc);
 
-                } else if (s.toLowerCase().endsWith(" desc")) {
+                } else if (s.toLowerCase(Locale.getDefault()).endsWith(" desc")) {
                     q.addSort(s.substring(0, s.length() - 5).trim(), SolrQuery.ORDER.desc);
                 } else {
                     q.addSort(s.trim(), SolrQuery.ORDER.asc);

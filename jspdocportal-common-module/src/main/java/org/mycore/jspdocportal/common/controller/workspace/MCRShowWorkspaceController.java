@@ -3,6 +3,7 @@ package org.mycore.jspdocportal.common.controller.workspace;
 import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -286,10 +287,10 @@ public class MCRShowWorkspaceController {
 
         //MCR.Workflow.Meta.dataEditor.Path.create_object_simple.wf_register_data
 
-        
-        if(taskID==null) {
+        if (taskID == null) {
             TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
-            Task t = ts.createTaskQuery().processVariableValueEquals(MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID, mcrID).singleResult();
+            Task t = ts.createTaskQuery().processVariableValueEquals(MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID, mcrID)
+                .singleResult();
             taskID = t.getExecutionId();
         }
         RuntimeService rs = MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService();
@@ -368,13 +369,14 @@ public class MCRShowWorkspaceController {
                 MCRConfiguration2.getString("MCR.Workflow.MCRObject.Display.Title.XSL").orElseThrow());
             ByteArrayOutputStream baosTitle = new ByteArrayOutputStream();
             xsltTitle.transform(new MCRJDOMContent(mcrObj.createXML()), baosTitle);
-            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_TITLE, baosTitle.toString());
+            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_TITLE, baosTitle.toString(StandardCharsets.UTF_8));
 
             MCRXSLTransformer xsltDescription = MCRXSLTransformer.getInstance(tfClass,
                 MCRConfiguration2.getString("MCR.Workflow.MCRObject.Display.Description.XSL").orElseThrow());
             ByteArrayOutputStream baosDescription = new ByteArrayOutputStream();
             xsltDescription.transform(new MCRJDOMContent(mcrObj.createXML()), baosDescription);
-            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_DESCRIPTION, baosDescription.toString());
+            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_DESCRIPTION,
+                baosDescription.toString(StandardCharsets.UTF_8));
 
         } catch (Exception e) {
             LOGGER.error(e);
@@ -474,43 +476,44 @@ public class MCRShowWorkspaceController {
                 MCRDerivate der = MCRBPMNUtils.loadMCRDerivateFromWorkflowDirectory(mcrObjID,
                     derID.getXLinkHrefID());
                 result.append("\n  <div class=\"col-8\">");
-                if(der==null) {
+                if (der == null) {
                     result.append("\n  <div class=\"alert alert-danger\" role=\"alert\">");
                     result.append("\n    " + MCRTranslation.translate("Editor.Common.derivate.error"));
                     result.append("\n  </div>");
                 } else {
-                if (!der.getDerivate().getClassifications().isEmpty()) {
-                    result.append("\n    <strong>");
-                    for (MCRMetaClassification c : der.getDerivate().getClassifications()) {
-                        Optional<MCRLabel> oLabel = MCRCategoryDAOFactory.getInstance()
-                            .getCategory(new MCRCategoryID(c.getClassId(), c.getCategId()), 0).getCurrentLabel();
-                        if (oLabel.isPresent()) {
-                            result.append("[").append(oLabel.get().getText()).append("] ");
+                    if (!der.getDerivate().getClassifications().isEmpty()) {
+                        result.append("\n    <strong>");
+                        for (MCRMetaClassification c : der.getDerivate().getClassifications()) {
+                            Optional<MCRLabel> oLabel = MCRCategoryDAOFactory.getInstance()
+                                .getCategory(new MCRCategoryID(c.getClassId(), c.getCategId()), 0).getCurrentLabel();
+                            if (oLabel.isPresent()) {
+                                result.append("[").append(oLabel.get().getText()).append("] ");
+                            }
                         }
+                        result.append("</strong>");
                     }
-                    result.append("</strong>");
-                }
-                for (MCRMetaLangText txt : der.getDerivate().getTitles()) {
-                    result.append("<br />" + txt.getText());
-                }
-                result.append("\n    <ul style=\"list-style-type: none;\">");
-                for (String fileName : derivateFiles.get(derID.getXLinkHref())) {
-                    result.append("\n        <li>");
-                    if (fileName.contains(".")) {
-                        result.append("<i class=\"fa fa-file mr-3\"></i>");
-                    } else {
-                        result.append("<i class=\"fa fa-folder-open mr-3\"></i>");
+                    for (MCRMetaLangText txt : der.getDerivate().getTitles()) {
+                        result.append("<br />" + txt.getText());
                     }
-                    result.append("<a href=\"" + MCRFrontendUtil.getBaseURL() + "do/wffile/" + mcrObjID.toString() + "/"
-                        + der.getId().toString() + "/" + fileName + "\">" + fileName + "</a>");
+                    result.append("\n    <ul style=\"list-style-type: none;\">");
+                    for (String fileName : derivateFiles.get(derID.getXLinkHref())) {
+                        result.append("\n        <li>");
+                        if (fileName.contains(".")) {
+                            result.append("<i class=\"fa fa-file mr-3\"></i>");
+                        } else {
+                            result.append("<i class=\"fa fa-folder-open mr-3\"></i>");
+                        }
+                        result.append(
+                            "<a href=\"" + MCRFrontendUtil.getBaseURL() + "do/wffile/" + mcrObjID.toString() + "/"
+                                + der.getId().toString() + "/" + fileName + "\">" + fileName + "</a>");
 
-                    if (fileName.equals(der.getDerivate().getInternals().getMainDoc())) {
-                        result.append("<span class=\"ml-3 text-secondary\" class=\"fa fa-star\" title=\""
-                            + MCRTranslation.translate("Editor.Common.derivate.maindoc") + "\"></span>");
+                        if (fileName.equals(der.getDerivate().getInternals().getMainDoc())) {
+                            result.append("<span class=\"ml-3 text-secondary\" class=\"fa fa-star\" title=\""
+                                + MCRTranslation.translate("Editor.Common.derivate.maindoc") + "\"></span>");
+                        }
+                        result.append("\n    </li>");
                     }
-                    result.append("\n    </li>");
-                }
-                result.append("\n    </ul>");
+                    result.append("\n    </ul>");
                 }
                 result.append("\n  </div>"); // col
                 result.append("\n</div>"); // row

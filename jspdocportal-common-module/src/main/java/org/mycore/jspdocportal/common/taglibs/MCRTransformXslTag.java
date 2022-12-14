@@ -24,6 +24,7 @@ package org.mycore.jspdocportal.common.taglibs;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import javax.xml.transform.TransformerFactory;
 
@@ -77,17 +78,17 @@ public class MCRTransformXslTag extends SimpleTagSupport {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             if (mcrid != null) {
                 t.transform(MCRXMLMetadataManager.instance().retrieveContent(MCRObjectID.getInstance(mcrid)), baos);
-                getJspContext().getOut().append(baos.toString());
+                getJspContext().getOut().append(baos.toString(StandardCharsets.UTF_8));
                 return;
             }
             if (jdom != null) {
                 t.transform(new MCRJDOMContent(jdom), baos);
-                getJspContext().getOut().append(baos.toString());
+                getJspContext().getOut().append(baos.toString(StandardCharsets.UTF_8));
                 return;
             }
             if (dom != null) {
                 t.transform(new MCRDOMContent(dom), baos);
-                getJspContext().getOut().append(baos.toString());
+                getJspContext().getOut().append(baos.toString(StandardCharsets.UTF_8));
                 return;
             }
         } catch (Exception e) {

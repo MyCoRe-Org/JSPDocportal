@@ -23,6 +23,7 @@
 package org.mycore.jspdocportal.common.taglibs;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -106,10 +107,10 @@ public class MCRWebjarLocatorTag extends SimpleTagSupport {
             if(htmlElement!=null) {
                 if(htmlElement.equals("script")) {
                     pageContext.getOut().print("<script src=\"" + MCRFrontendUtil.getBaseURL() + url + "\"");
-                    if(attribute!=null && attribute.toLowerCase().contains("defer")) {
+                    if(attribute!=null && attribute.toLowerCase(Locale.getDefault()).contains("defer")) {
                         pageContext.getOut().print(" defer=\"defer\"");
                     }
-                    if(attribute!=null && attribute.toLowerCase().contains("async")) {
+                    if(attribute!=null && attribute.toLowerCase(Locale.getDefault()).contains("async")) {
                         pageContext.getOut().print(" async=\"async\"");
                     }
                     pageContext.getOut().print("></script>");
