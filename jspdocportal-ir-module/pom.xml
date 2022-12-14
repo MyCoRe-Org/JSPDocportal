@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.mycore.jspdocportal</groupId>
@@ -14,75 +13,6 @@
   <properties>
     <manifest.priority>12</manifest.priority>
   </properties>
-
-  <build>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-      </resource>
-      <resource>
-        <directory>target/dependency/components/oai/web</directory>
-      </resource>
-    </resources>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifest>
-              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-              <addExtensions />
-            </manifest>
-            <manifestEntries>
-              <MCR-Artifact-Id>${project.artifactId}</MCR-Artifact-Id>
-              <MCR-Application-Module>${project.name}</MCR-Application-Module>
-              <Priority>${manifest.priority}</Priority>
-            </manifestEntries>
-          </archive>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>unpack</id>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <phase>generate-sources</phase>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.mycore</groupId>
-                  <artifactId>mycore-oai</artifactId>
-                  <version>${mycore.version}</version>
-                  <includes>components\/oai\/web\/oai\/**</includes>
-                  <!-- <includes>**\/*.xsd, **\/*.wsdl components\oai\web\/*.*</includes> -->
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.mycore.plugins</groupId>
-        <artifactId>datamodel-plugin</artifactId>
-        <version>0.7</version>
-        <configuration>
-          <schemaDirectory></schemaDirectory>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>schema</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
 
   <dependencyManagement>
     <dependencies>
@@ -142,4 +72,73 @@
       <artifactId>mycore-iiif</artifactId>
     </dependency>
   </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>target/dependency/components/oai/web</directory>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addExtensions></addExtensions>
+            </manifest>
+            <manifestEntries>
+              <MCR-Artifact-Id>${project.artifactId}</MCR-Artifact-Id>
+              <MCR-Application-Module>${project.name}</MCR-Application-Module>
+              <Priority>${manifest.priority}</Priority>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <phase>generate-sources</phase>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.mycore</groupId>
+                  <artifactId>mycore-oai</artifactId>
+                  <version>${mycore.version}</version>
+                  <includes>components\/oai\/web\/oai\/**</includes>
+                  <!-- <includes>**\/*.xsd, **\/*.wsdl components\oai\web\/*.*</includes> -->
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.mycore.plugins</groupId>
+        <artifactId>datamodel-plugin</artifactId>
+        <version>0.7</version>
+        <configuration>
+          <schemaDirectory></schemaDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>schema</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
