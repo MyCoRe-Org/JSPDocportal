@@ -84,11 +84,6 @@
       <artifactId>jakarta.servlet-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>jakarta.servlet.jsp</groupId>
-      <artifactId>jakarta.servlet.jsp-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>jakarta.servlet.jsp.jstl</groupId>
       <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
     </dependency>
@@ -164,6 +159,16 @@
       <groupId>org.mycore.iview2</groupId>
       <artifactId>image-tiler</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>webjars-locator-core</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>jakarta.servlet.jsp</groupId>
+      <artifactId>jakarta.servlet.jsp-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
 
     <dependency>
       <groupId>commons-fileupload</groupId>
@@ -189,10 +194,6 @@
       <groupId>org.webjars</groupId>
       <artifactId>ckeditor</artifactId>
       <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>webjars-locator-core</artifactId>
     </dependency>
   </dependencies>
   <dependencyManagement>
