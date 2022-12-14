@@ -30,6 +30,7 @@ import jakarta.servlet.jsp.PageContext;
  * 
  * Example usage:
  * 
+ * <pre>
  * @code{
  * <mcr:customNavigation id="left" expanded="true" var="navigation"/>
  * <ul>
@@ -46,7 +47,7 @@ import jakarta.servlet.jsp.PageContext;
  * </c:forEach>
  * </ul>
  * }
- * 
+ * </pre>
  * @author Robert Stephan, Christian Windolf
  * 
  */

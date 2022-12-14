@@ -43,7 +43,7 @@ import jakarta.servlet.jsp.tagext.JspFragment;
  * <ul>
  * <li>languages: A comma separated list of languages, that should be used.
  * For example "de,en"</li>
- * <li>var: The name of the variable that should be bound to the PAGE_SCOPE</p>
+ * <li>var: The name of the variable that should be bound to the PAGE_SCOPE</li>
  * </ul>
  * 
  * <p>You may use the following page variables within the JSP body (if you set var="lang"):</p>
@@ -57,7 +57,7 @@ import jakarta.servlet.jsp.tagext.JspFragment;
  *  
  *  <p>Sample Usage (simple):</p>
  * <pre>
- * @code{ 
+ * @code{
  *  <mcr:outputLanguageSelector languages="de,en" var="lang">
  *    <c:if test="${lang.currentLang != lang.lang}">
  *       <a href="${lang.href}">
