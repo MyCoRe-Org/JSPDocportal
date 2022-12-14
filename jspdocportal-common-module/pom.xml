@@ -65,20 +65,15 @@
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
     </dependency>
-    <dependency>
+    <!--<dependency>
       <groupId>com.itextpdf</groupId>
       <artifactId>itextpdf</artifactId>
-    </dependency>
-    <dependency>
+    </dependency> -->
+    <!-- <dependency>
       <groupId>com.itextpdf.tool</groupId>
       <artifactId>xmlworker</artifactId>
-    </dependency>
+    </dependency> -->
 
-    <!-- for FTP upload -->
-    <dependency>
-      <groupId>commons-net</groupId>
-      <artifactId>commons-net</artifactId>
-    </dependency>
     <dependency>
  	  <groupId>io.swagger.core.v3</groupId>
  	  <artifactId>swagger-annotations-jakarta</artifactId>
@@ -119,10 +114,10 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
     </dependency>
-    <dependency>
+    <!--<dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
-    </dependency>
+    </dependency> -->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
@@ -155,10 +150,10 @@
       <groupId>org.glassfish.jersey.media</groupId>
       <artifactId>jersey-media-multipart</artifactId>
     </dependency>
-    <dependency>
+    <!--<dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core-jakarta</artifactId>
-    </dependency>
+    </dependency> -->
     <dependency>
       <groupId>org.jdom</groupId>
       <artifactId>jdom2</artifactId>
@@ -167,10 +162,10 @@
       <groupId>org.mycore</groupId>
       <artifactId>mycore-base</artifactId>
     </dependency>
-    <dependency>
+    <!--<dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-ifs</artifactId>
-    </dependency>
+    </dependency> -->
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-solr</artifactId>
@@ -179,18 +174,18 @@
       <groupId>org.mycore</groupId>
       <artifactId>mycore-user2</artifactId>
     </dependency>
-    <dependency>
+    <!--<dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-webtools</artifactId>
-    </dependency>
+    </dependency>-->
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-xeditor</artifactId>
     </dependency>
-    <dependency>
+    <!--    <dependency>
       <groupId>org.mycore.iview2</groupId>
       <artifactId>image-tiler</artifactId>
-    </dependency>
+    </dependency> -->
     <dependency>
       <groupId>org.webjars</groupId>
       <artifactId>webjars-locator-core</artifactId>
@@ -205,6 +200,12 @@
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!-- for FTP upload -->
+    <dependency>
+      <groupId>commons-net</groupId>
+      <artifactId>commons-net</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
