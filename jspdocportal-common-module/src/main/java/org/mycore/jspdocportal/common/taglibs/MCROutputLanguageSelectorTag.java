@@ -56,7 +56,8 @@ import jakarta.servlet.jsp.tagext.JspFragment;
  * </ul>
  *  
  *  <p>Sample Usage (simple):</p>
- *  
+ * <pre>
+ * @code{ 
  *  <mcr:outputLanguageSelector languages="de,en" var="lang">
  *    <c:if test="${lang.currentLang != lang.lang}">
  *       <a href="${lang.href}">
@@ -65,9 +66,11 @@ import jakarta.servlet.jsp.tagext.JspFragment;
  *       </a>
  *    </c:if>
  *  </mcr:outputLanguageSelector>
- *  
+ *  }
+ *  </pre>
  *  Sample Usage (advanced):
- *  
+ *  <pre>
+ *  @code{
  *  <mcr:outputLanguageSelector languages="de,en" var="lang">
  *   <c:if test="${!lang.first}">&#160;|&#160;</c:if>                     
  *   <c:choose>
@@ -79,8 +82,8 @@ import jakarta.servlet.jsp.tagext.JspFragment;
  *      </c:otherwise>
  *   </c:choose>                     
  * </mcr:outputLanguageSelector>
- *
- *  
+ * }
+ * </pre>
  *  
  * @author Robert Stephan
  *
@@ -111,7 +114,6 @@ public class MCROutputLanguageSelectorTag extends MCRAbstractTag {
         JspContext context = getJspContext();
         JspFragment body = getJspBody();
 
-        @SuppressWarnings("unchecked")
         Enumeration<String> pnames = (Enumeration<String>) request.getParameterNames();
 
         while (pnames.hasMoreElements()) {

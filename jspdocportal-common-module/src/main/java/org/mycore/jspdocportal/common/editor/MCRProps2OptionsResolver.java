@@ -57,7 +57,9 @@ import org.mycore.services.i18n.MCRTranslation;
  *     OMD.profkat.states.document=Dokumenteintrag
  *     OMD.profkat.states.other=Sonstige
  *     
- * result:     
+ * result:
+ * <pre>
+ * {@code
  *     <select id="status" class="form-control">
  *         <option value="">Bitte wählen</option>
  *         <option value="inprogress">in Bearbeitung</option>
@@ -66,9 +68,9 @@ import org.mycore.services.i18n.MCRTranslation;
  *         <option value="document">Dokumenteintrag</option>
  *         <option value="other">Sonstige</option>
  *     </select>
- *     
+ * }
+ * </pre>  
  *  @author Robert Stephan                 
- *
  */
 public class MCRProps2OptionsResolver implements URIResolver {
     @Override

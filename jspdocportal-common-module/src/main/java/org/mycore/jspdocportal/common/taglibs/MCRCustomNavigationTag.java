@@ -18,8 +18,7 @@ import jakarta.servlet.jsp.PageContext;
  * <p>
  * Appends a JavaBean to the PAGE_SCOPE, that can be traversed with JSTL tags.
  * </p>
- * 
- * </p> The name of the variable is passed by the attribute "var" </p>
+ * <p> The name of the variable is passed by the attribute "var" </p>
  * <p>
  * Also it requires the attribute "id". The id is used to retrieve the
  * navigation from the navigation.xml.
@@ -31,6 +30,7 @@ import jakarta.servlet.jsp.PageContext;
  * 
  * Example usage:
  * 
+ * @code{
  * <mcr:customNavigation id="left" expanded="true" var="navigation"/>
  * <ul>
  * <c:forEach var="n1" items="${navigation}">
@@ -45,6 +45,7 @@ import jakarta.servlet.jsp.PageContext;
  * </c:if></li>
  * </c:forEach>
  * </ul>
+ * }
  * 
  * @author Robert Stephan, Christian Windolf
  * 

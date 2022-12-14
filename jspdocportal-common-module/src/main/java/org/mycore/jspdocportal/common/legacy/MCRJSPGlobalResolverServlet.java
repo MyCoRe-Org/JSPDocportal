@@ -57,7 +57,7 @@ import jakarta.servlet.http.HttpServletResponse;
 /**
  * This servlet response the MCRObject certain by the call path
  * <em>.../receive/MCRObjectID</em> or
- * <em>.../servlets/MCRObjectServlet/id=MCRObjectID[&XSL.Style=...]</em>.
+ * <em>.../servlets/MCRObjectServlet/id=MCRObjectID[&amp;XSL.Style=...]</em>.
  * 
  * @author Robert Stephan
  * 
