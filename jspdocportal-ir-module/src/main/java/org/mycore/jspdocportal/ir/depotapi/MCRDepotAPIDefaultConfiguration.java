@@ -33,7 +33,7 @@ import java.nio.file.Path;
 public class MCRDepotAPIDefaultConfiguration implements MCRDepotAPIConfiguration {
 
     /**
-     * @see org.mycore.frontend.depotapi.MCRDepotAPIConfiguration#resolveFile(java.lang.String)
+     * @see org.mycore.jspdocportal.ir.depotapi.MCRDepotAPIConfiguration#resolveFile(java.lang.String)
      */
     @Override
     public Path resolveFile(String path) {
@@ -41,7 +41,7 @@ public class MCRDepotAPIDefaultConfiguration implements MCRDepotAPIConfiguration
     }
 
     /**
-     * @see org.mycore.frontend.depotapi.MCRDepotAPIConfiguration#getMaxBrowserCacheAgeInMillis()
+     * @see org.mycore.jspdocportal.ir.depotapi.MCRDepotAPIConfiguration#getMaxBrowserCacheAgeInMillis()
      */
     @Override
     public long getMaxBrowserCacheAgeInMillis() {
@@ -49,7 +49,7 @@ public class MCRDepotAPIDefaultConfiguration implements MCRDepotAPIConfiguration
     }
 
     /**
-     * @see org.mycore.frontend.depotapi.MCRDepotAPIConfiguration#getMaxEtagAgeInMillis()
+     * @see org.mycore.jspdocportal.ir.depotapi.MCRDepotAPIConfiguration#getMaxEtagAgeInMillis()
      */
     @Override
     public long getMaxEtagAgeInMillis() {

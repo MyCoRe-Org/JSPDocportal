@@ -60,7 +60,7 @@ public class MCRDepotAPIServlet extends HttpServlet {
      * The initialization method of the servlet.
      * uses the servlet config parameter {@code config.class} 
      * 
-     * @see javax.servlet.GenericServlet#init()
+     * @see jakarta.servlet.GenericServlet#init()
      */
     public void init() throws ServletException {
         super.init();
