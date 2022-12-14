@@ -25,12 +25,12 @@ import org.mycore.user2.MCRUserManager;
  * 		e.g.: MCR.Workflow.TaskAssignment.CandidateUsers.edit_object.professorum=administrator
  * 
  * It is configured as TaskListener in BPMN model file:
- *  <userTask id="edit_object" name="Objekt bearbeiten">
- *    <extensionElements>
- *      <camunda:taskListener class="org.mycore.jspdocportal.common.bpmn.MCRBPMNAssignmentHandler" event="create" />
- *    </extensionElements>
+ *  &lt;userTask id="edit_object" name="Objekt bearbeiten"&gt;
+ *    &lt;extensionElements&gt;
+ *      &lt;camunda:taskListener class="org.mycore.jspdocportal.common.bpmn.MCRBPMNAssignmentHandler" event="create" /&gt;
+ *    &lt;/extensionElements&gt;
  *    ...
- *  </userTask>  
+ *  &lt;/userTask&gt;
  * 
  *  @author Robert Stephan
  *  

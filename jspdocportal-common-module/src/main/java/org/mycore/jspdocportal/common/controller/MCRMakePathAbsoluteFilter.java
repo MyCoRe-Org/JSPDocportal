@@ -38,6 +38,8 @@ import jakarta.ws.rs.container.PreMatching;
  * of the Jersey resource to distinguish between the multiple end-points.
  *
  *  web.xml:
+ * <pre>
+ * {@code
  *   <servlet>
  *     <servlet-name>MVC Jersey Servlet</servlet-name>
  *     <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
@@ -55,7 +57,8 @@ import jakarta.ws.rs.container.PreMatching;
  *       <servlet-name>MVC Jersey Servlet</servlet-name>
  *       <url-pattern>/resolve/*</url-pattern>
  *   </servlet-mapping>
- * 
+ * }
+ * </pre>
  * Example:
  *  localhost:8080/myapp/view/hello
  *  without modification Jersey BaseURI: /view   Path seen by Jersey Controller: /hello
