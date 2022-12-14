@@ -101,7 +101,7 @@ public class Navigations {
     * nodeID: a unique ID for the node (@see java.util.UUID for implementation details)
     * path: the complete navigation path (hierarchy of navitem ids, separated by ".") 
     * 
-    * @param session - the HTTPSession
+    * @param sce - the ServletContext
     */
     public static void loadNavigation(ServletContext sce) {
         Navigations nav = Navigations.unmarshall(MCRNavigationUtil.class.getResourceAsStream("/config/navigation.xml"));

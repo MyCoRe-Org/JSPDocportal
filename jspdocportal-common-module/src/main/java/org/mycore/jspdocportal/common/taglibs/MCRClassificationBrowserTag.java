@@ -148,7 +148,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
     Vector<String> path = new Vector<String>();
 
     /**
-     * @see javax.servlet.jsp.tagext.SimpleTagSupport#doTag()
+     * @see jakarta.servlet.jsp.tagext.SimpleTagSupport#doTag()
      */
     public void doTag() throws JspException, IOException {
         PageContext pageContext = (PageContext) getJspContext();

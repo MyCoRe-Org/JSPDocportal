@@ -54,8 +54,8 @@ import jakarta.servlet.jsp.tagext.JspFragment;
  * <li> lang.href - the link to be displayed for the current language</li>
  * <li> lang.imageURL - the URL to the image to be displayed for the current language</li>
  * </ul>
- *  
- *  <p>Sample Usage (simple):</p>
+ */  
+ /*  <p>Sample Usage (simple):</p>
  * <pre>
  * @code{
  *  <mcr:outputLanguageSelector languages="de,en" var="lang">
@@ -149,7 +149,7 @@ public class MCROutputLanguageSelectorTag extends MCRAbstractTag {
 
     /**
      * set the available languages (use comma separated list)
-     * @param should look like "de, en".
+     * @param languages - should look like "de, en".
      */
     public void setLanguages(String languages) {
         this.languages = languages;

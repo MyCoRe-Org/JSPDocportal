@@ -50,7 +50,7 @@ public class MCRNavigationUtil {
      * nodeID: a unique ID for the node (@see java.util.UUID for implementation details)
      * path: the complete navigation path (hierarchy of navitem ids, separated by ".") 
      * 
-     * @param session - the HTTPSession
+     * @param sce - the servlet context
      */
     protected static void loadNavigation(ServletContext sce) {
         Element eNav = MCRURIResolver.instance().resolve("resource:config/navigation.xml");

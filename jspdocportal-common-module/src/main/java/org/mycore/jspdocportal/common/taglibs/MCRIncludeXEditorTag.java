@@ -60,7 +60,7 @@ public class MCRIncludeXEditorTag extends SimpleTagSupport {
     /**
      * Path to cancel URL
      * 
-     * @param editorPath
+     * @param cancelURL
      */
     public void setCancelURL(String cancelURL) {
         this.cancelURL = cancelURL;

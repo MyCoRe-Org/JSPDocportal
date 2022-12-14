@@ -85,7 +85,7 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
     /**
      * The initalization of the servlet.
      * 
-     * @see javax.servlet.GenericServlet#init()
+     * @see jakarta.servlet.GenericServlet#init()
      */
     public void init() throws ServletException {
         super.init();

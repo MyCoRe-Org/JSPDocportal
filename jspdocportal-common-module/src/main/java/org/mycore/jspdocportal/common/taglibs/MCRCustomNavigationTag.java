@@ -27,8 +27,9 @@ import jakarta.servlet.jsp.PageContext;
  * The attribute "expanded" just points out, if the whole navigation tree should
  * be passed to the bean or just the first level.
  * </p>
- * 
- * Example usage:
+ */ 
+ 
+/* Example usage:
  * 
  * <pre>
  * @code{
@@ -192,7 +193,7 @@ public class MCRCustomNavigationTag extends MCRAbstractNavigationTag {
         /**
          * 
          * @return true, if
-         *         {@link MCRNavigation.NavigationVariables#getChildren()} ist
+         *         {@link NavigationVariables#getChildren()} ist
          *         not null or empty
          */
         public boolean isExpanded() {

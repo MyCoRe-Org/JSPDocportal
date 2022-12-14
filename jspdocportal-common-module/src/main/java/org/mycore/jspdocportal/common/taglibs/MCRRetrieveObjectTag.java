@@ -94,13 +94,6 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
     
     private String cache="";
 
-    /**
-     * sets the MCR Object ID (mandatory)
-     * 
-     * @param mcrID
-     *            the MCR object ID
-     * 
-     */
     public void setMcrid(String mcrid) {
         this.mcrid = mcrid;
     }

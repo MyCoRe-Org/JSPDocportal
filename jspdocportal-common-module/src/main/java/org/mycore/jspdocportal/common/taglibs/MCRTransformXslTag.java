@@ -46,13 +46,13 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
  * This allows us to use any namespace prefix in XPath Expressions processed by this JSTL.
  * 
  * Uses the Java Reflection Framework to modify private fields
+ *  
+ * @author Robert Stephan
  * 
- * Example:
+ */ 
+/* Example:
  * <mcr:retrieveObject mcrid="${mcrid}" varDOM="doc" />
  * <mcr:transformXSL dom="${doc}" xslt="xsl/xsl3example.xsl" />
- * 
- * @author Robert Stephan
- *
  */
 public class MCRTransformXslTag extends SimpleTagSupport {
     private static Logger LOGGER = LogManager.getLogger(MCRTransformXslTag.class);

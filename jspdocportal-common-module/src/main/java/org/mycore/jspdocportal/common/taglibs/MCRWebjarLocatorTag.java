@@ -89,7 +89,7 @@ public class MCRWebjarLocatorTag extends SimpleTagSupport {
     
     /**
      * additional attribute (especially 'async' or 'defer' for &lt;script&gt;)
-     * @param file as String
+     * @param attribute - additional attribute
      */
     public void setAttribute(String attribute) {
         this.attribute = attribute;

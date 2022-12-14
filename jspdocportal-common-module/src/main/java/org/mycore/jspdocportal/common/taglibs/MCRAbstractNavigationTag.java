@@ -131,7 +131,7 @@ public abstract class MCRAbstractNavigationTag extends MCRAbstractTag {
 	/**
 	 * Looks up for a matching key in the message_**.properties.
 	 * @param key A valid key
-	 * @return if the key is not found, it returns "???<key>???"
+	 * @return if the key is not found, it returns "???key???"
 	 */
 	protected String retrieveI18N(String key) {
 		if (key == null || key.equals("")) {
@@ -193,7 +193,7 @@ public abstract class MCRAbstractNavigationTag extends MCRAbstractTag {
 	 * Child elements, that are not "navitem"-elements are filtered out as well.
 	 * 
 	 * This method just retrieves elements one level below. It does not traverse them recursively!
-	 * @param e
+	 * @param navO
 	 * @return An array list with all elements that should be visible for this user in the current session.
 	 */
 	protected List<NavigationItem> printableItems(NavigationObject navO) {

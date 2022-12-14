@@ -36,11 +36,6 @@ public class MCRIncludeWebContentTag extends SimpleTagSupport {
 
     private String id;
 
-    /**
-     * used to set the filname as tag attribute
-     * @param file - the filename
-     */
-
     public void doTag() throws JspException, IOException {
         PageContext pageContext = (PageContext) getJspContext();
         JspWriter out = pageContext.getOut();

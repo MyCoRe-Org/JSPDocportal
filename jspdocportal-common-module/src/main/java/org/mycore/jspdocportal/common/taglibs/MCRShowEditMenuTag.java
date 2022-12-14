@@ -53,8 +53,8 @@ import jakarta.servlet.jsp.JspWriter;
  * 
  * <p>It has the following attributes:</p>
  * <ul>
- * <li>mcrid: The MyCoRe ID of the object to edit
- * <li>cssClass: additional CSS classes for styling</p>
+ * <li>mcrid: The MyCoRe ID of the object to edit</li>
+ * <li>cssClass: additional CSS classes for styling</li>
  * </ul>
  *  
  *  <p>Sample Usage (simple):</p>

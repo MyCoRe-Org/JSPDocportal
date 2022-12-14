@@ -65,7 +65,7 @@ public class MCRAbstractTag extends SimpleTagSupport {
     /**
      * Looks up for a matching key in the message_**.properties.
      * @param key A valid key
-     * @return if the key is not found, it returns "???<key>???"
+     * @return if the key is not found, it returns "???key???"
      */
     protected String retrieveI18N(String key) {
         if (key == null || key.equals("")) {

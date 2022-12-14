@@ -13,19 +13,14 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
-import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.mycore.access.MCRAccessManager;
-import org.mycore.access.MCRRuleAccessInterface;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRPathContent;
@@ -47,7 +42,7 @@ public class MCRBPMNUtils {
 
     /**
      * saves a given MCR object into the workflow directory
-     * @param MCRObject
+     * @param mcrObj - the MyCoRe object
      */
     public static void saveMCRObjectToWorkflowDirectory(MCRObject mcrObj) {
         Path wfObjFile = getWorkflowObjectFile(mcrObj.getId());
@@ -72,7 +67,7 @@ public class MCRBPMNUtils {
 
     /**
      * saves a given MCR object into the workflow directory
-     * @param MCRObject
+     * @param mcrDer - the MyCoRe derivate
      */
     public static void saveMCRDerivateToWorkflowDirectory(MCRDerivate mcrDer) {
         try (BufferedWriter bw = Files.newBufferedWriter(getWorkflowDerivateFile(mcrDer.getOwnerID(), mcrDer.getId()),

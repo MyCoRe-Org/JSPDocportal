@@ -133,11 +133,11 @@ public class MCRMetaHistoryEvent extends MCRMetaHistoryDate {
      * This method checks the validation of the content of this class. The
      * method returns <em>false</em> if
      * <ul>
-     * <li>the text is null or
-     * <li>the von is null or
-     * <li>the bis is null
-     * <li>the event is null
-     * <li the classification is null
+     * <li>the text is null or</li>
+     * <li>the von is null or</li>
+     * <li>the bis is null</li>
+     * <li>the event is null</li>
+     * <li the classification is null</li>
      * </ul>
      * otherwise the method returns <em>true</em>.
      * 
