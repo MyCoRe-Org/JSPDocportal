@@ -16,6 +16,7 @@
 <!doctype html>
 <html>
 <head>
+  <fmt:message var="pageTitle" key="Webpage.search.title.${it.mask}" />
   <title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
   <%@ include file="../fragments/html_head.jspf" %>
   <meta name="mcr:search.id" content="${it.result.id}" />
