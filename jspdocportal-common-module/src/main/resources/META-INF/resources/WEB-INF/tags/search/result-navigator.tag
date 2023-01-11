@@ -40,48 +40,48 @@
 		<c:choose>
 		  <c:when test="${mode eq 'one_line'}">
             <div class="d-flex justify-content-start">
-               <a style="font-size:1.25em;margin:5px;" class="btn btn-primary btn-sm" 
+               <a class="ir-nav-search-btn-return btn btn-primary btn-sm" 
 			      href="${backURL}"
 			      title="<fmt:message key="Webpage.Searchresult.back.hint" />"><i class="fa fa-chevron-up"></i></a>
 		    </div>
-            <div style="padding:0.66em 5px 5px 5px;" class="d-flex justify-content-between">
-              <fmt:message key="Webpage.Searchresult.hitXofY">
-                <fmt:param>${result.current + 1}</fmt:param>
-                <fmt:param>${numHits}</fmt:param> 
-              </fmt:message>
+            <div class="d-flex justify-content-between">
+              <span class="ir-nav-search-label">
+                <fmt:message key="Webpage.Searchresult.hitXofY">
+                  <fmt:param>${result.current + 1}</fmt:param>
+                  <fmt:param>${numHits}</fmt:param> 
+                </fmt:message>
+              </span>
             </div>
 		    <div class="d-flex justify-content-end">
-		     <div class="btn-group" style="width:101%; margin:5px">
-			   <a style="font-size:1.25em" class="btn btn-primary btn-sm ${result.current == 0 ? 'disabled invisible' :''}" 
+		     <div class="ir-nav-search-btn-group btn-group">
+			   <a class="ir-nav-search-btn-prev btn btn-primary btn-sm ${result.current == 0 ? 'disabled invisible' :''}" 
 			      href="${pageContext.request.contextPath}/do/search?_search=${result.id}&amp;_hit=${result.current-1}"
 			      title="<fmt:message key="Webpage.Searchresult.prevPage.hint" />"><i class="fa fa-chevron-left"></i></a>
-			   <a style="font-size:1.25em;margin-left:5px" class="btn btn-primary btn-sm ${result.current == numHits - 1 ? 'disabled invisible' : ''}" 
+			   <a class="ir-nav-search-btn-next btn btn-primary btn-sm ${result.current == numHits - 1 ? 'disabled invisible' : ''}" 
 				  href="${pageContext.request.contextPath}/do/search?_search=${result.id}&amp;_hit=${result.current+1}"
 				  title="<fmt:message key="Webpage.Searchresult.nextPage.hint" />"><i class="fa fa-chevron-right"></i></a>
 			 </div>
 		    </div>
     	</c:when>
 		<c:otherwise>
-		  <div style="padding:5px; text-align:center;">
+		  <div class="ir-nav-search-label">
 			<fmt:message key="Webpage.Searchresult.hitXofY">
 				<fmt:param>${result.current + 1}</fmt:param>
 				<fmt:param>${numHits}</fmt:param>	
 			</fmt:message>
 		  </div>
-		  <div style="padding:5px;">
-			<div class="btn-group" style="width:101%;">
-				<a style="font-size:1.5em;width:33.333%;" class="btn btn-primary btn-sm ${result.current == 0 ? 'disabled invisible' :''}" 
+		  <div class="ir-nav-search-btn-group btn-group">
+				<a class="ir-nav-search-btn-prev btn btn-primary btn-sm ${result.current == 0 ? 'disabled invisible' :''}" 
 			   	   href="${pageContext.request.contextPath}/do/search?_search=${result.id}&amp;_hit=${result.current-1}"
 			       title="<fmt:message key="Webpage.Searchresult.prevPage.hint" />"><i class="fa fa-chevron-left"></i></a>
 		
-			    <a style="font-size:1.5em;width:33.333%;" class="btn btn-primary btn-sm" 
+			    <a class="ir-nav-search-btn-return btn btn-primary btn-sm" 
 			       href="${backURL}"
 			       title="<fmt:message key="Webpage.Searchresult.back.hint" />"><i class="fa fa-chevron-up"></i></a>
 			
-				<a style="font-size:1.5em;width:33.333%;" class="btn btn-primary btn-sm ${result.current == numHits - 1 ? 'disabled invisible' : ''}" 
+				<a class="ir-nav-search-btn-next btn btn-primary btn-sm ${result.current == numHits - 1 ? 'disabled invisible' : ''}" 
 				   href="${pageContext.request.contextPath}/do/search?_search=${result.id}&amp;_hit=${result.current+1}"
 				   title="<fmt:message key="Webpage.Searchresult.nextPage.hint" />"><i class="fa fa-chevron-right"></i></a>
-			</div>
 		  </div>
 		</c:otherwise>
 	  </c:choose>	
