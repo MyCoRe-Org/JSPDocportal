@@ -9,9 +9,9 @@
   <description>(A MyCoRe Sample)</description>
   <name>jspdocportal_common_module</name>
   <ordering>
-    <before>
+    <after>
       <name>mycore</name>
-    </before>
+    </after>
   </ordering>
 
   <listener>

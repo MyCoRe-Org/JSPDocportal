@@ -9,9 +9,9 @@
   <name>jspdocportal_ir_module</name>
 
   <ordering>
-    <before>
+    <after>
       <name>jspdocportal_common_module</name>
-    </before>
+    </after>
   </ordering>
   
   <servlet>
