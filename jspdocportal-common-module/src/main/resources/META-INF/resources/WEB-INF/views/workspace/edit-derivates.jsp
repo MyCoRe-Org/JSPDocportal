@@ -53,9 +53,10 @@
 </head>
 <body>
   <%@ include file="../fragments/header.jspf" %>
-  <div class="container">
+  <div id="content_area">
+    <div class="container">
         <div class="row">
-          <div class="col">
+          <div class="col edit_derivates-content">
 		 	<h2><fmt:message key="WF.derivates.headline" /></h2>
 			<c:set  var="baseURL" value="${applicationScope.WebApplicationBaseURL}" />
 			
@@ -288,7 +289,8 @@
 		 </div>
        </div>
     </div>
-    <div style="height: 75px;">&nbsp;</div>
+  </div>
+  <div style="height: 75px;">&nbsp;</div>
   <%@ include file="../fragments/footer.jspf" %>
 </body>
 </html>

@@ -25,7 +25,7 @@
     <div id="content_area">
       <div id="workspace" class="container">
         <div class="row">
-          <div class="col">
+          <div class="col workspace-content">
             <div class="float-right">
               <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownNewActionsMenu"
