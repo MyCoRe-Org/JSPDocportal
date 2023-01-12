@@ -53,7 +53,7 @@
 				<fmt:message key="Webpage.docdetails.newsearch" />
 			</a>
  		  </div>
-          <search:result-navigator mcrid="${mcrid}" mode="one_line"/>
+          <search:result-navigator mcrid="${mcrid}" />
         </div>
       </div>
       <div class="row">  
@@ -83,7 +83,7 @@
     <div class="col-xs-12 col-md-4"> <%-- right area --%>
        <div class="ir-right_side h-100">
          <div class="d-none d-lg-block">
-     	    <search:result-navigator mcrid="${mcrid}" mode="one_line"/>
+     	    <search:result-navigator mcrid="${mcrid}" />
             <mcr:showEditMenu mcrid="${mcrid}" cssClass="text-right pb-3" />
             <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/rightside_html.xsl" />
          </div>

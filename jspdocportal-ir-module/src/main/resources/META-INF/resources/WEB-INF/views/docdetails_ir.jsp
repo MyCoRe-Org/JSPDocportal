@@ -87,7 +87,7 @@
     <div class="container">
       <div class="row d-block d-lg-none" style="padding: 0px 15px">
         <div class="col-12" style="padding-top:45px">
-          <search:result-navigator mcrid="${mcrid}" mode="one_line"/>
+          <search:result-navigator mcrid="${mcrid}" />
         </div>
       </div>
       <div class="row">  
@@ -266,7 +266,7 @@
     <div class="col col-md-4"> <%-- right area --%>
       <div class="ir-right_side h-100">
         <div class="d-none d-lg-block">
-          <search:result-navigator mcrid="${mcrid}" mode="one_line"/>
+          <search:result-navigator mcrid="${mcrid}" />
           <mcr:showEditMenu mcrid="${mcrid}" cssClass="text-right pb-3" />
           <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/rightside_html.xsl" />
         </div>

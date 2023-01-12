@@ -29,61 +29,37 @@
 %>
 
 <c:if test="${not empty result}">
-	<!-- Searchresult PageNavigation -->
-	<c:set var="backURL" value="${pageContext.request.contextPath}/${result.action}?_search=${result.id}" />
-	<c:if test="${fn:contains(result.backURL, 'indexbrowser') or empty result.action}">
-		<c:set var="backURL" value="${result.backURL}" />	
-	</c:if>
-	
-	<div id="searchdetail-navigation" class="navbar navbar-default ir-nav-search ir-box ir-box-emph d-flex">
-		<c:set var="numHits" value="${result.numFound}" />
-		<c:choose>
-		  <c:when test="${mode eq 'one_line'}">
-            <div class="d-flex justify-content-start">
-               <a class="ir-nav-search-btn-return btn btn-primary btn-sm" 
-			      href="${backURL}"
-			      title="<fmt:message key="Webpage.Searchresult.back.hint" />"><i class="fa fa-chevron-up"></i></a>
-		    </div>
-            <div class="d-flex justify-content-between">
-              <span class="ir-nav-search-label">
-                <fmt:message key="Webpage.Searchresult.hitXofY">
-                  <fmt:param>${result.current + 1}</fmt:param>
-                  <fmt:param>${numHits}</fmt:param> 
-                </fmt:message>
-              </span>
-            </div>
-		    <div class="d-flex justify-content-end">
-		     <div class="ir-nav-search-btn-group btn-group">
-			   <a class="ir-nav-search-btn-prev btn btn-primary btn-sm ${result.current == 0 ? 'disabled invisible' :''}" 
-			      href="${pageContext.request.contextPath}/do/search?_search=${result.id}&amp;_hit=${result.current-1}"
-			      title="<fmt:message key="Webpage.Searchresult.prevPage.hint" />"><i class="fa fa-chevron-left"></i></a>
-			   <a class="ir-nav-search-btn-next btn btn-primary btn-sm ${result.current == numHits - 1 ? 'disabled invisible' : ''}" 
-				  href="${pageContext.request.contextPath}/do/search?_search=${result.id}&amp;_hit=${result.current+1}"
-				  title="<fmt:message key="Webpage.Searchresult.nextPage.hint" />"><i class="fa fa-chevron-right"></i></a>
-			 </div>
-		    </div>
-    	</c:when>
-		<c:otherwise>
-		  <div class="ir-nav-search-label">
-			<fmt:message key="Webpage.Searchresult.hitXofY">
-				<fmt:param>${result.current + 1}</fmt:param>
-				<fmt:param>${numHits}</fmt:param>	
-			</fmt:message>
-		  </div>
-		  <div class="ir-nav-search-btn-group btn-group">
-				<a class="ir-nav-search-btn-prev btn btn-primary btn-sm ${result.current == 0 ? 'disabled invisible' :''}" 
-			   	   href="${pageContext.request.contextPath}/do/search?_search=${result.id}&amp;_hit=${result.current-1}"
-			       title="<fmt:message key="Webpage.Searchresult.prevPage.hint" />"><i class="fa fa-chevron-left"></i></a>
-		
-			    <a class="ir-nav-search-btn-return btn btn-primary btn-sm" 
-			       href="${backURL}"
-			       title="<fmt:message key="Webpage.Searchresult.back.hint" />"><i class="fa fa-chevron-up"></i></a>
-			
-				<a class="ir-nav-search-btn-next btn btn-primary btn-sm ${result.current == numHits - 1 ? 'disabled invisible' : ''}" 
-				   href="${pageContext.request.contextPath}/do/search?_search=${result.id}&amp;_hit=${result.current+1}"
-				   title="<fmt:message key="Webpage.Searchresult.nextPage.hint" />"><i class="fa fa-chevron-right"></i></a>
-		  </div>
-		</c:otherwise>
-	  </c:choose>	
-	</div>
+  <!-- Searchresult PageNavigation -->
+  <c:set var="backURL" value="${pageContext.request.contextPath}/${result.action}?_search=${result.id}" />
+  <c:if test="${fn:contains(result.backURL, 'indexbrowser') or empty result.action}">
+    <c:set var="backURL" value="${result.backURL}" />
+  </c:if>
+
+  <div id="searchdetail-navigation" class="navbar navbar-default ir-nav-search ir-box ir-box-emph d-flex">
+    <c:set var="numHits" value="${result.numFound}" />
+
+    <div class="d-flex justify-content-start">
+      <a class="ir-nav-search-btn-return btn btn-primary btn-sm"
+         href="${backURL}"
+         title="<fmt:message key="Webpage.Searchresult.back.hint" />"><i class="fa fa-chevron-up"></i></a>
+    </div>
+    <div class="d-flex justify-content-between">
+      <span class="ir-nav-search-label">
+        <fmt:message key="Webpage.Searchresult.hitXofY">
+          <fmt:param>${result.current + 1}</fmt:param>
+          <fmt:param>${numHits}</fmt:param>
+        </fmt:message>
+      </span>
+    </div>
+    <div class="d-flex justify-content-end">
+      <div class="ir-nav-search-btn-group btn-group">
+        <a class="ir-nav-search-btn-prev btn btn-primary btn-sm ${result.current == 0 ? 'disabled invisible' :''}"
+           href="${pageContext.request.contextPath}/do/search?_search=${result.id}&amp;_hit=${result.current-1}"
+           title="<fmt:message key="Webpage.Searchresult.prevPage.hint" />"><i class="fa fa-chevron-left"></i></a>
+        <a class="ir-nav-search-btn-next btn btn-primary btn-sm ${result.current == numHits - 1 ? 'disabled invisible' : ''}"
+           href="${pageContext.request.contextPath}/do/search?_search=${result.id}&amp;_hit=${result.current+1}"
+           title="<fmt:message key="Webpage.Searchresult.nextPage.hint" />"><i class="fa fa-chevron-right"></i></a>
+      </div>
+    </div>
+  </div>
 </c:if>
