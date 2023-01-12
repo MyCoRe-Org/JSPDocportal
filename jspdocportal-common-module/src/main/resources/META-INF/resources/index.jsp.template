@@ -24,8 +24,6 @@
               <fmt:message key="Webpage.intro" />
             </h2>
             <mcr:includeWebcontent id="index_intro" file="index_introtext.html" />
-
-            <div style="height: 75px;">&nbsp;</div>
       </div>
     </div>
     </div>

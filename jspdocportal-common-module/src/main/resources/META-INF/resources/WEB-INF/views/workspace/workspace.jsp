@@ -280,7 +280,6 @@
       </div>
     </div>  
     </form>
-   <div style="height: 75px;">&nbsp;</div>
-   <%@ include file="../fragments/footer.jspf"%>
+    <%@ include file="../fragments/footer.jspf"%>
   </body>
 </html>

@@ -91,7 +91,6 @@
       </c:if>
     </form>
 	</div>
-   <div style="height: 75px;">&nbsp;</div>
    </div>
   <%@ include file="fragments/footer.jspf" %>
   </body>

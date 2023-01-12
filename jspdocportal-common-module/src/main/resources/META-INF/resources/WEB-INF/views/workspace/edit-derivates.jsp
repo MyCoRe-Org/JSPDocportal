@@ -290,7 +290,6 @@
        </div>
     </div>
   </div>
-  <div style="height: 75px;">&nbsp;</div>
   <%@ include file="../fragments/footer.jspf" %>
 </body>
 </html>
