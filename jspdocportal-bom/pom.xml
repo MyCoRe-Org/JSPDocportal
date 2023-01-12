@@ -20,11 +20,6 @@
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>jakarta.servlet.jsp.jstl</groupId>
-        <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
-        <version>2.0.0</version>
-      </dependency>
-      <dependency>
         <groupId>com.itextpdf</groupId>
         <artifactId>itextpdf</artifactId>
         <version>5.5.13.3</version>
@@ -38,6 +33,11 @@
         <groupId>commons-net</groupId>
         <artifactId>commons-net</artifactId>
         <version>3.9.0</version>
+      </dependency>
+      <dependency>
+        <groupId>jakarta.servlet.jsp.jstl</groupId>
+        <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+        <version>2.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
