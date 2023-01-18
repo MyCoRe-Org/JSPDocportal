@@ -1,7 +1,4 @@
 /*
- * $Id: MCRTileServlet.java 30904 2014-10-20 14:22:26Z mcrtchef $
- * $Revision: 30904 $ $Date: 2014-10-20 16:22:26 +0200 (Mo, 20 Okt 2014) $
- *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
  *
