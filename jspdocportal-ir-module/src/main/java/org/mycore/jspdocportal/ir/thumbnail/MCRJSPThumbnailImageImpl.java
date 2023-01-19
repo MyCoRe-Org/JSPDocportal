@@ -23,12 +23,7 @@ package org.mycore.jspdocportal.ir.thumbnail;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,16 +33,10 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocumentList;
-import org.mycore.access.MCRAccessManager;
-import org.mycore.datamodel.classifications2.MCRCategoryID;
-import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetaEnrichedLinkID;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.iiif.image.impl.MCRIIIFImageNotFoundException;
 import org.mycore.iview2.backend.MCRTileInfo;
-import org.mycore.iview2.iiif.MCRIVIEWIIIFImageImpl;
+import org.mycore.iview2.iiif.MCRThumbnailImageImpl;
 import org.mycore.solr.MCRSolrClientFactory;
 
 /**
@@ -56,29 +45,32 @@ import org.mycore.solr.MCRSolrClientFactory;
  * @author Robert Stephan
  *
  */
-public class MCRJSPThumbnailImageImpl extends MCRIVIEWIIIFImageImpl {
-
-    protected static final String DERIVATE_TYPES = "Derivate.Types";
-
-    private static final Logger LOGGER = LogManager.getLogger(MCRJSPThumbnailImageImpl.class);
-
-    private static Set<String> derivateTypes;
-
+public class MCRJSPThumbnailImageImpl extends MCRThumbnailImageImpl {
+    Logger LOGGER = LogManager.getLogger();
+    
     public MCRJSPThumbnailImageImpl(String implName) {
         super(implName);
-        derivateTypes = new HashSet<String>();
-        derivateTypes.addAll(Arrays.asList(getProperties().get(DERIVATE_TYPES).split(",")));
     }
 
     @Override
     protected MCRTileInfo createTileInfo(String id) throws MCRIIIFImageNotFoundException {
         Optional<MCRObjectID> oMcrID = calculateMcrIDFromInput(id);
         if (oMcrID.isPresent()) {
-            return retrieveTileInfoByMcrID(oMcrID.get());
+            return super.createTileInfo(oMcrID.toString());
         }
         throw new MCRIIIFImageNotFoundException(id);
     }
 
+    @Override
+    protected boolean checkPermission(String identifier, MCRTileInfo tileInfo) {
+        Optional<MCRObjectID> mcrID = calculateMcrIDFromInput(identifier);
+        if (mcrID.isPresent()) {
+            return super.checkPermission(mcrID.toString(), tileInfo);
+        } else {
+            return false;
+        }
+    }
+    
     private Optional<MCRObjectID> calculateMcrIDFromInput(String id) {
         if (MCRObjectID.isValid(id)) {
             return Optional.of(MCRObjectID.getInstance(id));
@@ -90,6 +82,7 @@ public class MCRJSPThumbnailImageImpl extends MCRIVIEWIIIFImageImpl {
         }
 
         //TODO: Use PI component to retrieve MyCoRe ID for RecordIdentifier instead
+        //      or use some caching
         SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
         SolrQuery solrQuery = new SolrQuery("recordIdentifier:" + ClientUtils.escapeQueryChars(recordId));
         solrQuery.setRows(1);
@@ -105,43 +98,5 @@ public class MCRJSPThumbnailImageImpl extends MCRIVIEWIIIFImageImpl {
             LOGGER.error(e);
         }
         return Optional.empty();
-    }
-
-    private MCRTileInfo retrieveTileInfoByMcrID(MCRObjectID mcrID) throws MCRIIIFImageNotFoundException {
-        if (mcrID.getTypeId().equals("derivate")) {
-            MCRDerivate mcrDer = MCRMetadataManager.retrieveMCRDerivate(mcrID);
-            return new MCRTileInfo(mcrID.toString(), mcrDer.getDerivate().getInternals().getMainDoc(), null);
-        } else {
-            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrID);
-            for (String type : derivateTypes) {
-                for (MCRMetaEnrichedLinkID derLink : mcrObj.getStructure().getDerivates()) {
-                    if (derLink.getClassifications().stream()
-                        .map(MCRCategoryID::toString)
-                        .anyMatch(type::equals)) {
-                        final String maindoc = derLink.getMainDoc();
-                        if (maindoc != null) {
-                            final MCRTileInfo mcrTileInfo = new MCRTileInfo(derLink.getXLinkHref(), maindoc, null);
-                            final Optional<Path> tileFile = this.tileFileProvider.getTileFile(mcrTileInfo);
-                            if (tileFile.isPresent() && Files.exists(tileFile.get())) {
-                                return mcrTileInfo;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        throw new MCRIIIFImageNotFoundException(mcrID.toString());
-    }
-
-    @Override
-    protected boolean checkPermission(String identifier, MCRTileInfo tileInfo) {
-        Optional<MCRObjectID> mcrID = calculateMcrIDFromInput(identifier);
-        if (mcrID.isPresent()) {
-            return MCRAccessManager.checkPermission(mcrID.get().toString(), MCRAccessManager.PERMISSION_PREVIEW) ||
-                MCRAccessManager.checkPermission(tileInfo.getDerivate(), MCRAccessManager.PERMISSION_VIEW) ||
-                MCRAccessManager.checkPermission(tileInfo.getDerivate(), MCRAccessManager.PERMISSION_READ);
-        } else {
-            return false;
-        }
     }
 }
