@@ -315,7 +315,13 @@
           <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.licenseinfo')}</h4>
           <xsl:variable name="categ" select="mcrmods:to-mycoreclass(., 'single')/categories/category" />
           <span class="clearfix">
-            <img src="{$WebApplicationBaseURL}images{$categ/label[@xml:lang='x-icon']/@text}" class="float-left pr-3" />
+            <xsl:variable name="lic_logo" select="fn:concat($WebApplicationBaseURL,'images',$categ/label[@xml:lang='x-icon']/@text)" />
+            <xsl:if test="fn:ends-with($lic_logo, '.png')">
+              <img src="{$lic_logo}" class="float-left mr-3" />
+            </xsl:if>
+            <xsl:if test="fn:ends-with($lic_logo, '.svg')">
+              <img src="{$lic_logo}" class="float-left mr-3 p-1 bg-dark" style="max-width:7em;"/>
+            </xsl:if>
             <a href="{$categ/label[@xml:lang='x-uri']/@text}" class="font-weight-bold small">
               <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text"/>
             </a>
