@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" version="3.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:fn="http://www.w3.org/2005/xpath-functions"
   xmlns:mods="http://www.loc.gov/mods/v3" 
   xmlns:xlink="http://www.w3.org/1999/xlink" 
   xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
@@ -260,8 +261,11 @@
         <span id="badgeWorkLicense" class="badge ir-badge-header ir-badge-license p-0" data-toggle="popover" data-placement="bottom" data-html="true"
               data-content-ref="#popover_content_{generate-id(./mods:classification[contains(@valueURI, 'licenseinfo#work')])}">
           <xsl:choose>
-            <xsl:when test="$licecat/label[@xml:lang='x-icon']">
+            <xsl:when test="fn:ends-with($licecat/label[@xml:lang='x-icon']/@text, '.png')">
               <img src="{concat($WebApplicationBaseURL,'images',$licecat/label[@xml:lang='x-icon']/@text)}" />&#160;
+            </xsl:when>
+            <xsl:when test="fn:ends-with($licecat/label[@xml:lang='x-icon']/@text, '.svg')">
+              <img class="p-1 bg-dark" src="{concat($WebApplicationBaseURL,'images',$licecat/label[@xml:lang='x-icon']/@text)}" />&#160;
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="$licecat/label[@xml:lang=$CurrentLang]/@text" />
