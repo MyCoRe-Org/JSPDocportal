@@ -305,6 +305,12 @@
               <xsl:when test="starts-with($categid,'doctype:histbest.archivalmaterial.')">
                 <field name="ir.material_class.facet">doctype:histbest.archivalmaterial</field>
               </xsl:when>
+              <xsl:when test="starts-with($categid,'doctype:histbest.graphic.')">
+                <field name="ir.material_class.facet">doctype:histbest.graphic</field>
+              </xsl:when>
+              <xsl:when test="starts-with($categid,'doctype:histbest.map.')">
+                <field name="ir.material_class.facet">doctype:histbest.map</field>
+              </xsl:when>
             </xsl:choose>
           </xsl:for-each>
            <!-- disabled for cleanup collection classification -->
