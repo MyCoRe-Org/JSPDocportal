@@ -4,16 +4,13 @@
   xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-fragment_5_0.xsd"
   metadata-complete="true">
 
-  <display-name>JSP IR DOCPORTAL</display-name>
-  <description>A MyCoRe Base module</description>
-  <name>jspdocportal_ir_module</name>
-
+  <name>jspdocportal_ir</name>
   <ordering>
     <after>
-      <name>jspdocportal_common_module</name>
+      <name>jspdocportal_common</name>
     </after>
   </ordering>
-  
+
   <servlet>
     <servlet-name>MCRJSPTileServlet</servlet-name>
     <servlet-class>org.mycore.jspdocportal.ir.tileserver.MCRTileServlet</servlet-class>

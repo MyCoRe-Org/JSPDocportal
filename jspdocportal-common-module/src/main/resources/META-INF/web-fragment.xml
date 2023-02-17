@@ -5,9 +5,7 @@
   metadata-complete="true">
   <!-- @metadata-complete="true" -> do not process annotations, such as @WebServlet, @WebFilter, and @WebListener -->
 
-  <display-name>JSP DOCPORTAL</display-name>
-  <description>(A MyCoRe Sample)</description>
-  <name>jspdocportal_common_module</name>
+  <name>jspdocportal_common</name>
   <ordering>
     <after>
       <name>mycore</name>
@@ -122,9 +120,9 @@
   <!-- **************************************************************** -->
   <!-- MyCoRe OAI -->
   <!-- **************************************************************** -->
-
   <!-- <servlet id="OAI2Provider"> <servlet-name>OAI2</servlet-name> <servlet-class>org.mycore.oai.MCROAIDataProvider</servlet-class> 
     </servlet> <servlet-mapping> <servlet-name>OAI2</servlet-name> <url-pattern>/oai</url-pattern> </servlet-mapping> -->
+
   <!-- defined in mycore-base - you cannot override this value -->
 
   <session-config>
