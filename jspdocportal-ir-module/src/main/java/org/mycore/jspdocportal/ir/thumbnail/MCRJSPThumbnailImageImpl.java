@@ -20,24 +20,17 @@
 
 package org.mycore.jspdocportal.ir.thumbnail;
 
-import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.util.ClientUtils;
-import org.apache.solr.common.SolrDocumentList;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.iiif.image.impl.MCRIIIFImageNotFoundException;
-import org.mycore.iview2.backend.MCRTileInfo;
 import org.mycore.iview2.iiif.MCRThumbnailImageImpl;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.jspdocportal.ir.pi.local.MCRLocalID;
+import org.mycore.pi.MCRPIManager;
+import org.mycore.pi.MCRPIRegistrationInfo;
 
 /**
  * Calculates the TileInfo for the thumbnail image from RecordIdentifier or MyCoRe Object ID
@@ -47,31 +40,13 @@ import org.mycore.solr.MCRSolrClientFactory;
  */
 public class MCRJSPThumbnailImageImpl extends MCRThumbnailImageImpl {
     Logger LOGGER = LogManager.getLogger();
-    
+
     public MCRJSPThumbnailImageImpl(String implName) {
         super(implName);
     }
 
     @Override
-    protected MCRTileInfo createTileInfo(String id) throws MCRIIIFImageNotFoundException {
-        Optional<MCRObjectID> oMcrID = calculateMcrIDFromInput(id);
-        if (oMcrID.isPresent()) {
-            return super.createTileInfo(oMcrID.toString());
-        }
-        throw new MCRIIIFImageNotFoundException(id);
-    }
-
-    @Override
-    protected boolean checkPermission(String identifier, MCRTileInfo tileInfo) {
-        Optional<MCRObjectID> mcrID = calculateMcrIDFromInput(identifier);
-        if (mcrID.isPresent()) {
-            return super.checkPermission(mcrID.toString(), tileInfo);
-        } else {
-            return false;
-        }
-    }
-    
-    private Optional<MCRObjectID> calculateMcrIDFromInput(String id) {
+    protected Optional<MCRObjectID> calculateMCRObjectID(String id) {
         if (MCRObjectID.isValid(id)) {
             return Optional.of(MCRObjectID.getInstance(id));
         }
@@ -81,22 +56,7 @@ public class MCRJSPThumbnailImageImpl extends MCRThumbnailImageImpl {
             recordId = recordId.replaceFirst("_", "/");
         }
 
-        //TODO: Use PI component to retrieve MyCoRe ID for RecordIdentifier instead
-        //      or use some caching
-        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
-        SolrQuery solrQuery = new SolrQuery("recordIdentifier:" + ClientUtils.escapeQueryChars(recordId));
-        solrQuery.setRows(1);
-        try {
-            QueryResponse solrQueryResponse = solrClient.query(solrQuery);
-            SolrDocumentList solrResults = solrQueryResponse.getResults();
-            if (solrResults.getNumFound() > 0) {
-                MCRObjectID mcrID = MCRObjectID
-                    .getInstance(String.valueOf(solrResults.get(0).getFirstValue("returnId")));
-                return Optional.of(mcrID);
-            }
-        } catch (IOException | SolrServerException e) {
-            LOGGER.error(e);
-        }
-        return Optional.empty();
+        Optional<MCRPIRegistrationInfo> oPiInfo = MCRPIManager.getInstance().getInfo(recordId,  MCRLocalID.TYPE);
+        return oPiInfo.map(x -> x.getMycoreID()).map(MCRObjectID::getInstance);
     }
 }
