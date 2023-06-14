@@ -398,8 +398,10 @@ public class MCREditDerivatesController {
             MCRWorkflowMgr wfm = MCRBPMNMgr
                 .getWorkflowMgr(ts.createTaskQuery().executionId(taskid).singleResult().getProcessInstanceId());
 
-            String label = multiPart.getField("newDerivate_label-task_" + taskid).getValue();
-            String title = multiPart.getField("newDerivate_title-task_" + taskid).getValue();
+            String label = multiPart.getField("newDerivate_label-task_" + taskid) == null 
+                ? null : multiPart.getField("newDerivate_label-task_" + taskid).getValue();
+            String title = multiPart.getField("newDerivate_title-task_" + taskid) == null 
+                ? null : multiPart.getField("newDerivate_title-task_" + taskid).getValue();
             String fileName = multiPart.getField("newDerivate_file-task_" + taskid).getFormDataContentDisposition()
                 .getFileName();
             der = wfm.createMCRDerivate(MCRObjectID.getInstance(mcrobjid), label, title);
