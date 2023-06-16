@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass ID="state" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd">
+  <label xml:lang="de" text="Objektstatus" />
+  <label xml:lang="en" text="Object state" />
+  <label xml:lang="x-uri" text="http://www.mycore.org/classifications/state" />
+  <categories>
+    <category ID="new">
+      <label xml:lang="de" text="erstellt" />
+      <label xml:lang="en" text="new" />
+    </category>
+    <category ID="reserved">
+      <label xml:lang="de" text="reserviert" />
+      <label xml:lang="en" text="reserved" />
+    </category>
+    <category ID="submitted">
+      <label xml:lang="de" text="eingereicht" />
+      <label xml:lang="en" text="submitted" />
+    </category>
+    <category ID="review">
+      <label xml:lang="de" text="wird bearbeitet" />
+      <label xml:lang="en" text="in review" />
+    </category>
+    <category ID="published">
+      <label xml:lang="de" text="veröffentlicht" />
+      <label xml:lang="en" text="published" />
+      <category ID="published_stable">
+        <label xml:lang="de" text="veröffentlicht" description="mit diesem Status werden Dokumente markiert, die als stabil/unveränderlich gelten sollen (nach 7? Tagen)" />
+        <label xml:lang="en" text="published" description="use this state to mark documents which are stable and will not change (after 7? days)" />
+      </category>
+    </category>
+    <category ID="blocked">
+      <label xml:lang="de" text="gesperrt" />
+      <label xml:lang="en" text="blocked" />
+    </category>
+    <category ID="deleted">
+      <label xml:lang="de" text="gelöscht" />
+      <label xml:lang="en" text="deleted" />
+    </category>
+    <category ID="editing">
+      <label xml:lang="de" text="in Bearbeitung" />
+      <label xml:lang="en" text="currently edited" />
+    </category>
+  </categories>
+</mycoreclass>
