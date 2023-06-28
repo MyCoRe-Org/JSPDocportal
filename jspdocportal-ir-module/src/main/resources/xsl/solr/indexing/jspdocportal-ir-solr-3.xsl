@@ -167,7 +167,7 @@
           <field name="ir.host.recordIdentifier"><xsl:value-of select="." /></field> 
         </xsl:for-each>
       </xsl:for-each>
-      <xsl:for-each select="mods:relatedItem[(@otherType='hierarchical' or @otherType='appears_in') and not(@displayLabel='appears_in')][last()]">
+      <xsl:for-each select="mods:relatedItem[(@otherType='hierarchical' or @otherType='appears_in') and ./mods:part/mods:text[@type='sortstring'] and not(@displayLabel='appears_in')][last()]">
         <xsl:for-each select="mods:part/mods:text[@type='sortstring'][1]">
           <field name="ir.sortstring"><xsl:value-of select="." /></field> 
         </xsl:for-each>
