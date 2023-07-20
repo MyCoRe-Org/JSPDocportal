@@ -29,7 +29,7 @@ import org.mycore.datamodel.metadata.MCRObject;
 /**
  * This event handler sets the service date "oai-ready" for created / modified MyCoRe Objects.
  * 
- * It should run before saving the XML in MCRMetaXMLEventHandler (id < 20)
+ * It should run before saving the XML in MCRMetaXMLEventHandler (id &lt; 20)
  *
  * @author Robert Stephan
  */
