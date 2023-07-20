@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.mycore.jspdocportal</groupId>
     <artifactId>jspdocportal-parent</artifactId>
-    <version>2022.06-SNAPSHOT</version>
+    <version>2023.06-SNAPSHOT</version>
   </parent>
   <artifactId>jspdocportal-common-module</artifactId>
   <packaging>jar</packaging>
