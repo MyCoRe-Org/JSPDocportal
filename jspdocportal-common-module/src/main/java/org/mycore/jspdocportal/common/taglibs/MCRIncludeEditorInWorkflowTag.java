@@ -27,7 +27,6 @@ import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
-import org.xml.sax.SAXException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.jsp.JspException;
@@ -195,8 +194,6 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
             logger.error("TransformerConfigurationExceptio: " + e, e);
         } catch (TransformerException e) {
             logger.error("TransformerException: " + e, e);
-        } catch (SAXException e) {
-            logger.error("SaxParseException: " + e, e);
         } catch (JDOMException e) {
             logger.error("JDOMException: " + e, e);
         }

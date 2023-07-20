@@ -21,7 +21,6 @@ import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRURLContent;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xsl.MCRParameterCollector;
-import org.xml.sax.SAXException;
 
 import jakarta.servlet.jsp.JspException;
 import jakarta.servlet.jsp.PageContext;
@@ -92,8 +91,6 @@ public class MCRIncludeEditorTag extends SimpleTagSupport {
             logger.error("TransformerConfigurationException: " + e, e);
         } catch (TransformerException e) {
             logger.error("TransformerException " + e, e);
-        } catch (SAXException e) {
-            logger.error("SAXException " + e, e);
         } catch (JDOMException e) {
             logger.error("JDOMException " + e, e);
         }

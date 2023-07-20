@@ -19,6 +19,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
+import org.jdom2.JDOMException;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.common.MCRException;
@@ -29,7 +30,6 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.utils.MCRRecursiveDeleter;
-import org.xml.sax.SAXParseException;
 
 /**
  * provides some static utility methods
@@ -109,7 +109,7 @@ public class MCRBPMNUtils {
         MCRObject o = null;
         try {
             o = new MCRObject(getWorkflowObjectFile(mcrObjID).toUri());
-        } catch (SAXParseException | IOException e) {
+        } catch (JDOMException | IOException e) {
             LOGGER.error(e);
         }
         return o;

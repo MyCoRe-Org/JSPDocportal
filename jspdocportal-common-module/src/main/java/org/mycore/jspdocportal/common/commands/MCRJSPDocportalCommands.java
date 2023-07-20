@@ -49,6 +49,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.JDOMException;
 import org.jdom2.filter.Filters;
 import org.jdom2.output.Format;
 import org.jdom2.xpath.XPathExpression;
@@ -61,7 +62,6 @@ import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
@@ -75,7 +75,6 @@ import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.MCRDerivateCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
-import org.xml.sax.SAXParseException;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -345,7 +344,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
             if(mcrObj.getService().getRulesSize() > 0) {
                 LOGGER.warn("ACLS for " + mcrObj.getId().toString() + " ignored.");
             }
-        } catch (MCRActiveLinkException | MCRAccessException | SAXParseException | IOException e) {
+        } catch (MCRAccessException | JDOMException | IOException e) {
             LOGGER.error(e);
         }
     }

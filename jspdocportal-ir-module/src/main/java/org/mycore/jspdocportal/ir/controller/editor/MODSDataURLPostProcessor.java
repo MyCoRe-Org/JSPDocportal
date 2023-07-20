@@ -18,12 +18,11 @@ import org.mycore.common.MCRConstants;
 import org.mycore.datamodel.common.MCRDataURL;
 import org.mycore.datamodel.common.MCRDataURLEncoding;
 import org.mycore.frontend.xeditor.MCRPostProcessorXSL;
-import org.xml.sax.SAXException;
 
 public class MODSDataURLPostProcessor extends MCRPostProcessorXSL {
 
     @Override
-    public Document process(Document oldXML) throws IOException, JDOMException, SAXException {
+    public Document process(Document oldXML) throws IOException, JDOMException {
         final Document newXML = oldXML.clone();
 
         //

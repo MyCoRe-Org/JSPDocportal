@@ -16,6 +16,7 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.variable.value.StringValue;
 import org.jdom2.Document;
+import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.mycore.access.MCRAccessException;
 import org.mycore.access.MCRAccessManager;
@@ -42,7 +43,6 @@ import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
 import org.mycore.user2.MCRUserManager;
-import org.xml.sax.SAXParseException;
 
 public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
     private static Logger LOGGER = LogManager.getLogger(MCRAbstractWorkflowMgr.class);
@@ -54,7 +54,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
         MCRObject mcrObj = new MCRObject();
 
         mcrObj.setSchema("datamodel-" + execution.getVariable(MCRBPMNMgr.WF_VAR_OBJECT_TYPE).toString() + ".xsd");
-        mcrObj.setId(MCRObjectID.getNextFreeId(base));
+        mcrObj.setId(MCRMetadataManager.getMCRObjectIDGenerator().getNextFreeId(base));
         mcrObj.setLabel(mcrObj.getId().toString());
         mcrObj.setVersion(MCRConfiguration2.getString("MCR.SWF.MCR.Version").orElse("2.0"));
         MCRObjectMetadata defaultMetadata = getDefaultMetadata(base);
@@ -144,7 +144,8 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
             || MCRAccessManager.checkPermission("create-" + owner.getTypeId())) {
             MCRObject mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(owner);
             if (der.getId().getNumberAsInteger() == 0) {
-                MCRObjectID newDerID = MCRObjectID.getNextFreeId(der.getId().getBase());
+                MCRObjectID newDerID = MCRMetadataManager.getMCRObjectIDGenerator()
+                    .getNextFreeId(der.getId().getBase());
                 der.setId(newDerID);
                 try {
                     MCRMetadataManager.create(der);
@@ -246,7 +247,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                 }
 
                 mcrObj.getService().removeFlags("editedby");
-                
+
                 MCRMetadataManager.update(mcrObj);
             } catch (MCRAccessException | MCRException e) {
                 LOGGER.error(e);
@@ -311,7 +312,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
         try {
             @SuppressWarnings("unused")
             MCRObject mcrWFObj = new MCRObject(wfFile.toUri());
-        } catch (SAXParseException e) {
+        } catch (JDOMException e) {
             return "XML Error: " + e.getMessage();
         } catch (IOException e) {
             return "I/O-Error: " + e.getMessage();
@@ -392,7 +393,8 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                 MCRBPMNUtils.saveMCRDerivateToWorkflowDirectory(mcrDer);
                 MCRPath rootPath = MCRPath.getRootPath(mcrDerID.toString());
                 try {
-                    Files.walkFileTree(rootPath, new MCRTreeCopier(rootPath, MCRBPMNUtils.getWorkflowDerivateDir(mcrObj.getId(), mcrDer.getId())));
+                    Files.walkFileTree(rootPath, new MCRTreeCopier(rootPath,
+                        MCRBPMNUtils.getWorkflowDerivateDir(mcrObj.getId(), mcrDer.getId())));
                 } catch (IOException e) {
                     LOGGER.error(e);
                 }
@@ -448,7 +450,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                 } else {
                     MCRDerivateCommands.loadFromFile(filename, false);
                 }
-            } catch (SAXParseException | IOException | MCRAccessException e) {
+            } catch (JDOMException | IOException | MCRAccessException e) {
                 LOGGER.error(e);
             }
         }
