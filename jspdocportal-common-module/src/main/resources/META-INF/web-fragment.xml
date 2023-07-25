@@ -9,6 +9,21 @@
   <ordering>
     <after>
       <name>mycore</name>
+      <name>mycore_classbrowser</name>
+      <name>mycore_classeditor</name>
+      <name>mycore_indexing</name>
+      <name>mycore_iview2</name>
+      <name>mycore_jobqueue</name>
+      <name>mycore_mets</name>
+      <name>mycore_orcid</name>
+      <name>mycore_packer</name>
+      <name>mycore_restapi</name>
+      <name>mycore_solr</name>
+      <name>mycore_sword</name>
+      <name>mycore_user2</name>
+      <name>mycore_viewer</name>
+      <name>mycore_wfc</name>
+      <name>mycore_xeditor</name>
     </after>
   </ordering>
 
