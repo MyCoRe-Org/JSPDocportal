@@ -37,11 +37,12 @@
                       <p class="card-text text-secondary" 
                          x-text="doc['created'].substring(8,10)+'.'+doc['created'].substring(5,7)+'.'+doc['created'].substring(0,4)" >22.02.2022</p>
                     </td>
-                    <td style="vertical-align: bottom; width: 33%; padding-left: 15px;">
+                    <td style="vertical-align: bottom; width: 33%; padding-left: 15px; text-align:right">
                       <template x-if="hascover">
-                        <a href="../resolve/id/dbhsnb_thesis_0000001540">
+                        <a x-bind:href="'../resolve/id/' + doc['id']">
                           <img class="ir-latestdocs-cover" style="max-width: 100%; max-height: 180px; object-fit: contain;" 
-                               x-bind:src="baseurl + 'api/iiif/image/v2/thumbnail/' + doc['id'] + '/full/!1024,1024/0/default.jpg'">
+                               x-bind:src="baseurl + 'api/iiif/image/v2/thumbnail/' + doc['id'] + '/full/!1024,1024/0/default.jpg'"
+                               onerror="this.onerror=null; this.src='${WebApplicationBaseURL}images/empty_pixel.png'" />
                         </a>
                       </template>
                     </td>
