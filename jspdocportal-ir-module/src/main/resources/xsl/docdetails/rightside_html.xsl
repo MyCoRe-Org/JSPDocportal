@@ -123,7 +123,7 @@
             </xsl:for-each>
           </xsl:when>
           <xsl:when test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='purl']">
-            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='purl']">
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='purl' and not(contains(text(), 'ub1vm'))]">
               <p class="d-none d-xl-block mb-0"><a href="{.}" style="transform: scaleX(96%) translate(-2%);display: inline-block;white-space: nowrap">
                 {substring-before(.,'.de/')}.de/<br class="d-md-none"/>{substring-after(.,'.de/')}
               </a></p>
