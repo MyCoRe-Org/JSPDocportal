@@ -19,26 +19,26 @@ package org.mycore.jspdocportal.ir.pi;
 
 import org.mycore.common.events.MCREvent;
 import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.pi.MCRPICreationEventHandler;
 import org.mycore.pi.MCRPIService;
+import org.mycore.pi.MCRPersistentIdentifierEventHandler;
 
 /**
- * Wrapper for MCRPICreationEventHandler
+ * Wrapper for MCRPersistentIdentifierEventHandler
  * which disabled the execution if the object is in import mode.
  * In import mode it will only update the flags in database, but not register any PI.
  * 
  * @author Robert Stephan
  *
  */
-public class MCRJSPPICreationEventhandler extends MCRPICreationEventHandler {
+public class MCRJSPPersistentIdentifierEventhandler extends MCRPersistentIdentifierEventHandler{
 
     @Override
-    protected void handleObjectCreated(MCREvent evt, MCRObject obj) {
+    protected void handleObjectRepaired(MCREvent evt, MCRObject obj) {
         if(obj.isImportMode()) {
             MCRPIService.updateFlagsInDatabase(obj);
         }
         else {
-            super.handleObjectCreated(evt, obj);
+            super.handleObjectRepaired(evt, obj);
         }
     }
 
@@ -50,5 +50,10 @@ public class MCRJSPPICreationEventhandler extends MCRPICreationEventHandler {
         else {
             super.handleObjectUpdated(evt, obj);
         }
+    }
+
+    @Override
+    protected void handleObjectDeleted(MCREvent evt, MCRObject obj) {
+        super.handleObjectDeleted(evt, obj);
     }
 }
