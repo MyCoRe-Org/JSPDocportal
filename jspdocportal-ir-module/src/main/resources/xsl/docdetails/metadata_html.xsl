@@ -10,10 +10,10 @@
   <xsl:import href="resource:xsl/functions/classification.xsl" />
   <xsl:import href="resource:xsl/functions/mods.xsl" />
   <xsl:import href="resource:xsl/functions/i18n.xsl" />
-  <xsl:import href="resource:/xsl/docdetails/metadata/metadata_classifications_html.xsl" />
-  <xsl:import href="resource:/xsl/docdetails/metadata/metadata_title_html.xsl" />
-  <xsl:import href="resource:/xsl/docdetails/metadata/metadata_identifier_html.xsl" />
-  <xsl:import href="resource:/xsl/docdetails/metadata/metadata_name_html.xsl" />
+  <xsl:import href="resource:xsl/docdetails/metadata/metadata_classifications_html.xsl" />
+  <xsl:import href="resource:xsl/docdetails/metadata/metadata_title_html.xsl" />
+  <xsl:import href="resource:xsl/docdetails/metadata/metadata_identifier_html.xsl" />
+  <xsl:import href="resource:xsl/docdetails/metadata/metadata_name_html.xsl" />
   
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="CurrentLang" />

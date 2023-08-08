@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <!-- copy of: https://github.com/MyCoRe-Org/mir/blob/master/mir-module/src/main/resources/xsl/mcr_directory-recursive.xsl -->
-  <xsl:include href="resource:/xsl/copynodes.xsl" />
+  <xsl:include href="resource:xsl/copynodes.xsl" />
   <xsl:template match="numChildren" />
   <xsl:template match="child[@type='directory']">
     <xsl:copy>
