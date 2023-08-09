@@ -44,7 +44,7 @@
       <meta name="citation_publication_date" content="{$mods_pubdate}" />
       <meta name="DC.issued" content="{$mods_pubdate}" />
       
-      <xsl:variable name="mods_publisher" select="concat(./mods:publisher,' ', ./mods:place/mods:placeTerm)" />
+      <xsl:variable name="mods_publisher" select="concat(string-join(./mods:publisher, ', '),' ', string-join(./mods:place/mods:placeTerm, ', '))" />
       <meta name="citation_publisher" content="{$mods_publisher}" />
       <meta name="DC.publisher" content="{$mods_publisher}" />
     </xsl:for-each>
