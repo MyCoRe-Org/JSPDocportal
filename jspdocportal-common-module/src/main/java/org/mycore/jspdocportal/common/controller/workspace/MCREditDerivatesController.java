@@ -15,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -28,6 +29,7 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.server.mvc.Viewable;
+import org.jdom2.Element;
 import org.jdom2.output.DOMOutputter;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
@@ -243,8 +245,9 @@ public class MCREditDerivatesController {
                 break;
             }
         }
-        MCRBPMNUtils.saveMCRObjectToWorkflowDirectory(mcrObj);
         updateDerivateOrder(mcrObj);
+        MCRBPMNUtils.saveMCRObjectToWorkflowDirectory(mcrObj);
+        
     }
 
     private void updateDerivateOrder(MCRObject mcrObj) {
@@ -254,9 +257,24 @@ public class MCREditDerivatesController {
             MCRDerivate der = MCRBPMNUtils.loadMCRDerivateFromWorkflowDirectory(mcrObj.getId(),
                 derLink.getXLinkHrefID());
             der.setOrder(pos + 1);
+            
+            final int pos_final = pos;
+            // see protected static final String ORDER_ELEMENT_NAME = "order";
+            elementsWithNameFromContentList(derLink, "order").findFirst().ifPresent(
+                o-> o.setText(Integer.toString(pos_final +1)));
+            
             MCRBPMNUtils.saveMCRDerivateToWorkflowDirectory(der);
         }
     }
+    
+    //TODO replace with MCRMetaEnrichedLinkID.elementsWithNameFromContentList() after the method was made public there
+    protected Stream<Element> elementsWithNameFromContentList(MCRMetaEnrichedLinkID derId, String name) {
+        return derId.getContentList().stream()
+            .filter(Element.class::isInstance)
+            .map(Element.class::cast)
+            .filter(el -> el.getName().equals(name));
+    }
+    
 
     //File: addFile_file-task_${actionBean.taskid}-derivate_${derID}
     private void deleteFileFromDerivate(String taskid, String mcrobjid, String derid, String fileName) {
