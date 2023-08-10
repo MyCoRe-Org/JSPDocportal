@@ -40,7 +40,8 @@
           			           
           axios.get(url)
               .then(function (resp) {
-                  that.search_placeholder = '${lblPlaceholder}'.replace('[x]', resp.data.response.numFound)
+                  let numFound = parseInt(resp.data.response.numFound) || 0; //default 0 for NaN
+                  that.search_placeholder = '${lblPlaceholder}'.replace('[x]', numFound.toLocaleString())
                   that.solrResponse = resp.data.response;
                   that.solrFacetCounts = resp.data.facet_counts;
                   
