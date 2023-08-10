@@ -127,7 +127,7 @@
                                          </x:if>
                                          <x:if select="$doc/mycoreobject/structure/derobjects/derobject[last()]/@xlink:href != $x/@xlink:href">
                                             <fmt:message key="WF.derivates.button.move_down" var="titleMoveDown"/>
-                                            <button id="btnEditDerMoveUp_${derID}" name="doMoveDownDerivate-task_${it.taskid}-derivate_${derID}" class="btn btn-secondary float-right" title="${titleMoveDown}">
+                                            <button id="btnEditDerMoveDown_${derID}" name="doMoveDownDerivate-task_${it.taskid}-derivate_${derID}" class="btn btn-secondary float-right ml-2" title="${titleMoveDown}">
                                                 <i class="fa fa-arrow-down"></i>
                                              </button>
                                          </x:if>
