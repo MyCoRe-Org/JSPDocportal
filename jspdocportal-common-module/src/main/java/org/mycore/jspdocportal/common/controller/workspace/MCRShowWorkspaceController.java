@@ -465,7 +465,7 @@ public class MCRShowWorkspaceController {
         }
 
         MCRObject mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
-        StringWriter result = new StringWriter();
+        StringBuffer result = new StringBuffer();
         if (mcrObj != null && mcrObj.getStructure().getDerivates().size() > 0) {
             Map<String, List<String>> derivateFiles = MCRBPMNUtils.getDerivateFiles(mcrObjID);
             for (MCRMetaLinkID derID : mcrObj.getStructure().getDerivates()) {
@@ -497,6 +497,11 @@ public class MCRShowWorkspaceController {
                     }
                     result.append("\n    <ul style=\"list-style-type: none;\">");
                     for (String fileName : derivateFiles.get(derID.getXLinkHref())) {
+                        if(result.length()>3600) {
+                            result.append("\n        <li>...</li>");
+                            break;
+                        }
+                            
                         result.append("\n        <li>");
                         if (fileName.contains(".")) {
                             result.append("<i class=\"fa fa-file mr-3\"></i>");
