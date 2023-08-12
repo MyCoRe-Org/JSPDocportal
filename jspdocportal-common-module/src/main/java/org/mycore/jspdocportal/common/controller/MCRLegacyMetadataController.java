@@ -21,8 +21,9 @@ import jakarta.ws.rs.core.Response.Status;
 public class MCRLegacyMetadataController {
 
     @GET
-    public Response defaultRes(@PathParam("mcrid") String mcrid,
+    public Response defaultRes(@PathParam("mcrid") String paramMcrid,
         @Context HttpServletRequest request) {
+        String mcrid = paramMcrid.trim();
         if (MCRObjectID.isValid(mcrid)) {
             return Response.temporaryRedirect(URI.create(request.getContextPath() + "/resolve/id/" + mcrid)).build();
         } else {
