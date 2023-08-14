@@ -1,3 +1,4 @@
+<%@tag import="org.apache.commons.lang3.StringUtils"%>
 <%@tag import="org.mycore.frontend.MCRFrontendUtil"%>
 <%@tag import="org.mycore.jspdocportal.common.search.MCRSearchResultDataBean"%>
 <%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
@@ -20,7 +21,12 @@
  --%>
 <% 
 	MCRSearchResultDataBean result = new MCRSearchResultDataBean();
-	result.setQuery("ir.host.recordIdentifier:"+hostRecordIdentifier+" OR ir.host.recordIdentifier:"+hostMcrID);
+    if(StringUtils.isEmpty(hostRecordIdentifier)){
+        result.setQuery("ir.host.recordIdentifier:"+hostMcrID);
+    }
+    else {
+        result.setQuery("ir.host.recordIdentifier:"+hostRecordIdentifier+" OR ir.host.recordIdentifier:"+hostMcrID);
+    }
 	String sortOrder = hostMcrID.contains("_document_") ? "desc" : "asc";
 	result.setSort("ir.sortstring " + sortOrder);
     result.setRows(999);
