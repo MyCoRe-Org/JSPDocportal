@@ -15,7 +15,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -29,13 +28,13 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.server.mvc.Viewable;
-import org.jdom2.Element;
 import org.jdom2.output.DOMOutputter;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCREditableMetaEnrichedLinkID;
 import org.mycore.datamodel.metadata.MCRMetaClassification;
 import org.mycore.datamodel.metadata.MCRMetaEnrichedLinkID;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
@@ -247,34 +246,23 @@ public class MCREditDerivatesController {
         }
         updateDerivateOrder(mcrObj);
         MCRBPMNUtils.saveMCRObjectToWorkflowDirectory(mcrObj);
-        
+
     }
 
     private void updateDerivateOrder(MCRObject mcrObj) {
         List<MCRMetaEnrichedLinkID> derList = mcrObj.getStructure().getDerivates();
         for (int pos = 0; pos < derList.size(); pos++) {
             MCRMetaEnrichedLinkID derLink = mcrObj.getStructure().getDerivates().get(pos);
+            if (derLink instanceof MCREditableMetaEnrichedLinkID x) {
+                x.setOrder(pos + 1);
+            }
+
             MCRDerivate der = MCRBPMNUtils.loadMCRDerivateFromWorkflowDirectory(mcrObj.getId(),
                 derLink.getXLinkHrefID());
             der.setOrder(pos + 1);
-            
-            final int pos_final = pos;
-            // see protected static final String ORDER_ELEMENT_NAME = "order";
-            elementsWithNameFromContentList(derLink, "order").findFirst().ifPresent(
-                o-> o.setText(Integer.toString(pos_final +1)));
-            
             MCRBPMNUtils.saveMCRDerivateToWorkflowDirectory(der);
         }
     }
-    
-    //TODO replace with MCRMetaEnrichedLinkID.elementsWithNameFromContentList() after the method was made public there
-    protected Stream<Element> elementsWithNameFromContentList(MCRMetaEnrichedLinkID derId, String name) {
-        return derId.getContentList().stream()
-            .filter(Element.class::isInstance)
-            .map(Element.class::cast)
-            .filter(el -> el.getName().equals(name));
-    }
-    
 
     //File: addFile_file-task_${actionBean.taskid}-derivate_${derID}
     private void deleteFileFromDerivate(String taskid, String mcrobjid, String derid, String fileName) {
@@ -416,9 +404,9 @@ public class MCREditDerivatesController {
             MCRWorkflowMgr wfm = MCRBPMNMgr
                 .getWorkflowMgr(ts.createTaskQuery().executionId(taskid).singleResult().getProcessInstanceId());
 
-            String label = multiPart.getField("newDerivate_label-task_" + taskid) == null 
+            String label = multiPart.getField("newDerivate_label-task_" + taskid) == null
                 ? null : multiPart.getField("newDerivate_label-task_" + taskid).getValue();
-            String title = multiPart.getField("newDerivate_title-task_" + taskid) == null 
+            String title = multiPart.getField("newDerivate_title-task_" + taskid) == null
                 ? null : multiPart.getField("newDerivate_title-task_" + taskid).getValue();
             String fileName = multiPart.getField("newDerivate_file-task_" + taskid).getFormDataContentDisposition()
                 .getFileName();
