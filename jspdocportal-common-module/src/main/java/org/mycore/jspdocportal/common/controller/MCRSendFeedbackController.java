@@ -111,7 +111,7 @@ public class MCRSendFeedbackController {
             }
 
             if (StringUtils.isNoneBlank(message, fromName) && isEmailValid) {
-                subject = MCRConfiguration2.getString("MCRWorkflow.Email.Feedback.Subject")
+                subject = MCRConfiguration2.getString("MCR.Workflow.Email.Feedback.Subject")
                     .orElse("Feedbackformular zu {0}");
                 subject = subject.replace("{0}", topicHeader);
 
@@ -150,8 +150,12 @@ public class MCRSendFeedbackController {
 
                 MCRBPMNMgr.sendMail(receiver, subject, sbMailBody.toString(), replyTo, cc);
 
+                //see other redirect POST request to GET response
                 if (StringUtils.isNotBlank(returnURL)) {
-                    Response.temporaryRedirect(URI.create(returnURL)).build();
+                    return Response.seeOther(URI.create(returnURL)).build();
+                }
+                else if (StringUtils.isNotBlank(topicURL)) {
+                    return Response.seeOther(URI.create(topicURL)).build();
                 }
             }
         } catch (UnsupportedEncodingException e) {
