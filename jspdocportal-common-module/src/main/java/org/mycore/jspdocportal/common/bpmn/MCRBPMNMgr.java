@@ -117,7 +117,7 @@ public class MCRBPMNMgr {
             new Authenticator() {
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(
-                        MCRConfiguration2.getString(" MCR.Workflow.Email.MailServerUsername").get(),
+                        MCRConfiguration2.getString("MCR.Workflow.Email.MailServerUsername").get(),
                         MCRConfiguration2.getString("MCR.Workflow.Email.MailServerPassword").get());
                 }
             });

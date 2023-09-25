@@ -56,8 +56,8 @@ public class MCRSendFeedbackController {
         String csrfToken = UUID.randomUUID().toString();
         request.getSession().setAttribute("feedbackFormCSRFToken", csrfToken);
 
-        model.put("recipient", MCRConfiguration2.getString("MCRWorkflow.Email.Feedback.Recipient").orElse(""));
-        model.put("subject", MCRConfiguration2.getString("MCRWorkflow.Email.Feedback.Subject").orElse(""));
+        model.put("recipient", MCRConfiguration2.getString("MCR.Workflow.Email.Feedback.Recipient").orElse(""));
+        model.put("subject", MCRConfiguration2.getString("MCR.Workflow.Email.Feedback.Subject").orElse(""));
         model.put("topicURL", topicURL);
         model.put("topicHeader", topicHeader);
         model.put("returnURL", returnURL);
@@ -136,7 +136,7 @@ public class MCRSendFeedbackController {
                 sbMailBody.append("\n" + message);
 
                 List<InternetAddress> receiver = List
-                    .of(new InternetAddress(MCRConfiguration2.getString("MCRWorkflow.Email.Feedback.Recipient").get()));
+                    .of(new InternetAddress(MCRConfiguration2.getString("MCR.Workflow.Email.Feedback.Recipient").get()));
                 String[] ccProp = MCRConfiguration2.getString("MCR.Workflow.Email.CC").orElse("").split(",");
                 for (String s : ccProp) {
                     s = s.trim();
