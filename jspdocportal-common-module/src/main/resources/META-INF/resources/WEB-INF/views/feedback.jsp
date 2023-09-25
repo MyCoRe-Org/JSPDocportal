@@ -28,7 +28,7 @@
             </div>
           </c:forEach>
 
-			<form id="feedback-form" action="${applicationScope.WebApplicationBaseURL}do/feedback" accept-charset="UTF-8"
+			<form id="feedback-form" action="${applicationScope.WebApplicationBaseURL}do/feedback" accept-charset="UTF-8" method="post"
 				class="form-horizontal ir-box">
 				<input name="csrfToken" type="hidden" id="csrf-token" value="" />
 				<input type="hidden" name="returnURL" value="${it.returnURL}" />
