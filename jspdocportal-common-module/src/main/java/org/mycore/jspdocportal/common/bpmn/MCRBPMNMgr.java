@@ -118,11 +118,8 @@ public class MCRBPMNMgr {
             props.put("mail.smtp.auth", "true");
             auth = new Authenticator() {
                 protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(
-                        MCRConfiguration2.getString("MCR.Workflow.Email.MailServerUsername").get(),
-                        MCRConfiguration2.getString("MCR.Workflow.Email.MailServerPassword").get());
+                    return new PasswordAuthentication(user, password);
                 }
-
             };
         }
         //create the Session object
