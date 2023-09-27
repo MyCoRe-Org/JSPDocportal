@@ -104,7 +104,6 @@ public class MCRBPMNMgr {
     public static void sendMail(List<InternetAddress> to, String subject, String body, List<InternetAddress> cc,
         List<InternetAddress> replyTo) {
         Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         MCRConfiguration2.getString("MCR.Workflow.Email.MailServerSslProtocols")
             .ifPresent(p -> props.put("mail.smtp.ssl.protocols", p));
@@ -112,16 +111,22 @@ public class MCRBPMNMgr {
         props.put("mail.smtp.host", MCRConfiguration2.getString("MCR.Workflow.Email.MailServerHost").get());
         props.put("mail.smtp.port", MCRConfiguration2.getInt("MCR.Workflow.Email.MailServerPort").get());
 
-        //create the Session object
-        Session session = Session.getInstance(props,
-            new Authenticator() {
+        Authenticator auth = null;
+        String user = MCRConfiguration2.getString("MCR.Workflow.Email.MailServerUsername").orElse("");
+        String password = MCRConfiguration2.getString("MCR.Workflow.Email.MailServerPassword").orElse("");
+        if (!user.isBlank() && !password.isBlank()) {
+            props.put("mail.smtp.auth", "true");
+            auth = new Authenticator() {
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(
                         MCRConfiguration2.getString("MCR.Workflow.Email.MailServerUsername").get(),
                         MCRConfiguration2.getString("MCR.Workflow.Email.MailServerPassword").get());
                 }
-            });
 
+            };
+        }
+        //create the Session object
+        Session session = Session.getInstance(props, auth);
         try {
             //create a MimeMessage object
             Message message = new MimeMessage(session);
