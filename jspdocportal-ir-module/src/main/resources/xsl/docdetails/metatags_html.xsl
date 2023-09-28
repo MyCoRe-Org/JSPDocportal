@@ -80,7 +80,7 @@
     <meta name="DC.identifier" content="{$WebApplicationBaseURL}resolve/id/{$mcrid}" />
     
     <xsl:for-each select="./mods:identifier[@type='purl']/text()">
-      <meta name="citation_abstract_url" content="{.}" />
+      <meta name="citation_abstract_url" content="{replace(., 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')}" />
       <meta name="DC.identifier" content="{.}" />
     </xsl:for-each>
     <xsl:for-each select="./mods:identifier[@type='urn']/text()">

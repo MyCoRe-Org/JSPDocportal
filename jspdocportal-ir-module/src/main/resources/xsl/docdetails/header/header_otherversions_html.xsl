@@ -39,7 +39,7 @@
                   <xsl:attribute name="href" select="concat('https://doi.org/', ./mods:identifier[@type='doi'])" />   
                 </xsl:when>
                 <xsl:when test="./mods:identifier[@type='purl']">
-                  <xsl:attribute name="href" select="./mods:identifier[@type='purl']" />   
+                  <xsl:attribute name="href" select="replace(./mods:identifier[@type='purl'], 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')" />   
                 </xsl:when>
               </xsl:choose>
               <xsl:attribute name="data-toggle">popover</xsl:attribute>
@@ -89,7 +89,7 @@
                   <xsl:attribute name="href" select="concat('https://doi.org/', ./mods:identifier[@type='doi'])" />   
                 </xsl:when>
                 <xsl:when test="./mods:identifier[@type='purl']">
-                  <xsl:attribute name="href" select="./mods:identifier[@type='purl']" />   
+                  <xsl:attribute name="href" select="replace(./mods:identifier[@type='purl'], 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')" />   
                 </xsl:when>
               </xsl:choose>
               <xsl:attribute name="data-toggle">popover</xsl:attribute>

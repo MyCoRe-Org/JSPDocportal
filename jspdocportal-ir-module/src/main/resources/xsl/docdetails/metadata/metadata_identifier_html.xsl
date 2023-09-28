@@ -67,9 +67,16 @@
        </xsl:if>
      </xsl:for-each>
      <xsl:for-each select="mods:identifier[@type='purl']">
+       <xsl:variable name="p" select="replace(., 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')" />
        <xsl:variable name="categ_purl" select="mcrclass:category('identifier', 'purl')" />
          <tr><th><abbr class="text-nowrap" title="{$categ_purl/label[@xml:lang=$CurrentLang]/@description}">{$categ_purl/label[@xml:lang=$CurrentLang]/@text}</abbr>: </th>
-            <td><a href="{.}">{.}</a></td>
+            <td>
+              <a href="{$p}">{$p}</a>
+               <a class="ir-identifier-portal text-dark small ml-3" title="{mcri18n:translate('OMD.ir.docdetails.metadata.tooltip.identifier')}" 
+                  href="{replace($p, '://purl.uni-rostock.de/','://purl.uni-rostock.de/info/purl/')}">
+                 <i class="fas fa-external-link-alt"></i>
+               </a>
+            </td>
          </tr>
      </xsl:for-each>
   </xsl:template>

@@ -400,7 +400,7 @@
                       </xsl:for-each>
                       <xsl:for-each select="./mods:recordInfo/mods:recordIdentifier">     
                         <tr><th><abbr class="text-nowrap" title="Persistente URL">PURL</abbr>: </th>
-                            <td><a href="http://purl.uni-rostock.de/{.}">http://purl.uni-rostock.de/{.}</a></td>
+                            <td><a href="https://purl.uni-rostock.de/{.}">https://purl.uni-rostock.de/{.}</a></td>
                         </tr>
                       </xsl:for-each>
                     </table>

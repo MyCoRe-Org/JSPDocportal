@@ -54,9 +54,10 @@
                              </xsl:element></p>
                          </xsl:when>
                          <xsl:when test="./mods:identifier[@type='purl']">
+                          <xsl:variable name="p" select="replace(./mods:identifier[@type='purl'], 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')" />
                           <p><xsl:element name="a">
-                              <xsl:attribute name="href"><xsl:value-of select="./mods:identifier[@type='purl']" /></xsl:attribute>
-                              <xsl:value-of select="./mods:identifier[@type='purl']" />
+                              <xsl:attribute name="href"><xsl:value-of select="$p" /></xsl:attribute>
+                              <xsl:value-of select="$p" />
                             </xsl:element></p>
                          </xsl:when>
                        </xsl:choose>

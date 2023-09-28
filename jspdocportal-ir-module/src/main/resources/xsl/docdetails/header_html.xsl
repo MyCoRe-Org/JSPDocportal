@@ -179,7 +179,8 @@
             <a href="https://doi.org/{./mods:identifier[@type='doi']}">https://doi.org/{./mods:identifier[@type='doi']}</a>
           </xsl:when>
           <xsl:when test="./mods:identifier[@type='purl']">
-            <a href="{./mods:identifier[@type='purl']}">{./mods:identifier[@type='purl']}</a>
+            <xsl:variable name="p" select="replace(./mods:identifier[@type='purl'], 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')" />
+            <a href="{$p}">{$p}</a>
           </xsl:when>
         </xsl:choose>
       </p>
