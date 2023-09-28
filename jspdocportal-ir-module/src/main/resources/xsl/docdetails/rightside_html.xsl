@@ -124,7 +124,7 @@
           </xsl:when>
           <xsl:when test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='purl']">
             <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='purl' and not(contains(text(), 'ub1vm'))]">
-              <xsl:variable name="p" select="replace(./mods:identifier[@type='purl'], 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')" />
+              <xsl:variable name="p" select="replace(., 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')" />
               <p class="d-none d-xl-block mb-0"><a href="{$p}" style="transform: scaleX(96%) translate(-2%);display: inline-block;white-space: nowrap">
                 {substring-before($p,'.de/')}.de/<br class="d-md-none"/>{substring-after($p,'.de/')}
               </a></p>
