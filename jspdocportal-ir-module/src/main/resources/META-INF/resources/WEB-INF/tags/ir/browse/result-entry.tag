@@ -46,7 +46,7 @@
     <c:choose>
       <c:when test="${entry.data['category'].contains('doctype:histbest')}">
         <c:if test="${not empty(entry.data['purl'])}">
-          <p class="card-text">${entry.data['purl']}</p>
+          <p class="card-text">${fn:replace(entry.data['purl'], 'http://purl.uni-rostock.de','https://purl.uni-rostock.de')}</p>
         </c:if>
       </c:when>
       <c:otherwise>
