@@ -470,8 +470,9 @@
         </ddb:identifier>
       </xsl:if>
       <xsl:if test="mods:identifier[@type='purl']">
+      <xsl:variable name="p" select="replace(mods:identifier[@type='purl'], 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')" />
         <ddb:identifier xsi:type="URL">
-          <xsl:value-of select="mods:identifier[@type='purl']" />
+          <xsl:value-of select="$p" />
         </ddb:identifier>
       </xsl:if>
   </xsl:template>

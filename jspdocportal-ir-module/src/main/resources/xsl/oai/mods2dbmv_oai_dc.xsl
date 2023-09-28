@@ -53,8 +53,9 @@
         </dc:identifier>
       </xsl:when>
       <xsl:when test="contains ('purl urn', $type)">
+        <xsl:variable name="p" select="replace(., 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')" />
         <dc:identifier>
-          <xsl:value-of select="." />
+          <xsl:value-of select="$p" />
         </dc:identifier>
       </xsl:when>
     </xsl:choose>
