@@ -288,7 +288,7 @@
               <xsl:variable name="json_urls" select="replace($catalogs, '''', '&quot;')" />
               <xsl:variable name="opac_url" select="json-to-xml($json_urls)/json:map/json:string[@key='opac']" />
               <a class="badge px-1" target="_blank" href="{replace($opac_url, '\{0\}',.)}">OPAC</a>
-              <a class="badge px-1" href="https://gso.gbv.de/DB=2.1/PPNSET?PPN={.}">GVK</a>
+              <a class="badge px-1" href="https://kxp.k10plus.de/DB=2.1/PPNSET?PPN={.}">GVK</a>
             </xsl:for-each>
             <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='vd16']">
               <a class="badge px-1" target="_blank" href="http://gateway-bayern.de/VD16+{replace(.,' ','+')}">VD16</a>
@@ -306,7 +306,7 @@
               <a class="badge px-1" target="_blank" href="http://kalliope-verbund.info/{.}">Kalliope-Verbundkatalog</a>
             </xsl:for-each>
             <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='doi']">
-              <a class="badge px-1" target="_blank" href="https://search.datacite.org/works/{.}">DataCite Search</a>
+              <a class="badge px-1" target="_blank" href="https://commons.datacite.org/doi.org/{.}">DataCite Commons</a>
             </xsl:for-each>
           </p>
         </xsl:if>
