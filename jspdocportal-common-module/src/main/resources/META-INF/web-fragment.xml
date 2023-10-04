@@ -69,7 +69,6 @@
     <filter-name>MCRSessionInitializationFilter</filter-name>
     <url-pattern>*.action</url-pattern>
     <url-pattern>*.jsp</url-pattern>
-    <url-pattern>/browse/*</url-pattern>
     <url-pattern>/do/*</url-pattern>
     <url-pattern>/resolve</url-pattern>
     <url-pattern>/resolve/*</url-pattern>
@@ -111,10 +110,6 @@
   <servlet-mapping>
     <servlet-name>MVC Jersey Servlet</servlet-name>
     <url-pattern>/site/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>MVC Jersey Servlet</servlet-name>
-    <url-pattern>/browse/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>MVC Jersey Servlet</servlet-name>

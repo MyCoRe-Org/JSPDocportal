@@ -23,7 +23,7 @@
   </div>
 
   <div class="custom-control custom-control-inline float-right mr-0">
-    <a class="btn btn-outline-secondary btn-sm" href="${WebApplicationBaseURL}browse/${mode}">
+    <a class="btn btn-outline-secondary btn-sm" href="${WebApplicationBaseURL}do/browse/${mode}">
       <fmt:message key="Browse.Search.alldocuments" />
     </a>
   </div>
@@ -44,7 +44,7 @@
   <script>
     function changeFilterIncludeURL(key, value, mask) {
 	  window.location=$("meta[name='mcr:baseurl']").attr("content")
-		+ "browse/"+mask+"?"
+		+ "do/browse/"+mask+"?"
     	+ "&_add-filter="
     	+ encodeURIComponent("+" + key+":"+value);
     }

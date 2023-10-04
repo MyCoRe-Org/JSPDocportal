@@ -57,7 +57,7 @@
         },
         
         doSearch() {
-          window.location = this.baseurl + "browse/" + this.mask
+          window.location = this.baseurl + "do/browse/" + this.mask
             +"?_add-filter=" + encodeURIComponent("+" + this.search_field+":"+this.search_term);
         },
         

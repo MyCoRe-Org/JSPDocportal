@@ -16,7 +16,7 @@
       <li class="list-group-item ir-facets-btn btn-sm px-2 py-1"
           data-mcr-facet-value="${c.id.getRootID()}:${c.id.ID}"
           x-data="{countPos : counts.indexOf('${c.id.getRootID()}:${c.id.ID}')}" x-show="countPos >= 0"
-          x-on:click="window.location=baseurl + 'browse/' + mask
+          x-on:click="window.location=baseurl + 'do/browse/' + mask
               + '?_add-filter=' + encodeURIComponent('+${facetField}:${c.id.getRootID()}:${c.id.ID}')"
           x-effect="updateHiddenStateForParents($el)">
         <startpage:classification-label category="${c}" lang="${lang}" />

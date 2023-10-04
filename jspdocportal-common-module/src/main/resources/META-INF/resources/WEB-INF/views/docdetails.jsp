@@ -48,7 +48,7 @@
       <div class="row d-block d-lg-none" style="padding: 0px 15px">
         <div class="col-12" style="padding-top:45px">
 		  <div class="ir-nav-search-back ir-nav-search ir-box text-right" style="padding:0px 0px 30px 0px">
-             <a class="btn btn-primary" href="${WebApplicationBaseURL}/browse/epub" class="btn btn-primary btn-sm">
+             <a class="btn btn-primary" href="${WebApplicationBaseURL}/do/browse/epub" class="btn btn-primary btn-sm">
 			    <i class="fas fa-search"></i>
 				<fmt:message key="Webpage.docdetails.newsearch" />
 			</a>

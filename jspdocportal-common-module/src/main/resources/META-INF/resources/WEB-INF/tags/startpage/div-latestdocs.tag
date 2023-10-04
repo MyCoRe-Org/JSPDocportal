@@ -9,7 +9,7 @@
     <template x-if="solrResponse">
       <div class="ir-latestdocs card"style="background-color:unset">
         <div class="card-header px-0 py-2" style="background-color:unset">
-          <h4 class="mb-0"><a href="${WebApplicationBaseURL}browse/${it.path}"><fmt:message key="Browse.Search.LatestDocs" /></a></h4>
+          <h4 class="mb-0"><a href="${WebApplicationBaseURL}do/browse/${it.path}"><fmt:message key="Browse.Search.LatestDocs" /></a></h4>
         </div>
         <div>
           <template x-for="doc in solrResponse.docs">
@@ -53,7 +53,7 @@
           </template>
         </div>
         <div class="pb-3">
-          <a href="${WebApplicationBaseURL}browse/${it.path}" 
+          <a href="${WebApplicationBaseURL}do/browse/${it.path}" 
              class="ir-latestdocs-more-button btn btn-sm btn-primary float-right mt-3">
              <fmt:message key="Browse.Search.LatestDocs.button.more" />
           </a>

@@ -16,14 +16,14 @@
 <script type="text/javascript">
 	function changeFacetIncludeURL(key, value) {
 		window.location=$("meta[name='mcr:baseurl']").attr("content")
-				 	       + "browse/${mask}?_search="
+				 	       + "do/browse/${mask}?_search="
 				           + $("meta[name='mcr:search.id']").attr("content")
 					       + "&_add-filter="
 				       + encodeURIComponent("+" + key +":"+ value);
 		}
 		function changeFacetExcludeURL(key,value) {
 			window.location=$("meta[name='mcr:baseurl']").attr("content")
-					       + "browse/${mask}?_search="
+					       + "do/browse/${mask}?_search="
 				           + $("meta[name='mcr:search.id']").attr("content")
 					       + "&_add-filter="
 					       + encodeURIComponent("-" + key +":"+ value);
@@ -55,7 +55,7 @@
 						<c:set var="toggleClass">collapse toggle-${facetID}-collapse</c:set>
 					</c:if>
 					<c:if test="${result.filterQueries.contains(key)}">
-					  	<c:url var="url" value="${WebApplicationBaseURL}browse/${mask}">
+					  	<c:url var="url" value="${WebApplicationBaseURL}do/browse/${mask}">
 							<c:param name="_search" value="${result.id}" />
 							<c:param name="_remove-filter" value="${key}" />
 						</c:url>

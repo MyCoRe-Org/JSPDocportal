@@ -47,7 +47,7 @@ import jakarta.ws.rs.core.Context;
  *
  */
 
-@Path("/browse/{mask}")
+@Path("/do/browse/{mask}")
 public class BrowseController {
     @SuppressWarnings("unused")
     private static Logger LOGGER = LogManager.getLogger(BrowseController.class);
@@ -104,9 +104,9 @@ public class BrowseController {
         }
 
         if (mask == null) {
-            result.setAction("browse");
+            result.setAction("do/browse");
         } else {
-            result.setAction("browse/" + mask);
+            result.setAction("do/browse/" + mask);
             result.getFacetFields().clear();
             for (String ff : MCRConfiguration2.getString("MCR.Browse." + mask + ".FacetFields").orElse("")
                     .split(",")) {

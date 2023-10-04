@@ -59,14 +59,14 @@
                     <script type="text/javascript">
 						function changeFilterIncludeURL() {
 						  window.location=$("meta[name='mcr:baseurl']").attr("content")
-										    + "browse/epub?_search="
+										    + "do/browse/epub?_search="
 							       			+ $("meta[name='mcr:search.id']").attr("content")
 							    			+ "&_add-filter="
 							    			+ encodeURIComponent("+" + $("input[name='filterField']:checked").val()+":"+$("#filterValue").val());
 						}
 						function changeFilterExcludeURL() {
 							window.location=$("meta[name='mcr:baseurl']").attr("content")
-						    		   + "browse/epub?_search="
+						    		   + "do/browse/epub?_search="
 						   	   	       + $("meta[name='mcr:search.id']").attr("content")
 						   	   		   + "&_add-filter="
 						   	   		   + encodeURIComponent("-" + $("input[name='filterField']:checked").val()+":"+$("#filterValue").val());
@@ -139,7 +139,7 @@
             <div class="col">
               <c:forEach var="fq" items="${it.result.filterQueries}">
                 <c:if test="${not fn:contains(fq, '.facet:')}">
-                  <c:url var="url" value="${WebApplicationBaseURL}browse/epub">
+                  <c:url var="url" value="${WebApplicationBaseURL}do/browse/epub">
                     <c:param name="_search" value="${it.result.id}" />
                     <c:param name="_remove-filter" value="${fq}" />
                   </c:url>
