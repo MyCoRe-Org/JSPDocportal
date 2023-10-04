@@ -67,13 +67,10 @@
   </filter>
   <filter-mapping>
     <filter-name>MCRSessionInitializationFilter</filter-name>
-    <url-pattern>*.action</url-pattern>
     <url-pattern>*.jsp</url-pattern>
     <url-pattern>/do/*</url-pattern>
     <url-pattern>/resolve</url-pattern>
     <url-pattern>/resolve/*</url-pattern>
-    <url-pattern>/classbrowser/*</url-pattern>
-    <url-pattern>/indexbrowser/*</url-pattern>
     <url-pattern>/site/*</url-pattern>
     <url-pattern>/rsc/iiif/*</url-pattern>
     <url-pattern>/mcrviewer/*</url-pattern>

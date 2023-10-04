@@ -236,14 +236,14 @@
 			<refitem id="~index" />
 		</navitem>
 		<navitem id="sitemap" i18n="Nav.Sitemap" href="content/sitemap.jsp" />
-		<navitem id="login" i18n="Nav.Login" href="/login.action" hidden="true">
+		<navitem id="login" i18n="Nav.Login" href="do/login" hidden="true">
 			<refitem id="~login" />
 			<navitem id="showuser" i18n="Nav.UserDetails"
 				href="content/userdetails.jsp">
 				<refitem id="~userdetail" />
 			</navitem>
 		</navitem>
-		<navitem id="logout" i18n="Nav.Logout" href="/login.action?logout=true" hidden="true">
+		<navitem id="logout" i18n="Nav.Logout" href="do/login?logout=true" hidden="true">
 			<refitem id="~logout" />
 		</navitem>
 
