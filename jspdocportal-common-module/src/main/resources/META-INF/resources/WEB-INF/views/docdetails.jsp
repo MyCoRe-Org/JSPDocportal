@@ -28,6 +28,7 @@
 <html>
 <head>
   <title>${mcrid} @ <fmt:message key="Nav.Application" /></title>
+  <link rel="canonical" href="${WebApplicationBaseURL}resolve/id/${mcrid}" />
   <%@ include file="fragments/html_head.jspf" %>
   <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/metatags_html.xsl" />
   <link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}modules/shariff_3.2.1/shariff.min.css">
