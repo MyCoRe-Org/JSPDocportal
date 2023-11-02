@@ -60,6 +60,7 @@ import org.mycore.access.MCRRuleAccessInterface;
 import org.mycore.backend.jpa.MCREntityManagerProvider;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
+import org.mycore.common.MCRMailer;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
@@ -125,7 +126,8 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
     * @param dirname
     *            the filename to store the object 
     */
-    @MCRCommand(syntax = "backup all objects of type {0} to directory {1}", help = "The command backups all objects of type {0} into the directory {1} including all derivates")
+    @MCRCommand(syntax = "backup all objects of type {0} to directory {1}",
+        help = "The command backups all objects of type {0} into the directory {1} including all derivates")
     public static final List<String> backupAllObjects(String type, String dirname) {
         // check dirname
         List<String> commandList = new ArrayList<String>();
@@ -145,7 +147,8 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
         return commandList;
     }
 
-    @MCRCommand(syntax = "backup object {0} to directory {1}", help = "The command backups a single object {0} into the directory {1} including all derivates")
+    @MCRCommand(syntax = "backup object {0} to directory {1}",
+        help = "The command backups a single object {0} into the directory {1} including all derivates")
     public static final void backupObject(String id, String dirname) {
         File dir = new File(dirname);
         if (dir.isFile()) {
@@ -168,13 +171,13 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                     mcrObj.getService().addRule(s, rule);
                 }
             }
-            
+
             // build JDOM
             Document xml = mcrObj.createXML();
 
             File xmlOutput = new File(dir, id.toString() + ".xml");
-            try(FileOutputStream out = new FileOutputStream(xmlOutput)){
-                  new org.jdom2.output.XMLOutputter(Format.getPrettyFormat()).output(xml, out);
+            try (FileOutputStream out = new FileOutputStream(xmlOutput)) {
+                new org.jdom2.output.XMLOutputter(Format.getPrettyFormat()).output(xml, out);
             }
 
             MCRObjectStructure mcrStructure = mcrObj.getStructure();
@@ -219,7 +222,8 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
      *            the directory name from where to restore the objects
      * 
      */
-    @MCRCommand(syntax = "restore all objects from directory {0}", help = "The command restores all objects from directory {0} including all derivates")
+    @MCRCommand(syntax = "restore all objects from directory {0}",
+        help = "The command restores all objects from directory {0} including all derivates")
     public static final List<String> restoreAllObjects(String dirname) {
         // check dirname
         ArrayList<String> commandList = new ArrayList<String>();
@@ -240,7 +244,8 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
         return commandList;
     }
 
-    @MCRCommand(syntax = "restore object from file {0}", help = "The command restores a single object {0} including all derivates")
+    @MCRCommand(syntax = "restore object from file {0}",
+        help = "The command restores a single object {0} including all derivates")
     public static final void restoreObject(String fileName) {
         //ignore directories
         File objectFile = new File(fileName);
@@ -285,10 +290,10 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                     Files.walkFileTree(p, new SimpleFileVisitor<Path>() {
                         @Override
                         public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs)
-                                throws IOException {
+                            throws IOException {
                             if (attrs.creationTime().toMillis() > dateCreated.getTime()) {
                                 BasicFileAttributeView basicView = Files.getFileAttributeView(dir,
-                                        BasicFileAttributeView.class);
+                                    BasicFileAttributeView.class);
                                 basicView.setTimes(null, null, FileTime.fromMillis(dateCreated.getTime()));
                             }
                             return FileVisitResult.CONTINUE;
@@ -296,15 +301,15 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
 
                         @Override
                         public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
-                                throws IOException {
+                            throws IOException {
                             LOGGER.info("Update create date of file: " + file.toString() + ":" + attrs.creationTime());
                             if (attrs.creationTime().toMillis() > dateCreated.getTime()) {
                                 BasicFileAttributeView basicView = Files.getFileAttributeView(file,
-                                        BasicFileAttributeView.class);
+                                    BasicFileAttributeView.class);
                                 basicView.setTimes(null, null, FileTime.fromMillis(dateCreated.getTime()));
                             }
                             BasicFileAttributeView basicView = Files.getFileAttributeView(file,
-                                    BasicFileAttributeView.class);
+                                BasicFileAttributeView.class);
                             LOGGER.info("   -------------> " + basicView.readAttributes().creationTime());
                             return FileVisitResult.CONTINUE;
                         }
@@ -325,7 +330,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                         mcrDer.getService().removeRule(0);
                     }
                     */
-                    if(mcrDer.getService().getRulesSize() > 0) {
+                    if (mcrDer.getService().getRulesSize() > 0) {
                         LOGGER.warn("ACLS for " + mcrDer.getId().toString() + " ignored.");
                     }
                 }
@@ -336,12 +341,12 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
             while (mcrObj.getService().getRulesSize() > 0) {
                 MCRMetaAccessRule rule = mcrObj.getService().getRule(0);
                 String permission = mcrObj.getService().getRulePermission(0);
-
+            
                 MCRAccessManager.updateRule(id, permission, rule.getCondition(), "");
                 mcrObj.getService().removeRule(0);
             }
             */
-            if(mcrObj.getService().getRulesSize() > 0) {
+            if (mcrObj.getService().getRulesSize() > 0) {
                 LOGGER.warn("ACLS for " + mcrObj.getId().toString() + " ignored.");
             }
         } catch (MCRAccessException | JDOMException | IOException e) {
@@ -354,7 +359,8 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
      * 
      */
 
-    @MCRCommand(syntax = "repair urn store", help = "The command parses through all metadata objects and updates the urns in the URN store if necessary")
+    @MCRCommand(syntax = "repair urn store",
+        help = "The command parses through all metadata objects and updates the urns in the URN store if necessary")
     public static final void repairURNStore() throws MCRException {
         //TODO URN -> PI
         /*
@@ -383,7 +389,8 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
         */
     }
 
-    @MCRCommand(syntax = "create directory {0}", help = "The command creates a directory. If MyCoRe Properties are specified as part of the path, they will be replaced.")
+    @MCRCommand(syntax = "create directory {0}",
+        help = "The command creates a directory. If MyCoRe Properties are specified as part of the path, they will be replaced.")
     public static final void createDirectory(String dirname) {
         while (dirname.contains("${")) {
             int start = dirname.indexOf("${");
@@ -413,7 +420,8 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
      * with default users, permissions and classifications.
      * 
      */
-    @MCRCommand(syntax = "drop mycore content", help = "The command deletes all data from mycore directories and database on a lower level.")
+    @MCRCommand(syntax = "drop mycore content",
+        help = "The command deletes all data from mycore directories and database on a lower level.")
     public static final void dropMyCoReContent() {
         Map<String, String> ifsProperties = MCRConfiguration2.getSubPropertiesMap("MCR.IFS.ContentStore");
         for (String key : ifsProperties.keySet()) {
@@ -473,7 +481,8 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
      * At the end the parent entry is deleted.
      * 
      */
-    @MCRCommand(syntax = "migrate mycore parent to relateditem", help = "The command creates related items for parents and removes parent child relationships.")
+    @MCRCommand(syntax = "migrate mycore parent to relateditem",
+        help = "The command creates related items for parents and removes parent child relationships.")
     public static final void migrateParent2RelatedItem() {
         LOGGER.info("Please be patient, while collecting required MyCoRe objects.");
         List<String> check = new ArrayList<>();
@@ -481,17 +490,17 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
         check.addAll(MCRXMLMetadataManager.instance().listIDsOfType("document"));
 
         XPathExpression<Element> xpathRecordIdentifier = XPathFactory.instance().compile(
-                ".//mods:mods/mods:recordInfo/mods:recordIdentifier", Filters.element(), null,
-                MCRConstants.MODS_NAMESPACE);
+            ".//mods:mods/mods:recordInfo/mods:recordIdentifier", Filters.element(), null,
+            MCRConstants.MODS_NAMESPACE);
         XPathExpression<Element> xpathMainTitle = XPathFactory.instance().compile(
-                ".//mods:mods/mods:titleInfo/mods:title", Filters.element(), null, MCRConstants.MODS_NAMESPACE);
+            ".//mods:mods/mods:titleInfo/mods:title", Filters.element(), null, MCRConstants.MODS_NAMESPACE);
 
         for (String mcrid : check) {
             MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrid));
             if (mcrObj.getParent() != null) {
                 MCRMetaXML mcrMODS = (MCRMetaXML) mcrObj.getMetadata().findFirst("def.modsContainer").get();
                 Element eMeta = (Element) mcrMODS.getContent().stream().filter(x -> x.getClass().equals(Element.class))
-                        .findFirst().get();
+                    .findFirst().get();
                 Element eRelatedItem = eMeta.getChild("relatedItem", MCRConstants.MODS_NAMESPACE);
                 if (eRelatedItem != null) {
                     LOGGER.info("Creating mods:relatedItem for MCRObject " + mcrid);
@@ -503,12 +512,12 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
 
                     eRelatedItem.removeChildren("titleInfo", MCRConstants.MODS_NAMESPACE);
                     eRelatedItem.addContent(new Element("titleInfo", MCRConstants.MODS_NAMESPACE)
-                            .setAttribute("type", "simple", MCRConstants.XLINK_NAMESPACE)
-                            .addContent(new Element("title", MCRConstants.MODS_NAMESPACE).setText(title)));
+                        .setAttribute("type", "simple", MCRConstants.XLINK_NAMESPACE)
+                        .addContent(new Element("title", MCRConstants.MODS_NAMESPACE).setText(title)));
                     eRelatedItem.removeChildren("recordInfo", MCRConstants.MODS_NAMESPACE);
                     eRelatedItem.addContent(new Element("recordInfo", MCRConstants.MODS_NAMESPACE)
-                            .addContent(new Element("recordIdentifier", MCRConstants.MODS_NAMESPACE)
-                                    .setAttribute("source", "DE-28").setText(recordIdentifier)));
+                        .addContent(new Element("recordIdentifier", MCRConstants.MODS_NAMESPACE)
+                            .setAttribute("source", "DE-28").setText(recordIdentifier)));
 
                     int pos = 0;
                     for (int i = 0; i < mcrParentObj.getStructure().getChildren().size(); i++) {
@@ -520,10 +529,10 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                     DecimalFormat df = new DecimalFormat("0000", DecimalFormatSymbols.getInstance(Locale.GERMANY));
                     String sortString = "_" + df.format(pos) + "-" + mcrParentObj.getId().toString();
                     eRelatedItem.getChild("part", MCRConstants.MODS_NAMESPACE).removeChildren("text",
-                            MCRConstants.MODS_NAMESPACE);
+                        MCRConstants.MODS_NAMESPACE);
                     eRelatedItem.getChild("part", MCRConstants.MODS_NAMESPACE)
-                            .addContent(new Element("text", MCRConstants.MODS_NAMESPACE)
-                                    .setAttribute("type", "sortstring").setText(sortString));
+                        .addContent(new Element("text", MCRConstants.MODS_NAMESPACE)
+                            .setAttribute("type", "sortstring").setText(sortString));
 
                     try {
                         MCRMetadataManager.update(mcrObj);
@@ -543,10 +552,16 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                 mcrObj.getStructure().setParent((MCRMetaLinkID) null);
                 try {
                     MCRMetadataManager.update(mcrObj);
-                } catch (MCRAccessException  e) {
+                } catch (MCRAccessException e) {
                     LOGGER.error(e);
                 }
             }
         }
+    }
+
+    @MCRCommand(syntax = "send mail to {0} with subject {1} with body {2}", help = "Send an email via MCRMailer")
+    public static final void sendMail(String to, String subject, String body) {
+        String from = MCRConfiguration2.getString("MCR.Mail.Address").orElse("");
+        MCRMailer.send("MyCoRe Mailer Test<" + from + ">", to, subject, body);
     }
 }
