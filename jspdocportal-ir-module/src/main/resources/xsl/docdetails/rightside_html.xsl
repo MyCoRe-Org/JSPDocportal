@@ -223,7 +223,7 @@
     <xsl:variable name="catalogs">
       <xsl:choose>
         <xsl:when test="$class_provider">
-          <xsl:value-of select="mcrmods:to-mycoreclass($class_provider, 'single')/categories/category/label[@xml:lang='x-catalog']/@text" />
+          <xsl:value-of select="mcrmods:to-mycoreclass($class_provider[1], 'single')/categories/category/label[@xml:lang='x-catalog']/@text" />
         </xsl:when>
         <xsl:otherwise>
           <xsl:variable name="isil" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier/@source" />
@@ -250,7 +250,7 @@
           <xsl:variable name="categ">
             <xsl:choose>
               <xsl:when test="$class_provider">
-                <xsl:copy-of select="mcrmods:to-mycoreclass($class_provider, 'single')/categories/category" />
+                <xsl:copy-of select="mcrmods:to-mycoreclass($class_provider[1], 'single')/categories/category" />
               </xsl:when>
               <xsl:otherwise>
                 <xsl:variable name="isil" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier/@source" />
