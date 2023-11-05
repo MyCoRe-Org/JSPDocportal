@@ -72,7 +72,7 @@ public class MCRSetNamespaceTag extends SimpleTagSupport {
             Class c_XPathUtil = Class.forName("org.apache.taglibs.standard.tag.common.xml.XPathUtil");
             // XPathUtil
             // private static JSTLXPathNamespaceContext jstlXPathNamespaceContext = null;
-            Field field = c_XPathUtil.getDeclaredField("jstlXPathNamespaceContext");
+            Field field = c_XPathUtil.getDeclaredField("JSTL_XPATH_NS_CTX");
             field.setAccessible(true);
             Object nsContext = field.get(null); // param null for static fields
 
