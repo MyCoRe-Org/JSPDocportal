@@ -6,7 +6,6 @@
 <fmt:message var="lblPlaceholder" key="Browse.Search.placeholder.count" />
 <mcr:session var="lang" info="language" />
 
-<mcr:webjarLocator htmlElement="script" project="axios" file="axios.min.js" />
 <mcr:webjarLocator htmlElement="script" project="alpinejs" file="cdn.min.js" attribute="defer" />
 
 <script>
@@ -38,22 +37,27 @@
           
           console.log(url);
           			           
-          axios.get(url)
-              .then(function (resp) {
-                  let numFound = parseInt(resp.data.response.numFound) || 0; //default 0 for NaN
-                  that.search_placeholder = '${lblPlaceholder}'.replace('[x]', numFound.toLocaleString())
-                  that.solrResponse = resp.data.response;
-                  that.solrFacetCounts = resp.data.facet_counts;
+          fetch(url)
+            .then(function(response) {
+                if (!response.ok) {
+                    console.log(response.statusText);
+                }
+                return response;
+            }
+            .then(function (resp) {
+                let numFound = parseInt(resp.data.response.numFound) || 0; //default 0 for NaN
+                that.search_placeholder = '${lblPlaceholder}'.replace('[x]', numFound.toLocaleString())
+                that.solrResponse = resp.data.response;
+                that.solrFacetCounts = resp.data.facet_counts;
                   
-                  //test remove count for unirostock to provoke a disabled facet entry
-                  //var pos = that.solrFacetCounts.facet_fields['ir.institution_class.facet'].indexOf('institution:unirostock')
-                  //that.solrFacetCounts.facet_fields['ir.institution_class.facet'].splice(pos,2)
-                  //console.log(that.solrFacetCounts);
-                  
-              })
-              .catch(function (error) {
-                  console.log(error);
-              });
+                //test remove count for unirostock to provoke a disabled facet entry
+                //var pos = that.solrFacetCounts.facet_fields['ir.institution_class.facet'].indexOf('institution:unirostock')
+                //that.solrFacetCounts.facet_fields['ir.institution_class.facet'].splice(pos,2)
+                //console.log(that.solrFacetCounts);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         },
         
         doSearch() {
