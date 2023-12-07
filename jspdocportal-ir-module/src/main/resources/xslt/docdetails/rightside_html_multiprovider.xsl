@@ -21,11 +21,11 @@
   
   <xsl:output method="html" indent="yes" standalone="no" />
   
-  <xsl:import href="resource:xsl/functions/i18n.xsl" />
-  <xsl:import href="resource:xsl/functions/classification.xsl" />
-  <xsl:import href="resource:xsl/functions/stringutils.xsl" />
-  <xsl:import href="resource:xsl/functions/mods.xsl" />
-  <xsl:import href="resource:xsl/functions/acl.xsl" />
+  <xsl:import href="resource:xslt/functions/i18n.xsl" />
+  <xsl:import href="resource:xslt/functions/classification.xsl" />
+  <xsl:import href="resource:xslt/functions/stringutils.xsl" />
+  <xsl:import href="resource:xslt/functions/mods.xsl" />
+  <xsl:import href="resource:xslt/functions/acl.xsl" />
     
   <xsl:template match="/">
       

@@ -12,7 +12,7 @@
   <xsl:import href="resource:xslt/functions/stringutils.xsl" />
   
   <!-- already imported earlier in chain: -->
-  <!-- <xsl:import href="resource:xsl/functions/mods.xsl" /> -->
+  <!-- <xsl:import href="resource:xslt/functions/mods.xsl" /> -->
 
   <xsl:template match="mycoreobject">
     <xsl:apply-imports />
