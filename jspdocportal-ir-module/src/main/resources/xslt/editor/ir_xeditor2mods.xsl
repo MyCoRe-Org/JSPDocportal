@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet  version="1.0" 
-     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mods="http://www.loc.gov/mods/v3">
+<xsl:stylesheet  version="3.0"
+                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 xmlns:mods="http://www.loc.gov/mods/v3">
+  <xsl:mode on-no-match="shallow-copy" />
   <xsl:include href="resource:xslt/docdetails/mods-util.xsl" />
-  <xsl:include href="resource:xsl/copynodes.xsl" />
   <xsl:param name="WebApplicationBaseURL" />
   <!-- create value URI using valueURIxEditor and authorityURI -->
   <xsl:template match="@valueURIxEditor">

@@ -6,7 +6,7 @@
                 xmlns:fn="http://www.w3.org/2005/xpath-functions"
                 exclude-result-prefixes="fn">
 
-  <xsl:include href="resource:xsl/copynodes.xsl" />
+  <xsl:mode on-no-match="shallow-copy" />
   
   <xsl:template match="mods:abstract[string-length(@altFormat) &gt; 0]">
       <xsl:variable name="dataURLcontent" select="document(./@altFormat)" />
