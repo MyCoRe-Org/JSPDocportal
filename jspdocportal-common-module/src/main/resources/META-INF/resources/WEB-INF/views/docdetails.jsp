@@ -30,7 +30,7 @@
   <title>${mcrid} @ <fmt:message key="Nav.Application" /></title>
   <link rel="canonical" href="${WebApplicationBaseURL}resolve/id/${mcrid}" />
   <%@ include file="fragments/html_head.jspf" %>
-  <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/metatags_html.xsl" />
+  <mcr:transformXSL dom="${doc}" xslt="xslt/docdetails/metatags_html.xsl" />
   <link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}modules/shariff_3.2.1/shariff.min.css">
   <script>
    var urlParam = function(name){
@@ -64,10 +64,10 @@
 			  <div class="ir-docdetails-header">
                 <x:choose>
                   <x:when select="$doc/mycoreobject/service/servstates/servstate/@categid='deleted'">
-                    <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/deleted_header_html.xsl" />
+                    <mcr:transformXSL dom="${doc}" xslt="xslt/docdetails/deleted_header_html.xsl" />
                   </x:when>
                   <x:otherwise>
-                    <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/header_html.xsl" />
+                    <mcr:transformXSL dom="${doc}" xslt="xslt/docdetails/header_html.xsl" />
                   </x:otherwise>
                 </x:choose>
 			  </div>
@@ -86,7 +86,7 @@
          <div class="d-none d-lg-block">
      	    <search:result-navigator mcrid="${mcrid}" />
             <mcr:showEditMenu mcrid="${mcrid}" cssClass="text-right pb-3" />
-            <mcr:transformXSL dom="${doc}" xslt="xsl/docdetails/rightside_html.xsl" />
+            <mcr:transformXSL dom="${doc}" xslt="xslt/docdetails/rightside_html.xsl" />
          </div>
       </div>
     </div><%-- right area --%>

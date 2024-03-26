@@ -178,7 +178,7 @@ import jakarta.ws.rs.core.Response;
 
     private boolean loginInMyCore(String mcrUserID, String mcrPassword, MCRSession mcrSession, HttpServletRequest request, HashMap<String, Object> model) {
         boolean result = false;
-        try {
+        try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
             MCRUser mcrUser = MCRUserManager.login(mcrUserID, mcrPassword);
             if (mcrUser != null) {
                 result = true;

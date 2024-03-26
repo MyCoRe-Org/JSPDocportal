@@ -43,12 +43,13 @@
                     console.log(response.statusText);
                 }
                 return response;
-            }
-            .then(function (resp) {
-                let numFound = parseInt(resp.data.response.numFound) || 0; //default 0 for NaN
+            })
+            .then(function(response) { return response.json(); })
+            .then(function (data) {
+                let numFound = parseInt(data.response.numFound) || 0; //default 0 for NaN
                 that.search_placeholder = '${lblPlaceholder}'.replace('[x]', numFound.toLocaleString())
-                that.solrResponse = resp.data.response;
-                that.solrFacetCounts = resp.data.facet_counts;
+                that.solrResponse = data.response;
+                that.solrFacetCounts = data.facet_counts;
                   
                 //test remove count for unirostock to provoke a disabled facet entry
                 //var pos = that.solrFacetCounts.facet_fields['ir.institution_class.facet'].indexOf('institution:unirostock')
