@@ -27,6 +27,7 @@ import java.util.Locale;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mycore.common.MCRCache;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.webjars.WebJarAssetLocator;
 
@@ -43,6 +44,9 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
  */
 public class MCRWebjarLocatorTag extends SimpleTagSupport {
     private static Logger LOGGER = LogManager.getLogger(MCRWebjarLocatorTag.class);
+
+    protected static MCRCache<String, String> WEBJAR_LOCATOR_URL_CACHE
+        = new MCRCache<>(100, "MCRWebjarLocatorTag WebjarItemURLCache");
 
     private String project;
 
@@ -100,7 +104,12 @@ public class MCRWebjarLocatorTag extends SimpleTagSupport {
         PageContext pageContext = (PageContext) getJspContext();
         WebJarAssetLocator locator = new WebJarAssetLocator();
         try {
-            String url = locator.getFullPath(project, file).substring("META-INF/resources/".length());
+            String cacheKey = project + "__::__" + file;
+            String url = WEBJAR_LOCATOR_URL_CACHE.get(cacheKey);
+            if (url == null) {
+                url = locator.getFullPath(project, file).substring("META-INF/resources/".length());
+                WEBJAR_LOCATOR_URL_CACHE.put(cacheKey, url);
+            }
             if(var!=null) {
                 pageContext.setAttribute(var, url);
             }
