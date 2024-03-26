@@ -1,3 +1,5 @@
+<%@tag import="java.nio.charset.StandardCharsets"%>
+<%@tag import="java.net.URLEncoder"%>
 <%@tag import="org.apache.commons.lang3.StringUtils"%>
 <%@tag import="org.mycore.frontend.MCRFrontendUtil"%>
 <%@tag import="org.mycore.jspdocportal.common.search.MCRSearchResultDataBean"%>
@@ -33,8 +35,8 @@
 	StringBuffer sb = new StringBuffer(MCRFrontendUtil.getBaseURL());
     //sb.append("resolve/recordIdentifier/"+recordIdentifier.replace("/", "%252F")+"?");
     sb.append("resolve/id/" + hostMcrID + "?");
-	if(request.getParameter("_search")!=null){sb.append("&_search="+request.getParameter("_search"));}
-	if(request.getParameter("_hit")!=null){sb.append("&_hit="+request.getParameter("_hit"));}
+	if(request.getParameter("_search")!=null){sb.append("&_search="+URLEncoder.encode(request.getParameter("_search"), StandardCharsets.UTF_8));}
+	if(request.getParameter("_hit")!=null){sb.append("&_hit="+ URLEncoder.encode(request.getParameter("_hit"), StandardCharsets.UTF_8));}
 	result.setBackURL(sb.toString());
 	result.doSearch();
 	MCRSearchResultDataBean.addSearchresultToSession(request, result);
