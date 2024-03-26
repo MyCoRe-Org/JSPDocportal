@@ -304,6 +304,9 @@
             <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='kalliope']">
               <a class="badge px-1" target="_blank" href="http://kalliope-verbund.info/{.}">Kalliope-Verbundkatalog</a>
             </xsl:for-each>
+            <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='hsp']">
+              <a class="badge px-1" target="_blank" href="https://handschriftenportal.de/search?hspobjectid={.}">Handschriftenportal</a>
+            </xsl:for-each>
             <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='doi']">
               <a class="badge px-1" target="_blank" href="https://commons.datacite.org/doi.org/{.}">DataCite Commons</a>
             </xsl:for-each>
