@@ -48,6 +48,8 @@ public class MCRWebjarLocatorTag extends SimpleTagSupport {
     protected static MCRCache<String, String> WEBJAR_LOCATOR_URL_CACHE
         = new MCRCache<>(100, "MCRWebjarLocatorTag WebjarItemURLCache");
 
+    protected static WebJarAssetLocator WEBJAR_LOCATOR = new WebJarAssetLocator();
+
     private String project;
 
     private String var;
@@ -102,12 +104,11 @@ public class MCRWebjarLocatorTag extends SimpleTagSupport {
 
     public void doTag() throws JspException, IOException {
         PageContext pageContext = (PageContext) getJspContext();
-        WebJarAssetLocator locator = new WebJarAssetLocator();
         try {
             String cacheKey = project + "__::__" + file;
             String url = WEBJAR_LOCATOR_URL_CACHE.get(cacheKey);
             if (url == null) {
-                url = locator.getFullPath(project, file).substring("META-INF/resources/".length());
+                url = WEBJAR_LOCATOR.getFullPath(project, file).substring("META-INF/resources/".length());
                 WEBJAR_LOCATOR_URL_CACHE.put(cacheKey, url);
             }
             if(var!=null) {
