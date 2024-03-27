@@ -126,6 +126,8 @@ public class MCROutputLanguageSelectorTag extends MCRAbstractTag {
             url.append(URLEncoder.encode(pName, StandardCharsets.UTF_8)).append("=")
                 .append(URLEncoder.encode(request.getParameter(pName), StandardCharsets.UTF_8));
         }
+        //UriBuilder.fromUri("").replaceQueryParam("lang",  "l");
+        
 
         boolean first = true;
         for (String l : languages.split(",")) {
