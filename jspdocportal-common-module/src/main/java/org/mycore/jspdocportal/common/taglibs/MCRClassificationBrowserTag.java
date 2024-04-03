@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
@@ -175,9 +176,9 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
         while (paramNames.hasMoreElements()) {
             String s = paramNames.nextElement().toString();
             if (!s.equals("select") && !s.equals("modus")) {
-                url.append(s).append("=")
-                        .append(URLEncoder.encode(request.getParameter(s), Charset.defaultCharset().name()))
-                        .append("&amp;");
+                url.append(URLEncoder.encode(s, StandardCharsets.UTF_8)).append("=")
+                    .append(URLEncoder.encode(request.getParameter(s), StandardCharsets.UTF_8))
+                    .append("&amp;");
             }
         }
 
