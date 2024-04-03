@@ -26,6 +26,8 @@ package org.mycore.jspdocportal.common.taglibs;
 import static javax.servlet.jsp.PageContext.PAGE_SCOPE;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
@@ -121,9 +123,8 @@ public class MCROutputLanguageSelectorTag extends MCRAbstractTag {
             if (pName.equals("lang")) {
                 continue;
             }
-
-            url.append(pName).append("=").append(request.getParameter(pName));
-
+            url.append(URLEncoder.encode(pName, StandardCharsets.UTF_8)).append("=")
+            .append(URLEncoder.encode(request.getParameter(pName), StandardCharsets.UTF_8));
         }
 
         boolean first = true;
