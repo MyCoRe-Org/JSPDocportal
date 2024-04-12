@@ -522,10 +522,10 @@ public final class DiskLruCache implements Closeable {
             Path dirty = entry.getDirtyFile(i);
             if (success) {
                 if (Files.exists(dirty)) {
-                    File clean = entry.getCleanFile(i).toFile();
-                    dirty.toFile().renameTo(clean);
+                    Path clean = entry.getCleanFile(i);
+                    renameTo(dirty, clean, true);
                     long oldLength = entry.lengths[i];
-                    long newLength = clean.length();
+                    long newLength = Files.size(clean);
                     entry.lengths[i] = newLength;
                     size = size - oldLength + newLength;
                 }
