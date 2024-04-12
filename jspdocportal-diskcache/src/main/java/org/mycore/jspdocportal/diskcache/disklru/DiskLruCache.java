@@ -23,13 +23,9 @@ package org.mycore.jspdocportal.diskcache.disklru;
 import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.EOFException;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -656,10 +652,6 @@ public final class DiskLruCache implements Closeable {
         DiskLruUtil.deleteContents(directory);
     }
 
-    private static String inputStreamToString(InputStream in) throws IOException {
-        return DiskLruUtil.readFully(new InputStreamReader(in, StandardCharsets.UTF_8));
-    }
-
     /**
      * Closes the writer while whitelisting with StrictMode if necessary.
      *
@@ -705,10 +697,10 @@ public final class DiskLruCache implements Closeable {
             return files[index];
         }
 
-        /** Returns the string value for {@code index}. */
+        /** Returns the string value for {@code index} or null. */
         public String getString(int index) throws IOException {
-            InputStream is = new FileInputStream(files[index].toFile());
-            return inputStreamToString(is);
+            Path p = files[index];
+            return Files.exists(p) ? Files.readString(p) : null;
         }
 
         /** Returns the byte length of the value for {@code index}. */
@@ -729,10 +721,10 @@ public final class DiskLruCache implements Closeable {
         }
 
         /**
-         * Returns an unbuffered input stream to read the last committed value,
+         * Returns the path from where to read the last committed value,
          * or null if no value has been committed.
          */
-        private InputStream newInputStream(int index) throws IOException {
+        private Path newInputFile(int index) throws IOException {
             synchronized (DiskLruCache.this) {
                 if (entry.currentEditor != this) {
                     throw new IllegalStateException();
@@ -740,11 +732,10 @@ public final class DiskLruCache implements Closeable {
                 if (!entry.readable) {
                     return null;
                 }
-                try {
-                    return new FileInputStream(entry.getCleanFile(index).toFile());
-                } catch (FileNotFoundException e) {
+                if(!Files.exists(entry.getCleanFile(index))) {
                     return null;
                 }
+                return entry.getCleanFile(index);
             }
         }
 
@@ -753,8 +744,8 @@ public final class DiskLruCache implements Closeable {
          * has been committed.
          */
         public String getString(int index) throws IOException {
-            InputStream in = newInputStream(index);
-            return in != null ? inputStreamToString(in) : null;
+            Path p = newInputFile(index);
+            return p != null ? Files.readString(p) : null;
         }
 
         public Path getFile(int index) throws IOException {

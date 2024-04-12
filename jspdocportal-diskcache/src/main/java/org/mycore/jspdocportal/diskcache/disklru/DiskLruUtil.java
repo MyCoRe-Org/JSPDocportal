@@ -19,26 +19,10 @@ package org.mycore.jspdocportal.diskcache.disklru;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringWriter;
 import java.nio.file.Path;
 
 final class DiskLruUtil {
     private DiskLruUtil() {
-    }
-
-    static String readFully(Reader reader) throws IOException {
-        try {
-            StringWriter writer = new StringWriter();
-            char[] buffer = new char[1024];
-            int count;
-            while ((count = reader.read(buffer)) != -1) {
-                writer.write(buffer, 0, count);
-            }
-            return writer.toString();
-        } finally {
-            reader.close();
-        }
     }
 
     /**
