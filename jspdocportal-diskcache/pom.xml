@@ -10,6 +10,9 @@
 	<artifactId>jspdocportal-diskcache</artifactId>
 	<name>jspdocportal-diskcache</name>
 	<description>Cacheing and generation of derived files</description>
+	<properties>
+      <manifest.priority>13</manifest.priority>
+    </properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.mycore</groupId>
@@ -20,6 +23,28 @@
 			<artifactId>jakarta.servlet-api</artifactId>
 		</dependency>
 	</dependencies>
+	<build>
+  <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addExtensions></addExtensions>
+            </manifest>
+            <manifestEntries>
+              <MCR-Artifact-Id>${project.artifactId}</MCR-Artifact-Id>
+              <MCR-Application-Module>${project.name}</MCR-Application-Module>
+              <Priority>${manifest.priority}</Priority>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+      </plugins>
+	</build>
+	
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
