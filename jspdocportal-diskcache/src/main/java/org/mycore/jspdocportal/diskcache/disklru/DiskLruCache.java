@@ -34,6 +34,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -239,7 +240,7 @@ public final class DiskLruCache implements Closeable {
         }
 
         // Create a new empty cache.
-        directory.toFile().mkdirs();
+        Files.createDirectories(directory);
         cache = new DiskLruCache(directory, appVersion, valueCount, maxSize);
         cache.rebuildJournal();
         return cache;
@@ -775,7 +776,7 @@ public final class DiskLruCache implements Closeable {
                     written[index] = true;
                 }
                 Path dirtyFile = entry.getDirtyFile(index);
-                directory.toFile().mkdirs();
+                Files.createDirectories(directory);
                 return dirtyFile;
             }
         }
