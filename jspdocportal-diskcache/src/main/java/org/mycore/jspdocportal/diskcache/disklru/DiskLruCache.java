@@ -211,10 +211,10 @@ public final class DiskLruCache implements Closeable {
 
         // If a bkp file exists, use it instead.
         Path backupFile = directory.resolve(JOURNAL_FILE_BACKUP);
-        if (backupFile.toFile().exists()) {
+        if (Files.exists(backupFile)) {
             Path journalFile = directory.resolve(JOURNAL_FILE);
             // If journal file also exists just delete backup file.
-            if (journalFile.toFile().exists()) {
+            if (Files.exists(journalFile)) {
                 backupFile.toFile().delete();
             } else {
                 renameTo(backupFile, journalFile, false);
@@ -223,7 +223,7 @@ public final class DiskLruCache implements Closeable {
 
         // Prefer to pick up where we left off.
         DiskLruCache cache = new DiskLruCache(directory, appVersion, valueCount, maxSize);
-        if (cache.journalFile.toFile().exists()) {
+        if (Files.exists(cache.journalFile)) {
             try {
                 cache.readJournal();
                 cache.processJournal();
@@ -381,7 +381,7 @@ public final class DiskLruCache implements Closeable {
             closeWriter(writer);
         }
 
-        if (journalFile.toFile().exists()) {
+        if (Files.exists(journalFile)) {
             renameTo(journalFile, journalFileBackup, true);
         }
         renameTo(journalFileTmp, journalFile, false);
@@ -422,7 +422,7 @@ public final class DiskLruCache implements Closeable {
 
         for (Path file : entry.cleanFiles) {
             // A file must have been deleted manually!
-            if (!file.toFile().exists()) {
+            if (!Files.exists(file)) {
                 return null;
             }
         }
@@ -517,7 +517,7 @@ public final class DiskLruCache implements Closeable {
                     editor.abort();
                     throw new IllegalStateException("Newly created entry didn't create value for index " + i);
                 }
-                if (!entry.getDirtyFile(i).toFile().exists()) {
+                if (!Files.exists(entry.getDirtyFile(i))) {
                     editor.abort();
                     return;
                 }
@@ -525,18 +525,18 @@ public final class DiskLruCache implements Closeable {
         }
 
         for (int i = 0; i < valueCount; i++) {
-            File dirty = entry.getDirtyFile(i).toFile();
+            Path dirty = entry.getDirtyFile(i);
             if (success) {
-                if (dirty.exists()) {
+                if (Files.exists(dirty)) {
                     File clean = entry.getCleanFile(i).toFile();
-                    dirty.renameTo(clean);
+                    dirty.toFile().renameTo(clean);
                     long oldLength = entry.lengths[i];
                     long newLength = clean.length();
                     entry.lengths[i] = newLength;
                     size = size - oldLength + newLength;
                 }
             } else {
-                deleteIfExists(dirty);
+                deleteIfExists(dirty.toFile());
             }
         }
 
@@ -591,8 +591,8 @@ public final class DiskLruCache implements Closeable {
         }
 
         for (int i = 0; i < valueCount; i++) {
-            File file = entry.getCleanFile(i).toFile();
-            if (file.exists() && !file.delete()) {
+            Path file = entry.getCleanFile(i);
+            if (Files.exists(file) && !file.toFile().delete()) {
                 throw new IOException("failed to delete " + file);
             }
             size -= entry.lengths[i];
