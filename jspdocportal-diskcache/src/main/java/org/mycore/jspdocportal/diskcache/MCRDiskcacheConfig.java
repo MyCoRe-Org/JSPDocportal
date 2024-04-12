@@ -13,6 +13,7 @@ import org.mycore.common.config.annotation.MCRPostConstruction;
 import org.mycore.common.config.annotation.MCRProperty;
 import org.mycore.common.events.MCRShutdownHandler;
 import org.mycore.jspdocportal.diskcache.disklru.DiskLruCache;
+import org.mycore.jspdocportal.diskcache.disklru.DiskLruCache.Editor;
 import org.mycore.jspdocportal.diskcache.disklru.DiskLruCache.Value;
 
 public class MCRDiskcacheConfig {
@@ -24,9 +25,9 @@ public class MCRDiskcacheConfig {
 
     private String id;
     private Path baseDir;
-    
+
     //TODO "defaultName" in MCRInstance
-    @MCRInstance(name="Generator", valueClass=BiConsumer.class)
+    @MCRInstance(name = "Generator", valueClass = BiConsumer.class)
     public BiConsumer<String, Path> generator;
 
     @MCRProperty(name = "FileName", defaultName = "MCR.Diskcache.Default.FileName")
@@ -71,9 +72,12 @@ public class MCRDiskcacheConfig {
 
     @MCRPostConstruction
     public void init(String property) {
-        id = property.substring(property.lastIndexOf(".") + 1);
+        String p = property.endsWith(".Class") ? property.substring(0, property.length() - 6) : property;
+        id = p.substring(p.lastIndexOf(".") + 1);
         try {
-            cache = DiskLruCache.open(baseDir, version, DISK_LRUCACHE_VALUE_COUNT, maxSizeInBytes);
+            Path cacheDir = baseDir.resolve(id);
+            Files.createDirectories(cacheDir);
+            cache = DiskLruCache.open(cacheDir, version, DISK_LRUCACHE_VALUE_COUNT, maxSizeInBytes);
             MCRShutdownHandler.getInstance().addCloseable(new MCRDiskLruCacheClosable(cache));
         } catch (IOException e) {
             LOGGER.error(e);
@@ -112,11 +116,11 @@ public class MCRDiskcacheConfig {
         return cache;
     }
 
-    private Value getFromCache(DiskLruCache cache, String key) {
+    private Value getFromCache(String key) {
         try {
             Value v = cache.get(key);
             if (v != null) {
-                Path p = v.getFile(1);
+                Path p = v.getFile(0);
                 if (Files.getLastModifiedTime(p).toMillis() < System.currentTimeMillis() - livespanInMillis) {
                     cache.remove(key);
                     return null;
@@ -124,21 +128,38 @@ public class MCRDiskcacheConfig {
             }
             return v;
         } catch (IOException e) {
-           LOGGER.error(e);
+            LOGGER.error(e);
         }
         return null;
     }
 
-    public Path retrieveCachedFile(String objectId) {
-        Value v = getFromCache(cache, objectId);
-        Path p = v.getFile(0);
-        if (p == null) {
-            //TODO recreate FileObject and add it to Cache
+    public synchronized Path retrieveCachedFile(String objectId) {
+        Value v = getFromCache(objectId);
+        if (v != null && v.getFile(0) != null) {
+            return v.getFile(0);
+        } else {
+            //TODO Null-Check / Errorhandling
+            return generateCachedFile(objectId);
+        }
+    }
+
+    public Path generateCachedFile(String key) {
+        Editor editor = null;
+        Path p = null;
+        try {
+            editor = cache.edit(key);
+            p = editor.getFile(0);
+            generator.accept(key, p);
+            editor.commit();
+        } catch (IOException e) {
+            if (editor != null) {
+                editor.abortUnlessCommitted();
+            }
         }
         return p;
     }
 
-    public void removeCachedFile(String objectId) {
+    public synchronized void removeCachedFile(String objectId) {
         try {
             cache.remove(objectId);
         } catch (IOException e) {
