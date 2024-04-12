@@ -27,12 +27,12 @@ public class MCRDiskcacheConfig {
     
     //TODO "defaultName" in MCRInstance
     @MCRInstance(name="Generator", valueClass=BiConsumer.class)
-    private BiConsumer<String, Path> generator;
+    public BiConsumer<String, Path> generator;
 
     @MCRProperty(name = "FileName", defaultName = "MCR.Diskcache.Default.FileName")
-    private String fileName;
+    public String fileName;
     @MCRProperty(name = "MimeType", defaultName = "MCR.Diskcache.Default.MimeType")
-    private String mimeType;
+    public String mimeType;
 
     private long livespanInMillis;
     private long maxSizeInBytes;
