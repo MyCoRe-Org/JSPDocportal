@@ -672,7 +672,6 @@ public final class DiskLruCache implements Closeable {
      *
      * <p>Analogous to b/71520172.
      */
-
     private static void closeWriter(Writer writer) throws IOException {
         writer.close();
     }
@@ -682,7 +681,6 @@ public final class DiskLruCache implements Closeable {
      *
      * <p>See b/71520172.
      */
-
     private static void flushWriter(Writer writer) throws IOException {
         writer.flush();
     }
