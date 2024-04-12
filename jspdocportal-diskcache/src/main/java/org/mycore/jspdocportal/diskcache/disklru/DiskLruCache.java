@@ -25,13 +25,18 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
@@ -239,7 +244,7 @@ public final class DiskLruCache implements Closeable {
     }
 
     private void readJournal() throws IOException {
-        try(StrictLineReader reader = new StrictLineReader(journalFile, StandardCharsets.US_ASCII)){
+        try (StrictLineReader reader = new StrictLineReader(journalFile, StandardCharsets.US_ASCII)) {
             String magic = reader.readLine();
             String version = reader.readLine();
             String appVersionString = reader.readLine();
@@ -269,7 +274,8 @@ public final class DiskLruCache implements Closeable {
             if (reader.hasUnterminatedLine()) {
                 rebuildJournal();
             } else {
-                journalWriter = Files.newBufferedWriter(journalFile, StandardCharsets.US_ASCII, StandardOpenOption.APPEND);
+                journalWriter = Files.newBufferedWriter(journalFile,
+                    StandardCharsets.US_ASCII, StandardOpenOption.APPEND);
             }
         }
     }
@@ -344,7 +350,7 @@ public final class DiskLruCache implements Closeable {
         if (journalWriter != null) {
             journalWriter.close();
         }
-        try (Writer writer = Files.newBufferedWriter(journalFileTmp, StandardCharsets.US_ASCII)){
+        try (Writer writer = Files.newBufferedWriter(journalFileTmp, StandardCharsets.US_ASCII)) {
             writer.write(MAGIC);
             writer.write("\n");
             writer.write(VERSION_1);
@@ -371,13 +377,6 @@ public final class DiskLruCache implements Closeable {
         Files.delete(journalFileBackup);
 
         journalWriter = Files.newBufferedWriter(journalFile, StandardCharsets.US_ASCII, StandardOpenOption.APPEND);
-    }
-
-    private static void renameTo(Path from, Path to, boolean deleteDestination) throws IOException {
-        if (deleteDestination) {
-            Files.deleteIfExists(to);
-        }
-        Files.move(from, to);
     }
 
     /**
@@ -635,7 +634,7 @@ public final class DiskLruCache implements Closeable {
      */
     public void delete() throws IOException {
         close();
-        DiskLruUtil.deleteContents(directory);
+        cleanDirectory(directory);
     }
 
     /** A snapshot of the values for an entry. */
@@ -700,7 +699,7 @@ public final class DiskLruCache implements Closeable {
                 if (!entry.readable) {
                     return null;
                 }
-                if(!Files.exists(entry.getCleanFile(index))) {
+                if (!Files.exists(entry.getCleanFile(index))) {
                     return null;
                 }
                 return entry.getCleanFile(index);
@@ -850,5 +849,46 @@ public final class DiskLruCache implements Closeable {
             result.setPriority(Thread.MIN_PRIORITY);
             return result;
         }
+    }
+
+    /**
+     * Deletes the contents of {@code directory}. Throws an IOException if any file
+     * could not be deleted, or if {@code dir} is not a readable directory.
+     * Keeps the given directory
+     */
+    static void cleanDirectory(Path directory) throws IOException {
+        FileVisitor<Path> visitor = new SimpleFileVisitor<>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                Files.delete(file);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                Files.delete(file);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                if (exc != null) {
+                    throw exc;
+                }
+                //keep the current directory;
+                if (!Objects.equals(directory, dir)) {
+                    Files.delete(dir);
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        };
+        Files.walkFileTree(directory, visitor);
+    }
+
+    static void renameTo(Path from, Path to, boolean deleteDestination) throws IOException {
+        if (deleteDestination) {
+            Files.deleteIfExists(to);
+        }
+        Files.move(from, to);
     }
 }
