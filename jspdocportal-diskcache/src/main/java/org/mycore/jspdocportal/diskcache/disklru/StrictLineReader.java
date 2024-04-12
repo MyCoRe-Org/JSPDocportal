@@ -1,4 +1,10 @@
 /*
+ * based on:
+ * https://android.googlesource.com/platform/libcore/+/jb-mr2-release/luni/src/main/java/libcore/io/DiskLruCache.java
+ * updated to use Java NIO File API
+ * 
+ * ------------------------------------------------------------------------------
+/*
  * Copyright (C) 2012 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
