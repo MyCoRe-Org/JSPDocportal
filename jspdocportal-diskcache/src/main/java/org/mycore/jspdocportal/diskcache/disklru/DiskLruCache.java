@@ -215,7 +215,7 @@ public final class DiskLruCache implements Closeable {
             Path journalFile = directory.resolve(JOURNAL_FILE);
             // If journal file also exists just delete backup file.
             if (Files.exists(journalFile)) {
-                backupFile.toFile().delete();
+                Files.delete(backupFile);
             } else {
                 renameTo(backupFile, journalFile, false);
             }
@@ -330,7 +330,7 @@ public final class DiskLruCache implements Closeable {
      * cache. Dirty entries are assumed to be inconsistent and will be deleted.
      */
     private void processJournal() throws IOException {
-        deleteIfExists(journalFileTmp.toFile());
+        Files.deleteIfExists(journalFileTmp);
         for (Iterator<Entry> i = lruEntries.values().iterator(); i.hasNext();) {
             Entry entry = i.next();
             if (entry.currentEditor == null) {
@@ -340,8 +340,8 @@ public final class DiskLruCache implements Closeable {
             } else {
                 entry.currentEditor = null;
                 for (int t = 0; t < valueCount; t++) {
-                    deleteIfExists(entry.getCleanFile(t).toFile());
-                    deleteIfExists(entry.getDirtyFile(t).toFile());
+                    Files.deleteIfExists(entry.getCleanFile(t));
+                    Files.deleteIfExists(entry.getDirtyFile(t));
                 }
                 i.remove();
             }
@@ -385,16 +385,10 @@ public final class DiskLruCache implements Closeable {
             renameTo(journalFile, journalFileBackup, true);
         }
         renameTo(journalFileTmp, journalFile, false);
-        journalFileBackup.toFile().delete();
+        Files.delete(journalFileBackup);
 
         journalWriter = new BufferedWriter(
             new OutputStreamWriter(new FileOutputStream(journalFile.toFile(), true), StandardCharsets.US_ASCII));
-    }
-
-    private static void deleteIfExists(File file) throws IOException {
-        if (file.exists() && !file.delete()) {
-            throw new IOException();
-        }
     }
 
     private static void renameTo(Path from, Path to, boolean deleteDestination) throws IOException {
@@ -536,7 +530,7 @@ public final class DiskLruCache implements Closeable {
                     size = size - oldLength + newLength;
                 }
             } else {
-                deleteIfExists(dirty.toFile());
+                Files.deleteIfExists(dirty);
             }
         }
 
@@ -592,9 +586,7 @@ public final class DiskLruCache implements Closeable {
 
         for (int i = 0; i < valueCount; i++) {
             Path file = entry.getCleanFile(i);
-            if (Files.exists(file) && !file.toFile().delete()) {
-                throw new IOException("failed to delete " + file);
-            }
+            Files.deleteIfExists(file);
             size -= entry.lengths[i];
             entry.lengths[i] = 0;
         }
