@@ -217,7 +217,7 @@ public final class DiskLruCache implements Closeable {
             if (journalFile.toFile().exists()) {
                 backupFile.toFile().delete();
             } else {
-                renameTo(backupFile.toFile(), journalFile.toFile(), false);
+                renameTo(backupFile, journalFile, false);
             }
         }
 
@@ -382,9 +382,9 @@ public final class DiskLruCache implements Closeable {
         }
 
         if (journalFile.toFile().exists()) {
-            renameTo(journalFile.toFile(), journalFileBackup.toFile(), true);
+            renameTo(journalFile, journalFileBackup, true);
         }
-        renameTo(journalFileTmp.toFile(), journalFile.toFile(), false);
+        renameTo(journalFileTmp, journalFile, false);
         journalFileBackup.toFile().delete();
 
         journalWriter = new BufferedWriter(
@@ -397,13 +397,11 @@ public final class DiskLruCache implements Closeable {
         }
     }
 
-    private static void renameTo(File from, File to, boolean deleteDestination) throws IOException {
+    private static void renameTo(Path from, Path to, boolean deleteDestination) throws IOException {
         if (deleteDestination) {
-            deleteIfExists(to);
+            Files.deleteIfExists(to);
         }
-        if (!from.renameTo(to)) {
-            throw new IOException();
-        }
+        Files.move(from, to);
     }
 
     /**
