@@ -33,6 +33,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -245,7 +246,7 @@ public final class DiskLruCache implements Closeable {
     }
 
     private void readJournal() throws IOException {
-        StrictLineReader reader = new StrictLineReader(new FileInputStream(journalFile.toFile()), DiskLruUtil.US_ASCII);
+        StrictLineReader reader = new StrictLineReader(new FileInputStream(journalFile.toFile()), StandardCharsets.US_ASCII);
         try {
             String magic = reader.readLine();
             String version = reader.readLine();
@@ -277,7 +278,7 @@ public final class DiskLruCache implements Closeable {
                 rebuildJournal();
             } else {
                 journalWriter = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(journalFile.toFile(), true), DiskLruUtil.US_ASCII));
+                    new FileOutputStream(journalFile.toFile(), true), StandardCharsets.US_ASCII));
             }
         } finally {
             DiskLruUtil.closeQuietly(reader);
@@ -356,7 +357,7 @@ public final class DiskLruCache implements Closeable {
         }
 
         Writer writer = new BufferedWriter(
-            new OutputStreamWriter(new FileOutputStream(journalFileTmp.toFile()), DiskLruUtil.US_ASCII));
+            new OutputStreamWriter(new FileOutputStream(journalFileTmp.toFile()), StandardCharsets.US_ASCII));
         try {
             writer.write(MAGIC);
             writer.write("\n");
@@ -386,7 +387,7 @@ public final class DiskLruCache implements Closeable {
         journalFileBackup.toFile().delete();
 
         journalWriter = new BufferedWriter(
-            new OutputStreamWriter(new FileOutputStream(journalFile.toFile(), true), DiskLruUtil.US_ASCII));
+            new OutputStreamWriter(new FileOutputStream(journalFile.toFile(), true), StandardCharsets.US_ASCII));
     }
 
     private static void deleteIfExists(File file) throws IOException {
@@ -665,7 +666,7 @@ public final class DiskLruCache implements Closeable {
     }
 
     private static String inputStreamToString(InputStream in) throws IOException {
-        return DiskLruUtil.readFully(new InputStreamReader(in, DiskLruUtil.UTF_8));
+        return DiskLruUtil.readFully(new InputStreamReader(in, StandardCharsets.UTF_8));
     }
 
     /**
@@ -784,7 +785,7 @@ public final class DiskLruCache implements Closeable {
             Writer writer = null;
             try {
                 OutputStream os = new FileOutputStream(getFile(index).toFile());
-                writer = new OutputStreamWriter(os, DiskLruUtil.UTF_8);
+                writer = new OutputStreamWriter(os, StandardCharsets.UTF_8);
                 writer.write(value);
             } finally {
                 DiskLruUtil.closeQuietly(writer);

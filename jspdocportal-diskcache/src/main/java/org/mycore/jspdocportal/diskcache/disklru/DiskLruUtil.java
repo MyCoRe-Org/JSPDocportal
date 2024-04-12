@@ -21,13 +21,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.nio.charset.Charset;
 import java.nio.file.Path;
 
 final class DiskLruUtil {
-    static final Charset US_ASCII = Charset.forName("US-ASCII");
-    static final Charset UTF_8 = Charset.forName("UTF-8");
-
     private DiskLruUtil() {
     }
 
