@@ -139,24 +139,29 @@ public class MCRDiskcacheConfig {
             return v.getFile(0);
         } else {
             //TODO Null-Check / Errorhandling
-            return generateCachedFile(objectId);
+            generateCachedFile(objectId);
+            v = getFromCache(objectId);
+            if (v != null && v.getFile(0) != null) {
+                return v.getFile(0);
+            }
+
         }
+        return null;
     }
 
-    public Path generateCachedFile(String key) {
+    public void generateCachedFile(String objectId) {
         Editor editor = null;
         Path p = null;
         try {
-            editor = cache.edit(key);
+            editor = cache.edit(objectId);
             p = editor.getFile(0);
-            generator.accept(key, p);
+            generator.accept(objectId, p);
             editor.commit();
         } catch (IOException e) {
             if (editor != null) {
                 editor.abortUnlessCommitted();
             }
         }
-        return p;
     }
 
     public synchronized void removeCachedFile(String objectId) {
