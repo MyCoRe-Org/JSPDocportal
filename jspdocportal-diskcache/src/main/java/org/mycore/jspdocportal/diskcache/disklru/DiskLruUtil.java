@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
 
 final class DiskLruUtil {
     static final Charset US_ASCII = Charset.forName("US-ASCII");
@@ -48,14 +49,14 @@ final class DiskLruUtil {
      * Deletes the contents of {@code dir}. Throws an IOException if any file
      * could not be deleted, or if {@code dir} is not a readable directory.
      */
-    static void deleteContents(File dir) throws IOException {
-        File[] files = dir.listFiles();
+    static void deleteContents(Path dir) throws IOException {
+        File[] files = dir.toFile().listFiles();
         if (files == null) {
             throw new IOException("not a readable directory: " + dir);
         }
         for (File file : files) {
             if (file.isDirectory()) {
-                deleteContents(file);
+                deleteContents(file.toPath());
             }
             if (!file.delete()) {
                 throw new IOException("failed to delete file: " + file);
