@@ -20,18 +20,14 @@
 
 package org.mycore.jspdocportal.diskcache.disklru;
 
-import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.EOFException;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -243,8 +239,7 @@ public final class DiskLruCache implements Closeable {
     }
 
     private void readJournal() throws IOException {
-        StrictLineReader reader = new StrictLineReader(new FileInputStream(journalFile.toFile()), StandardCharsets.US_ASCII);
-        try {
+        try(StrictLineReader reader = new StrictLineReader(journalFile, StandardCharsets.US_ASCII)){
             String magic = reader.readLine();
             String version = reader.readLine();
             String appVersionString = reader.readLine();
@@ -274,11 +269,8 @@ public final class DiskLruCache implements Closeable {
             if (reader.hasUnterminatedLine()) {
                 rebuildJournal();
             } else {
-                journalWriter = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(journalFile.toFile(), true), StandardCharsets.US_ASCII));
+                journalWriter = Files.newBufferedWriter(journalFile, StandardCharsets.US_ASCII, StandardOpenOption.APPEND);
             }
-        } finally {
-            DiskLruUtil.closeQuietly(reader);
         }
     }
 
@@ -350,12 +342,9 @@ public final class DiskLruCache implements Closeable {
      */
     private synchronized void rebuildJournal() throws IOException {
         if (journalWriter != null) {
-            closeWriter(journalWriter);
+            journalWriter.close();
         }
-
-        Writer writer = new BufferedWriter(
-            new OutputStreamWriter(new FileOutputStream(journalFileTmp.toFile()), StandardCharsets.US_ASCII));
-        try {
+        try (Writer writer = Files.newBufferedWriter(journalFileTmp, StandardCharsets.US_ASCII)){
             writer.write(MAGIC);
             writer.write("\n");
             writer.write(VERSION_1);
@@ -373,8 +362,6 @@ public final class DiskLruCache implements Closeable {
                     writer.write(CLEAN + ' ' + entry.key + entry.getLengths() + '\n');
                 }
             }
-        } finally {
-            closeWriter(writer);
         }
 
         if (Files.exists(journalFile)) {
@@ -383,8 +370,7 @@ public final class DiskLruCache implements Closeable {
         renameTo(journalFileTmp, journalFile, false);
         Files.delete(journalFileBackup);
 
-        journalWriter = new BufferedWriter(
-            new OutputStreamWriter(new FileOutputStream(journalFile.toFile(), true), StandardCharsets.US_ASCII));
+        journalWriter = Files.newBufferedWriter(journalFile, StandardCharsets.US_ASCII, StandardOpenOption.APPEND);
     }
 
     private static void renameTo(Path from, Path to, boolean deleteDestination) throws IOException {
@@ -459,7 +445,7 @@ public final class DiskLruCache implements Closeable {
         journalWriter.append(' ');
         journalWriter.append(key);
         journalWriter.append('\n');
-        flushWriter(journalWriter);
+        journalWriter.flush();
         return editor;
     }
 
@@ -550,7 +536,7 @@ public final class DiskLruCache implements Closeable {
             journalWriter.append(entry.key);
             journalWriter.append('\n');
         }
-        flushWriter(journalWriter);
+        journalWriter.flush();
 
         if (size > maxSize || journalRebuildRequired()) {
             executorService.submit(cleanupCallable);
@@ -617,7 +603,7 @@ public final class DiskLruCache implements Closeable {
     public synchronized void flush() throws IOException {
         checkNotClosed();
         trimToSize();
-        flushWriter(journalWriter);
+        journalWriter.flush();
     }
 
     /** Closes this cache. Stored values will remain on the filesystem. */
@@ -631,7 +617,7 @@ public final class DiskLruCache implements Closeable {
             }
         }
         trimToSize();
-        closeWriter(journalWriter);
+        journalWriter.close();
         journalWriter = null;
     }
 
@@ -650,24 +636,6 @@ public final class DiskLruCache implements Closeable {
     public void delete() throws IOException {
         close();
         DiskLruUtil.deleteContents(directory);
-    }
-
-    /**
-     * Closes the writer while whitelisting with StrictMode if necessary.
-     *
-     * <p>Analogous to b/71520172.
-     */
-    private static void closeWriter(Writer writer) throws IOException {
-        writer.close();
-    }
-
-    /**
-     * Flushes the writer while whitelisting with StrictMode if necessary.
-     *
-     * <p>See b/71520172.
-     */
-    private static void flushWriter(Writer writer) throws IOException {
-        writer.flush();
     }
 
     /** A snapshot of the values for an entry. */
@@ -764,14 +732,7 @@ public final class DiskLruCache implements Closeable {
 
         /** Sets the value at {@code index} to {@code value}. */
         public void set(int index, String value) throws IOException {
-            Writer writer = null;
-            try {
-                OutputStream os = new FileOutputStream(getFile(index).toFile());
-                writer = new OutputStreamWriter(os, StandardCharsets.UTF_8);
-                writer.write(value);
-            } finally {
-                DiskLruUtil.closeQuietly(writer);
-            }
+            Files.writeString(getFile(index), value);
         }
 
         /**

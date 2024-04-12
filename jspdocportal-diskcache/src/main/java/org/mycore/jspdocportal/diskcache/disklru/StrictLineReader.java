@@ -24,6 +24,8 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * Buffers input from an {@link InputStream} for reading lines.
@@ -66,11 +68,12 @@ class StrictLineReader implements Closeable {
      * @param in the {@code InputStream} to read data from.
      * @param charset the charset used to decode data. Only US-ASCII, UTF-8 and ISO-8859-1 are
      * supported.
+     * @throws IOException 
      * @throws NullPointerException if {@code in} or {@code charset} is null.
      * @throws IllegalArgumentException if the specified charset is not supported.
      */
-    StrictLineReader(InputStream in, Charset charset) {
-        this(in, 8192, charset);
+    StrictLineReader(Path file, Charset charset) throws IOException {
+        this(Files.newInputStream(file), 8192, charset);
     }
 
     /**
