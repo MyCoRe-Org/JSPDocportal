@@ -1,5 +1,3 @@
-
-
 /* 
  * Datei übernommen von https://raw.githubusercontent.com/omnifaces/omnifaces/4.x/src/main/java/org/omnifaces/util/Servlets.java
  * 
@@ -21,6 +19,7 @@
  */
 
 package org.mycore.jspdocportal.diskcache.servlet;
+
 import static java.lang.String.format;
 import static java.util.logging.Level.FINE;
 
@@ -147,8 +146,14 @@ public abstract class FileServlet extends HttpServlet {
         response.reset();
         Resource resource;
 
+        FileServletData data = getFileData(request);
+        if (data == null) {
+            handleFileNotFound(request, response);
+            return;
+        }
+
         try {
-            resource = new Resource(getFile(request));
+            resource = new Resource(data.file());
         } catch (IllegalArgumentException e) {
             logger.log(FINE, "Got an IllegalArgumentException from user code; interpreting it as 400 Bad Request.", e);
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -187,6 +192,16 @@ public abstract class FileServlet extends HttpServlet {
         }
 
         String contentType = setContentHeaders(request, response, resource, ranges);
+        if (data.contentType() != null) {
+            response.setContentType(data.contentType());
+            if (data.fileName() != null) {
+                boolean attachment = isAttachment(request, data.contentType());
+                response.setHeader("Content-Disposition",
+                    FileDownloadServletUtils.formatContentDispositionHeader(data.fileName(), attachment));
+            }
+        } else {
+            response.setContentType(contentType);
+        }
 
         if (head) {
             return;
@@ -205,7 +220,7 @@ public abstract class FileServlet extends HttpServlet {
      * @throws IllegalArgumentException When the request is mangled in such way that it's not recognizable as a valid
      * file request. The servlet will then return a HTTP 400 error.
      */
-    protected abstract Path getFile(HttpServletRequest request);
+    protected abstract FileServletData getFileData(HttpServletRequest request);
 
     /**
      * Handles the case when the file is not found.
@@ -260,8 +275,9 @@ public abstract class FileServlet extends HttpServlet {
      */
     protected boolean isAttachment(HttpServletRequest request, String contentType) {
         String accept = request.getHeader("Accept");
-        return !FileDownloadServletUtils.startsWithOneOf(contentType, "text", "image") && (accept == null || !accepts(accept,
-            contentType));
+        return !FileDownloadServletUtils.startsWithOneOf(contentType, "text", "image")
+            && (accept == null || !accepts(accept,
+                contentType));
     }
 
     /**
@@ -379,7 +395,8 @@ public abstract class FileServlet extends HttpServlet {
         String contentType = getContentType(request, resource.file);
         String filename = getAttachmentName(request, resource.file);
         boolean attachment = isAttachment(request, contentType);
-        response.setHeader("Content-Disposition", FileDownloadServletUtils.formatContentDispositionHeader(filename, attachment));
+        response.setHeader("Content-Disposition",
+            FileDownloadServletUtils.formatContentDispositionHeader(filename, attachment));
         response.setHeader("Accept-Ranges", "bytes");
 
         if (ranges.size() == 1) {
@@ -477,7 +494,8 @@ public abstract class FileServlet extends HttpServlet {
                     this.file = file;
                     length = Files.size(file);
                     lastModified = Files.getLastModifiedTime(file).toMillis();
-                    eTag = format(ETAG, FileDownloadServletUtils.encodeURL(file.getFileName().toString()), lastModified);
+                    eTag = format(ETAG, FileDownloadServletUtils.encodeURL(file.getFileName().toString()),
+                        lastModified);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -505,4 +523,3 @@ public abstract class FileServlet extends HttpServlet {
     }
 
 }
-
