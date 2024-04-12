@@ -16,10 +16,10 @@ public class MCRDiskcacheManager {
     private MCRDiskcacheManager() {
         MCRConfiguration2.getString("MCR.Diskcache.EnabledCaches").ifPresent(x -> {
             Arrays.asList(x.split(",")).forEach(c -> {
-                caches.put(c, 
-                MCRConfiguration2.<MCRDiskcacheConfig>getInstanceOf(MCR_PROPERTY_CONFIG_PREFIX + c)
-                    .orElseThrow(
-                        () -> MCRConfiguration2.createConfigurationException("MCR_PROPERTY_CONFIG_PREFIX" + c)));
+                caches.put(c,
+                    MCRConfiguration2.<MCRDiskcacheConfig>getInstanceOf(MCR_PROPERTY_CONFIG_PREFIX + c + ".Class")
+                        .orElseThrow(() -> MCRConfiguration2
+                            .createConfigurationException(MCR_PROPERTY_CONFIG_PREFIX + c + ".Class")));
             });
         });
     }
@@ -31,15 +31,15 @@ public class MCRDiskcacheManager {
     public Map<String, MCRDiskcacheConfig> getCaches() {
         return caches;
     }
-    
+
     public Path retrieveCachedFile(String cacheId, String objectId) {
         Path p = caches.get(cacheId).retrieveCachedFile(objectId);
         return p;
-        
+
     }
-    
+
     public void removeCachedFile(String cacheId, String objectId) {
         caches.get(cacheId).removeCachedFile(objectId);
     }
-    
+
 }
