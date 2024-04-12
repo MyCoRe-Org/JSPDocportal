@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 
 import org.mycore.jspdocportal.diskcache.servlet.FileServlet;
+import org.mycore.jspdocportal.diskcache.servlet.FileServletData;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,9 +23,8 @@ public class MCRDiskcacheDownloadServlet extends FileServlet {
 
     }
 
-    //TODO null Handling
     @Override
-    protected Path getFile(HttpServletRequest request) {
+    protected FileServletData getFileData(HttpServletRequest request) {
         String pathInfo = request.getPathInfo();
 
         if (pathInfo == null || pathInfo.isEmpty()) {
@@ -34,11 +34,12 @@ public class MCRDiskcacheDownloadServlet extends FileServlet {
         Optional<Entry<String, MCRDiskcacheConfig>> oCache = caches.entrySet()
             .stream().filter(e -> pathInfo.endsWith(e.getValue().getFileName())).findFirst();
         if (oCache.isPresent()) {
-            String objectId = pathInfo.substring(1, pathInfo.length() - oCache.get().getValue().getFileName().length());
-            Path file = MCRDiskcacheManager.instance().retrieveCachedFile(oCache.get().getValue().getId(), objectId);
-            return file;
+            MCRDiskcacheConfig cache = oCache.get().getValue();
+            String objectId = pathInfo.substring(1, pathInfo.length() - cache.getFileName().length());
+            Path file = MCRDiskcacheManager.instance().retrieveCachedFile(cache.getId(), objectId);
+            
+            return new FileServletData(file, cache.getMimeType(), pathInfo.substring(pathInfo.lastIndexOf("/")+1));
         }
         return null;
     }
-
 }
