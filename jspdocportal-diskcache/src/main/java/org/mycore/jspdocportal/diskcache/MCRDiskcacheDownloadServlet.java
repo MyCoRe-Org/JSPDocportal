@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.jspdocportal.diskcache.servlet.FileServlet;
 import org.mycore.jspdocportal.diskcache.servlet.FileServletData;
 
@@ -36,9 +37,11 @@ public class MCRDiskcacheDownloadServlet extends FileServlet {
         if (oCache.isPresent()) {
             MCRDiskcacheConfig cache = oCache.get().getValue();
             String objectId = pathInfo.substring(1, pathInfo.length() - cache.getFileName().length());
-            Path file = MCRDiskcacheManager.instance().retrieveCachedFile(cache.getId(), objectId);
-            
-            return new FileServletData(file, cache.getMimeType(), pathInfo.substring(pathInfo.lastIndexOf("/")+1));
+            MCRObjectID mcrObjId = MCRTemporaryObjectIDNormalizer.retrieveMCRObjIDfromSOLR(objectId); 
+            if(mcrObjId!=null) {
+                Path file = MCRDiskcacheManager.instance().retrieveCachedFile(cache.getId(), mcrObjId.toString());
+                return new FileServletData(file, cache.getMimeType(), pathInfo.substring(pathInfo.lastIndexOf("/")+1));
+            }
         }
         return null;
     }

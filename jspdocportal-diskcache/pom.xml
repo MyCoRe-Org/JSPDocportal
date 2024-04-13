@@ -15,8 +15,20 @@
     </properties>
 	<dependencies>
 		<dependency>
+			<!-- TEMPORARY - until we properly cleanup code from
+			MCRTemporaryObjectIDNormalizer -->
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-solrj</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.mycore</groupId>
 			<artifactId>mycore-base</artifactId>
+		</dependency>
+		<dependency>
+			<!-- TEMPORARY - until we properly cleanup code from
+			MCRTemporaryObjectIDNormalizer -->
+			<groupId>org.mycore</groupId>
+			<artifactId>mycore-solr</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
@@ -44,7 +56,7 @@
       </plugin>
       </plugins>
 	</build>
-	
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
