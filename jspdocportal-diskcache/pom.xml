@@ -30,6 +30,12 @@
 			<groupId>org.mycore</groupId>
 			<artifactId>mycore-solr</artifactId>
 		</dependency>
+        <dependency>
+			<!-- TEMPORARY - used for IIIF Manifest Generator implementation should move to IIIF module -->
+			<groupId>org.mycore</groupId>
+			<artifactId>mycore-iiif</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
 			<artifactId>jakarta.servlet-api</artifactId>

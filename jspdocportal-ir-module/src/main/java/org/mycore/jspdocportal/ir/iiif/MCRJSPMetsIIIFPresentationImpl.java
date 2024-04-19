@@ -67,6 +67,7 @@ public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
     public MCRIIIFManifest getManifest(String id) {
         try {
             Document metsDocument = getMets(id);
+            String objId = metsDocument.getRootElement().getAttributeValue("OBJID").replace("/","_");
             metsDocument.getRootElement().setAttribute("schemaLocation",
                 "http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd http://www.w3.org/1999/xlink http://www.loc.gov/standards/xlink/xlink.xsd",
                 MCRConstants.XSI_NAMESPACE);
@@ -131,7 +132,7 @@ public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
             eStructMapPhysDiv.removeChildren("fptr", MCRConstants.METS_NAMESPACE);
 
             LOGGER.debug(() -> new XMLOutputter(Format.getPrettyFormat()).outputString(metsDocument));
-            return getConverter(id, metsDocument).convert();
+            return getConverter(objId, metsDocument).convert();
         } catch (IOException | JDOMException | SAXException e) {
             throw new MCRException(e);
         }
@@ -142,11 +143,19 @@ public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
     }
 
     private Document getMets(String id) throws IOException, JDOMException, SAXException {
-        String localID = id.contains("/") ? id : id.replaceFirst("_", "/");
-        Optional<MCRPIRegistrationInfo> optRegInfo = MCRPIManager.getInstance().getInfo(localID, MCRLocalID.TYPE);
-        if (optRegInfo.isPresent()) {
-            String mcrid = optRegInfo.get().getMycoreID();
-            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrid));
+        MCRObjectID mcrid = null;
+        if(MCRObjectID.isValid(id)) {
+            mcrid = MCRObjectID.getInstance(id);
+        }
+        else {
+            String localID = id.contains("/") ? id : id.replaceFirst("_", "/");
+            Optional<MCRPIRegistrationInfo> optRegInfo = MCRPIManager.getInstance().getInfo(localID, MCRLocalID.TYPE);
+            if (optRegInfo.isPresent()) {
+                mcrid = MCRObjectID.getInstance(optRegInfo.get().getMycoreID());
+            }
+        }
+        if(mcrid!=null) {
+            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrid);
             Optional<MCRMetaEnrichedLinkID> optMCRViewerDerLink = mcrObj.getStructure().getDerivates().stream()
                 .filter(x -> x.getClassifications().stream()
                     .filter(c -> "REPOS_METS".equals(c.getID()))

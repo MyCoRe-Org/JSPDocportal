@@ -41,6 +41,8 @@ public class MCRDiskcacheConfig {
     //not directly supported, could be removed later
     private int maxCount;
     private int version;
+    
+    private boolean createEager = false;
 
     private DiskLruCache cache;
 
@@ -62,6 +64,11 @@ public class MCRDiskcacheConfig {
     @MCRProperty(name = "MaxCount", defaultName = "MCR.Diskcache.Default.MaxCount")
     public void setMaxCount(String sMaxCount) {
         this.maxCount = Integer.parseInt(sMaxCount);
+    }
+    
+    @MCRProperty(name = "CreateEager", required=false)
+    public void setCreateEager(String sCreateEager) {
+        this.createEager = Boolean.parseBoolean(sCreateEager);
     }
 
     //Version des Caches -> beim Setzen einer neuen Nummer wird der Cache gelöscht
@@ -111,6 +118,10 @@ public class MCRDiskcacheConfig {
     public long getMaxCount() {
         return maxCount;
     }
+    
+    public boolean isCreateEager() {
+        return createEager;
+    }
 
     public DiskLruCache getCache() {
         return cache;
@@ -157,7 +168,10 @@ public class MCRDiskcacheConfig {
             p = editor.getFile(0);
             generator.accept(objectId, p);
             editor.commit();
-        } catch (IOException e) {
+        } catch (Exception e) {
+            LOGGER.error(e);
+        }
+        finally {
             if (editor != null) {
                 editor.abortUnlessCommitted();
             }
@@ -167,6 +181,9 @@ public class MCRDiskcacheConfig {
     public synchronized void removeCachedFile(String objectId) {
         try {
             cache.remove(objectId);
+            if(createEager) {
+                generateCachedFile(objectId);
+            }
         } catch (IOException e) {
             LOGGER.error("Could not remove object " + objectId + " from cache " + getId(), e);
         }
