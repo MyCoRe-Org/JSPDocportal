@@ -38,10 +38,10 @@ public class MCRDiskcacheDownloadServlet extends FileServlet {
         }
         Map<String, MCRDiskcacheConfig> caches = MCRDiskcacheManager.instance().getCaches();
         Optional<Entry<String, MCRDiskcacheConfig>> oCache = caches.entrySet()
-            .stream().filter(e -> pathInfo.endsWith(e.getValue().getFileName())).findFirst();
+            .stream().filter(e -> pathInfo.endsWith(e.getValue().getURLSuffix())).findFirst();
         if (oCache.isPresent()) {
             MCRDiskcacheConfig cache = oCache.get().getValue();
-            String id = pathInfo.substring(1, pathInfo.length() - cache.getFileName().length());
+            String id = pathInfo.substring(1, pathInfo.length() - cache.getURLSuffix().length());
             Optional<MCRObjectID> mcrObjId = mcrIdMapper.mapMCRObjectID(id.replace("rosdok_ppn", "rosdok/ppn")); 
             if(mcrObjId.isPresent()) {
                 Path file = MCRDiskcacheManager.instance().retrieveCachedFile(cache.getId(), mcrObjId.get().toString());

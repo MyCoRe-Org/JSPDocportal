@@ -30,8 +30,9 @@ public class MCRDiskcacheConfig {
     @MCRInstance(name = "Generator", valueClass = BiConsumer.class)
     public BiConsumer<String, Path> generator;
 
-    @MCRProperty(name = "FileName", defaultName = "MCR.Diskcache.Default.FileName")
-    public String fileName;
+    @MCRProperty(name = "URLSuffix", defaultName = "MCR.Diskcache.Default.URLSuffix")
+    public String urlSuffix;
+
     @MCRProperty(name = "MimeType", defaultName = "MCR.Diskcache.Default.MimeType")
     public String mimeType;
 
@@ -41,7 +42,7 @@ public class MCRDiskcacheConfig {
     //not directly supported, could be removed later
     private int maxCount;
     private int version;
-    
+
     private boolean createEager = false;
 
     private DiskLruCache cache;
@@ -65,8 +66,8 @@ public class MCRDiskcacheConfig {
     public void setMaxCount(String sMaxCount) {
         this.maxCount = Integer.parseInt(sMaxCount);
     }
-    
-    @MCRProperty(name = "CreateEager", required=false)
+
+    @MCRProperty(name = "CreateEager", required = false)
     public void setCreateEager(String sCreateEager) {
         this.createEager = Boolean.parseBoolean(sCreateEager);
     }
@@ -99,8 +100,8 @@ public class MCRDiskcacheConfig {
         return baseDir;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getURLSuffix() {
+        return urlSuffix;
     }
 
     public String getMimeType() {
@@ -118,7 +119,7 @@ public class MCRDiskcacheConfig {
     public long getMaxCount() {
         return maxCount;
     }
-    
+
     public boolean isCreateEager() {
         return createEager;
     }
@@ -170,8 +171,7 @@ public class MCRDiskcacheConfig {
             editor.commit();
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        finally {
+        } finally {
             if (editor != null) {
                 editor.abortUnlessCommitted();
             }
@@ -181,7 +181,7 @@ public class MCRDiskcacheConfig {
     public synchronized void removeCachedFile(String objectId) {
         try {
             cache.remove(objectId);
-            if(createEager) {
+            if (createEager) {
                 generateCachedFile(objectId);
             }
         } catch (IOException e) {
