@@ -16,12 +16,12 @@ import org.apache.logging.log4j.Logger;
  */
 
 public class SimpleGenerator implements BiConsumer<String, Path> {
-    private static Logger LOGGER = LogManager.getLogger(SimpleGenerator.class);
+    private static Logger LOGGER = LogManager.getLogger();
 
     @Override
-    public void accept(String t, Path p) {
+    public void accept(String id, Path p) {
         try {
-            Files.writeString(p, t);
+            Files.writeString(p, id);
         } catch (IOException e) {
             LOGGER.error(e);
         }
