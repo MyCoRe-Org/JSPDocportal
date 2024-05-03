@@ -67,13 +67,12 @@ public class MCRPDFDownloadController {
     @jakarta.ws.rs.Path("recordIdentifier/{path:.*}")
     public Response get(@Context HttpServletRequest request, @Context ServletContext servletContext) {
         HashMap<String, Object> model = new HashMap<>();
-        
+
         List<String> errorMessages = new ArrayList<String>();
-        model.put("errorMessages",  errorMessages);
+        model.put("errorMessages", errorMessages);
         model.put("requestURL", request.getRequestURL().toString());
-        
-        String path = request.getPathInfo().replace("pdfdownload/recordIdentifier", "").replace("..",
-                "");
+
+        String path = request.getPathInfo().replace("pdfdownload/recordIdentifier", "").replace("..", "");
         while (path.startsWith("/")) {
             path = path.substring(1);
         }
@@ -81,10 +80,9 @@ public class MCRPDFDownloadController {
             return Response.temporaryRedirect(URI.create(request.getContextPath())).build();
         }
 
-        String recordIdentifier = path.endsWith(".pdf") ?
-            path.substring(0, path.lastIndexOf("/")) : path;
+        String recordIdentifier = path.endsWith(".pdf") ? path.substring(0, path.lastIndexOf("/")) : path;
         recordIdentifier = recordIdentifier.replace("/", "_");
-        
+
         SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
         SolrQuery query = new SolrQuery();
         query.setQuery("recordIdentifier:" + recordIdentifier.replaceFirst("_", "/"));
@@ -95,17 +93,17 @@ public class MCRPDFDownloadController {
 
             if (solrResults.getNumFound() > 0) {
                 String filename = recordIdentifier + ".pdf";
-                model.put("filename",  filename);
+                model.put("filename", filename);
 
-                final Path resultPDF = HashedDirectoryStructure.createOutputDirectory(calculateCacheDir(), recordIdentifier).resolve(filename);
+                final Path resultPDF = HashedDirectoryStructure
+                    .createOutputDirectory(calculateCacheDir(), recordIdentifier).resolve(filename);
                 boolean ready = Files.exists(resultPDF);
-                model.put("ready",  ready);
+                model.put("ready", ready);
 
                 if (ready) {
                     model.put("filesize", String.format(Locale.GERMANY, "%1.1f%n MB",
-                            (double) Files.size(resultPDF) / 1024 / 1024));
-                }
-                else {
+                        (double) Files.size(resultPDF) / 1024 / 1024));
+                } else {
                     model.put("filesize", "O MB");
                 }
 
@@ -113,8 +111,8 @@ public class MCRPDFDownloadController {
                     // download pdf
                     Path fCount = resultPDF.getParent().resolve(resultPDF.getFileName() + ".count");
                     Files.write(fCount, ".".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE,
-                            StandardOpenOption.APPEND);
-                    
+                        StandardOpenOption.APPEND);
+
                     StreamingOutput stream = new StreamingOutput() {
                         public void write(OutputStream output) throws IOException, WebApplicationException {
                             try {
@@ -123,8 +121,10 @@ public class MCRPDFDownloadController {
                                 if (e instanceof IOException && "Connection reset by peer".equals(e.getMessage())) {
                                     LOGGER.warn("PDF-Download of " + resultPDF.toString()
                                         + "incomplete - 'Connection reset by peer'");
-                                } else if (e.getCause()!=null && e.getCause() instanceof IOException && "Connection reset by peer".equals(e.getCause().getMessage())) {
-                                    LOGGER.warn("PDF-Download of " + resultPDF.toString() + "incomplete - 'Connection reset by peer'"); 
+                                } else if (e.getCause() != null && e.getCause() instanceof IOException
+                                    && "Connection reset by peer".equals(e.getCause().getMessage())) {
+                                    LOGGER.warn("PDF-Download of " + resultPDF.toString()
+                                        + "incomplete - 'Connection reset by peer'");
                                 } else {
                                     throw new WebApplicationException(
                                         "PDF-Download of " + resultPDF.toString() + " failed.", e);
@@ -142,12 +142,11 @@ public class MCRPDFDownloadController {
                 String mcrid = String.valueOf(solrResults.get(0).getFirstValue("returnId"));
 
                 if (!ready && getProgress(servletContext, recordIdentifier) < 0) {
-                    servletContext.setAttribute(PDFGenerator.SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier,
-                            0);
+                    servletContext.setAttribute(PDFGenerator.SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier, 0);
                     Path depotDir = Paths.get(MCRConfiguration2.getString("MCR.depotdir").orElse(""));
                     PDFGeneratorService.execute(new PDFGenerator(resultPDF,
-                            HashedDirectoryStructure.createOutputDirectory(depotDir, recordIdentifier),
-                            recordIdentifier, mcrid, servletContext));
+                        HashedDirectoryStructure.createOutputDirectory(depotDir, recordIdentifier),
+                        recordIdentifier, mcrid, servletContext));
                 }
 
                 if (getProgress(servletContext, recordIdentifier) > 100) {
@@ -161,18 +160,16 @@ public class MCRPDFDownloadController {
             LOGGER.error(e);
         }
 
-
-
-        model.put("progress",  getProgress(servletContext, recordIdentifier));
+        model.put("progress", getProgress(servletContext, recordIdentifier));
         model.put("recordIdentifier", recordIdentifier);
-    
+
         Viewable v = new Viewable("/pdfdownload", model);
         return Response.ok(v).build();
     }
 
     public int getProgress(ServletContext servletContext, String recordIdentifier) {
-        Integer num = (Integer) servletContext
-                .getAttribute(PDFGenerator.SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier);
+        Integer num
+            = (Integer) servletContext.getAttribute(PDFGenerator.SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier);
         if (num == null) {
             return -1;
         } else {
