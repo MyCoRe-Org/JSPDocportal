@@ -55,16 +55,66 @@ import org.mycore.solr.MCRSolrClientFactory;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.StreamingOutput;
 
 @jakarta.ws.rs.Path("/do/pdfdownload")
 public class MCRPDFDownloadController {
-   
+
     private static final Logger LOGGER = LogManager.getLogger(MCRPDFDownloadController.class);
+
+    private static final String PROPERTY_DELETE_PDF_SECRET = "MCR.PDFDownload.Delete.Secret";
+    private static final String HEADER_DELETE_PDF_SECRET = "X-MCR-PDFDownload-Delete-Secret";
+
+    @DELETE
+    @jakarta.ws.rs.Path("recordIdentifier/{path:.*}")
+    public Response delete(@Context HttpServletRequest request, @Context ServletContext servletContext) {
+
+        String secret = MCRConfiguration2.getString(PROPERTY_DELETE_PDF_SECRET).orElse(null);
+        String secretHeader = request.getHeader(HEADER_DELETE_PDF_SECRET);
+        if (secretHeader != null && secret != null && !secret.isBlank() && secret.equals(secretHeader)) {
+
+            String path = request.getPathInfo().replace("pdfdownload/recordIdentifier", "").replace("..", "");
+            while (path.startsWith("/")) {
+                path = path.substring(1);
+            }
+            if (path.length() == 0) {
+                return Response.status(Status.BAD_REQUEST).build();
+            }
+
+            String recordIdentifier = path.endsWith(".pdf") ? path.substring(0, path.lastIndexOf("/")) : path;
+            recordIdentifier = recordIdentifier.replace("/", "_");
+
+            SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+            SolrQuery query = new SolrQuery();
+            query.setQuery("recordIdentifier:" + recordIdentifier.replaceFirst("_", "/"));
+
+            try {
+                QueryResponse response = solrClient.query(query);
+                SolrDocumentList solrResults = response.getResults();
+
+                if (solrResults.getNumFound() > 0) {
+                    String filename = recordIdentifier + ".pdf";
+                    final Path resultPDF = HashedDirectoryStructure
+                        .createOutputDirectory(calculateCacheDir(), recordIdentifier).resolve(filename);
+
+                    Files.deleteIfExists(resultPDF);
+                    return Response.ok().build();
+                }
+                return Response.status(Status.NOT_FOUND).build();
+
+            } catch (SolrServerException | IOException e) {
+                LOGGER.error(e);
+                return Response.status(Status.BAD_REQUEST).build();
+            }
+        }
+        return Response.status(Status.FORBIDDEN).build();
+    }
 
     @GET
     @jakarta.ws.rs.Path("recordIdentifier/{path:.*}")
