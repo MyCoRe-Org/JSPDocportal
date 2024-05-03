@@ -11,8 +11,8 @@
 	<name>jspdocportal-diskcache</name>
 	<description>Cacheing and generation of derived files</description>
 	<properties>
-      <manifest.priority>13</manifest.priority>
-    </properties>
+		<manifest.priority>13</manifest.priority>
+	</properties>
 	<dependencies>
 		<dependency>
 			<!-- TEMPORARY - until we properly cleanup code from
@@ -30,10 +30,24 @@
 			<groupId>org.mycore</groupId>
 			<artifactId>mycore-solr</artifactId>
 		</dependency>
-        <dependency>
-			<!-- TEMPORARY - used for IIIF Manifest Generator implementation should move to IIIF module -->
+		<dependency>
+			<!-- TEMPORARY - used for IIIF Manifest Generator implementation
+			should move to IIIF module -->
 			<groupId>org.mycore</groupId>
 			<artifactId>mycore-iiif</artifactId>
+		</dependency>
+
+		<!-- TEMPORARY - used for DV METS Generator -->
+		<dependency>
+			<groupId>org.mycore.libmeta</groupId>
+			<artifactId>libmeta-mets</artifactId>
+			<version>0.8.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mycore.libmeta</groupId>
+			<artifactId>libmeta-mods</artifactId>
+			<version>0.8.1</version>
 		</dependency>
 
 		<dependency>
@@ -42,25 +56,25 @@
 		</dependency>
 	</dependencies>
 	<build>
-  <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifest>
-              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-              <addExtensions></addExtensions>
-            </manifest>
-            <manifestEntries>
-              <MCR-Artifact-Id>${project.artifactId}</MCR-Artifact-Id>
-              <MCR-Application-Module>${project.name}</MCR-Application-Module>
-              <Priority>${manifest.priority}</Priority>
-            </manifestEntries>
-          </archive>
-        </configuration>
-      </plugin>
-      </plugins>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addExtensions></addExtensions>
+						</manifest>
+						<manifestEntries>
+							<MCR-Artifact-Id>${project.artifactId}</MCR-Artifact-Id>
+							<MCR-Application-Module>${project.name}</MCR-Application-Module>
+							<Priority>${manifest.priority}</Priority>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 	<dependencyManagement>
