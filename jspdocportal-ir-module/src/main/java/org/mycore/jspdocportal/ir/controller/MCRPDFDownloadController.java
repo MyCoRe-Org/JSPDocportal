@@ -31,6 +31,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -103,8 +106,13 @@ public class MCRPDFDownloadController {
                 if (ready) {
                     model.put("filesize", String.format(Locale.GERMANY, "%1.1f%n MB",
                         (double) Files.size(resultPDF) / 1024 / 1024));
+
+                    BasicFileAttributes attr = Files.readAttributes(resultPDF, BasicFileAttributes.class);
+                    FileTime fileTime = attr.creationTime();
+                    model.put("filecreated", DateTimeFormatter.ISO_INSTANT.format(fileTime.toInstant()));
                 } else {
                     model.put("filesize", "O MB");
+                    model.put("filecreated", "");
                 }
 
                 if (path.endsWith(".pdf") && ready && getProgress(servletContext, recordIdentifier) < 0) {
