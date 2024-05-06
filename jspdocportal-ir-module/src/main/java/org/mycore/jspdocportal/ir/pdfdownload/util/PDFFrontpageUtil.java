@@ -123,7 +123,7 @@ public class PDFFrontpageUtil {
 
         //Metadata
         org.jdom2.Document jdomObj = mcrObj.createXML();
-        String xslt = "xsl/docdetails/pdffrontpage_html.xsl";
+        String xslt = "xslt/docdetails/pdffrontpage_html.xsl";
         try {
             Class<? extends TransformerFactory> tfClass = MCRClassTools.forName("net.sf.saxon.TransformerFactoryImpl");
             MCRXSLTransformer t = MCRXSLTransformer.getInstance(tfClass, xslt);
