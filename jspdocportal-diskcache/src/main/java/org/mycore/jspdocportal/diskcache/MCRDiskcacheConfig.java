@@ -86,7 +86,9 @@ public class MCRDiskcacheConfig {
             Path cacheDir = baseDir.resolve(id);
             Files.createDirectories(cacheDir);
             cache = DiskLruCache.open(cacheDir, version, DISK_LRUCACHE_VALUE_COUNT, maxSizeInBytes);
-            MCRShutdownHandler.getInstance().addCloseable(new MCRDiskLruCacheClosable(cache));
+            if (cache != null) {
+                MCRShutdownHandler.getInstance().addCloseable(new MCRDiskLruCacheClosable(cache));
+            }
         } catch (IOException e) {
             LOGGER.error(e);
         }
@@ -129,18 +131,20 @@ public class MCRDiskcacheConfig {
     }
 
     private Value getFromCache(String key) {
-        try {
-            Value v = cache.get(key);
-            if (v != null) {
-                Path p = v.getFile(0);
-                if (Files.getLastModifiedTime(p).toMillis() < System.currentTimeMillis() - livespanInMillis) {
-                    cache.remove(key);
-                    return null;
+        if (cache != null) {
+            try {
+                Value v = cache.get(key);
+                if (v != null) {
+                    Path p = v.getFile(0);
+                    if (Files.getLastModifiedTime(p).toMillis() < System.currentTimeMillis() - livespanInMillis) {
+                        cache.remove(key);
+                        return null;
+                    }
                 }
+                return v;
+            } catch (IOException e) {
+                LOGGER.error(e);
             }
-            return v;
-        } catch (IOException e) {
-            LOGGER.error(e);
         }
         return null;
     }
@@ -162,27 +166,31 @@ public class MCRDiskcacheConfig {
     }
 
     public void generateCachedFile(String objectId) {
-        Editor editor = null;
-        Path p = null;
-        try {
-            editor = cache.edit(objectId);
-            p = editor.getFile(0);
-            generator.accept(objectId, p);
-            editor.commit();
-        } catch (Exception e) {
-            LOGGER.error(e);
-        } finally {
-            if (editor != null) {
-                editor.abortUnlessCommitted();
+        if (cache != null) {
+            Editor editor = null;
+            Path p = null;
+            try {
+                editor = cache.edit(objectId);
+                p = editor.getFile(0);
+                generator.accept(objectId, p);
+                editor.commit();
+            } catch (Exception e) {
+                LOGGER.error(e);
+            } finally {
+                if (editor != null) {
+                    editor.abortUnlessCommitted();
+                }
             }
         }
     }
 
     public synchronized void removeCachedFile(String objectId) {
         try {
-            cache.remove(objectId);
-            if (createEager) {
-                generateCachedFile(objectId);
+            if (cache != null) {
+                cache.remove(objectId);
+                if (createEager) {
+                    generateCachedFile(objectId);
+                }
             }
         } catch (IOException e) {
             LOGGER.error("Could not remove object " + objectId + " from cache " + getId(), e);
@@ -207,16 +215,16 @@ public class MCRDiskcacheConfig {
 
         @Override
         public void close() {
-            String cacheId = cache.getDirectory().getFileName().toString();
-            LOGGER.info("Shutting down DiskCache " + cacheId);
-            try {
-                cache.flush();
-                cache.close();
-            } catch (IOException e) {
-                LOGGER.error("Error closing cache " + cacheId, e);
+            if (cache != null) {
+                String cacheId = cache.getDirectory().getFileName().toString();
+                LOGGER.info("Shutting down DiskCache " + cacheId);
+                try {
+                    cache.flush();
+                    cache.close();
+                } catch (IOException e) {
+                    LOGGER.error("Error closing cache " + cacheId, e);
+                }
             }
-
         }
     }
-
 }
