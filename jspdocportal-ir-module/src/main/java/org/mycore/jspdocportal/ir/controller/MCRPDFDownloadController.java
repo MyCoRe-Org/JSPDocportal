@@ -34,6 +34,7 @@ import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -159,10 +160,10 @@ public class MCRPDFDownloadController {
 
                     BasicFileAttributes attr = Files.readAttributes(resultPDF, BasicFileAttributes.class);
                     FileTime fileTime = attr.creationTime();
-                    model.put("filecreated", DateTimeFormatter.ISO_INSTANT.format(fileTime.toInstant()));
+                    model.put("filecreated", DateTimeFormatter.ISO_INSTANT.format(fileTime.toInstant().truncatedTo(ChronoUnit.SECONDS)));
                 } else {
                     model.put("filesize", "O MB");
-                    model.put("filecreated", "");
+                    model.put("filecreated", "unknown");
                 }
 
                 if (path.endsWith(".pdf") && ready && getProgress(servletContext, recordIdentifier) < 0) {

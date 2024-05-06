@@ -69,7 +69,7 @@
 					   <a href="${url}" class="btn btn-primary ir-button-download" style="font-size:150%;padding:15px;">
                           <img src="${imgIconUrl}" style="height:60px;"/>&nbsp;&nbsp;${it.filename} &nbsp;&nbsp;&nbsp; <small>(${it.filesize})</small>
                        </a>
-                       <small class="text-muted">(<fmt:message key="Webpage.PDFDownload.file.created" />: ${it.filecreated})</small>
+                       <small class="text-muted float-right pt-1">(<fmt:message key="Webpage.PDFDownload.file.created" />: ${it.filecreated})</small>
 					</div>
                     <div class="ir-box-teaser mt-5">
 					 <h3><fmt:message key="Webpage.PDFDownload.headline.hint" /></h3>
