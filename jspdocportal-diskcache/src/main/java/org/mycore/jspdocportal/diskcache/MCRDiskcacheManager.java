@@ -4,10 +4,16 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration2;
+import org.mycore.jspdocportal.diskcache.disklru.DiskLruCache;
 
 public class MCRDiskcacheManager {
+    private static final Logger LOGGER = LogManager.getLogger();
+
     private static final MCRDiskcacheManager SINGLETON = new MCRDiskcacheManager();
     private static final String MCR_PROPERTY_CONFIG_PREFIX = "MCR.Diskcache.Cache.";
 
@@ -21,6 +27,14 @@ public class MCRDiskcacheManager {
                         .orElseThrow(() -> MCRConfiguration2
                             .createConfigurationException(MCR_PROPERTY_CONFIG_PREFIX + c + ".Class")));
             });
+            LOGGER.warn("Info: DiskCacheConfiguration loaded");
+            LOGGER.warn("-----------------------------------");
+            for (Entry<String, MCRDiskcacheConfig> e : caches.entrySet()) {
+                DiskLruCache c = e.getValue().getCache();
+                LOGGER.warn(e.getKey() + ":: urlSuffix: " + e.getValue().getURLSuffix()
+                    + " / cacheObject: " + c
+                    + " / currentCacheSize: " + c == null ? "null" : Long.valueOf(c.size()));
+            }
         });
     }
 
