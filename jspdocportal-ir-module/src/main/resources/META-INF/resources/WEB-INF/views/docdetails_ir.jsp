@@ -262,13 +262,6 @@
              </script>
           </div>
        </div>
-       <%--
-       <div class="row">
-         <div class="col">
-           <mcr:transformXSL dom="${doc}" xslt="xsl/xsl3example.xsl" />
-         </div>
-       </div>
-       --%>
     </div><%-- main area --%>
     <div class="col col-md-4"> <%-- right area --%>
       <div class="ir-right_side h-100">
