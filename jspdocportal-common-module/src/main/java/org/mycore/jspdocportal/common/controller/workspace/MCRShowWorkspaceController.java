@@ -129,10 +129,10 @@ public class MCRShowWorkspaceController {
             // doFollowt-task_[ID]-[mcrObjID]
             if (s.startsWith("doGoto-task_")) {
                 String id = s.substring(s.indexOf("-") + 1);
-                String taskID = id.substring(0, id.indexOf("-"));
-                taskID = taskID.substring(taskID.indexOf("_") + 1);
+                String taskExecID = id.substring(0, id.indexOf("-"));
+                taskExecID = taskExecID.substring(taskExecID.indexOf("_") + 1);
                 String transactionID = id.substring(id.indexOf("-") + 1);
-                followTransaction(taskID, transactionID, messages);
+                followTransaction(taskExecID, transactionID, messages);
             }
 
             // doEditObject-task_[ID]-[mcrObjID]
@@ -535,7 +535,7 @@ public class MCRShowWorkspaceController {
             .orderByTaskCreateTime().desc().list();
 
         for (Task t : myTasks) {
-            followTransaction(t.getId(), "edit_object.do_save", messages);
+            followTransaction(t.getExecutionId(), "edit_object.do_save", messages);
         }
     }
 
