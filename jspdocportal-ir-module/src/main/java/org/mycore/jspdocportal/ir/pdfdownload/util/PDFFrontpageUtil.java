@@ -29,9 +29,15 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import javax.xml.transform.TransformerFactory;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRClassTools;
@@ -59,23 +65,20 @@ import com.itextpdf.tool.xml.XMLWorkerHelper;
 
 public class PDFFrontpageUtil {
     private static Logger LOGGER = LogManager.getLogger();
-    
+    private static DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm 'Uhr'", Locale.GERMAN);
+
     public static void createFrontPage(PdfWriter writer, Document document, String recordIdentifier, String mcrid)
         throws DocumentException {
-        byte[] buffer = new byte[4096];
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            InputStream is = PDFFrontpageUtil.class.getResourceAsStream("/rosdok_schriftzug.png")) {
-
-            int read = 0;
-            while ((read = is.read(buffer)) != -1) {
-                baos.write(buffer, 0, read);
-            }
-            Image img = Image.getInstance(baos.toByteArray());
+        document.addCreationDate();
+        document.addTitle("RosDok Download");
+        document.addAuthor("Universitätsbibliothek Rostock");
+        document.addSubject("https://purl.uni-rostock.de/"+recordIdentifier.replace("rosdok_", "rosdok/"));
+        
+        try (InputStream is = PDFFrontpageUtil.class.getResourceAsStream("/rosdok_schriftzug.png")) {
+            byte[] imgBytes = IOUtils.toByteArray(is);
+            Image img = Image.getInstance(imgBytes);
             img.scalePercent(25f);
             document.add(img);
-
-            is.close();
-            baos.close();
         } catch (IOException e) {
             //do nothing
         }
@@ -84,8 +87,10 @@ public class PDFFrontpageUtil {
         document.add(new Paragraph(
             "Dieses Werk wurde Ihnen durch die Universitätsbibliothek Rostock zum Download bereitgestellt.", font));
         document.add(
-            new Paragraph("Für Fragen und Hinweise wenden Sie sich bitte an: digibib.ub@uni-rostock.de", font));
-        Rectangle rect = new Rectangle(document.left(), document.top() - 25 * 2.54f,
+            new Paragraph("Für Fragen und Hinweise wenden Sie sich bitte an: digibib.ub@uni-rostock.de .", font));
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("Europe/Berlin"));
+        document.add(new Paragraph("Das PDF wurde erstellt am: " + DTF.format(zonedDateTime) + ".", font));
+        Rectangle rect = new Rectangle(document.left(), document.top() - 30 * 2.54f,
             document.getPageSize().getWidth() - document.rightMargin(), 10);
         rect.setBorder(Rectangle.BOTTOM);
         rect.setBorderColor(BaseColor.BLACK);
@@ -138,7 +143,6 @@ public class PDFFrontpageUtil {
             LogManager.getLogger(MCRTransformXslTag.class).error("Something went wrong processing the XSLT: " + xslt,
                 e);
         }
-
     }
 
     private static String cleanUpHTML(String content) {
