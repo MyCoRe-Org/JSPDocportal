@@ -132,9 +132,20 @@
         <p>
           <xsl:choose>
             <xsl:when test="contains(../mods:genre[@displayLabel='doctype']/@valueURI,'#histbest')">
+              <xsl:variable name="publisherAndPlace">
+              
+              </xsl:variable>
+              <xsl:variable name="publisherWithoutPlace">
+              </xsl:variable>
+              
+              <xsl:variable name="placeWithoutPublisher">
+              
+              </xsl:variable>
+              
               <xsl:variable name="publisherPlace">
                 <xsl:choose>
                   <xsl:when test="mods:publisher">
+                    {string-join(./mods:place[not(@supplied='yes')][not(following-sibling::mods:publisher)]/mods:placeTerm,', ')}
                     <xsl:for-each select="mods:publisher">
                       <xsl:variable name="thePublisher" select="." />
                       {string-join(./following-sibling::mods:place[not(@supplied='yes')][preceding-sibling::mods:publisher[1]=$thePublisher]/mods:placeTerm,', ')}: {.}{if (not(../mods:publisher[last()]=$thePublisher)) then ', ' else ()}
