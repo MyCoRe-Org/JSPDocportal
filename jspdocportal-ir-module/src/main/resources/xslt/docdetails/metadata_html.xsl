@@ -207,7 +207,7 @@
           <xsl:with-param name="items" select="./mods:classification[@displayLabel='sdnb']" />
         </xsl:call-template>
       
-        <xsl:if test="mods:physicalDescription">
+        <xsl:if test="mods:physicalDescription[./mods:extent | ./mods:note]">
           <tr>
             <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.physical_description')}</th>
             <td><table id="ir-table-docdetails-language" class="ir-table-docdetails-values">
