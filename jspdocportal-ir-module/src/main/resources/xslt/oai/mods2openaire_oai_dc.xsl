@@ -37,6 +37,7 @@
             <xsl:apply-templates select="mods:language" />
             <xsl:apply-templates select="mods:abstract" />
             <xsl:apply-templates select="mods:classification" />
+            <xsl:apply-templates select="mods:relatedItem" />
           </oai_dc:dc>
         </xsl:for-each>
       </oai:metadata>
@@ -65,27 +66,32 @@
     </dc:title>
   </xsl:template>
 
-  <xsl:template match="mods:name">
-    <xsl:if test="@type='personal'">
-      <xsl:choose>
-        <xsl:when test="mods:role[mods:roleTerm[@type='code']='cre' or mods:roleTerm[@type='code']='aut' ]">
-          <dc:creator>
-            <xsl:call-template name="name" />
-            <xsl:if test="mods:etal">
-              et al.
-            </xsl:if>
-          </dc:creator>
-        </xsl:when>
-        <xsl:otherwise>
-          <dc:contributor>
-            <xsl:call-template name="name" />
-            <xsl:if test="mods:etal">
-              et al.
-            </xsl:if>
-          </dc:contributor>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:if>
+  <xsl:template match="mods:name[mods:role[mods:roleTerm[@type='code']='cre' or mods:roleTerm[@type='code']='aut']]">
+    <dc:creator>
+      <xsl:call-template name="name" />
+      <xsl:if test="mods:etal">
+        et al.
+      </xsl:if>
+    </dc:creator>
+  </xsl:template>
+  
+  <xsl:template match="mods:name[not(../mods:name/mods:role[mods:roleTerm[@type='code']='cre' or ../mods:name/mods:roleTerm[@type='code']='aut'])][1]"
+                priority="2">
+    <dc:creator>
+      <xsl:call-template name="name" />
+      <xsl:if test="mods:etal">
+        et al.
+      </xsl:if>
+    </dc:creator>
+  </xsl:template>
+  
+  <xsl:template match="mods:name[not(mods:role[mods:roleTerm[@type='code']='cre' or mods:roleTerm[@type='code']='aut'])]">
+    <dc:contributor>
+      <xsl:call-template name="name" />
+        <xsl:if test="mods:etal">
+          et al.
+      </xsl:if>
+    </dc:contributor>
   </xsl:template>
 
   <xsl:template match="mods:abstract">
@@ -138,17 +144,20 @@
           <xsl:value-of select="$p" />
         </dc:identifier>
       </xsl:when>
+      <!-- disable because of failed check for GRANT Identifier -->
+      <!-- 
       <xsl:when test="contains ('ark arxiv hdl isbn pissn eissn pmid wos', $type)">
         <dc:relation>
           <xsl:value-of select="concat('info:eu-repo/semantics/altIdentifier/',$type,'/',.)" />
         </dc:relation>
       </xsl:when>
+      -->
     </xsl:choose>
   </xsl:template>
 
   <xsl:template match="mods:classification|mods:genre">
     <xsl:if test="@displayLabel='doctype'">
-      <xsl:if test="contains(@valueURI, '#epub.')">
+      <xsl:if test="contains(@valueURI, '#epub.') or contains(@valueURI, '#data')">
         <dc:type>
           {mcrmods:to-category(.)/label[@xml:lang='x-openaire']/@text}
         </dc:type>
@@ -168,14 +177,10 @@
     <xsl:if test="contains(@valueURI,'licenseinfo#work')">
       <xsl:choose>
         <xsl:when test="(contains(@valueURI, 'licenseinfo#work.cclicense') and contains(@valueURI, '.v40'))">
-          <dc:rights>
-            {mcrmods:to-category(.)/label[@xml:lang='x-uri']/@text}
-          </dc:rights>
+          <dc:rights>{mcrmods:to-category(.)/label[@xml:lang='x-uri']/@text}</dc:rights>
         </xsl:when>
         <xsl:otherwise>
-          <dc:rights>
-            {mcrmods:to-category(.)/label[@xml:lang='en']/@text}
-          </dc:rights>
+          <dc:rights>{mcrmods:to-category(.)/label[@xml:lang='en']/@text}</dc:rights>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:if>
@@ -186,19 +191,23 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="mods:originInfo">
-    <xsl:if test="@eventType='publication'">
-      <dc:publisher>
+  <xsl:template match="mods:originInfo[@eventType='publication']">
+    <xsl:if test="not(../mods:name)">
+      <dc:creator>
         <xsl:value-of select="mods:publisher" />
-        <xsl:if test="mods:place/mods:placeTerm">
-          <xsl:text> </xsl:text>
-          <xsl:value-of select="mods:place/mods:placeTerm" />
-        </xsl:if>
-      </dc:publisher>
-      <dc:date>
-        <xsl:value-of select="mods:dateIssued" />
-      </dc:date>
+      </dc:creator>
     </xsl:if>
+
+    <dc:publisher>
+      <xsl:value-of select="mods:publisher" />
+      <xsl:if test="mods:place/mods:placeTerm">
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="mods:place/mods:placeTerm" />
+      </xsl:if>
+    </dc:publisher>
+    <dc:date>
+      <xsl:value-of select="mods:dateIssued[@keyDate='yes']" />
+    </dc:date>
   </xsl:template>
 
   <xsl:template match="mods:language">
@@ -206,4 +215,20 @@
       <xsl:value-of select="./mods:languageTerm" />
     </dc:language>
   </xsl:template>
+  
+  <!-- does not work -->
+  <!-- OpenAIRE validator For Literature Repositories (3.0): Field Project Identifier (MA)
+       A vocabulary of projects is exposed by OpenAIRE through OAI-PMH, and available for all repository managers. 
+       Values include the project name and project ID. The projectID equals the Grant Agreement identifier, 
+       and is defined by the info:eu-repo namespace term grantAgreement. 
+       The syntax is: info:eu-repo/grantAgreement/Funder/FundingProgram/ProjectID /[Jurisdiction]/[ProjectName]/[ProjectAcronym] 
+       Note: If any of the field values contains a forward slash (/), it needs to be escaped using URL encoding (%2F). 
+       For instance, My/Project would be represented as My%2FProject. -->
+  <!--        
+  <xsl:template match="mods:relatedItem[@type='isReferencedBy']">
+    <xsl:for-each select="mods:identifier[@type='doi']">
+      <dc:relation>info:eu-repo/semantics/reference/doi/{replace(., 'https://doi.org/', ''}</dc:relation>
+    </xsl:for-each>
+  </xsl:template>
+  --> 
 </xsl:stylesheet>
