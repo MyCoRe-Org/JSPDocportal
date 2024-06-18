@@ -72,8 +72,8 @@ public class MCRPDFDownloadController {
 
     private static final String PROPERTY_DELETE_PDF_SECRET = "MCR.PDFDownload.Delete.Secret";
     private static final String HEADER_DELETE_PDF_SECRET = "X-MCR-PDFDownload-Delete-Secret";
-    private static DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm", Locale.GERMAN).withZone(ZoneId.of("Europe/Berlin"));
-    
+    private static DateTimeFormatter DTF
+        = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm", Locale.GERMAN).withZone(ZoneId.of("Europe/Berlin"));
 
     @DELETE
     @jakarta.ws.rs.Path("recordIdentifier/{path:.*}")
@@ -163,6 +163,9 @@ public class MCRPDFDownloadController {
 
                     BasicFileAttributes attr = Files.readAttributes(resultPDF, BasicFileAttributes.class);
                     FileTime fileTime = attr.creationTime();
+                    if (FileTime.fromMillis(0).equals(fileTime)) {
+                        fileTime = attr.lastModifiedTime();
+                    }
                     model.put("filecreated", DTF.format(fileTime.toInstant().truncatedTo(ChronoUnit.SECONDS)));
                 } else {
                     model.put("filesize", "O MB");
