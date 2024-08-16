@@ -448,7 +448,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
         }
 
         StringBuffer sbOut = new StringBuffer();
-        sbOut.append(INDENT).append("</ul>");
+        sbOut.append(INDENT).append("</ol>");
         NavigationObject c = currentNode;
         while (c instanceof NavigationItem) {
             String href = ((NavigationItem) c).getHref();
