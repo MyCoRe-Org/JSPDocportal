@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" version="3.0" 
+<xsl:stylesheet version="3.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:mods="http://www.loc.gov/mods/v3" 
@@ -9,7 +9,7 @@
   xmlns:mcrstring="http://www.mycore.de/xslt/stringutils"
   xmlns:mcrclass="http://www.mycore.de/xslt/classification"
   xmlns:mcrmods="http://www.mycore.de/xslt/mods"
-  exclude-result-prefixes="mods xlink mcri18n mcracl mcrstring mcrclass mcrmods"
+  exclude-result-prefixes="xs mods xlink mcri18n mcracl mcrstring mcrclass mcrmods"
   expand-text="yes">
  
   <xsl:import href="resource:xslt/functions/i18n.xsl" />

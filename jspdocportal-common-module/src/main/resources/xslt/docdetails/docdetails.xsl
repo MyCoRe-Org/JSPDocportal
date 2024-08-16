@@ -1,12 +1,11 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="3.0"
-                xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fn="http://www.w3.org/2005/xpath-functions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 
                 xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
-                exclude-result-prefixes="fn xs mcri18n"
+                exclude-result-prefixes="xsl fn xs mcri18n"
                 expand-text="yes">
   <xsl:output method="html" indent="yes" standalone="yes" encoding="UTF-8"/>
   
