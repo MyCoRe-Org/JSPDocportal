@@ -1,11 +1,14 @@
 <?xml version="1.0"?>
-<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink"
+<xsl:stylesheet version="3.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:mods="http://www.loc.gov/mods/v3"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:ubr-researchdata="http://purl.uni-rostock.de/ub/standards/ubr-researchdata-information-v1.0"
   xmlns:ubr-legal="http://purl.uni-rostock.de/ub/standards/ubr-legal-information-v1.0"
   xmlns:mcrclass="http://www.mycore.de/xslt/classification"
   xmlns:mcrmods="http://www.mycore.de/xslt/mods"
   xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
-  exclude-result-prefixes="mods xlink" expand-text="true">
+  exclude-result-prefixes="mods xlink ubr-researchdata ubr-leagal mcrclass mcrmods mcri18n" expand-text="true">
   
   <xsl:import href="resource:xslt/functions/classification.xsl" />
   <xsl:import href="resource:xslt/functions/mods.xsl" />
@@ -417,7 +420,7 @@
         <xsl:if test="mods:classification[@displayLabel='accesscondition']">
           <tr>
             <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.accesscondition')}</th>
-            <td><table id="ir-table-docdetails-identifier" class="ir-table-docdetails-values">
+            <td><table id="ir-table-docdetails-accesscondition" class="ir-table-docdetails-values">
               <xsl:variable name="categ" select="mcrmods:to-category(mods:classification[@displayLabel='accesscondition'][1])" />
               <tr><td>
                 {$categ/label[@xml:lang=$CurrentLang]/@text}

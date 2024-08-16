@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" version="3.0" 
+<xsl:stylesheet version="3.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:mods="http://www.loc.gov/mods/v3" 
   xmlns:xlink="http://www.w3.org/1999/xlink" 
   xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
@@ -46,7 +45,7 @@
       <xsl:if test="$items">
         <tr>
           <th>{mcri18n:translate(concat('OMD.ir.docdetails.metadata.classifications.', $items[1]/@displayLabel))}:</th>
-          <td><table id="ir-table-docdetails-summary" class="ir-table-docdetails-values">
+          <td><table id="ir-table-docdetails-classification-{$items[1]/@displayLabel}" class="ir-table-docdetails-values">
             <xsl:for-each select="$items">
               <tr>
                 <td>{mcrclass:current-label-text(mcrmods:to-category(.))}</td>
