@@ -8,7 +8,7 @@
   xmlns:mcrclass="http://www.mycore.de/xslt/classification"
   xmlns:mcrmods="http://www.mycore.de/xslt/mods"
   xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
-  exclude-result-prefixes="mods xlink ubr-researchdata ubr-leagal mcrclass mcrmods mcri18n" expand-text="true">
+  exclude-result-prefixes="mods xlink ubr-researchdata ubr-legal mcrclass mcrmods mcri18n" expand-text="true">
   
   <xsl:import href="resource:xslt/functions/classification.xsl" />
   <xsl:import href="resource:xslt/functions/mods.xsl" />
