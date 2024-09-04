@@ -80,21 +80,22 @@ public class MCRJSPDocportalIRCommands extends MCRAbstractCommands {
                 MCRMetaXML xml = (MCRMetaXML) it.next();
                 if ("imported".equals(xml.getType())) {
                     //Element eOldMODS = (Element)xml.getContent().get(0);
-                    Optional<Element> oldMODS = xml.getContent().stream().filter(Element.class::isInstance).map(Element.class::cast).findFirst();
-                    if(oldMODS.isPresent()) {
-                    Element ePPN = XP_PPN.evaluateFirst(oldMODS.get());
-                    if (ePPN != null) {
-                        //retrieve MODS by PPN
-                        String query = "pica.ppn=" + ePPN.getTextTrim();
-                        Element newMODS = MODS_CATALOG_SERVICE.retrieveMODSFromCatalogue(query);
-                        if (newMODS != null) {
-                            xml.getContent().clear();
-                            xml.getContent().add(newMODS);
-                            MCRMetadataManager.update(mcrObj);
-                            LOGGER.info("MODS updated in " + objectID);
-                            return;
+                    Optional<Element> oldMODS = xml.getContent().stream().filter(Element.class::isInstance)
+                        .map(Element.class::cast).findFirst();
+                    if (oldMODS.isPresent()) {
+                        Element ePPN = XP_PPN.evaluateFirst(oldMODS.get());
+                        if (ePPN != null) {
+                            //retrieve MODS by PPN
+                            String query = "pica.ppn=" + ePPN.getTextTrim();
+                            Element newMODS = MODS_CATALOG_SERVICE.retrieveMODSFromCatalogue(query);
+                            if (newMODS != null) {
+                                xml.getContent().clear();
+                                xml.getContent().add(newMODS);
+                                MCRMetadataManager.update(mcrObj);
+                                LOGGER.info("MODS updated in " + objectID);
+                                return;
+                            }
                         }
-                    }
                     }
                 }
             }
