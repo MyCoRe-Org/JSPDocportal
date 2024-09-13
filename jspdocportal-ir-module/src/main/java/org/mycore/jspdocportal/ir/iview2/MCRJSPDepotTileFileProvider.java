@@ -84,15 +84,15 @@ public class MCRJSPDepotTileFileProvider implements MCRTileFileProvider {
         try {
             String recordIdentifier = null;
             String imagePath = null;
-            if (!StringUtils.isEmpty(tileInfo.getDerivate())) {
+            if (!StringUtils.isEmpty(tileInfo.derivate())) {
                 recordIdentifier = URLDecoder
-                    .decode(URLDecoder.decode(tileInfo.getDerivate(), "UTF-8"), "UTF-8")
+                    .decode(URLDecoder.decode(tileInfo.derivate(), "UTF-8"), "UTF-8")
                     .replace("..", "");
-                imagePath = "iview2/" + tileInfo.getImagePath() + ".iview2";
+                imagePath = "iview2/" + tileInfo.imagePath() + ".iview2";
             } else {
                 //fallback for image ids like: rosdok%252Fppn642329060%252Fphys_0002
                 String normalizedIdentifier = URLDecoder
-                    .decode(URLDecoder.decode(tileInfo.getImagePath(), "UTF-8"), "UTF-8")
+                    .decode(URLDecoder.decode(tileInfo.imagePath(), "UTF-8"), "UTF-8")
                     .replace("..", "");
 
                 if (!normalizedIdentifier.contains("/")) {
