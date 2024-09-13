@@ -29,7 +29,7 @@ public class MCRExtendedDerivateLinkIDFactory extends MCRDefaultEnrichedDerivate
                     @SuppressWarnings("rawtypes")
                     MCRFileAttributes attrs = Files.readAttributes(mcrPath, MCRFileAttributes.class);
                     derivateLinkID.setOrCreateElement("maindoc_size", Long.toString(attrs.size()));
-                    derivateLinkID.getContentList().add(new Element("maindoc_md5").setText(attrs.md5sum()));
+                    derivateLinkID.getContentList().add(new Element("maindoc_"+attrs.digest().getAlgorithm().toLowerCase()).setText(attrs.digest().toHexString()));
                 } catch (IOException e) {
                     LOGGER.error(e);
                 }
