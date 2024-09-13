@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.mycore.jspdocportal</groupId>
     <artifactId>jspdocportal-parent</artifactId>
-    <version>2023.06-SNAPSHOT</version>
+    <version>2024.06-SNAPSHOT</version>
   </parent>
   <artifactId>jspdocportal-bom</artifactId>
   <packaging>pom</packaging>
@@ -15,7 +15,7 @@
       <dependency>
         <groupId>org.mycore</groupId>
         <artifactId>mycore-bom</artifactId>
-        <version>2023.06.2-SNAPSHOT</version>
+        <version>2024.06.0-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -106,6 +106,12 @@
         <artifactId>commons-fileupload</artifactId>
         <version>1.5</version>
         <scope>runtime</scope>
+      </dependency>
+      <!-- Optional Idealerweise migrieren-->
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpcore</artifactId>
+        <version>4.4.16</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
