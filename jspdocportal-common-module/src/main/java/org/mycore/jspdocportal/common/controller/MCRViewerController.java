@@ -17,7 +17,7 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.glassfish.jersey.server.mvc.Viewable;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.DefaultValue;
@@ -66,7 +66,7 @@ public class MCRViewerController {
 
         Viewable v = new Viewable("/mcrviewer", model);
 
-        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+        SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
         String value = identifier;
         if ("recordIdentifier".equals(field) && !value.contains("/")) {
             value = value.replaceFirst("_", "/");

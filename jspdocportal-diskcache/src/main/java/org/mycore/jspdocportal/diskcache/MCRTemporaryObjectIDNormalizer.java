@@ -31,7 +31,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
@@ -78,7 +78,7 @@ public class MCRTemporaryObjectIDNormalizer {
                 params.set("sort", "derivateOrder asc");
                 QueryResponse solrResponse = null;
                 try {
-                    solrResponse = MCRSolrClientFactory.getMainSolrClient().query(params);
+                    solrResponse = MCRSolrCoreManager.getMainSolrClient().query(params);
                 } catch (Exception e) {
                     LOGGER.error("Error retrieving derivate id from SOLR", e);
                 }
@@ -117,7 +117,7 @@ public class MCRTemporaryObjectIDNormalizer {
                 params.set("q", key + ":" + ClientUtils.escapeQueryChars(value));
                 QueryResponse solrResponse = null;
                 try {
-                    solrResponse = MCRSolrClientFactory.getMainSolrClient().query(params);
+                    solrResponse = MCRSolrCoreManager.getMainSolrClient().query(params);
                 } catch (Exception e) {
                     LOGGER.error("Error retrieving object id from SOLR", e);
                 }

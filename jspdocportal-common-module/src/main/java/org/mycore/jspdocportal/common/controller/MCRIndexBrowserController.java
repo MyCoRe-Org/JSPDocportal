@@ -22,7 +22,7 @@ import org.glassfish.jersey.server.mvc.Viewable;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.jspdocportal.common.search.MCRSearchResultDataBean;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.GET;
@@ -65,7 +65,7 @@ public class MCRIndexBrowserController {
             q.setRows(0);
             q.setStart(0);
 
-            SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+            SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
 
             firstSelector.clear();
             try {

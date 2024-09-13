@@ -48,7 +48,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Document;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -122,7 +122,7 @@ public class MCRSearchResultDataBean implements Serializable {
 
     public void doSearch() {
         solrQueryResponse = null;
-        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+        SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
 
         if (rows >= 0) {
             solrQuery.setRows(rows);

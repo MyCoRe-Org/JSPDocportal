@@ -53,7 +53,7 @@ import org.mycore.datamodel.metadata.MCRObjectStructure;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.jspdocportal.common.controller.MCRResolvingController;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -122,7 +122,7 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
             getServletContext().getRequestDispatcher("/nav?path=~mycore-error&messageKey=IdNotGiven").forward(request,
                 response);
         } else {
-            SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+            SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
             SolrQuery query = new SolrQuery();
             query.setQuery(queryString);
 

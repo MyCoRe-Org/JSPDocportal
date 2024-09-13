@@ -47,7 +47,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.jspdocportal.common.controller.MCRResolvingController;
 import org.mycore.services.i18n.MCRTranslation;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 import org.mycore.solr.MCRSolrUtils;
 
 import jakarta.servlet.ServletException;
@@ -111,7 +111,7 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
         if ("gnd".equals(key)) {
             //"gnd_uri": "http://d-nb.info/gnd/14075444X"
             try {
-                SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+                SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
                 SolrQuery solrQuery = new SolrQuery();
                 solrQuery.setQuery("gnd_uri:" + MCRSolrUtils.escapeSearchValue("http://d-nb.info/gnd/" + value.trim()));
                 solrQuery.setFields("id");
@@ -141,7 +141,7 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
                     value = value.replaceFirst("_", "/");
                 }
 
-                SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+                SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
                 SolrQuery solrQuery = new SolrQuery(key + ":" + ClientUtils.escapeQueryChars(value));
                 solrQuery.setRows(1);
                 QueryResponse solrQueryResponse = solrClient.query(solrQuery);

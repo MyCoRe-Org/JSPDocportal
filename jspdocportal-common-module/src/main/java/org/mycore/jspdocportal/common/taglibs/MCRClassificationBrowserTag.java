@@ -49,7 +49,7 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.services.i18n.MCRTranslation;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -90,7 +90,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
                 new CacheLoader<String, Integer>() {
                     @Override
                   public Integer load(String key) throws Exception {
-                        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+                        SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
                         SolrQuery query = new SolrQuery(key);
                         query.setRows(0);
                         try {

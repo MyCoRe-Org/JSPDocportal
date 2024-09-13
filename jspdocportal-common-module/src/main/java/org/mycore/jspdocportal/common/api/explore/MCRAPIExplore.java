@@ -36,7 +36,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.frontend.jersey.MCRCacheControl;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import jakarta.servlet.ServletContext;
@@ -91,7 +91,7 @@ public class MCRAPIExplore {
         //}
         MCRAPIExploreResponse response = new MCRAPIExploreResponse();
 
-        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+        SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
         SolrQuery q = new SolrQuery("*:*");
         MCRConfiguration2.getString("MCR.API.Explore.FilterQuery").ifPresent(fq -> {
             q.addFilterQuery(fq);

@@ -53,7 +53,7 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.jspdocportal.ir.depotapi.HashedDirectoryStructure;
 import org.mycore.jspdocportal.ir.pdfdownload.PDFGenerator;
 import org.mycore.jspdocportal.ir.pdfdownload.PDFGeneratorService;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
@@ -94,7 +94,7 @@ public class MCRPDFDownloadController {
             String recordIdentifier = path.endsWith(".pdf") ? path.substring(0, path.lastIndexOf("/")) : path;
             recordIdentifier = recordIdentifier.replace("/", "_");
 
-            SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+            SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
             SolrQuery query = new SolrQuery();
             query.setQuery("recordIdentifier:" + recordIdentifier.replaceFirst("_", "/"));
 
@@ -140,7 +140,7 @@ public class MCRPDFDownloadController {
         String recordIdentifier = path.endsWith(".pdf") ? path.substring(0, path.lastIndexOf("/")) : path;
         recordIdentifier = recordIdentifier.replace("/", "_");
 
-        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+        SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
         SolrQuery query = new SolrQuery();
         query.setQuery("recordIdentifier:" + recordIdentifier.replaceFirst("_", "/"));
 

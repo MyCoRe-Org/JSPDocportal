@@ -42,7 +42,7 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -151,7 +151,7 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
             PageContext pageContext = (PageContext) getJspContext();
             if(StringUtils.isNotBlank(query)) {
                 try {
-                    SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+                    SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
                     SolrQuery solrQuery = new SolrQuery();
                     solrQuery.setQuery(query);
                     solrQuery.setFields("id");
