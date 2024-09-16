@@ -219,7 +219,7 @@ import jakarta.ws.rs.core.Response;
             
             StringBuffer name = new StringBuffer();
             ResourceBundle messages = MCRTranslation.getResourceBundle("messages",
-                    new Locale(mcrSession.getCurrentLanguage()));
+                    Locale.of(mcrSession.getCurrentLanguage()));
             MCRUser mcrUser = MCRUserManager.getCurrentUser();
             if ("female".equals(mcrUser.getUserAttribute("sex"))) {
                 // Frau

@@ -269,7 +269,7 @@ public class MCRGetEditorElements {
             if (lang == null || lang.equals("")) {
                 lang = "de";
             }
-            propValue = MCRTranslation.translate(prop, new Locale(lang));
+            propValue = MCRTranslation.translate(prop, Locale.of(lang));
         } else {
             if (defaultValue == null)
                 defaultValue = "";

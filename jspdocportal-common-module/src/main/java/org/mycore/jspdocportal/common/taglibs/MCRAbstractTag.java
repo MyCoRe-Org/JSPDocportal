@@ -59,7 +59,7 @@ public class MCRAbstractTag extends SimpleTagSupport {
         if (StringUtils.isEmpty(lang)) {
             lang = "de";
         }
-        rbMessages = MCRTranslation.getResourceBundle("messages", new Locale(lang));
+        rbMessages = MCRTranslation.getResourceBundle("messages", Locale.of(lang));
     }
 
     /**

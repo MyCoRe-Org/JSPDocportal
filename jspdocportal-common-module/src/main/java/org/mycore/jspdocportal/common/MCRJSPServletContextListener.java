@@ -104,7 +104,7 @@ public class MCRJSPServletContextListener implements ServletContextListener {
      */
 
     private void registerDefaultMessageBundle(ServletContext sc) {
-        Locale loc = new Locale(
+        Locale loc = Locale.of(
                 MCRConfiguration2.getString("MCR.Metadata.DefaultLang").orElse(MCRConstants.DEFAULT_LANG));
         Config.set(sc, Config.FMT_LOCALE, loc);
         LocalizationContext locCtxt = new LocalizationContext(MCRTranslation.getResourceBundle("messages", loc));
