@@ -27,6 +27,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -236,8 +237,8 @@ public class PDFGenerator implements Runnable {
                             .retrieveMCRDerivate(MCRObjectID.getInstance(derID.getXLinkHref()));
                     String mainDoc = der.getDerivate().getInternals().getMainDoc();
 
-                    URL metsURL = new URL(MCRFrontendUtil.getBaseURL() + "file/" + mcrid + "/" + der.getId().toString()
-                            + "/" + mainDoc);
+                    URL metsURL = URI.create(MCRFrontendUtil.getBaseURL() + "file/" + mcrid + "/" + der.getId().toString()
+                            + "/" + mainDoc).toURL();
                     SAXBuilder sb = new SAXBuilder();
                     metsXML = sb.build(metsURL);
 
@@ -265,7 +266,7 @@ public class PDFGenerator implements Runnable {
             Rectangle pageSize = document.getPageSize();
             for (int i = 0; i < imgURLs.size(); i++) {
                 //default
-                img = Image.getInstance(new URL(imgURLs.get(i)));
+                img = Image.getInstance(URI.create(imgURLs.get(i)).toURL());
                 img.scalePercent(72 * 100 / DEFAULT_DPI);
                 img.setAbsolutePosition(0f, 0f);
 

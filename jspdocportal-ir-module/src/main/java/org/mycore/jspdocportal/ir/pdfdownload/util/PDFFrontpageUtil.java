@@ -27,9 +27,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.net.URL;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -88,7 +87,7 @@ public class PDFFrontpageUtil {
             "Dieses Werk wurde Ihnen durch die Universitätsbibliothek Rostock zum Download bereitgestellt.", font));
         document.add(
             new Paragraph("Für Fragen und Hinweise wenden Sie sich bitte an: digibib.ub@uni-rostock.de .", font));
-        ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("Europe/Berlin"));
+        ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneId.of("Europe/Berlin"));
         document.add(new Paragraph("Das PDF wurde erstellt am: " + DTF.format(zonedDateTime) + ".", font));
         Rectangle rect = new Rectangle(document.left(), document.top() - 30 * 2.54f,
             document.getPageSize().getWidth() - document.rightMargin(), 10);
@@ -111,8 +110,8 @@ public class PDFFrontpageUtil {
                     String mainDoc = der.getDerivate().getInternals().getMainDoc();
                     document.add(Chunk.NEWLINE);
                     document.add(Chunk.NEWLINE);
-                    Image img = Image.getInstance(new URL(MCRFrontendUtil.getBaseURL() + "file/" + mcrid + "/"
-                        + der.getId().toString() + "/" + mainDoc));
+                    Image img = Image.getInstance(URI.create(MCRFrontendUtil.getBaseURL() + "file/" + mcrid + "/"
+                        + der.getId().toString() + "/" + mainDoc).toURL());
                     img.scaleToFit(document.getPageSize().getWidth() * .33f, document.getPageSize().getHeight() * .33f);
                     img.setAlignment(Image.MIDDLE);
 
