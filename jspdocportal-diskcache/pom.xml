@@ -34,16 +34,37 @@
     </plugins>
   </build>
   <dependencies>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>jakarta.ws.rs</groupId>
+      <artifactId>jakarta.ws.rs-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
     </dependency>
     <dependency>
       <!-- TEMPORARY - until we properly cleanup code from
 			MCRTemporaryObjectIDNormalizer -->
       <groupId>org.apache.solr</groupId>
       <artifactId>solr-solrj</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jdom</groupId>
+      <artifactId>jdom2</artifactId>
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
@@ -60,6 +81,11 @@
 			MCRTemporaryObjectIDNormalizer -->
       <groupId>org.mycore</groupId>
       <artifactId>mycore-solr</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore.libmeta</groupId>
+      <artifactId>libmeta-common</artifactId>
+      <version>0.8.1</version>
     </dependency>
 
     <!-- TEMPORARY - used for DV METS Generator -->
