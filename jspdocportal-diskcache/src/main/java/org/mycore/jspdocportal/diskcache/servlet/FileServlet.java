@@ -46,7 +46,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * <p>
  * The well known "<a href="https://balusc.omnifaces.org/2009/02/fileservlet-supporting-resume-and.html">BalusC FileServlet</a>",
  * as an abstract template, slightly refactored, rewritten and modernized with a.o. fast NIO stuff instead of legacy
- * RandomAccessFile. GZIP support is stripped off as that can be done application wide via {@link GzipResponseFilter}.
+ * RandomAccessFile. GZIP support is stripped off as that can be done application wide via GzipResponseFilter.
  * <p>
  * This servlet properly deals with <code>ETag</code>, <code>If-None-Match</code> and <code>If-Modified-Since</code>
  * caching requests, hereby improving browser caching. This servlet also properly deals with <code>Range</code> and
@@ -57,7 +57,7 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * <h2>Usage</h2>
  * <p>
- * Just extend this class and override the {@link #getFile(HttpServletRequest)} method to return the desired file. If
+ * Just extend this class and override the {@link #getFileData(HttpServletRequest)} method to return the desired file. If
  * you want to trigger a HTTP 400 "Bad Request" error, simply throw {@link IllegalArgumentException}. If you want to
  * trigger a HTTP 404 "Not Found" error, simply return <code>null</code>, or a non-existent file.
  * <p>
@@ -100,10 +100,10 @@ import jakarta.servlet.http.HttpServletResponse;
  * can opt to override one or more of the following protected methods:
  * <ul>
  * <li>{@link #handleFileNotFound(HttpServletRequest, HttpServletResponse)}
- * <li>{@link #getExpireTime(HttpServletRequest, File)}
- * <li>{@link #getContentType(HttpServletRequest, File)}
+ * <li>{@link #getExpireTime(HttpServletRequest, Path)}
+ * <li>{@link #getContentType(HttpServletRequest, Path)}
  * <li>{@link #isAttachment(HttpServletRequest, String)}
- * <li>{@link #getAttachmentName(HttpServletRequest, File)}
+ * <li>{@link #getAttachmentName(HttpServletRequest, Path)}
  * </ul>
  *
  * <p><strong>See also</strong>:
@@ -263,7 +263,7 @@ public abstract class FileServlet extends HttpServlet {
 
     /**
      * Returns <code>true</code> if we must force a "Save As" dialog based on the given HTTP servlet request and content
-     * type as obtained from {@link #getContentType(HttpServletRequest, File)}.
+     * type as obtained from {@link #getContentType(HttpServletRequest, Path)}.
      * <p>
      * The default implementation will return <code>true</code> if the content type does <strong>not</strong> start with
      * <code>text</code> or <code>image</code>, and the <code>Accept</code> request header is either <code>null</code>
