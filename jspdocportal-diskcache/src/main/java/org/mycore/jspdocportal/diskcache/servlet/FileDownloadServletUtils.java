@@ -33,6 +33,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -205,7 +206,7 @@ public class FileDownloadServletUtils {
      * @since 2.6
      */
     public static String formatContentDispositionHeader(String filename, boolean attachment) {
-        return String.format("%s;filename=\"%2$s\"; filename*=UTF-8''%2$s", (attachment ? "attachment" : "inline"),
+        return String.format(Locale.US, "%s;filename=\"%2$s\"; filename*=UTF-8''%2$s", (attachment ? "attachment" : "inline"),
             encodeURI(filename));
     }
 

@@ -180,7 +180,7 @@ class StrictLineReader implements Closeable {
                             out.write(buf, pos, i - pos);
                         }
                         pos = i + 1;
-                        return out.toString();
+                        return out.toString(StandardCharsets.US_ASCII);
                     }
                 }
             }

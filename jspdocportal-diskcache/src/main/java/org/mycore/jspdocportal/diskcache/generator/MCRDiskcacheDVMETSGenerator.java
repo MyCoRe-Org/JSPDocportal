@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -394,7 +395,7 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
         return "reserved";
     }
 
-    private static DateTimeFormatter ISO_FORMATTER = new DateTimeFormatterBuilder().appendInstant(0).toFormatter();
+    private static DateTimeFormatter ISO_FORMATTER = new DateTimeFormatterBuilder().appendInstant(0).toFormatter(Locale.US);
 
     private void updateHeader(Mets mets) {
         MetsHdr metsHdr = mets.getMetsHdr();

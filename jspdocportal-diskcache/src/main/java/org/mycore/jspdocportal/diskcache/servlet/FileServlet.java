@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -494,7 +495,7 @@ public abstract class FileServlet extends HttpServlet {
                     this.file = file;
                     length = Files.size(file);
                     lastModified = Files.getLastModifiedTime(file).toMillis();
-                    eTag = format(ETAG, FileDownloadServletUtils.encodeURL(file.getFileName().toString()),
+                    eTag = format(Locale.US, ETAG, FileDownloadServletUtils.encodeURL(file.getFileName().toString()),
                         lastModified);
                 } catch (IOException e) {
                     e.printStackTrace();
