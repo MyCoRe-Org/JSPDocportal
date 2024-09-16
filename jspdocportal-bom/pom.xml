@@ -44,6 +44,12 @@
         <artifactId>commons-collections4</artifactId>
         <version>4.4</version>
       </dependency>
+      <!-- Optional Idealerweise migrieren-->
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpcore</artifactId>
+        <version>4.4.16</version>
+      </dependency>
       <dependency>
         <groupId>org.camunda.bpm</groupId>
         <artifactId>camunda-engine</artifactId>
@@ -52,8 +58,8 @@
       <dependency>
         <groupId>org.camunda.commons</groupId>
         <artifactId>camunda-commons-typed-values</artifactId>
- 	    <version>7.14.0</version>
- 	  </dependency>
+        <version>7.14.0</version>
+      </dependency>
 
       <dependency>
         <groupId>org.glassfish.web</groupId>
@@ -100,18 +106,12 @@
         <version>3.1.1</version>
         <scope>provided</scope>
       </dependency>
-     
+
       <dependency>
         <groupId>commons-fileupload</groupId>
         <artifactId>commons-fileupload</artifactId>
         <version>1.5</version>
         <scope>runtime</scope>
-      </dependency>
-      <!-- Optional Idealerweise migrieren-->
-      <dependency>
-        <groupId>org.apache.httpcomponents</groupId>
-        <artifactId>httpcore</artifactId>
-        <version>4.4.16</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

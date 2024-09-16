@@ -1,91 +1,90 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.mycore.jspdocportal</groupId>
-		<artifactId>jspdocportal-parent</artifactId>
-		<version>2024.06-SNAPSHOT</version>
-	</parent>
-	<artifactId>jspdocportal-diskcache</artifactId>
-	<name>jspdocportal-diskcache</name>
-	<description>Cacheing and generation of derived files</description>
-	<properties>
-		<manifest.priority>13</manifest.priority>
-	</properties>
-	<dependencies>
-		<dependency>
-			<!-- TEMPORARY - until we properly cleanup code from
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.mycore.jspdocportal</groupId>
+    <artifactId>jspdocportal-parent</artifactId>
+    <version>2024.06-SNAPSHOT</version>
+  </parent>
+  <artifactId>jspdocportal-diskcache</artifactId>
+  <name>jspdocportal-diskcache</name>
+  <description>Cacheing and generation of derived files</description>
+  <properties>
+    <manifest.priority>13</manifest.priority>
+  </properties>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addExtensions />
+            </manifest>
+            <manifestEntries>
+              <MCR-Artifact-Id>${project.artifactId}</MCR-Artifact-Id>
+              <MCR-Application-Module>${project.name}</MCR-Application-Module>
+              <Priority>${manifest.priority}</Priority>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+    </dependency>
+    <dependency>
+      <!-- TEMPORARY - until we properly cleanup code from
 			MCRTemporaryObjectIDNormalizer -->
-			<groupId>org.apache.solr</groupId>
-			<artifactId>solr-solrj</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.mycore</groupId>
-			<artifactId>mycore-base</artifactId>
-		</dependency>
-		<dependency>
-			<!-- TEMPORARY - until we properly cleanup code from
-			MCRTemporaryObjectIDNormalizer -->
-			<groupId>org.mycore</groupId>
-			<artifactId>mycore-solr</artifactId>
-		</dependency>
-		<dependency>
-			<!-- TEMPORARY - used for IIIF Manifest Generator implementation
+      <groupId>org.apache.solr</groupId>
+      <artifactId>solr-solrj</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-base</artifactId>
+    </dependency>
+    <dependency>
+      <!-- TEMPORARY - used for IIIF Manifest Generator implementation
 			should move to IIIF module -->
-			<groupId>org.mycore</groupId>
-			<artifactId>mycore-iiif</artifactId>
-		</dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-iiif</artifactId>
+    </dependency>
+    <dependency>
+      <!-- TEMPORARY - until we properly cleanup code from
+			MCRTemporaryObjectIDNormalizer -->
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-solr</artifactId>
+    </dependency>
 
-		<!-- TEMPORARY - used for DV METS Generator -->
-		<dependency>
-			<groupId>org.mycore.libmeta</groupId>
-			<artifactId>libmeta-mets</artifactId>
-			<version>0.8.1</version>
-		</dependency>
+    <!-- TEMPORARY - used for DV METS Generator -->
+    <dependency>
+      <groupId>org.mycore.libmeta</groupId>
+      <artifactId>libmeta-mets</artifactId>
+      <version>0.8.1</version>
+    </dependency>
 
-		<dependency>
-			<groupId>org.mycore.libmeta</groupId>
-			<artifactId>libmeta-mods</artifactId>
-			<version>0.8.1</version>
-		</dependency>
+    <dependency>
+      <groupId>org.mycore.libmeta</groupId>
+      <artifactId>libmeta-mods</artifactId>
+      <version>0.8.1</version>
+    </dependency>
+  </dependencies>
 
-		<dependency>
-			<groupId>jakarta.servlet</groupId>
-			<artifactId>jakarta.servlet-api</artifactId>
-		</dependency>
-	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-							<addExtensions></addExtensions>
-						</manifest>
-						<manifestEntries>
-							<MCR-Artifact-Id>${project.artifactId}</MCR-Artifact-Id>
-							<MCR-Application-Module>${project.name}</MCR-Application-Module>
-							<Priority>${manifest.priority}</Priority>
-						</manifestEntries>
-					</archive>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.mycore.jspdocportal</groupId>
-				<artifactId>jspdocportal-bom</artifactId>
-				<version>${project.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.mycore.jspdocportal</groupId>
+        <artifactId>jspdocportal-bom</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 </project>

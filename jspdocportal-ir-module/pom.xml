@@ -30,7 +30,7 @@
           <archive>
             <manifest>
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-              <addExtensions></addExtensions>
+              <addExtensions />
             </manifest>
             <manifestEntries>
               <MCR-Artifact-Id>${project.artifactId}</MCR-Artifact-Id>
@@ -69,7 +69,7 @@
         <artifactId>datamodel-plugin</artifactId>
         <version>0.7</version>
         <configuration>
-          <schemaDirectory></schemaDirectory>
+          <schemaDirectory />
         </configuration>
         <executions>
           <execution>
@@ -82,11 +82,11 @@
     </plugins>
   </build>
   <dependencies>
-   	<dependency>
- 	  <groupId>com.google.guava</groupId>
- 	  <artifactId>guava</artifactId>
- 	</dependency>
-	<dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.itextpdf</groupId>
       <artifactId>itextpdf</artifactId>
     </dependency>
@@ -94,34 +94,34 @@
       <groupId>com.itextpdf.tool</groupId>
       <artifactId>xmlworker</artifactId>
     </dependency>
-   	<dependency>
- 	  <groupId>jakarta.ws.rs</groupId>
- 	  <artifactId>jakarta.ws.rs-api</artifactId>
- 	</dependency>
     <dependency>
- 	  <groupId>org.apache.commons</groupId>
- 	  <artifactId>commons-lang3</artifactId>
- 	</dependency>
- 	<dependency>
- 	  <groupId>org.apache.commons</groupId>
- 	  <artifactId>commons-text</artifactId>
- 	</dependency>
-	<dependency>
+      <groupId>jakarta.ws.rs</groupId>
+      <artifactId>jakarta.ws.rs-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-text</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
     </dependency>
     <dependency>
- 	  <groupId>org.apache.solr</groupId>
- 	  <artifactId>solr-solrj</artifactId>
- 	</dependency>
+      <groupId>org.apache.solr</groupId>
+      <artifactId>solr-solrj</artifactId>
+    </dependency>
     <dependency>
- 	  <groupId>org.glassfish.jersey.ext</groupId>
- 	  <artifactId>jersey-mvc</artifactId>
- 	</dependency>
- 	<dependency>
- 	  <groupId>org.jdom</groupId>
- 	  <artifactId>jdom2</artifactId>
- 	</dependency>
+      <groupId>org.glassfish.jersey.ext</groupId>
+      <artifactId>jersey-mvc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jdom</groupId>
+      <artifactId>jdom2</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-base</artifactId>
@@ -147,37 +147,37 @@
       <groupId>org.mycore</groupId>
       <artifactId>mycore-mods</artifactId>
     </dependency>
-  	<dependency>
- 	  <groupId>org.mycore</groupId>
- 	  <artifactId>mycore-pi</artifactId>
- 	</dependency>
- 	<dependency>
- 	  <groupId>org.mycore</groupId>
- 	  <artifactId>mycore-solr</artifactId>
- 	</dependency>
     <dependency>
- 	  <groupId>org.mycore</groupId>
- 	  <artifactId>mycore-xeditor</artifactId>
- 	</dependency>
-   	<dependency>
- 	  <groupId>org.mycore.iview2</groupId>
- 	  <artifactId>image-tiler</artifactId>
- 	</dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-pi</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-solr</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-xeditor</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore.iview2</groupId>
+      <artifactId>image-tiler</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.mycore.jspdocportal</groupId>
       <artifactId>jspdocportal-common-module</artifactId>
     </dependency>
     <dependency>
- 	  <groupId>org.mycore.mets</groupId>
- 	  <artifactId>mets-model</artifactId>
- 	</dependency>
+      <groupId>org.mycore.mets</groupId>
+      <artifactId>mets-model</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
       <scope>provided</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-oai</artifactId>
@@ -189,7 +189,7 @@
       <scope>runtime</scope>
     </dependency>
   </dependencies>
-  
+
   <dependencyManagement>
     <dependencies>
       <dependency>

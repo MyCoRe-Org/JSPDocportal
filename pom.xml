@@ -26,7 +26,7 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </repository>
   </repositories>
-  
+
   <modules>
     <module>jspdocportal-bom</module>
     <module>jspdocportal-common-module</module>
