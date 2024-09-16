@@ -73,7 +73,11 @@
       <groupId>com.itextpdf.tool</groupId>
       <artifactId>xmlworker</artifactId>
     </dependency> -->
-
+    <!--added for bamboo-->
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
+    </dependency>
     <dependency>
       <groupId>io.swagger.core.v3</groupId>
       <artifactId>swagger-annotations-jakarta</artifactId>
