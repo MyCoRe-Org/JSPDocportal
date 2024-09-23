@@ -3,6 +3,7 @@ package org.mycore.jspdocportal.common.bpmn;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.logging.log4j.LogManager;
@@ -11,8 +12,10 @@ import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
+import org.mycore.jspdocportal.common.bpmn.identity.MCRMyCoReIDMPlugin;
 import org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple.MCRWorkflowMgr;
 
 import jakarta.mail.Authenticator;
@@ -54,16 +57,43 @@ public class MCRBPMNMgr {
 
     public static final String WF_VAR_DISPLAY_DERIVATELIST = "wfObjectDisplayDerivateList";
 
-    public static final String MCR_BPMN_CONFIG_FILE = "camunda.cfg.xml";
+    public static final String WF_PROCESS_ENGINE_PROPERTIES_PREFIX = "MCR.Worflow.ProcessEngine.";
 
     private static ProcessEngine processEngine;
 
     public static ProcessEngineConfiguration getWorkflowProcessEngineConfiguration() {
         try {
-            return ProcessEngineConfiguration.createProcessEngineConfigurationFromResource(MCR_BPMN_CONFIG_FILE);
+            Map<String, String> props = MCRConfiguration2.getSubPropertiesMap(WF_PROCESS_ENGINE_PROPERTIES_PREFIX);
+            StandaloneProcessEngineConfiguration peConf
+                = (StandaloneProcessEngineConfiguration) ProcessEngineConfiguration
+                    .createStandaloneProcessEngineConfiguration();
+            if (props.containsKey("JdbcDriver")) {
+                peConf.setJdbcDriver(props.get("JdbcDriver"));
+            }
+            if (props.containsKey("JdbcUrl")) {
+                peConf.setJdbcUrl(props.get("JdbcUrl"));
+            }
+            if (props.containsKey("JdbcUsername")) {
+                peConf.setJdbcUsername(props.get("JdbcUsername"));
+            }
+            if (props.containsKey("JdbcPassword")) {
+                peConf.setJdbcPassword(props.get("JdbcPassword"));
+            }
+            if (props.containsKey("DatabaseSchema")) {
+                peConf.setDatabaseSchema(props.get("DatabaseSchema"));
+                // databaseTablePrefix = databaseSchema + '.' 
+                peConf.setDatabaseTablePrefix(props.get("DatabaseSchema") + ".");
+            }
 
+            // default values, currently no support to change via MyCoRe properties
+            peConf.setHistoryTimeToLive("P7D");
+            peConf.setDatabaseSchemaUpdate("true");
+            peConf.setJobExecutorActivate(false);
+
+            peConf.getProcessEnginePlugins().add(new MCRMyCoReIDMPlugin());
+            return peConf;
         } catch (Exception e) {
-            throw new MCRException("Workflow Engine configuration not found", e);
+            throw new MCRException("Workflow Engine could not be configured", e);
         }
     }
 
@@ -93,7 +123,7 @@ public class MCRBPMNMgr {
         String prop = "";
         try {
             prop = "MCR.Workflow.WorkflowMgr.Class.create_object_simple." + mode;
-            mgr = (MCRWorkflowMgr) MCRConfiguration2.getInstanceOf(prop).orElseThrow();
+            mgr = MCRConfiguration2.getInstanceOf(MCRWorkflowMgr.class, prop).orElseThrow();
         } catch (Exception e) {
             throw new MCRException("Could not instantiate MCRWorkflowMgr for " + prop, e);
         }
