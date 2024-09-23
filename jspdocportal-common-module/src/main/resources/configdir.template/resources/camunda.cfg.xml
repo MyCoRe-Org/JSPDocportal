@@ -5,8 +5,8 @@
     class="org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration">
 
     <!-- H2 (Test and Debugging) -->
-    <!-- Please copy the JAR file for H2 version 1.4.199 (last version tested for compatibility with MyCoRe)
-         from https://repo1.maven.org/maven2/com/h2database/h2/1.4.199/h2-1.4.199.jar
+    <!-- Please copy the JAR file for H2 latest version 2.3.x (last version tested for compatibility with MyCoRe)
+         from https://repo1.maven.org/maven2/com/h2database/h2/2.3.232/h2-2.3.232.jar
          into /lib folder of the configuration directory -->
     <property name="jdbcDriver" value="org.h2.Driver" />
     <property name="jdbcUrl" value="jdbc:h2:file:c:/Users/mcradmin/AppData/Local/MyCoRe/myapp/data/h2/bpm" />
@@ -25,6 +25,7 @@
     <property name="jdbcPassword" value="***" />
     -->
     
+    <property name="historyTimeToLive" value="P1D" />
     <property name="databaseSchemaUpdate" value="true" />
     <property name="jobExecutorActivate" value="false" />
 
