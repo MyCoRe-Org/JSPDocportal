@@ -61,6 +61,13 @@ public class MCRBPMNMgr {
 
     private static ProcessEngine processEngine;
 
+    /**
+     * initializes Camunda Workflow processEngine from MyCoRe properties
+     * see https://docs.camunda.org/manual/7.21/user-guide/spring-boot-integration/configuration/
+     * for documentation, default values and other options
+     * 
+     * @return the configuration object
+     */
     public static ProcessEngineConfiguration getWorkflowProcessEngineConfiguration() {
         try {
             Map<String, String> props = MCRConfiguration2.getSubPropertiesMap(WF_PROCESS_ENGINE_PROPERTIES_PREFIX);
@@ -86,8 +93,8 @@ public class MCRBPMNMgr {
             }
 
             // default values, currently no support to change via MyCoRe properties
-            peConf.setHistoryTimeToLive("P7D");
-            peConf.setDatabaseSchemaUpdate("true");
+            peConf.setHistoryTimeToLive(props.getOrDefault("HistoryTimeToLive", "P7D"));
+            peConf.setDatabaseSchemaUpdate(props.getOrDefault("DatabaseSchemaUpdate", "true"));
             peConf.setJobExecutorActivate(false);
 
             peConf.getProcessEnginePlugins().add(new MCRMyCoReIDMPlugin());
