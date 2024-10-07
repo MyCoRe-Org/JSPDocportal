@@ -57,7 +57,7 @@ public class MCRBPMNMgr {
 
     public static final String WF_VAR_DISPLAY_DERIVATELIST = "wfObjectDisplayDerivateList";
 
-    public static final String WF_PROCESS_ENGINE_PROPERTIES_PREFIX = "MCR.Worflow.ProcessEngine.";
+    public static final String WF_PROCESS_ENGINE_PROPERTIES_PREFIX = "MCR.Workflow.ProcessEngine.";
 
     private static ProcessEngine processEngine;
 
