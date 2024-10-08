@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.mycore.access.MCRAccessException;
@@ -17,6 +18,8 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mcr.cronjob.MCRCronjob;
 import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 import org.mycore.util.concurrent.MCRFixedUserCallable;
 
 /**
@@ -61,7 +64,11 @@ public class MCRSetStatePublishedStableCronjob extends MCRCronjob {
                     params.set("fq", "objectKind:mycoreobject");
 
                     try {
-                        final QueryResponse response = solrClient.query(params);
+
+                        QueryRequest queryRequest = new QueryRequest(params);
+                        MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                            MCRSolrAuthenticationLevel.SEARCH);
+                        final QueryResponse response = queryRequest.process(solrClient);
                         response.getResults().stream()
                             .map(result -> (String) result.get("id"))
                             .map(MCRObjectID::getInstance)

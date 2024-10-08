@@ -40,6 +40,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.mycore.common.config.MCRConfiguration2;
@@ -94,7 +95,8 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
                         SolrQuery query = new SolrQuery(key);
                         query.setRows(0);
                         try {
-                            QueryResponse response = solrClient.query(query);
+                            QueryRequest queryRequest = new QueryRequest(query);
+                            QueryResponse response = queryRequest.process(solrClient);
                             SolrDocumentList solrResults = response.getResults();
                             return (int) solrResults.getNumFound();
                         } catch (SolrServerException e) {

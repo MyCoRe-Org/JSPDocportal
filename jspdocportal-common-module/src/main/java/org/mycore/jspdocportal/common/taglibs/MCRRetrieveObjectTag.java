@@ -32,6 +32,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Document;
@@ -43,6 +44,8 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
 import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -155,7 +158,10 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
                     SolrQuery solrQuery = new SolrQuery();
                     solrQuery.setQuery(query);
                     solrQuery.setFields("id");
-                    QueryResponse solrResponse = solrClient.query(solrQuery);
+                    QueryRequest queryRequest = new QueryRequest(solrQuery);
+                    MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                        MCRSolrAuthenticationLevel.SEARCH);
+                    QueryResponse solrResponse = queryRequest.process(solrClient);
                     SolrDocumentList solrResults = solrResponse.getResults();
 
                     if(solrResults.size()>0) {

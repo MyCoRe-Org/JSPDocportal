@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -37,6 +38,8 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.frontend.jersey.MCRCacheControl;
 import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import jakarta.servlet.ServletContext;
@@ -102,7 +105,10 @@ public class MCRAPIExplore {
         processFiltersParam(filter, q);
 
         try {
-            QueryResponse solrResponse = solrClient.query(q);
+            QueryRequest queryRequest = new QueryRequest(q);
+            MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                MCRSolrAuthenticationLevel.SEARCH);
+            QueryResponse solrResponse = queryRequest.process(solrClient);
             response.getHeader().setRows(q.getRows() == null ? 10 : q.getRows());
             SolrDocumentList solrResults = solrResponse.getResults();
             response.getHeader().setStart(solrResults.getStart());
