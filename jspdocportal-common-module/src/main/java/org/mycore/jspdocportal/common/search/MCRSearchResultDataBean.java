@@ -39,6 +39,7 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.SortClause;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -49,6 +50,8 @@ import org.jdom2.Document;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -193,7 +196,10 @@ public class MCRSearchResultDataBean implements Serializable {
 
         try {
             facetResult.clear();
-            solrQueryResponse = solrClient.query(solrQuery);
+            QueryRequest queryRequest = new QueryRequest(solrQuery);
+            MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                MCRSolrAuthenticationLevel.SEARCH);
+            solrQueryResponse = queryRequest.process(solrClient);
             SolrDocumentList solrResults = solrQueryResponse.getResults();
             if (solrResults.getNumFound() < start) {
                 start = 0;

@@ -14,6 +14,7 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -23,6 +24,8 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.jspdocportal.common.search.MCRSearchResultDataBean;
 import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.GET;
@@ -69,7 +72,11 @@ public class MCRIndexBrowserController {
 
             firstSelector.clear();
             try {
-                for (Count c : solrClient.query(q).getFacetFields().get(0).getValues()) {
+                QueryRequest queryRequest = new QueryRequest(q);
+                MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                    MCRSolrAuthenticationLevel.SEARCH);
+                QueryResponse response = queryRequest.process(solrClient);
+                for (Count c : response.getFacetFields().get(0).getValues()) {
                     if (c.getCount() > 0 && c.getName().length() > 0) {
                         firstSelector.add(c.getName().substring(0, 1));
                     }

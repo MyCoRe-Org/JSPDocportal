@@ -12,12 +12,15 @@ import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.glassfish.jersey.server.mvc.Viewable;
 import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.DefaultValue;
@@ -75,7 +78,10 @@ public class MCRViewerController {
         solrQuery.setRows(1);
 
         try {
-            QueryResponse solrResponse = solrClient.query(solrQuery);
+            QueryRequest queryRequest = new QueryRequest(solrQuery);
+            MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                MCRSolrAuthenticationLevel.SEARCH);
+            QueryResponse solrResponse = queryRequest.process(solrClient);
             SolrDocumentList solrResults = solrResponse.getResults();
             if (solrResults.size() > 0) {
                 SolrDocument solrDoc = solrResults.get(0);
