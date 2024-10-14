@@ -51,6 +51,8 @@ import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -96,6 +98,8 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
                         query.setRows(0);
                         try {
                             QueryRequest queryRequest = new QueryRequest(query);
+                            MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                                MCRSolrAuthenticationLevel.SEARCH);
                             QueryResponse response = queryRequest.process(solrClient);
                             SolrDocumentList solrResults = response.getResults();
                             return (int) solrResults.getNumFound();
