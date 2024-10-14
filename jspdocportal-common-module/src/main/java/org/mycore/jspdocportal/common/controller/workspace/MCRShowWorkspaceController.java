@@ -1,7 +1,6 @@
 package org.mycore.jspdocportal.common.controller.workspace;
 
 import java.io.ByteArrayOutputStream;
-import java.io.StringWriter;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -10,13 +9,13 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
 import javax.xml.transform.TransformerFactory;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.camunda.bpm.engine.RuntimeService;
@@ -67,8 +66,8 @@ import jakarta.ws.rs.core.Response;
 public class MCRShowWorkspaceController {
     private static Logger LOGGER = LogManager.getLogger(MCRShowWorkspaceController.class);
 
-    private MCRMODSCatalogService modsCatService = (MCRMODSCatalogService) MCRConfiguration2
-        .getInstanceOf("MCR.Workflow.MODSCatalogService.class").orElse(null);
+    private MCRMODSCatalogService modsCatService = MCRConfiguration2
+        .getInstanceOf(MCRMODSCatalogService.class, "MCR.Workflow.MODSCatalogService.class").orElse(null);
 
     @POST
     public Response submitForm(@Context HttpServletRequest request) {
@@ -396,7 +395,7 @@ public class MCRShowWorkspaceController {
             LOGGER.error(e);
             txt = e.getMessage();
         }
-        ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_RECORD_IDENTIFIER, StringUtils.defaultString(txt, ""));
+        ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_RECORD_IDENTIFIER, Objects.toString(txt, ""));
 
         //Persistent Identifier (URN für Pica)
         try {
@@ -408,7 +407,7 @@ public class MCRShowWorkspaceController {
             LOGGER.error(e);
             txt = e.getMessage();
         }
-        ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_PERSISTENT_IDENTIFIER, StringUtils.defaultString(txt, ""));
+        ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_PERSISTENT_IDENTIFIER, Objects.toString(txt, ""));
 
         // LicenceInfo ... TODO MOVE TO XSLT for Description
         ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_LICENCE_HTML, "");

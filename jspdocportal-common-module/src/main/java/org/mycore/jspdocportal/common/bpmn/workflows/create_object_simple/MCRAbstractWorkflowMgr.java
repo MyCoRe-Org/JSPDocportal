@@ -240,7 +240,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                 for (String flag : mcrWFObj.getService().getFlags("mcr-delete:doctype")) {
                     mcrObj.getService().addFlag("mcr-delete:doctype", flag);
                 }
-                if ("deleted".equals(mcrWFObj.getService().getState().getID())) {
+                if ("deleted".equals(mcrWFObj.getService().getState().getId())) {
                     mcrObj.getService().setState(new MCRCategoryID(
                         MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"),
                         "deleted"));
@@ -335,7 +335,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                         LOGGER.error(mpe);
                     }
                     if (derObj != null && derObj.getService().getState() != null) {
-                        String state = derObj.getService().getState().getID();
+                        String state = derObj.getService().getState().getId();
                         if (state.equals("new")) {
                             MCRMetadataManager.delete(derObj);
                         } else {
@@ -354,7 +354,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
 
                 mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
                 if (mcrObj.getService().getState() != null &&
-                    "new".equals(mcrObj.getService().getState().getID())) {
+                    "new".equals(mcrObj.getService().getState().getId())) {
                     MCRMetadataManager.delete(mcrObj);
                 } else {
                     mcrObj.getService().removeFlags("editedby");
@@ -380,7 +380,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
             if (mcrDerID != null && MCRMetadataManager.exists(mcrDerID)) {
                 MCRDerivate mcrDer = MCRMetadataManager.retrieveMCRDerivate(mcrDerID);
                 if (mcrDer.getService().getState() == null
-                    || "new|published".contains(mcrDer.getService().getState().getID())) {
+                    || "new|published".contains(mcrDer.getService().getState().getId())) {
                     mcrDer.getService().removeFlags("editedby");
                     mcrDer.getService().addFlag("editedby", MCRUserManager.getCurrentUser().getUserID());
                 }
@@ -427,12 +427,12 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
             MCRDerivate der = MCRBPMNUtils.loadMCRDerivateFromWorkflowDirectory(mcrObj.getId(),
                 MCRObjectID.getInstance(derID));
             der.setOrder(wfDerivateIDs.indexOf(derID) + 1);
-            if ("deleted".equals(mcrObj.getService().getState().getID())) {
+            if ("deleted".equals(mcrObj.getService().getState().getId())) {
                 der.getService().setState(new MCRCategoryID(
                     MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"),
                     "deleted"));
             } else if (der.getService().getState() == null
-                || "new|review".contains(der.getService().getState().getID())) {
+                || "new|review".contains(der.getService().getState().getId())) {
                 der.getService().setState(new MCRCategoryID(
                     MCRConfiguration2.getString("MCR.Metadata.Service.State.Classification.ID").orElse("state"),
                     "published"));

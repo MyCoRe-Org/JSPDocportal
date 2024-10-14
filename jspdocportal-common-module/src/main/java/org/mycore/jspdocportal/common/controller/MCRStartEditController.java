@@ -47,7 +47,7 @@ public class MCRStartEditController  {
                 if (MCRAccessManager.checkPermission(mcrid, "writedb")) {
                     MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrid);
                     MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
-                    if (Arrays.asList("published", "deleted", "reserved").contains(mcrObj.getService().getState().getID())) {
+                    if (Arrays.asList("published", "deleted", "reserved").contains(mcrObj.getService().getState().getId())) {
                     	//String mode = retrieveModeFromMetadata(mcrObj);
                     	//TODO validate mode
                         Map<String, Object> variables = new HashMap<String, Object>();
