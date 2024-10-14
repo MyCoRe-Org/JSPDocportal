@@ -46,6 +46,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.glassfish.jersey.server.mvc.Viewable;
@@ -54,6 +55,8 @@ import org.mycore.jspdocportal.ir.depotapi.HashedDirectoryStructure;
 import org.mycore.jspdocportal.ir.pdfdownload.PDFGenerator;
 import org.mycore.jspdocportal.ir.pdfdownload.PDFGeneratorService;
 import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
@@ -99,7 +102,10 @@ public class MCRPDFDownloadController {
             query.setQuery("recordIdentifier:" + recordIdentifier.replaceFirst("_", "/"));
 
             try {
-                QueryResponse response = solrClient.query(query);
+                QueryRequest queryRequest = new QueryRequest(query);
+                MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                    MCRSolrAuthenticationLevel.SEARCH);
+                QueryResponse response = queryRequest.process(solrClient);
                 SolrDocumentList solrResults = response.getResults();
 
                 if (solrResults.getNumFound() > 0) {
@@ -145,7 +151,10 @@ public class MCRPDFDownloadController {
         query.setQuery("recordIdentifier:" + recordIdentifier.replaceFirst("_", "/"));
 
         try {
-            QueryResponse response = solrClient.query(query);
+            QueryRequest queryRequest = new QueryRequest(query);
+            MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                MCRSolrAuthenticationLevel.SEARCH);
+            QueryResponse response = queryRequest.process(solrClient);
             SolrDocumentList solrResults = response.getResults();
 
             if (solrResults.getNumFound() > 0) {

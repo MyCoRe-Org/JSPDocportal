@@ -34,6 +34,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Content;
@@ -59,6 +60,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 
 /**
  * This servlet response the MCRObject certain by the call path
@@ -127,7 +130,10 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
             query.setQuery(queryString);
 
             try {
-                QueryResponse solrResponse = solrClient.query(query);
+                QueryRequest queryRequest = new QueryRequest(query);
+                MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                    MCRSolrAuthenticationLevel.SEARCH);
+                QueryResponse solrResponse = queryRequest.process(solrClient);
                 SolrDocumentList solrResults = solrResponse.getResults();
 
                 if (solrResults.getNumFound() > 0) {

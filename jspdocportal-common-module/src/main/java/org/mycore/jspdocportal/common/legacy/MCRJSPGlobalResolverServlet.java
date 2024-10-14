@@ -33,6 +33,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
@@ -49,6 +50,8 @@ import org.mycore.jspdocportal.common.controller.MCRResolvingController;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.solr.MCRSolrCoreManager;
 import org.mycore.solr.MCRSolrUtils;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -115,7 +118,10 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
                 SolrQuery solrQuery = new SolrQuery();
                 solrQuery.setQuery("gnd_uri:" + MCRSolrUtils.escapeSearchValue("http://d-nb.info/gnd/" + value.trim()));
                 solrQuery.setFields("id");
-                QueryResponse solrResponse = solrClient.query(solrQuery);
+                QueryRequest queryRequest = new QueryRequest(solrQuery);
+                MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                    MCRSolrAuthenticationLevel.SEARCH);
+                QueryResponse solrResponse = queryRequest.process(solrClient);
                 SolrDocumentList solrResults = solrResponse.getResults();
 
                 Iterator<SolrDocument> it = solrResults.iterator();
@@ -144,7 +150,10 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
                 SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
                 SolrQuery solrQuery = new SolrQuery(key + ":" + ClientUtils.escapeQueryChars(value));
                 solrQuery.setRows(1);
-                QueryResponse solrQueryResponse = solrClient.query(solrQuery);
+                QueryRequest queryRequest = new QueryRequest(solrQuery);
+                MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                    MCRSolrAuthenticationLevel.SEARCH);
+                QueryResponse solrQueryResponse = queryRequest.process(solrClient);
                 SolrDocumentList solrResults = solrQueryResponse.getResults();
                 if (solrResults.getNumFound() > 0) {
                     mcrID = String.valueOf(solrResults.get(0).getFirstValue("returnId"));

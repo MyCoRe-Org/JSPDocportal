@@ -40,6 +40,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.mycore.common.config.MCRConfiguration2;
@@ -50,6 +51,8 @@ import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -94,7 +97,10 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
                         SolrQuery query = new SolrQuery(key);
                         query.setRows(0);
                         try {
-                            QueryResponse response = solrClient.query(query);
+                            QueryRequest queryRequest = new QueryRequest(query);
+                            MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                                MCRSolrAuthenticationLevel.SEARCH);
+                            QueryResponse response = queryRequest.process(solrClient);
                             SolrDocumentList solrResults = response.getResults();
                             return (int) solrResults.getNumFound();
                         } catch (SolrServerException e) {
