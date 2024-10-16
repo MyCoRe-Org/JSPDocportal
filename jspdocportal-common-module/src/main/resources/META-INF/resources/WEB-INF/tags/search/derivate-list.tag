@@ -107,7 +107,7 @@
                           if(Files.isRegularFile(theFile)) {
                               @SuppressWarnings("rawtypes")
                               MCRFileAttributes attrs = Files.readAttributes(theFile, MCRFileAttributes.class);
-                               md5 = "; MD5: " + attrs.md5sum(); 
+                               md5 = "; MD5: " + attrs.digest().toHexString(); 
                               out.write("<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small>(" +  MCRUtils.getSizeFormatted(attrs.size()).replace(" ","&#160;") + md5 + ")</small>");
                           }
                         }
