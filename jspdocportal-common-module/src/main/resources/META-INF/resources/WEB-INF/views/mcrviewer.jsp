@@ -26,10 +26,10 @@
 <mcr:webjarLocator htmlElement="script" project="jquery" file="jquery.min.js" />
 <mcr:webjarLocator htmlElement="script" project="bootstrap" file="js/bootstrap.min.js" />
 
-<script type="text/javascript" src="${iviewBaseURL}js/iview-client-base.js"></script>
-<script type="text/javascript" src="${iviewBaseURL}js/iview-client-desktop.js"></script>
-<script type="text/javascript" src="${iviewBaseURL}js/iview-client-logo.js"></script>
-<script type="text/javascript" src="${iviewBaseURL}js/iview-client-toolbar-extender.js"></script>
+<script type="module" src="${iviewBaseURL}js/iview-client-base.es.js"></script>
+<script type="module" src="${iviewBaseURL}js/iview-client-desktop.es.js"></script>
+<script type="module" src="${iviewBaseURL}js/iview-client-logo.es.js"></script>
+<script type="module" src="${iviewBaseURL}js/iview-client-toolbar-extender.es.js"></script>
 
 <style type="text/css">
       div.mcrviewer_html{
@@ -49,9 +49,8 @@
 <mcr:session var="lang" info="language" />
 
 <c:if test="${it.doctype eq 'pdf'}">
-	<script type="text/javascript" src="${iviewBaseURL}js/iview-client-pdf.js"></script>
-	<script type="text/javascript" src="${iviewBaseURL}js/lib/pdf.js"></script>
-	<script type="text/javascript" src="${iviewBaseURL}js/iview-client-metadata.js"></script>
+	<script type="module" src="${iviewBaseURL}js/iview-client-pdf.es.js"></script>
+	<script type="module" src="${iviewBaseURL}js/iview-client-metadata.es.js"></script>
 	<style type="text/css">
       button[data-id='ShareButton']{
         border-radius:4px !important;
@@ -66,7 +65,9 @@
       }
       
     </style>
-	<script>
+	<script type="module">
+		import {MyCoReViewer} from "${iviewBaseURL}js/iview-client-base.es.js";
+
 		window.onload = function() {
 			var config = {
 				logoURL:"${applicationScope.WebApplicationBaseURL}images/mcrviewer/mcrviewer.png",
@@ -79,7 +80,7 @@
 				i18nURL : "${applicationScope.WebApplicationBaseURL}rsc/locale/translate/{lang}/component.viewer.*",
 				lang : "${lang}",
 				webApplicationBaseURL : "${applicationScope.WebApplicationBaseURL}",
-				pdfWorkerURL : "${iviewBaseURL}js/lib/pdf.worker.js",
+				pdfWorkerURL : "${iviewBaseURL}js/lib/pdf.worker.min.js",
 				canvas: {
                 	startup:{
                 		fitWidth: true
@@ -118,14 +119,14 @@
 								inGroup: "addOns"
 							} ]
 			};
-			new mycore.viewer.MyCoReViewer(jQuery("body"), config);
+			window["viewer"] = new MyCoReViewer(jQuery("body"), config);
 		};
 	</script>
 </c:if>
 <c:if test="${it.doctype eq 'mets'}">
 	<c:set var="mcrid">${it.mcrid}</c:set>
-	<script type="text/javascript" src="${iviewBaseURL}js/iview-client-mets.js"></script>
-	<script type="text/javascript" src="${iviewBaseURL}js/iview-client-metadata.js"></script>
+	<script type="module" src="${iviewBaseURL}js/iview-client-mets.es.js"></script>
+	<script type="module" src="${iviewBaseURL}js/iview-client-metadata.es.js"></script>
 	
 	<%
 	   
@@ -148,7 +149,9 @@
 		}
 	%>
 
-	<script>
+	<script type="module">
+		import {MyCoReViewer} from "${iviewBaseURL}js/iview-client-base.es.js";
+
 		window.onload = function() {
 			var config = {
 				mobile : false,
@@ -240,7 +243,7 @@
 				objId : ""
 
 			};
-			new mycore.viewer.MyCoReViewer(jQuery("body"), config);
+			window["viewer"] = new MyCoReViewer(jQuery("body"), config);
 		};
 	</script>
 </c:if>

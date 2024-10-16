@@ -22,13 +22,12 @@
 <mcr:session var="lang" info="language" />
 
     <link href="${iviewBaseURL}css/default.css" type="text/css" rel="stylesheet">
-    <script src="${iviewBaseURL}js/iview-client-base.js"></script>
-    <script src="${iviewBaseURL}js/iview-client-frame.js"></script>
+    <script type="module" src="${iviewBaseURL}js/iview-client-base.es.js"></script>
+    <script type="module" src="${iviewBaseURL}js/iview-client-frame.es.js"></script>
     
     
 <c:if test="${doctype eq 'pdf' }">
-    <script src="${iviewBaseURL}js/iview-client-pdf.js"></script>
-    <script src="${iviewBaseURL}js/lib/pdf.js"></script>
+    <script type="module" src="${iviewBaseURL}js/iview-client-pdf.es.js"></script>
 	<style type="text/css">
 		.mycoreViewer .navbar{
 			position: absolute; left: 0px; right: 0px; top: 0px;
@@ -66,9 +65,11 @@
 	}
 %>
 
-    <script>
+    <script type="module">
+    import {MyCoReViewer} from "${iviewBaseURL}js/iview-client-base.es.js";
+
     window.addEventListener("load", function(){
-            new mycore.viewer.MyCoReViewer(jQuery("#${id}"), {
+            window["viewer"] = new MyCoReViewer(jQuery("#${id}"), {
                 mobile: false,
                 pdfProviderURL: "${applicationScope.WebApplicationBaseURL}file/${mcrid}/${derid}/${maindoc}",
                 derivate: "${mcrid}",
@@ -78,7 +79,7 @@
                 i18nURL: "${applicationScope.WebApplicationBaseURL}rsc/locale/translate/{lang}/component.viewer.*",
                 lang: "${lang}",
                 webApplicationBaseURL: "${applicationScope.WebApplicationBaseURL}",
-                pdfWorkerURL: "${iviewBaseURL}js/lib/pdf.worker.js",
+                pdfWorkerURL: "${iviewBaseURL}js/lib/pdf.worker.min.js",
                 canvas: {
                 	startup:{
                 		fitWidth: true
@@ -107,7 +108,7 @@
 
 
 <c:if test="${doctype eq 'mets' }">
-    <script src="${iviewBaseURL}js/iview-client-mets.js"></script>
+    <script type="module" src="${iviewBaseURL}js/iview-client-mets.es.js"></script>
 	<style type="text/css">
 		.mycoreViewer .navbar{
 			position: absolute; left: 0px; right: 0px; top: 0px;
@@ -154,8 +155,10 @@
 
     <script>
     window.addEventListener("load", function(){
-            new mycore.viewer.MyCoReViewer(jQuery("#${id}"),  {
-            	mobile: false,
+        import {MyCoReViewer} from "${iviewBaseURL}js/iview-client-base.es.js";
+        
+        window["viewer"] = new MyCoReViewer(jQuery("#${id}"), {
+                mobile: false,
                 doctype: "mets",
                 metsURL: "${applicationScope.WebApplicationBaseURL}file/${mcrid}/${derid}/${maindoc}",
                 imageXmlPath: "${applicationScope.WebApplicationBaseURL}tiles/${fn:replace(recordIdentifier,'/','_')}/",
