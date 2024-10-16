@@ -23,7 +23,7 @@ public class MCRDiskcacheManager {
         MCRConfiguration2.getString("MCR.Diskcache.EnabledCaches").ifPresent(x -> {
             Arrays.asList(x.split(",")).forEach(c -> {
                 caches.put(c,
-                    MCRConfiguration2.<MCRDiskcacheConfig>getInstanceOf(MCR_PROPERTY_CONFIG_PREFIX + c + ".Class")
+                    MCRConfiguration2.getInstanceOf(MCRDiskcacheConfig.class, MCR_PROPERTY_CONFIG_PREFIX + c + ".Class")
                         .orElseThrow(() -> MCRConfiguration2
                             .createConfigurationException(MCR_PROPERTY_CONFIG_PREFIX + c + ".Class")));
             });
@@ -31,9 +31,10 @@ public class MCRDiskcacheManager {
             LOGGER.warn("-----------------------------------");
             for (Entry<String, MCRDiskcacheConfig> e : caches.entrySet()) {
                 DiskLruCache c = e.getValue().getCache();
+                String size = c == null ? "null" : Long.toString(c.size());
                 LOGGER.warn(e.getKey() + ":: urlSuffix: " + e.getValue().getURLSuffix()
                     + " / cacheObject: " + c
-                    + " / currentCacheSize: " + c == null ? "null" : Long.valueOf(c.size()));
+                    + " / currentCacheSize: " + size);
             }
         });
     }

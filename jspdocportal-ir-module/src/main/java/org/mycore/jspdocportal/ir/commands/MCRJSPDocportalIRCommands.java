@@ -61,8 +61,8 @@ public class MCRJSPDocportalIRCommands extends MCRAbstractCommands {
         "./mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']",
         Filters.element(), null, MODS_NAMESPACE);
 
-    private static MCRMODSCatalogService MODS_CATALOG_SERVICE = (MCRMODSCatalogService) MCRConfiguration2
-        .getInstanceOf("MCR.Workflow.MODSCatalogService.class").orElse(null);
+    private static MCRMODSCatalogService MODS_CATALOG_SERVICE = MCRConfiguration2
+        .getInstanceOf(MCRMODSCatalogService.class, "MCR.Workflow.MODSCatalogService.class").orElse(null);
 
     /**
     * Update the MODS metadata of the given object with data from catalog
