@@ -33,7 +33,6 @@
 	result.setSort("ir.sortstring " + sortOrder);
     result.setRows(999);
 	StringBuffer sb = new StringBuffer(MCRFrontendUtil.getBaseURL());
-    //sb.append("resolve/recordIdentifier/"+recordIdentifier.replace("/", "%252F")+"?");
     sb.append("resolve/id/" + hostMcrID + "?");
 	if(request.getParameter("_search")!=null){sb.append("&_search="+URLEncoder.encode(request.getParameter("_search"), StandardCharsets.UTF_8));}
 	if(request.getParameter("_hit")!=null){sb.append("&_hit="+ URLEncoder.encode(request.getParameter("_hit"), StandardCharsets.UTF_8));}

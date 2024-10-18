@@ -81,7 +81,7 @@
             <xsl:element name="a">
               <xsl:attribute name="class">ir-btn-goto-top btn btn-outline-secondary btn-sm ml-2</xsl:attribute>
               <xsl:if test="./mods:recordInfo/mods:recordIdentifier">
-                <xsl:attribute name="href">{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(./mods:recordInfo/mods:recordIdentifier, '/', '%252F')}</xsl:attribute>
+                <xsl:attribute name="href">{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(./mods:recordInfo/mods:recordIdentifier, '/', '_')}</xsl:attribute>
               </xsl:if>
               <xsl:attribute name="data-toggle">popover</xsl:attribute>
               <xsl:attribute name="data-placement">bottom</xsl:attribute>

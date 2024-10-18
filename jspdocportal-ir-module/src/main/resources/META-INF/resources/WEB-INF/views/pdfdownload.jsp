@@ -37,7 +37,7 @@
    
 	 
 	 <c:if test="${empty it.errorMessages}">
-        <mcr:retrieveObject query="recordIdentifier:${fn:replace(it.recordIdentifier, 'rosdok_', 'rosdok/')}" varDOM="doc" />
+        <mcr:retrieveObject query="recordIdentifier:${it.recordIdentifier}" varDOM="doc" />
 		<mcr:setNamespace prefix="mods" uri="http://www.loc.gov/mods/v3" />
 		<x:choose>
    		<x:when select="$doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo">
