@@ -51,7 +51,7 @@
     <field name="ir.identifier">[xslt]Saxon</field>
   
   	<xsl:for-each select="def.modsContainer/modsContainer[@type='imported' or @type='created'][1]/mods:mods">
-      <field name="recordIdentifier"><xsl:value-of select="mods:recordInfo/mods:recordIdentifier" /></field>
+      <field name="recordIdentifier"><xsl:value-of select="translate(mods:recordInfo/mods:recordIdentifier,'/','_')" /></field>
 
       <!-- Do not prefix searchfields for identifiers with "ir.*", 
            because these fields will be used in /resolve/{key}/{value} -->  		
@@ -164,7 +164,7 @@
       
       <xsl:for-each select="mods:relatedItem[(@otherType='hierarchical' or @otherType='appears_in') and not(@displayLabel='appears_in')]">
         <xsl:for-each select="mods:recordInfo[1]/mods:recordIdentifier">
-          <field name="ir.host.recordIdentifier"><xsl:value-of select="." /></field> 
+          <field name="ir.host.recordIdentifier"><xsl:value-of select="translate(.,'/','_')" /></field> 
         </xsl:for-each>
       </xsl:for-each>
       <xsl:for-each select="mods:relatedItem[(@otherType='hierarchical' or @otherType='appears_in') and ./mods:part/mods:text[@type='sortstring'] and not(@displayLabel='appears_in')][last()]">
