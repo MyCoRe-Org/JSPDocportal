@@ -190,7 +190,7 @@
 			    	    <c:set var="recordIdentifier"><x:out select="$doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier"/></c:set>
                         <c:set var="doctype"><x:out select="substring-after($doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI,'#')"/></c:set>
                         <c:set var="zdbid"><x:out select="$doc/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='zdb']"/></c:set>
-  
+
                         <browse:docdetails-structure hostRecordIdentifier="${recordIdentifier}" hostMcrID="${it.id}" hostDoctype="${doctype}" hostZDBID="${zdbid}" />
 				      </div>
 			        </div>

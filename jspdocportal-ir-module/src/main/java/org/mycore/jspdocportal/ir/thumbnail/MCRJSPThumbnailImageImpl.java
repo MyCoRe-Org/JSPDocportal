@@ -52,8 +52,8 @@ public class MCRJSPThumbnailImageImpl extends MCRThumbnailImageImpl {
         }
         //we assume it's a RecordIdentifier
         String recordId = URLDecoder.decode(URLDecoder.decode(id, StandardCharsets.UTF_8), StandardCharsets.UTF_8);
-        if (!recordId.contains("/")) {
-            recordId = recordId.replaceFirst("_", "/");
+        if (recordId.contains("/")) {
+            recordId = recordId.replace("/", "_");
         }
 
         Optional<MCRPIRegistrationInfo> oPiInfo = MCRPIManager.getInstance().getInfo(recordId,  MCRLocalID.TYPE);

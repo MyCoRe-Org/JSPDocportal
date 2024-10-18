@@ -157,7 +157,6 @@
 				mobile : false,
 				doctype : "mets",
 
-				//derivate: "${fn:replace(it.recordIdentifier,'/','%252F')}",
 				derivate : "${derid}",
 				filePath : "${it.filePath}",
 				metsURL : "${applicationScope.WebApplicationBaseURL}file/${mcrid}/${derid}/${maindoc}",
@@ -167,7 +166,6 @@
 				i18nURL : "${applicationScope.WebApplicationBaseURL}rsc/locale/translate/{lang}/component.viewer.*",
 				lang : "${lang}",
 				webApplicationBaseURL : "${applicationScope.WebApplicationBaseURL}",
-				// derivateURL : "${applicationScope.WebApplicationBaseURL}depot/${fn:replace(it.recordIdentifier,'/','%25252F')}/",
 				derivateURL : "${applicationScope.WebApplicationBaseURL}file/${mcrid}/${derid}/",
 				canvas: {
                 	startup:{

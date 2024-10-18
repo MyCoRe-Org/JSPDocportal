@@ -99,7 +99,7 @@ public class MCRPDFDownloadController {
 
             SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
             SolrQuery query = new SolrQuery();
-            query.setQuery("recordIdentifier:" + recordIdentifier.replaceFirst("_", "/"));
+            query.setQuery("recordIdentifier:" + recordIdentifier.replace("/", "_"));
 
             try {
                 QueryRequest queryRequest = new QueryRequest(query);
@@ -148,7 +148,7 @@ public class MCRPDFDownloadController {
 
         SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
         SolrQuery query = new SolrQuery();
-        query.setQuery("recordIdentifier:" + recordIdentifier.replaceFirst("_", "/"));
+        query.setQuery("recordIdentifier:" + recordIdentifier.replaceFirst("/", "_"));
 
         try {
             QueryRequest queryRequest = new QueryRequest(query);

@@ -33,7 +33,7 @@
               <xsl:attribute name="class">btn btn-sm btn-outline-secondary</xsl:attribute>
               <xsl:choose>
                 <xsl:when test="./mods:recordInfo/mods:recordIdentifier[@source='DE-28']">
-                  <xsl:attribute name="href" select="concat($WebApplicationBaseURL, 'resolve/recordIdentifier/', replace(./mods:recordInfo/mods:recordIdentifier[@source='DE-28'],'/', '%252F'))" />   
+                  <xsl:attribute name="href" select="concat($WebApplicationBaseURL, 'resolve/recordIdentifier/', replace(./mods:recordInfo/mods:recordIdentifier[@source='DE-28'],'/', '_'))" />   
                 </xsl:when>
                 <xsl:when test="./mods:identifier[@type='doi']">
                   <xsl:attribute name="href" select="concat('https://doi.org/', ./mods:identifier[@type='doi'])" />   
@@ -83,7 +83,7 @@
               <xsl:attribute name="class">btn btn-sm btn-outline-secondary ml-3</xsl:attribute>
               <xsl:choose>
                 <xsl:when test="./mods:recordInfo/mods:recordIdentifier[@source='DE-28']">
-                  <xsl:attribute name="href" select="concat($WebApplicationBaseURL, 'resolve/recordIdentifier/', replace(./mods:recordInfo/mods:recordIdentifier[@source='DE-28'],'/', '%252F'))" />   
+                  <xsl:attribute name="href" select="concat($WebApplicationBaseURL, 'resolve/recordIdentifier/', replace(./mods:recordInfo/mods:recordIdentifier[@source='DE-28'],'/', '_'))" />   
                 </xsl:when>
                 <xsl:when test="./mods:identifier[@type='doi']">
                   <xsl:attribute name="href" select="concat('https://doi.org/', ./mods:identifier[@type='doi'])" />   

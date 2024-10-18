@@ -143,8 +143,8 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
         } else {
             try {
                 value = URLDecoder.decode(URLDecoder.decode(value, "UTF-8"), "UTF-8");
-                if("recordIdentifier".equals(key) && !value.contains("/")) {
-                    value = value.replaceFirst("_", "/");
+                if("recordIdentifier".equals(key) && value.contains("/")) {
+                    value = value.replaceFirst("/", "_");
                 }
 
                 SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
