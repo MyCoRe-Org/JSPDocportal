@@ -408,7 +408,7 @@ public class MCRResolvingController  {
             MCRObject o = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrID));
             for (MCRMetaEnrichedLinkID derMetaLink : o.getStructure().getDerivates()) {
                 if (derMetaLink.getClassifications().size() > 0 && 
-                    "MCRVIEWER_METS".equals(derMetaLink.getClassifications().get(0).getID())) {
+                    "MCRVIEWER_METS".equals(derMetaLink.getClassifications().get(0).getId())) {
                     MCRObjectID derID = derMetaLink.getXLinkHrefID();
                     Path root = MCRPath.getRootPath(derID.toString());
                     try (DirectoryStream<Path> ds = Files.newDirectoryStream(root)) {
@@ -504,7 +504,7 @@ public class MCRResolvingController  {
             MCRObject o = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrID));
             for (MCRMetaEnrichedLinkID derMetaLink : o.getStructure().getDerivates()) {
                 if (derMetaLink.getClassifications().size() > 0 && 
-                    "DV_METS".equals(derMetaLink.getClassifications().get(0).getID())) {
+                    "DV_METS".equals(derMetaLink.getClassifications().get(0).getId())) {
                     MCRObjectID derID = derMetaLink.getXLinkHrefID();
                     Path root = MCRPath.getRootPath(derID.toString());
                     try (DirectoryStream<Path> ds = Files.newDirectoryStream(root)) {

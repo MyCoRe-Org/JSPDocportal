@@ -23,7 +23,7 @@
 package org.mycore.jspdocportal.common;
 
 import org.mycore.common.MCRException;
-import org.mycore.common.MCRTransactionHelper;
+import org.mycore.common.MCRTransactionManager;
 
 /**
  * This AutoClosable can be used to begin and commit
@@ -42,9 +42,9 @@ public class MCRHibernateTransactionWrapper implements AutoCloseable {
             et.begin();
         }
         */
-        if (!MCRTransactionHelper.isTransactionActive()) {
+        if (!MCRTransactionManager.hasActiveTransactions()) {
             responsibleForTransaction = true;
-            MCRTransactionHelper.beginTransaction();
+            MCRTransactionManager.beginTransactions();
         }
     }
 
@@ -56,10 +56,10 @@ public class MCRHibernateTransactionWrapper implements AutoCloseable {
             EntityTransaction et = MCREntityManagerProvider.getCurrentEntityManager().getTransaction();
             et.commit();
             */
-            if (MCRTransactionHelper.transactionRequiresRollback()) {
-                MCRTransactionHelper.rollbackTransaction();
+            if (MCRTransactionManager.hasRollbackOnlyTransactions()) {
+            	MCRTransactionManager.rollbackTransactions();
             } else {
-                MCRTransactionHelper.commitTransaction();
+            	MCRTransactionManager.commitTransactions();
             }
         }
     }

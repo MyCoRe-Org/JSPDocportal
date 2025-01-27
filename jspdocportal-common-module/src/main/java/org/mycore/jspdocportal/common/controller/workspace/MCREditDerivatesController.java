@@ -446,10 +446,10 @@ public class MCREditDerivatesController {
                 if (lblMode.isPresent()) {
                     List<String> modes = Arrays.asList(lblMode.get().getText().split("\\s+"));
                     if (modes.contains(mode)) {
-                        result.put(c.getId().getID(), c.getCurrentLabel().get().getText());
+                        result.put(c.getId().getId(), c.getCurrentLabel().get().getText());
                     }
                 } else {
-                    result.put(c.getId().getID(), c.getCurrentLabel().get().getText());
+                    result.put(c.getId().getId(), c.getCurrentLabel().get().getText());
                 }
             }
         }

@@ -34,10 +34,10 @@ public class MCRIsObjectLockedTag extends SimpleTagSupport {
         try {
             MCRBase mcrBase = MCRMetadataManager.retrieve(MCRObjectID.getInstance(mcrid));
             MCRCategoryID state = mcrBase.getService().getState();
-            if (state != null && state.getID().equals("published")) {
+            if (state != null && state.getId().equals("published")) {
                 result = Boolean.FALSE;
             }
-            if (state != null && state.getID().equals("deleted")) {
+            if (state != null && state.getId().equals("deleted")) {
                 result = Boolean.FALSE;
             }
         } catch (MCRPersistenceException e) {

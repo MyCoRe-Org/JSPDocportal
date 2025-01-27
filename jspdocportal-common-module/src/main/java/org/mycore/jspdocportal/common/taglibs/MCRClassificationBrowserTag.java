@@ -264,9 +264,9 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
         JspWriter out = getJspContext().getOut();
        
         boolean result = didIt;
-        boolean hasChildren = countChildrenBySearch(cb,  categ.getId().getID()) > 0;
+        boolean hasChildren = countChildrenBySearch(cb,  categ.getId().getId()) > 0;
         boolean hasLinks = hasLinks(cb, categ);
-        boolean opened = path.contains(categ.getId().getID());
+        boolean opened = path.contains(categ.getId().getId());
         
         if (!(cb.hideemptyleaves && !hasLinks)) {
             result = true;
@@ -286,7 +286,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
                 if (iconURL.endsWith("_minus.gif")) {
                     title = MCRTranslation.translate("Webpage.browse.close");
                 }
-                out.write(indent + "         <a href=\"" + cbURL + "/" + categ.getId().getID() + "\" title=\"" + title
+                out.write(indent + "         <a href=\"" + cbURL + "/" + categ.getId().getId() + "\" title=\"" + title
                         + "\">");
             }
             out.write(indent + "            <img class=\"borderless\" src=\"" + baseURL + iconURL + "\" />");
@@ -296,7 +296,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
             out.write(indent + "      </div>");
             out.write(indent + "      <div class=\"cb-label\">");
             if (cb.showid) {
-                out.write(indent + "         <span class=\"cb-id\">" + categ.getId().getID() + "</span>");
+                out.write(indent + "         <span class=\"cb-id\">" + categ.getId().getId() + "</span>");
             }
 
             out.write(
@@ -307,7 +307,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
             if (cb.count) {
                 int c = 0;
                 if (cb.filter != null) {
-                    c = countBySearch(cb, categ.getId().getID());
+                    c = countBySearch(cb, categ.getId().getId());
                 } else {
                    Number n;
                    try {
@@ -415,7 +415,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
      */
     private boolean hasLinks(CBConfig cb, MCRCategory category) {
         if (cb.filter != null) {
-            return countBySearch(cb, category.getId().getID()) > 0;
+            return countBySearch(cb, category.getId().getId()) > 0;
         }
 
         if (cb.count) {
@@ -462,13 +462,13 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
                 url.append("&amp;subselect.varpath=" + request.getParameter("XSL.subselect.varpath.SESSION"));
                 url.append("&amp;subselect.webpage="
                         + URLEncoder.encode(request.getParameter("XSL.subselect.webpage.SESSION"), "UTF-8"));
-                url.append("&amp;_var_@categid=" + categ.getId().getID());
+                url.append("&amp;_var_@categid=" + categ.getId().getId());
                 url.append("&amp;_var_@type=" + URLEncoder.encode(categ.getCurrentLabel().get().getText(), "UTF-8"));
 
             } else {
                 // "normal" classification browser - do a search
                 url.append("do/search");
-                String query = URLEncoder.encode(generateQuery(cb, categ.getId().getID()), Charset.defaultCharset().name());
+                String query = URLEncoder.encode(generateQuery(cb, categ.getId().getId()), Charset.defaultCharset().name());
                 query = query.replace("\\", "%5C");
                 url.append("?q=").append(query);
                         
