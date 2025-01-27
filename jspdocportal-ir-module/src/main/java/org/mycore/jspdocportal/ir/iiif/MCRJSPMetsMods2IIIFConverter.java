@@ -174,7 +174,7 @@ public class MCRJSPMetsMods2IIIFConverter {
                 MCRIIIFAnnotation annotation = new MCRIIIFAnnotation(identifier, canvas);
                 canvas.images.add(annotation);
 
-                MCRIIIFResource resource = new MCRIIIFResource(information.getId(), MCRDCMIType.Image);
+                MCRIIIFResource resource = new MCRIIIFResource(information.getId(), MCRDCMIType.IMAGE);
                 resource.setWidth(information.width);
                 resource.setHeight(information.height);
 
@@ -225,7 +225,7 @@ public class MCRJSPMetsMods2IIIFConverter {
             if (oLabel.isPresent()) {
                 MCRIIIFResource logo = new MCRIIIFResource(
                     MCRFrontendUtil.getBaseURL() + StringUtils.removeStart(oLabel.get().getText(), "/"),
-                    MCRDCMIType.Image);
+                    MCRDCMIType.IMAGE);
                 manifest.setLogo(logo);
             }
         }
@@ -235,7 +235,7 @@ public class MCRJSPMetsMods2IIIFConverter {
     protected void processDivContainer(List<MCRIIIFRange> complete, LogicalDiv divContainer) {
         MCRIIIFRange range = new MCRIIIFRange(divContainer.getId());
         if (divContainer.getParent() == null) {
-            range.setViewingHint(MCRIIIFViewingHint.top);
+            range.setViewingHint(MCRIIIFViewingHint.TOP);
         }
         complete.add(range);
         range.setLabel((divContainer.getLabel() != null) ? divContainer.getLabel() : divContainer.getType());

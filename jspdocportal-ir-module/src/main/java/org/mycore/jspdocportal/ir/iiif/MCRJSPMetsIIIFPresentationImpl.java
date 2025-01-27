@@ -158,7 +158,7 @@ public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
             MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrid);
             Optional<MCRMetaEnrichedLinkID> optMCRViewerDerLink = mcrObj.getStructure().getDerivates().stream()
                 .filter(x -> x.getClassifications().stream()
-                    .filter(c -> "REPOS_METS".equals(c.getID()))
+                    .filter(c -> "REPOS_METS".equals(c.getId()))
                     .findFirst().isPresent())
                 .findFirst();
             if (optMCRViewerDerLink.isPresent()) {
