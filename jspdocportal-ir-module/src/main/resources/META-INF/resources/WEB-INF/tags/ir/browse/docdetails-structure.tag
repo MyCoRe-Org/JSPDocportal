@@ -27,7 +27,10 @@
         result.setQuery("ir.host.recordIdentifier:"+hostMcrID);
     }
     else {
-        result.setQuery("ir.host.recordIdentifier:"+hostRecordIdentifier+" OR ir.host.recordIdentifier:"+hostMcrID);
+        result.setQuery("ir.host.recordIdentifier:"+hostRecordIdentifier
+            +" OR ir.host.recordIdentifier:"+hostMcrID.replaceFirst("/", "_")
+            +" OR ir.host.recordIdentifier:"+hostMcrID.replaceFirst("_", "/")
+            +" OR ir.host.recordIdentifier:"+hostMcrID);
     }
 	String sortOrder = hostMcrID.contains("_document_") ? "desc" : "asc";
 	result.setSort("ir.sortstring " + sortOrder);
