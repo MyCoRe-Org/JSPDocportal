@@ -151,12 +151,21 @@ public class MCRResolvingController  {
         } else {
             try {
                 value = URLDecoder.decode(URLDecoder.decode(value, "UTF-8"), "UTF-8");
-                if("recordIdentifier".equals(key) && value.contains("/")) {
-                    value = value.replaceFirst("/", "_");
+                String query = null;
+                if ("recordIdentifier".equals(key)) {
+                    //allow both forms of recordIdentifier: rosdok_ppn12345 and rosdok/ppn12345
+                    if (!value.contains("/")) {
+                        value = value.replaceFirst("_", "/");
+                    }
+                    String value2 = value.replaceFirst("/", "_");
+                    query = key + ":" + ClientUtils.escapeQueryChars(value)
+                        + " OR " + key + ":" + ClientUtils.escapeQueryChars(value2);
+                } else {
+                    query = key + ":" + ClientUtils.escapeQueryChars(value);
                 }
 
                 SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
-                SolrQuery solrQuery = new SolrQuery(key + ":" + ClientUtils.escapeQueryChars(value));
+                SolrQuery solrQuery = new SolrQuery(query);
                 solrQuery.setRows(1);
                 QueryRequest queryRequest = new QueryRequest(solrQuery);
                 MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
