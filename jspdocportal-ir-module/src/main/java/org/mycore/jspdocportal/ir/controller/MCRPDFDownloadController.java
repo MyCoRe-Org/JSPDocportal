@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -71,6 +72,8 @@ import jakarta.ws.rs.core.StreamingOutput;
 @jakarta.ws.rs.Path("/do/pdfdownload")
 public class MCRPDFDownloadController {
 
+    private static final String PDF_EXTENSION = ".pdf";
+
     private static final Logger LOGGER = LogManager.getLogger(MCRPDFDownloadController.class);
 
     private static final String PROPERTY_DELETE_PDF_SECRET = "MCR.PDFDownload.Delete.Secret";
@@ -84,7 +87,7 @@ public class MCRPDFDownloadController {
 
         String secret = MCRConfiguration2.getString(PROPERTY_DELETE_PDF_SECRET).orElse(null);
         String secretHeader = request.getHeader(HEADER_DELETE_PDF_SECRET);
-        if (secretHeader != null && secret != null && !secret.isBlank() && secret.equals(secretHeader)) {
+        if (secret != null && !secret.isBlank() && secret.equals(secretHeader)) {
 
             String path = request.getPathInfo().replace("pdfdownload/recordIdentifier", "").replace("..", "");
             while (path.startsWith("/")) {
@@ -94,7 +97,7 @@ public class MCRPDFDownloadController {
                 return Response.status(Status.BAD_REQUEST).build();
             }
 
-            String recordIdentifier = path.endsWith(".pdf") ? path.substring(0, path.lastIndexOf("/")) : path;
+            String recordIdentifier = path.endsWith(PDF_EXTENSION) ? path.substring(0, path.lastIndexOf('/')) : path;
             recordIdentifier = recordIdentifier.replace("/", "_");
 
             SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
@@ -109,7 +112,7 @@ public class MCRPDFDownloadController {
                 SolrDocumentList solrResults = response.getResults();
 
                 if (solrResults.getNumFound() > 0) {
-                    String filename = recordIdentifier + ".pdf";
+                    String filename = recordIdentifier + PDF_EXTENSION;
                     final Path resultPDF = HashedDirectoryStructure
                         .createOutputDirectory(calculateCacheDir(), recordIdentifier).resolve(filename);
 
@@ -129,9 +132,9 @@ public class MCRPDFDownloadController {
     @GET
     @jakarta.ws.rs.Path("recordIdentifier/{path:.*}")
     public Response get(@Context HttpServletRequest request, @Context ServletContext servletContext) {
-        HashMap<String, Object> model = new HashMap<>();
+        Map<String, Object> model = new HashMap<>();
 
-        List<String> errorMessages = new ArrayList<String>();
+        List<String> errorMessages = new ArrayList<>();
         model.put("errorMessages", errorMessages);
         model.put("requestURL", request.getRequestURL().toString());
 
@@ -143,7 +146,7 @@ public class MCRPDFDownloadController {
             return Response.temporaryRedirect(URI.create(request.getContextPath())).build();
         }
 
-        String recordIdentifier = path.endsWith(".pdf") ? path.substring(0, path.lastIndexOf("/")) : path;
+        String recordIdentifier = path.endsWith(PDF_EXTENSION) ? path.substring(0, path.lastIndexOf('/')) : path;
         recordIdentifier = recordIdentifier.replace("/", "_");
 
         SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
@@ -158,7 +161,7 @@ public class MCRPDFDownloadController {
             SolrDocumentList solrResults = response.getResults();
 
             if (solrResults.getNumFound() > 0) {
-                String filename = recordIdentifier + ".pdf";
+                String filename = recordIdentifier + PDF_EXTENSION;
                 model.put("filename", filename);
 
                 final Path resultPDF = HashedDirectoryStructure
@@ -181,13 +184,15 @@ public class MCRPDFDownloadController {
                     model.put("filecreated", "unknown");
                 }
 
-                if (path.endsWith(".pdf") && ready && getProgress(servletContext, recordIdentifier) < 0) {
+                if (path.endsWith(PDF_EXTENSION) && ready && getProgress(servletContext, recordIdentifier) < 0) {
                     // download pdf
                     Path fCount = resultPDF.getParent().resolve(resultPDF.getFileName() + ".count");
                     Files.write(fCount, ".".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE,
                         StandardOpenOption.APPEND);
 
                     StreamingOutput stream = new StreamingOutput() {
+                        @Override
+                        @SuppressWarnings("PMD.AvoidInstanceofChecksInCatchClause")
                         public void write(OutputStream output) throws IOException, WebApplicationException {
                             try {
                                 Files.copy(resultPDF, output);
@@ -195,7 +200,7 @@ public class MCRPDFDownloadController {
                                 if (e instanceof IOException && "Connection reset by peer".equals(e.getMessage())) {
                                     LOGGER.warn("PDF-Download of {} incomplete - 'Connection reset by peer'",
                                         resultPDF);
-                                } else if (e.getCause() != null && e.getCause() instanceof IOException
+                                } else if (e.getCause() instanceof IOException
                                     && "Connection reset by peer".equals(e.getCause().getMessage())) {
                                     LOGGER.warn("PDF-Download of {} incomplete - 'Connection reset by peer'",
                                         resultPDF);
@@ -252,8 +257,7 @@ public class MCRPDFDownloadController {
     }
 
     private Path calculateCacheDir() {
-        Path cacheDir = Paths.get(MCRConfiguration2.getString("MCR.PDFDownload.CacheDir").orElseThrow());
-        return cacheDir;
+        return Paths.get(MCRConfiguration2.getString("MCR.PDFDownload.CacheDir").orElseThrow());
     }
 
 }

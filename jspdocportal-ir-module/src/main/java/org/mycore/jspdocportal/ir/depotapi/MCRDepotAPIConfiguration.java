@@ -19,14 +19,14 @@ public interface MCRDepotAPIConfiguration {
      * 
      * @return the file to be delivered or null
      */
-    public Path resolveFile(String path);
+    Path resolveFile(String path);
 
     /**
      * return how long the browser should cache request to the API.
      * The HTTP-Header "Expires" will be set with this value.
      * @return time in ms or -1 if no browser cache shall be used.
      */
-    public long getMaxBrowserCacheAgeInMillis();
+    long getMaxBrowserCacheAgeInMillis();
 
     /**
      * returns how long generated ETags should be valid
@@ -35,6 +35,6 @@ public interface MCRDepotAPIConfiguration {
      * 
      * @return time in ms or -1 if request shall not be cached
      */
-    public long getMaxEtagAgeInMillis();
+    long getMaxEtagAgeInMillis();
 
 }

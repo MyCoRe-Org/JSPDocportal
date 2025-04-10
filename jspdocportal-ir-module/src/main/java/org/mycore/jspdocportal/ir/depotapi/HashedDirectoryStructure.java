@@ -77,7 +77,7 @@ public class HashedDirectoryStructure {
             currentDir = currentDir.resolve(s);
         }
 
-        Path result = null;
+        Path result;
         Matcher m = ID_START_SPLITT_PATTERN.matcher(currentDir.getFileName().toString());
         if (!UUID_PATTERN.matcher(currentDir.getFileName().toString()).matches() && m.find()) {
             String start = m.group();
@@ -115,7 +115,7 @@ public class HashedDirectoryStructure {
      * @param args
      *            - none
      */
-    @SuppressWarnings("PMD.SystemPrintln")
+    @SuppressWarnings({"PMD.SystemPrintln", "PMD.AvoidDuplicateLiterals"})
     public static void main(String[] args) {
         // testing ...
         String r = "rosdok/id123456789";

@@ -41,9 +41,17 @@ import com.google.common.base.Optional;
  */
 public class MCRJSPMetsIIIFModsMetadataExtractor implements MCRMetsIIIFMetadataExtractor {
 
+    private static final String ELEMENT_NAME__NON_SORT = "nonSort";
+    private static final String ELEMENT_NAME__TITLE = "title";
+    private static final String ELEMENT_NAME__SUB_TITLE = "subTitle";
+    private static final String ELEMENT_NAME__PART_NUMBER = "partNumber";
+    private static final String ELEMENT_NAME__PART_NAME = "partName";
+    private static final String ATTRIBUTE_NAME__TYPE = "type";
+    private static final String ELEMENT_NAME__NAME_PART = "namePart";
+
     @Override
     public List<MCRIIIFMetadata> extractModsMetadata(Element xmlData) {
-        List<MCRIIIFMetadata> iiifMetadataList = new ArrayList<MCRIIIFMetadata>();
+        List<MCRIIIFMetadata> iiifMetadataList = new ArrayList<>();
         Element eMods = xmlData.getChild("mods", MCRConstants.MODS_NAMESPACE);
         Optional<String> oContributors = retrieveContributors(eMods);
         if (oContributors.isPresent()) {
@@ -51,7 +59,7 @@ public class MCRJSPMetsIIIFModsMetadataExtractor implements MCRMetsIIIFMetadataE
         }
         Optional<String> oTitle = retrieveTitle(eMods);
         if (oTitle.isPresent()) {
-            iiifMetadataList.add(new MCRIIIFMetadata("title", oTitle.get()));
+            iiifMetadataList.add(new MCRIIIFMetadata(ELEMENT_NAME__TITLE, oTitle.get()));
         }
 
         Optional<String> oOriginInfo = retrieveOriginInfo(eMods);
@@ -101,32 +109,32 @@ public class MCRJSPMetsIIIFModsMetadataExtractor implements MCRMetsIIIFMetadataE
             "./mods:name[mods:role/mods:roleTerm='oth' or mods:role/mods:roleTerm='aut']", Filters.element(), null,
             MCRConstants.MODS_NAMESPACE);
         List<Element> eNames = xpName.evaluate(eMods);
-        if (eNames.size() > 0) {
+        if (!eNames.isEmpty()) {
             StringBuffer sbName = new StringBuffer();
             for (Element eName : eNames) {
-                if(eNames.indexOf(eName)>0) {
+                if (eNames.indexOf(eName) > 0) {
                     sbName.append("; ");
                 }
-                for (Element eNamePart : eName.getChildren("namePart", MCRConstants.MODS_NAMESPACE)) {
-                    if ("family".equals(eNamePart.getAttributeValue("type"))) {
+                for (Element eNamePart : eName.getChildren(ELEMENT_NAME__NAME_PART, MCRConstants.MODS_NAMESPACE)) {
+                    if ("family".equals(eNamePart.getAttributeValue(ATTRIBUTE_NAME__TYPE))) {
                         sbName.append(eNamePart.getTextNormalize());
                         sbName.append(", ");
                     }
 
                 }
-                for (Element eNamePart : eName.getChildren("namePart", MCRConstants.MODS_NAMESPACE)) {
-                    if ("given".equals(eNamePart.getAttributeValue("type"))) {
+                for (Element eNamePart : eName.getChildren(ELEMENT_NAME__NAME_PART, MCRConstants.MODS_NAMESPACE)) {
+                    if ("given".equals(eNamePart.getAttributeValue(ATTRIBUTE_NAME__TYPE))) {
                         sbName.append(eNamePart.getTextNormalize());
                     }
                 }
-                for (Element eNamePart : eName.getChildren("namePart", MCRConstants.MODS_NAMESPACE)) {
-                    if (null == eNamePart.getAttributeValue("type")) {
+                for (Element eNamePart : eName.getChildren(ELEMENT_NAME__NAME_PART, MCRConstants.MODS_NAMESPACE)) {
+                    if (null == eNamePart.getAttributeValue(ATTRIBUTE_NAME__TYPE)) {
                         sbName.append(eNamePart.getTextNormalize());
                     }
                 }
-                for (Element eNamePart : eName.getChildren("namePart", MCRConstants.MODS_NAMESPACE)) {
-                    if ("termsOfAddress".equals(eNamePart.getAttributeValue("type"))) {
-                        sbName.append(" ");
+                for (Element eNamePart : eName.getChildren(ELEMENT_NAME__NAME_PART, MCRConstants.MODS_NAMESPACE)) {
+                    if ("termsOfAddress".equals(eNamePart.getAttributeValue(ATTRIBUTE_NAME__TYPE))) {
+                        sbName.append(' ');
                         sbName.append(eNamePart.getTextNormalize());
                     }
                 }
@@ -163,30 +171,32 @@ public class MCRJSPMetsIIIFModsMetadataExtractor implements MCRMetsIIIFMetadataE
             "mods:titleInfo[@usage='primary']", Filters.element(), null,
             MCRConstants.MODS_NAMESPACE);
         List<Element> eTitles = xpTitle.evaluate(eMods);
-        if (eTitles.size() > 0) {
+        if (!eTitles.isEmpty()) {
             StringBuffer sbTitle = new StringBuffer();
             for (Element eTitle : eTitles) {
-                if (eTitle.getChild("nonSort", MCRConstants.MODS_NAMESPACE) != null) {
-                    sbTitle.append(eTitle.getChildText("nonSort", MCRConstants.MODS_NAMESPACE)).append(" ");
+                if (eTitle.getChild(ELEMENT_NAME__NON_SORT, MCRConstants.MODS_NAMESPACE) != null) {
+                    sbTitle.append(eTitle.getChildText(ELEMENT_NAME__NON_SORT, MCRConstants.MODS_NAMESPACE))
+                        .append(' ');
                 }
-                sbTitle.append(eTitle.getChildText("title", MCRConstants.MODS_NAMESPACE)).append(" ");
-                if (eTitle.getChild("subTitle", MCRConstants.MODS_NAMESPACE) != null) {
-                    sbTitle.append(" : ").append(eTitle.getChildText("subTitle", MCRConstants.MODS_NAMESPACE));
+                sbTitle.append(eTitle.getChildText(ELEMENT_NAME__TITLE, MCRConstants.MODS_NAMESPACE)).append(' ');
+                if (eTitle.getChild(ELEMENT_NAME__SUB_TITLE, MCRConstants.MODS_NAMESPACE) != null) {
+                    sbTitle.append(" : ")
+                        .append(eTitle.getChildText(ELEMENT_NAME__SUB_TITLE, MCRConstants.MODS_NAMESPACE));
                 }
-                if (eTitle.getChild("partNumber", MCRConstants.MODS_NAMESPACE) != null
-                    || eTitle.getChild("partName", MCRConstants.MODS_NAMESPACE) != null) {
+                if (eTitle.getChild(ELEMENT_NAME__PART_NUMBER, MCRConstants.MODS_NAMESPACE) != null
+                    || eTitle.getChild(ELEMENT_NAME__PART_NAME, MCRConstants.MODS_NAMESPACE) != null) {
                     if (sbTitle.length() > 0) {
                         sbTitle.append(" / ");
                     }
-                    if (eTitle.getChild("partNumber", MCRConstants.MODS_NAMESPACE) != null) {
-                        sbTitle.append(eTitle.getChildText("partNumber", MCRConstants.MODS_NAMESPACE));
+                    if (eTitle.getChild(ELEMENT_NAME__PART_NUMBER, MCRConstants.MODS_NAMESPACE) != null) {
+                        sbTitle.append(eTitle.getChildText(ELEMENT_NAME__PART_NUMBER, MCRConstants.MODS_NAMESPACE));
                     }
-                    if (eTitle.getChild("partNumber", MCRConstants.MODS_NAMESPACE) != null
-                        && eTitle.getChild("partName", MCRConstants.MODS_NAMESPACE) != null) {
+                    if (eTitle.getChild(ELEMENT_NAME__PART_NUMBER, MCRConstants.MODS_NAMESPACE) != null
+                        && eTitle.getChild(ELEMENT_NAME__PART_NAME, MCRConstants.MODS_NAMESPACE) != null) {
                         sbTitle.append(" : ");
                     }
-                    if (eTitle.getChild("partName", MCRConstants.MODS_NAMESPACE) != null) {
-                        sbTitle.append(eTitle.getChildText("partName", MCRConstants.MODS_NAMESPACE));
+                    if (eTitle.getChild(ELEMENT_NAME__PART_NAME, MCRConstants.MODS_NAMESPACE) != null) {
+                        sbTitle.append(eTitle.getChildText(ELEMENT_NAME__PART_NAME, MCRConstants.MODS_NAMESPACE));
                     }
                 }
 
@@ -243,7 +253,7 @@ public class MCRJSPMetsIIIFModsMetadataExtractor implements MCRMetsIIIFMetadataE
                 "mods:place[not(@supplied)]/mods:placeTerm", Filters.element(), null,
                 MCRConstants.MODS_NAMESPACE);
             List<Element> ePlaces = xpPlaces.evaluate(eOInfo);
-            if (ePlaces.size() > 0) {
+            if (!ePlaces.isEmpty()) {
                 StringBuffer sbPlaces = new StringBuffer();
                 for (Element ePlace : ePlaces) {
                     if (sbPlaces.length() > 0) {
@@ -257,7 +267,7 @@ public class MCRJSPMetsIIIFModsMetadataExtractor implements MCRMetsIIIFMetadataE
                 "mods:publisher", Filters.element(), null,
                 MCRConstants.MODS_NAMESPACE);
             List<Element> ePublishers = xpPublishers.evaluate(eOInfo);
-            if (ePublishers.size() > 0) {
+            if (!ePublishers.isEmpty()) {
                 StringBuffer sbPublisher = new StringBuffer();
                 for (Element ePublisher : ePublishers) {
                     if (sbPublisher.length() > 0) {
@@ -272,7 +282,7 @@ public class MCRJSPMetsIIIFModsMetadataExtractor implements MCRMetsIIIFMetadataE
                 Filters.element(), null,
                 MCRConstants.MODS_NAMESPACE);
             for (Element eDate : xpDates.evaluate(eOInfo)) {
-                sb.append(eDate.getText()).append(" ");
+                sb.append(eDate.getText()).append(' ');
             }
 
             return Optional.of(sb.toString().trim());

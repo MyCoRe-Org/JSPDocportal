@@ -32,6 +32,7 @@ public abstract class MCRGVKMODSCatalogService implements MCRMODSCatalogService 
         "//modsContainer[@type='created' or @type='imported'][./mods:mods]",
         Filters.element(), null, MODS_NAMESPACE);
 
+    @Override
     public void updateWorkflowFile(Path mcrFile, Document docJdom) throws Exception {
         Element eModsContainer = XP_MODS_ROOT.evaluateFirst(docJdom);
         Element eNewMODS = retrieveNewMODS(docJdom);
@@ -104,5 +105,6 @@ public abstract class MCRGVKMODSCatalogService implements MCRMODSCatalogService 
     /**return external library number **/
     public abstract String getELN();
 
+    @Override
     public abstract Element retrieveMODSFromCatalogue(String sruQuery);
 }

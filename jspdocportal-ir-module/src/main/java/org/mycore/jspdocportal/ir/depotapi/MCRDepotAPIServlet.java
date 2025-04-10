@@ -62,6 +62,7 @@ public class MCRDepotAPIServlet extends HttpServlet {
      * 
      * @see jakarta.servlet.GenericServlet#init()
      */
+    @Override
     public void init() throws ServletException {
         super.init();
         try {
@@ -85,7 +86,7 @@ public class MCRDepotAPIServlet extends HttpServlet {
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        LOGGER.debug("contextPath={}", () -> request.getContextPath());
+        LOGGER.debug("contextPath={}", request::getContextPath);
         String path = request.getPathInfo();
 
         if (path != null) {

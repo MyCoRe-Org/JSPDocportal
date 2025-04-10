@@ -39,7 +39,7 @@ public class MODSDataURLPostProcessor extends MCRPostProcessorXSL {
             SAXBuilder sb = new SAXBuilder();
             Document doc = sb.build(new StringReader("<html>"+ StringEscapeUtils.unescapeHtml4(content) + "</html>"));
             StringBuffer sbText = new StringBuffer();
-            doc.getDescendants(Filters.text()).forEach(t -> sbText.append(t.getValue()).append(" "));
+            doc.getDescendants(Filters.text()).forEach(t -> sbText.append(t.getValue()).append(' '));
             e.setText(StringUtils.normalizeSpace(sbText.toString()));
         }
 
