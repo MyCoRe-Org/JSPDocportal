@@ -83,7 +83,7 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private static Logger LOGGER = LogManager.getLogger(MCRJSPIDResolverServlet.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     /**
      * The initalization of the servlet.

@@ -64,7 +64,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class MCRSearchResultDataBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private static Logger LOGGER = LogManager.getLogger(MCRSearchResultDataBean.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private String id;
 

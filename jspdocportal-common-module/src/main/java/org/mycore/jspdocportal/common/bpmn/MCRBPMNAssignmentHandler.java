@@ -37,7 +37,7 @@ import org.mycore.user2.MCRUserManager;
  */
 public class MCRBPMNAssignmentHandler implements TaskListener {
 
-    private static Logger LOGGER = LogManager.getLogger(MCRBPMNAssignmentHandler.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public void notify(DelegateTask delegateTask) {
         StringValue mode = delegateTask.getVariableTyped(MCRBPMNMgr.WF_VAR_MODE);

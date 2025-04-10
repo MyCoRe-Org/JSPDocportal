@@ -45,7 +45,7 @@ import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
 import org.mycore.user2.MCRUserManager;
 
 public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
-    private static Logger LOGGER = LogManager.getLogger(MCRAbstractWorkflowMgr.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @Override
     public MCRObject createMCRObject(DelegateExecution execution) {

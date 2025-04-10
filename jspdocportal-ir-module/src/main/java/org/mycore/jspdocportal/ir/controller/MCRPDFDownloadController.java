@@ -75,7 +75,7 @@ public class MCRPDFDownloadController {
 
     private static final String PROPERTY_DELETE_PDF_SECRET = "MCR.PDFDownload.Delete.Secret";
     private static final String HEADER_DELETE_PDF_SECRET = "X-MCR-PDFDownload-Delete-Secret";
-    private static DateTimeFormatter DTF
+    private static final DateTimeFormatter DTF
         = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm", Locale.GERMAN).withZone(ZoneId.of("Europe/Berlin"));
 
     @DELETE

@@ -72,7 +72,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
 
     private String mode;
 
-    private static Logger LOGGER = LogManager.getLogger(MCROutputNavigationTag.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public void doTag() throws JspException, IOException {
         init(mode);

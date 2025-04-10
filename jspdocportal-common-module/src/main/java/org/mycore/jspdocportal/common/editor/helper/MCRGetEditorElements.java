@@ -58,7 +58,7 @@ import org.mycore.user2.MCRRoleManager;
  *
  */
 public class MCRGetEditorElements {
-    private static Logger logger = LogManager.getLogger("MCRGetEditorElements");
+    private static final Logger logger = LogManager.getLogger();
 
     private Properties parseQueryString(String query) {
         Properties params = new Properties();

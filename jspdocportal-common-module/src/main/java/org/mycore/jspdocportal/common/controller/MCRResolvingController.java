@@ -87,7 +87,7 @@ import jakarta.ws.rs.core.Response.Status;
 
 @jakarta.ws.rs.Path("/resolve/{path: .*}")
 public class MCRResolvingController  {
-    private static Logger LOGGER = LogManager.getLogger(MCRResolvingController.class);
+    private static final Logger LOGGER = LogManager.getLogger();
     
     protected enum OpenBy {
         page, nr, part, empty

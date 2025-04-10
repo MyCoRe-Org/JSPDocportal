@@ -38,7 +38,7 @@ import org.mycore.datamodel.niofs.utils.MCRRecursiveDeleter;
  * 
  */
 public class MCRBPMNUtils {
-    private static Logger LOGGER = LogManager.getLogger(MCRBPMNUtils.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     /**
      * saves a given MCR object into the workflow directory

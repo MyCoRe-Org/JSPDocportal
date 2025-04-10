@@ -16,7 +16,7 @@ public class MCRHasAccessTag extends SimpleTagSupport {
     private String var;
     private String mcrid;
 
-    private static Logger LOGGER = LogManager.getLogger(MCRHasAccessTag.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public void setPermission(String permission) {
         this.permission = permission;
@@ -34,7 +34,7 @@ public class MCRHasAccessTag extends SimpleTagSupport {
     public void doTag() throws JspException, IOException {
         try (MCRHibernateTransactionWrapper htw = new MCRHibernateTransactionWrapper()) {
             PageContext pageContext = (PageContext) getJspContext();
-            
+
             if (mcrid == null || "".equals(mcrid)) { // allgemeiner check des aktuellen Users
                 pageContext.setAttribute(var, Boolean.valueOf(MCRAccessManager.checkPermission(permission)));
             } else {

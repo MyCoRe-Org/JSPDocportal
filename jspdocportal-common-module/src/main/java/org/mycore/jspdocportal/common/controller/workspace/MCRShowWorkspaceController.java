@@ -64,7 +64,7 @@ import jakarta.ws.rs.core.Response;
 
 @jakarta.ws.rs.Path("/do/workspace/tasks")
 public class MCRShowWorkspaceController {
-    private static Logger LOGGER = LogManager.getLogger(MCRShowWorkspaceController.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private MCRMODSCatalogService modsCatService = MCRConfiguration2
         .getInstanceOf(MCRMODSCatalogService.class, "MCR.Workflow.MODSCatalogService.class").orElse(null);

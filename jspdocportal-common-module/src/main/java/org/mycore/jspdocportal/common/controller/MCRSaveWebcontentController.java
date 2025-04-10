@@ -34,7 +34,7 @@ import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 
 @Path("/do/save-webcontent")
 public class MCRSaveWebcontentController {
-    private static Logger LOGGER = LogManager.getLogger(MCRSaveWebcontentController.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @POST
     public Response post(@Context HttpServletRequest request) {

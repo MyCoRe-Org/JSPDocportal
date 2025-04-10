@@ -56,7 +56,7 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
  * <mcr:transformXSL dom="${doc}" xslt="xsl/xsl3example.xsl" />
  */
 public class MCRTransformXslTag extends SimpleTagSupport {
-    private static Logger LOGGER = LogManager.getLogger(MCRTransformXslTag.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private Document dom;
 

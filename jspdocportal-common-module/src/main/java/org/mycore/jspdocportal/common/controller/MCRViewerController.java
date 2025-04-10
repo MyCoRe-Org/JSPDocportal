@@ -39,7 +39,7 @@ import jakarta.ws.rs.core.Response;
  */
 @Path("/mcrviewer")
 public class MCRViewerController {
-    private static Logger LOGGER = LogManager.getLogger(MCRViewerController.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @GET
     @Path("/{field}/{identifier}")

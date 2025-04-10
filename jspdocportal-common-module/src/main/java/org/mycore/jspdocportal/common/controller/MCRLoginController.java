@@ -76,7 +76,7 @@ import jakarta.ws.rs.core.Response;
         
     public static String SESSION_ATTR_MCR_USER = "mcr.jspdocportal.current_user";
     
-    private static Logger LOGGER = LogManager.getLogger(MCRLoginController.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @GET
     public Response defaultRes( @QueryParam("logout") @DefaultValue("") String logout,

@@ -52,7 +52,7 @@ public class MCRDepotAPIServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private static Logger LOGGER = LogManager.getLogger(MCRDepotAPIServlet.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private MCRDepotAPIConfiguration depotAPIConf = new MCRDepotAPIDefaultConfiguration();
 

@@ -24,7 +24,7 @@ import jakarta.ws.rs.core.Response;
 
 @Path("/do/workspace/administration")
 public class MCRWorkflowProcessAdminController {
-    private static Logger LOGGER = LogManager.getLogger(MCRWorkflowProcessAdminController.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @POST
     public Response defaultRes(@QueryParam("objectType") String objectType,

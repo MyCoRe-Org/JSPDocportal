@@ -53,7 +53,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
     private String editorPath;
     private String cancelPage;
 
-    private static Logger logger = LogManager.getLogger("MCRIncludeEditorTag.class");
+    private static final Logger logger = LogManager.getLogger();
 
     public void setIsNewEditorSource(String isNewEditorSource) {
         this.isNewEditorSource = isNewEditorSource;

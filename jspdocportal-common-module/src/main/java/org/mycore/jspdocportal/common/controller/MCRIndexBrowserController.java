@@ -37,7 +37,7 @@ import jakarta.ws.rs.core.Response;
 
 @Path("/do/indexbrowser/{modus}")
 public class MCRIndexBrowserController {
-    private static Logger LOGGER = LogManager.getLogger(MCRIndexBrowserController.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private TreeSet<String> firstSelector = new TreeSet<String>();
 

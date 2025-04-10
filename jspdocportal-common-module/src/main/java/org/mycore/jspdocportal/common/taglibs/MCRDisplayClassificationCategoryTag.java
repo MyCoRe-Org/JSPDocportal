@@ -16,7 +16,7 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
 public class MCRDisplayClassificationCategoryTag extends SimpleTagSupport {
     private static MCRCategoryDAO categoryDAO = MCRCategoryDAOFactory.getInstance();
 
-    private static Logger LOGGER = LogManager.getLogger(MCRDisplayClassificationCategoryTag.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private String lang;
 

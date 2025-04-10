@@ -36,7 +36,7 @@ import jakarta.servlet.jsp.PageContext;
 import jakarta.servlet.jsp.tagext.SimpleTagSupport;
 
 public class MCRSessionTag extends SimpleTagSupport {
-    private static Logger LOGGER = LogManager.getLogger(MCRSessionTag.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     /** 
      * Time when the webapp was deployed 

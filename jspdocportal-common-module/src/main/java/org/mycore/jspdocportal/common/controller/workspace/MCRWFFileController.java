@@ -54,7 +54,7 @@ import jakarta.ws.rs.core.StreamingOutput;
 @jakarta.ws.rs.Path("/do/wffile/{path: .*}")
 public class MCRWFFileController {
 
-    private static Logger LOGGER = LogManager.getLogger(MCRWFFileController.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @GET
     public Response doGet(@PathParam("path") String uri, @Context HttpServletRequest request) {

@@ -19,7 +19,7 @@ import org.mycore.jspdocportal.diskcache.disklru.DiskLruCache.Value;
 public class MCRDiskcacheConfig {
 
     /** The logger */
-    private static Logger LOGGER = LogManager.getLogger(MCRDiskcacheConfig.class);
+    private static final Logger LOGGER = LogManager.getLogger(MCRDiskcacheConfig.class);
 
     private static int DISK_LRUCACHE_VALUE_COUNT = 1;
 

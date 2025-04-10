@@ -62,7 +62,7 @@ public class MCREditDerivatesController {
         MOVE_UP, MOVE_DOWN
     };
 
-    private static Logger LOGGER = LogManager.getLogger(MCREditDerivatesController.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)

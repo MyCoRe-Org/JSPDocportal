@@ -11,7 +11,7 @@ import org.mycore.datamodel.metadata.validator.MCREditorMetadataValidator;
 import org.mycore.datamodel.metadata.validator.MCREditorOutValidator;
 
 public class MCRMetaHistoryEventCheck implements MCREditorMetadataValidator {
-    private static Logger LOGGER = LogManager.getLogger(MCRMetaHistoryEventCheck.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public String checkDataSubTag(Element datasubtag) {
         List<Element> children = datasubtag.getChildren("text");

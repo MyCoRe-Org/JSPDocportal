@@ -18,7 +18,7 @@ public class MCRIsObjectLockedTag extends SimpleTagSupport {
     private String var;
     private String mcrid;
 
-    private static Logger LOGGER = LogManager.getLogger(MCRIsObjectLockedTag.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public void setVar(String var) {
         this.var = var;

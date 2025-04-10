@@ -43,7 +43,7 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
  *
  */
 public class MCRSetNamespaceTag extends SimpleTagSupport {
-    private static Logger LOGGER = LogManager.getLogger(MCRSetNamespaceTag.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private String prefix = "";
 

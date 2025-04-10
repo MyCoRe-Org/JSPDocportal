@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class NavServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private static Logger LOGGER = LogManager.getLogger(NavServlet.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private static org.jdom2.Document navJdom;
 

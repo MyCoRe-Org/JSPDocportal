@@ -57,7 +57,7 @@ import jakarta.servlet.jsp.jstl.fmt.LocalizationContext;
  * 
  */
 public class MCRJSPServletContextListener implements ServletContextListener {
-    private static Logger LOGGER = LogManager.getLogger(MCRJSPServletContextListener.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {

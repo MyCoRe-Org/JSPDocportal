@@ -53,15 +53,15 @@ import org.mycore.jspdocportal.common.controller.workspace.MCRMODSCatalogService
 @MCRCommandGroup(name = "JSPDocportal IR Commands")
 public class MCRJSPDocportalIRCommands extends MCRAbstractCommands {
     /** The logger */
-    private static Logger LOGGER = LogManager.getLogger(MCRJSPDocportalIRCommands.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static final Namespace MODS_NAMESPACE = Namespace.getNamespace("mods", "http://www.loc.gov/mods/v3");
 
-    private static XPathExpression<Element> XP_PPN = XPathFactory.instance().compile(
+    private static final XPathExpression<Element> XP_PPN = XPathFactory.instance().compile(
         "./mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']",
         Filters.element(), null, MODS_NAMESPACE);
 
-    private static MCRMODSCatalogService MODS_CATALOG_SERVICE = MCRConfiguration2
+    private static final MCRMODSCatalogService MODS_CATALOG_SERVICE = MCRConfiguration2
         .getInstanceOf(MCRMODSCatalogService.class, "MCR.Workflow.MODSCatalogService.class").orElse(null);
 
     /**

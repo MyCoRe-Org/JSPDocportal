@@ -27,7 +27,7 @@ import jakarta.servlet.jsp.PageContext;
 import jakarta.servlet.jsp.tagext.SimpleTagSupport;
 
 public class MCRIncludeEditorTag extends SimpleTagSupport {
-    private static Logger logger = LogManager.getLogger(MCRIncludeEditorTag.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private String editorPath;
     private String cancelPage;
@@ -88,11 +88,11 @@ public class MCRIncludeEditorTag extends SimpleTagSupport {
             pageContext.getOut().append(out.toString());
 
         } catch (TransformerConfigurationException e) {
-            logger.error("TransformerConfigurationException: " + e, e);
+            LOGGER.error("TransformerConfigurationException: " + e, e);
         } catch (TransformerException e) {
-            logger.error("TransformerException " + e, e);
+            LOGGER.error("TransformerException " + e, e);
         } catch (JDOMException e) {
-            logger.error("JDOMException " + e, e);
+            LOGGER.error("JDOMException " + e, e);
         }
     }
 }

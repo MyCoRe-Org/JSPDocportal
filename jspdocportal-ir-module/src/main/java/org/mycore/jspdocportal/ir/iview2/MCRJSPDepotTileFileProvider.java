@@ -22,9 +22,9 @@ package org.mycore.jspdocportal.ir.iview2;
 import java.net.URLDecoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,14 +65,14 @@ public class MCRJSPDepotTileFileProvider implements MCRTileFileProvider {
     // AliasMatch "^/depot/darl%2F([a-f0-9]{2})([a-f0-9]{3})(.{31})(/.*)$"
     // "/storage/digibib/doro/depot/darl/$1/$1$2/$1$2$3$4"
 
-    public static String[][] DIRECTORY_PATTERN_REGEX = new String[][] {
+    public static final String[][] DIRECTORY_PATTERN_REGEX = new String[][] {
         { "^rosdok[_/](.*)(.{3})(.{4})$", "rosdok/$1/$1$2/$1$2$3" },
         { "^wossidia[_/](.{3})(.{5})(.{3})$", "wossidia/$1/$1$2/$1$2$3" },
         { "^ipac[_/]([a-z]+)[_]([a-z0-9]*)$", "ipac/$1/$1_$2" },
         { "^ipac[_/]([a-z]+)$", "ipac/$1/$1" }
     };
 
-    public static Map<String, Pattern> DIRECTORY_PATTERNS = new HashMap<>();
+    public static final Map<String, Pattern> DIRECTORY_PATTERNS = new ConcurrentHashMap<>();
     static {
         for (String[] s : DIRECTORY_PATTERN_REGEX) {
             DIRECTORY_PATTERNS.put(s[0], Pattern.compile(s[0]));

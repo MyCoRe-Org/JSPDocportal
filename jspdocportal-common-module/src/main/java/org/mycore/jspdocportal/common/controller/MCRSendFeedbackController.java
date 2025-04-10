@@ -37,7 +37,7 @@ import jakarta.ws.rs.core.Response.Status;
  */
 @Path("/do/feedback")
 public class MCRSendFeedbackController {
-    private static Logger LOGGER = LogManager.getLogger(MCRSendFeedbackController.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private static final Pattern EMAIL_PATTERN = Pattern
         .compile("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");

@@ -52,13 +52,13 @@ import org.mycore.solr.search.MCRSolrSearchUtils;
  */
 @Path("/do/search")
 public class MCRSearchController {
-    private static Logger LOGGER = LogManager.getLogger(MCRSearchController.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
-    public static Namespace NS_XED = Namespace.getNamespace("xed", "http://www.mycore.de/xeditor");
+    public static final Namespace NS_XED = Namespace.getNamespace("xed", "http://www.mycore.de/xeditor");
 
-    private static Pattern REGEX_XML_EMPTY_ELEMENTS = Pattern.compile("<(a|i|span|div|textarea)\\s([^>]*)?(\\s)?/>");
+    private static final Pattern REGEX_XML_EMPTY_ELEMENTS = Pattern.compile("<(a|i|span|div|textarea)\\s([^>]*)?(\\s)?/>");
 
-    public static int DEFAULT_ROWS = 100;
+    public static final int DEFAULT_ROWS = 100;
 
     private boolean showMask;
 

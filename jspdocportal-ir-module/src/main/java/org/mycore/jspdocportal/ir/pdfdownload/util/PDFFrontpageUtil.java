@@ -63,8 +63,8 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 
 public class PDFFrontpageUtil {
-    private static Logger LOGGER = LogManager.getLogger();
-    private static DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm 'Uhr'", Locale.GERMAN);
+    private static final Logger LOGGER = LogManager.getLogger();
+    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm 'Uhr'", Locale.GERMAN);
 
     public static void createFrontPage(PdfWriter writer, Document document, String recordIdentifier, String mcrid)
         throws DocumentException {

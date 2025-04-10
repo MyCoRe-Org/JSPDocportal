@@ -70,7 +70,7 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
  *          2010) $
  */
 public class MCRRetrieveObjectTag extends SimpleTagSupport {
-    private static Logger LOGGER = LogManager.getLogger(MCRRetrieveObjectTag.class);
+    private static final Logger LOGGER = LogManager.getLogger();
     
     private static DOMOutputter DOM_OUTPUTTER = new DOMOutputter();
     

@@ -45,7 +45,7 @@ import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 @MCRCommandGroup(name = "JSPDocportal Acitiviti Commands")
 public class MCRBPMNCommands extends MCRAbstractCommands {
     /** The logger */
-    private static Logger LOGGER = LogManager.getLogger(MCRBPMNCommands.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     /**
      * The command deploys a process definition to the database from a given file

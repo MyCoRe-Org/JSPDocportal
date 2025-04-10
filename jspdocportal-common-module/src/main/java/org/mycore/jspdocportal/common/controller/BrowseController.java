@@ -50,7 +50,7 @@ import jakarta.ws.rs.core.Context;
 @Path("/do/browse/{mask}")
 public class BrowseController {
     @SuppressWarnings("unused")
-    private static Logger LOGGER = LogManager.getLogger(BrowseController.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static Namespace NS_XED = Namespace.getNamespace("xed", "http://www.mycore.de/xeditor");
 

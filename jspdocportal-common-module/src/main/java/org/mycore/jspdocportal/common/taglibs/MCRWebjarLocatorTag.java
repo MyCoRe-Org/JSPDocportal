@@ -43,7 +43,7 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
  *
  */
 public class MCRWebjarLocatorTag extends SimpleTagSupport {
-    private static Logger LOGGER = LogManager.getLogger(MCRWebjarLocatorTag.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     protected static MCRCache<String, String> WEBJAR_LOCATOR_URL_CACHE
         = new MCRCache<>(100, "MCRWebjarLocatorTag WebjarItemURLCache");

@@ -71,12 +71,12 @@ import jakarta.servlet.ServletContext;
  *
  */
 public class PDFGenerator implements Runnable {
-    public static int DEFAULT_DPI = 300;
-    public static int BORDER = 55; // 2cm (72dpi)
+    public static final int DEFAULT_DPI = 300;
+    public static final int BORDER = 55; // 2cm (72dpi)
     public static final String SESSION_ATTRIBUTE_PROGRESS_PREFIX = "pdfdownload_progress_";
 
-    private static Namespace NS_METS = Namespace.getNamespace("mets", "http://www.loc.gov/METS/");
-    private static Namespace NS_XLINK = Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink");
+    private static final Namespace NS_METS = Namespace.getNamespace("mets", "http://www.loc.gov/METS/");
+    private static final Namespace NS_XLINK = Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink");
 
     private Path pdfOutFile;
     private Path dataDir;

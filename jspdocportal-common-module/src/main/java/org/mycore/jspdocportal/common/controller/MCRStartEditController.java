@@ -32,7 +32,7 @@ import jakarta.ws.rs.core.Response;
 
 @Path("/do/startedit")
 public class MCRStartEditController  {
-    private static Logger LOGGER = LogManager.getLogger(MCRStartEditController.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @GET
     public Response defaultRes(@QueryParam("mcrid") String mcrid, @QueryParam("mode") String mode, @Context HttpServletRequest request) {
