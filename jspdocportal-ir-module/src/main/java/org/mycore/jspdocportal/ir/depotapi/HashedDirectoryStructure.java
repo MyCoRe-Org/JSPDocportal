@@ -115,6 +115,7 @@ public class HashedDirectoryStructure {
      * @param args
      *            - none
      */
+    @SuppressWarnings("PMD.SystemPrintln")
     public static void main(String[] args) {
         // testing ...
         String r = "rosdok/id123456789";

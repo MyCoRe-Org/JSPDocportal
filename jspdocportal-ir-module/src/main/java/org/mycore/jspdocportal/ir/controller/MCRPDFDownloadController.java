@@ -75,8 +75,8 @@ public class MCRPDFDownloadController {
 
     private static final String PROPERTY_DELETE_PDF_SECRET = "MCR.PDFDownload.Delete.Secret";
     private static final String HEADER_DELETE_PDF_SECRET = "X-MCR-PDFDownload-Delete-Secret";
-    private static final DateTimeFormatter DTF
-        = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm", Locale.GERMAN).withZone(ZoneId.of("Europe/Berlin"));
+    private static final DateTimeFormatter DTF =
+        DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm", Locale.GERMAN).withZone(ZoneId.of("Europe/Berlin"));
 
     @DELETE
     @jakarta.ws.rs.Path("recordIdentifier/{path:.*}")
@@ -193,12 +193,12 @@ public class MCRPDFDownloadController {
                                 Files.copy(resultPDF, output);
                             } catch (Exception e) {
                                 if (e instanceof IOException && "Connection reset by peer".equals(e.getMessage())) {
-                                    LOGGER.warn("PDF-Download of " + resultPDF.toString()
-                                        + " incomplete - 'Connection reset by peer'");
+                                    LOGGER.warn("PDF-Download of {} incomplete - 'Connection reset by peer'",
+                                        resultPDF);
                                 } else if (e.getCause() != null && e.getCause() instanceof IOException
                                     && "Connection reset by peer".equals(e.getCause().getMessage())) {
-                                    LOGGER.warn("PDF-Download of " + resultPDF.toString()
-                                        + " incomplete - 'Connection reset by peer'");
+                                    LOGGER.warn("PDF-Download of {} incomplete - 'Connection reset by peer'",
+                                        resultPDF);
                                 } else {
                                     throw new WebApplicationException(
                                         "PDF-Download of " + resultPDF.toString() + " failed.", e);
@@ -242,8 +242,8 @@ public class MCRPDFDownloadController {
     }
 
     public int getProgress(ServletContext servletContext, String recordIdentifier) {
-        Integer num
-            = (Integer) servletContext.getAttribute(PDFGenerator.SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier);
+        Integer num =
+            (Integer) servletContext.getAttribute(PDFGenerator.SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier);
         if (num == null) {
             return -1;
         } else {

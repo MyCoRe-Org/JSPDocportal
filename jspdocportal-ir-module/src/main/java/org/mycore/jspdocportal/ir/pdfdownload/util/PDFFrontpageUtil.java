@@ -72,8 +72,8 @@ public class PDFFrontpageUtil {
         document.addCreationDate();
         document.addTitle("RosDok Download");
         document.addAuthor("Universitätsbibliothek Rostock");
-        document.addSubject("https://purl.uni-rostock.de/"+recordIdentifier.replace("rosdok_", "rosdok/"));
-        
+        document.addSubject("https://purl.uni-rostock.de/" + recordIdentifier.replace("rosdok_", "rosdok/"));
+
         try (InputStream is = MCRResourceHelper.getResourceAsStream("/rosdok_schriftzug.png")) {
             byte[] imgBytes = IOUtils.toByteArray(is);
             Image img = Image.getInstance(imgBytes);
@@ -140,8 +140,8 @@ public class PDFFrontpageUtil {
             XMLWorkerHelper.getInstance().parseXHtml(writer, document, new StringReader(htmlContent));
 
         } catch (Exception e) {
-            LogManager.getLogger(MCRTransformXslTag.class).error("Something went wrong processing the XSLT: " + xslt,
-                e);
+            LogManager.getLogger(MCRTransformXslTag.class)
+                .error("Something went wrong processing the XSLT: {}", xslt, e);
         }
     }
 

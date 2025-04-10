@@ -30,6 +30,7 @@ public class MCRLocalIDParser implements MCRPIParser<MCRLocalID> {
 
     }
 
+    @SuppressWarnings("PMD.SystemPrintln")
     public static void main(String[] args) {
         MCRLocalIDParser parser = new MCRLocalIDParser();
         Optional<MCRLocalID> x = parser.parse("rosdok/id123x");

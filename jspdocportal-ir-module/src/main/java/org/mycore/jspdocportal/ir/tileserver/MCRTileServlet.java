@@ -148,7 +148,7 @@ public class MCRTileServlet extends HttpServlet {
      * @return a {@link TileInfo} instance for <code>pathInfo</code>
      */
     static TileInfo getTileInfo(final String pathInfo) {
-        LOGGER.debug("Starting MCRTileServlet: " + pathInfo);
+        LOGGER.debug("Starting MCRTileServlet: {}", pathInfo);
         String path = pathInfo.startsWith("/") ? pathInfo.substring(1) : pathInfo;
         String tile = "";
         String imagePath = "";

@@ -72,7 +72,8 @@ public class MCRDepotAPIServlet extends HttpServlet {
                     depotAPIConf = (MCRDepotAPIConfiguration) c.getDeclaredConstructor(new Class[] {}).newInstance();
                 }
             }
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | IllegalArgumentException
+            | InvocationTargetException | NoSuchMethodException | SecurityException e) {
             //do nothing
         }
     }
@@ -84,7 +85,7 @@ public class MCRDepotAPIServlet extends HttpServlet {
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        LOGGER.debug("contextPath=" + request.getContextPath());
+        LOGGER.debug("contextPath={}", () -> request.getContextPath());
         String path = request.getPathInfo();
 
         if (path != null) {
@@ -104,7 +105,7 @@ public class MCRDepotAPIServlet extends HttpServlet {
 
                     MessageDigest md = MessageDigest.getInstance("MD5");
                     String md5 = String.format(Locale.ENGLISH, "%032x",
-                            new BigInteger(1, md.digest(path.getBytes(StandardCharsets.UTF_8))));
+                        new BigInteger(1, md.digest(path.getBytes(StandardCharsets.UTF_8))));
 
                     long lastModified = Files.getLastModifiedTime(file).toMillis();
                     long current = System.currentTimeMillis();
@@ -121,9 +122,9 @@ public class MCRDepotAPIServlet extends HttpServlet {
 
                 if (depotAPIConf.getMaxBrowserCacheAgeInMillis() > 0) {
                     response.setDateHeader("Expires",
-                            System.currentTimeMillis() + depotAPIConf.getMaxBrowserCacheAgeInMillis());
+                        System.currentTimeMillis() + depotAPIConf.getMaxBrowserCacheAgeInMillis());
                     response.setHeader("Cache-Control",
-                            "max-age=" + depotAPIConf.getMaxBrowserCacheAgeInMillis() / 1000);
+                        "max-age=" + depotAPIConf.getMaxBrowserCacheAgeInMillis() / 1000);
                 }
                 try (OutputStream out = new BufferedOutputStream(response.getOutputStream())) {
                     response.setContentType(getServletContext().getMimeType(file.getFileName().toString()));

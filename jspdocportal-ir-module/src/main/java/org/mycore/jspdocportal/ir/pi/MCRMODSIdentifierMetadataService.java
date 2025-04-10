@@ -20,22 +20,21 @@ public class MCRMODSIdentifierMetadataService extends MCRAbstractMODSMetadataSer
         MCRObject object = checkObject(base);
         MCRMODSWrapper wrapper = new MCRMODSWrapper(object);
 
-        Element identifierElement = wrapper.getElement(getXPath());
+        final Element identifierElement = wrapper.getElement(getXPath());
         final String type = getIdentifierType();
 
         if (identifierElement != null) {
             if (!identifier.asString().equals(identifierElement.getText())) {
-                LOGGER.warn(
-                    type + " with prefix " + getProperties().get(PREFIX_PROPERTY_KEY) + " already exist with value "
-                        + identifierElement.getText() + "! - It will be replaced with " + identifier.asString());
+                LOGGER.warn("{} with prefix {} already exist with value {}! - It will be replaced with {}",
+                    () -> type, () -> getProperties().get(PREFIX_PROPERTY_KEY), () -> identifierElement.getText(),
+                    () -> identifier.asString());
                 identifierElement.setText(identifier.asString());
             }
-        }
-        else {
-            identifierElement = new Element("identifier", MCRConstants.MODS_NAMESPACE);
-            identifierElement.setAttribute("type", type);
-            identifierElement.setText(identifier.asString());
-            wrapper.addElement(identifierElement);
+        } else {
+            Element idElem = new Element("identifier", MCRConstants.MODS_NAMESPACE);
+            idElem.setAttribute("type", type);
+            idElem.setText(identifier.asString());
+            wrapper.addElement(idElem);
         }
     }
 }

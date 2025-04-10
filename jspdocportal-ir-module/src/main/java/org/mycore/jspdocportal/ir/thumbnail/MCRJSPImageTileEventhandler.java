@@ -52,16 +52,16 @@ public class MCRJSPImageTileEventhandler extends MCRImageTileEventHandler {
         try {
             super.handlePathCreated(evt, file, attrs);
         } catch (Exception e) {
-            LOGGER.warn("Error on TileEvent(created): " + e.getClass().getName() + ": "+ e.getMessage());
+            LOGGER.warn("Error on TileEvent(created): {}: {}", () -> e.getClass().getName(), () -> e.getMessage());
         }
     }
-    
+
     @Override
     public void handlePathDeleted(MCREvent evt, Path file, BasicFileAttributes attrs) {
         try {
             super.handlePathDeleted(evt, file, attrs);
         } catch (Exception e) {
-            LOGGER.warn("Error on TileEvent(deleted): " + e.getClass().getName() + ": "+ e.getMessage());
+            LOGGER.warn("Error on TileEvent(deleted): {}, {}", () -> e.getClass().getName(), () -> e.getMessage());
         }
     }
 

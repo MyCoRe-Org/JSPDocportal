@@ -92,7 +92,7 @@ public class MCRJSPDocportalIRCommands extends MCRAbstractCommands {
                                 xml.getContent().clear();
                                 xml.getContent().add(newMODS);
                                 MCRMetadataManager.update(mcrObj);
-                                LOGGER.info("MODS updated in " + objectID);
+                                LOGGER.info("MODS updated in {}", objectID);
                                 return;
                             }
                         }
@@ -102,6 +102,6 @@ public class MCRJSPDocportalIRCommands extends MCRAbstractCommands {
         } catch (Exception e) {
             LOGGER.error("MODS Update Exception", e);
         }
-        LOGGER.error("MODS updated FAILED in " + objectID);
+        LOGGER.error("MODS updated FAILED in {}", objectID);
     }
 }
