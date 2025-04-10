@@ -205,7 +205,7 @@ public class MCRJSPMetsMods2IIIFConverter {
         MCRIIIFLDURI seealsoHTML = new MCRIIIFLDURI(MCRConfiguration2.getStringOrThrow("MCR.Identifier.PURL.BaseURL")
             + metsDocument.getRootElement().getAttributeValue("OBJID"), null, "text/html");
         seealsoHTML.setContext(null);
-        manifest.seeAlso = new ArrayList<MCRIIIFLDURI>(List.of(seealsoHTML));
+        manifest.seeAlso = new ArrayList<>(List.of(seealsoHTML));
 
         // does not work because we removed the mets:note elements with additional attributes: 
         //  XPathExpression<Attribute> xpathProvider = XPathFactory.instance().compile(
@@ -217,8 +217,8 @@ public class MCRJSPMetsMods2IIIFConverter {
             Filters.attribute(), null, MCRConstants.METS_NAMESPACE, MCRConstants.MODS_NAMESPACE);
         Attribute attrProvider = xpathProvider.evaluateFirst(metsDocument);
         if (attrProvider != null) {
-            String providerID = attrProvider.getValue().toString();
-            providerID = providerID.substring(providerID.lastIndexOf("#") + 1);
+            String providerID = attrProvider.getValue();
+            providerID = providerID.substring(providerID.lastIndexOf('#') + 1);
             MCRCategory categ = MCRCategoryDAOFactory.getInstance()
                 .getCategory(new MCRCategoryID("provider", providerID), 0);
             Optional<MCRLabel> oLabel = categ.getLabel("x-logo");

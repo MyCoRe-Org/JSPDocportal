@@ -50,6 +50,7 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 public class MCRDepotAPIServlet extends HttpServlet {
 
+    @java.io.Serial
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = LogManager.getLogger();

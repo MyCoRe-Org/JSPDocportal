@@ -57,9 +57,10 @@ public class MCRTileServlet extends HttpServlet {
      */
     static final int MAX_AGE = 60 * 60 * 24 * 365; // one year
 
-    private static final long serialVersionUID = 3805114872438336791L;
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
 
-    private static final Logger LOGGER = LogManager.getLogger(MCRTileServlet.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private MCRTileFileProvider tfp = new MCRStandardTileFileProvider();
 
@@ -119,7 +120,7 @@ public class MCRTileServlet extends HttpServlet {
         final TileInfo tileInfo = getTileInfo(getPathInfo(req));
         try {
             Path p = getTileFile(tileInfo);
-            if (p!=null && Files.exists(p)) {
+            if (p != null && Files.exists(p)) {
                 return Files.getLastModifiedTime(p).toMillis();
             } else {
                 return -1;
@@ -160,15 +161,16 @@ public class MCRTileServlet extends HttpServlet {
                 tile = imagePath.substring(imagePath.lastIndexOf('/') + 1);
                 imagePath = imagePath.substring(0, imagePath.length() - tile.length() - 1);
             } else {
-                int pos = imagePath.length();
+                int pos = imagePath.length() - 1;
                 int cnt = 0;
-                while (--pos > 0 && cnt < 3) {
+                while (pos > 0 && cnt < 3) {
                     switch (imagePath.charAt(pos)) {
                         case '/':
                             cnt++;
                             break;
                         default:
                     }
+                    pos--;
                 }
                 if (imagePath.length() > pos + 1) {
                     tile = imagePath.substring(pos + 2);
@@ -176,8 +178,7 @@ public class MCRTileServlet extends HttpServlet {
                 }
             }
         }
-        final TileInfo tileInfo = new TileInfo(derivate, imagePath, tile);
-        return tileInfo;
+        return new TileInfo(derivate, imagePath, tile);
     }
 
     private Path getTileFile(TileInfo tileInfo) {
@@ -191,15 +192,7 @@ public class MCRTileServlet extends HttpServlet {
      * @author Thomas Scheffler (yagee)
      *
      */
-    static class TileInfo {
-        String derivate, imagePath, tile;
-
-        public TileInfo(final String derivate, final String imagePath, final String tile) {
-            this.derivate = derivate;
-            this.imagePath = imagePath;
-            this.tile = tile;
-        }
-
+    record TileInfo(String derivate, String imagePath, String tile) {
         /**
          * returns "TileInfo [derivate=" + derivate + ", imagePath=" + imagePath + ", tile=" + tile + "]"
          */
@@ -213,7 +206,7 @@ public class MCRTileServlet extends HttpServlet {
         URI uri = URI.create("jar:" + iviewFile.toUri().toString());
         try {
             return FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap(),
-                MCRTileServlet.class.getClassLoader());
+                Thread.currentThread().getContextClassLoader());
         } catch (FileSystemAlreadyExistsException exc) {
             // block until file system is closed
             try {
@@ -222,8 +215,7 @@ public class MCRTileServlet extends HttpServlet {
                     try {
                         Thread.sleep(10);
                     } catch (InterruptedException ie) {
-                        // get out of here
-                        throw new IOException(ie);
+                        // ignore
                     }
                 }
             } catch (FileSystemNotFoundException fsnfe) {

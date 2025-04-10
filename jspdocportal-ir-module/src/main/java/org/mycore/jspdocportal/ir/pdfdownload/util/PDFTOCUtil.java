@@ -30,7 +30,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -41,12 +44,16 @@ import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.config.MCRConfiguration2;
 
+//PDFWriter API expects List<HashMap> >- disable PMD rule
+@SuppressWarnings("PMD.LooseCoupling")
 public class PDFTOCUtil {
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final Namespace NS_METS = Namespace.getNamespace("mets", "http://www.loc.gov/METS/");
-
     private static final Namespace NS_XLINK = Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink");
 
-    private static XPathExpression<Element> xpStructMapPhysical, xpStructLink, xpRootDivLogical;
+    private static XPathExpression<Element> xpStructMapPhysical;
+    private static XPathExpression<Element> xpStructLink;
+    private static XPathExpression<Element> xpRootDivLogical;
 
     static {
         xpStructMapPhysical = XPathFactory.instance().compile("//mets:structMap[@TYPE='PHYSICAL']//mets:div",
@@ -57,8 +64,8 @@ public class PDFTOCUtil {
             Filters.element(), null, NS_METS);
     }
 
-    public static ArrayList<HashMap<String, Object>> createTOC(Path dataDir, int offset) {
-        ArrayList<HashMap<String, Object>> outlines = new ArrayList<HashMap<String, Object>>();
+    public static List<HashMap<String, Object>> createTOC(Path dataDir, int offset) {
+        List<HashMap<String, Object>> outlines = new ArrayList<>();
         Path metsFile = dataDir.resolve(
             MCRConfiguration2.getString("MCR.SWF.Project.ID").get() + "_" + dataDir.getFileName() + ".repos.mets.xml");
         if (Files.exists(metsFile)) {
@@ -66,21 +73,18 @@ public class PDFTOCUtil {
             try {
                 Document metsDoc = sb.build(metsFile.toFile());
                 outlines = createTOC(metsDoc, offset);
-            } catch (JDOMException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (JDOMException | IOException e) {
+                LOGGER.error(e);
             }
             return outlines;
         } else {
-            return new ArrayList<HashMap<String, Object>>();
+            return new ArrayList<>();
         }
     }
 
-    public static ArrayList<HashMap<String, Object>> createTOC(Document metsDoc, int offset) {
-        ArrayList<HashMap<String, Object>> outlines = new ArrayList<HashMap<String, Object>>();
-
-        HashMap<String, Integer> physStructMap = new HashMap<String, Integer>();
+    public static List<HashMap<String, Object>> createTOC(Document metsDoc, int offset) {
+        List<HashMap<String, Object>> outlines = new ArrayList<>();
+        Map<String, Integer> physStructMap = new HashMap<>();
         for (Element e : xpStructMapPhysical.evaluate(metsDoc)) {
             String id = e.getAttributeValue("ID");
             String order = e.getAttributeValue("ORDER");
@@ -94,7 +98,7 @@ public class PDFTOCUtil {
                 physStructMap.put(id, page);
             }
         }
-        HashMap<String, Integer> logDiv2PageMap = new HashMap<String, Integer>();
+        Map<String, Integer> logDiv2PageMap = new HashMap<>();
         for (Element e : xpStructLink.evaluate(metsDoc)) {
             String from = e.getAttributeValue("from", NS_XLINK);
             String to = e.getAttributeValue("to", NS_XLINK);
@@ -111,9 +115,9 @@ public class PDFTOCUtil {
         return outlines;
     }
 
-    private static void addTocEntry(ArrayList<HashMap<String, Object>> parent, Element logElem,
-        HashMap<String, Integer> logDiv2PageMap) {
-        HashMap<String, Object> data = new HashMap<String, Object>();
+    private static void addTocEntry(List<HashMap<String, Object>> parent, Element logElem,
+        Map<String, Integer> logDiv2PageMap) {
+        HashMap<String, Object> data = new HashMap<>();
         parent.add(data);
 
         String title = logElem.getAttributeValue("LABEL");
@@ -130,7 +134,7 @@ public class PDFTOCUtil {
         data.put("Page", String.format(Locale.ENGLISH, "%d Fit", logDiv2PageMap.get(logElem.getAttributeValue("ID"))));
         List<Element> children = logElem.getChildren("div", NS_METS);
         if (!children.isEmpty()) {
-            ArrayList<HashMap<String, Object>> kids = new ArrayList<HashMap<String, Object>>();
+            List<HashMap<String, Object>> kids = new ArrayList<>();
             data.put("Kids", kids);
             for (Element e : children) {
                 addTocEntry(kids, e, logDiv2PageMap);

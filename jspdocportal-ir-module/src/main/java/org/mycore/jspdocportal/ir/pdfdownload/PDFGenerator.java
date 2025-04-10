@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
@@ -71,6 +73,8 @@ import jakarta.servlet.ServletContext;
  *
  */
 public class PDFGenerator implements Runnable {
+    private static final Logger LOGGER = LogManager.getLogger();
+    
     public static final int DEFAULT_DPI = 300;
     public static final int BORDER = 55; // 2cm (72dpi)
     public static final String SESSION_ATTRIBUTE_PROGRESS_PREFIX = "pdfdownload_progress_";
@@ -91,7 +95,8 @@ public class PDFGenerator implements Runnable {
         this.mcrid = mcrid;
         this.ctx = ctx;
     }
-
+    
+    @Override
     public void run() {
         ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier, 0);
         Path baseDir = dataDir;
@@ -132,8 +137,8 @@ public class PDFGenerator implements Runnable {
             PdfReader reader;
             reader = new PdfReader(new ByteArrayInputStream(frontPageBytes.toByteArray()));
             // loop over the pages in that document
-            for (int page = 0; page < reader.getNumberOfPages();) {
-                copy.addPage(copy.getImportedPage(reader, ++page));
+            for (int page = 1; page <= reader.getNumberOfPages(); page++) {
+                copy.addPage(copy.getImportedPage(reader, page));
             }
             copy.freeReader(reader);
             reader.close();
@@ -145,8 +150,8 @@ public class PDFGenerator implements Runnable {
                 reader = new PdfReader(imageFiles[i].getAbsolutePath());
                 // loop over the pages in that document
                 int n = reader.getNumberOfPages();
-                for (int page = 0; page < n;) {
-                    copy.addPage(copy.getImportedPage(reader, ++page));
+                for (int page = 1; page <= n; page++) {
+                    copy.addPage(copy.getImportedPage(reader, page));
                 }
                 copy.freeReader(reader);
                 reader.close();
@@ -165,10 +170,8 @@ public class PDFGenerator implements Runnable {
 
             Files.move(tmpFile, pdfOutFile, StandardCopyOption.REPLACE_EXISTING);
             ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier, 101);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (DocumentException e) {
-            e.printStackTrace();
+        } catch (IOException | DocumentException e) {
+            LOGGER.error(e);
         }
     }
 
@@ -213,18 +216,14 @@ public class PDFGenerator implements Runnable {
 
             Files.move(tmpFile, pdfOutFile, StandardCopyOption.REPLACE_EXISTING);
             ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier, 101);
-        } catch (IOException e) {
-            e.printStackTrace();
-            ctx.removeAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier);
-
-        } catch (DocumentException e) {
-            e.printStackTrace();
+        } catch (IOException | DocumentException e) {
+            LOGGER.error(e);
             ctx.removeAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier);
         }
     }
 
     private void createFromMETS() {
-        List<String> imgURLs = new ArrayList<String>();
+        List<String> imgURLs = new ArrayList<>();
 
         org.jdom2.Document metsXML = null;
         ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier, 1);
@@ -283,7 +282,7 @@ public class PDFGenerator implements Runnable {
                     // do nothing
                 }
             }
-            if (imgURLs.size() > 0) {
+            if (!imgURLs.isEmpty()) {
                 writer.setOutlines(PDFTOCUtil.createTOC(metsXML, 1));
             }
 
@@ -293,7 +292,7 @@ public class PDFGenerator implements Runnable {
             Files.move(tmpFile, pdfOutFile, StandardCopyOption.REPLACE_EXISTING);
             ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier, 101);
         } catch (IOException | JDOMException | DocumentException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
             ctx.removeAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier);
         }
     }

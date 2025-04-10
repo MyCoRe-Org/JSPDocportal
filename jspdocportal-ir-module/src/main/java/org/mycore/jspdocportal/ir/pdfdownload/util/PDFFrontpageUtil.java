@@ -146,21 +146,20 @@ public class PDFFrontpageUtil {
     }
 
     private static String cleanUpHTML(String content) {
-        String result = ""
-            + "<html xmlns='http://www.w3.org/1999/xhtml'>                                                        "
-            + "\n  <head>                                                                                         "
-            + "\n    <style>                                                                                      "
-            + "\n      body{font-size:12px;}                                                                      "
-            + "\n      h4{color: rgb(0, 74, 153);font-family: Verdana;font-size: 120%}                            "
-            + "\n      a {text-decoration: none !important; font-size:120%;font-weight:bold;color:black;}         "
-            + "\n      span.label {color: #777;}                                                                  "
-            + "\n      span.ir-badge-license img{height:20px !important;}                                         "
-            + "\n      p {margin-bottom:0.5em;}                                                                   "
-            + "\n    </style>                                                                                     "
-            + "\n  </head>                                                                                        "
-            + "\n  <body>" + content + "</body>                                                                   "
+        return """
+            <html xmlns='http://www.w3.org/1999/xhtml'>
+              <head>
+                <style>
+                  body{font-size:12px;}
+                  h4{color: rgb(0, 74, 153);font-family: Verdana;font-size: 120%}
+                  a {text-decoration: none !important; font-size:120%;font-weight:bold;color:black;}
+                  span.label {color: #777;}
+                  span.ir-badge-license img{height:20px !important;}
+                  p {margin-bottom:0.5em;}
+                </style>
+              </head>
+            """
+            + "\n  <body>" + content + "</body>"
             + "\n</html>";
-
-        return result;
     }
 }

@@ -20,6 +20,7 @@
 package org.mycore.jspdocportal.ir.iview2;
 
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -45,7 +46,7 @@ import org.mycore.iview2.backend.MCRTileInfo;
  *
  */
 public class MCRJSPDepotTileFileProvider implements MCRTileFileProvider {
-    private static final Logger LOGGER = LogManager.getLogger(MCRJSPDepotTileFileProvider.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     // from Apache Configuration ...
     // AliasMatch "^/depot/demel[_/]([a-z0-9]+)(/.*)$"
@@ -65,7 +66,7 @@ public class MCRJSPDepotTileFileProvider implements MCRTileFileProvider {
     // AliasMatch "^/depot/darl%2F([a-f0-9]{2})([a-f0-9]{3})(.{31})(/.*)$"
     // "/storage/digibib/doro/depot/darl/$1/$1$2/$1$2$3$4"
 
-    public static final String[][] DIRECTORY_PATTERN_REGEX = new String[][] {
+    public static final String[][] DIRECTORY_PATTERN_REGEX = {
         { "^rosdok[_/](.*)(.{3})(.{4})$", "rosdok/$1/$1$2/$1$2$3" },
         { "^wossidia[_/](.{3})(.{5})(.{3})$", "wossidia/$1/$1$2/$1$2$3" },
         { "^ipac[_/]([a-z]+)[_]([a-z0-9]*)$", "ipac/$1/$1_$2" },
@@ -82,17 +83,17 @@ public class MCRJSPDepotTileFileProvider implements MCRTileFileProvider {
     @Override
     public Optional<Path> getTileFile(MCRTileInfo tileInfo) {
         try {
-            String recordIdentifier = null;
-            String imagePath = null;
+            String recordIdentifier;
+            String imagePath;
             if (!StringUtils.isEmpty(tileInfo.derivate())) {
                 recordIdentifier = URLDecoder
-                    .decode(URLDecoder.decode(tileInfo.derivate(), "UTF-8"), "UTF-8")
+                    .decode(URLDecoder.decode(tileInfo.derivate(), StandardCharsets.UTF_8), StandardCharsets.UTF_8)
                     .replace("..", "");
                 imagePath = "iview2/" + tileInfo.imagePath() + ".iview2";
             } else {
                 //fallback for image ids like: rosdok%252Fppn642329060%252Fphys_0002
                 String normalizedIdentifier = URLDecoder
-                    .decode(URLDecoder.decode(tileInfo.imagePath(), "UTF-8"), "UTF-8")
+                    .decode(URLDecoder.decode(tileInfo.imagePath(), StandardCharsets.UTF_8), StandardCharsets.UTF_8)
                     .replace("..", "");
 
                 if (!normalizedIdentifier.contains("/")) {
@@ -102,10 +103,10 @@ public class MCRJSPDepotTileFileProvider implements MCRTileFileProvider {
                     return Optional.empty();
                 }
 
-                recordIdentifier = normalizedIdentifier.substring(0, normalizedIdentifier.lastIndexOf("/"));
-                imagePath = normalizedIdentifier.substring(normalizedIdentifier.lastIndexOf("/") + 1);
+                recordIdentifier = normalizedIdentifier.substring(0, normalizedIdentifier.lastIndexOf('/'));
+                imagePath = normalizedIdentifier.substring(normalizedIdentifier.lastIndexOf('/') + 1);
                 if (imagePath.contains(".")) {
-                    imagePath = imagePath.substring(0, imagePath.lastIndexOf("."));
+                    imagePath = imagePath.substring(0, imagePath.lastIndexOf('.'));
                 }
 
                 imagePath = "iview2/" + imagePath + ".iview2";

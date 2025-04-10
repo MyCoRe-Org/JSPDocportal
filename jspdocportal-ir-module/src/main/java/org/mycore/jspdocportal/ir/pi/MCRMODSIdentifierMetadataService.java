@@ -26,8 +26,8 @@ public class MCRMODSIdentifierMetadataService extends MCRAbstractMODSMetadataSer
         if (identifierElement != null) {
             if (!identifier.asString().equals(identifierElement.getText())) {
                 LOGGER.warn("{} with prefix {} already exist with value {}! - It will be replaced with {}",
-                    () -> type, () -> getProperties().get(PREFIX_PROPERTY_KEY), () -> identifierElement.getText(),
-                    () -> identifier.asString());
+                    () -> type, () -> getProperties().get(PREFIX_PROPERTY_KEY),
+                    identifierElement::getText, identifier::asString);
                 identifierElement.setText(identifier.asString());
             }
         } else {

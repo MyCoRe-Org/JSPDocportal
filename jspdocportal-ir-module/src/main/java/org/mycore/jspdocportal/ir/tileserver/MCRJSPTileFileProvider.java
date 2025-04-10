@@ -39,8 +39,9 @@ import org.mycore.jspdocportal.ir.depotapi.HashedDirectoryStructure;
  *
  */
 public class MCRJSPTileFileProvider implements MCRTileFileProvider {
-    private static final Logger LOGGER = LogManager.getLogger(MCRJSPTileFileProvider.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
+    @Override
     public Path getTileFile(String derivate, String image) {
         try {
             if (StringUtils.isNotEmpty(derivate) && StringUtils.isNotEmpty(image)) {

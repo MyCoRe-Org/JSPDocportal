@@ -174,6 +174,7 @@ public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
 
     }
 
+    @Override
     public String normalizeIdentifier(String id) {
         String normalizedIdentifier = URLDecoder.decode(
             URLDecoder.decode(id, StandardCharsets.UTF_8), StandardCharsets.UTF_8)

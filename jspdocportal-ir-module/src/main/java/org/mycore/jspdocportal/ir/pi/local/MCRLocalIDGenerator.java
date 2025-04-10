@@ -29,7 +29,8 @@ public class MCRLocalIDGenerator extends MCRPIGenerator<MCRLocalID> {
     private static final int MIN_ID = 4001;
 
     private static final String PROP_RECORDIDENTIFIER_SOURCE = "Source";
-
+    private static final Map<String, AtomicInteger> PATTERN_COUNT_MAP = new HashMap<>();
+    
     @Override
     public MCRLocalID generate(MCRBase mcrBase, String additional) throws MCRPersistentIdentifierException {
         MCRObject mcrObj = (MCRObject) mcrBase;
@@ -68,10 +69,8 @@ public class MCRLocalIDGenerator extends MCRPIGenerator<MCRLocalID> {
         return new MCRLocalID(mcrBase.getId().getProjectId(), "id", getNextCount(mcrBase.getId().getProjectId(), "id"));
     }
 
-    private static final Map<String, AtomicInteger> PATTERN_COUNT_MAP = new HashMap<>();
-
     //* implementation adopted from MCRCountingDNBURNGenerator
-    private final synchronized int getNextCount(String projectID, String idPrefix) {
+    private synchronized int getNextCount(String projectID, String idPrefix) {
         String pattern = projectID + "/" + idPrefix + "([0-9]+)";
 
         AtomicInteger count = PATTERN_COUNT_MAP.computeIfAbsent(pattern, (p) -> {

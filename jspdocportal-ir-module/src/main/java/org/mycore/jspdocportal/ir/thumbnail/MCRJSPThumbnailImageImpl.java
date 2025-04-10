@@ -24,8 +24,6 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.iview2.iiif.MCRThumbnailImageImpl;
 import org.mycore.jspdocportal.ir.pi.local.MCRLocalID;
@@ -39,7 +37,6 @@ import org.mycore.pi.MCRPIRegistrationInfo;
  *
  */
 public class MCRJSPThumbnailImageImpl extends MCRThumbnailImageImpl {
-    private static final Logger LOGGER = LogManager.getLogger();
 
     public MCRJSPThumbnailImageImpl(String implName) {
         super(implName);
@@ -57,6 +54,6 @@ public class MCRJSPThumbnailImageImpl extends MCRThumbnailImageImpl {
         }
 
         Optional<MCRPIRegistrationInfo> oPiInfo = MCRPIManager.getInstance().getInfo(recordId,  MCRLocalID.TYPE);
-        return oPiInfo.map(x -> x.getMycoreID()).map(MCRObjectID::getInstance);
+        return oPiInfo.map(MCRPIRegistrationInfo::getMycoreID).map(MCRObjectID::getInstance);
     }
 }

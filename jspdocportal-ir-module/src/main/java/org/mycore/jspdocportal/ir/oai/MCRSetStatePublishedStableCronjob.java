@@ -72,7 +72,7 @@ public class MCRSetStatePublishedStableCronjob extends MCRCronjob {
                         response.getResults().stream()
                             .map(result -> (String) result.get("id"))
                             .map(MCRObjectID::getInstance)
-                            .forEach(x -> makeObjectOAIReady(x));
+                            .forEach(this::makeObjectOAIReady);
 
                     } catch (SolrServerException | IOException e) {
                         LOGGER.error("Error while searching documents, which are oai-ready!", e);

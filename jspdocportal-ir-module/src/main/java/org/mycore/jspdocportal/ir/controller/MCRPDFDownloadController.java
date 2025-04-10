@@ -74,7 +74,7 @@ public class MCRPDFDownloadController {
 
     private static final String PDF_EXTENSION = ".pdf";
 
-    private static final Logger LOGGER = LogManager.getLogger(MCRPDFDownloadController.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private static final String PROPERTY_DELETE_PDF_SECRET = "MCR.PDFDownload.Delete.Secret";
     private static final String HEADER_DELETE_PDF_SECRET = "X-MCR-PDFDownload-Delete-Secret";
