@@ -20,15 +20,15 @@ public abstract class MCRGVKMODSCatalogService implements MCRMODSCatalogService 
 
     public static final Namespace MODS_NAMESPACE = Namespace.getNamespace("mods", "http://www.loc.gov/mods/v3");
 
-    private static XPathExpression<Element> XP_PPN = XPathFactory.instance().compile(
+    private static final XPathExpression<Element> XP_PPN = XPathFactory.instance().compile(
         "//mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']",
         Filters.element(), null, MODS_NAMESPACE);
 
-    private static XPathExpression<Element> XP_RECORD_ID = XPathFactory.instance().compile(
+    private static final XPathExpression<Element> XP_RECORD_ID = XPathFactory.instance().compile(
         "//mods:mods/mods:recordInfo/mods:recordIdentifier",
         Filters.element(), null, MODS_NAMESPACE);
 
-    private static XPathExpression<Element> XP_MODS_ROOT = XPathFactory.instance().compile(
+    private static final XPathExpression<Element> XP_MODS_ROOT = XPathFactory.instance().compile(
         "//modsContainer[@type='created' or @type='imported'][./mods:mods]",
         Filters.element(), null, MODS_NAMESPACE);
 

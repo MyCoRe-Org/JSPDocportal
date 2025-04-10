@@ -45,7 +45,7 @@ public class MCRJSPImageTileEventhandler extends MCRImageTileEventHandler {
     //       at org.mycore.common.events.MCREventManager.handleEvent(MCREventManager.java:153)
     //       ... 22 more
 
-    private Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @Override
     public void handlePathCreated(MCREvent evt, Path file, BasicFileAttributes attrs) {

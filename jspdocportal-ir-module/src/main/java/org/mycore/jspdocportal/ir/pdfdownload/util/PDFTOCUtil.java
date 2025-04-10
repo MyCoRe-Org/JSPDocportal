@@ -42,9 +42,9 @@ import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.config.MCRConfiguration2;
 
 public class PDFTOCUtil {
-    private static Namespace NS_METS = Namespace.getNamespace("mets", "http://www.loc.gov/METS/");
+    private static final Namespace NS_METS = Namespace.getNamespace("mets", "http://www.loc.gov/METS/");
 
-    private static Namespace NS_XLINK = Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink");
+    private static final Namespace NS_XLINK = Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink");
 
     private static XPathExpression<Element> xpStructMapPhysical, xpStructLink, xpRootDivLogical;
 

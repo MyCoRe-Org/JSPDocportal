@@ -49,6 +49,7 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.jspdocportal.common.taglibs.MCRTransformXslTag;
+import org.mycore.resource.MCRResourceHelper;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
@@ -73,7 +74,7 @@ public class PDFFrontpageUtil {
         document.addAuthor("Universitätsbibliothek Rostock");
         document.addSubject("https://purl.uni-rostock.de/"+recordIdentifier.replace("rosdok_", "rosdok/"));
         
-        try (InputStream is = PDFFrontpageUtil.class.getResourceAsStream("/rosdok_schriftzug.png")) {
+        try (InputStream is = MCRResourceHelper.getResourceAsStream("/rosdok_schriftzug.png")) {
             byte[] imgBytes = IOUtils.toByteArray(is);
             Image img = Image.getInstance(imgBytes);
             img.scalePercent(25f);

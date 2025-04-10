@@ -39,7 +39,7 @@ import org.mycore.pi.MCRPIRegistrationInfo;
  *
  */
 public class MCRJSPThumbnailImageImpl extends MCRThumbnailImageImpl {
-    Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public MCRJSPThumbnailImageImpl(String implName) {
         super(implName);

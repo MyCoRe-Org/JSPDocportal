@@ -26,7 +26,7 @@ public class MCRLocalIDGenerator extends MCRPIGenerator<MCRLocalID> {
 
     // initialize minimal ID to avoid conflicts on initial import
     // LTS 2017: 251 / LTS 2021: 3301 / LTS 2022: 4001
-    private static int MIN_ID = 4001;
+    private static final int MIN_ID = 4001;
 
     private static final String PROP_RECORDIDENTIFIER_SOURCE = "Source";
 
@@ -74,8 +74,8 @@ public class MCRLocalIDGenerator extends MCRPIGenerator<MCRLocalID> {
     private final synchronized int getNextCount(String projectID, String idPrefix) {
         String pattern = projectID + "/" + idPrefix + "([0-9]+)";
 
-        AtomicInteger count = PATTERN_COUNT_MAP.computeIfAbsent(pattern, (pattern_) -> {
-            Pattern regExpPattern = Pattern.compile(pattern_);
+        AtomicInteger count = PATTERN_COUNT_MAP.computeIfAbsent(pattern, (p) -> {
+            Pattern regExpPattern = Pattern.compile(p);
             Predicate<String> matching = regExpPattern.asPredicate();
 
             List<MCRPIRegistrationInfo> list = MCRPIManager.getInstance().getList(MCRLocalID.TYPE, -1,

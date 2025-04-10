@@ -12,7 +12,7 @@ import org.mycore.pi.MCRPersistentIdentifier;
 import org.mycore.pi.exceptions.MCRPersistentIdentifierException;
 
 public class MCRMODSIdentifierMetadataService extends MCRAbstractMODSMetadataService {
-    private Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @Override
     public void insertIdentifier(MCRPersistentIdentifier identifier, MCRBase base, String additional)

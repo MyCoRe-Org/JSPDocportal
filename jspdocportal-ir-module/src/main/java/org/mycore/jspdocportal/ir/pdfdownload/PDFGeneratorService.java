@@ -33,7 +33,7 @@ import org.mycore.util.concurrent.MCRTransactionableRunnable;
 
 public class PDFGeneratorService {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static ExecutorService PDFGENERATOR_SERVICE = Executors.newFixedThreadPool(3);
+    private static final ExecutorService PDFGENERATOR_SERVICE = Executors.newFixedThreadPool(3);
     static {
         MCRShutdownHandler.getInstance().addCloseable(new MCRShutdownHandler.Closeable() {
 
