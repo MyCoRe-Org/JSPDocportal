@@ -43,26 +43,26 @@ public class MCRViewerController {
 
     @GET
     @Path("/{field}/{identifier}")
-    public Response doGetFirstImage(@PathParam("field") String field, @PathParam("identifier") String identifier_,
+    public Response doGetFirstImage(@PathParam("field") String field, @PathParam("identifier") String identifier,
         @DefaultValue("") @QueryParam("_mcrviewer_start") String startPage,
         @Context HttpServletRequest request) {
         if ("".equals(startPage)) {
-            return doGetWithFile(field, identifier_, "", request);
+            return doGetWithFile(field, identifier, "", request);
         } else {
-            return doGetWithFile(field, identifier_, "iview2/" + startPage + ".iview2", request);
+            return doGetWithFile(field, identifier, "iview2/" + startPage + ".iview2", request);
         }
     }
 
     @GET
     @Path("/{field}/{identifier}/{filePath:.*}")
-    public Response doGetWithFile(@PathParam("field") String field, @PathParam("identifier") String identifier_,
+    public Response doGetWithFile(@PathParam("field") String field, @PathParam("identifier") String identifier,
         @PathParam("filePath") String filePath, @Context HttpServletRequest request) {
 
-        String identifier = URLDecoder.decode(URLDecoder.decode(identifier_, StandardCharsets.UTF_8),
+        String cleanIdentifier = URLDecoder.decode(URLDecoder.decode(identifier, StandardCharsets.UTF_8),
             StandardCharsets.UTF_8);
         Map<String, Object> model = new HashMap<>();
         model.put("field", field);
-        model.put("identifier", identifier);
+        model.put("identifier", cleanIdentifier);
         if (!StringUtils.isEmpty(filePath)) {
             model.put("filePath", filePath);
         }
@@ -70,7 +70,7 @@ public class MCRViewerController {
         Viewable v = new Viewable("/mcrviewer", model);
 
         SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
-        String value = identifier;
+        String value = cleanIdentifier;
         if ("recordIdentifier".equals(field) && value.contains("/")) {
             value = value.replaceFirst("/", "_");
         }

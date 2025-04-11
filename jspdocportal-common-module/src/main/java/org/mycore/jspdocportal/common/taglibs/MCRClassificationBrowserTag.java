@@ -82,7 +82,7 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
  * @since 2.0
  */
 public class MCRClassificationBrowserTag extends SimpleTagSupport {
-    private static final Logger LOGGER = LogManager.getLogger(MCRClassificationBrowserTag.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private String mode;
     
@@ -202,25 +202,25 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
             }
 
             String webApplicationBaseURL = MCRFrontendUtil.getBaseURL();
-            String subselect_webpage = context.getRequest().getParameter("XSL.subselect.webpage.SESSION");
-            if (subselect_webpage == null) {
-                subselect_webpage = "";
+            String subselectWebpage = context.getRequest().getParameter("XSL.subselect.webpage.SESSION");
+            if (subselectWebpage == null) {
+                subselectWebpage = "";
             }
 
-            String subselect_session = context.getRequest().getParameter("XSL.subselect.session.SESSION");
-            if (subselect_session == null) {
-                subselect_session = "";
+            String subselectSession = context.getRequest().getParameter("XSL.subselect.session.SESSION");
+            if (subselectSession == null) {
+                subselectSession = "";
             }
-            String subselect_varpath = context.getRequest().getParameter("XSL.subselect.varpath.SESSION");
-            if (subselect_varpath == null) {
-                subselect_varpath = "";
+            String subselectVarpath = context.getRequest().getParameter("XSL.subselect.varpath.SESSION");
+            if (subselectVarpath == null) {
+                subselectVarpath = "";
             }
-            boolean isSubselect = !subselect_varpath.equals("");
+            boolean isSubselect = !subselectVarpath.equals("");
 
             // cancel subselect
             if (isSubselect) {
-                out.write("<form action=\"" + webApplicationBaseURL + subselect_webpage + "XSL.editor.session.id="
-                        + subselect_session + "\" method=\"post\">\n");
+                out.write("<form action=\"" + webApplicationBaseURL + subselectWebpage + "XSL.editor.session.id="
+                        + subselectSession + "\" method=\"post\">\n");
                 out.write("   <input type=\"submit\" class=\"submit\" value=\""
                         + MCRTranslation.translate("Editor.Common.button.CancelSelect") + "\" />\n");
                 out.write("</form><br/><br/>\n");
@@ -571,7 +571,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
 }
 
 class CBConfig {
-    private static String PROP_PREFIX = "MCR.ClassBrowser.";
+    private static final String PROP_PREFIX = "MCR.ClassBrowser.";
 
     /*
      * required: set the ID of the classification to be shown

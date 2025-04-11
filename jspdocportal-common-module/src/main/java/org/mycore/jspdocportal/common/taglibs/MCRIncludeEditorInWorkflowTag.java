@@ -53,7 +53,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
     private String editorPath;
     private String cancelPage;
 
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public void setIsNewEditorSource(String isNewEditorSource) {
         this.isNewEditorSource = isNewEditorSource;
@@ -191,11 +191,11 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
         }
 
         catch (TransformerConfigurationException e) {
-            logger.error("TransformerConfigurationExceptio: " + e, e);
+            LOGGER.error("TransformerConfigurationExceptio: " + e, e);
         } catch (TransformerException e) {
-            logger.error("TransformerException: " + e, e);
+            LOGGER.error("TransformerException: " + e, e);
         } catch (JDOMException e) {
-            logger.error("JDOMException: " + e, e);
+            LOGGER.error("JDOMException: " + e, e);
         }
     }
 
@@ -227,7 +227,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
             try {
                 url = new File(editorSource).toURI().toURL().toString();
             } catch (MalformedURLException mue) {
-                logger.error("Wrong URL", mue);
+                LOGGER.error("Wrong URL", mue);
             }
 
         } else if (!isNewEditorSource.equals("true") && mcrid != null && !mcrid.equals("") && type != null
@@ -235,7 +235,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
             try {
                 url = MCRBPMNUtils.getWorkflowObjectFile(MCRObjectID.getInstance(mcrid)).toUri().toURL().toString();
             } catch (MalformedURLException mue) {
-                logger.error("Wrong URL", mue);
+                LOGGER.error("Wrong URL", mue);
             }
         }
         //params.put("XSL.editor.source.uri", url);

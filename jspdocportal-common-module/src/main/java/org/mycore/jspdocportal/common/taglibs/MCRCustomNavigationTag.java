@@ -53,7 +53,7 @@ import jakarta.servlet.jsp.PageContext;
  * 
  */
 public class MCRCustomNavigationTag extends MCRAbstractNavigationTag {
-    protected static Logger LOGGER = LogManager.getLogger(MCRCustomNavigationTag.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private String var;
 

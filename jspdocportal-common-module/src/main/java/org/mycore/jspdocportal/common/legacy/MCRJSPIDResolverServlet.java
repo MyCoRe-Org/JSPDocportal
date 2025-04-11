@@ -78,7 +78,7 @@ import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 @Deprecated
 public class MCRJSPIDResolverServlet extends HttpServlet {
     protected enum OpenBy {
-        page, nr, part, empty
+        PAGE, NR, PART, EMPTY
     };
 
     private static final long serialVersionUID = 1L;
@@ -160,19 +160,19 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
                         String url = "";
                         String page = request.getParameter("page");
                         if (page != null) {
-                            url = createURLForDFGViewer(request, mcrID, OpenBy.page, page);
+                            url = createURLForDFGViewer(request, mcrID, OpenBy.PAGE, page);
                         }
                         String nr = request.getParameter("nr");
                         if (nr != null) {
-                            url = createURLForDFGViewer(request, mcrID, OpenBy.nr, nr);
+                            url = createURLForDFGViewer(request, mcrID, OpenBy.NR, nr);
                         }
                         String part = request.getParameter("part");
                         if (part != null) {
-                            url = createURLForDFGViewer(request, mcrID, OpenBy.part, part);
+                            url = createURLForDFGViewer(request, mcrID, OpenBy.PART, part);
                         }
 
                         if (url.isEmpty()) {
-                            url = createURLForDFGViewer(request, mcrID, OpenBy.empty, "");
+                            url = createURLForDFGViewer(request, mcrID, OpenBy.EMPTY, "");
                         }
                         if (url.length() > 0) {
                             LOGGER.debug("DFGViewer URL: " + url);
@@ -281,19 +281,19 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
                                     nr = nr.substring(1);
                                 }
                                 if (!nr.isEmpty()) {
-                                    if (openBy == OpenBy.page) {
+                                    if (openBy == OpenBy.PAGE) {
                                         eMETSPhysDiv = XPathFactory.instance()
                                             .compile("/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
                                                 + "/mets:div[@TYPE='physSequence']/mets:div[starts-with(@ORDERLABEL, '"
                                                 + nr + "')]", Filters.element(), null, nsMets)
                                             .evaluateFirst(docMETS);
-                                    } else if (openBy == OpenBy.nr) {
+                                    } else if (openBy == OpenBy.NR) {
                                         eMETSPhysDiv = XPathFactory.instance()
                                             .compile("/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
                                                 + "/mets:div[@TYPE='physSequence']/mets:div[@ORDER='" + nr
                                                 + "']", Filters.element(), null, nsMets)
                                             .evaluateFirst(docMETS);
-                                    } else if (openBy == OpenBy.part) {
+                                    } else if (openBy == OpenBy.PART) {
                                         eMETSPhysDiv = XPathFactory.instance()
                                             .compile(
                                                 "/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
@@ -410,19 +410,19 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
                                     nr = nr.substring(1);
                                 }
                                 if (!nr.isEmpty()) {
-                                    if (openBy == OpenBy.page) {
+                                    if (openBy == OpenBy.PAGE) {
                                         eMETSPhysDiv = XPathFactory.instance()
                                             .compile("/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
                                                 + "/mets:div[@TYPE='physSequence']/mets:div[starts-with(@ORDERLABEL, '"
                                                 + nr + "')]", Filters.element(), null, nsMets)
                                             .evaluateFirst(docMETS);
-                                    } else if (openBy == OpenBy.nr) {
+                                    } else if (openBy == OpenBy.NR) {
                                         eMETSPhysDiv = XPathFactory.instance()
                                             .compile("/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
                                                 + "/mets:div[@TYPE='physSequence']/mets:div[@ORDER='" + nr
                                                 + "']", Filters.element(), null, nsMets)
                                             .evaluateFirst(docMETS);
-                                    } else if (openBy == OpenBy.part) {
+                                    } else if (openBy == OpenBy.PART) {
                                         eMETSPhysDiv = XPathFactory.instance()
                                             .compile(
                                                 "/mets:mets/mets:structMap[@TYPE='PHYSICAL']"

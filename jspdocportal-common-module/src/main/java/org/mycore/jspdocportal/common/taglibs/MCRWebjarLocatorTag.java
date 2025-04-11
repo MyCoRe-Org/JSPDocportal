@@ -45,10 +45,10 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
 public class MCRWebjarLocatorTag extends SimpleTagSupport {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    protected static MCRCache<String, String> WEBJAR_LOCATOR_URL_CACHE
+    protected static final MCRCache<String, String> WEBJAR_LOCATOR_URL_CACHE
         = new MCRCache<>(100, "MCRWebjarLocatorTag WebjarItemURLCache");
 
-    protected static WebJarAssetLocator WEBJAR_LOCATOR = new WebJarAssetLocator();
+    protected static final WebJarAssetLocator WEBJAR_LOCATOR = new WebJarAssetLocator();
 
     private String project;
 

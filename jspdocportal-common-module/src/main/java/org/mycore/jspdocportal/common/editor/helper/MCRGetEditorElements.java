@@ -58,7 +58,7 @@ import org.mycore.user2.MCRRoleManager;
  *
  */
 public class MCRGetEditorElements {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private Properties parseQueryString(String query) {
         Properties params = new Properties();
@@ -70,9 +70,9 @@ public class MCRGetEditorElements {
         return params;
     }
 
-    public Element resolveElement(String URI) {
+    public Element resolveElement(String uri) {
         try {
-            String query = URI.substring(URI.indexOf("?") + 1);
+            String query = uri.substring(uri.indexOf("?") + 1);
             Properties params = parseQueryString(query);
             String mode = params.getProperty("mode");
             if (mode.equals("getHiddenVar")) {
@@ -92,7 +92,7 @@ public class MCRGetEditorElements {
             }
             return null;
         } catch (Exception ex) {
-            logger.error("could not resolve URI " + URI);
+            LOGGER.error("could not resolve URI " + uri);
             return new Element("error");
         }
     }
@@ -116,9 +116,9 @@ public class MCRGetEditorElements {
         Iterator<MCRRole> itGroup = groups.iterator();
         while (itGroup.hasNext()) {
             MCRRole group = (MCRRole) itGroup.next();
-            String ID = group.getName();
-            if (ID.startsWith("create")) {
-                org.jdom2.Element item = new org.jdom2.Element("item").setAttribute("value", ID).setAttribute("label",
+            String id = group.getName();
+            if (id.startsWith("create")) {
+                org.jdom2.Element item = new org.jdom2.Element("item").setAttribute("value", id).setAttribute("label",
                         group.getName());
                 retitems.addContent(item);
             }
@@ -203,7 +203,7 @@ public class MCRGetEditorElements {
             try {
                 values = Arrays.asList(MCRConfiguration2.getString(categoryProp).orElse("").split(","));
             } catch (Exception ex) {
-                logger.warn("config property " + categoryProp + " must be a comma separated list [" + ex.getMessage()
+                LOGGER.warn("config property " + categoryProp + " must be a comma separated list [" + ex.getMessage()
                         + "]");
                 return items;
             }

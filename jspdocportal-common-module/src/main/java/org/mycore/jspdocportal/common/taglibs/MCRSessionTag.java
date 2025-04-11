@@ -42,7 +42,7 @@ public class MCRSessionTag extends SimpleTagSupport {
      * Time when the webapp was deployed 
      * coded as base32 String
      */
-    private static String DEPLOY_TIME_BASE32 = null;
+    private static String deployTimeBase32 = null;
 
     private String info;
 
@@ -74,18 +74,18 @@ public class MCRSessionTag extends SimpleTagSupport {
                 pageContext.setAttribute(var, mcrSession.getID());
                 break;
             case "deployTimeBase32":
-                if (DEPLOY_TIME_BASE32 == null) {
+                if (deployTimeBase32 == null) {
                     //set the deploy time of the web application as base32 String
                     String path2WEBINF = pageContext.getServletContext().getRealPath("/WEB-INF");
                     if (path2WEBINF != null) {
                         Path p = Paths.get(path2WEBINF);
                         if (Files.exists(p)) {
                             BasicFileAttributes attr = Files.readAttributes(p, BasicFileAttributes.class);
-                            DEPLOY_TIME_BASE32 = Long.toString(attr.creationTime().toMillis(), 32);
+                            deployTimeBase32 = Long.toString(attr.creationTime().toMillis(), 32);
                         }
                     }
                 }
-                pageContext.setAttribute(var, DEPLOY_TIME_BASE32);
+                pageContext.setAttribute(var, deployTimeBase32);
                 break;
             default:
                 LOGGER.info("unknown information key: " + info);
