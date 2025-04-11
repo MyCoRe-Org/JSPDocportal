@@ -74,7 +74,7 @@ import jakarta.ws.rs.core.Response;
     @Path("/do/login")
     public class MCRLoginController{
         
-    public static String SESSION_ATTR_MCR_USER = "mcr.jspdocportal.current_user";
+    public static final String SESSION_ATTR_MCR_USER = "mcr.jspdocportal.current_user";
     
     private static final Logger LOGGER = LogManager.getLogger();
 

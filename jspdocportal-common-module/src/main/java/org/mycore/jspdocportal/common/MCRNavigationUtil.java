@@ -41,7 +41,7 @@ import jakarta.servlet.ServletContext;
  *
  */
 public class MCRNavigationUtil {
-    private static Namespace NS_NAVIGATION = Namespace.getNamespace("http://www.mycore.org/jspdocportal/navigation");
+    private static final Namespace NS_NAVIGATION = Namespace.getNamespace("http://www.mycore.org/jspdocportal/navigation");
 
     /**
      * This method loads the navigation as DOM tree into the applicationScope / servletContext.

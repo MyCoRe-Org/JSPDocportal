@@ -90,7 +90,7 @@ public class MCRResolvingController  {
     private static final Logger LOGGER = LogManager.getLogger();
     
     protected enum OpenBy {
-        page, nr, part, empty
+        PAGE, NR, PART, EMPTY
     };
 
     @GET
@@ -228,20 +228,20 @@ public class MCRResolvingController  {
         if (action.equals("dfgviewer")) {
             String url = "";
             if (path.length == 3 || path.length == 4) {
-                url = createURLForDFGViewer(request, mcrID, OpenBy.empty, "");
+                url = createURLForDFGViewer(request, mcrID, OpenBy.EMPTY, "");
             }
             if (path.length > 4 && path[3].equals("page")) {
-                url = createURLForDFGViewer(request, mcrID, OpenBy.page, path[4]);
+                url = createURLForDFGViewer(request, mcrID, OpenBy.PAGE, path[4]);
             }
             if (path.length > 4 && path[3].equals("nr")) {
-                url = createURLForDFGViewer(request, mcrID, OpenBy.nr, path[4]);
+                url = createURLForDFGViewer(request, mcrID, OpenBy.NR, path[4]);
             }
             if (path.length > 4 && path[3].equals("part")) {
                 String nr = path[4];
                 if(nr.matches("phys\\d+")) {
                     nr = nr.replace("phys",  "phys_");
                 }
-                url = createURLForDFGViewer(request, mcrID, OpenBy.part, nr);
+                url = createURLForDFGViewer(request, mcrID, OpenBy.PART, nr);
             }
             if (url.length() > 0) {
                 LOGGER.debug("DFGViewer URL: " + url);
@@ -254,20 +254,20 @@ public class MCRResolvingController  {
         if (action.equals("image")) {
             String url = "";
             if (path.length == 3 || path.length == 4) {
-                url = createURLForMyCoReViewer(request, mcrID, OpenBy.empty, "");
+                url = createURLForMyCoReViewer(request, mcrID, OpenBy.EMPTY, "");
             }
             if (path.length > 4 && path[3].equals("page")) {
-                url = createURLForMyCoReViewer(request, mcrID, OpenBy.page, path[4]);
+                url = createURLForMyCoReViewer(request, mcrID, OpenBy.PAGE, path[4]);
             }
             if (path.length > 4 && path[3].equals("nr")) {
-                url = createURLForMyCoReViewer(request, mcrID, OpenBy.nr, path[4]);
+                url = createURLForMyCoReViewer(request, mcrID, OpenBy.NR, path[4]);
             }
             if (path.length > 4 && path[3].equals("part")) {
                 String nr = path[4];
                 if(nr.matches("phys\\d+")) {
                     nr = nr.replace("phys",  "phys_");
                 }
-                url = createURLForMyCoReViewer(request, mcrID, OpenBy.part, nr);
+                url = createURLForMyCoReViewer(request, mcrID, OpenBy.PART, nr);
             }
             if (url.length() > 0) {
                 LOGGER.debug("MyCoReViewer URL: " + url);
@@ -432,19 +432,19 @@ public class MCRResolvingController  {
                                     nr = nr.substring(1);
                                 }
                                 if (!nr.isEmpty()) {
-                                    if (openBy == OpenBy.page) {
+                                    if (openBy == OpenBy.PAGE) {
                                         eMETSPhysDiv = XPathFactory.instance()
                                             .compile("/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
                                                 + "/mets:div[@TYPE='physSequence']/mets:div[starts-with(@ORDERLABEL, '"
                                                 + nr + "')]", Filters.element(), null, nsMets)
                                             .evaluateFirst(docMETS);
-                                    } else if (openBy == OpenBy.nr) {
+                                    } else if (openBy == OpenBy.NR) {
                                         eMETSPhysDiv = XPathFactory.instance()
                                             .compile("/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
                                                 + "/mets:div[@TYPE='physSequence']/mets:div[@ORDER='" + nr
                                                 + "']", Filters.element(), null, nsMets)
                                             .evaluateFirst(docMETS);
-                                    } else if (openBy == OpenBy.part) {
+                                    } else if (openBy == OpenBy.PART) {
                                         eMETSPhysDiv = XPathFactory.instance()
                                             .compile(
                                                 "/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
@@ -528,19 +528,19 @@ public class MCRResolvingController  {
                                     nr = nr.substring(1);
                                 }
                                 if (!nr.isEmpty()) {
-                                    if (openBy == OpenBy.page) {
+                                    if (openBy == OpenBy.PAGE) {
                                         eMETSPhysDiv = XPathFactory.instance()
                                             .compile("/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
                                                 + "/mets:div[@TYPE='physSequence']/mets:div[starts-with(@ORDERLABEL, '"
                                                 + nr + "')]", Filters.element(), null, nsMets)
                                             .evaluateFirst(docMETS);
-                                    } else if (openBy == OpenBy.nr) {
+                                    } else if (openBy == OpenBy.NR) {
                                         eMETSPhysDiv = XPathFactory.instance()
                                             .compile("/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
                                                 + "/mets:div[@TYPE='physSequence']/mets:div[@ORDER='" + nr
                                                 + "']", Filters.element(), null, nsMets)
                                             .evaluateFirst(docMETS);
-                                    } else if (openBy == OpenBy.part) {
+                                    } else if (openBy == OpenBy.PART) {
                                         eMETSPhysDiv = XPathFactory.instance()
                                             .compile(
                                                 "/mets:mets/mets:structMap[@TYPE='PHYSICAL']"

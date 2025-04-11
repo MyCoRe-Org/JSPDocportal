@@ -25,7 +25,7 @@ public class NavServlet extends HttpServlet {
 
     private static org.jdom2.Document navJdom;
 
-    private static Namespace NS_NAV = Namespace.getNamespace("n", "http://www.mycore.org/jspdocportal/navigation");
+    private static final Namespace NS_NAV = Namespace.getNamespace("n", "http://www.mycore.org/jspdocportal/navigation");
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

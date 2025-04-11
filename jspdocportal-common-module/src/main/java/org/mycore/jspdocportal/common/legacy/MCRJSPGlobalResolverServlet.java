@@ -192,16 +192,16 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
         if (action.equals("dfgviewer")) {
             String url = "";
             if (path.length == 3 || path.length == 4) {
-                url = createURLForDFGViewer(request, mcrID, OpenBy.empty, "");
+                url = createURLForDFGViewer(request, mcrID, OpenBy.EMPTY, "");
             }
             if (path.length > 4 && path[3].equals("page")) {
-                url = createURLForDFGViewer(request, mcrID, OpenBy.page, path[4]);
+                url = createURLForDFGViewer(request, mcrID, OpenBy.PAGE, path[4]);
             }
             if (path.length > 4 && path[3].equals("nr")) {
-                url = createURLForDFGViewer(request, mcrID, OpenBy.nr, path[4]);
+                url = createURLForDFGViewer(request, mcrID, OpenBy.NR, path[4]);
             }
             if (path.length > 4 && path[3].equals("part")) {
-                url = createURLForDFGViewer(request, mcrID, OpenBy.part, path[4]);
+                url = createURLForDFGViewer(request, mcrID, OpenBy.PART, path[4]);
             }
             if (url.length() > 0) {
                 LOGGER.debug("DFGViewer URL: " + url);
@@ -213,16 +213,16 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
         if (action.equals("image")) {
             String url = "";
             if (path.length == 3 || path.length == 4) {
-                url = createURLForMyCoReViewer(request, mcrID, OpenBy.empty, "");
+                url = createURLForMyCoReViewer(request, mcrID, OpenBy.EMPTY, "");
             }
             if (path.length > 4 && path[3].equals("page")) {
-                url = createURLForMyCoReViewer(request, mcrID, OpenBy.page, path[4]);
+                url = createURLForMyCoReViewer(request, mcrID, OpenBy.PAGE, path[4]);
             }
             if (path.length > 4 && path[3].equals("nr")) {
-                url = createURLForMyCoReViewer(request, mcrID, OpenBy.nr, path[4]);
+                url = createURLForMyCoReViewer(request, mcrID, OpenBy.NR, path[4]);
             }
             if (path.length > 4 && path[3].equals("part")) {
-                url = createURLForMyCoReViewer(request, mcrID, OpenBy.part, path[4]);
+                url = createURLForMyCoReViewer(request, mcrID, OpenBy.PART, path[4]);
             }
             if (url.length() > 0) {
                 LOGGER.debug("MyCoReViewer URL: " + url);

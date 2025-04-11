@@ -94,7 +94,7 @@ import jakarta.persistence.metamodel.EntityType;
 @MCRCommandGroup(name = "JSPDocportal Commands")
 public class MCRJSPDocportalCommands extends MCRAbstractCommands {
     /** The logger */
-    private static final Logger LOGGER = LogManager.getLogger(MCRJSPDocportalCommands.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     /**
      * The command deletes a process instance of the workflow engine

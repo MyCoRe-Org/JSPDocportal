@@ -69,10 +69,10 @@ public class MCRSetNamespaceTag extends SimpleTagSupport {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void doTag() throws JspException, IOException {
         try {
-            Class c_XPathUtil = Class.forName("org.apache.taglibs.standard.tag.common.xml.XPathUtil");
+            Class cXPathUtil = Class.forName("org.apache.taglibs.standard.tag.common.xml.XPathUtil");
             // XPathUtil
             // private static JSTLXPathNamespaceContext jstlXPathNamespaceContext = null;
-            Field field = c_XPathUtil.getDeclaredField("JSTL_XPATH_NS_CTX");
+            Field field = cXPathUtil.getDeclaredField("JSTL_XPATH_NS_CTX");
             field.setAccessible(true);
             Object nsContext = field.get(null); // param null for static fields
 
@@ -84,12 +84,12 @@ public class MCRSetNamespaceTag extends SimpleTagSupport {
 
             // JSTLXPathNamespaceContext
             // protected void addNamespace(String prefix, String uri ) {
-            Class c_JSTLXPathNamespaceContext = Class
+            Class cJSTLXPathNamespaceContext = Class
                 .forName("org.apache.taglibs.standard.tag.common.xml.JSTLXPathNamespaceContext");
-            Method m_addNamespace = c_JSTLXPathNamespaceContext.getDeclaredMethod("addNamespace", String.class,
+            Method mAddNamespace = cJSTLXPathNamespaceContext.getDeclaredMethod("addNamespace", String.class,
                 String.class);
-            m_addNamespace.setAccessible(true);
-            m_addNamespace.invoke(nsContext, prefix, uri);
+            mAddNamespace.setAccessible(true);
+            mAddNamespace.invoke(nsContext, prefix, uri);
         } catch (Exception e) {
             LOGGER.error("Something went wrong adding the namespace", e);
         }

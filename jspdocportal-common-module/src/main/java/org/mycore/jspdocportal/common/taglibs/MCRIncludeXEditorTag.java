@@ -36,9 +36,9 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
 public class MCRIncludeXEditorTag extends SimpleTagSupport {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static Namespace NS_XED = Namespace.getNamespace("xed", "http://www.mycore.de/xeditor");
+    public static final Namespace NS_XED = Namespace.getNamespace("xed", "http://www.mycore.de/xeditor");
 
-    private static Pattern REGEX_XML_EMPTY_ELEMENTS = Pattern.compile("<(a|i|span|div|textarea)\\s([^>]*)?(\\s)?/>");
+    private static final Pattern REGEX_XML_EMPTY_ELEMENTS = Pattern.compile("<(a|i|span|div|textarea)\\s([^>]*)?(\\s)?/>");
 
     private String editorPath = null;
 

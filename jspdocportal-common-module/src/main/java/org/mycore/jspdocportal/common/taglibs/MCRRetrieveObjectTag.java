@@ -72,9 +72,9 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
 public class MCRRetrieveObjectTag extends SimpleTagSupport {
     private static final Logger LOGGER = LogManager.getLogger();
     
-    private static DOMOutputter DOM_OUTPUTTER = new DOMOutputter();
+    private static final DOMOutputter DOM_OUTPUTTER = new DOMOutputter();
     
-    private static LoadingCache<String, Document> MCROBJECTXML_CACHE = CacheBuilder.newBuilder().maximumSize(300)
+    private static final LoadingCache<String, Document> MCROBJECTXML_CACHE = CacheBuilder.newBuilder().maximumSize(300)
             .expireAfterWrite(3, TimeUnit.MINUTES).expireAfterAccess(15, TimeUnit.SECONDS).build(new CacheLoader<String, Document>() {
                 @Override
                 public Document load(String mcrid) throws Exception {

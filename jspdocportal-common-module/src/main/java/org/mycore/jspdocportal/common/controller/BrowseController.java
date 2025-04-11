@@ -47,9 +47,9 @@ import jakarta.ws.rs.core.Context;
 
 @Path("/do/browse/{mask}")
 public class BrowseController {
-    public static Namespace NS_XED = Namespace.getNamespace("xed", "http://www.mycore.de/xeditor");
+    public static final Namespace NS_XED = Namespace.getNamespace("xed", "http://www.mycore.de/xeditor");
 
-    public static int DEFAULT_ROWS = 20;
+    public static final int DEFAULT_ROWS = 20;
 
     private MCRSearchResultDataBean result;
     

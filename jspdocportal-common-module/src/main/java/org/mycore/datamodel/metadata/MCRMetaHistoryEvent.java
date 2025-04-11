@@ -24,8 +24,8 @@ public class MCRMetaHistoryEvent extends MCRMetaHistoryDate {
 
     }
 
-    public MCRMetaHistoryEvent(String set_subtag, String set_type, int set_inherted) throws MCRException {
-        super(set_subtag, set_type, set_inherted);
+    public MCRMetaHistoryEvent(String setSubtag, String setType, int setInherted) throws MCRException {
+        super(setSubtag, setType, setInherted);
         event = "";
         classification = new MCRMetaClassification();
         classification.setSubTag("classification");

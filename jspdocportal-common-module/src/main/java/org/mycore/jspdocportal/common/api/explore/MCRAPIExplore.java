@@ -66,7 +66,7 @@ import jakarta.xml.bind.annotation.XmlElementWrapper;
 @Path("/explore")
 @OpenAPIDefinition(tags = {})
 public class MCRAPIExplore {
-    public static int MAX_ROWS = 1000;
+    public static final int MAX_ROWS = 1000;
 
     @Context
     Request request;
