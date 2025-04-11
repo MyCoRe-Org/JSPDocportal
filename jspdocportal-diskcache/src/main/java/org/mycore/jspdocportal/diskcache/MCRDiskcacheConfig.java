@@ -19,9 +19,9 @@ import org.mycore.jspdocportal.diskcache.disklru.DiskLruCache.Value;
 public class MCRDiskcacheConfig {
 
     /** The logger */
-    private static final Logger LOGGER = LogManager.getLogger(MCRDiskcacheConfig.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
-    private static int DISK_LRUCACHE_VALUE_COUNT = 1;
+    private static final int DISK_LRUCACHE_VALUE_COUNT = 1;
 
     private String id;
     private Path baseDir;
@@ -43,7 +43,8 @@ public class MCRDiskcacheConfig {
     private int maxCount;
     private int version;
 
-    private boolean createEager = false;
+    //default: false
+    private boolean createEager;
 
     private DiskLruCache cache;
 
@@ -81,7 +82,7 @@ public class MCRDiskcacheConfig {
     @MCRPostConstruction
     public void init(String property) {
         String p = property.endsWith(".Class") ? property.substring(0, property.length() - 6) : property;
-        id = p.substring(p.lastIndexOf(".") + 1);
+        id = p.substring(p.lastIndexOf('.') + 1);
         try {
             Path cacheDir = baseDir.resolve(id);
             Files.createDirectories(cacheDir);
@@ -168,10 +169,9 @@ public class MCRDiskcacheConfig {
     public void generateCachedFile(String objectId) {
         if (cache != null) {
             Editor editor = null;
-            Path p = null;
             try {
                 editor = cache.edit(objectId);
-                p = editor.getFile(0);
+                Path p = editor.getFile(0);
                 generator.accept(objectId, p);
                 editor.commit();
             } catch (Exception e) {
@@ -193,7 +193,7 @@ public class MCRDiskcacheConfig {
                 }
             }
         } catch (IOException e) {
-            LOGGER.error("Could not remove object " + objectId + " from cache " + getId(), e);
+            LOGGER.error("Could not remove object {} from cache {}.", objectId, id, e);
         }
     }
 
@@ -217,12 +217,12 @@ public class MCRDiskcacheConfig {
         public void close() {
             if (cache != null) {
                 String cacheId = cache.getDirectory().getFileName().toString();
-                LOGGER.info("Shutting down DiskCache " + cacheId);
+                LOGGER.info("Shutting down DiskCache {}.", cacheId);
                 try {
                     cache.flush();
                     cache.close();
                 } catch (IOException e) {
-                    LOGGER.error("Error closing cache " + cacheId, e);
+                    LOGGER.error("Error closing cache{}.", cacheId, e);
                 }
             }
         }

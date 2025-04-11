@@ -59,6 +59,7 @@ import org.mycore.libmeta.mets.model.structmap.Div;
 import org.mycore.libmeta.mets.model.structmap.StructMap;
 import org.mycore.libmeta.mods.MODSXMLProcessor;
 import org.mycore.libmeta.mods.model.Mods;
+import org.mycore.libmeta.mods.model._misc.types.StringPlusLanguagePlusAuthority;
 import org.mycore.libmeta.mods.model._toplevel.Classification;
 import org.mycore.libmeta.mods.model._toplevel.ITopLevelElement;
 import org.mycore.libmeta.mods.model._toplevel.Identifier;
@@ -73,13 +74,33 @@ import com.google.gson.JsonParser;
 
 public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
 
+    private static final String NAMESPACE__ZVDD = "http://zvdd.de/namespace";
+
+    private static final String NAMESPACE__MODS = "http://www.loc.gov/mods/v3";
+
+    private static final String NAMESPACE__DFGVIEWER = "http://dfg-viewer.de/";
+
+    private static final String FILEGROUP_NAME__THUMBS = "THUMBS";
+
+    private static final String FILEGROUP_NAME__DEFAULT = "DEFAULT";
+
+    private static final String STRUCTMAP_TYPE__PHYSICAL = "PHYSICAL";
+
+    private static final QName QNAME_UBR_URI = new QName("http://ub.uni-rostock.de", "uri");
+
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static DocumentBuilderFactory DBF;
+    private static final List<String> CC_TERMS = Arrays.asList("cc-by-nc-nd", "cc-by-nc-sa", "cc-by-nc", "cc-by-nd",
+        "cc-by-sa", "cc-by", "cc0");
+
+    private static final DateTimeFormatter ISO_FORMATTER = new DateTimeFormatterBuilder()
+        .appendInstant(0).toFormatter(Locale.US);
+
+    private static DocumentBuilderFactory facDBF;
 
     static {
-        DBF = DocumentBuilderFactory.newInstance();
-        DBF.setNamespaceAware(true);
+        facDBF = DocumentBuilderFactory.newInstance();
+        facDBF.setNamespaceAware(true);
     }
 
     @Override
@@ -87,7 +108,7 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
         if (MCRObjectID.isValid(id)) {
             MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(id));
             Optional<MCRMetaEnrichedLinkID> optDerLink = mcrObj.getStructure().getDerivates().stream()
-                .filter(x -> x.getClassifications().contains(MCRCategoryID.fromString("derivate_types:REPOS_METS")))
+                .filter(x -> x.getClassifications().contains(MCRCategoryID.ofString("derivate_types:REPOS_METS")))
                 .findFirst();
 
             Optional<MCRMetaXML> optMetaMODS = mcrObj.getMetadata().getMetadataElement("def.modsContainer").stream()
@@ -108,8 +129,8 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
                         try {
                             //TODO use XML source: unmarshal(MCRPathContent.getSource())
                             byte[] metsXML = new MCRPathContent(metsFile).asByteArray();
-                            Mets mets
-                                = METSXMLProcessor.getInstance().unmarshal(new String(metsXML, StandardCharsets.UTF_8));
+                            Mets mets = METSXMLProcessor.getInstance()
+                                .unmarshal(new String(metsXML, StandardCharsets.UTF_8));
                             Files.deleteIfExists(p);
                             process(mets, mods, p);
                         } catch (IOException e) {
@@ -118,8 +139,7 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
                     }
 
                 } catch (LibmetaProcessorException | JDOMException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    LOGGER.error(e);
                 }
             }
         }
@@ -152,7 +172,7 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
     private void createPresentationFileGroups(Mets mets) {
         //delete all fileGroups - keep ALTO
         mets.getFileSec().getFileGrp().removeIf(fg -> !"ALTO".equals(fg.getID()));
-        StructMap smPhys = METSQuery.findStructMap(mets, "PHYSICAL");
+        StructMap smPhys = METSQuery.findStructMap(mets, STRUCTMAP_TYPE__PHYSICAL);
         if (smPhys != null) {
             // delete all existing filePointers - keep ALTO;
             smPhys.getDiv().getFptr().clear();
@@ -161,8 +181,8 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
             }
 
             String iiifBaseURL = MCRFrontendUtil.getBaseURL() + "api/iiif/image/v2";
-            String[] fgNames = new String[] { "DEFAULT", "THUMBS" };
-            Map<String, String> iiifSizes = Map.of("DEFAULT", "max", "THUMBS", "!256,256");
+            String[] fgNames = { FILEGROUP_NAME__DEFAULT, FILEGROUP_NAME__THUMBS };
+            Map<String, String> iiifSizes = Map.of(FILEGROUP_NAME__DEFAULT, "max", FILEGROUP_NAME__THUMBS, "!256,256");
             for (String fgName : fgNames) {
                 fgName = fgName.trim();
                 FileGrp fg = METSQuery.findOrCreateFileGrpOfUse(mets, fgName);
@@ -193,145 +213,47 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
     private String retrieveIIIFID(Div divPhys) {
         String purl = divPhys.getCONTENTIDS().get(0).toString();
         String iiifID = purl.replace("//", "");
-        iiifID = iiifID.substring(iiifID.indexOf("/") + 1);
-        iiifID = iiifID.replace("/", "_").replace("_phys", "__phys");
+        iiifID = iiifID.substring(iiifID.indexOf('/') + 1);
+        iiifID = iiifID.replace('/', '_').replace("_phys", "__phys");
         return iiifID;
     }
 
     private void updateAMDSectionForDFGViewer(Mets mets, Mods mods) {
-        QName qnameURI = new QName("http://ub.uni-rostock.de", "uri");
-        String providerURI
-            = mets.getMetsHdr().getAgent().stream()
-                .filter(x -> "PROVIDER".equals(x.getOTHERROLE()))
-                .findFirst()
-                .<String>map(x -> x.getNote().get(0).getOtherAttributes().get(qnameURI))
-                .orElse(null);
-        String provider = providerURI == null ? null : providerURI.substring(providerURI.lastIndexOf("#") + 1);
-
-        String sponsorURI
-            = mets.getMetsHdr().getAgent().stream().filter(x -> "SPONSOR".equals(x.getOTHERROLE())).findFirst()
-                .<String>map(x -> x.getNote().get(0).getOtherAttributes().get(qnameURI))
-                .orElse(null);
-        String sponsor = sponsorURI == null ? null : sponsorURI.substring(sponsorURI.lastIndexOf("#") + 1);
+        String provider = retrieveProvider(mets);
+        String sponsor = retrieveSponsor(mets);
 
         // TODO RecordInfo ri = mods.filterContent(RecordInfo.class).get(0);
         //  und weiter mit: ri.filterContent(RecordInfoNOte.class).stream()...
-        RecordInfo ri = getMODSChildren(mods, RecordInfo.class).get(0);
-        String ppn = ri.getContent().stream()
-            .filter(RecordInfoNote.class::isInstance)
-            .map(RecordInfoNote.class::cast)
-            .filter(x -> "k10plus_ppn".equals(x.getType()))
-            .findFirst()
-            .get().getContent();
 
         String license = retrieveLicense(mods);
-        MCRCategoryDAO categDAO = MCRCategoryDAOFactory.getInstance();
-
         try {
-            DocumentBuilder db = DBF.newDocumentBuilder();
+            DocumentBuilder db = facDBF.newDocumentBuilder();
             Document document = db.newDocument();
             mets.getAmdSec().removeIf(x -> "AMD_DFGVIEWER".equals(x.getID()));
             AmdSec amdSec = new AmdSec();
             amdSec.setID("AMD_DFGVIEWER");
             mets.getAmdSec().add(0, amdSec);
 
-            org.w3c.dom.Element eDvRights = document.createElementNS("http://dfg-viewer.de/", "dv:rights");
-            org.w3c.dom.Element e = null;
+            org.w3c.dom.Element eDvRights = document.createElementNS(NAMESPACE__DFGVIEWER, "dv:rights");
             if (provider != null) {
-                MCRCategory catProvider = categDAO.getCategory(new MCRCategoryID("provider", provider), 0);
-                catProvider.getLabel("de").ifPresent(l -> {
-                    org.w3c.dom.Element e2 = document.createElementNS("http://dfg-viewer.de/", "dv:owner");
-                    e2.setTextContent(l.getText());
-                    eDvRights.appendChild(e2);
-                });
-
-                catProvider.getLabel("x-dfg-viewer").ifPresent(l -> {
-                    String url = JsonParser.parseString(l.getText()).getAsJsonObject().get("logo_url").getAsString();
-                    org.w3c.dom.Element e2 = document.createElementNS("http://dfg-viewer.de/", "dv:ownerLogo");
-                    e2.setTextContent(url);
-                    eDvRights.appendChild(e2);
-                });
-
-                catProvider.getLabel("x-homepage").ifPresent(l -> {
-                    org.w3c.dom.Element e2 = document.createElementNS("http://dfg-viewer.de/", "dv:ownerSiteURL");
-                    e2.setTextContent(l.getText());
-                    eDvRights.appendChild(e2);
-                });
-
-                catProvider.getLabel("x-contact").ifPresent(l -> {
-                    org.w3c.dom.Element e2 = document.createElementNS("http://dfg-viewer.de/", "dv:ownerContact");
-                    e2.setTextContent(l.getText());
-                    eDvRights.appendChild(e2);
-                });
+                insertProvider(provider, document, eDvRights);
             }
             if (sponsor != null) {
-                MCRCategory catSponsor = categDAO.getCategory(new MCRCategoryID("sponsor", sponsor), 0);
-                catSponsor.getLabel("de").ifPresent(l -> {
-                    org.w3c.dom.Element e2 = document.createElementNS("http://dfg-viewer.de/", "dv:sponsor");
-                    e2.setTextContent(l.getText());
-                    eDvRights.appendChild(e2);
-                });
-                catSponsor.getLabel("x-dfg-viewer").ifPresent(l -> {
-                    String url = JsonParser.parseString(l.getText()).getAsJsonObject().get("logo_url").getAsString();
-                    org.w3c.dom.Element e2 = document.createElementNS("http://dfg-viewer.de/", "dv:sponsorLogo");
-                    e2.setTextContent(url);
-                    eDvRights.appendChild(e2);
-                });
-                catSponsor.getLabel("x-homepage").ifPresent(l -> {
-                    org.w3c.dom.Element e2 = document.createElementNS("http://dfg-viewer.de/", "dv:sponsorSiteURL");
-                    e2.setTextContent(l.getText());
-                    eDvRights.appendChild(e2);
-                });
+                insertSponsor(sponsor, document, eDvRights);
             }
             if (license != null) {
-                e = document.createElementNS("http://dfg-viewer.de/", "dv:license");
+                org.w3c.dom.Element e = document.createElementNS(NAMESPACE__DFGVIEWER, "dv:license");
                 e.setTextContent(license);
                 eDvRights.appendChild(e);
             }
             if (provider != null) {
-                org.w3c.dom.Element eDvLinks = document.createElementNS("http://dfg-viewer.de/", "dv:links");
+                insertRightsMD(amdSec, eDvRights);
 
-                XMLData xmlData = new XMLData();
-                xmlData.getNodes().add(eDvRights);
-                MdWrap.Builder mdWrapBuilder = MdWrap.builder()
-                    .xmlData(xmlData)
-                    .MDTYPE(MDTYPE.OTHER)
-                    .MIMETYPE("text/xml")
-                    .OTHERMDTYPE("DVRIGHTS");
+                org.w3c.dom.Element eDvLinks = document.createElementNS(NAMESPACE__DFGVIEWER, "dv:links");
+                insertCatalogLink(mods, provider, document, eDvLinks);
 
-                MdSec rightsMD = new MdSec();
-                rightsMD.setID("RIGHTS");
-                rightsMD.setMdWrap(mdWrapBuilder.build());
-                amdSec.getRightsMD().add(rightsMD);
-
-                MCRCategory catProvider = categDAO.getCategory(new MCRCategoryID("provider", provider), 0);
-                catProvider.getLabel("x-catalog").ifPresent(l -> {
-                    String url = JsonParser.parseString(l.getText()).getAsJsonObject().get("opac").getAsString();
-                    org.w3c.dom.Element e2 = document.createElementNS("http://dfg-viewer.de/", "dv:reference");
-                    e2.setTextContent(url.replace("{0}", ppn));
-                    eDvLinks.appendChild(e2);
-                });
-
-                // set PURL
-                getMODSChildren(mods, Identifier.class).stream()
-                    .filter(i -> "purl".equals(i.getType())).findFirst().ifPresent(p -> {
-                        org.w3c.dom.Element e3 = document.createElementNS("http://dfg-viewer.de/", "dv:presentation");
-                        e3.setTextContent(p.getContent());
-                        eDvLinks.appendChild(e3);
-                    });
-
-                xmlData = new XMLData();
-                xmlData.getNodes().add(eDvLinks);
-                MdWrap.Builder mdWrapBuilder2 = MdWrap.builder()
-                    .xmlData(xmlData)
-                    .MDTYPE(MDTYPE.OTHER)
-                    .MIMETYPE("text/xml")
-                    .OTHERMDTYPE("DVLINKS");
-
-                MdSec digiprovMD = new MdSec();
-                digiprovMD.setID("DIGIPROV");
-                digiprovMD.setMdWrap(mdWrapBuilder2.build());
-                amdSec.getDigiprovMD().add(digiprovMD);
+                insertPURL(mods, document, eDvLinks);
+                insertDigiProvider(amdSec, eDvLinks);
 
                 for (AmdSec amdSec2 : mets.getAmdSec()) {
                     if ("AMD_UBROSTOCK".equals(amdSec2.getID())) {
@@ -356,22 +278,150 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
         }
     }
 
+    private String retrieveSponsor(Mets mets) {
+        String sponsorURI =
+            mets.getMetsHdr().getAgent().stream().filter(x -> "SPONSOR".equals(x.getOTHERROLE())).findFirst()
+                .<String>map(x -> x.getNote().get(0).getOtherAttributes().get(QNAME_UBR_URI))
+                .orElse(null);
+        return sponsorURI == null ? null : sponsorURI.substring(sponsorURI.lastIndexOf('#') + 1);
+    }
+
+    private String retrieveProvider(Mets mets) {
+        String providerURI = mets.getMetsHdr().getAgent().stream()
+            .filter(x -> "PROVIDER".equals(x.getOTHERROLE()))
+            .findFirst()
+            .<String>map(x -> x.getNote().get(0).getOtherAttributes().get(QNAME_UBR_URI))
+            .orElse(null);
+        return providerURI == null ? null : providerURI.substring(providerURI.lastIndexOf('#') + 1);
+    }
+
+    private void insertCatalogLink(Mods mods, String provider, Document document, org.w3c.dom.Element eDvLinks) {
+        MCRCategoryDAO categDAO = MCRCategoryDAOFactory.obtainInstance();
+
+        RecordInfo ri = getMODSChildren(mods, RecordInfo.class).get(0);
+
+        String ppn = ri.getContent().stream()
+            .filter(RecordInfoNote.class::isInstance)
+            .map(RecordInfoNote.class::cast)
+            .filter(x -> "k10plus_ppn".equals(x.getType()))
+            .findFirst()
+            .get().getContent();
+
+        MCRCategory catProvider = categDAO.getCategory(new MCRCategoryID("provider", provider), 0);
+        catProvider.getLabel("x-catalog").ifPresent(l -> {
+            String url = JsonParser.parseString(l.getText()).getAsJsonObject().get("opac").getAsString();
+            org.w3c.dom.Element e2 = document.createElementNS(NAMESPACE__DFGVIEWER, "dv:reference");
+            e2.setTextContent(url.replace("{0}", ppn));
+            eDvLinks.appendChild(e2);
+        });
+    }
+
+    private void insertDigiProvider(AmdSec amdSec, org.w3c.dom.Element eDvLinks) {
+        XMLData xmlData = new XMLData();
+        xmlData.getNodes().add(eDvLinks);
+        MdWrap.Builder mdWrapBuilder2 = MdWrap.builder()
+            .xmlData(xmlData)
+            .MDTYPE(MDTYPE.OTHER)
+            .MIMETYPE("text/xml")
+            .OTHERMDTYPE("DVLINKS");
+
+        MdSec digiprovMD = new MdSec();
+        digiprovMD.setID("DIGIPROV");
+        digiprovMD.setMdWrap(mdWrapBuilder2.build());
+        amdSec.getDigiprovMD().add(digiprovMD);
+    }
+
+    private void insertPURL(Mods mods, Document document, org.w3c.dom.Element eDvLinks) {
+        getMODSChildren(mods, Identifier.class).stream()
+            .filter(i -> "purl".equals(i.getType())).findFirst().ifPresent(p -> {
+                org.w3c.dom.Element e3 = document.createElementNS(NAMESPACE__DFGVIEWER, "dv:presentation");
+                e3.setTextContent(p.getContent());
+                eDvLinks.appendChild(e3);
+            });
+    }
+
+    private void insertRightsMD(AmdSec amdSec, org.w3c.dom.Element eDvRights) {
+        XMLData xmlData = new XMLData();
+        xmlData.getNodes().add(eDvRights);
+        MdWrap.Builder mdWrapBuilder = MdWrap.builder()
+            .xmlData(xmlData)
+            .MDTYPE(MDTYPE.OTHER)
+            .MIMETYPE("text/xml")
+            .OTHERMDTYPE("DVRIGHTS");
+
+        MdSec rightsMD = new MdSec();
+        rightsMD.setID("RIGHTS");
+        rightsMD.setMdWrap(mdWrapBuilder.build());
+        amdSec.getRightsMD().add(rightsMD);
+    }
+
+    private void insertSponsor(String sponsor, Document document, org.w3c.dom.Element eDvRights) {
+        MCRCategoryDAO categDAO = MCRCategoryDAOFactory.obtainInstance();
+
+        MCRCategory catSponsor = categDAO.getCategory(new MCRCategoryID("sponsor", sponsor), 0);
+        catSponsor.getLabel("de").ifPresent(l -> {
+            org.w3c.dom.Element e2 = document.createElementNS(NAMESPACE__DFGVIEWER, "dv:sponsor");
+            e2.setTextContent(l.getText());
+            eDvRights.appendChild(e2);
+        });
+        catSponsor.getLabel("x-dfg-viewer").ifPresent(l -> {
+            String url = JsonParser.parseString(l.getText()).getAsJsonObject().get("logo_url").getAsString();
+            org.w3c.dom.Element e2 = document.createElementNS(NAMESPACE__DFGVIEWER, "dv:sponsorLogo");
+            e2.setTextContent(url);
+            eDvRights.appendChild(e2);
+        });
+        catSponsor.getLabel("x-homepage").ifPresent(l -> {
+            org.w3c.dom.Element e2 = document.createElementNS(NAMESPACE__DFGVIEWER, "dv:sponsorSiteURL");
+            e2.setTextContent(l.getText());
+            eDvRights.appendChild(e2);
+        });
+    }
+
+    private void insertProvider(String provider, Document document, org.w3c.dom.Element eDvRights) {
+        MCRCategoryDAO categDAO = MCRCategoryDAOFactory.obtainInstance();
+        MCRCategory catProvider = categDAO.getCategory(new MCRCategoryID("provider", provider), 0);
+        catProvider.getLabel("de").ifPresent(l -> {
+            org.w3c.dom.Element e2 = document.createElementNS(NAMESPACE__DFGVIEWER, "dv:owner");
+            e2.setTextContent(l.getText());
+            eDvRights.appendChild(e2);
+        });
+
+        catProvider.getLabel("x-dfg-viewer").ifPresent(l -> {
+            String url = JsonParser.parseString(l.getText()).getAsJsonObject().get("logo_url").getAsString();
+            org.w3c.dom.Element e2 = document.createElementNS(NAMESPACE__DFGVIEWER, "dv:ownerLogo");
+            e2.setTextContent(url);
+            eDvRights.appendChild(e2);
+        });
+
+        catProvider.getLabel("x-homepage").ifPresent(l -> {
+            org.w3c.dom.Element e2 = document.createElementNS(NAMESPACE__DFGVIEWER, "dv:ownerSiteURL");
+            e2.setTextContent(l.getText());
+            eDvRights.appendChild(e2);
+        });
+
+        catProvider.getLabel("x-contact").ifPresent(l -> {
+            org.w3c.dom.Element e2 = document.createElementNS(NAMESPACE__DFGVIEWER, "dv:ownerContact");
+            e2.setTextContent(l.getText());
+            eDvRights.appendChild(e2);
+        });
+    }
+
     private String retrieveLicense(Mods mods) {
-        String license = null;
+        String license;
 
         String licenseWorkURI = getMODSChildren(mods, Classification.class).stream()
-            .filter(c -> c.getValueURI().contains("/licenseinfo#work"))
-            .map(x -> x.getValueURI())
+            .map(StringPlusLanguagePlusAuthority::getValueURI)
+            .filter(uri -> uri.contains("/licenseinfo#work"))
             .findFirst().get();
         String licenseWork = licenseWorkURI == null ? null
-            : licenseWorkURI.substring(licenseWorkURI.lastIndexOf("#")).replace("#work.", "");
+            : licenseWorkURI.substring(licenseWorkURI.lastIndexOf('#')).replace("#work.", "");
         if ("publicdomain".equals(licenseWork)) {
             String licenseDigiURI = getMODSChildren(mods, Classification.class).stream()
-                .filter(c -> c.getValueURI().contains("/licenseinfo#digitisedimages"))
-                .map(x -> x.getValueURI())
+                .map(StringPlusLanguagePlusAuthority::getValueURI)
+                .filter(uri -> uri.contains("/licenseinfo#digitisedimages"))
                 .findFirst().get();
             String licenseDigi = licenseDigiURI == null ? null
-                : licenseDigiURI.substring(licenseDigiURI.lastIndexOf("#")).replace("#digitisedimages.", "");
+                : licenseDigiURI.substring(licenseDigiURI.lastIndexOf('#')).replace("#digitisedimages.", "");
             if ("norestrictions".equals(licenseDigi)) {
                 license = "pdm";
             } else {
@@ -383,9 +433,6 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
         return license;
     }
 
-    private static List<String> CC_TERMS = Arrays.asList("cc-by-nc-nd", "cc-by-nc-sa", "cc-by-nc", "cc-by-nd",
-        "cc-by-sa", "cc-by", "cc0");
-
     private String retrieveLicenseFromTerm(String term) {
         for (String c : CC_TERMS) {
             if (term.contains(c)) {
@@ -394,8 +441,6 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
         }
         return "reserved";
     }
-
-    private static DateTimeFormatter ISO_FORMATTER = new DateTimeFormatterBuilder().appendInstant(0).toFormatter(Locale.US);
 
     private void updateHeader(Mets mets) {
         MetsHdr metsHdr = mets.getMetsHdr();
@@ -444,7 +489,7 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
             + "/do/pdfdownload/recordIdentifier/" + mets.getOBJID() + "/" + mets.getOBJID() + ".pdf");
         fDown.getFLocat().add(fLocat);
 
-        Div physRoot = METSQuery.findStructMap(mets, "PHYSICAL").getDiv();
+        Div physRoot = METSQuery.findStructMap(mets, STRUCTMAP_TYPE__PHYSICAL).getDiv();
         Fptr fptr = new Fptr();
         fptr.setFILEID(id);
         physRoot.getFptr().add(fptr);
@@ -462,7 +507,7 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
          */
 
         // use IIIF API
-        Optional<Div> teaserDiv = METSQuery.findStructMap(mets, "PHYSICAL").getDiv().getDiv()
+        Optional<Div> teaserDiv = METSQuery.findStructMap(mets, STRUCTMAP_TYPE__PHYSICAL).getDiv().getDiv()
             .stream()
             .filter(d -> "START_PAGE".equals(d.getXlinkLabel()))
             .findFirst();
@@ -483,7 +528,7 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
             fLocat.setXlinkHref(teaserURL);
             fDown.getFLocat().add(fLocat);
 
-            Div physRoot = METSQuery.findStructMap(mets, "PHYSICAL").getDiv();
+            Div physRoot = METSQuery.findStructMap(mets, STRUCTMAP_TYPE__PHYSICAL).getDiv();
             Fptr fptr = new Fptr();
             fptr.setFILEID(id);
             physRoot.getFptr().add(fptr);
@@ -498,50 +543,50 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
                 dmdSec.setCREATED(null);
                 dmdSec.getMdWrap().setMDTYPEVERSION(null);
 
-                org.w3c.dom.Document docMods = null;
                 try {
-                    docMods = MODSXMLProcessor.getInstance().marshalToDOM(mods);
+                    Document docMods = MODSXMLProcessor.getInstance().marshalToDOM(mods);
+                    if (docMods != null) {
+                        org.w3c.dom.Element eMods = docMods.getDocumentElement();
+                        // mods:note[@type='titlewordindex']  -> <mods:extension><zvdd:Wrap>
+                        NodeList nl = eMods.getElementsByTagNameNS(NAMESPACE__MODS, "note");
+                        for (int i = 0; i < nl.getLength(); i++) {
+                            org.w3c.dom.Element e = (org.w3c.dom.Element) nl.item(i);
+                            if ("titlewordindex".equals(e.getAttribute("type"))) {
+                                String titlewordindex = e.getTextContent();
+                                eMods.removeChild(e);
+
+                                org.w3c.dom.Element eExtension = null;
+                                NodeList nlExt =
+                                    eMods.getElementsByTagNameNS(NAMESPACE__MODS, "mods:extension");
+                                for (int j = 0; i < nlExt.getLength(); j++) {
+                                    if ("zvdd"
+                                        .equals(((org.w3c.dom.Element) nl.item(j)).getAttribute("displayLabel"))) {
+                                        eExtension = (org.w3c.dom.Element) nl.item(j);
+                                    }
+                                }
+                                if (eExtension == null) {
+                                    eExtension =
+                                        docMods.createElementNS(NAMESPACE__MODS, "mods:extension");
+                                    eExtension.setAttribute("displayLabel", "zvdd");
+                                    eMods.appendChild(eExtension);
+                                }
+                                eExtension.appendChild(docMods.createComment(
+                                    "We have not found a valid and documented ZVDD Namespace URI !!!"));
+                                org.w3c.dom.Element eZVDDWrap =
+                                    docMods.createElementNS(NAMESPACE__ZVDD, "zvdd:zvddWrap");
+                                eExtension.appendChild(eZVDDWrap);
+                                org.w3c.dom.Element eZVDDTitleWord =
+                                    docMods.createElementNS(NAMESPACE__ZVDD, "zvdd:titleWord");
+                                eZVDDWrap.appendChild(eZVDDTitleWord);
+                                eZVDDTitleWord.setTextContent(titlewordindex);
+                            }
+                        }
+                        dmdSec.getMdWrap().getXmlData().getNodes().clear();
+                        dmdSec.getMdWrap().getXmlData().getNodes().add(eMods.cloneNode(true));
+                    }
                 } catch (Exception e) {
                     //ignore
                 }
-                if (docMods != null) {
-                    org.w3c.dom.Element eMods = docMods.getDocumentElement();
-                    // mods:note[@type='titlewordindex']  -> <mods:extension><zvdd:Wrap>
-                    NodeList nl = eMods.getElementsByTagNameNS("http://www.loc.gov/mods/v3", "note");
-                    for (int i = 0; i < nl.getLength(); i++) {
-                        org.w3c.dom.Element e = (org.w3c.dom.Element) nl.item(i);
-                        if ("titlewordindex".equals(e.getAttribute("type"))) {
-                            String titlewordindex = e.getTextContent();
-                            eMods.removeChild(e);
-
-                            org.w3c.dom.Element eExtension = null;
-                            NodeList nlExt
-                                = eMods.getElementsByTagNameNS("http://www.loc.gov/mods/v3", "mods:extension");
-                            for (int j = 0; i < nlExt.getLength(); j++) {
-                                if ("zvdd".equals(((org.w3c.dom.Element) nl.item(j)).getAttribute("displayLabel"))) {
-                                    eExtension = (org.w3c.dom.Element) nl.item(j);
-                                }
-                            }
-                            if (eExtension == null) {
-                                eExtension = docMods.createElementNS("http://www.loc.gov/mods/v3", "mods:extension");
-                                eExtension.setAttribute("displayLabel", "zvdd");
-                                eMods.appendChild(eExtension);
-                            }
-                            eExtension.appendChild(docMods.createComment(
-                                "We have not found a valid and documented ZVDD Namespace URI !!!"));
-                            org.w3c.dom.Element eZVDDWrap
-                                = docMods.createElementNS("http://zvdd.de/namespace", "zvdd:zvddWrap");
-                            eExtension.appendChild(eZVDDWrap);
-                            org.w3c.dom.Element eZVDDTitleWord
-                                = docMods.createElementNS("http://zvdd.de/namespace", "zvdd:titleWord");
-                            eZVDDWrap.appendChild(eZVDDTitleWord);
-                            eZVDDTitleWord.setTextContent(titlewordindex);
-                        }
-                    }
-                    dmdSec.getMdWrap().getXmlData().getNodes().clear();
-                    dmdSec.getMdWrap().getXmlData().getNodes().add(eMods.cloneNode(true));
-                }
-
             });
     }
 
@@ -563,7 +608,7 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
     private void updateMetsPtr(Mets mets) {
         StructMap smLogical = METSQuery.findStructMap(mets, "LOGICAL");
         treeStreamOfDivs(smLogical.getDiv())
-            .filter(d -> d.getMptr().size() > 0)
+            .filter(d -> !d.getMptr().isEmpty())
             .forEach(div -> {
                 for (Mptr mptr : div.getMptr()) {
                     String recordIdentifier = mptr.getXlinkHref().replace("/", "_");
@@ -577,7 +622,7 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
 
     //TODO move to LibMeta
     private Stream<Div> treeStreamOfDivs(Div d) {
-        return Stream.concat(Stream.of(d), d.getDiv().stream().flatMap(x -> treeStreamOfDivs(x)));
+        return Stream.concat(Stream.of(d), d.getDiv().stream().flatMap(this::treeStreamOfDivs));
     }
 
     //TODO in 2024.06 this should be replaced with MCRMetaXML.getFirstContentElement()

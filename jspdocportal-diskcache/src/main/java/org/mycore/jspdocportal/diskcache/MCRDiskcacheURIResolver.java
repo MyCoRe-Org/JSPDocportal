@@ -48,12 +48,12 @@ public class MCRDiskcacheURIResolver implements URIResolver {
         }
 
         String cacheId = params[1];
-        Map<String, MCRDiskcacheConfig> caches = MCRDiskcacheManager.instance().getCaches();
+        Map<String, MCRDiskcacheConfig> caches = MCRDiskcacheManager.getInstance().getCaches();
         if (caches.containsKey(cacheId)) {
             MCRDiskcacheConfig cache = caches.get(cacheId);
             Optional<MCRObjectID> oMcrObjId = mcrIdMapper.mapMCRObjectID(params[2]);
-            String objId = oMcrObjId.map(x -> x.toString()).orElse(params[2]);
-            Path file = MCRDiskcacheManager.instance().retrieveCachedFile(cache.getId(), objId);
+            String objId = oMcrObjId.map(MCRObjectID::toString).orElse(params[2]);
+            Path file = MCRDiskcacheManager.getInstance().retrieveCachedFile(cache.getId(), objId);
             try {
                 return new SAXSource(new InputSource(Files.newBufferedReader(file)));
             } catch (IOException e) {

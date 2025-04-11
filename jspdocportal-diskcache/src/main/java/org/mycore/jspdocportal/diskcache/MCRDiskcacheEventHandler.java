@@ -18,7 +18,7 @@ public class MCRDiskcacheEventHandler extends MCREventHandlerBase {
 
     @Override
     protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
-        MCRDiskcacheManager.instance().getCaches()
+        MCRDiskcacheManager.getInstance().getCaches()
             .forEach((id, cache) -> {
                 cache.removeCachedFile(obj.getId().toString());
 

@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class FileDownloadServletUtils {
-    private static final int DEFAULT_STREAM_BUFFER_SIZE = 10240;
+    private static final int DEFAULT_STREAM_BUFFER_SIZE = 10 * 1024;
 
     /**
      * Returns the first non-<code>null</code> object of the argument list, or <code>null</code> if there is no such

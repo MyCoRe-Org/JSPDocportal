@@ -21,7 +21,6 @@
 package org.mycore.jspdocportal.diskcache.servlet;
 
 import static java.lang.String.format;
-import static java.util.logging.Level.FINE;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,8 +32,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
@@ -120,8 +121,10 @@ public abstract class FileServlet extends HttpServlet {
 
     // Constants ------------------------------------------------------------------------------------------------------
 
+    @java.io.Serial
     private static final long serialVersionUID = 1L;
-    private static final Logger logger = Logger.getLogger(FileServlet.class.getName());
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private static final Long DEFAULT_EXPIRE_TIME_IN_SECONDS = TimeUnit.DAYS.toSeconds(30);
     private static final long ONE_SECOND_IN_MILLIS = TimeUnit.SECONDS.toMillis(1);
@@ -153,15 +156,9 @@ public abstract class FileServlet extends HttpServlet {
             return;
         }
 
-        try {
-            resource = new Resource(data.file());
-        } catch (IllegalArgumentException e) {
-            logger.log(FINE, "Got an IllegalArgumentException from user code; interpreting it as 400 Bad Request.", e);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
+        resource = createResource(response, data);
 
-        if (resource.file == null) {
+        if (resource == null || resource.file == null) {
             handleFileNotFound(request, response);
             return;
         }
@@ -192,6 +189,28 @@ public abstract class FileServlet extends HttpServlet {
             ranges.add(new Range(0, resource.length - 1)); // Full content.
         }
 
+        String contentType = setContentType(request, response, resource, data, ranges);
+
+        if (head) {
+            return;
+        }
+
+        writeContent(response, resource, ranges, contentType);
+    }
+
+    private Resource createResource(HttpServletResponse response, FileServletData data)
+        throws IOException {
+        try {
+            return new Resource(data.file());
+        } catch (IllegalArgumentException e) {
+            LOGGER.error("Got an IllegalArgumentException from user code; interpreting it as 400 Bad Request.", e);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return null;
+        }
+    }
+
+    private String setContentType(HttpServletRequest request, HttpServletResponse response, Resource resource,
+        FileServletData data, List<Range> ranges) {
         String contentType = setContentHeaders(request, response, resource, ranges);
         if (data.contentType() != null) {
             response.setContentType(data.contentType());
@@ -203,12 +222,7 @@ public abstract class FileServlet extends HttpServlet {
         } else {
             response.setContentType(contentType);
         }
-
-        if (head) {
-            return;
-        }
-
-        writeContent(response, resource, ranges, contentType);
+        return contentType;
     }
 
     /**
@@ -349,7 +363,7 @@ public abstract class FileServlet extends HttpServlet {
                     return ranges;
                 }
             } catch (IllegalArgumentException ifRangeHeaderIsInvalid) {
-                logger.log(FINE, "If-Range header is invalid. Just return full file then.", ifRangeHeaderIsInvalid);
+                LOGGER.debug("If-Range header is invalid. Just return full file then.", ifRangeHeaderIsInvalid);
                 return ranges;
             }
         }
@@ -484,10 +498,10 @@ public abstract class FileServlet extends HttpServlet {
      * Convenience class for a file resource.
      */
     private static class Resource {
-        private Path file = null;
-        private long length = 0;
-        private long lastModified = 0;
-        private String eTag = null;
+        private Path file;
+        private long length;
+        private long lastModified;
+        private String eTag;
 
         public Resource(Path file) {
             if (file != null && Files.isRegularFile(file)) {
@@ -498,13 +512,10 @@ public abstract class FileServlet extends HttpServlet {
                     eTag = format(Locale.US, ETAG, FileDownloadServletUtils.encodeURL(file.getFileName().toString()),
                         lastModified);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOGGER.error(e);
                 }
-
             }
-
         }
-
     }
 
     /**

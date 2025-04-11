@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.jspdocportal.diskcache.disklru.DiskLruCache;
 
-public class MCRDiskcacheManager {
+public final class MCRDiskcacheManager {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private static final MCRDiskcacheManager SINGLETON = new MCRDiskcacheManager();
@@ -32,14 +32,15 @@ public class MCRDiskcacheManager {
             for (Entry<String, MCRDiskcacheConfig> e : caches.entrySet()) {
                 DiskLruCache c = e.getValue().getCache();
                 String size = c == null ? "null" : Long.toString(c.size());
-                LOGGER.warn(e.getKey() + ":: urlSuffix: " + e.getValue().getURLSuffix()
-                    + " / cacheObject: " + c
-                    + " / currentCacheSize: " + size);
+                String urlSuffix = e.getValue().getURLSuffix();
+                String key = e.getKey();
+                LOGGER.warn("{} :: urlSuffix: {} / cacheObject: {} / currentCacheSize: {}",
+                    key, urlSuffix, c, size);
             }
         });
     }
 
-    public static MCRDiskcacheManager instance() {
+    public static MCRDiskcacheManager getInstance() {
         return SINGLETON;
     }
 
@@ -48,9 +49,7 @@ public class MCRDiskcacheManager {
     }
 
     public Path retrieveCachedFile(String cacheId, String objectId) {
-        Path p = caches.get(cacheId).retrieveCachedFile(objectId);
-        return p;
-
+        return caches.get(cacheId).retrieveCachedFile(objectId);
     }
 
     public void removeCachedFile(String cacheId, String objectId) {

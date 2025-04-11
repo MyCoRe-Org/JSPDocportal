@@ -57,19 +57,19 @@ public class MCRTemporaryObjectIDNormalizer {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static Set<String> SEARCHKEYS_FOR_OBJECTS = MCRConfiguration2
+    private static final Set<String> SEARCHKEYS_FOR_OBJECTS = MCRConfiguration2
         .getString("MCR.RestAPI.V2.AlternativeIdentifier.Objects.Keys").stream()
         .flatMap(MCRConfiguration2::splitValue).collect(Collectors.toSet());
 
-    private static Set<String> SEARCHKEYS_FOR_DERIVATES = MCRConfiguration2
+    private static final Set<String> SEARCHKEYS_FOR_DERIVATES = MCRConfiguration2
         .getString("MCR.RestAPI.V2.AlternativeIdentifier.Derivates.Keys").stream()
         .flatMap(MCRConfiguration2::splitValue).collect(Collectors.toSet());
 
     public static MCRObjectID retrieveMCRDerIDfromSOLR(MCRObjectID mcrObjId, String derid) {
         String result = derid;
         if (derid.contains(":") && !SEARCHKEYS_FOR_DERIVATES.isEmpty()) {
-            String key = derid.substring(0, derid.indexOf(":"));
-            String value = derid.substring(derid.indexOf(":") + 1);
+            String key = derid.substring(0, derid.indexOf(':'));
+            String value = derid.substring(derid.indexOf(':') + 1);
             if (SEARCHKEYS_FOR_DERIVATES.contains(key)) {
                 ModifiableSolrParams params = new ModifiableSolrParams();
                 params.set("start", 0);
@@ -82,7 +82,7 @@ public class MCRTemporaryObjectIDNormalizer {
                 QueryResponse solrResponse = null;
                 try {
                     QueryRequest queryRequest = new QueryRequest(params);
-                    MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                    MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
                         MCRSolrAuthenticationLevel.SEARCH);
                     solrResponse = queryRequest.process(MCRSolrCoreManager.getMainSolrClient());
                 } catch (Exception e) {
@@ -112,8 +112,8 @@ public class MCRTemporaryObjectIDNormalizer {
     public static MCRObjectID retrieveMCRObjIDfromSOLR(String mcrid) {
         String result = mcrid;
         if (mcrid.contains(":") && !SEARCHKEYS_FOR_OBJECTS.isEmpty()) {
-            String key = mcrid.substring(0, mcrid.indexOf(":"));
-            String value = URLDecoder.decode(mcrid.substring(mcrid.indexOf(":") + 1), StandardCharsets.UTF_8);
+            String key = mcrid.substring(0, mcrid.indexOf(':'));
+            String value = URLDecoder.decode(mcrid.substring(mcrid.indexOf(':') + 1), StandardCharsets.UTF_8);
             if (SEARCHKEYS_FOR_OBJECTS.contains(key)) {
                 ModifiableSolrParams params = new ModifiableSolrParams();
                 params.set("start", 0);
@@ -124,7 +124,7 @@ public class MCRTemporaryObjectIDNormalizer {
                 QueryResponse solrResponse = null;
                 try {
                     QueryRequest queryRequest = new QueryRequest(params);
-                    MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                    MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
                         MCRSolrAuthenticationLevel.SEARCH);
                     solrResponse = queryRequest.process(MCRSolrCoreManager.getMainSolrClient());
                 } catch (Exception e) {

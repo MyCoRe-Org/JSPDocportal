@@ -89,13 +89,15 @@ class StrictLineReader implements Closeable {
      * @param capacity the capacity of the buffer.
      * @param charset the charset used to decode data. Only US-ASCII, UTF-8 and ISO-8859-1 are
      * supported.
-     * @throws NullPointerException if {@code in} or {@code charset} is null.
-     * @throws IllegalArgumentException if {@code capacity} is negative or zero
-     * or the specified charset is not supported.
+     * @throws IllegalArgumentException if {@code capacity} is negative or zero or if {@code in} 
+     * or {@code charset} is null or the specified charset is not supported.
      */
     StrictLineReader(InputStream in, int capacity, Charset charset) {
-        if (in == null || charset == null) {
-            throw new NullPointerException();
+        if (in == null) {
+            throw new IllegalArgumentException("inputstream cannot be null");
+        }
+        if (charset == null) {
+            throw new IllegalArgumentException("charset cannot be null");
         }
         if (capacity < 0) {
             throw new IllegalArgumentException("capacity <= 0");
@@ -155,18 +157,7 @@ class StrictLineReader implements Closeable {
                 }
             }
 
-            // Let's anticipate up to 80 characters on top of those already read.
-            ByteArrayOutputStream out = new ByteArrayOutputStream(end - pos + 80) {
-                @Override
-                public String toString() {
-                    int length = (count > 0 && buf[count - 1] == CR) ? count - 1 : count;
-                    try {
-                        return new String(buf, 0, length, charset.name());
-                    } catch (UnsupportedEncodingException e) {
-                        throw new AssertionError(e); // Since we control the charset this will never happen.
-                    }
-                }
-            };
+            ByteArrayOutputStream out = createOutputStream();
 
             while (true) {
                 out.write(buf, pos, end - pos);
@@ -185,6 +176,21 @@ class StrictLineReader implements Closeable {
                 }
             }
         }
+    }
+
+    private ByteArrayOutputStream createOutputStream() {
+        // Let's anticipate up to 80 characters on top of those already read.
+        return new ByteArrayOutputStream(end - pos + 80) {
+            @Override
+            public String toString() {
+                int length = (count > 0 && buf[count - 1] == CR) ? count - 1 : count;
+                try {
+                    return new String(buf, 0, length, charset.name());
+                } catch (UnsupportedEncodingException e) {
+                    throw new AssertionError(e); // Since we control the charset this will never happen.
+                }
+            }
+        };
     }
 
     boolean hasUnterminatedLine() {

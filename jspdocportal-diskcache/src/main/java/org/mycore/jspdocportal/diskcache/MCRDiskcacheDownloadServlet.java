@@ -19,6 +19,8 @@ import jakarta.servlet.http.HttpServletRequest;
  */
 
 public class MCRDiskcacheDownloadServlet extends FileServlet {
+    
+    @java.io.Serial
     private static final long serialVersionUID = 1L;
 
     private MCRIDMapper mcrIdMapper
@@ -36,16 +38,16 @@ public class MCRDiskcacheDownloadServlet extends FileServlet {
         if (pathInfo == null || pathInfo.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        Map<String, MCRDiskcacheConfig> caches = MCRDiskcacheManager.instance().getCaches();
+        Map<String, MCRDiskcacheConfig> caches = MCRDiskcacheManager.getInstance().getCaches();
         Optional<Entry<String, MCRDiskcacheConfig>> oCache = caches.entrySet()
             .stream().filter(e -> pathInfo.endsWith(e.getValue().getURLSuffix())).findFirst();
         if (oCache.isPresent()) {
             MCRDiskcacheConfig cache = oCache.get().getValue();
             String id = pathInfo.substring(1, pathInfo.length() - cache.getURLSuffix().length());
             Optional<MCRObjectID> oMcrObjId = mcrIdMapper.mapMCRObjectID(id.replace("rosdok/ppn", "rosdok_ppn"));
-            String objId = oMcrObjId.map(x -> x.toString()).orElse(id);
-            Path file = MCRDiskcacheManager.instance().retrieveCachedFile(cache.getId(), objId);
-            return new FileServletData(file, cache.getMimeType(), pathInfo.substring(pathInfo.lastIndexOf("/") + 1));
+            String objId = oMcrObjId.map(MCRObjectID::toString).orElse(id);
+            Path file = MCRDiskcacheManager.getInstance().retrieveCachedFile(cache.getId(), objId);
+            return new FileServletData(file, cache.getMimeType(), pathInfo.substring(pathInfo.lastIndexOf('/') + 1));
         }
         return null;
     }
