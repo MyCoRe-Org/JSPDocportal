@@ -106,7 +106,7 @@ public class MCRPDFDownloadController {
 
             try {
                 QueryRequest queryRequest = new QueryRequest(query);
-                MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
                     MCRSolrAuthenticationLevel.SEARCH);
                 QueryResponse response = queryRequest.process(solrClient);
                 SolrDocumentList solrResults = response.getResults();
@@ -155,7 +155,7 @@ public class MCRPDFDownloadController {
 
         try {
             QueryRequest queryRequest = new QueryRequest(query);
-            MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+            MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
                 MCRSolrAuthenticationLevel.SEARCH);
             QueryResponse response = queryRequest.process(solrClient);
             SolrDocumentList solrResults = response.getResults();

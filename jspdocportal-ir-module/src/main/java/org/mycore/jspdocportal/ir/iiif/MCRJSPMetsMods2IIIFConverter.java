@@ -152,7 +152,7 @@ public class MCRJSPMetsMods2IIIFConverter {
         MCRIIIFSequence sequence = new MCRIIIFSequence(id);
 
         List<PhysicalSubDiv> children = physicalDivContainer.getChildren();
-        MCRIIIFImageImpl imageImpl = MCRIIIFImageImpl.getInstance(getImageImplName());
+        MCRIIIFImageImpl imageImpl = MCRIIIFImageImpl.obtainInstance(getImageImplName());
         MCRIIIFImageProfile profile = imageImpl.getProfile();
         profile.setId(MCRIIIFImageUtil.getProfileLink(imageImpl));
         sequence.canvases = children.stream().map(physicalSubDiv -> {
@@ -219,7 +219,7 @@ public class MCRJSPMetsMods2IIIFConverter {
         if (attrProvider != null) {
             String providerID = attrProvider.getValue();
             providerID = providerID.substring(providerID.lastIndexOf('#') + 1);
-            MCRCategory categ = MCRCategoryDAOFactory.getInstance()
+            MCRCategory categ = MCRCategoryDAOFactory.obtainInstance()
                 .getCategory(new MCRCategoryID("provider", providerID), 0);
             Optional<MCRLabel> oLabel = categ.getLabel("x-logo");
             if (oLabel.isPresent()) {

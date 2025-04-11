@@ -66,7 +66,7 @@ public class MCRSetStatePublishedStableCronjob extends MCRCronjob {
                     try {
 
                         QueryRequest queryRequest = new QueryRequest(params);
-                        MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                        MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
                             MCRSolrAuthenticationLevel.SEARCH);
                         final QueryResponse response = queryRequest.process(solrClient);
                         response.getResults().stream()
@@ -79,7 +79,7 @@ public class MCRSetStatePublishedStableCronjob extends MCRCronjob {
                     }
                 }
                 return true;
-            }, MCRSystemUserInformation.getSuperUserInstance()).call();
+            }, MCRSystemUserInformation.SYSTEM_USER).call();
         } catch (Exception e) {
             LOGGER.error("Errow while calling cron job", e);
         }

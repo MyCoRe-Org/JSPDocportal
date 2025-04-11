@@ -131,7 +131,7 @@ public class PDFFrontpageUtil {
         String xslt = "xslt/docdetails/pdffrontpage_html.xsl";
         try {
             Class<? extends TransformerFactory> tfClass = MCRClassTools.forName("net.sf.saxon.TransformerFactoryImpl");
-            MCRXSLTransformer t = MCRXSLTransformer.getInstance(tfClass, xslt);
+            MCRXSLTransformer t = MCRXSLTransformer.obtainInstance(tfClass, xslt);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
             t.transform(new MCRJDOMContent(jdomObj), baos);
