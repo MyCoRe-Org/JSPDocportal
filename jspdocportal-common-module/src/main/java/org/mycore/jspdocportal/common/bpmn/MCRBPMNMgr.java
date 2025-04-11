@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
 import org.camunda.bpm.engine.RuntimeService;
@@ -28,9 +26,6 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
 public class MCRBPMNMgr {
-    @SuppressWarnings("unused")
-    private static final Logger LOGGER = LogManager.getLogger(MCRBPMNMgr.class);
-
     public static final String WF_VAR_MODE = "wfMode";
 
     public static final String WF_VAR_HEADLINE = "wfHeadline";

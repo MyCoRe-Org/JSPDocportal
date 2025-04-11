@@ -98,7 +98,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
                         query.setRows(0);
                         try {
                             QueryRequest queryRequest = new QueryRequest(query);
-                            MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                            MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
                                 MCRSolrAuthenticationLevel.SEARCH);
                             QueryResponse response = queryRequest.process(solrClient);
                             SolrDocumentList solrResults = response.getResults();
@@ -118,7 +118,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
                 new CacheLoader<MCRCategoryID, List<MCRCategory>>() {
                     @Override
                   public List<MCRCategory> load(MCRCategoryID key){
-                        return MCRCategoryDAOFactory.getInstance().getChildren(key);
+                        return MCRCategoryDAOFactory.obtainInstance().getChildren(key);
                   }
                 });
     
@@ -129,7 +129,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
                 new CacheLoader<MCRCategoryID, Map<MCRCategoryID, Boolean>>() {
                     @Override
                   public Map<MCRCategoryID, Boolean> load(MCRCategoryID key) throws Exception {
-                        return MCRCategLinkServiceFactory.getInstance().hasLinks(MCRCategoryDAOFactory.getInstance().getCategory(key,0));
+                        return MCRCategLinkServiceFactory.obtainInstance().hasLinks(MCRCategoryDAOFactory.getInstance().getCategory(key,0));
                   }
                 });
     
@@ -140,7 +140,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
                 new CacheLoader<MCRCategoryID, Map<MCRCategoryID, Number>>() {
                     @Override
                   public Map<MCRCategoryID, Number> load(MCRCategoryID key) throws Exception {
-                        return MCRCategLinkServiceFactory.getInstance().countLinks(MCRCategoryDAOFactory.getInstance().getCategory(key,0), false);
+                        return MCRCategLinkServiceFactory.obtainInstance().countLinks(MCRCategoryDAOFactory.getInstance().getCategory(key,0), false);
                   }
                 });
     
@@ -195,7 +195,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
 
         JspWriter out = getJspContext().getOut();
             out.write("\n\n<!-- ClassificationBrowser ("+rootClassifID.getRootID()+") START  -->");
-            if (!MCRCategoryDAOFactory.getInstance().exist(rootClassifID)) {
+            if (!MCRCategoryDAOFactory.obtainInstance().exist(rootClassifID)) {
                 LOGGER.error("Classification does not exist" + rootClassifID.getRootID());
                 out.write("Classification " + rootClassifID.getRootID() + " does not exist!");
                 return;

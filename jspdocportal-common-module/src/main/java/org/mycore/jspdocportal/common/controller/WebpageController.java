@@ -114,7 +114,7 @@ public class WebpageController {
             result = MCRTranslation.translate("Browse.Facet." + facetKey.replace("_msg.facet", "") + "." + facetValue);
         }
         if (facetKey.contains("_class.facet")) {
-            MCRCategory categ = MCRCategoryDAOFactory.getInstance().getCategory(MCRCategoryID.fromString(facetValue),
+            MCRCategory categ = MCRCategoryDAOFactory.obtainInstance().getCategory(MCRCategoryID.ofString(facetValue),
                 0);
             if (categ != null) {
                 result = categ.getCurrentLabel().get().getText();

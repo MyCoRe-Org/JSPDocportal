@@ -138,7 +138,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
             }
         }
         if (dir.isDirectory()) {
-            for (String id : MCRXMLMetadataManager.instance().listIDsOfType(type)) {
+            for (String id : MCRXMLMetadataManager.getInstance().listIDsOfType(type)) {
                 commandList.add("backup object " + id + " to directory " + dirname);
             }
         } else {
@@ -429,7 +429,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                 Path dir = Paths.get(String.valueOf(ifsProperties.get(key)));
                 if (Files.exists(dir)) {
                     try {
-                        Files.walkFileTree(dir, MCRRecursiveDeleter.instance());
+                        Files.walkFileTree(dir, new MCRRecursiveDeleter());
                     } catch (IOException e) {
                         LOGGER.error(e);
                     }
@@ -439,7 +439,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
         Path dir = Paths.get(MCRConfiguration2.getString("MCR.Metadata.Store.BaseDir").orElseThrow());
         if (Files.exists(dir)) {
             try {
-                Files.walkFileTree(dir, MCRRecursiveDeleter.instance());
+                Files.walkFileTree(dir, new MCRRecursiveDeleter());
             } catch (IOException e) {
                 LOGGER.error(e);
             }
@@ -486,8 +486,8 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
     public static final void migrateParent2RelatedItem() {
         LOGGER.info("Please be patient, while collecting required MyCoRe objects.");
         List<String> check = new ArrayList<>();
-        check.addAll(MCRXMLMetadataManager.instance().listIDsOfType("bundle"));
-        check.addAll(MCRXMLMetadataManager.instance().listIDsOfType("document"));
+        check.addAll(MCRXMLMetadataManager.getInstance().listIDsOfType("bundle"));
+        check.addAll(MCRXMLMetadataManager.getInstance().listIDsOfType("document"));
 
         XPathExpression<Element> xpathRecordIdentifier = XPathFactory.instance().compile(
             ".//mods:mods/mods:recordInfo/mods:recordIdentifier", Filters.element(), null,

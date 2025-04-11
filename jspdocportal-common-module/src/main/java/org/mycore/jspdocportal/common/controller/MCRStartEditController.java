@@ -57,7 +57,7 @@ public class MCRStartEditController  {
                         variables.put(MCRBPMNMgr.WF_VAR_MODE, mode);
                         String role = mode + "-" + mcrObjID.getTypeId();
                         variables.put(MCRBPMNMgr.WF_VAR_HEADLINE,
-                            MCRCategoryDAOFactory.getInstance().getCategory(new MCRCategoryID("mcr-roles", role), 0)
+                            MCRCategoryDAOFactory.obtainInstance().getCategory(new MCRCategoryID("mcr-roles", role), 0)
                                 .getCurrentLabel()
                                 .orElse(new MCRLabel(MCRSessionMgr.getCurrentSession().getLocale().getLanguage(),
                                     "??" + role + "??", ""))

@@ -132,7 +132,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
             der.getDerivate().getTitles().add(new MCRMetaLangText("title", "de", null, 0, "plain", title));
         }
         if (!StringUtils.isBlank(label)) {
-            if (MCRCategoryDAOFactory.getInstance().exist(new MCRCategoryID("derivate_types", label))) {
+            if (MCRCategoryDAOFactory.obtainInstance().exist(new MCRCategoryID("derivate_types", label))) {
                 der.getDerivate().getClassifications()
                     .add(new MCRMetaClassification("classification", 0, null, "derivate_types", label));
             } else {
@@ -155,7 +155,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                 MCRBPMNUtils.saveMCRDerivateToWorkflowDirectory(der);
             }
             der.setOrder(mcrObj.getStructure().getDerivates().size() + 1);
-            mcrObj.getStructure().addDerivate(MCRMetaEnrichedLinkIDFactory.getInstance().getDerivateLink(der));
+            mcrObj.getStructure().addDerivate(MCRMetaEnrichedLinkIDFactory.obtainInstance().getDerivateLink(der));
             MCRBPMNUtils.saveMCRObjectToWorkflowDirectory(mcrObj);
 
         } else {

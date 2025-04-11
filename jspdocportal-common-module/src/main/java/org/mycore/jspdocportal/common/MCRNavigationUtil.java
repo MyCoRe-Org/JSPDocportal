@@ -53,7 +53,7 @@ public class MCRNavigationUtil {
      * @param sce - the servlet context
      */
     protected static void loadNavigation(ServletContext sce) {
-        Element eNav = MCRURIResolver.instance().resolve("resource:config/navigation.xml");
+        Element eNav = MCRURIResolver.obtainInstance().resolve("resource:config/navigation.xml");
         annoteNavigation(eNav);
 
         Document jdomDoc = eNav.getDocument();

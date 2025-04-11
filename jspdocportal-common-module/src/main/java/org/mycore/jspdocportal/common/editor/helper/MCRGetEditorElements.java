@@ -170,7 +170,7 @@ public class MCRGetEditorElements {
     private Element transformClassToItems(String classid, String emptyLeafs, boolean withCounter)
             throws TransformerException {
         Document classJdom = MCRCategoryTransformer.getMetaDataDocument(
-                MCRCategoryDAOFactory.getInstance().getCategory(MCRCategoryID.rootID(classid), -1), withCounter);
+                MCRCategoryDAOFactory.obtainInstance().getCategory(new MCRCategoryID(classid), -1), withCounter);
 
         boolean displayEmptyLeafs = (emptyLeafs.equalsIgnoreCase("yes") || emptyLeafs.equalsIgnoreCase("true"));
         return MCREditorClassificationHelper.transformClassificationtoItems(classJdom, displayEmptyLeafs)
@@ -179,7 +179,7 @@ public class MCRGetEditorElements {
 
     private Element transformClassLabelsToItems(String classid) throws TransformerException {
         Document classJdom = MCRCategoryTransformer.getMetaDataDocument(
-                MCRCategoryDAOFactory.getInstance().getCategory(MCRCategoryID.rootID(classid), -1), false);
+                MCRCategoryDAOFactory.obtainInstance().getCategory(new MCRCategoryID(classid), -1), false);
         return MCREditorClassificationHelper.transformClassificationLabeltoItems(classJdom, true).getRootElement();
     }
 

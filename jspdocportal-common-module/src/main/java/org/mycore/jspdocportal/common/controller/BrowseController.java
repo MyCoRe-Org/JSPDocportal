@@ -22,8 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.glassfish.jersey.server.mvc.Viewable;
 import org.jdom2.Namespace;
@@ -49,9 +47,6 @@ import jakarta.ws.rs.core.Context;
 
 @Path("/do/browse/{mask}")
 public class BrowseController {
-    @SuppressWarnings("unused")
-    private static final Logger LOGGER = LogManager.getLogger();
-
     public static Namespace NS_XED = Namespace.getNamespace("xed", "http://www.mycore.de/xeditor");
 
     public static int DEFAULT_ROWS = 20;
@@ -178,7 +173,7 @@ public class BrowseController {
             result = MCRTranslation.translate("Browse.Facet." + facetKey.replace("_msg.facet", "") + "." + facetValue);
         }
         if (facetKey.contains("_class.facet")) {
-            MCRCategory categ = MCRCategoryDAOFactory.getInstance().getCategory(MCRCategoryID.fromString(facetValue),
+            MCRCategory categ = MCRCategoryDAOFactory.obtainInstance().getCategory(MCRCategoryID.ofString(facetValue),
                     0);
             if (categ != null) {
                 result = categ.getCurrentLabel().get().getText();

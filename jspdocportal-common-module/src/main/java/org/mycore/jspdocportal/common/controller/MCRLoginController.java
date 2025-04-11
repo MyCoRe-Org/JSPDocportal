@@ -105,7 +105,7 @@ import jakarta.ws.rs.core.Response;
         MCRSession session = MCRSessionMgr.getCurrentSession();
         String uid = session.getUserInformation().getUserID();
         LOGGER.debug("Log out user " + uid);
-        session.setUserInformation(MCRSystemUserInformation.getGuestInstance());
+        session.setUserInformation(MCRSystemUserInformation.GUEST);
         request.getSession().removeAttribute(SESSION_ATTR_MCR_USER);
         
         HashMap<String, Object> model = new HashMap<>();

@@ -73,7 +73,7 @@ public class MCRIndexBrowserController {
             firstSelector.clear();
             try {
                 QueryRequest queryRequest = new QueryRequest(q);
-                MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
                     MCRSolrAuthenticationLevel.SEARCH);
                 QueryResponse response = queryRequest.process(solrClient);
                 for (Count c : response.getFacetFields().get(0).getValues()) {

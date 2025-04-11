@@ -73,11 +73,11 @@ public class MCRTransformXslTag extends SimpleTagSupport {
             // MCRXSLTransformer t = MCRXSLTransformer.getInstance(stylesheet);
 
             Class<? extends TransformerFactory> tfClass = MCRClassTools.forName("net.sf.saxon.TransformerFactoryImpl");
-            MCRXSLTransformer t = MCRXSLTransformer.getInstance(tfClass, stylesheet);
+            MCRXSLTransformer t = MCRXSLTransformer.obtainInstance(tfClass, stylesheet);
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             if (mcrid != null) {
-                t.transform(MCRXMLMetadataManager.instance().retrieveContent(MCRObjectID.getInstance(mcrid)), baos);
+                t.transform(MCRXMLMetadataManager.getInstance().retrieveContent(MCRObjectID.getInstance(mcrid)), baos);
                 getJspContext().getOut().append(baos.toString(StandardCharsets.UTF_8));
                 return;
             }

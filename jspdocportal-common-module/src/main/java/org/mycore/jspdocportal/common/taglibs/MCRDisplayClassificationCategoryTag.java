@@ -14,7 +14,7 @@ import jakarta.servlet.jsp.JspException;
 import jakarta.servlet.jsp.tagext.SimpleTagSupport;
 
 public class MCRDisplayClassificationCategoryTag extends SimpleTagSupport {
-    private static MCRCategoryDAO categoryDAO = MCRCategoryDAOFactory.getInstance();
+    private static MCRCategoryDAO categoryDAO = MCRCategoryDAOFactory.obtainInstance();
 
     private static final Logger LOGGER = LogManager.getLogger();
 

@@ -197,7 +197,7 @@ public class MCRShowWorkspaceController {
         for (String role : roles) {
             if (role.startsWith("wf_")) {
                 newActions.put(role,
-                    MCRCategoryDAOFactory.getInstance().getCategory(new MCRCategoryID("mcr-roles", role), 0)
+                    MCRCategoryDAOFactory.obtainInstance().getCategory(new MCRCategoryID("mcr-roles", role), 0)
                         .getCurrentLabel()
                         .orElse(new MCRLabel(MCRSessionMgr.getCurrentSession().getLocale().getLanguage(),
                             "??" + role + "??", ""))
@@ -221,7 +221,7 @@ public class MCRShowWorkspaceController {
                     variables.put(MCRBPMNMgr.WF_VAR_MODE, mode);
                     String role = mode + "-" + objectType;
                     variables.put(MCRBPMNMgr.WF_VAR_HEADLINE,
-                        MCRCategoryDAOFactory.getInstance().getCategory(new MCRCategoryID("mcr-roles", role), 0)
+                        MCRCategoryDAOFactory.obtainInstance().getCategory(new MCRCategoryID("mcr-roles", role), 0)
                             .getCurrentLabel()
                             .orElse(new MCRLabel(MCRSessionMgr.getCurrentSession().getLocale().getLanguage(),
                                 "??" + role + "??", ""))
@@ -364,13 +364,13 @@ public class MCRShowWorkspaceController {
             mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
 
             Class<? extends TransformerFactory> tfClass = MCRClassTools.forName("net.sf.saxon.TransformerFactoryImpl");
-            MCRXSLTransformer xsltTitle = MCRXSLTransformer.getInstance(tfClass,
+            MCRXSLTransformer xsltTitle = MCRXSLTransformer.obtainInstance(tfClass,
                 MCRConfiguration2.getString("MCR.Workflow.MCRObject.Display.Title.XSL").orElseThrow());
             ByteArrayOutputStream baosTitle = new ByteArrayOutputStream();
             xsltTitle.transform(new MCRJDOMContent(mcrObj.createXML()), baosTitle);
             ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_TITLE, baosTitle.toString(StandardCharsets.UTF_8));
 
-            MCRXSLTransformer xsltDescription = MCRXSLTransformer.getInstance(tfClass,
+            MCRXSLTransformer xsltDescription = MCRXSLTransformer.obtainInstance(tfClass,
                 MCRConfiguration2.getString("MCR.Workflow.MCRObject.Display.Description.XSL").orElseThrow());
             ByteArrayOutputStream baosDescription = new ByteArrayOutputStream();
             xsltDescription.transform(new MCRJDOMContent(mcrObj.createXML()), baosDescription);
@@ -418,8 +418,8 @@ public class MCRShowWorkspaceController {
             Attribute attrLic = xpathLic.evaluateFirst(mcrObj.createXML());
             if (attrLic != null) {
                 String licID = attrLic.getValue().substring(attrLic.getValue().indexOf("#") + 1);
-                MCRCategory cat = MCRCategoryDAOFactory.getInstance()
-                    .getCategory(MCRCategoryID.fromString("licenseinfo:" + licID), 0);
+                MCRCategory cat = MCRCategoryDAOFactory.obtainInstance()
+                    .getCategory(MCRCategoryID.ofString("licenseinfo:" + licID), 0);
                 if (cat != null) {
                     Optional<MCRLabel> optLabelIcon = cat.getLabel("x-icon");
                     Optional<MCRLabel> optLabelText = cat.getLabel("de");
@@ -483,7 +483,7 @@ public class MCRShowWorkspaceController {
                     if (!der.getDerivate().getClassifications().isEmpty()) {
                         result.append("\n    <strong>");
                         for (MCRMetaClassification c : der.getDerivate().getClassifications()) {
-                            Optional<MCRLabel> oLabel = MCRCategoryDAOFactory.getInstance()
+                            Optional<MCRLabel> oLabel = MCRCategoryDAOFactory.obtainInstance()
                                 .getCategory(new MCRCategoryID(c.getClassId(), c.getCategId()), 0).getCurrentLabel();
                             if (oLabel.isPresent()) {
                                 result.append("[").append(oLabel.get().getText()).append("] ");

@@ -106,7 +106,7 @@ public class MCRShowEditMenuTag extends MCRAbstractTag {
                     XPathExpression<Object> xpCheck = xpFactory.compile(entry.getValue(), Filters.fpassthrough(), null,
                         MCRConstants.MODS_NAMESPACE);
                     if (xpCheck.evaluateFirst(doc) != null) {
-                        String label = MCRCategoryDAOFactory.getInstance()
+                        String label = MCRCategoryDAOFactory.obtainInstance()
                             .getCategory(new MCRCategoryID("mcr-roles", role), 0)
                             .getCurrentLabel()
                             .orElse(new MCRLabel(MCRSessionMgr.getCurrentSession().getLocale().getLanguage(),

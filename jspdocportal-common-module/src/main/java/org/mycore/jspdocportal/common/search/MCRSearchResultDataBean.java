@@ -197,7 +197,7 @@ public class MCRSearchResultDataBean implements Serializable {
         try {
             facetResult.clear();
             QueryRequest queryRequest = new QueryRequest(solrQuery);
-            MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+            MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
                 MCRSolrAuthenticationLevel.SEARCH);
             solrQueryResponse = queryRequest.process(solrClient);
             SolrDocumentList solrResults = solrQueryResponse.getResults();

@@ -159,7 +159,7 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
                     solrQuery.setQuery(query);
                     solrQuery.setFields("id");
                     QueryRequest queryRequest = new QueryRequest(solrQuery);
-                    MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                    MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
                         MCRSolrAuthenticationLevel.SEARCH);
                     QueryResponse solrResponse = queryRequest.process(solrClient);
                     SolrDocumentList solrResults = solrResponse.getResults();

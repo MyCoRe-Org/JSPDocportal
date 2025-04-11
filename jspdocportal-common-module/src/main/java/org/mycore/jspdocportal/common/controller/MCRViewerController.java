@@ -79,7 +79,7 @@ public class MCRViewerController {
 
         try {
             QueryRequest queryRequest = new QueryRequest(solrQuery);
-            MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+            MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
                 MCRSolrAuthenticationLevel.SEARCH);
             QueryResponse solrResponse = queryRequest.process(solrClient);
             SolrDocumentList solrResults = solrResponse.getResults();

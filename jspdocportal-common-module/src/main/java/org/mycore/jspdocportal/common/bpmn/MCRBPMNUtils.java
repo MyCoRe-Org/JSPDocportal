@@ -177,7 +177,7 @@ public class MCRBPMNUtils {
         Path wfObjDir = getWorkflowObjectDir(mcrObjID);
         if (Files.exists(wfObjDir)) {
             try {
-                Files.walkFileTree(wfObjDir, MCRRecursiveDeleter.instance());
+                Files.walkFileTree(wfObjDir, new MCRRecursiveDeleter());
             } catch (IOException e) {
                 LOGGER.error(e);
             }
@@ -198,7 +198,7 @@ public class MCRBPMNUtils {
         try {
             Path wfDerDir = getWorkflowDerivateDir(mcrObjID, mcrDerID);
             if (Files.exists(wfDerDir)) {
-                Files.walkFileTree(wfDerDir, MCRRecursiveDeleter.instance());
+                Files.walkFileTree(wfDerDir, new MCRRecursiveDeleter());
             }
             Path wfDerFile = getWorkflowDerivateFile(mcrObjID, mcrDerID);
             if (Files.exists(wfDerFile)) {

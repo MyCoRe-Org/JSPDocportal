@@ -178,14 +178,14 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
 
             // das Factory-Pattern unterstützt verschiedene XSLT-Prozessoren
             TransformerFactory transFact = TransformerFactory.newInstance();
-            transFact.setURIResolver(MCRURIResolver.instance());
+            transFact.setURIResolver(MCRURIResolver.obtainInstance());
             Transformer transformer = transFact.newTransformer(xsltSource);
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
             transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 
             transformer.clearParameters();
-            MCRParameterCollector paramColl = MCRParameterCollector.getInstanceFromUserSession();
+            MCRParameterCollector paramColl = MCRParameterCollector.ofCurrentSession();
             paramColl.setParametersTo(transformer);
             transformer.transform(xmlSource, new StreamResult(out));
         }

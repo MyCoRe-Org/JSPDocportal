@@ -86,7 +86,7 @@ public class MCRAPIExplore {
     @XmlElementWrapper(name = "mycoreobjects")
     public Response exploreObjects(@QueryParam("start") String start, @QueryParam("rows") String rows,
             @QueryParam("sort") String sort, @QueryParam("filter") List<String> filter) throws IOException {
-        Date lastModified = new Date(MCRXMLMetadataManager.instance().getLastModified());
+        Date lastModified = new Date(MCRXMLMetadataManager.getInstance().getLastModified());
 
         // enable on 2020 LTS
         // if (cachedResponse.isPresent()) {
@@ -106,7 +106,7 @@ public class MCRAPIExplore {
 
         try {
             QueryRequest queryRequest = new QueryRequest(q);
-            MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+            MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
                 MCRSolrAuthenticationLevel.SEARCH);
             QueryResponse solrResponse = queryRequest.process(solrClient);
             response.getHeader().setRows(q.getRows() == null ? 10 : q.getRows());

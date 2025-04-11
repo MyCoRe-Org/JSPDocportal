@@ -212,7 +212,7 @@ public class MCREditDerivatesController {
 
         if (!StringUtils.isBlank(label)) {
             der.getDerivate().getClassifications().removeIf(x -> "derivate_types".equals(x.getClassId()));
-            if (MCRCategoryDAOFactory.getInstance().exist(new MCRCategoryID("derivate_types", label))) {
+            if (MCRCategoryDAOFactory.obtainInstance().exist(new MCRCategoryID("derivate_types", label))) {
                 der.getDerivate().getClassifications()
                     .add(new MCRMetaClassification("classification", 0, null, "derivate_types", label));
             } else {
@@ -440,7 +440,7 @@ public class MCREditDerivatesController {
 
     public Map<String, String> calcDerivateLabels(String mode) {
         LinkedHashMap<String, String> result = new LinkedHashMap<>();
-        for (MCRCategory c : MCRCategoryDAOFactory.getInstance().getChildren(MCRCategoryID.rootID("derivate_types"))) {
+        for (MCRCategory c : MCRCategoryDAOFactory.obtainInstance().getChildren(MCRCategoryID.rootID("derivate_types"))) {
             if (c.getCurrentLabel().isPresent()) {
                 Optional<MCRLabel> lblMode = c.getLabel("x-usedfor");
                 if (lblMode.isPresent()) {

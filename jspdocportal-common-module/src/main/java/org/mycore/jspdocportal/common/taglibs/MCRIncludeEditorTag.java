@@ -63,7 +63,7 @@ public class MCRIncludeEditorTag extends SimpleTagSupport {
 
             // das Factory-Pattern unterstützt verschiedene XSLT-Prozessoren
             TransformerFactory transFact = TransformerFactory.newInstance();
-            transFact.setURIResolver(MCRURIResolver.instance());
+            transFact.setURIResolver(MCRURIResolver.obtainInstance());
             Transformer transformer = transFact.newTransformer(xsltSource);
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
@@ -77,7 +77,7 @@ public class MCRIncludeEditorTag extends SimpleTagSupport {
              * name="HttpSession" /> <xsl:param name="JSessionID" />
              */
             transformer.clearParameters();
-            MCRParameterCollector paramColl = MCRParameterCollector.getInstanceFromUserSession();
+            MCRParameterCollector paramColl = MCRParameterCollector.ofCurrentSession();
             paramColl.setParametersTo(transformer);
             if (cancelPage != null && cancelPage.length() > 0) {
                 paramColl.setParameter("cancelUrl", cancelPage);
