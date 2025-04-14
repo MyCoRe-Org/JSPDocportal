@@ -87,12 +87,8 @@ public class MCRIncludeEditorTag extends SimpleTagSupport {
 
             pageContext.getOut().append(out.toString());
 
-        } catch (TransformerConfigurationException e) {
-            LOGGER.error("TransformerConfigurationException: {}", e, e);
-        } catch (TransformerException e) {
-            LOGGER.error("TransformerException {}", e, e);
-        } catch (JDOMException e) {
-            LOGGER.error("JDOMException {}", e, e);
+        } catch (TransformerException | JDOMException e) {
+            LOGGER.error("Exception", e);
         }
     }
 }

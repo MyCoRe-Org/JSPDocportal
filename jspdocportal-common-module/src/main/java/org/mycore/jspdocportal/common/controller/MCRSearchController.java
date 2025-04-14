@@ -325,7 +325,7 @@ public class MCRSearchController {
                 }
             }
         } catch (Exception e) {
-            LOGGER.error("SAXException {}", e, e);
+            LOGGER.error("SAXException", e);
         }
         return out.toString();
     }

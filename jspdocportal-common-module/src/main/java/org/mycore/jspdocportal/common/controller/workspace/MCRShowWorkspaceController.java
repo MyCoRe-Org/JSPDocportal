@@ -241,7 +241,7 @@ public class MCRShowWorkspaceController {
     }
 
     private void acceptTask(String taskId) {
-        LOGGER.debug("Accepted Task{}", taskId);
+        LOGGER.debug("Accepted Task {}", taskId);
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
         for (Task t : ts.createTaskQuery().executionId(taskId).list()) {
             //should be only one item
@@ -250,7 +250,7 @@ public class MCRShowWorkspaceController {
     }
 
     private void releaseTask(String taskId) {
-        LOGGER.debug("Release Task{}", taskId);
+        LOGGER.debug("Release Task {}", taskId);
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
         for (Task t : ts.createTaskQuery().executionId(taskId).list()) {
             //should be only one item

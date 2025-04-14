@@ -201,7 +201,7 @@ import jakarta.ws.rs.core.Response;
                 model.put("loginStatus", "user.disabled");
             } else {
                 model.put("loginStatus", "user.unkwnown_error");
-                LOGGER.debug("user.unkwnown_error{}", e);
+                LOGGER.debug("user.unkwnown_error{}", e.getMessage());
             }
         }
         LOGGER.info(() -> model.get("loginStatus"));

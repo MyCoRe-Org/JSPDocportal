@@ -189,13 +189,8 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
             paramColl.setParametersTo(transformer);
             transformer.transform(xmlSource, new StreamResult(out));
         }
-
-        catch (TransformerConfigurationException e) {
-            LOGGER.error("TransformerConfigurationExceptio: {}", e, e);
-        } catch (TransformerException e) {
-            LOGGER.error("TransformerException: {}", e, e);
-        } catch (JDOMException e) {
-            LOGGER.error("JDOMException: {}", e, e);
+        catch (TransformerException | JDOMException e) {
+            LOGGER.error("Exception", e);
         }
     }
 
