@@ -28,10 +28,6 @@ import org.mycore.user2.MCRUserManager;
 
 public class MCRMyCoreIDMProvider implements ReadOnlyIdentityProvider {
 
-    public MCRMyCoreIDMProvider() {
-
-    }
-
     // User ////////////////////////////////////////////
 
     @Override
@@ -92,15 +88,13 @@ public class MCRMyCoreIDMProvider implements ReadOnlyIdentityProvider {
 
     @Override
     public boolean checkPassword(String userId, String password) {
-
-        if (userId == null || password == null || userId.isEmpty() || password.isEmpty())
+        if (userId == null || password == null || userId.isEmpty() || password.isEmpty()) {
             return false;
-
+        }
         User user = findUserById(userId);
-
-        if (user == null)
+        if (user == null) {
             return false;
-
+        }
         return user.getPassword().equals(password);
     }
 
@@ -136,7 +130,7 @@ public class MCRMyCoreIDMProvider implements ReadOnlyIdentityProvider {
             return Arrays.asList(new MCRMyCoReIDMGroup(mcrRole));
         }
         if (query.getUserId() != null) {
-            List<Group> groups = new ArrayList<Group>();
+            List<Group> groups = new ArrayList<>();
             for (String roleID : MCRUserManager.getUser(query.getUserId()).getSystemRoleIDs()) {
                 groups.add(new MCRMyCoReIDMGroup(MCRRoleManager.getRole(roleID)));
             }

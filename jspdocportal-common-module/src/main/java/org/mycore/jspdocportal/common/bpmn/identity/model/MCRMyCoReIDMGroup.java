@@ -4,6 +4,7 @@ import org.camunda.bpm.engine.identity.Group;
 import org.mycore.user2.MCRRole;
 
 public class MCRMyCoReIDMGroup implements Group{
+    @java.io.Serial
     private static final long serialVersionUID = 1L;
 
     private String id;

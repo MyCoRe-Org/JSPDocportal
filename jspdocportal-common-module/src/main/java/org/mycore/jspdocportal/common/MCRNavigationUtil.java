@@ -23,8 +23,6 @@
  */
 package org.mycore.jspdocportal.common;
 
-import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -79,7 +77,7 @@ public class MCRNavigationUtil {
      * @param rootElement the root element of the navigation document
      */
     private static void annoteNavigation(Element rootElement) {
-        for (Element eChild : (List<Element>) rootElement.getChildren("navigation", NS_NAVIGATION)) {
+        for (Element eChild : rootElement.getChildren("navigation", NS_NAVIGATION)) {
             annoteNavigationItem(eChild, 0, "");
         }
     }
@@ -99,7 +97,7 @@ public class MCRNavigationUtil {
         path = path + e.getAttributeValue("id");
         e.setAttribute("_path", path);
         //e.setAttribute("_nodeID", UUID.randomUUID().toString());
-        for (Element eChild : (List<Element>) e.getChildren("navitem", NS_NAVIGATION)) {
+        for (Element eChild : e.getChildren("navitem", NS_NAVIGATION)) {
             annoteNavigationItem(eChild, level + 1, path);
         }
     }

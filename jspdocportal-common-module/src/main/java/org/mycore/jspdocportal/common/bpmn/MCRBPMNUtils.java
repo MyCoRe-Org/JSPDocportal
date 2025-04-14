@@ -51,7 +51,7 @@ public class MCRBPMNUtils {
             xmlOut.output(mcrObj.createXML(), bw);
         } catch (Exception ex) {
             throw new MCRException(
-                "Cant save MCR Object " + mcrObj.getId().toString() + " as file " + wfObjFile.toString());
+                "Cant save MCR Object " + mcrObj.getId().toString() + " as file " + wfObjFile.toString(), ex);
         }
     }
 
@@ -106,18 +106,16 @@ public class MCRBPMNUtils {
     }
 
     public static MCRObject getWorkflowObject(MCRObjectID mcrObjID) {
-        MCRObject o = null;
         try {
-            o = new MCRObject(getWorkflowObjectFile(mcrObjID).toUri());
+            return new MCRObject(getWorkflowObjectFile(mcrObjID).toUri());
         } catch (JDOMException | IOException e) {
             LOGGER.error(e);
+            return null;
         }
-        return o;
     }
 
     public static Path getWorkflowObjectFile(MCRObjectID mcrObjID) {
-        Path p = getWorkflowDirectory(mcrObjID).resolve(mcrObjID.toString() + ".xml");
-        return p;
+        return getWorkflowDirectory(mcrObjID).resolve(mcrObjID.toString() + ".xml");
     }
 
     public static Document getWorkflowObjectXML(MCRObjectID mcrObjID) {
@@ -145,8 +143,7 @@ public class MCRBPMNUtils {
     }
 
     public static Path getWorkflowDerivateFile(MCRObjectID mcrObjID, MCRObjectID mcrDerID) {
-        Path wfFile = getWorkflowObjectDir(mcrObjID).resolve(mcrDerID.toString() + ".xml");
-        return wfFile;
+        return getWorkflowObjectDir(mcrObjID).resolve(mcrDerID.toString() + ".xml");
     }
 
     public static Document getWorkflowDerivateXML(MCRObjectID mcrObjID, MCRObjectID mcrDerID) {
@@ -214,13 +211,13 @@ public class MCRBPMNUtils {
     }
 
     public static Map<String, List<String>> getDerivateFiles(MCRObjectID mcrObjID) {
-        HashMap<String, List<String>> result = new HashMap<String, List<String>>();
+        Map<String, List<String>> result = new HashMap<>();
         Path baseDir = getWorkflowObjectDir(mcrObjID);
         MCRObject obj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
         try {
             for (MCRMetaLinkID derID : obj.getStructure().getDerivates()) {
                 String id = derID.getXLinkHref();
-                List<String> fileNames = new ArrayList<String>();
+                List<String> fileNames = new ArrayList<>();
                 try {
                     Path derDir = baseDir.resolve(id);
 
@@ -245,7 +242,7 @@ public class MCRBPMNUtils {
     public static void deleteDirectoryContent(Path path) {
         try {
             final Path rootPath = path;
-            Files.walkFileTree(rootPath, new SimpleFileVisitor<Path>() {
+            Files.walkFileTree(rootPath, new SimpleFileVisitor<>() {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     Files.delete(file);
@@ -264,7 +261,7 @@ public class MCRBPMNUtils {
                 }
             });
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
     }
 }

@@ -23,6 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * @author Robert Stephan
  */
 public class MCRStoreMetadataServlet extends HttpServlet {
+    @java.io.Serial
     private static final long serialVersionUID = 1L;
 
     /**

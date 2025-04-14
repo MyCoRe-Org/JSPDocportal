@@ -39,6 +39,7 @@ public class MCRBPMNAssignmentHandler implements TaskListener {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    @Override
     public void notify(DelegateTask delegateTask) {
         StringValue mode = delegateTask.getVariableTyped(MCRBPMNMgr.WF_VAR_MODE);
         StringValue objectType = delegateTask.getVariableTyped(MCRBPMNMgr.WF_VAR_OBJECT_TYPE);
@@ -46,7 +47,7 @@ public class MCRBPMNAssignmentHandler implements TaskListener {
         String candidateRole = mode.getValue() + "-" + objectType.getValue();
 
         String wfID = delegateTask.getProcessDefinitionId().split(":")[0];
-        List<String> groups = new ArrayList<String>();
+        List<String> groups = new ArrayList<>();
         for (String role : MCRUserManager.getCurrentUser().getSystemRoleIDs()) {
             if (role.equals(candidateRole)) {
                 groups.add(role);
@@ -61,7 +62,7 @@ public class MCRBPMNAssignmentHandler implements TaskListener {
             delegateTask.addCandidateUser(u.trim());
         }
 
-        if (groups.size() == 0 && users.size() == 0) {
+        if (groups.isEmpty() && users.isEmpty()) {
             LOGGER.error("Please define candidate users or groups for the following workflow: {}", wfID);
             LOGGER.error("For candidate users you may set the following property: {}", propKeyUser);
         }

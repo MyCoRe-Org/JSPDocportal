@@ -117,8 +117,8 @@ public class MCRAPIExplore {
                 response.getHeader().setSort(String.join(",", q.getSorts().stream()
                         .map(x -> x.getItem() + " " + x.getOrder().name()).collect(Collectors.toList())));
             }
-            for (int i = 0; i < solrResults.size(); ++i) {
-                SolrDocument solrDoc = solrResults.get(i);
+
+            for (SolrDocument solrDoc : solrResults) {
                 response.getData().add(createResponseObject(solrDoc));
             }
 

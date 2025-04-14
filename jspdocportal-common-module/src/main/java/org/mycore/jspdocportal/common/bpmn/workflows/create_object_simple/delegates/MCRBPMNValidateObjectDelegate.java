@@ -7,6 +7,7 @@ import org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple.MCRWor
 
 public class MCRBPMNValidateObjectDelegate implements JavaDelegate {
 
+    @Override
     public void execute(DelegateExecution execution) throws Exception {
         MCRWorkflowMgr wfm = MCRBPMNMgr.getWorkflowMgr(execution);
         wfm.validateMCRObject(execution);

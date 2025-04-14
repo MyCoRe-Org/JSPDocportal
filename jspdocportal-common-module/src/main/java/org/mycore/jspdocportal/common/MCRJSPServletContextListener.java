@@ -80,7 +80,7 @@ public class MCRJSPServletContextListener implements ServletContextListener {
         Enumeration<Driver> drivers = DriverManager.getDrivers();
         while (drivers.hasMoreElements()) {
             Driver driver = drivers.nextElement();
-            if (driver.getClass().getClassLoader() == cl) {
+            if (driver.getClass().getClassLoader().equals(cl)) {
                 // This driver was registered by the webapp's ClassLoader, so deregister it:
                 try {
                     LOGGER.info("Deregistering JDBC driver: {}", driver);

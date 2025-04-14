@@ -121,16 +121,12 @@ public class MCRBPMNMgr {
     }
 
     private static MCRWorkflowMgr getWorkflowMgrForMode(String mode) {
-        MCRWorkflowMgr mgr = null;
-        String prop = "";
+        String prop = "MCR.Workflow.WorkflowMgr.Class.create_object_simple." + mode;
         try {
-            prop = "MCR.Workflow.WorkflowMgr.Class.create_object_simple." + mode;
-            mgr = MCRConfiguration2.getInstanceOf(MCRWorkflowMgr.class, prop).orElseThrow();
+            return MCRConfiguration2.getInstanceOf(MCRWorkflowMgr.class, prop).orElseThrow();
         } catch (Exception e) {
             throw new MCRException("Could not instantiate MCRWorkflowMgr for " + prop, e);
         }
-
-        return mgr;
     }
 
     public static void sendMail(List<InternetAddress> to, String subject, String body, List<InternetAddress> cc,
@@ -149,6 +145,7 @@ public class MCRBPMNMgr {
         if (!user.isBlank() && !password.isBlank()) {
             props.put("mail.smtp.auth", "true");
             auth = new Authenticator() {
+                @Override
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(user, password);
                 }
@@ -163,7 +160,7 @@ public class MCRBPMNMgr {
             //set From:
             InternetAddress addrFrom = new InternetAddress();
             MCRConfiguration2.getString("MCR.Workflow.Email.From")
-                .ifPresent(from -> addrFrom.setAddress(from));
+                .ifPresent(addrFrom::setAddress);
             MCRConfiguration2.getString("MCR.Workflow.Email.Sender")
                 .ifPresent(name -> {
                     try {

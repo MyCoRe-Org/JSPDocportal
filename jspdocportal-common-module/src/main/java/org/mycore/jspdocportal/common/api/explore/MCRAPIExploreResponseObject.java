@@ -54,12 +54,12 @@ public class MCRAPIExploreResponseObject {
 
     @XmlElement(name = "payload")
     @JsonProperty("payloads")
-    private List<MCRAPIExploreResponsePayload> payload = null;
+    private List<MCRAPIExploreResponsePayload> payload;
 
     @XmlElement(name = "link")
     @JsonProperty("links")
     @JsonSerialize(using = MCRLinkListJsonSerializer.class)
-    private List<MCRAPIExploreResponseLink> links = new ArrayList<MCRAPIExploreResponseLink>();
+    private List<MCRAPIExploreResponseLink> links = new ArrayList<>();
 
     public MCRAPIExploreResponseObject(String id, Instant modified) {
         super();

@@ -16,7 +16,7 @@ import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
  *
  */
 public class MCRMyCoReIDMTenantQuery extends TenantQueryImpl {
-
+    @java.io.Serial
     private static final long serialVersionUID = 1L;
 
     public MCRMyCoReIDMTenantQuery() {

@@ -13,6 +13,8 @@ import org.mycore.datamodel.metadata.validator.MCREditorOutValidator;
 public class MCRMetaHistoryEventCheck implements MCREditorMetadataValidator {
     private static final Logger LOGGER = LogManager.getLogger();
 
+    @SuppressWarnings("PMD.AvoidReassigningLoopVariables")
+    @Override
     public String checkDataSubTag(Element datasubtag) {
         List<Element> children = datasubtag.getChildren("text");
         for (int i = 0; i < children.size(); i++) {
@@ -25,10 +27,10 @@ public class MCRMetaHistoryEventCheck implements MCREditorMetadataValidator {
             }
             if (child.getAttribute("lang") != null) {
                 child.getAttribute("lang").setNamespace(XML_NAMESPACE);
-                LOGGER.warn("namespace add for xml:lang attribute in {}", () -> datasubtag.getName());
+                LOGGER.warn("namespace add for xml:lang attribute in {}", datasubtag::getName);
             }
         }
-        if (children.size() == 0) {
+        if (children.isEmpty()) {
             return "history date is empty";
         }
         Element classification = datasubtag.getChild("classification");
