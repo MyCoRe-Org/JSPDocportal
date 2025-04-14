@@ -130,7 +130,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
         help = "The command backups all objects of type {0} into the directory {1} including all derivates")
     public static final List<String> backupAllObjects(String type, String dirname) {
         // check dirname
-        List<String> commandList = new ArrayList<String>();
+        List<String> commandList = new ArrayList<>();
         File dir = new File(dirname);
         if (!dir.exists()) {
             if (dir.getParentFile().exists()) {
@@ -162,12 +162,11 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
 
             //               add ACL's
             if (MCRAccessManager.getAccessImpl() instanceof MCRRuleAccessInterface) {
-                Iterator<String> it = MCRAccessManager.getPermissionsForID(id.toString()).iterator();
+                Iterator<String> it = MCRAccessManager.getPermissionsForID(id).iterator();
                 while (it.hasNext()) {
                     String s = it.next();
 
-                    Element rule = ((MCRRuleAccessInterface) MCRAccessManager.getAccessImpl()).getRule(id.toString(),
-                        s);
+                    Element rule = ((MCRRuleAccessInterface) MCRAccessManager.getAccessImpl()).getRule(id, s);
                     mcrObj.getService().addRule(s, rule);
                 }
             }
@@ -175,14 +174,15 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
             // build JDOM
             Document xml = mcrObj.createXML();
 
-            File xmlOutput = new File(dir, id.toString() + ".xml");
+            File xmlOutput = new File(dir, id + ".xml");
             try (FileOutputStream out = new FileOutputStream(xmlOutput)) {
                 new org.jdom2.output.XMLOutputter(Format.getPrettyFormat()).output(xml, out);
             }
 
             MCRObjectStructure mcrStructure = mcrObj.getStructure();
-            if (mcrStructure == null)
+            if (mcrStructure == null) {
                 return;
+            }
             for (MCRMetaLinkID derivate : mcrStructure.getDerivates()) {
                 String derID = derivate.getXLinkHref();
                 File subdir = new File(dirname, mcrObj.getId().toString());
@@ -193,7 +193,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
             LOGGER.info("Object {} saved to {}.", id, canonicalPath);
             LOGGER.info("");
         } catch (MCRException ex) {
-            return;
+            // ignore
         } catch (FileNotFoundException ex) {
             LOGGER.error("Could not write to file {}", id, ex);
         } catch (IOException ex) {
@@ -226,7 +226,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
         help = "The command restores all objects from directory {0} including all derivates")
     public static final List<String> restoreAllObjects(String dirname) {
         // check dirname
-        ArrayList<String> commandList = new ArrayList<String>();
+        List<String> commandList = new ArrayList<>();
         File dir = new File(dirname);
         if (dir.isDirectory()) {
             File[] files = dir.listFiles();
@@ -260,7 +260,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
             MCRObject mcrObj = new MCRObject(objectFile.toURI());
             mcrObj.setImportMode(true); //true = servdates are taken from xml file;
             //clone derivateIDs
-            List<MCRMetaLinkID> derivateIDs = new ArrayList<MCRMetaLinkID>(mcrObj.getStructure().getDerivates());
+            List<MCRMetaLinkID> derivateIDs = new ArrayList<>(mcrObj.getStructure().getDerivates());
             mcrObj.getStructure().getDerivates().clear();
             MCRMetadataManager.update(mcrObj);
 
@@ -278,7 +278,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                         }
                     }
                     File f = new File(objDir, derID.toString() + ".xml");
-                    LOGGER.info("Loading derivate {} : file exists?: {}", () -> f.getAbsolutePath(), () -> f.exists());
+                    LOGGER.info("Loading derivate {} : file exists?: {}", f::getAbsolutePath, f::exists);
 
                     MCRDerivate mcrDer = new MCRDerivate(f.toURI());
                     mcrDer.setImportMode(true); //true = servdates are taken from xml file;
@@ -287,7 +287,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                     Date dateCreated = mcrDer.getService().getDate("createdate");
                     Path p = objDir.toPath().resolve(derID.toString());
                     LOGGER.info(p);
-                    Files.walkFileTree(p, new SimpleFileVisitor<Path>() {
+                    Files.walkFileTree(p, new SimpleFileVisitor<>() {
                         @Override
                         public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs)
                             throws IOException {
@@ -302,7 +302,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                         @Override
                         public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
                             throws IOException {
-                            LOGGER.info("Update create date of file: {}:{}", () -> file.toString(), () -> attrs.creationTime());
+                            LOGGER.info("Update create date of file: {}:{}", file::toString, attrs::creationTime);
                             if (attrs.creationTime().toMillis() > dateCreated.getTime()) {
                                 BasicFileAttributeView basicView = Files.getFileAttributeView(file,
                                     BasicFileAttributeView.class);
@@ -332,7 +332,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                     }
                     */
                     if (mcrDer.getService().getRulesSize() > 0) {
-                        LOGGER.warn("ACLS for {} ignored.", () -> mcrDer.getId());
+                        LOGGER.warn("ACLS for {} ignored.", mcrDer::getId);
                     }
                 }
             }
@@ -348,7 +348,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
             }
             */
             if (mcrObj.getService().getRulesSize() > 0) {
-                LOGGER.warn("ACLS for {} ignored.", () -> mcrObj.getId());
+                LOGGER.warn("ACLS for {} ignored.", mcrObj::getId);
             }
         } catch (MCRAccessException | JDOMException | IOException e) {
             LOGGER.error(e);
@@ -395,7 +395,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
     public static final void createDirectory(String dirname) {
         while (dirname.contains("${")) {
             int start = dirname.indexOf("${");
-            int end = dirname.indexOf("}", start);
+            int end = dirname.indexOf('}', start);
 
             if (end > start && end < dirname.length()) {
                 String prop = dirname.substring(start + 2, end);
@@ -446,8 +446,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
             }
         }
 
-        EntityManager em = MCREntityManagerProvider.getEntityManagerFactory().createEntityManager();
-        try {
+        try (EntityManager em = MCREntityManagerProvider.getEntityManagerFactory().createEntityManager();) {
             int count = 0;
             EntityTransaction t = em.getTransaction();
             for (EntityType<?> et : em.getMetamodel().getEntities()) {
@@ -456,7 +455,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                     t.begin();
                     String selectQuery = "SELECT x FROM " + entityName + " x WHERE 1=1";
                     List<?> toRemove = em.createQuery(selectQuery).getResultList();
-                    LOGGER.info("deleting {} objects of {}", () -> toRemove.size(), () -> entityName);
+                    LOGGER.info("deleting {} objects of {}", toRemove::size, () -> entityName);
                     count += toRemove.size();
                     for (Object o : toRemove) {
                         em.remove(o);
@@ -469,8 +468,6 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                 }
             }
             LOGGER.info("Deleted {} objects.", count);
-        } finally {
-            em.close();
         }
     }
 
