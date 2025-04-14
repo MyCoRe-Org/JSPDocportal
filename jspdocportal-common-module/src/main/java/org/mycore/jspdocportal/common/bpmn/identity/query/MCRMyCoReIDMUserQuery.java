@@ -10,7 +10,7 @@ import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
 import org.mycore.jspdocportal.common.bpmn.identity.MCRMyCoreIDMProvider;
 
 public class MCRMyCoReIDMUserQuery extends UserQueryImpl {
-
+    @java.io.Serial
     private static final long serialVersionUID = 1L;
 
     public MCRMyCoReIDMUserQuery() {

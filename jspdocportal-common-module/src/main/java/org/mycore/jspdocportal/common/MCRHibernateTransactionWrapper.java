@@ -32,7 +32,7 @@ import org.mycore.common.MCRTransactionManager;
  * @author Robert Stephan
  */
 public class MCRHibernateTransactionWrapper implements AutoCloseable {
-    private boolean responsibleForTransaction = false;
+    private boolean responsibleForTransaction;
 
     public MCRHibernateTransactionWrapper() {
         /* 

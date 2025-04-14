@@ -4,6 +4,7 @@ import org.camunda.bpm.engine.identity.User;
 import org.mycore.user2.MCRUser;
 
 public class MCRMyCoReIDMUser implements User{
+    @java.io.Serial
     private static final long serialVersionUID = 1L;
 
     private String id;
@@ -16,7 +17,7 @@ public class MCRMyCoReIDMUser implements User{
         setId(mcrUser.getUserID());
         String name = mcrUser.getUserName();
         if(name.contains(" ")) {
-            int pos = name.lastIndexOf(" ");
+            int pos = name.lastIndexOf(' ');
             setFirstName(name.substring(0, pos));
             setLastName(name.substring(pos +1 ));
         }

@@ -46,7 +46,7 @@ public class MCRAPIExploreResponse {
     @XmlElementWrapper(name = "data")
     @XmlElement(name = "mcrobject")
     @JsonProperty("data")
-    private List<MCRAPIExploreResponseObject> data = new ArrayList<MCRAPIExploreResponseObject>();
+    private List<MCRAPIExploreResponseObject> data = new ArrayList<>();
 
     @XmlElement(name = "header")
     private MCRAPIExploreResponseHeader header = new MCRAPIExploreResponseHeader();

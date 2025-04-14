@@ -5,10 +5,12 @@ import org.camunda.bpm.engine.impl.interceptor.SessionFactory;
 
 public class MCRMyCoReIDMProviderFactory implements SessionFactory {
 
+    @Override
     public Class<?> getSessionType() {
         return MCRMyCoreIDMProvider.class;
     }
 
+    @Override
     public Session openSession() {
         return new MCRMyCoreIDMProvider();
     }

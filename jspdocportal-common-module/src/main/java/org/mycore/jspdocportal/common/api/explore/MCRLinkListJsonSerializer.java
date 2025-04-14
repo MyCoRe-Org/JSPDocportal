@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
  */
 public class MCRLinkListJsonSerializer extends StdSerializer<List<MCRAPIExploreResponseLink>> {
 
+    @java.io.Serial
     private static final long serialVersionUID = 1L;
 
     @SuppressWarnings("unchecked")

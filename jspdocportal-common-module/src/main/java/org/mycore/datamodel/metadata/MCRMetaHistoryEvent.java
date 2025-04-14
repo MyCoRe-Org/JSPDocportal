@@ -11,6 +11,7 @@ import org.mycore.common.MCRException;
 
 public class MCRMetaHistoryEvent extends MCRMetaHistoryDate {
     private static final Logger LOGGER = LogManager.getLogger(MCRMetaHistoryEvent.class);
+    private static final String SUBTAG_CLASSIFICATION = "classification";
     public static final int MCRHISTORYEVENT_MAX_EVENT = 1024;
     private String event;
     private MCRMetaClassification classification;
@@ -20,7 +21,7 @@ public class MCRMetaHistoryEvent extends MCRMetaHistoryDate {
         super();
         event = "";
         classification = new MCRMetaClassification();
-        classification.setSubTag("classification");
+        classification.setSubTag(SUBTAG_CLASSIFICATION);
 
     }
 
@@ -28,7 +29,7 @@ public class MCRMetaHistoryEvent extends MCRMetaHistoryDate {
         super(setSubtag, setType, setInherted);
         event = "";
         classification = new MCRMetaClassification();
-        classification.setSubTag("classification");
+        classification.setSubTag(SUBTAG_CLASSIFICATION);
 
     }
 
@@ -66,6 +67,7 @@ public class MCRMetaHistoryEvent extends MCRMetaHistoryDate {
      * @param element
      *            a relevant JDOM element for the metadata
      */
+    @Override
     public void setFromDOM(org.jdom2.Element element) {
         if (element.getChild("von") == null) {
             element.addContent(new Element("von"));
@@ -85,11 +87,11 @@ public class MCRMetaHistoryEvent extends MCRMetaHistoryDate {
         super.setFromDOM(element);
         setEvent(element.getChildTextTrim("event"));
         setCalendar(element.getChildTextTrim("calendar"));
-        Element eClassi = element.getChild("classification");
+        Element eClassi = element.getChild(SUBTAG_CLASSIFICATION);
         if (eClassi != null) {
             if (classification == null) {
                 classification = new MCRMetaClassification();
-                classification.setSubTag("classification");
+                classification.setSubTag(SUBTAG_CLASSIFICATION);
             }
             classification.setFromDOM(eClassi);
         } else {
@@ -106,6 +108,7 @@ public class MCRMetaHistoryEvent extends MCRMetaHistoryDate {
      *                if the content of this class is not valid
      * @return a JDOM Element with the XML MCRMetaHistoryDate part
      */
+    @Override
     public org.jdom2.Element createXML() throws MCRException {
         if (!isValid()) {
             debug();
@@ -143,6 +146,7 @@ public class MCRMetaHistoryEvent extends MCRMetaHistoryDate {
      * 
      * @return a boolean value
      */
+    @Override
     public boolean isValid() {
         boolean b = super.isValid() && event != null;
         if (classification != null) {
@@ -154,6 +158,7 @@ public class MCRMetaHistoryEvent extends MCRMetaHistoryDate {
     /**
      * This method make a clone of this class.
      */
+    @Override
     public MCRMetaHistoryEvent clone() {
         MCRMetaHistoryEvent out = new MCRMetaHistoryEvent(subtag, type, inherited);
         out.setText(getText("de").getText(), "de");
@@ -164,7 +169,7 @@ public class MCRMetaHistoryEvent extends MCRMetaHistoryDate {
             out.setEvent(event);
         }
         if (classification != null) {
-            out.setClassification((MCRMetaClassification) classification.clone());
+            out.setClassification(classification.clone());
         } else {
             out.setClassification(null);
         }
@@ -174,6 +179,7 @@ public class MCRMetaHistoryEvent extends MCRMetaHistoryDate {
     /**
      * This method put debug data to the logger (for the debug mode).
      */
+    @Override
     public void debug() {
         LOGGER.debug("Start Class : MCRMetaHistoryEvent");
         super.debugDefault();
