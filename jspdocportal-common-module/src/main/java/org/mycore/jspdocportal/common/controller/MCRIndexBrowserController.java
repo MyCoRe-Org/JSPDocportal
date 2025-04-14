@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -39,9 +40,9 @@ import jakarta.ws.rs.core.Response;
 public class MCRIndexBrowserController {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private TreeSet<String> firstSelector = new TreeSet<String>();
+    private Set<String> firstSelector = new TreeSet<>();
 
-    private Map<String, Long> secondSelector = new TreeMap<String, Long>();
+    private Map<String, Long> secondSelector = new TreeMap<>();
 
     private MCRSearchResultDataBean mcrSearchResult;
 
@@ -49,7 +50,7 @@ public class MCRIndexBrowserController {
     public Response defaultRes(@PathParam("modus") String modus,
         @QueryParam("select") String select,
         @Context HttpServletRequest request) {
-        HashMap<String, Object> model = new HashMap<>();
+        Map<String, Object> model = new HashMap<>();
         model.put("modus", modus);
         model.put("select", select);
 

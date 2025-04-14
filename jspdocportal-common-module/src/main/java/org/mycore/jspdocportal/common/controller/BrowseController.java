@@ -105,7 +105,7 @@ public class BrowseController {
             result.getFacetFields().clear();
             for (String ff : MCRConfiguration2.getString("MCR.Browse." + mask + ".FacetFields").orElse("")
                     .split(",")) {
-                if (ff.trim().length() > 0) {
+                if (!ff.isBlank()) {
                     result.getFacetFields().add(ff.trim());
                 }
             }
@@ -116,8 +116,8 @@ public class BrowseController {
                 for (String s : request.getParameterValues("_add-filter")) {
                 	if(!s.trim().endsWith(":")) {
                 	    if(s.contains(":")) {
-                	        String key = s.substring(0, s.indexOf(":"));
-                	        String values = s.substring(s.indexOf(":")+1);
+                	        String key = s.substring(0, s.indexOf(':'));
+                	        String values = s.substring(s.indexOf(':')+1);
                 	        for(String val: values.split("\\s")) {
                 	            String f = key+":"+val;
                 	            if (!result.getFilterQueries().contains(f)) {
@@ -149,7 +149,7 @@ public class BrowseController {
         }
         if (request.getParameter("rows") != null) {
             try {
-                result.setRows(Integer.valueOf(request.getParameter("rows")));
+                result.setRows(Integer.parseInt(request.getParameter("rows")));
             } catch (NumberFormatException nfe) {
                 // do nothing, use default
             }

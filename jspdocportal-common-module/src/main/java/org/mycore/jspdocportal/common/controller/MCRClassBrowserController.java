@@ -35,7 +35,7 @@ public class MCRClassBrowserController {
     }
 
     public static void flattenChildren(MCRCategory categ) {
-        List<MCRCategory> newChildren = new ArrayList<MCRCategory>();
+        List<MCRCategory> newChildren = new ArrayList<>();
         collect(newChildren, categ);
         categ.getChildren().clear();
         categ.getChildren().addAll(newChildren);
