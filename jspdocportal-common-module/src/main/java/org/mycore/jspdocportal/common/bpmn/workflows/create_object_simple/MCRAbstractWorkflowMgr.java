@@ -45,6 +45,7 @@ import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
 import org.mycore.user2.MCRUserManager;
 
 public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
+    private static final String STATE_REVIEW = "review";
     private static final String FLAG_DELETE_DOCTYPE = "mcr-delete:doctype";
     private static final String FLAG_DELETE_NOTE = "mcr-delete:note";
     private static final String FLAG_DELETE_DATE = "mcr-delete:date";
@@ -378,7 +379,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
             if (mcrDerID != null && MCRMetadataManager.exists(mcrDerID)) {
                 MCRDerivate mcrDer = MCRMetadataManager.retrieveMCRDerivate(mcrDerID);
                 if (mcrDer.getService().getState() == null
-                    || "new|published".contains(mcrDer.getService().getState().getId())) {
+                    || List.of(STATE_NEW, STATE_PUBLISHED).contains(mcrDer.getService().getState().getId())) {
                     mcrDer.getService().removeFlags(FLAG_EDITEDBY);
                     mcrDer.getService().addFlag(FLAG_EDITEDBY, MCRUserManager.getCurrentUser().getUserID());
                 }
@@ -428,7 +429,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
             if (STATE_DELETED.equals(mcrObj.getService().getState().getId())) {
                 der.getService().setState(createStateCategory(STATE_DELETED));
             } else if (der.getService().getState() == null
-                || "new|review".contains(der.getService().getState().getId())) {
+                || List.of(STATE_NEW, STATE_REVIEW).contains(der.getService().getState().getId())) {
                 der.getService().setState(createStateCategory(STATE_PUBLISHED));
             }
             der.getService().removeFlags(FLAG_EDITEDBY);
