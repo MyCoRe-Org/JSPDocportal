@@ -2,6 +2,7 @@ package org.mycore.jspdocportal.common.legacy;
 
 
 import java.io.IOException;
+import java.util.Objects;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,12 +44,8 @@ public class NavServlet extends HttpServlet {
             navJdom = domB.build((org.w3c.dom.Document) context.getAttribute("navDom"));
         }
 
-        String path = request.getParameter("path");
-        if (path == null) {
-            path = "left.start";
-        }
-        LOGGER.debug("Navigation servlet called with path " + path + " (session "
-                + MCRSessionMgr.getCurrentSessionID() + ")");
+        final String path = Objects.requireNonNullElse(request.getParameter("path"), "left.start");
+        LOGGER.debug("Navigation servlet called with path {} (session {})", () -> path, () -> MCRSessionMgr.getCurrentSessionID());
 
         Element navitem = null;
 
@@ -59,13 +56,13 @@ public class NavServlet extends HttpServlet {
             if (refitem != null) {
                 navitem = refitem.getParentElement();
             } else {
-                LOGGER.debug("navigation.xml does not contain an entry for " + path);
+                LOGGER.debug("navigation.xml does not contain an entry for {}", path);
             }
         } else {
             String[] nodes = path.split("\\.");
             StringBuffer xpath = new StringBuffer("/n:navigations");
             for (int i = 0; i < nodes.length; i++) {
-                LOGGER.debug("i = " + i);
+                LOGGER.debug("i = {}", i);
                 if (i == 0) {
                     xpath.append("/n:navigation[@id='").append(nodes[i]).append("']");
                 } else {
@@ -134,7 +131,7 @@ public class NavServlet extends HttpServlet {
             String baseURL = requestURL.substring(0, pos) + contextPath;
 
             context.setAttribute("WebApplicationBaseURL", baseURL);
-            LOGGER.debug("baseURL now set to: " + baseURL);
+            LOGGER.debug("baseURL now set to: {}", baseURL);
         }
     }
 

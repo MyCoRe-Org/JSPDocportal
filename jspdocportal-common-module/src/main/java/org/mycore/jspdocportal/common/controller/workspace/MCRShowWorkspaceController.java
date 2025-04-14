@@ -241,7 +241,7 @@ public class MCRShowWorkspaceController {
     }
 
     private void acceptTask(String taskId) {
-        LOGGER.debug("Accepted Task" + taskId);
+        LOGGER.debug("Accepted Task{}", taskId);
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
         for (Task t : ts.createTaskQuery().executionId(taskId).list()) {
             //should be only one item
@@ -250,7 +250,7 @@ public class MCRShowWorkspaceController {
     }
 
     private void releaseTask(String taskId) {
-        LOGGER.debug("Release Task" + taskId);
+        LOGGER.debug("Release Task{}", taskId);
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
         for (Task t : ts.createTaskQuery().executionId(taskId).list()) {
             //should be only one item
@@ -324,7 +324,8 @@ public class MCRShowWorkspaceController {
         String mode = ((StringValue) rs.getVariableLocalTyped(taskID, MCRBPMNMgr.WF_VAR_MODE)).getValue();
 
         LOGGER.debug(
-            "ID: " + MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getActivityInstance(taskID).getId());
+            "ID: {}", 
+            () -> MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getActivityInstance(taskID).getId());
 
         String propKey = "MCR.Workflow.Reservation.Editor.Path.create_object_simple." + mode;
         String editorPath = MCRConfiguration2.getStringOrThrow(propKey);

@@ -244,7 +244,7 @@ public class MCRResolvingController  {
                 url = createURLForDFGViewer(request, mcrID, OpenBy.PART, nr);
             }
             if (url.length() > 0) {
-                LOGGER.debug("DFGViewer URL: " + url);
+                LOGGER.debug("DFGViewer URL: {}", url);
                 return Response.temporaryRedirect(URI.create(url)).build();
                 
             }
@@ -270,7 +270,7 @@ public class MCRResolvingController  {
                 url = createURLForMyCoReViewer(request, mcrID, OpenBy.PART, nr);
             }
             if (url.length() > 0) {
-                LOGGER.debug("MyCoReViewer URL: " + url);
+                LOGGER.debug("MyCoReViewer URL: {}", url);
                 return Response.temporaryRedirect(URI.create(url)).build();
             }
             return Response.status(Status.NOT_FOUND).build();
@@ -286,7 +286,7 @@ public class MCRResolvingController  {
                     sbUrl.append("#page=").append(path[3]);
                 }
             }
-            LOGGER.debug("PDF URL: " + sbUrl.toString());
+            LOGGER.debug("PDF URL: {}", sbUrl);
             return Response.temporaryRedirect(URI.create(sbUrl.toString())).build();
         }
 
@@ -305,14 +305,14 @@ public class MCRResolvingController  {
 
         if (action.equals("cover")) {
             StringBuffer url = createURLForMainDocInDerivateWithLabel(request, mcrID, "Cover");
-            LOGGER.debug("Cover URL: " + url.toString());
+            LOGGER.debug("Cover URL: {}", url);
             return Response.temporaryRedirect(URI.create(url.toString())).build();
         }
         
         // used in METS-Files in mets:mptr to resolve METS files of parent or child
         if (action.equals("dv_mets")) {
             StringBuffer url = createURLForMainDocInDerivateWithLabel(request, mcrID, "DV_METS");
-            LOGGER.debug("METS for DFG-Viewer: " + url.toString());
+            LOGGER.debug("METS for DFG-Viewer: {}", url);
             return Response.temporaryRedirect(URI.create(url.toString())).build();
         }
 
@@ -495,10 +495,8 @@ public class MCRResolvingController  {
             return "";
         }
         String url = sbURL.toString();
-        if (!url.contains(".dv.mets.xml")) {
-            url = url.replace("dfg-viewer.de/v3", "dfg-viewer.de/show");
-        }
-        LOGGER.debug("created DFG-ViewerURL: " + request.getContextPath() + " -> " + url);
+        String urlMessage = !url.contains(".dv.mets.xml") ? url.replace("dfg-viewer.de/v3", "dfg-viewer.de/show") : url;
+        LOGGER.debug("created DFG-ViewerURL: {} -> {}", () -> request.getContextPath(), () -> urlMessage);
         return url;
     }
     
@@ -627,10 +625,8 @@ public class MCRResolvingController  {
             return "";
         }
         String url = sbURL.toString();
-        if (!url.contains(".dv.mets.xml")) {
-            url = url.replace("dfg-viewer.de/v3", "dfg-viewer.de/show");
-        }
-        LOGGER.debug("created DFG-ViewerURL: " + request.getContextPath() + " -> " + url);
+        String urlMessage = !url.contains(".dv.mets.xml") ? url.replace("dfg-viewer.de/v3", "dfg-viewer.de/show") : url;
+        LOGGER.debug("created DFG-ViewerURL: {} -> {}", () -> request.getContextPath(), () -> urlMessage);
         return url;
     }
 }

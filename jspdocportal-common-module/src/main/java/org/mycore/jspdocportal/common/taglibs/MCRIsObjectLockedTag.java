@@ -41,7 +41,7 @@ public class MCRIsObjectLockedTag extends SimpleTagSupport {
                 result = Boolean.FALSE;
             }
         } catch (MCRPersistenceException e) {
-            LOGGER.debug(e.getMessage());
+            LOGGER.debug("{}", () -> e.getMessage());
         }
         pageContext.setAttribute(var, result);
     }

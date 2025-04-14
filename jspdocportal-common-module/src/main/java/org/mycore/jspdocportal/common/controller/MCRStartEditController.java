@@ -41,7 +41,7 @@ public class MCRStartEditController  {
                 return Response.temporaryRedirect(URI.create(request.getContextPath() + "/do/login")).build();
             }
 
-            LOGGER.debug("Document MCRID = " + mcrid);
+            LOGGER.debug("Document MCRID = {}", mcrid);
 
             if (mcrid != null) {
                 if (MCRAccessManager.checkPermission(mcrid, "writedb")) {

@@ -92,7 +92,7 @@ public class MCRGetEditorElements {
             }
             return null;
         } catch (Exception ex) {
-            LOGGER.error("could not resolve URI " + uri);
+            LOGGER.error("could not resolve URI {}", uri);
             return new Element("error");
         }
     }
@@ -203,8 +203,7 @@ public class MCRGetEditorElements {
             try {
                 values = Arrays.asList(MCRConfiguration2.getString(categoryProp).orElse("").split(","));
             } catch (Exception ex) {
-                LOGGER.warn("config property " + categoryProp + " must be a comma separated list [" + ex.getMessage()
-                        + "]");
+                LOGGER.warn("config property {} must be a comma separated list [ {} ]", categoryProp, ex);
                 return items;
             }
             for (Iterator<Element> it = items.getDescendants(new ElementFilter("item")); it.hasNext();) {

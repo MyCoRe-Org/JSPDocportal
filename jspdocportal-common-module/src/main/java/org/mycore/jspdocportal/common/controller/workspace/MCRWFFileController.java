@@ -62,7 +62,7 @@ public class MCRWFFileController {
         String derivateID = null;
         String mcrObjID = null;
         if (uri != null) {
-            LOGGER.debug(" Path = " + uri);
+            LOGGER.debug(" Path = {}", uri);
             String path[] = uri.split("/", 3);
             if (path.length == 3) {
                 mcrObjID = path[0];

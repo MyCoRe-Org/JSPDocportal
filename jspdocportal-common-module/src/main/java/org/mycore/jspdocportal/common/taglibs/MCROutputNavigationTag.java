@@ -77,7 +77,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
     public void doTag() throws JspException, IOException {
         init(mode);
         if (!MODES.contains(mode)) {
-            LOGGER.warn("The attribute mode has to be one of these values: " + MODES);
+            LOGGER.warn("The attribute mode has to be one of these values: {}", MODES);
             return;
         }
         JspWriter out = getJspContext().getOut();
@@ -400,7 +400,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
      */
     private void printTOC(NavigationObject currentNode, JspWriter out) {
         if (currentNode == null) {
-            LOGGER.error("No navigation item found for navigation: " + id + ", path: " + currentPath);
+            LOGGER.error("No navigation item found for navigation: {}, path: {}", id, currentPath);
             return;
         }
         List<NavigationItem> printableElements = printableItems(currentNode);

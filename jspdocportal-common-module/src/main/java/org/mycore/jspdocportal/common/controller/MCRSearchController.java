@@ -7,15 +7,6 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.Response;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,6 +30,15 @@ import org.mycore.jspdocportal.common.search.MCRSearchResultDataBean;
 import org.mycore.services.fieldquery.MCRQuery;
 import org.mycore.solr.search.MCRQLSearchUtils;
 import org.mycore.solr.search.MCRSolrSearchUtils;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.Response;
 
 /**
  * Action Bean for Search Handling ... Query Parameters:
@@ -216,7 +216,8 @@ public class MCRSearchController {
 
         if (queryDoc != null) {
             XMLOutputter xml = new XMLOutputter(Format.getPrettyFormat());
-            LOGGER.debug(xml.outputString(queryDoc));
+            String xmlMessage = xml.outputString(queryDoc);
+            LOGGER.debug("{}", xmlMessage);
             if (queryDoc.getRootElement().getAttribute("mask") != null) {
                 result.setMask(queryDoc.getRootElement().getAttributeValue("mask"));
             }
@@ -313,7 +314,7 @@ public class MCRSearchController {
                     // replace "<i class='fa fa-plus' /> with "<i class='fa fa-plus'></i>"
                     Matcher m = REGEX_XML_EMPTY_ELEMENTS.matcher(content);
                     content = m.replaceAll("<$1 $2></$1>");
-                    LOGGER.debug("Searchmask-Editor-XML\n" + content);
+                    LOGGER.debug("Searchmask-Editor-XML\n{}", content);
 
                     out.append(content);
 
@@ -324,7 +325,7 @@ public class MCRSearchController {
                 }
             }
         } catch (Exception e) {
-            LOGGER.error("SAXException " + e, e);
+            LOGGER.error("SAXException {}", e, e);
         }
         return out.toString();
     }

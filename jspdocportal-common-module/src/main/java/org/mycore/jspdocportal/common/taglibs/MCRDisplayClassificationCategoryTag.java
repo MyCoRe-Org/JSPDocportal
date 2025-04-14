@@ -42,7 +42,7 @@ public class MCRDisplayClassificationCategoryTag extends SimpleTagSupport {
                     getJspContext().getOut().write(text);
                 }
             } catch (Exception e) {
-                LOGGER.error("could not display category " + classid + ":" + categid + "@" + lang, e);
+                LOGGER.error("could not display category {}:{}@{}", classid, categid, lang, e);
             }
         }
     }

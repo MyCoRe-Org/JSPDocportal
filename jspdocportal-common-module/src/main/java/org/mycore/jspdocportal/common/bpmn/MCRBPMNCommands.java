@@ -62,7 +62,7 @@ public class MCRBPMNCommands extends MCRAbstractCommands {
             RepositoryService repositoryService = processEngine.getRepositoryService();
             repositoryService.createDeployment().addClasspathResource(resource).deploy();
 
-            LOGGER.info(resource + " successfully deployed");
+            LOGGER.info("{} successfully deployed", resource);
         } catch (Exception e) {
             LOGGER.error("Error in deploying a workflow process definition", e);
             throw new MCRException("Error in deploying a workflow process definition", e);

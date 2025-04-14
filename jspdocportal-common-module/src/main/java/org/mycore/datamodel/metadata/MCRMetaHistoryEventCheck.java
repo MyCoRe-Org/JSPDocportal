@@ -25,7 +25,7 @@ public class MCRMetaHistoryEventCheck implements MCREditorMetadataValidator {
             }
             if (child.getAttribute("lang") != null) {
                 child.getAttribute("lang").setNamespace(XML_NAMESPACE);
-                LOGGER.warn("namespace add for xml:lang attribute in " + datasubtag.getName());
+                LOGGER.warn("namespace add for xml:lang attribute in {}", () -> datasubtag.getName());
             }
         }
         if (children.size() == 0) {

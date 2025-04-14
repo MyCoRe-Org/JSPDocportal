@@ -62,8 +62,8 @@ public class MCRBPMNAssignmentHandler implements TaskListener {
         }
 
         if (groups.size() == 0 && users.size() == 0) {
-            LOGGER.error("Please define candidate users or groups for the following workflow: " + wfID);
-            LOGGER.error("For candidate users you may set the following property: " + propKeyUser);
+            LOGGER.error("Please define candidate users or groups for the following workflow: {}", wfID);
+            LOGGER.error("For candidate users you may set the following property: {}", propKeyUser);
         }
     }
 }
