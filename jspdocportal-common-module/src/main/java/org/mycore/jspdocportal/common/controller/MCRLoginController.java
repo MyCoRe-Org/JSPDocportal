@@ -104,7 +104,7 @@ import jakarta.ws.rs.core.Response;
     public Response doLogout(HttpServletRequest request) {
         MCRSession session = MCRSessionMgr.getCurrentSession();
         String uid = session.getUserInformation().getUserID();
-        LOGGER.debug("Log out user " + uid);
+        LOGGER.debug("Log out user {}", uid);
         session.setUserInformation(MCRSystemUserInformation.GUEST);
         request.getSession().removeAttribute(SESSION_ATTR_MCR_USER);
         
@@ -149,9 +149,9 @@ import jakarta.ws.rs.core.Response;
                 return r;
             }
 
-            LOGGER.debug("Trying to log in user " + userID);
+            LOGGER.debug("Trying to log in user {}", userID);
             if (oldUserID.equals(userID)) {
-                LOGGER.debug("User " /*+ userName */+ " with ID " + userID + " is allready logged in");
+                LOGGER.debug("User " /*+ userName */+ " with ID {} is allready logged in", userID);
                 model.put("loginOK",  true);
                 model.put("loginStatus", "user.exists");
                 updateData(mcrSession, model);
@@ -185,7 +185,7 @@ import jakarta.ws.rs.core.Response;
                 mcrSession.setUserInformation(mcrUser);
                 request.getSession().setAttribute(SESSION_ATTR_MCR_USER, mcrUser);
                 model.put("loginStatus", "user.welcome");
-                LOGGER.debug("user " + mcrUserID + " logged in ");
+                LOGGER.debug("user {} logged in ", mcrUserID);
                 updateData(mcrSession, model);
             } else {
                 if (mcrUserID != null) {
@@ -201,10 +201,10 @@ import jakarta.ws.rs.core.Response;
                 model.put("loginStatus", "user.disabled");
             } else {
                 model.put("loginStatus", "user.unkwnown_error");
-                LOGGER.debug("user.unkwnown_error" + e.getMessage());
+                LOGGER.debug("user.unkwnown_error", e);
             }
         }
-        LOGGER.info(model.get("loginStatus"));
+        LOGGER.info(() -> model.get("loginStatus"));
         return result;
     }
 

@@ -175,7 +175,7 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
                             url = createURLForDFGViewer(request, mcrID, OpenBy.EMPTY, "");
                         }
                         if (url.length() > 0) {
-                            LOGGER.debug("DFGViewer URL: " + url);
+                            LOGGER.debug("DFGViewer URL: {}", url);
                             response.sendRedirect(url);
                             return;
                         }
@@ -380,10 +380,8 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
             return "";
         }
         String url = sbURL.toString();
-        if (!url.contains(".dv.mets.xml")) {
-            url = url.replace("dfg-viewer.de/v3", "dfg-viewer.de/show");
-        }
-        LOGGER.debug("created DFG-ViewerURL: " + request.getContextPath() + " -> " + url);
+        String urlMessage = !url.contains(".dv.mets.xml") ? url.replace("dfg-viewer.de/v3", "dfg-viewer.de/show") : url;
+        LOGGER.debug("created DFG-ViewerURL: {} -> {}",() -> request.getContextPath(), () -> urlMessage);
         return url;
     }
     
@@ -473,10 +471,8 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
             return "";
         }
         String url = sbURL.toString();
-        if (!url.contains(".dv.mets.xml")) {
-            url = url.replace("dfg-viewer.de/v3", "dfg-viewer.de/show");
-        }
-        LOGGER.debug("created DFG-ViewerURL: " + request.getContextPath() + " -> " + url);
+        String urlMessage = !url.contains(".dv.mets.xml") ? url.replace("dfg-viewer.de/v3", "dfg-viewer.de/show") : url;
+        LOGGER.debug("created DFG-ViewerURL: {} -> {}", () -> request.getContextPath(), () -> urlMessage);
         return url;
     }
 }

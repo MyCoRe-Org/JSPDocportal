@@ -65,7 +65,7 @@ public class MCRWorkflowProcessAdminController {
     }
 
     private void deleteProcessInstance(String processInstanceId) {
-        LOGGER.debug("Delete Process " + processInstanceId);
+        LOGGER.debug("Delete Process {}", processInstanceId);
         MCRWorkflowMgr wfMgr = MCRBPMNMgr.getWorkflowMgr(processInstanceId);
         wfMgr.deleteProcessInstance(processInstanceId);
     }

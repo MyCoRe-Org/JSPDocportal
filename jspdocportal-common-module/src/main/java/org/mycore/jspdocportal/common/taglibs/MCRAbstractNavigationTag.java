@@ -101,10 +101,10 @@ public abstract class MCRAbstractNavigationTag extends MCRAbstractTag {
 
 		if (nav == null) {
 			if (path == null || path.length == 0) {
-				LOGGER.error("No navigation item found for navigation: " + id + ", path: " + currentPath);
+				LOGGER.error("No navigation item found for navigation: {}, path: {}", id, currentPath);
 			} else {
-				LOGGER.error("No navigation item found for navigation: " + id + ", path: " + currentPath + ", item: "
-						+ path[0]);
+				LOGGER.error("No navigation item found for navigation: {}, path: {}, item: {}", id, currentPath, 
+				    path[0]);
 			}
 			return;
 		}

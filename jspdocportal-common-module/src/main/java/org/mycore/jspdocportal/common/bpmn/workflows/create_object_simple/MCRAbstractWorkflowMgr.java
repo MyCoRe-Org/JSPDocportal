@@ -136,7 +136,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                 der.getDerivate().getClassifications()
                     .add(new MCRMetaClassification("classification", 0, null, "derivate_types", label));
             } else {
-                LOGGER.warn("Classification 'derivate_types' does not contain a category with ID: " + label);
+                LOGGER.warn("Classification 'derivate_types' does not contain a category with ID: {}", label);
             }
         }
 

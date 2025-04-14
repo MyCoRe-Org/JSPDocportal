@@ -196,7 +196,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
         JspWriter out = getJspContext().getOut();
             out.write("\n\n<!-- ClassificationBrowser ("+rootClassifID.getRootID()+") START  -->");
             if (!MCRCategoryDAOFactory.obtainInstance().exist(rootClassifID)) {
-                LOGGER.error("Classification does not exist" + rootClassifID.getRootID());
+                LOGGER.error("Classification does not exist {}", () -> rootClassifID.getRootID());
                 out.write("Classification " + rootClassifID.getRootID() + " does not exist!");
                 return;
             }
@@ -242,7 +242,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
             out.write("\n</div>");
             long d = System.currentTimeMillis() - start;
             out.write("\n\n<!-- ClassificationBrowser ("+rootClassifID.getRootID()+") ENDE  [" + Long.toString(d) + "ms] -->");
-            LOGGER.debug("ClassificationBrowser displayed for: " + rootClassifID.getRootID() + "   (" + d + " ms)");
+            LOGGER.debug("ClassificationBrowser displayed for: {}   ({} ms)", () -> rootClassifID.getRootID(), () -> d);
 
     }
 

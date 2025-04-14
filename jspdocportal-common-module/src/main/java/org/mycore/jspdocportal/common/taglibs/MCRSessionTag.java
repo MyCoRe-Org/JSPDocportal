@@ -88,7 +88,7 @@ public class MCRSessionTag extends SimpleTagSupport {
                 pageContext.setAttribute(var, deployTimeBase32);
                 break;
             default:
-                LOGGER.info("unknown information key: " + info);
+                LOGGER.info("unknown information key: {}", info);
                 break;
         }
     }

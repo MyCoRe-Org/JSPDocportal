@@ -204,7 +204,7 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
                 url = createURLForDFGViewer(request, mcrID, OpenBy.PART, path[4]);
             }
             if (url.length() > 0) {
-                LOGGER.debug("DFGViewer URL: " + url);
+                LOGGER.debug("DFGViewer URL: {}", url);
                 response.sendRedirect(url);
             }
             return;
@@ -225,7 +225,7 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
                 url = createURLForMyCoReViewer(request, mcrID, OpenBy.PART, path[4]);
             }
             if (url.length() > 0) {
-                LOGGER.debug("MyCoReViewer URL: " + url);
+                LOGGER.debug("MyCoReViewer URL: {}", url);
                 response.sendRedirect(url);
             }
             return;
@@ -242,7 +242,7 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
                     sbUrl.append("#page=").append(path[3]);
                 }
             }
-            LOGGER.debug("PDF URL: " + sbUrl.toString());
+            LOGGER.debug("PDF URL: {}", sbUrl);
             response.sendRedirect(sbUrl.toString());
             return;
         }
@@ -262,7 +262,7 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
 
         if (action.equals("cover")) {
             StringBuffer url = createURLForMainDocInDerivateWithLabel(request, mcrID, "Cover");
-            LOGGER.debug("Cover URL: " + url.toString());
+            LOGGER.debug("Cover URL: {}", url);
             response.sendRedirect(url.toString());
             return;
         }
@@ -270,7 +270,7 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
         // used in METS-Files in mets:mptr to resolve METS files of parent or child
         if (action.equals("dv_mets")) {
             StringBuffer url = createURLForMainDocInDerivateWithLabel(request, mcrID, "DV_METS");
-            LOGGER.debug("METS for DFG-Viewer: " + url.toString());
+            LOGGER.debug("METS for DFG-Viewer: {}", url);
             response.sendRedirect(url.toString());
             return;
         }

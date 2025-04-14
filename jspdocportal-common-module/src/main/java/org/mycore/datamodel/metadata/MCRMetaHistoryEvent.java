@@ -177,13 +177,13 @@ public class MCRMetaHistoryEvent extends MCRMetaHistoryDate {
     public void debug() {
         LOGGER.debug("Start Class : MCRMetaHistoryEvent");
         super.debugDefault();
-        LOGGER.debug("Text               = " + getText("de"));
-        LOGGER.debug("Calendar           = " + getCalendar());
-        LOGGER.debug("Von (String)       = " + getVonToString());
-        LOGGER.debug("Von (JulianDay)    = " + getIvon());
-        LOGGER.debug("Bis (String)       = " + getBisToString());
-        LOGGER.debug("Bis (JulianDay)    = " + getIbis());
-        LOGGER.debug("Event              = " + event);
+        LOGGER.debug("Text               = {}", () -> getText("de"));
+        LOGGER.debug("Calendar           = {}", this::getCalendar);
+        LOGGER.debug("Von (String)       = {}", this::getVonToString);
+        LOGGER.debug("Von (JulianDay)    = {}", this::getIvon);
+        LOGGER.debug("Bis (String)       = {}", this::getBisToString);
+        LOGGER.debug("Bis (JulianDay)    = {}", this::getIbis);
+        LOGGER.debug("Event              = {}", event);
         if (classification != null) {
             classification.debug();
         }

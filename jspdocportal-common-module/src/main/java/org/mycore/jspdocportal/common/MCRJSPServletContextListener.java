@@ -63,7 +63,7 @@ public class MCRJSPServletContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         MCRSessionMgr.unlock();
         MCRSessionMgr.getCurrentSession();
-        LOGGER.debug("Application " + sce.getServletContext().getServletContextName() + " started");
+        LOGGER.debug("Application {} started", () -> sce.getServletContext().getServletContextName());
         MCRNavigationUtil.loadNavigation(sce.getServletContext());
         Navigations.loadNavigation(sce.getServletContext());
         registerDefaultMessageBundle(sce.getServletContext());
@@ -73,7 +73,7 @@ public class MCRJSPServletContextListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        LOGGER.debug("Application " + sce.getServletContext().getServletContextName() + " stopped");
+        LOGGER.debug("Application {} stopped", () -> sce.getServletContext().getServletContextName());
 
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         // Loop through all drivers
@@ -83,14 +83,14 @@ public class MCRJSPServletContextListener implements ServletContextListener {
             if (driver.getClass().getClassLoader() == cl) {
                 // This driver was registered by the webapp's ClassLoader, so deregister it:
                 try {
-                    LOGGER.info("Deregistering JDBC driver: " + driver);
+                    LOGGER.info("Deregistering JDBC driver: {}", driver);
                     DriverManager.deregisterDriver(driver);
                 } catch (SQLException ex) {
-                    LOGGER.error("Error deregistering JDBC driver " + driver, ex);
+                    LOGGER.error("Error deregistering JDBC driver {}", driver, ex);
                 }
             } else {
-                LOGGER.trace("Not deregistering JDBC driver " + driver
-                        + " as it does not belong to this webapp's ClassLoader");
+                LOGGER.trace("Not deregistering JDBC driver {} as it does not belong to this webapp's ClassLoader",
+                    driver);
             }
         }
     }
@@ -105,7 +105,7 @@ public class MCRJSPServletContextListener implements ServletContextListener {
 
     private void registerDefaultMessageBundle(ServletContext sc) {
         Locale loc = Locale.of(
-                MCRConfiguration2.getString("MCR.Metadata.DefaultLang").orElse(MCRConstants.DEFAULT_LANG));
+            MCRConfiguration2.getString("MCR.Metadata.DefaultLang").orElse(MCRConstants.DEFAULT_LANG));
         Config.set(sc, Config.FMT_LOCALE, loc);
         LocalizationContext locCtxt = new LocalizationContext(MCRTranslation.getResourceBundle("messages", loc));
         Config.set(sc, Config.FMT_LOCALIZATION_CONTEXT, locCtxt);

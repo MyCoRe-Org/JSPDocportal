@@ -136,7 +136,7 @@ public class MCRIncludeXEditorTag extends SimpleTagSupport {
 
                     }
                 } catch (Exception e) {
-                    LOGGER.error("Exception: " + e.getMessage(), e);
+                    LOGGER.error("Exception", e);
                 }
             }
         }
