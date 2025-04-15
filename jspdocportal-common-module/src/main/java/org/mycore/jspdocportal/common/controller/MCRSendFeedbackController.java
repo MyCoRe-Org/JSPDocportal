@@ -81,7 +81,7 @@ public class MCRSendFeedbackController {
         Viewable v = new Viewable("/feedback", model);
 
         String sessionCSRFToken = String.valueOf(request.getSession().getAttribute("feedbackFormCSRFToken"));
-        List<String> messages = new ArrayList<String>();
+        List<String> messages = new ArrayList<>();
         model.put("messages", messages);
 
         if (!sessionCSRFToken.equals(csrfToken)) {
@@ -117,23 +117,23 @@ public class MCRSendFeedbackController {
 
                 StringBuilder sbMailBody = new StringBuilder();
                 sbMailBody.append(subject);
-                sbMailBody.append("\n" + StringUtils.repeat("=", subject.length()));
+                sbMailBody.append("\n").append(StringUtils.repeat('=', subject.length()));
                 sbMailBody.append("\n");
                 sbMailBody.append("\nAngaben zu:");
                 sbMailBody.append("\n-----------");
-                sbMailBody.append("\n" + topicHeader);
-                sbMailBody.append("\n(" + topicURL + ")");
+                sbMailBody.append("\n").append(topicHeader);
+                sbMailBody.append("\n(").append(topicURL).append(')');
                 sbMailBody.append("\n");
                 sbMailBody.append("\nAbsender:");
                 sbMailBody.append("\n---------");
-                sbMailBody.append("\n" + fromName);
+                sbMailBody.append("\n").append(fromName);
                 if (StringUtils.isNotBlank(fromEmail)) {
-                    sbMailBody.append(" (" + fromEmail + ")");
+                    sbMailBody.append(" (").append(fromEmail).append(')');
                 }
                 sbMailBody.append("\n");
                 sbMailBody.append("\nNachricht:");
                 sbMailBody.append("\n----------");
-                sbMailBody.append("\n" + message);
+                sbMailBody.append("\n").append(message);
 
                 List<InternetAddress> receiver = List
                     .of(new InternetAddress(MCRConfiguration2.getString("MCR.Workflow.Email.Feedback.Recipient").get()));

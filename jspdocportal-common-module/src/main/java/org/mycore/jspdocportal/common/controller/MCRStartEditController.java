@@ -36,7 +36,7 @@ public class MCRStartEditController  {
 
     @GET
     public Response defaultRes(@QueryParam("mcrid") String mcrid, @QueryParam("mode") String mode, @Context HttpServletRequest request) {
-        try (MCRHibernateTransactionWrapper htw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
             if (request.getSession(false)==null  || !MCRAccessManager.checkPermission(mcrid, "writedb")) {
                 return Response.temporaryRedirect(URI.create(request.getContextPath() + "/do/login")).build();
             }
@@ -50,7 +50,7 @@ public class MCRStartEditController  {
                     if (Arrays.asList("published", "deleted", "reserved").contains(mcrObj.getService().getState().getId())) {
                     	//String mode = retrieveModeFromMetadata(mcrObj);
                     	//TODO validate mode
-                        Map<String, Object> variables = new HashMap<String, Object>();
+                        Map<String, Object> variables = new HashMap<>();
                         variables.put(MCRBPMNMgr.WF_VAR_OBJECT_TYPE, mcrObjID.getTypeId());
                         variables.put(MCRBPMNMgr.WF_VAR_PROJECT_ID, mcrObjID.getProjectId());
                         variables.put(MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID, mcrObjID.toString());

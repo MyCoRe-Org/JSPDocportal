@@ -4,6 +4,7 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -60,15 +61,7 @@ public class MCRSearchController {
 
     public static final int DEFAULT_ROWS = 100;
 
-    private boolean showMask;
-
-    private boolean showResults;
-
     private MCRSearchResultDataBean result;
-
-    public MCRSearchController() {
-
-    }
 
     @GET
     public Response resolveRes(@Context HttpServletRequest request,
@@ -87,7 +80,7 @@ public class MCRSearchController {
     @Path("/{mask}")
     public Response defaultRes(@PathParam("mask") String mask, @Context HttpServletRequest request,
         @Context HttpServletResponse response) {
-        HashMap<String, Object> model = new HashMap<String, Object>();
+        Map<String, Object> model = new HashMap<>();
         Viewable v = new Viewable(("/search/search"), model);
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/xhtml;charset=utf-8");
@@ -118,8 +111,8 @@ public class MCRSearchController {
                     .build();
             }
         }
-        showMask = true;
-        showResults = false;
+        boolean showMask = true;
+        boolean showResults = false;
 
         if (request.getParameter("q") != null) {
             result = new MCRSearchResultDataBean();
@@ -221,7 +214,7 @@ public class MCRSearchController {
             if (queryDoc.getRootElement().getAttribute("mask") != null) {
                 result.setMask(queryDoc.getRootElement().getAttributeValue("mask"));
             }
-            if (queryDoc.getRootElement().getChild("conditions").getChildren().size() > 0) {
+            if (!queryDoc.getRootElement().getChild("conditions").getChildren().isEmpty()) {
                 result.setMCRQueryXML(queryDoc);
                 MCRQuery query = MCRQLSearchUtils.buildFormQuery(queryDoc.getRootElement());
 
@@ -257,7 +250,7 @@ public class MCRSearchController {
         }
         if (request.getParameter("rows") != null) {
             try {
-                result.setRows(Integer.valueOf(request.getParameter("rows")));
+                result.setRows(Integer.parseInt(request.getParameter("rows")));
             } catch (NumberFormatException nfe) {
                 // do nothing, use default
             }
@@ -281,7 +274,7 @@ public class MCRSearchController {
         StringWriter out = new StringWriter();
 
         MCRContent editorContent = null;
-        try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
             URL resource = getClass().getResource("/editor/search/" + result.getMask() + ".xed");
             if (resource != null) {
                 editorContent = new MCRURLContent(resource);
@@ -303,7 +296,7 @@ public class MCRSearchController {
                     MCRContent newContent = MCRStaticXEditorFileServlet.doExpandEditorElements(editorContent, request,
                         response, sessionID,
                         MCRFrontendUtil.getBaseURL() + "do/search/"+result.getMask());
-                    String content = null;
+                    String content;
                     if (newContent != null) {
                         content = newContent.asString().replaceAll("<\\?xml.*?\\?>", "");
                     } else {

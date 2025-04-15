@@ -58,9 +58,9 @@ import jakarta.ws.rs.core.Response;
 
 @jakarta.ws.rs.Path("/do/workspace/derivates")
 public class MCREditDerivatesController {
-    public static enum Direction {
+    public enum Direction {
         MOVE_UP, MOVE_DOWN
-    };
+    }
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -76,7 +76,7 @@ public class MCREditDerivatesController {
 
             String s = ((FormDataContentDisposition) p.getContentDisposition()).getName();
             if (s.startsWith("doCreateNewDerivate-task_")) {
-                taskid = s.substring(s.indexOf("_") + 1);
+                taskid = s.substring(s.indexOf('_') + 1);
                 StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
                 mcrobjid = sv.getValue();
                 createNewDerivate(taskid, mcrobjid, multiPart);
@@ -84,29 +84,29 @@ public class MCREditDerivatesController {
             //doMoveUpDerivate-task_${actionBean.taskid}-derivate_${derID}
             if (s.startsWith("doMoveUpDerivate-")) {
                 int start = s.indexOf("task_") + 5;
-                taskid = s.substring(start, s.indexOf("-", start));
+                taskid = s.substring(start, s.indexOf('-', start));
                 StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
                 mcrobjid = sv.getValue();
                 start = s.indexOf("derivate_") + 9;
                 String derid = s.substring(start);
-                moveDerivate(taskid, mcrobjid, derid, Direction.MOVE_UP);
+                moveDerivate(mcrobjid, derid, Direction.MOVE_UP);
             }
 
             //doMoveDownDerivate-task_${actionBean.taskid}-derivate_${derID}
             if (s.startsWith("doMoveDownDerivate-")) {
                 int start = s.indexOf("task_") + 5;
-                taskid = s.substring(start, s.indexOf("-", start));
+                taskid = s.substring(start, s.indexOf('-', start));
                 StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
                 mcrobjid = sv.getValue();
                 start = s.indexOf("derivate_") + 9;
                 String derid = s.substring(start);
-                moveDerivate(taskid, mcrobjid, derid, Direction.MOVE_DOWN);
+                moveDerivate(mcrobjid, derid, Direction.MOVE_DOWN);
             }
 
             //doSaveDerivateMeta-task_${actionBean.taskid}-derivate_${derID}
             if (s.startsWith("doSaveDerivateMeta-")) {
                 int start = s.indexOf("task_") + 5;
-                taskid = s.substring(start, s.indexOf("-", start));
+                taskid = s.substring(start, s.indexOf('-', start));
                 StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
                 mcrobjid = sv.getValue();
                 start = s.indexOf("derivate_") + 9;
@@ -117,7 +117,7 @@ public class MCREditDerivatesController {
             //doAddFile-task_${actionBean.taskid}-derivate_${derID}
             if (s.startsWith("doAddFile-")) {
                 int start = s.indexOf("task_") + 5;
-                taskid = s.substring(start, s.indexOf("-", start));
+                taskid = s.substring(start, s.indexOf('-', start));
                 StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
                 mcrobjid = sv.getValue();
                 start = s.indexOf("derivate_") + 9;
@@ -128,11 +128,11 @@ public class MCREditDerivatesController {
             //doDeleteFile-task_${actionBean.taskid}-derivate_${derID}-file_${f}
             if (s.startsWith("doDeleteFile-")) {
                 int start = s.indexOf("task_") + 5;
-                taskid = s.substring(start, s.indexOf("-", start));
+                taskid = s.substring(start, s.indexOf('-', start));
                 StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
                 mcrobjid = sv.getValue();
                 start = s.indexOf("derivate_") + 9;
-                String derid = s.substring(start, s.indexOf("-", start));
+                String derid = s.substring(start, s.indexOf('-', start));
                 start = s.indexOf("file_") + 5;
                 String file = s.substring(start);
                 deleteFileFromDerivate(taskid, mcrobjid, derid, file);
@@ -141,11 +141,11 @@ public class MCREditDerivatesController {
             //doRenameFile-task_${actionBean.taskid}-derivate_${derID}-file_${f}
             if (s.startsWith("doRenameFile-")) {
                 int start = s.indexOf("task_") + 5;
-                taskid = s.substring(start, s.indexOf("-", start));
+                taskid = s.substring(start, s.indexOf('-', start));
                 StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
                 mcrobjid = sv.getValue();
                 start = s.indexOf("derivate_") + 9;
-                String derid = s.substring(start, s.indexOf("-", start));
+                String derid = s.substring(start, s.indexOf('-', start));
                 start = s.indexOf("file_") + 5;
                 String file = s.substring(start);
                 renameFileInDerivate(taskid, mcrobjid, derid, file, multiPart);
@@ -154,7 +154,7 @@ public class MCREditDerivatesController {
             //doDeleteDerivate-task_${actionBean.taskid}-derivate_${derID}
             if (s.startsWith("doDeleteDerivate-")) {
                 int start = s.indexOf("task_") + 5;
-                taskid = s.substring(start, s.indexOf("-", start));
+                taskid = s.substring(start, s.indexOf('-', start));
                 StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
                 mcrobjid = sv.getValue();
                 start = s.indexOf("derivate_") + 9;
@@ -169,7 +169,7 @@ public class MCREditDerivatesController {
     @GET
     public Response defaultRes(@Context HttpServletRequest request,
         @QueryParam("taskid") String taskid, @QueryParam("mcrobjid") String mcrobjid) {
-        HashMap<String, Object> model = new HashMap<String, Object>();
+        Map<String, Object> model = new HashMap<>();
         Viewable v = new Viewable("/workspace/edit-derivates", model);
         model.put("taskid", taskid);
         model.put("mcrobjid", mcrobjid);
@@ -230,7 +230,7 @@ public class MCREditDerivatesController {
         MCRBPMNUtils.saveMCRDerivateToWorkflowDirectory(der);
     }
 
-    private void moveDerivate(String taskid, String mcrobjid, String derid, Direction dir) {
+    private void moveDerivate(String mcrobjid, String derid, Direction dir) {
         MCRObject mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(MCRObjectID.getInstance(mcrobjid));
         List<MCRMetaEnrichedLinkID> derList = mcrObj.getStructure().getDerivates();
         for (int pos = 0; pos < derList.size(); pos++) {
@@ -348,7 +348,7 @@ public class MCREditDerivatesController {
 
     private void updateMainFile(MCRDerivate der, Path derDir) {
         String mainFile = der.getDerivate().getInternals().getMainDoc();
-        if ((mainFile == null) || mainFile.trim().isEmpty() || !(Files.exists(derDir.resolve(mainFile)))) {
+        if ((mainFile == null) || mainFile.isBlank() || !(Files.exists(derDir.resolve(mainFile)))) {
             mainFile = getPathOfMainFile(derDir);
             if (mainFile.equals("")) {
                 der.getDerivate().getInternals().setMainDoc("");
@@ -365,24 +365,24 @@ public class MCREditDerivatesController {
      */
     protected static String getPathOfMainFile(Path parent) {
         while (Files.isDirectory(parent)) {
-            List<Path> children = new ArrayList<Path>();
+            List<Path> children = new ArrayList<>();
             try (DirectoryStream<Path> stream = Files.newDirectoryStream(parent)) {
                 for (Path p : stream) {
                     children.add(p);
                 }
             } catch (IOException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                LOGGER.error(e);
             }
 
-            Collections.sort(children, new Comparator<Path>() {
+            Collections.sort(children, new Comparator<>() {
                 @Override
                 public int compare(Path f0, Path f1) {
                     // TODO Auto-generated method stub
                     return f0.toString().compareTo(f1.toString());
                 }
             });
-            if (children.size() == 0) {
+            if (children.isEmpty()) {
                 return "";
             }
             if (Files.isDirectory(children.get(0))) {
@@ -399,7 +399,7 @@ public class MCREditDerivatesController {
 
     private void createNewDerivate(String taskid, String mcrobjid, FormDataMultiPart multiPart) {
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
-        MCRDerivate der = null;
+        MCRDerivate der;
         try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
             MCRWorkflowMgr wfm = MCRBPMNMgr
                 .getWorkflowMgr(ts.createTaskQuery().executionId(taskid).singleResult().getProcessInstanceId());
@@ -439,7 +439,7 @@ public class MCREditDerivatesController {
     }
 
     public Map<String, String> calcDerivateLabels(String mode) {
-        LinkedHashMap<String, String> result = new LinkedHashMap<>();
+        Map<String, String> result = new LinkedHashMap<>();
         for (MCRCategory c : MCRCategoryDAOFactory.obtainInstance().getChildren(MCRCategoryID.rootID("derivate_types"))) {
             if (c.getCurrentLabel().isPresent()) {
                 Optional<MCRLabel> lblMode = c.getLabel("x-usedfor");
@@ -457,7 +457,7 @@ public class MCREditDerivatesController {
     }
 
     public Map<String, Document> calcDerivateXMLs(String mcrobjid) {
-        HashMap<String, Document> result = new HashMap<String, Document>();
+        Map<String, Document> result = new HashMap<>();
         MCRObject obj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(MCRObjectID.getInstance(mcrobjid));
         DOMOutputter domOut = new DOMOutputter();
         try {
@@ -465,7 +465,7 @@ public class MCREditDerivatesController {
                 String id = derID.getXLinkHref();
                 org.jdom2.Document jdom = MCRBPMNUtils.getWorkflowDerivateXML(MCRObjectID.getInstance(mcrobjid),
                     MCRObjectID.getInstance(id));
-                Document doc = null;
+                Document doc;
                 try {
                     doc = domOut.output(jdom);
                     result.put(id, doc);

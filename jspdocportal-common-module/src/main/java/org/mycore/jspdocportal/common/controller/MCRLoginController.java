@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.apache.logging.log4j.LogManager;
@@ -74,6 +75,10 @@ import jakarta.ws.rs.core.Response;
     @Path("/do/login")
     public class MCRLoginController{
         
+    private static final String MODEL_LOGIN_OK = "loginOK";
+
+    private static final String MODEL_LOGIN_STATUS = "loginStatus";
+
     public static final String SESSION_ATTR_MCR_USER = "mcr.jspdocportal.current_user";
     
     private static final Logger LOGGER = LogManager.getLogger();
@@ -85,14 +90,14 @@ import jakarta.ws.rs.core.Response;
         if ("true".equals(logout)) {
             return doLogout(request);
         } else {
-            HashMap<String, Object> model = new HashMap<>();
+            Map<String, Object> model = new HashMap<>();
             MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
             MCRUserInformation mcrUserInfo = mcrSession.getUserInformation();
             if (mcrUserInfo != null && !mcrUserInfo.getUserID().equals("guest")) {
-                model.put("loginStatus", "user.welcome");
-                model.put("loginOK", true);
+                model.put(MODEL_LOGIN_STATUS, "user.welcome");
+                model.put(MODEL_LOGIN_OK, true);
 
-                try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
+                try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
                     updateData(mcrSession, model);
                 }
             }
@@ -108,7 +113,7 @@ import jakarta.ws.rs.core.Response;
         session.setUserInformation(MCRSystemUserInformation.GUEST);
         request.getSession().removeAttribute(SESSION_ATTR_MCR_USER);
         
-        HashMap<String, Object> model = new HashMap<>();
+        Map<String, Object> model = new HashMap<>();
         Viewable v = new Viewable("/login", model);
         return Response.ok(v).build();
         
@@ -118,25 +123,23 @@ import jakarta.ws.rs.core.Response;
     @POST
     public Response doLogin(  @FormParam("userID") String userID,  @FormParam("password") String password,
         @Context HttpServletRequest request) {
-        boolean mcrLoginOK = false;
-
         MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
-        try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
-            HashMap<String, Object> model = new HashMap<>();
+        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+            Map<String, Object> model = new HashMap<>();
             Viewable v = new Viewable("/login", model);
             Response r = Response.ok(v).build();
             String oldUserID = mcrSession.getUserInformation().getUserID();
 
             if (userID != null) {
-                userID = (userID.trim().length() == 0) ? null : userID.trim();
+                userID = (userID.isBlank()) ? null : userID.trim();
             }
             if (password != null) {
-                password = (password.trim().length() == 0) ? password : password.trim();
+                password = (password.isBlank()) ? password : password.trim();
             }
 
             if (userID == null && password == null && !"guest".equals(oldUserID)) {
-                model.put("loginOK",  true);
-                model.put("loginStatus", "user.incomplete");
+                model.put(MODEL_LOGIN_OK,  true);
+                model.put(MODEL_LOGIN_STATUS, "user.incomplete");
                 model.put("userID",  userID);
                 
                 updateData(mcrSession, model);
@@ -144,67 +147,66 @@ import jakarta.ws.rs.core.Response;
             }
 
             if (userID == null || password == null) {
-                model.put("loginOK",  false);
-                model.put("loginStatus", "user.incomplete");
+                model.put(MODEL_LOGIN_OK,  false);
+                model.put(MODEL_LOGIN_STATUS, "user.incomplete");
                 return r;
             }
 
             LOGGER.debug("Trying to log in user {}", userID);
             if (oldUserID.equals(userID)) {
                 LOGGER.debug("User " /*+ userName */+ " with ID {} is allready logged in", userID);
-                model.put("loginOK",  true);
-                model.put("loginStatus", "user.exists");
+                model.put(MODEL_LOGIN_OK,  true);
+                model.put(MODEL_LOGIN_STATUS, "user.exists");
                 updateData(mcrSession, model);
                 return r;
             }
 
-            mcrLoginOK = loginInMyCore(userID, password, mcrSession, request, model);
-            
+            boolean mcrLoginOK = loginInMyCore(userID, password, mcrSession, request, model);
             // interprete the results
             if (mcrLoginOK) {
-                model.put("loginOK",  true);
-                model.put("loginStatus", "user.welcome");
+                model.put(MODEL_LOGIN_OK,  true);
+                model.put(MODEL_LOGIN_STATUS, "user.welcome");
                 updateData(mcrSession, model);
                 return Response.temporaryRedirect(URI.create(request.getContextPath() + "/do/workspace/tasks")).build();
             } else {
                 // the user is not allowed
-                model.put("loginOK",  false);
-                model.put("loginStatus", "user.unknown");
+                model.put(MODEL_LOGIN_OK,  false);
+                model.put(MODEL_LOGIN_STATUS, "user.unknown");
             }
            
             return Response.ok(v).build();
         }
     }
 
-    private boolean loginInMyCore(String mcrUserID, String mcrPassword, MCRSession mcrSession, HttpServletRequest request, HashMap<String, Object> model) {
+    private boolean loginInMyCore(String mcrUserID, String mcrPassword, MCRSession mcrSession, HttpServletRequest request, Map<String, Object> model) {
         boolean result = false;
-        try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
             MCRUser mcrUser = MCRUserManager.login(mcrUserID, mcrPassword);
             if (mcrUser != null) {
                 result = true;
                 mcrSession.setUserInformation(mcrUser);
                 request.getSession().setAttribute(SESSION_ATTR_MCR_USER, mcrUser);
-                model.put("loginStatus", "user.welcome");
+                model.put(MODEL_LOGIN_STATUS, "user.welcome");
                 LOGGER.debug("user {} logged in ", mcrUserID);
                 updateData(mcrSession, model);
             } else {
                 if (mcrUserID != null) {
-                    model.put("loginStatus", "user.invalid_password");
+                    model.put(MODEL_LOGIN_STATUS, "user.invalid_password");
                 }
             }
 
         } catch (MCRException e) {
             result = false;
             if (e.getMessage().equals("user can't be found in the database")) {
-                model.put("loginStatus", "user.unknown");
+                model.put(MODEL_LOGIN_STATUS, "user.unknown");
             } else if (e.getMessage().equals("Login denied. User is disabled.")) {
-                model.put("loginStatus", "user.disabled");
+                model.put(MODEL_LOGIN_STATUS, "user.disabled");
             } else {
-                model.put("loginStatus", "user.unkwnown_error");
+                model.put(MODEL_LOGIN_STATUS, "user.unkwnown_error");
                 LOGGER.debug("user.unkwnown_error", e);
             }
         }
-        LOGGER.info(() -> model.get("loginStatus"));
+        LOGGER.info(() -> model.get(MODEL_LOGIN_STATUS));
         return result;
     }
 
@@ -213,7 +215,7 @@ import jakarta.ws.rs.core.Response;
      * 
      * @param mcrSession
      */
-    private void updateData(MCRSession mcrSession, HashMap<String, Object> model) {
+    private void updateData(MCRSession mcrSession, Map<String, Object> model) {
 
             List<MCRLoginNextStep> nextSteps = new ArrayList<>();
             
@@ -228,7 +230,7 @@ import jakarta.ws.rs.core.Response;
                 // Herr
                 name.append(messages.getString("Webpage.login.user.salutation.male"));
             }
-            name.append(" ");
+            name.append(' ');
             name.append(mcrUser.getRealName());
             model.put("userName",  name.toString());
             model.put("userID", mcrUser.getUserID()); 
