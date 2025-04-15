@@ -1,14 +1,14 @@
 package org.mycore.jspdocportal.common.taglibs;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
@@ -21,7 +21,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
-import org.mycore.common.content.MCRFileContent;
+import org.mycore.common.content.MCRPathContent;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -158,7 +158,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
         try {
             String path = pageContext.getServletContext()
                     .getRealPath(editorBase.substring(MCRFrontendUtil.getBaseURL().length()));
-            File editorFile = new File(path);
+            Path editorFile = Paths.get(path);
 
             HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 
@@ -168,7 +168,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
                 request.getParameterMap().put(key.toString(), new String[] { parameters.getProperty((String) key) });
             }
 
-            Document xml = new MCRFileContent(editorFile).asXML();
+            Document xml = new MCRPathContent(editorFile).asXML();
 
             //TODO use MCRStaticXEditorFileServlet.doExpandEditorElements
             //MCREditorServlet.replaceEditorElements(request, editorFile.toURI().toString(), xml);
@@ -220,7 +220,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
         String url = "";
         if (editorSource != null && !editorSource.equals("")) {
             try {
-                url = new File(editorSource).toURI().toURL().toString();
+                url = Paths.get(editorSource).toUri().toURL().toString();
             } catch (MalformedURLException mue) {
                 LOGGER.error("Wrong URL", mue);
             }

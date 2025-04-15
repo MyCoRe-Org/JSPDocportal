@@ -1,13 +1,15 @@
 package org.mycore.jspdocportal.common.taglibs;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -123,33 +125,31 @@ public class MCRIncludeWebContentTag extends SimpleTagSupport {
 
     private void showText(JspWriter out) throws IOException {
         String lang = MCRSessionMgr.getCurrentSession().getCurrentLanguage();
-        File dirSaveWebcontent = new File(MCRConfiguration2.getString("MCR.WebContent.SaveFolder").orElseThrow());
-        dirSaveWebcontent = new File(dirSaveWebcontent, lang);
-        File fText = new File(dirSaveWebcontent, file);
-        String path = fText.getPath();
+        Path dirSaveWebcontent = Paths.get(MCRConfiguration2.getString("MCR.WebContent.SaveFolder").orElseThrow())
+            .resolve(lang);
+        Path fText = dirSaveWebcontent.resolve(file);
+        String path = fText.toAbsolutePath().toString();
 
-        InputStream is = null;
-        if (fText.exists()) {
-            is = new FileInputStream(fText);
-        } else {
-            is = getClass().getResourceAsStream("/config/webcontent/" + lang + "/" + file);
-        }
-        if (is != null) {
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"))) {
-                String line = null;
-                while ((line = br.readLine()) != null) {
-                    out.println(line);
+        try (InputStream is = Files.exists(fText)
+            ? Files.newInputStream(fText)
+            : getClass().getResourceAsStream("/config/webcontent/" + lang + "/" + file)) {
+            if (is != null) {
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+                    String line = null;
+                    while ((line = br.readLine()) != null) {
+                        out.println(line);
+                    }
+                } catch (UnsupportedEncodingException | FileNotFoundException e) {
+                    //do nothing
                 }
-            } catch (UnsupportedEncodingException | FileNotFoundException e) {
-                //do nothing
+            } else {
+                out.println("<p class=\"bg-warning panel-body\">");
+                String dataDir = Paths.get(MCRConfiguration2.getString("MCR.datadir")
+                    .orElseThrow()).toAbsolutePath().toString();
+                out.println(MCRTranslation.translate("Webpage.editwebcontent.nofile",
+                    path.replace(dataDir, "%MCR.datadir% ")));
+                out.println("</p>");
             }
-
-        } else {
-            out.println("<p class=\"bg-warning panel-body\">");
-            String dataDir = new File(MCRConfiguration2.getString("MCR.datadir").orElseThrow()).getPath();
-            out.println(
-                MCRTranslation.translate("Webpage.editwebcontent.nofile", path.replace(dataDir, "%MCR.datadir% ")));
-            out.println("</p>");
         }
     }
 

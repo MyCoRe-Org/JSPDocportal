@@ -23,10 +23,8 @@
 
 package org.mycore.jspdocportal.common.commands;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,12 +36,12 @@ import java.nio.file.attribute.FileTime;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -131,13 +129,18 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
     public static final List<String> backupAllObjects(String type, String dirname) {
         // check dirname
         List<String> commandList = new ArrayList<>();
-        File dir = new File(dirname);
-        if (!dir.exists()) {
-            if (dir.getParentFile().exists()) {
-                dir.mkdir();
+        Path dir = Paths.get(dirname);
+        if (!Files.exists(dir)) {
+            if (Files.exists(dir.getParent())) {
+                try {
+                    Files.createDirectory(dir);
+                } catch (IOException e) {
+                    LOGGER.error("Could not create directory {}", dirname, e);
+                }
+
             }
         }
-        if (dir.isDirectory()) {
+        if (Files.isDirectory(dir)) {
             for (String id : MCRXMLMetadataManager.getInstance().listIDsOfType(type)) {
                 commandList.add("backup object " + id + " to directory " + dirname);
             }
@@ -150,8 +153,8 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
     @MCRCommand(syntax = "backup object {0} to directory {1}",
         help = "The command backups a single object {0} into the directory {1} including all derivates")
     public static final void backupObject(String id, String dirname) {
-        File dir = new File(dirname);
-        if (dir.isFile()) {
+        Path dir = Paths.get(dirname);
+        if (!Files.isDirectory(dir)) {
             LOGGER.error("{} is not a directory.", dirname);
             return;
         }
@@ -174,8 +177,8 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
             // build JDOM
             Document xml = mcrObj.createXML();
 
-            File xmlOutput = new File(dir, id + ".xml");
-            try (FileOutputStream out = new FileOutputStream(xmlOutput)) {
+            Path xmlOutput = dir.resolve(id + ".xml");
+            try (OutputStream out = Files.newOutputStream(xmlOutput)) {
                 new org.jdom2.output.XMLOutputter(Format.getPrettyFormat()).output(xml, out);
             }
 
@@ -185,17 +188,15 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
             }
             for (MCRMetaLinkID derivate : mcrStructure.getDerivates()) {
                 String derID = derivate.getXLinkHref();
-                File subdir = new File(dirname, mcrObj.getId().toString());
-                subdir.mkdir();
-                MCRDerivateCommands.exportWithStylesheet(derID, subdir.getPath(), null);
+                Path subdir = dir.resolve(mcrObj.getId().toString());
+                Files.createDirectories(subdir);
+                MCRDerivateCommands.exportWithStylesheet(derID, subdir.toAbsolutePath().toString(), null);
             }
-            String canonicalPath = xmlOutput.getCanonicalPath();
+            String canonicalPath = xmlOutput.toAbsolutePath().toString();
             LOGGER.info("Object {} saved to {}.", id, canonicalPath);
             LOGGER.info("");
         } catch (MCRException ex) {
             // ignore
-        } catch (FileNotFoundException ex) {
-            LOGGER.error("Could not write to file {}", id, ex);
         } catch (IOException ex) {
             LOGGER.error("Error writing file {}", id, ex);
         }
@@ -227,16 +228,13 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
     public static final List<String> restoreAllObjects(String dirname) {
         // check dirname
         List<String> commandList = new ArrayList<>();
-        File dir = new File(dirname);
-        if (dir.isDirectory()) {
-            File[] files = dir.listFiles();
-            Arrays.sort(files);
-            for (File objectFile : files) {
-                if (objectFile.isDirectory()) {
-                    continue;
-                }
-                commandList.add("restore object from file " + objectFile.getAbsolutePath());
-
+        Path dir = Paths.get(dirname);
+        if (Files.isDirectory(dir)) {
+            try (Stream<Path> files = Files.list(dir)) {
+                files.sorted().filter(x -> !Files.isDirectory(x))
+                    .forEach(f -> commandList.add("restore object from file " + f.toAbsolutePath().toString()));
+            } catch (IOException e) {
+                LOGGER.error(e);
             }
         } else {
             LOGGER.error("{} is not a directory.", dirname);
@@ -248,16 +246,17 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
         help = "The command restores a single object {0} including all derivates")
     public static final void restoreObject(String fileName) {
         //ignore directories
-        File objectFile = new File(fileName);
-        if (!objectFile.exists() && !objectFile.isFile()) {
+        Path objectFile = Paths.get(fileName);
+        if (!Files.exists(objectFile) && !Files.isRegularFile(objectFile)) {
             LOGGER.error("{} is not a file.", fileName);
             return;
         }
 
-        String id = objectFile.getName().substring(0, objectFile.getName().length() - 4);
+        String fn = objectFile.getFileName().toString();
+        String id = fn.substring(0, fn.lastIndexOf('.'));
         LOGGER.info(" ... processing object {}", id);
         try {
-            MCRObject mcrObj = new MCRObject(objectFile.toURI());
+            MCRObject mcrObj = new MCRObject(objectFile.toUri());
             mcrObj.setImportMode(true); //true = servdates are taken from xml file;
             //clone derivateIDs
             List<MCRMetaLinkID> derivateIDs = new ArrayList<>(mcrObj.getStructure().getDerivates());
@@ -265,8 +264,8 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
             MCRMetadataManager.update(mcrObj);
 
             //load derivates in the order specified in MCRObject
-            File objDir = new File(objectFile.getParentFile(), id);
-            if (objDir.exists()) {
+            Path objDir = objectFile.getParent().resolve(id);
+            if (Files.exists(objDir)) {
                 for (MCRMetaLinkID derLinkID : derivateIDs) {
                     MCRObjectID derID = derLinkID.getXLinkHrefID();
                     LOGGER.info(" ... processing derivate {}", derID);
@@ -277,17 +276,17 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                             LOGGER.error("Could not delete derivate {}", derID, mpe);
                         }
                     }
-                    File f = new File(objDir, derID.toString() + ".xml");
-                    LOGGER.info("Loading derivate {} : file exists?: {}", f::getAbsolutePath, f::exists);
+                    final Path f = objDir.resolve(derID.toString() + ".xml");
+                    LOGGER.info("Loading derivate {} : file exists?: {}", 
+                        () -> f.toAbsolutePath(),
+                        () -> Files.exists(f));
 
-                    MCRDerivate mcrDer = new MCRDerivate(f.toURI());
+                    MCRDerivate mcrDer = new MCRDerivate(f.toUri());
                     mcrDer.setImportMode(true); //true = servdates are taken from xml file;
 
                     // override creation dates with the information from the xml file
                     Date dateCreated = mcrDer.getService().getDate("createdate");
-                    Path p = objDir.toPath().resolve(derID.toString());
-                    LOGGER.info(p);
-                    Files.walkFileTree(p, new SimpleFileVisitor<>() {
+                    Files.walkFileTree(objDir.resolve(derID.toString()), new SimpleFileVisitor<>() {
                         @Override
                         public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs)
                             throws IOException {
@@ -317,9 +316,9 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                     });
 
                     if (MCRMetadataManager.exists(derID)) {
-                        MCRDerivateCommands.updateFromFile(f.getAbsolutePath());
+                        MCRDerivateCommands.updateFromFile(f.toAbsolutePath().toString());
                     } else {
-                        MCRDerivateCommands.loadFromFile(f.getAbsolutePath());
+                        MCRDerivateCommands.loadFromFile(f.toAbsolutePath().toString());
                     }
 
                     /*
@@ -406,8 +405,12 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
             }
         }
         // check dirname
-        File dir = new File(dirname);
-        dir.mkdirs();
+        Path dir = Paths.get(dirname);
+        try {
+            Files.createDirectories(dir);
+        } catch (IOException e) {
+            LOGGER.error(e);
+        }
     }
 
     /**

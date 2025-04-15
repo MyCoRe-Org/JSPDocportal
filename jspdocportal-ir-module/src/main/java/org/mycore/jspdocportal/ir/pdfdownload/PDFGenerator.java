@@ -25,7 +25,6 @@ package org.mycore.jspdocportal.ir.pdfdownload;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -74,7 +73,7 @@ import jakarta.servlet.ServletContext;
  */
 public class PDFGenerator implements Runnable {
     private static final Logger LOGGER = LogManager.getLogger();
-    
+
     public static final int DEFAULT_DPI = 300;
     public static final int BORDER = 55; // 2cm (72dpi)
     public static final String SESSION_ATTRIBUTE_PROGRESS_PREFIX = "pdfdownload_progress_";
@@ -95,7 +94,7 @@ public class PDFGenerator implements Runnable {
         this.mcrid = mcrid;
         this.ctx = ctx;
     }
-    
+
     @Override
     public void run() {
         ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier, 0);
@@ -134,8 +133,7 @@ public class PDFGenerator implements Runnable {
             document = new Document(PageSize.A4);
             PdfCopy copy = new PdfCopy(document, Files.newOutputStream(tmpFile));
             document.open();
-            PdfReader reader;
-            reader = new PdfReader(new ByteArrayInputStream(frontPageBytes.toByteArray()));
+            PdfReader reader = new PdfReader(new ByteArrayInputStream(frontPageBytes.toByteArray()));
             // loop over the pages in that document
             for (int page = 1; page <= reader.getNumberOfPages(); page++) {
                 copy.addPage(copy.getImportedPage(reader, page));
@@ -143,11 +141,10 @@ public class PDFGenerator implements Runnable {
             copy.freeReader(reader);
             reader.close();
 
-            File[] imageFiles = imgDir.toFile().listFiles();
-            Arrays.sort(imageFiles);
+            List<Path> imageFiles = Files.list(imgDir).sorted().toList();
+            for (int i = 0; i < imageFiles.size(); i++) {
 
-            for (int i = 0; i < imageFiles.length; i++) {
-                reader = new PdfReader(imageFiles[i].getAbsolutePath());
+                reader = new PdfReader(Files.newInputStream(imageFiles.get(i)));
                 // loop over the pages in that document
                 int n = reader.getNumberOfPages();
                 for (int page = 1; page <= n; page++) {
@@ -155,8 +152,9 @@ public class PDFGenerator implements Runnable {
                 }
                 copy.freeReader(reader);
                 reader.close();
+
                 ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier,
-                        (i + 1) * 100 / imageFiles.length);
+                    (i + 1) * 100 / imageFiles.size());
 
                 // this is just for debgging
                 try {
@@ -186,14 +184,13 @@ public class PDFGenerator implements Runnable {
             PDFFrontpageUtil.createFrontPage(writer, document, recordIdentifier, mcrid);
 
             Image img;
-            File[] imageFiles = imgDir.toFile().listFiles();
-            Arrays.sort(imageFiles);
+            List<Path> imageFiles = Files.list(imgDir).sorted().toList();
 
             @SuppressWarnings("unused")
             Rectangle pageSize = document.getPageSize();
-            for (int i = 0; i < imageFiles.length; i++) {
+            for (int i = 0; i < imageFiles.size(); i++) {
                 //default
-                img = Image.getInstance(imageFiles[i].getAbsolutePath());
+                img = Image.getInstance(imageFiles.get(i).toAbsolutePath().toString());
                 img.scalePercent(72 * 100 / DEFAULT_DPI);
                 img.setAbsolutePosition(0f, 0f);
 
@@ -203,7 +200,7 @@ public class PDFGenerator implements Runnable {
 
                 document.add(img);
                 ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier,
-                        (i + 1) * 100 / imageFiles.length);
+                    (i + 1) * 100 / imageFiles.size());
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -233,16 +230,17 @@ public class PDFGenerator implements Runnable {
             for (MCRMetaLinkID derID : mcrObj.getStructure().getDerivates()) {
                 if ("DV_METS".equals(derID.getXLinkTitle())) {
                     MCRDerivate der = MCRMetadataManager
-                            .retrieveMCRDerivate(MCRObjectID.getInstance(derID.getXLinkHref()));
+                        .retrieveMCRDerivate(MCRObjectID.getInstance(derID.getXLinkHref()));
                     String mainDoc = der.getDerivate().getInternals().getMainDoc();
 
-                    URL metsURL = URI.create(MCRFrontendUtil.getBaseURL() + "file/" + mcrid + "/" + der.getId().toString()
+                    URL metsURL =
+                        URI.create(MCRFrontendUtil.getBaseURL() + "file/" + mcrid + "/" + der.getId().toString()
                             + "/" + mainDoc).toURL();
                     SAXBuilder sb = new SAXBuilder();
                     metsXML = sb.build(metsURL);
 
                     XPathExpression<Element> xpImages = XPathFactory.instance().compile(
-                            "//mets:fileGrp[@USE='DEFAULT']/mets:file/mets:FLocat", Filters.element(), null, NS_METS);
+                        "//mets:fileGrp[@USE='DEFAULT']/mets:file/mets:FLocat", Filters.element(), null, NS_METS);
 
                     for (Element ef : xpImages.evaluate(metsXML)) {
                         imgURLs.add(ef.getAttributeValue("href", NS_XLINK));
@@ -275,7 +273,7 @@ public class PDFGenerator implements Runnable {
 
                 document.add(img);
                 ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier,
-                        (i + 1) * 100 / imgURLs.size());
+                    (i + 1) * 100 / imgURLs.size());
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {

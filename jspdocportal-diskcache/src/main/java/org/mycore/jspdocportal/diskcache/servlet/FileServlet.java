@@ -22,7 +22,6 @@ package org.mycore.jspdocportal.diskcache.servlet;
 
 import static java.lang.String.format;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
