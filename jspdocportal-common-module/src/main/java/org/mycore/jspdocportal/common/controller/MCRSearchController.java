@@ -28,6 +28,7 @@ import org.mycore.frontend.xeditor.MCRStaticXEditorFileServlet;
 import org.mycore.frontend.xeditor.tracker.MCRChangeData;
 import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 import org.mycore.jspdocportal.common.search.MCRSearchResultDataBean;
+import org.mycore.resource.MCRResourceHelper;
 import org.mycore.services.fieldquery.MCRQuery;
 import org.mycore.solr.search.MCRQLSearchUtils;
 import org.mycore.solr.search.MCRSolrSearchUtils;
@@ -275,7 +276,7 @@ public class MCRSearchController {
 
         MCRContent editorContent = null;
         try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
-            URL resource = getClass().getResource("/editor/search/" + result.getMask() + ".xed");
+            URL resource = MCRResourceHelper.getResourceUrl("/editor/search/" + result.getMask() + ".xed");
             if (resource != null) {
                 editorContent = new MCRURLContent(resource);
             }

@@ -17,6 +17,7 @@ import org.mycore.common.content.MCRURLContent;
 import org.mycore.frontend.xeditor.MCREditorSessionStore;
 import org.mycore.frontend.xeditor.MCRStaticXEditorFileServlet;
 import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
+import org.mycore.resource.MCRResourceHelper;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -75,7 +76,7 @@ public class MCRIncludeXEditorTag extends SimpleTagSupport {
                 if (!editorPath.startsWith("/")) {
                     editorPath = "/" + editorPath;
                 }
-                editorContent = new MCRURLContent(getClass().getResource(editorPath));
+                editorContent = new MCRURLContent(MCRResourceHelper.getResourceUrl(editorPath));
             } else {
                 if (getJspBody() != null) {
                     StringWriter sw = new StringWriter();

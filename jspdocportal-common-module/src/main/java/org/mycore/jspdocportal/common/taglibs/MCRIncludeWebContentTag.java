@@ -18,6 +18,7 @@ import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRSystemUserInformation;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
+import org.mycore.resource.MCRResourceHelper;
 import org.mycore.services.i18n.MCRTranslation;
 
 import jakarta.servlet.jsp.JspException;
@@ -60,7 +61,7 @@ public class MCRIncludeWebContentTag extends SimpleTagSupport {
 
     private boolean isGuestUser() {
         String userID = MCRSessionMgr.getCurrentSession().getUserInformation().getUserID();
-        return (userID.equals(MCRSystemUserInformation.getGuestInstance().getUserID()));
+        return (userID.equals(MCRSystemUserInformation.GUEST.getUserID()));
     }
 
     /**
@@ -132,7 +133,7 @@ public class MCRIncludeWebContentTag extends SimpleTagSupport {
 
         try (InputStream is = Files.exists(fText)
             ? Files.newInputStream(fText)
-            : getClass().getResourceAsStream("/config/webcontent/" + lang + "/" + file)) {
+            : MCRResourceHelper.getResourceAsStream("/config/webcontent/" + lang + "/" + file)) {
             if (is != null) {
                 try (BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
                     String line = null;

@@ -6,7 +6,6 @@ import java.io.StringWriter;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
@@ -21,6 +20,7 @@ import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRURLContent;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xsl.MCRParameterCollector;
+import org.mycore.resource.MCRResourceHelper;
 
 import jakarta.servlet.jsp.JspException;
 import jakarta.servlet.jsp.PageContext;
@@ -52,14 +52,14 @@ public class MCRIncludeEditorTag extends SimpleTagSupport {
         StringWriter out = new StringWriter();
 
         try {
-            MCRContent editorContent = new MCRURLContent(getClass().getResource(editorPath));
+            MCRContent editorContent = new MCRURLContent(MCRResourceHelper.getResourceUrl(editorPath));
             Document xml = editorContent.asXML();
             // TODO use MCRStaticXEditorFileServlet.doExpandEditorElements
             // MCREditorServlet.replaceEditorElements(request, editorXML.toURI().toString(),
             // xml);
 
             Source xmlSource = new JDOMSource(xml);
-            Source xsltSource = new StreamSource(getClass().getResourceAsStream("/xsl/editor_standalone.xsl"));
+            Source xsltSource = new StreamSource(MCRResourceHelper.getResourceAsStream("/xsl/editor_standalone.xsl"));
 
             // das Factory-Pattern unterstützt verschiedene XSLT-Prozessoren
             TransformerFactory transFact = TransformerFactory.newInstance();

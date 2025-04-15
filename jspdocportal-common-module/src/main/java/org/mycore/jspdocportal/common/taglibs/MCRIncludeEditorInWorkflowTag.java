@@ -27,6 +27,7 @@ import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
+import org.mycore.resource.MCRResourceHelper;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.jsp.JspException;
@@ -125,7 +126,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
             editorBase = (String) pageContext.getSession().getAttribute("editorPath");
             if (editorBase == null) {
                 editorBase = new StringBuffer(MCRFrontendUtil.getBaseURL())
-                        .append((String) pageContext.getAttribute("editorPath")).toString();
+                    .append((String) pageContext.getAttribute("editorPath")).toString();
             }
         } else {
             if (editorPath != null && !editorPath.equals("")) {
@@ -136,7 +137,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
                 }
             } else if (uploadID == null || uploadID.equals("")) {
                 StringBuffer base = new StringBuffer(MCRFrontendUtil.getBaseURL()).append("editor/workflow/editor-")
-                        .append(step).append('-').append(type);
+                    .append(step).append('-').append(type);
                 if (publicationType != null && !publicationType.equals("")) {
                     if (publicationType.endsWith("TYPE0002"))
                         base.append("-").append("TYPE0002");
@@ -148,7 +149,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
 
             } else {
                 editorBase = new StringBuffer(MCRFrontendUtil.getBaseURL())
-                        .append("editor/workflow/editor-author-addfile-new.xml").toString();
+                    .append("editor/workflow/editor-author-addfile-new.xml").toString();
             }
 
             pageContext.getSession().setAttribute("editorPath", editorBase);
@@ -157,7 +158,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
 
         try {
             String path = pageContext.getServletContext()
-                    .getRealPath(editorBase.substring(MCRFrontendUtil.getBaseURL().length()));
+                .getRealPath(editorBase.substring(MCRFrontendUtil.getBaseURL().length()));
             Path editorFile = Paths.get(path);
 
             HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
@@ -174,7 +175,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
             //MCREditorServlet.replaceEditorElements(request, editorFile.toURI().toString(), xml);
             Source xmlSource = new JDOMSource(xml);
 
-            Source xsltSource = new StreamSource(getClass().getResourceAsStream("/xsl/editor_standalone.xsl"));
+            Source xsltSource = new StreamSource(MCRResourceHelper.getResourceAsStream("/xsl/editor_standalone.xsl"));
 
             // das Factory-Pattern unterstützt verschiedene XSLT-Prozessoren
             TransformerFactory transFact = TransformerFactory.newInstance();
@@ -188,8 +189,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
             MCRParameterCollector paramColl = MCRParameterCollector.ofCurrentSession();
             paramColl.setParametersTo(transformer);
             transformer.transform(xmlSource, new StreamResult(out));
-        }
-        catch (TransformerException | JDOMException e) {
+        } catch (TransformerException | JDOMException e) {
             LOGGER.error("Exception", e);
         }
     }
@@ -225,8 +225,9 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
                 LOGGER.error("Wrong URL", mue);
             }
 
-        } else if (!isNewEditorSource.equals("true") && mcrid != null && !mcrid.equals("") && type != null
-                && !type.equals("")) {
+        } else if (!isNewEditorSource.equals("true")
+            && mcrid != null && !mcrid.equals("")
+            && type != null && !type.equals("")) {
             try {
                 url = MCRBPMNUtils.getWorkflowObjectFile(MCRObjectID.getInstance(mcrid)).toUri().toURL().toString();
             } catch (MalformedURLException mue) {

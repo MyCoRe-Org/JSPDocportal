@@ -33,6 +33,7 @@ import java.util.Map;
 import org.mycore.jspdocportal.common.MCRNavigationUtil;
 import org.mycore.jspdocportal.common.navigation.model.Navigation;
 import org.mycore.jspdocportal.common.navigation.model.NavigationItem;
+import org.mycore.resource.MCRResourceHelper;
 
 import jakarta.servlet.ServletContext;
 import jakarta.xml.bind.JAXBContext;
@@ -104,7 +105,7 @@ public class Navigations {
     * @param sce - the ServletContext
     */
     public static void loadNavigation(ServletContext sce) {
-        Navigations nav = Navigations.unmarshall(MCRNavigationUtil.class.getResourceAsStream("/config/navigation.xml"));
+        Navigations nav = Navigations.unmarshall(MCRResourceHelper.getResourceAsStream("/config/navigation.xml"));
         for (Navigation n : nav.getList()) {
             annotate(n);
         }

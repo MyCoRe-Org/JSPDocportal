@@ -25,6 +25,7 @@ import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
+import org.mycore.resource.MCRResourceHelper;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.POST;
@@ -114,7 +115,7 @@ public class MCRSaveWebcontentController {
         java.nio.file.Path fText = dirSaveWebcontent.resolve(file);
 
         try (InputStream is = Files.exists(fText) ? Files.newInputStream(fText)
-            : getClass().getResourceAsStream("/config/webcontent/" + lang + "/" + file)) {
+            : MCRResourceHelper.getResourceAsStream("/config/webcontent/" + lang + "/" + file)) {
 
             if (is != null) {
                 try (BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
