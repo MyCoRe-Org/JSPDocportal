@@ -35,7 +35,7 @@ public class MCRExtendedDerivateLinkIDFactory extends MCRDefaultEnrichedDerivate
                 }
             }
             else {
-                LOGGER.error("Error - maindoc '{}' does not exist for {}", () -> mainDoc,  () -> der.getId());
+                LOGGER.error("Error - maindoc '{}' does not exist for {}", () -> mainDoc, der::getId);
             }
         }
 

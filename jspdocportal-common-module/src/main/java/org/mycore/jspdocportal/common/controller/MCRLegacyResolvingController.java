@@ -42,7 +42,7 @@ import jakarta.ws.rs.core.Response;
 public class MCRLegacyResolvingController {
     @GET
     public Response doGet(@PathParam("path") String uri, @Context HttpServletRequest request) {
-        String[] keys = new String[] { "id", "ppn", "urn" };
+        String[] keys = { "id", "ppn", "urn" };
         for (String key : keys) {
             if (request.getParameterMap().containsKey(key)) {
                 String value = request.getParameter(key);

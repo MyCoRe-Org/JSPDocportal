@@ -31,6 +31,7 @@ import java.io.Serializable;
  */
 public class MCRJSPErrorInfo implements Serializable  {
 
+    @java.io.Serial
     private static final long serialVersionUID = 1L;
     
     int status;

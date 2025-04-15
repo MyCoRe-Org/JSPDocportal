@@ -77,8 +77,8 @@ public class MCRShowWorkspaceController {
     @GET
     public Response defaultRes(@Context HttpServletRequest request) {
 
-        HashMap<String, Object> model = new HashMap<String, Object>();
-        List<String> messages = new ArrayList<String>();
+        Map<String, Object> model = new HashMap<>();
+        List<String> messages = new ArrayList<>();
         model.put("messages", messages);
 
         // open XEditor
@@ -101,7 +101,7 @@ public class MCRShowWorkspaceController {
             return editObject(mcrID, null);
         }
 
-        try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
             if (request.getSession(false) == null
                 || !MCRUserManager.getCurrentUser().isUserInRole("edit")) {
                 return Response.temporaryRedirect(URI.create(request.getContextPath() + "/do/login")).build();
@@ -118,52 +118,52 @@ public class MCRShowWorkspaceController {
                 createNewTask(parts[1], parts[2], request, messages);
             }
             if (s.startsWith("doAcceptTask-task_")) {
-                String id = s.substring(s.indexOf("_") + 1);
+                String id = s.substring(s.indexOf('_') + 1);
                 acceptTask(id);
             }
             if (s.startsWith("doReleaseTask-task_")) {
-                String id = s.substring(s.indexOf("_") + 1);
+                String id = s.substring(s.indexOf('_') + 1);
                 releaseTask(id);
             }
             // doFollowt-task_[ID]-[mcrObjID]
             if (s.startsWith("doGoto-task_")) {
-                String id = s.substring(s.indexOf("-") + 1);
-                String taskExecID = id.substring(0, id.indexOf("-"));
-                taskExecID = taskExecID.substring(taskExecID.indexOf("_") + 1);
-                String transactionID = id.substring(id.indexOf("-") + 1);
+                String id = s.substring(s.indexOf('-') + 1);
+                String taskExecID = id.substring(0, id.indexOf('-'));
+                taskExecID = taskExecID.substring(taskExecID.indexOf('_') + 1);
+                String transactionID = id.substring(id.indexOf('-') + 1);
                 followTransaction(taskExecID, transactionID, messages);
             }
 
             // doEditObject-task_[ID]-[mcrObjID]
             if (s.startsWith("doEditObject-task_")) {
-                String id = s.substring(s.indexOf("-") + 1);
-                String taskID = id.substring(0, id.indexOf("-"));
-                taskID = taskID.substring(taskID.indexOf("_") + 1);
-                String mcrObjID = id.substring(id.indexOf("-") + 1);
+                String id = s.substring(s.indexOf('-') + 1);
+                String taskID = id.substring(0, id.indexOf('-'));
+                taskID = taskID.substring(taskID.indexOf('_') + 1);
+                String mcrObjID = id.substring(id.indexOf('-') + 1);
                 return editObject(mcrObjID, taskID);
             }
 
             // doEditReservation-task_[ID]-[mcrObjID]
             if (s.startsWith("doEditReservation-task_")) {
-                String id = s.substring(s.indexOf("-") + 1);
-                String taskID = id.substring(0, id.indexOf("-"));
-                taskID = taskID.substring(taskID.indexOf("_") + 1);
-                String mcrObjID = id.substring(id.indexOf("-") + 1);
+                String id = s.substring(s.indexOf('-') + 1);
+                String taskID = id.substring(0, id.indexOf('-'));
+                taskID = taskID.substring(taskID.indexOf('_') + 1);
+                String mcrObjID = id.substring(id.indexOf('-') + 1);
                 return editReservation(mcrObjID, taskID);
             }
 
             // doImportMODS-task_[ID]-[mcrObjID]
             if (s.startsWith("doImportMODS-task_")) {
-                String id = s.substring(s.indexOf("-") + 1);
-                String taskID = id.substring(0, id.indexOf("-"));
-                taskID = taskID.substring(taskID.indexOf("_") + 1);
-                String mcrObjID = id.substring(id.indexOf("-") + 1);
+                String id = s.substring(s.indexOf('-') + 1);
+                String taskID = id.substring(0, id.indexOf('-'));
+                taskID = taskID.substring(taskID.indexOf('_') + 1);
+                String mcrObjID = id.substring(id.indexOf('-') + 1);
 
                 importMODSFromGVK(mcrObjID, taskID);
             }
         }
 
-        try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
             MCRUser user = MCRUserManager.getCurrentUser();
 
             TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
@@ -192,8 +192,8 @@ public class MCRShowWorkspaceController {
             model.put("availableVariables", availableVariables);
         }
 
-        LinkedHashMap<String, String> newActions = new LinkedHashMap<>();
-        Set<String> roles = new TreeSet<String>(MCRUserManager.getCurrentUser().getSystemRoleIDs());
+        Map<String, String> newActions = new LinkedHashMap<>();
+        Set<String> roles = new TreeSet<>(MCRUserManager.getCurrentUser().getSystemRoleIDs());
         for (String role : roles) {
             if (role.startsWith("wf_")) {
                 newActions.put(role,
@@ -212,10 +212,10 @@ public class MCRShowWorkspaceController {
 
     private void createNewTask(String mode, String objectType, HttpServletRequest request, List<String> messages) {
         if (objectType != null) {
-            try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
+            try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
                 String projectID = MCRConfiguration2.getStringOrThrow("MCR.SWF.Project.ID");
                 if (request.getSession(false) != null) {
-                    Map<String, Object> variables = new HashMap<String, Object>();
+                    Map<String, Object> variables = new HashMap<>();
                     variables.put(MCRBPMNMgr.WF_VAR_OBJECT_TYPE, objectType);
                     variables.put(MCRBPMNMgr.WF_VAR_PROJECT_ID, projectID);
                     variables.put(MCRBPMNMgr.WF_VAR_MODE, mode);
@@ -261,7 +261,7 @@ public class MCRShowWorkspaceController {
     private Response editObject(String mcrID, String taskID) {
         MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
 
-        HashMap<String, Object> model = new HashMap<String, Object>();
+        Map<String, Object> model = new HashMap<>();
         Viewable v = new Viewable("/workspace/fullpageEditor", model);
 
         Path wfFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);
@@ -278,7 +278,7 @@ public class MCRShowWorkspaceController {
         }
         model.put("sourceURI", sourceURI);
 
-        StringBuffer sbCancel = new StringBuffer(MCRFrontendUtil.getBaseURL() + "do/workspace/tasks");
+        StringBuffer sbCancel = new StringBuffer(MCRFrontendUtil.getBaseURL()).append("do/workspace/tasks");
         if (taskID != null) {
             sbCancel.append("#task_").append(taskID);
         }
@@ -305,14 +305,14 @@ public class MCRShowWorkspaceController {
     private Response editReservation(String mcrID, String taskID) {
         MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
 
-        HashMap<String, Object> model = new HashMap<String, Object>();
+        Map<String, Object> model = new HashMap<>();
         Viewable v = new Viewable("/workspace/fullpageEditor", model);
 
         Path wfFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);
         String sourceURI = wfFile.toUri().toString();
         model.put("sourceURI", sourceURI);
 
-        StringBuffer sbCancel = new StringBuffer(MCRFrontendUtil.getBaseURL() + "do/workspace/tasks");
+        StringBuffer sbCancel = new StringBuffer(MCRFrontendUtil.getBaseURL()).append("do/workspace/tasks");
         if (taskID != null) {
             sbCancel.append("#task_").append(taskID);
         }
@@ -351,8 +351,8 @@ public class MCRShowWorkspaceController {
 
     private void updateWFObjectMetadata(Task t) {
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
-        String txt = null;
-        MCRObjectID mcrObjID = null;
+        String txt;
+        MCRObjectID mcrObjID;
         MCRObject mcrObj;
         try {
             mcrObjID = MCRObjectID
@@ -418,7 +418,7 @@ public class MCRShowWorkspaceController {
         try {
             Attribute attrLic = xpathLic.evaluateFirst(mcrObj.createXML());
             if (attrLic != null) {
-                String licID = attrLic.getValue().substring(attrLic.getValue().indexOf("#") + 1);
+                String licID = attrLic.getValue().substring(attrLic.getValue().indexOf('#') + 1);
                 MCRCategory cat = MCRCategoryDAOFactory.obtainInstance()
                     .getCategory(MCRCategoryID.ofString("licenseinfo:" + licID), 0);
                 if (cat != null) {
@@ -431,8 +431,7 @@ public class MCRShowWorkspaceController {
                     }
                     sb.append("</td></tr><tr><td>");
                     if (optLabelIcon.isPresent()) {
-                        sb.append("<img src='" + MCRFrontendUtil.getBaseURL() + "images" + optLabelIcon.get().getText()
-                            + "' />");
+                        sb.append("<img src='" + MCRFrontendUtil.getBaseURL()).append("images").append(optLabelIcon.get().getText()).append("' />");
                     }
                     sb.append("</td><td>&nbsp;&nbsp;&nbsp;</td> <td style='text-align:justify'>");
                     if (optLabelText.isPresent()) {

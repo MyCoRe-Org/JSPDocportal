@@ -15,13 +15,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.Response;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,6 +27,12 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.Response;
+
 @Path("/do/save-webcontent")
 public class MCRSaveWebcontentController {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -39,19 +40,19 @@ public class MCRSaveWebcontentController {
     @POST
     public Response post(@Context HttpServletRequest request) {
         String referer = null;
-        try (MCRHibernateTransactionWrapper htw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
             if (MCRAccessManager.checkPermission("administrate-webcontent")) {
                 for (Object o :request.getParameterMap().keySet()) {
                     String s = o.toString();
                     if (s.startsWith("doSave_")) {
-                        String id = s.substring(s.indexOf("_") + 1);
+                        String id = s.substring(s.indexOf('_') + 1);
                         doSave(id, request);
                         break;
                     }
                     if (s.startsWith("doOpen_")) {
-                        String id = s.substring(s.indexOf("_") + 1);
+                        String id = s.substring(s.indexOf('_') + 1);
                         getOpenEditorsFromSession().add(id);
-                        HashMap<String, Object> model = new HashMap<>();
+                        Map<String, Object> model = new HashMap<>();
                         model.put("id",  id);
                         model.put("referer", request.getHeader("Referer"));
                         String file = request.getParameter("file_" + id);
@@ -63,7 +64,7 @@ public class MCRSaveWebcontentController {
                         
                     }
                     if (s.startsWith("doCancel_")) {
-                        String id = s.substring(s.indexOf("_") + 1);
+                        String id = s.substring(s.indexOf('_') + 1);
                         getOpenEditorsFromSession().remove(id);
                         break;
                     }
@@ -98,7 +99,7 @@ public class MCRSaveWebcontentController {
         @SuppressWarnings("unchecked")
         Set<String> openEditors = (Set<String>) MCRSessionMgr.getCurrentSession().get("open_webcontent_editors");
         if (openEditors == null) {
-            openEditors = new HashSet<String>();
+            openEditors = new HashSet<>();
             MCRSessionMgr.getCurrentSession().put("open_webcontent_editors", openEditors);
         }
         return openEditors;
@@ -112,7 +113,7 @@ public class MCRSaveWebcontentController {
         File fText = new File(dirSaveWebcontent, file);
 
         try {
-            InputStream is = null;
+            InputStream is;
             if (fText.exists()) {
                 is = new FileInputStream(fText);
             } else {
@@ -120,7 +121,7 @@ public class MCRSaveWebcontentController {
             }
             if (is != null) {
                 try (BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"))) {
-                    String line = null;
+                    String line;
                     while ((line = br.readLine()) != null) {
                         out.append("\n" + line);
                     }

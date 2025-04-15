@@ -83,7 +83,7 @@ public class MCRViewerController {
                 MCRSolrAuthenticationLevel.SEARCH);
             QueryResponse solrResponse = queryRequest.process(solrClient);
             SolrDocumentList solrResults = solrResponse.getResults();
-            if (solrResults.size() > 0) {
+            if (!solrResults.isEmpty()) {
                 SolrDocument solrDoc = solrResults.get(0);
                 model.put("recordIdentifier", String.valueOf(solrDoc.getFieldValue("recordIdentifier")));
                 model.put("mcrid", String.valueOf(solrDoc.getFieldValue("returnId")));
@@ -92,7 +92,7 @@ public class MCRViewerController {
                     String pdfProviderURL = String.valueOf(solrDoc.getFieldValue("ir.pdffulltext_url"));
                     model.put("pdfProviderURL", pdfProviderURL);
                     if (!model.containsKey("filePath")) {
-                        model.put("filePath", pdfProviderURL.substring(pdfProviderURL.lastIndexOf("/") + 1));
+                        model.put("filePath", pdfProviderURL.substring(pdfProviderURL.lastIndexOf('/') + 1));
                     }
                 } else {
                     model.put("doctype", "mets");

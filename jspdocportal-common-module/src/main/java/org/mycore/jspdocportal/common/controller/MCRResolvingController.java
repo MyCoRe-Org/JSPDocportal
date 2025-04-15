@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -87,18 +88,23 @@ import jakarta.ws.rs.core.Response.Status;
 
 @jakarta.ws.rs.Path("/resolve/{path: .*}")
 public class MCRResolvingController  {
+    private static final String STRUCTMAP_LOGICAL = "LOGICAL";
+    private static final String STRUCTMAP_PHYSICAL = "PHYSICAL";
+    private static final String XPATH_STRUCTMAP_PHYSICAL = "/mets:mets/mets:structMap[@TYPE='PHYSICAL']";
     private static final Logger LOGGER = LogManager.getLogger();
+    
+    private static final Namespace NS_METS = Namespace.getNamespace("mets", "http://www.loc.gov/METS/");
+    private static final Namespace NS_XLINK = Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink");
     
     protected enum OpenBy {
         PAGE, NR, PART, EMPTY
-    };
+    }
 
     @GET
     public Response doGet(@PathParam("path") String uri, @Context HttpServletRequest request) {
         String path[] = uri.split("/", -1);
         if (path.length < 2) {
-            return Response.status(Status.NOT_FOUND).encoding("UTF-8").entity(MCRTranslation.translate("Resolver.error.unknownUrlSchema")).type(MediaType.TEXT_PLAIN_TYPE).build();
-            
+            return Response.status(Status.NOT_FOUND).encoding(StandardCharsets.UTF_8.toString()).entity(MCRTranslation.translate("Resolver.error.unknownUrlSchema")).type(MediaType.TEXT_PLAIN_TYPE).build();
         }
         String key = path[0];
         String value = path[1];
@@ -131,7 +137,7 @@ public class MCRResolvingController  {
                 if (it.hasNext()) {
                     SolrDocument doc = it.next();
                     String id = String.valueOf(doc.getFirstValue("id"));
-                    return Response.status(Status.MOVED_PERMANENTLY).header("Location", MCRFrontendUtil.getBaseURL() + "resolve/id/" + id).build();
+                    return Response.status(Status.MOVED_PERMANENTLY).header("Location", createStringBufferWithPath(id).toString()).build();
                 }
             } catch (IOException | SolrServerException e) {
                 Response.status(Status.INTERNAL_SERVER_ERROR)
@@ -150,8 +156,8 @@ public class MCRResolvingController  {
             }
         } else {
             try {
-                value = URLDecoder.decode(URLDecoder.decode(value, "UTF-8"), "UTF-8");
-                String query = null;
+                value = URLDecoder.decode(URLDecoder.decode(value, StandardCharsets.UTF_8.toString()), StandardCharsets.UTF_8.toString());
+                String query;
                 if ("recordIdentifier".equals(key)) {
                     //allow both forms of recordIdentifier: rosdok_ppn12345 and rosdok/ppn12345
                     if (!value.contains("/")) {
@@ -180,13 +186,13 @@ public class MCRResolvingController  {
                 LOGGER.error(e);
             }
         }
-
+        String errorMessageNotFound = "No object with id '" + mcrID + "' found.";
         if (path.length == 2) {
                 // show metadata as docdetails view
-                try {
+            try {
                     MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
                     if (!MCRMetadataManager.exists(mcrObjID)) {
-                        throw new MCRException("No object with id '" + mcrID + "' found.");
+                        throw new MCRException(errorMessageNotFound);
                     }
                     String view = MCRConfiguration2.getString("MCR.JSPDocportal.Doctails.View").orElse("/docdetails");
                     
@@ -197,7 +203,7 @@ public class MCRResolvingController  {
                     
                 } catch (MCRException ex) {
                     return Response.status(Status.NOT_FOUND)
-                        .entity("No object with id '" + mcrID + "' found.")
+                        .entity(errorMessageNotFound)
                         .type(MediaType.TEXT_PLAIN_TYPE)
                         .build();
                 }
@@ -209,7 +215,7 @@ public class MCRResolvingController  {
             try {
                 MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
                 if (!MCRMetadataManager.exists(mcrObjID)) {
-                    throw new MCRException("No object with id '" + mcrID + "' found.");
+                    throw new MCRException(errorMessageNotFound);
                 }
                 String view = MCRConfiguration2.getString("MCR.JSPDocportal.Doctails.Print").orElse("/printdetails");
                 
@@ -220,7 +226,7 @@ public class MCRResolvingController  {
                 
             } catch (MCRException ex) {
                 return Response.status(Status.NOT_FOUND)
-                    .entity("No object with id '" + mcrID + "' found.")
+                    .entity(errorMessageNotFound)
                     .type(MediaType.TEXT_PLAIN_TYPE)
                     .build();
             }   
@@ -335,14 +341,14 @@ public class MCRResolvingController  {
                 MCRObjectID mcrMetaID = MCRObjectID.getInstance(mcrID);
                 label = MCRObjectID.getInstance(mcrMetaID.getProjectId() + "_derivate_" + label).toString();
             }
-            StringBuffer sbURL = null;
+            StringBuffer sbURL;
             if (path.length == 4) {
                 sbURL = createURLForMainDocInDerivateWithLabel(request, mcrID, label);
             } else {
                 sbURL = createRootURLForDerivateWithLabel(request, mcrID, label);
                 // display file on remaining path
                 for (int i = 4; i < path.length; i++) {
-                    sbURL.append("/").append(path[i]);
+                    sbURL.append('/').append(path[i]);
                 }
             }
             return Response.temporaryRedirect(URI.create(sbURL.toString())).build();
@@ -377,7 +383,7 @@ public class MCRResolvingController  {
                         if(c1 instanceof Element && ((Element) c1).getName().equals("maindoc")){
                           String maindoc = ((Element)c1).getTextNormalize();
                           StringBuffer sbPath = new StringBuffer(MCRFrontendUtil.getBaseURL());
-                          sbPath.append("file/").append(mcrID).append("/").append(der.getXLinkHref()).append("/").append(maindoc);
+                          sbPath.append("file/").append(mcrID).append('/').append(der.getXLinkHref()).append('/').append(maindoc);
                           return sbPath;
                         }
                     }
@@ -385,7 +391,7 @@ public class MCRResolvingController  {
             }
         }
 
-        return new StringBuffer(MCRFrontendUtil.getBaseURL() + "resolve/id/" + mcrID);
+        return createStringBufferWithPath(mcrID);
     }
 
     protected StringBuffer createRootURLForDerivateWithLabel(HttpServletRequest request, String mcrID, String label) {
@@ -399,32 +405,30 @@ public class MCRResolvingController  {
                     for(Content c1: der.getContentList()) {
                         if(c1 instanceof Element && ((Element) c1).getName().equals("maindoc")){
                           StringBuffer sbPath = new StringBuffer(MCRFrontendUtil.getBaseURL());
-                          return sbPath.append("file/").append(mcrID).append("/").append(der.getXLinkHref().toString());
+                          return sbPath.append("file/").append(mcrID).append('/').append(der.getXLinkHref());
                         }
                     }
                 }
             }
         }
 
-        return new StringBuffer(MCRFrontendUtil.getBaseURL() + "resolve/id/" + mcrID);
+        return createStringBufferWithPath(mcrID);
     }
     
     //TODO cleanup: first part (resolving from mets IDs) is the same as in method createURLForDFGViewer()
     protected String createURLForMyCoReViewer(HttpServletRequest request, String mcrID, OpenBy openBy, String nr) {
 
-        StringBuffer sbURL = new StringBuffer(MCRFrontendUtil.getBaseURL() + "resolve/id/" + mcrID);
+        StringBuffer sbURL = createStringBufferWithPath(mcrID);
         try {
             MCRObject o = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrID));
             for (MCRMetaEnrichedLinkID derMetaLink : o.getStructure().getDerivates()) {
-                if (derMetaLink.getClassifications().size() > 0 && 
+                if (!derMetaLink.getClassifications().isEmpty() && 
                     "MCRVIEWER_METS".equals(derMetaLink.getClassifications().get(0).getId())) {
                     MCRObjectID derID = derMetaLink.getXLinkHrefID();
                     Path root = MCRPath.getRootPath(derID.toString());
                     try (DirectoryStream<Path> ds = Files.newDirectoryStream(root)) {
                         for (Path p : ds) {
                             if (Files.isRegularFile(p) && p.getFileName().toString().endsWith(".mets.xml")) {
-                                Namespace nsMets = Namespace.getNamespace("mets", "http://www.loc.gov/METS/");
-                                Namespace nsXlink = Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink");
                                 Document docMETS = new MCRPathContent(p).asXML();
 
                                 Element eMETSPhysDiv = null;
@@ -434,53 +438,35 @@ public class MCRResolvingController  {
                                 if (!nr.isEmpty()) {
                                     if (openBy == OpenBy.PAGE) {
                                         eMETSPhysDiv = XPathFactory.instance()
-                                            .compile("/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
+                                            .compile(XPATH_STRUCTMAP_PHYSICAL
                                                 + "/mets:div[@TYPE='physSequence']/mets:div[starts-with(@ORDERLABEL, '"
-                                                + nr + "')]", Filters.element(), null, nsMets)
+                                                + nr + "')]", Filters.element(), null, NS_METS)
                                             .evaluateFirst(docMETS);
                                     } else if (openBy == OpenBy.NR) {
                                         eMETSPhysDiv = XPathFactory.instance()
-                                            .compile("/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
+                                            .compile(XPATH_STRUCTMAP_PHYSICAL
                                                 + "/mets:div[@TYPE='physSequence']/mets:div[@ORDER='" + nr
-                                                + "']", Filters.element(), null, nsMets)
+                                                + "']", Filters.element(), null, NS_METS)
                                             .evaluateFirst(docMETS);
                                     } else if (openBy == OpenBy.PART) {
-                                        eMETSPhysDiv = XPathFactory.instance()
-                                            .compile(
-                                                "/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
-                                                    + "//mets:div[@ID='" + nr + "']",
-                                                Filters.element(), null, nsMets)
-                                            .evaluateFirst(docMETS);
+                                        eMETSPhysDiv = retrieveStructMapDiv(STRUCTMAP_PHYSICAL, nr, docMETS);
                                         if (eMETSPhysDiv == null) {
-                                            Element eMETSLogDiv = XPathFactory.instance()
-                                                .compile(
-                                                    "/mets:mets/mets:structMap[@TYPE='LOGICAL']"
-                                                        + "//mets:div[@ID='" + nr + "']",
-                                                    Filters.element(), null, nsMets)
-                                                .evaluateFirst(docMETS);
+                                            Element eMETSLogDiv = retrieveStructMapDiv(STRUCTMAP_LOGICAL, nr, docMETS);
                                             if (eMETSLogDiv != null) {
                                                 Element eMETSSmLink = XPathFactory.instance().compile(
                                                     "/mets:mets/mets:structLink" + "//mets:smLink[@xlink:from='"
                                                         + eMETSLogDiv.getAttributeValue("ID") + "']",
-                                                    Filters.element(), null, nsMets, nsXlink)
+                                                    Filters.element(), null, NS_METS, NS_XLINK)
                                                     .evaluateFirst(docMETS);
                                                 if (eMETSSmLink != null) {
-                                                    eMETSPhysDiv = XPathFactory.instance()
-                                                        .compile(
-                                                            "/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
-                                                                + "//mets:div[@ID='"
-                                                                + eMETSSmLink.getAttributeValue("to",
-                                                                    nsXlink)
-                                                                + "']",
-                                                            Filters.element(), null, nsMets)
-                                                        .evaluateFirst(docMETS);
+                                                    eMETSPhysDiv = retrieveStructMapDiv(STRUCTMAP_PHYSICAL, eMETSSmLink.getAttributeValue("to", NS_XLINK), docMETS); 
                                                 }
                                             }
                                         }
                                     }
                                 }
                                 if (eMETSPhysDiv != null) {
-                                    sbURL.append("?_mcrviewer_start="+eMETSPhysDiv.getAttributeValue("ID"));
+                                    sbURL.append("?_mcrviewer_start=").append(eMETSPhysDiv.getAttributeValue("ID"));
                                 }
                             }
                         }
@@ -496,7 +482,7 @@ public class MCRResolvingController  {
         }
         String url = sbURL.toString();
         String urlMessage = !url.contains(".dv.mets.xml") ? url.replace("dfg-viewer.de/v3", "dfg-viewer.de/show") : url;
-        LOGGER.debug("created DFG-ViewerURL: {} -> {}", () -> request.getContextPath(), () -> urlMessage);
+        LOGGER.debug("created DFG-ViewerURL: {} -> {}", request::getContextPath, () -> urlMessage);
         return url;
     }
     
@@ -510,15 +496,13 @@ public class MCRResolvingController  {
         try {
             MCRObject o = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrID));
             for (MCRMetaEnrichedLinkID derMetaLink : o.getStructure().getDerivates()) {
-                if (derMetaLink.getClassifications().size() > 0 && 
+                if (!derMetaLink.getClassifications().isEmpty() && 
                     "DV_METS".equals(derMetaLink.getClassifications().get(0).getId())) {
                     MCRObjectID derID = derMetaLink.getXLinkHrefID();
                     Path root = MCRPath.getRootPath(derID.toString());
                     try (DirectoryStream<Path> ds = Files.newDirectoryStream(root)) {
                         for (Path p : ds) {
                             if (Files.isRegularFile(p) && p.getFileName().toString().endsWith(".mets.xml")) {
-                                Namespace nsMets = Namespace.getNamespace("mets", "http://www.loc.gov/METS/");
-                                Namespace nsXlink = Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink");
                                 Document docMETS = new MCRPathContent(p).asXML();
 
                                 Element eMETSPhysDiv = null;
@@ -528,46 +512,28 @@ public class MCRResolvingController  {
                                 if (!nr.isEmpty()) {
                                     if (openBy == OpenBy.PAGE) {
                                         eMETSPhysDiv = XPathFactory.instance()
-                                            .compile("/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
+                                            .compile(XPATH_STRUCTMAP_PHYSICAL
                                                 + "/mets:div[@TYPE='physSequence']/mets:div[starts-with(@ORDERLABEL, '"
-                                                + nr + "')]", Filters.element(), null, nsMets)
+                                                + nr + "')]", Filters.element(), null, NS_METS)
                                             .evaluateFirst(docMETS);
                                     } else if (openBy == OpenBy.NR) {
                                         eMETSPhysDiv = XPathFactory.instance()
-                                            .compile("/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
+                                            .compile(XPATH_STRUCTMAP_PHYSICAL
                                                 + "/mets:div[@TYPE='physSequence']/mets:div[@ORDER='" + nr
-                                                + "']", Filters.element(), null, nsMets)
+                                                + "']", Filters.element(), null, NS_METS)
                                             .evaluateFirst(docMETS);
                                     } else if (openBy == OpenBy.PART) {
-                                        eMETSPhysDiv = XPathFactory.instance()
-                                            .compile(
-                                                "/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
-                                                    + "//mets:div[@ID='" + nr + "']",
-                                                Filters.element(), null, nsMets)
-                                            .evaluateFirst(docMETS);
+                                        eMETSPhysDiv = retrieveStructMapDiv(STRUCTMAP_PHYSICAL, nr, docMETS);
                                         if (eMETSPhysDiv == null) {
-                                            Element eMETSLogDiv = XPathFactory.instance()
-                                                .compile(
-                                                    "/mets:mets/mets:structMap[@TYPE='LOGICAL']"
-                                                        + "//mets:div[@ID='" + nr + "']",
-                                                    Filters.element(), null, nsMets)
-                                                .evaluateFirst(docMETS);
+                                            Element eMETSLogDiv = retrieveStructMapDiv(STRUCTMAP_LOGICAL, nr, docMETS);
                                             if (eMETSLogDiv != null) {
                                                 Element eMETSSmLink = XPathFactory.instance().compile(
                                                     "/mets:mets/mets:structLink" + "//mets:smLink[@xlink:from='"
                                                         + eMETSLogDiv.getAttributeValue("ID") + "']",
-                                                    Filters.element(), null, nsMets, nsXlink)
+                                                    Filters.element(), null, NS_METS, NS_XLINK)
                                                     .evaluateFirst(docMETS);
                                                 if (eMETSSmLink != null) {
-                                                    eMETSPhysDiv = XPathFactory.instance()
-                                                        .compile(
-                                                            "/mets:mets/mets:structMap[@TYPE='PHYSICAL']"
-                                                                + "//mets:div[@ID='"
-                                                                + eMETSSmLink.getAttributeValue("to",
-                                                                    nsXlink)
-                                                                + "']",
-                                                            Filters.element(), null, nsMets)
-                                                        .evaluateFirst(docMETS);
+                                                    eMETSPhysDiv = retrieveStructMapDiv(STRUCTMAP_PHYSICAL, eMETSSmLink.getAttributeValue("to", NS_XLINK), docMETS); 
                                                 }
                                             }
                                         }
@@ -578,7 +544,7 @@ public class MCRResolvingController  {
                                     sbURL = new StringBuffer(MCRConfiguration2.getString("MCR.JSPDocportal.DFG-Viewer.BaseURL").orElseThrow().trim());
                                     sbURL.append("?set[mets]=");
                                     sbURL.append(URLEncoder.encode(MCRFrontendUtil.getBaseURL() + "file/" + mcrID + "/"
-                                        + p.toString().replace(":/", "/"), "UTF-8"));
+                                        + p.toString().replace(":/", "/"), StandardCharsets.UTF_8.toString()));
                                     if (eMETSPhysDiv != null) {
                                         String order = eMETSPhysDiv.getAttributeValue("ORDER");
                                         if (order != null) {
@@ -588,7 +554,7 @@ public class MCRResolvingController  {
                                     }
                                 } else if (eMETSPhysDiv != null) {
                                     // return thumb image
-                                    List<Element> l = (List<Element>) eMETSPhysDiv.getChildren();
+                                    List<Element> l = eMETSPhysDiv.getChildren();
                                     String fileid = null;
                                     for (Element e : l) {
                                         if (e.getAttributeValue("FILEID").startsWith("THUMB")) {
@@ -604,10 +570,10 @@ public class MCRResolvingController  {
                                         // </mets:file>
                                         Element eFLocat = XPathFactory.instance()
                                             .compile("//mets:file[@ID='" + fileid + "']/mets:FLocat",
-                                                Filters.element(), null, nsMets)
+                                                Filters.element(), null, NS_METS)
                                             .evaluateFirst(docMETS);
                                         if (eFLocat != null) {
-                                            sbURL = new StringBuffer(eFLocat.getAttributeValue("href", nsXlink));
+                                            sbURL = new StringBuffer(eFLocat.getAttributeValue("href", NS_XLINK));
                                         }
                                     }
                                 }
@@ -626,7 +592,21 @@ public class MCRResolvingController  {
         }
         String url = sbURL.toString();
         String urlMessage = !url.contains(".dv.mets.xml") ? url.replace("dfg-viewer.de/v3", "dfg-viewer.de/show") : url;
-        LOGGER.debug("created DFG-ViewerURL: {} -> {}", () -> request.getContextPath(), () -> urlMessage);
+        LOGGER.debug("created DFG-ViewerURL: {} -> {}", request::getContextPath, () -> urlMessage);
         return url;
     }
+    
+    private Element retrieveStructMapDiv(String structMapType, String id, Document docMETS) {
+        return XPathFactory.instance()
+            .compile(
+                "/mets:mets/mets:structMap[@TYPE='" + structMapType + "']"
+                    + "//mets:div[@ID='" + id + "']",
+                Filters.element(), null, NS_METS)
+            .evaluateFirst(docMETS);
+    }
+    
+    private StringBuffer createStringBufferWithPath(String mcrID) {
+        return new StringBuffer(MCRFrontendUtil.getBaseURL()).append("resolve/id/").append(mcrID);
+    }
+    
 }
