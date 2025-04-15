@@ -72,6 +72,7 @@ public class MCRJSPServletContextListener implements ServletContextListener {
     }
 
     @Override
+    @SuppressWarnings("PMD.UseProperClassLoader")
     public void contextDestroyed(ServletContextEvent sce) {
         LOGGER.debug("Application {} stopped", () -> sce.getServletContext().getServletContextName());
 

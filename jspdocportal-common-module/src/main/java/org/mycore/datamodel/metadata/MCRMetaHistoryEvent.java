@@ -116,7 +116,7 @@ public class MCRMetaHistoryEvent extends MCRMetaHistoryDate {
         }
 
         org.jdom2.Element elm = super.createXML();
-        if ((event = event.trim()).length() != 0) {
+        if (!event.isBlank()) {
             elm.addContent(new org.jdom2.Element("event").addContent(event));
         }
 

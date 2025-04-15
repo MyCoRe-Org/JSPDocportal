@@ -119,9 +119,10 @@ public class MCRSaveWebcontentController {
 
             if (is != null) {
                 try (BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-                    String line;
-                    while ((line = br.readLine()) != null) {
+                    String line = br.readLine();
+                    while (line != null) {
                         out.append("\n" + line);
+                        line = br.readLine();
                     }
                 } catch (UnsupportedEncodingException | FileNotFoundException e) {
                     // do nothing

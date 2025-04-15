@@ -107,23 +107,7 @@ public class MCRIndexBrowserController {
                 MCRSearchResultDataBean.addSearchresultToSession(request, mcrSearchResult);
 
                 QueryResponse response = mcrSearchResult.getSolrQueryResponse();
-                if (response != null) {
-                    SolrDocumentList solrResults = response.getResults();
-
-                    List<FacetField> facets = response.getFacetFields();
-                    secondSelector.clear();
-                    if (solrResults.getNumFound() > 20 || select.length() > 1) {
-                        for (Count c : facets.get(0).getValues()) {
-                            if (c.getCount() > 0) {
-                                secondSelector.put(c.getName(), c.getCount());
-                            }
-                        }
-                    }
-                    if (solrResults.getNumFound() > 20 && select.length() <= 1) {
-                        // do not display entries, show 2nd selector instead
-                        mcrSearchResult.getEntries().clear();
-                    }
-                }
+                processResponse(select, response);
             }
             model.put("firstSelector", firstSelector);
             model.put("secondSelector", secondSelector);
@@ -131,6 +115,26 @@ public class MCRIndexBrowserController {
             return Response.ok(v).build();
         } catch (MCRConfigurationException e) {
             return Response.temporaryRedirect(URI.create(request.getContextPath() + "/")).build();
+        }
+    }
+
+    private void processResponse(String select, QueryResponse response) {
+        if (response != null) {
+            SolrDocumentList solrResults = response.getResults();
+
+            List<FacetField> facets = response.getFacetFields();
+            secondSelector.clear();
+            if (solrResults.getNumFound() > 20 || select.length() > 1) {
+                for (Count c : facets.get(0).getValues()) {
+                    if (c.getCount() > 0) {
+                        secondSelector.put(c.getName(), c.getCount());
+                    }
+                }
+            }
+            if (solrResults.getNumFound() > 20 && select.length() <= 1) {
+                // do not display entries, show 2nd selector instead
+                mcrSearchResult.getEntries().clear();
+            }
         }
     }
 }

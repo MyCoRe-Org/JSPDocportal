@@ -52,7 +52,7 @@ public class BrowseController {
     public static final int DEFAULT_ROWS = 20;
 
     private MCRSearchResultDataBean result;
-    
+
     @GET
     public Viewable get(@PathParam("mask") String mask,
         @Context HttpServletRequest request) {
@@ -64,24 +64,7 @@ public class BrowseController {
             result = MCRSearchResultDataBean.retrieveSearchresultFromSession(request, request.getParameter("_search"));
         }
 
-        if (request.getParameter("q") != null) {
-            result = new MCRSearchResultDataBean();
-            result.setAction("browse");
-            result.setQuery(request.getParameter("q"));
-            result.setMask("");
-        }
-
-        if (request.getParameter("searchField") != null && request.getParameter("searchValue") != null) {
-            result = new MCRSearchResultDataBean();
-            result.setAction("browse");
-            result.setQuery("+" + request.getParameter("searchField") + ":"
-                    + ClientUtils.escapeQueryChars(request.getParameter("searchValue")));
-            result.setMask("");
-        }
-        if (request.getParameter("sortField") != null && request.getParameter("sortValue") != null) {
-            result.setSort(request.getParameter("sortField") + " " + request.getParameter("sortValue"));
-            result.setStart(0);
-        }
+        processQueryAndSearchParams(request);
 
         if (result == null) {
             result = new MCRSearchResultDataBean();
@@ -93,7 +76,7 @@ public class BrowseController {
             result.setSort(request.getParameter("_sort"));
             result.setStart(0);
         } else {
-            if(StringUtils.isEmpty(result.getSort())) {
+            if (StringUtils.isEmpty(result.getSort())) {
                 result.setSort("modified desc");
             }
         }
@@ -104,28 +87,61 @@ public class BrowseController {
             result.setAction("do/browse/" + mask);
             result.getFacetFields().clear();
             for (String ff : MCRConfiguration2.getString("MCR.Browse." + mask + ".FacetFields").orElse("")
-                    .split(",")) {
+                .split(",")) {
                 if (!ff.isBlank()) {
                     result.getFacetFields().add(ff.trim());
                 }
             }
         }
 
+        processFilterParams(request);
+        processStartAndRowParam(request);
+
+        if (result.getSolrQuery() != null) {
+            MCRSearchResultDataBean.addSearchresultToSession(request, result);
+            result.doSearch();
+        }
+        model.put("result", result);
+        model.put("util", new Util());
+
+        return v;
+    }
+
+    private void processQueryAndSearchParams(HttpServletRequest request) {
+        if (request.getParameter("q") != null) {
+            result = new MCRSearchResultDataBean();
+            result.setAction("browse");
+            result.setQuery(request.getParameter("q"));
+            result.setMask("");
+        }
+
+        if (request.getParameter("searchField") != null && request.getParameter("searchValue") != null) {
+            result = new MCRSearchResultDataBean();
+            result.setAction("browse");
+            result.setQuery("+" + request.getParameter("searchField") + ":"
+                + ClientUtils.escapeQueryChars(request.getParameter("searchValue")));
+            result.setMask("");
+        }
+        if (request.getParameter("sortField") != null && request.getParameter("sortValue") != null) {
+            result.setSort(request.getParameter("sortField") + " " + request.getParameter("sortValue"));
+            result.setStart(0);
+        }
+    }
+
+    private void processFilterParams(HttpServletRequest request) {
         if (result != null) {
             if (request.getParameter("_add-filter") != null) {
                 for (String s : request.getParameterValues("_add-filter")) {
-                	if(!s.trim().endsWith(":")) {
-                	    if(s.contains(":")) {
-                	        String key = s.substring(0, s.indexOf(':'));
-                	        String values = s.substring(s.indexOf(':')+1);
-                	        for(String val: values.split("\\s")) {
-                	            String f = key+":"+val;
-                	            if (!result.getFilterQueries().contains(f)) {
-                                    result.getFilterQueries().add(f);
-                                }
-                	        }
-                	    }
-                	}
+                    if (!s.trim().endsWith(":") && s.contains(":")) {
+                        String key = s.substring(0, s.indexOf(':'));
+                        String values = s.substring(s.indexOf(':') + 1);
+                        for (String val : values.split("\\s")) {
+                            String f = key + ":" + val;
+                            if (!result.getFilterQueries().contains(f)) {
+                                result.getFilterQueries().add(f);
+                            }
+                        }
+                    }
                 }
             }
 
@@ -134,13 +150,15 @@ public class BrowseController {
                     result.getFilterQueries().remove(s);
                 }
             }
+        }
+    }
 
-            if (request.getParameter("_start") != null) {
-                try {
-                    result.setStart(Integer.parseInt(request.getParameter("_start")));
-                } catch (NumberFormatException nfe) {
-                    result.setStart(0);
-                }
+    private void processStartAndRowParam(HttpServletRequest request) {
+        if (request.getParameter("_start") != null) {
+            try {
+                result.setStart(Integer.parseInt(request.getParameter("_start")));
+            } catch (NumberFormatException nfe) {
+                result.setStart(0);
             }
         }
 
@@ -154,35 +172,28 @@ public class BrowseController {
                 // do nothing, use default
             }
         }
-        if (result.getSolrQuery() != null) {
-            MCRSearchResultDataBean.addSearchresultToSession(request, result);
-            result.doSearch();
-        }
-        model.put("result",  result);
-        model.put("util",  new Util());
-
-        return v;
     }
-
 
     //TODO move to jsp tag
-   public class Util{
-    public String calcFacetOutputString(String facetKey, String facetValue) {
-        String result = facetValue;
-        if (facetKey.contains("_msg.facet")) {
-            result = MCRTranslation.translate("Browse.Facet." + facetKey.replace("_msg.facet", "") + "." + facetValue);
-        }
-        if (facetKey.contains("_class.facet")) {
-            MCRCategory categ = MCRCategoryDAOFactory.obtainInstance().getCategory(MCRCategoryID.ofString(facetValue),
-                    0);
-            if (categ != null) {
-                result = categ.getCurrentLabel().get().getText();
+    public class Util {
+        public String calcFacetOutputString(String facetKey, String facetValue) {
+            String result = facetValue;
+            if (facetKey.contains("_msg.facet")) {
+                result =
+                    MCRTranslation.translate("Browse.Facet." + facetKey.replace("_msg.facet", "") + "." + facetValue);
             }
+            if (facetKey.contains("_class.facet")) {
+                MCRCategory categ =
+                    MCRCategoryDAOFactory.obtainInstance().getCategory(MCRCategoryID.ofString(facetValue),
+                        0);
+                if (categ != null) {
+                    result = categ.getCurrentLabel().get().getText();
+                }
+            }
+
+            return result;
+
         }
-
-        return result;
-
     }
-   }
 
 }

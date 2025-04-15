@@ -265,76 +265,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
 
             //load derivates in the order specified in MCRObject
             Path objDir = objectFile.getParent().resolve(id);
-            if (Files.exists(objDir)) {
-                for (MCRMetaLinkID derLinkID : derivateIDs) {
-                    MCRObjectID derID = derLinkID.getXLinkHrefID();
-                    LOGGER.info(" ... processing derivate {}", derID);
-                    if (MCRMetadataManager.exists(derID)) {
-                        try {
-                            MCRDerivateCommands.delete(derID.toString());
-                        } catch (MCRPersistenceException mpe) {
-                            LOGGER.error("Could not delete derivate {}", derID, mpe);
-                        }
-                    }
-                    final Path f = objDir.resolve(derID.toString() + ".xml");
-                    LOGGER.info("Loading derivate {} : file exists?: {}", 
-                        () -> f.toAbsolutePath(),
-                        () -> Files.exists(f));
-
-                    MCRDerivate mcrDer = new MCRDerivate(f.toUri());
-                    mcrDer.setImportMode(true); //true = servdates are taken from xml file;
-
-                    // override creation dates with the information from the xml file
-                    Date dateCreated = mcrDer.getService().getDate("createdate");
-                    Files.walkFileTree(objDir.resolve(derID.toString()), new SimpleFileVisitor<>() {
-                        @Override
-                        public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs)
-                            throws IOException {
-                            if (attrs.creationTime().toMillis() > dateCreated.getTime()) {
-                                BasicFileAttributeView basicView = Files.getFileAttributeView(dir,
-                                    BasicFileAttributeView.class);
-                                basicView.setTimes(null, null, FileTime.fromMillis(dateCreated.getTime()));
-                            }
-                            return FileVisitResult.CONTINUE;
-                        }
-
-                        @Override
-                        public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
-                            throws IOException {
-                            LOGGER.info("Update create date of file: {}:{}", file::toString, attrs::creationTime);
-                            if (attrs.creationTime().toMillis() > dateCreated.getTime()) {
-                                BasicFileAttributeView basicView = Files.getFileAttributeView(file,
-                                    BasicFileAttributeView.class);
-                                basicView.setTimes(null, null, FileTime.fromMillis(dateCreated.getTime()));
-                            }
-                            BasicFileAttributeView basicView = Files.getFileAttributeView(file,
-                                BasicFileAttributeView.class);
-                            FileTime creationTime = basicView.readAttributes().creationTime();
-                            LOGGER.info("   -------------> {}", creationTime);
-                            return FileVisitResult.CONTINUE;
-                        }
-                    });
-
-                    if (MCRMetadataManager.exists(derID)) {
-                        MCRDerivateCommands.updateFromFile(f.toAbsolutePath().toString());
-                    } else {
-                        MCRDerivateCommands.loadFromFile(f.toAbsolutePath().toString());
-                    }
-
-                    /*
-                    //set ACLs
-                    while (mcrDer.getService().getRulesSize() > 0) {
-                        MCRMetaAccessRule rule = mcrDer.getService().getRule(0);
-                        String permission = mcrDer.getService().getRulePermission(0);
-                        MCRAccessManager.updateRule(derID, permission, rule.getCondition(), "");
-                        mcrDer.getService().removeRule(0);
-                    }
-                    */
-                    if (mcrDer.getService().getRulesSize() > 0) {
-                        LOGGER.warn("ACLS for {} ignored.", mcrDer::getId);
-                    }
-                }
-            }
+            processDerivates(derivateIDs, objDir);
 
             //set AccessRules
             /*
@@ -351,6 +282,79 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
             }
         } catch (MCRAccessException | JDOMException | IOException e) {
             LOGGER.error(e);
+        }
+    }
+
+    private static void processDerivates(List<MCRMetaLinkID> derivateIDs, Path objDir)
+        throws MCRAccessException, IOException, JDOMException {
+        if (Files.exists(objDir)) {
+            for (MCRMetaLinkID derLinkID : derivateIDs) {
+                MCRObjectID derID = derLinkID.getXLinkHrefID();
+                LOGGER.info(" ... processing derivate {}", derID);
+                if (MCRMetadataManager.exists(derID)) {
+                    try {
+                        MCRDerivateCommands.delete(derID.toString());
+                    } catch (MCRPersistenceException mpe) {
+                        LOGGER.error("Could not delete derivate {}", derID, mpe);
+                    }
+                }
+                final Path f = objDir.resolve(derID.toString() + ".xml");
+                LOGGER.info("Loading derivate {} : file exists?: {}",
+                    f::toAbsolutePath, () -> Files.exists(f));
+
+                MCRDerivate mcrDer = new MCRDerivate(f.toUri());
+                mcrDer.setImportMode(true); //true = servdates are taken from xml file;
+
+                // override creation dates with the information from the xml file
+                Date dateCreated = mcrDer.getService().getDate("createdate");
+                Files.walkFileTree(objDir.resolve(derID.toString()), new SimpleFileVisitor<>() {
+                    @Override
+                    public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs)
+                        throws IOException {
+                        if (attrs.creationTime().toMillis() > dateCreated.getTime()) {
+                            BasicFileAttributeView basicView = Files.getFileAttributeView(dir,
+                                BasicFileAttributeView.class);
+                            basicView.setTimes(null, null, FileTime.fromMillis(dateCreated.getTime()));
+                        }
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    @Override
+                    public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
+                        throws IOException {
+                        LOGGER.info("Update create date of file: {}:{}", file::toString, attrs::creationTime);
+                        if (attrs.creationTime().toMillis() > dateCreated.getTime()) {
+                            BasicFileAttributeView basicView = Files.getFileAttributeView(file,
+                                BasicFileAttributeView.class);
+                            basicView.setTimes(null, null, FileTime.fromMillis(dateCreated.getTime()));
+                        }
+                        BasicFileAttributeView basicView = Files.getFileAttributeView(file,
+                            BasicFileAttributeView.class);
+                        FileTime creationTime = basicView.readAttributes().creationTime();
+                        LOGGER.info("   -------------> {}", creationTime);
+                        return FileVisitResult.CONTINUE;
+                    }
+                });
+
+                if (MCRMetadataManager.exists(derID)) {
+                    MCRDerivateCommands.updateFromFile(f.toAbsolutePath().toString());
+                } else {
+                    MCRDerivateCommands.loadFromFile(f.toAbsolutePath().toString());
+                }
+
+                /*
+                //set ACLs
+                while (mcrDer.getService().getRulesSize() > 0) {
+                    MCRMetaAccessRule rule = mcrDer.getService().getRule(0);
+                    String permission = mcrDer.getService().getRulePermission(0);
+                    MCRAccessManager.updateRule(derID, permission, rule.getCondition(), "");
+                    mcrDer.getService().removeRule(0);
+                }
+                */
+                if (mcrDer.getService().getRulesSize() > 0) {
+                    LOGGER.warn("ACLS for {} ignored.", mcrDer::getId);
+                }
+            }
         }
     }
 
