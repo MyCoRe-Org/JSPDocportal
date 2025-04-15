@@ -110,38 +110,42 @@ public class MCRJSPMetsIIIFModsMetadataExtractor implements MCRMetsIIIFMetadataE
             MCRConstants.MODS_NAMESPACE);
         List<Element> eNames = xpName.evaluate(eMods);
         if (!eNames.isEmpty()) {
-            StringBuffer sbName = new StringBuffer();
-            for (Element eName : eNames) {
-                if (eNames.indexOf(eName) > 0) {
-                    sbName.append("; ");
-                }
-                for (Element eNamePart : eName.getChildren(ELEMENT_NAME__NAME_PART, MCRConstants.MODS_NAMESPACE)) {
-                    if ("family".equals(eNamePart.getAttributeValue(ATTRIBUTE_NAME__TYPE))) {
-                        sbName.append(eNamePart.getTextNormalize());
-                        sbName.append(", ");
-                    }
-
-                }
-                for (Element eNamePart : eName.getChildren(ELEMENT_NAME__NAME_PART, MCRConstants.MODS_NAMESPACE)) {
-                    if ("given".equals(eNamePart.getAttributeValue(ATTRIBUTE_NAME__TYPE))) {
-                        sbName.append(eNamePart.getTextNormalize());
-                    }
-                }
-                for (Element eNamePart : eName.getChildren(ELEMENT_NAME__NAME_PART, MCRConstants.MODS_NAMESPACE)) {
-                    if (null == eNamePart.getAttributeValue(ATTRIBUTE_NAME__TYPE)) {
-                        sbName.append(eNamePart.getTextNormalize());
-                    }
-                }
-                for (Element eNamePart : eName.getChildren(ELEMENT_NAME__NAME_PART, MCRConstants.MODS_NAMESPACE)) {
-                    if ("termsOfAddress".equals(eNamePart.getAttributeValue(ATTRIBUTE_NAME__TYPE))) {
-                        sbName.append(' ');
-                        sbName.append(eNamePart.getTextNormalize());
-                    }
-                }
-            }
-            return Optional.of(sbName.toString());
+            return Optional.of(processNames(eNames));
         }
         return Optional.absent();
+    }
+
+    private String processNames(List<Element> eNames) {
+        StringBuffer sbName = new StringBuffer();
+        for (Element eName : eNames) {
+            if (eNames.indexOf(eName) > 0) {
+                sbName.append("; ");
+            }
+            for (Element eNamePart : eName.getChildren(ELEMENT_NAME__NAME_PART, MCRConstants.MODS_NAMESPACE)) {
+                if ("family".equals(eNamePart.getAttributeValue(ATTRIBUTE_NAME__TYPE))) {
+                    sbName.append(eNamePart.getTextNormalize());
+                    sbName.append(", ");
+                }
+
+            }
+            for (Element eNamePart : eName.getChildren(ELEMENT_NAME__NAME_PART, MCRConstants.MODS_NAMESPACE)) {
+                if ("given".equals(eNamePart.getAttributeValue(ATTRIBUTE_NAME__TYPE))) {
+                    sbName.append(eNamePart.getTextNormalize());
+                }
+            }
+            for (Element eNamePart : eName.getChildren(ELEMENT_NAME__NAME_PART, MCRConstants.MODS_NAMESPACE)) {
+                if (null == eNamePart.getAttributeValue(ATTRIBUTE_NAME__TYPE)) {
+                    sbName.append(eNamePart.getTextNormalize());
+                }
+            }
+            for (Element eNamePart : eName.getChildren(ELEMENT_NAME__NAME_PART, MCRConstants.MODS_NAMESPACE)) {
+                if ("termsOfAddress".equals(eNamePart.getAttributeValue(ATTRIBUTE_NAME__TYPE))) {
+                    sbName.append(' ');
+                    sbName.append(eNamePart.getTextNormalize());
+                }
+            }
+        }
+        return sbName.toString();
     }
 
     /*
@@ -172,38 +176,42 @@ public class MCRJSPMetsIIIFModsMetadataExtractor implements MCRMetsIIIFMetadataE
             MCRConstants.MODS_NAMESPACE);
         List<Element> eTitles = xpTitle.evaluate(eMods);
         if (!eTitles.isEmpty()) {
-            StringBuffer sbTitle = new StringBuffer();
-            for (Element eTitle : eTitles) {
-                if (eTitle.getChild(ELEMENT_NAME__NON_SORT, MCRConstants.MODS_NAMESPACE) != null) {
-                    sbTitle.append(eTitle.getChildText(ELEMENT_NAME__NON_SORT, MCRConstants.MODS_NAMESPACE))
-                        .append(' ');
-                }
-                sbTitle.append(eTitle.getChildText(ELEMENT_NAME__TITLE, MCRConstants.MODS_NAMESPACE)).append(' ');
-                if (eTitle.getChild(ELEMENT_NAME__SUB_TITLE, MCRConstants.MODS_NAMESPACE) != null) {
-                    sbTitle.append(" : ")
-                        .append(eTitle.getChildText(ELEMENT_NAME__SUB_TITLE, MCRConstants.MODS_NAMESPACE));
-                }
-                if (eTitle.getChild(ELEMENT_NAME__PART_NUMBER, MCRConstants.MODS_NAMESPACE) != null
-                    || eTitle.getChild(ELEMENT_NAME__PART_NAME, MCRConstants.MODS_NAMESPACE) != null) {
-                    if (sbTitle.length() > 0) {
-                        sbTitle.append(" / ");
-                    }
-                    if (eTitle.getChild(ELEMENT_NAME__PART_NUMBER, MCRConstants.MODS_NAMESPACE) != null) {
-                        sbTitle.append(eTitle.getChildText(ELEMENT_NAME__PART_NUMBER, MCRConstants.MODS_NAMESPACE));
-                    }
-                    if (eTitle.getChild(ELEMENT_NAME__PART_NUMBER, MCRConstants.MODS_NAMESPACE) != null
-                        && eTitle.getChild(ELEMENT_NAME__PART_NAME, MCRConstants.MODS_NAMESPACE) != null) {
-                        sbTitle.append(" : ");
-                    }
-                    if (eTitle.getChild(ELEMENT_NAME__PART_NAME, MCRConstants.MODS_NAMESPACE) != null) {
-                        sbTitle.append(eTitle.getChildText(ELEMENT_NAME__PART_NAME, MCRConstants.MODS_NAMESPACE));
-                    }
-                }
-
-            }
-            return Optional.of(sbTitle.toString());
+            return Optional.of(processTitle(eTitles));
         }
         return Optional.absent();
+    }
+
+    private String processTitle(List<Element> eTitles) {
+        StringBuffer sbTitle = new StringBuffer();
+        for (Element eTitle : eTitles) {
+            if (eTitle.getChild(ELEMENT_NAME__NON_SORT, MCRConstants.MODS_NAMESPACE) != null) {
+                sbTitle.append(eTitle.getChildText(ELEMENT_NAME__NON_SORT, MCRConstants.MODS_NAMESPACE))
+                    .append(' ');
+            }
+            sbTitle.append(eTitle.getChildText(ELEMENT_NAME__TITLE, MCRConstants.MODS_NAMESPACE)).append(' ');
+            if (eTitle.getChild(ELEMENT_NAME__SUB_TITLE, MCRConstants.MODS_NAMESPACE) != null) {
+                sbTitle.append(" : ")
+                    .append(eTitle.getChildText(ELEMENT_NAME__SUB_TITLE, MCRConstants.MODS_NAMESPACE));
+            }
+            if (eTitle.getChild(ELEMENT_NAME__PART_NUMBER, MCRConstants.MODS_NAMESPACE) != null
+                || eTitle.getChild(ELEMENT_NAME__PART_NAME, MCRConstants.MODS_NAMESPACE) != null) {
+                if (sbTitle.length() > 0) {
+                    sbTitle.append(" / ");
+                }
+                if (eTitle.getChild(ELEMENT_NAME__PART_NUMBER, MCRConstants.MODS_NAMESPACE) != null) {
+                    sbTitle.append(eTitle.getChildText(ELEMENT_NAME__PART_NUMBER, MCRConstants.MODS_NAMESPACE));
+                }
+                if (eTitle.getChild(ELEMENT_NAME__PART_NUMBER, MCRConstants.MODS_NAMESPACE) != null
+                    && eTitle.getChild(ELEMENT_NAME__PART_NAME, MCRConstants.MODS_NAMESPACE) != null) {
+                    sbTitle.append(" : ");
+                }
+                if (eTitle.getChild(ELEMENT_NAME__PART_NAME, MCRConstants.MODS_NAMESPACE) != null) {
+                    sbTitle.append(eTitle.getChildText(ELEMENT_NAME__PART_NAME, MCRConstants.MODS_NAMESPACE));
+                }
+            }
+
+        }
+        return sbTitle.toString();
     }
 
     /*

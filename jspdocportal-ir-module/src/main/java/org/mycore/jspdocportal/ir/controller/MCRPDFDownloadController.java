@@ -136,12 +136,8 @@ public class MCRPDFDownloadController {
 
         List<String> errorMessages = new ArrayList<>();
         model.put("errorMessages", errorMessages);
-        model.put("requestURL", request.getRequestURL().toString());
 
-        String path = request.getPathInfo().replace("pdfdownload/recordIdentifier", "").replace("..", "");
-        while (path.startsWith("/")) {
-            path = path.substring(1);
-        }
+        String path = retrieveNormalizedPath(request);
         if (path.length() == 0) {
             return Response.temporaryRedirect(URI.create(request.getContextPath())).build();
         }
@@ -162,60 +158,15 @@ public class MCRPDFDownloadController {
 
             if (solrResults.getNumFound() > 0) {
                 String filename = recordIdentifier + PDF_EXTENSION;
-                model.put("filename", filename);
 
                 final Path resultPDF = HashedDirectoryStructure
                     .createOutputDirectory(calculateCacheDir(), recordIdentifier).resolve(filename);
                 boolean ready = Files.exists(resultPDF);
-                model.put("ready", ready);
 
-                if (ready) {
-                    model.put("filesize", String.format(Locale.GERMANY, "%1.1f%n MB",
-                        (double) Files.size(resultPDF) / 1024 / 1024));
-
-                    BasicFileAttributes attr = Files.readAttributes(resultPDF, BasicFileAttributes.class);
-                    FileTime fileTime = attr.creationTime();
-                    if (FileTime.fromMillis(0).equals(fileTime)) {
-                        fileTime = attr.lastModifiedTime();
-                    }
-                    model.put("filecreated", DTF.format(fileTime.toInstant().truncatedTo(ChronoUnit.SECONDS)));
-                } else {
-                    model.put("filesize", "O MB");
-                    model.put("filecreated", "unknown");
-                }
+                fillModel(model, request, resultPDF, filename, ready);
 
                 if (path.endsWith(PDF_EXTENSION) && ready && getProgress(servletContext, recordIdentifier) < 0) {
-                    // download pdf
-                    Path fCount = resultPDF.getParent().resolve(resultPDF.getFileName() + ".count");
-                    Files.write(fCount, ".".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE,
-                        StandardOpenOption.APPEND);
-
-                    StreamingOutput stream = new StreamingOutput() {
-                        @Override
-                        @SuppressWarnings("PMD.AvoidInstanceofChecksInCatchClause")
-                        public void write(OutputStream output) throws IOException, WebApplicationException {
-                            try {
-                                Files.copy(resultPDF, output);
-                            } catch (Exception e) {
-                                if (e instanceof IOException && "Connection reset by peer".equals(e.getMessage())) {
-                                    LOGGER.warn("PDF-Download of {} incomplete - 'Connection reset by peer'",
-                                        resultPDF);
-                                } else if (e.getCause() instanceof IOException
-                                    && "Connection reset by peer".equals(e.getCause().getMessage())) {
-                                    LOGGER.warn("PDF-Download of {} incomplete - 'Connection reset by peer'",
-                                        resultPDF);
-                                } else {
-                                    throw new WebApplicationException(
-                                        "PDF-Download of " + resultPDF.toString() + " failed.", e);
-                                }
-                            }
-                        }
-                    };
-
-                    return Response.ok(stream)
-                        .header("Content-Type", "application/pdf")
-                        .header("Content-Disposition", "attachment; filename=" + filename)
-                        .build();
+                    return downloadPDF(filename, resultPDF);
                 }
 
                 String mcrid = String.valueOf(solrResults.get(0).getFirstValue("returnId"));
@@ -244,6 +195,69 @@ public class MCRPDFDownloadController {
 
         Viewable v = new Viewable("/pdfdownload", model);
         return Response.ok(v).build();
+    }
+
+    private String retrieveNormalizedPath(HttpServletRequest request) {
+        String path = request.getPathInfo().replace("pdfdownload/recordIdentifier", "").replace("..", "");
+        while (path.startsWith("/")) {
+            path = path.substring(1);
+        }
+        return path;
+    }
+
+    private void fillModel(Map<String, Object> model, HttpServletRequest request, final Path resultPDF, String filename,
+        boolean ready) throws IOException {
+        model.put("ready", ready);
+        model.put("requestURL", request.getRequestURL().toString());
+        model.put("filename", filename);
+        if (ready) {
+            model.put("filesize", String.format(Locale.GERMANY, "%1.1f%n MB",
+                (double) Files.size(resultPDF) / 1024 / 1024));
+
+            BasicFileAttributes attr = Files.readAttributes(resultPDF, BasicFileAttributes.class);
+            FileTime fileTime = attr.creationTime();
+            if (FileTime.fromMillis(0).equals(fileTime)) {
+                fileTime = attr.lastModifiedTime();
+            }
+            model.put("filecreated", DTF.format(fileTime.toInstant().truncatedTo(ChronoUnit.SECONDS)));
+        } else {
+            model.put("filesize", "O MB");
+            model.put("filecreated", "unknown");
+        }
+    }
+
+    private Response downloadPDF(String filename, final Path resultPDF) throws IOException {
+        // download pdf
+        Path fCount = resultPDF.getParent().resolve(resultPDF.getFileName() + ".count");
+        Files.write(fCount, ".".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE,
+            StandardOpenOption.APPEND);
+
+        StreamingOutput stream = new StreamingOutput() {
+            @Override
+            @SuppressWarnings("PMD.AvoidInstanceofChecksInCatchClause")
+            public void write(OutputStream output) throws IOException, WebApplicationException {
+                try {
+                    Files.copy(resultPDF, output);
+                } catch (Exception e) {
+                    if (e instanceof IOException && "Connection reset by peer".equals(e.getMessage())) {
+                        LOGGER.warn("PDF-Download of {} incomplete - 'Connection reset by peer'",
+                            resultPDF);
+                    } else if (e.getCause() instanceof IOException
+                        && "Connection reset by peer".equals(e.getCause().getMessage())) {
+                        LOGGER.warn("PDF-Download of {} incomplete - 'Connection reset by peer'",
+                            resultPDF);
+                    } else {
+                        throw new WebApplicationException(
+                            "PDF-Download of " + resultPDF.toString() + " failed.", e);
+                    }
+                }
+            }
+        };
+
+        return Response.ok(stream)
+            .header("Content-Type", "application/pdf")
+            .header("Content-Disposition", "attachment; filename=" + filename)
+            .build();
     }
 
     public int getProgress(ServletContext servletContext, String recordIdentifier) {
