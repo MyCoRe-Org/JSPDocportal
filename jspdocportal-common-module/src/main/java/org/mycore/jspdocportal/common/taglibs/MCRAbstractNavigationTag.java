@@ -50,7 +50,7 @@ import jakarta.servlet.jsp.PageContext;
  *
  */
 public abstract class MCRAbstractNavigationTag extends MCRAbstractTag {
-	private static final Logger LOGGER = LogManager.getLogger(MCRAbstractNavigationTag.class);
+	private static final Logger LOGGER = LogManager.getLogger();
 	protected static final String NS_NAVIGATION = "http://www.mycore.org/jspdocportal/navigation";
 
 	protected String currentPath;

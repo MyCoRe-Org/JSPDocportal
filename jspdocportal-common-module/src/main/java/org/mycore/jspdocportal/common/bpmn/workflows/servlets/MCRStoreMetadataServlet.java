@@ -31,7 +31,7 @@ public class MCRStoreMetadataServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Document xml = (org.jdom2.Document) (req.getAttribute("MCRXEditorSubmission"));
+        Document xml = (Document) (req.getAttribute("MCRXEditorSubmission"));
         String mcrID = xml.getRootElement().getAttributeValue("ID");
         MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
         Path wfFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);

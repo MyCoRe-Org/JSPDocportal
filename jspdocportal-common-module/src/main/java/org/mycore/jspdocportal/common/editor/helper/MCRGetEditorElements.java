@@ -101,7 +101,7 @@ public class MCRGetEditorElements {
         Element retitems = new Element("items");
         List<MCRRole> groupIDs = MCRRoleManager.listSystemRoles();
         for (MCRRole groupId : groupIDs) {
-            org.jdom2.Element item = new org.jdom2.Element("item")
+            Element item = new Element("item")
                 .setAttribute("value", groupId.getName())
                 .setAttribute("label", groupId.getName());
             retitems.addContent(item);
@@ -117,7 +117,7 @@ public class MCRGetEditorElements {
             MCRRole group = itGroup.next();
             String id = group.getName();
             if (id.startsWith("create")) {
-                org.jdom2.Element item = new org.jdom2.Element("item").setAttribute("value", id).setAttribute("label",
+                Element item = new Element("item").setAttribute("value", id).setAttribute("label",
                         group.getName());
                 retitems.addContent(item);
             }

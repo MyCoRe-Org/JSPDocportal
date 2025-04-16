@@ -71,6 +71,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Deprecated
 public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
 
+    @java.io.Serial
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = LogManager.getLogger();

@@ -108,7 +108,7 @@ public class Navigations {
     * @param sce - the ServletContext
     */
     public static void loadNavigation(ServletContext sce) {
-        Navigations nav = Navigations.unmarshall(MCRResourceHelper.getResourceAsStream("/config/navigation.xml"));
+        Navigations nav = unmarshall(MCRResourceHelper.getResourceAsStream("/config/navigation.xml"));
         for (Navigation n : nav.getList()) {
             annotate(n);
         }

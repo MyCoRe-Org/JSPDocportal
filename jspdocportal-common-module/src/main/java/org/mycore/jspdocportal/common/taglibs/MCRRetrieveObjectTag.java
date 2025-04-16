@@ -177,7 +177,7 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
             }
             
             MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrid);
-            org.jdom2.Document doc;
+            Document doc;
             if (fromWorkflow) {
                 doc = MCRBPMNUtils.getWorkflowObjectXML(mcrObjID);
             } else {
