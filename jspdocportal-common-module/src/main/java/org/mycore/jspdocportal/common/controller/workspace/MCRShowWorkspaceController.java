@@ -431,7 +431,7 @@ public class MCRShowWorkspaceController {
                     }
                     sb.append("</td></tr><tr><td>");
                     if (optLabelIcon.isPresent()) {
-                        sb.append("<img src='" + MCRFrontendUtil.getBaseURL()).append("images").append(optLabelIcon.get().getText()).append("' />");
+                        sb.append("<img src='").append(MCRFrontendUtil.getBaseURL()).append("images").append(optLabelIcon.get().getText()).append("' />");
                     }
                     sb.append("</td><td>&nbsp;&nbsp;&nbsp;</td> <td style='text-align:justify'>");
                     if (optLabelText.isPresent()) {
@@ -451,7 +451,7 @@ public class MCRShowWorkspaceController {
     //TODO: -> JSP-Tag oder Model-Object + HTML im Frontend
     private void updateWFDerivateList(Task t) {
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
-        MCRObjectID mcrObjID = null;
+        MCRObjectID mcrObjID;
         try {
             mcrObjID = MCRObjectID
                 .getInstance(String.valueOf(ts.getVariable(t.getId(), MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID)));
@@ -465,19 +465,19 @@ public class MCRShowWorkspaceController {
 
         MCRObject mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
         StringBuffer result = new StringBuffer();
-        if (mcrObj != null && mcrObj.getStructure().getDerivates().size() > 0) {
+        if (mcrObj != null && !mcrObj.getStructure().getDerivates().isEmpty()) {
             Map<String, List<String>> derivateFiles = MCRBPMNUtils.getDerivateFiles(mcrObjID);
             for (MCRMetaLinkID derID : mcrObj.getStructure().getDerivates()) {
                 result.append("<div class=\"row\">");
                 result.append("\n  <div class=\"offset-1 col-3\">");
-                result.append("<span class=\"badge badge-pill badge-secondary\">" + derID.getXLinkHref() + "</span>");
+                result.append("<span class=\"badge badge-pill badge-secondary\">").append(derID.getXLinkHref()).append("</span>");
                 result.append("\n  </div>");
                 MCRDerivate der = MCRBPMNUtils.loadMCRDerivateFromWorkflowDirectory(mcrObjID,
                     derID.getXLinkHrefID());
                 result.append("\n  <div class=\"col-8\">");
                 if (der == null) {
                     result.append("\n  <div class=\"alert alert-danger\" role=\"alert\">");
-                    result.append("\n    " + MCRTranslation.translate("Editor.Common.derivate.error"));
+                    result.append("\n    ").append(MCRTranslation.translate("Editor.Common.derivate.error"));
                     result.append("\n  </div>");
                 } else {
                     if (!der.getDerivate().getClassifications().isEmpty()) {
@@ -486,13 +486,13 @@ public class MCRShowWorkspaceController {
                             Optional<MCRLabel> oLabel = MCRCategoryDAOFactory.obtainInstance()
                                 .getCategory(new MCRCategoryID(c.getClassId(), c.getCategId()), 0).getCurrentLabel();
                             if (oLabel.isPresent()) {
-                                result.append("[").append(oLabel.get().getText()).append("] ");
+                                result.append('[').append(oLabel.get().getText()).append("] ");
                             }
                         }
                         result.append("</strong>");
                     }
                     for (MCRMetaLangText txt : der.getDerivate().getTitles()) {
-                        result.append("<br />" + txt.getText());
+                        result.append("<br />").append(txt.getText());
                     }
                     result.append("\n    <ul style=\"list-style-type: none;\">");
                     for (String fileName : derivateFiles.get(derID.getXLinkHref())) {
@@ -508,12 +508,12 @@ public class MCRShowWorkspaceController {
                             result.append("<i class=\"fa fa-folder-open mr-3\"></i>");
                         }
                         result.append(
-                            "<a href=\"" + MCRFrontendUtil.getBaseURL() + "do/wffile/" + mcrObjID.toString() + "/"
-                                + der.getId().toString() + "/" + fileName + "\">" + fileName + "</a>");
+                            "<a href=\"").append(MCRFrontendUtil.getBaseURL()).append("do/wffile/").append(mcrObjID.toString()).append('/')
+                                .append(der.getId().toString()).append('/').append(fileName).append("\">").append(fileName).append("</a>");
 
                         if (fileName.equals(der.getDerivate().getInternals().getMainDoc())) {
-                            result.append("<span class=\"ml-3 text-secondary\" class=\"fa fa-star\" title=\""
-                                + MCRTranslation.translate("Editor.Common.derivate.maindoc") + "\"></span>");
+                            result.append("<span class=\"ml-3 text-secondary\" class=\"fa fa-star\" title=\"")
+                                  .append(MCRTranslation.translate("Editor.Common.derivate.maindoc")).append("\"></span>");
                         }
                         result.append("\n    </li>");
                     }

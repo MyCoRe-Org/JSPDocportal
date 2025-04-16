@@ -77,7 +77,7 @@ public class MCRProps2OptionsResolver implements URIResolver {
     public Source resolve(String href, String base) throws TransformerException {
         //List<Element> result = new ArrayList<>();
         Element result = new Element("select"); // this element will be used as container and not rendered in output
-        String key = href.substring(href.indexOf(":") + 1).trim();
+        String key = href.substring(href.indexOf(':') + 1).trim();
         String items = MCRConfiguration2.getString(key).orElse(",");
         if (items.equals(",")) {
             //empty option box

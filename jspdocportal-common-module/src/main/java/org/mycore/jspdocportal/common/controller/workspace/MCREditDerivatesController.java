@@ -58,6 +58,10 @@ import jakarta.ws.rs.core.Response;
 
 @jakarta.ws.rs.Path("/do/workspace/derivates")
 public class MCREditDerivatesController {
+    private static final String CLASSID__DERIVATE_TYPES = "derivate_types";
+    private static final String PREFIX_DERIVATE = "-derivate_";
+    private static final String PREFIX_TASK = "-task_";
+
     public enum Direction {
         MOVE_UP, MOVE_DOWN
     }
@@ -75,76 +79,76 @@ public class MCREditDerivatesController {
         for (BodyPart p : multiPart.getBodyParts()) {
 
             String s = ((FormDataContentDisposition) p.getContentDisposition()).getName();
-            if (s.startsWith("doCreateNewDerivate-task_")) {
+            if (s.startsWith("doCreateNewDerivate" + PREFIX_TASK)) {
                 taskid = s.substring(s.indexOf('_') + 1);
                 StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
                 mcrobjid = sv.getValue();
                 createNewDerivate(taskid, mcrobjid, multiPart);
             }
             //doMoveUpDerivate-task_${actionBean.taskid}-derivate_${derID}
-            if (s.startsWith("doMoveUpDerivate-")) {
-                int start = s.indexOf("task_") + 5;
+            if (s.startsWith("doMoveUpDerivate")) {
+                int start = s.indexOf(PREFIX_TASK) + 6;
                 taskid = s.substring(start, s.indexOf('-', start));
                 StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
                 mcrobjid = sv.getValue();
-                start = s.indexOf("derivate_") + 9;
+                start = s.indexOf(PREFIX_DERIVATE) + 10;
                 String derid = s.substring(start);
                 moveDerivate(mcrobjid, derid, Direction.MOVE_UP);
             }
 
             //doMoveDownDerivate-task_${actionBean.taskid}-derivate_${derID}
-            if (s.startsWith("doMoveDownDerivate-")) {
-                int start = s.indexOf("task_") + 5;
+            if (s.startsWith("doMoveDownDerivate")) {
+                int start = s.indexOf(PREFIX_TASK) + 6;
                 taskid = s.substring(start, s.indexOf('-', start));
                 StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
                 mcrobjid = sv.getValue();
-                start = s.indexOf("derivate_") + 9;
+                start = s.indexOf(PREFIX_DERIVATE) + 10;
                 String derid = s.substring(start);
                 moveDerivate(mcrobjid, derid, Direction.MOVE_DOWN);
             }
 
             //doSaveDerivateMeta-task_${actionBean.taskid}-derivate_${derID}
-            if (s.startsWith("doSaveDerivateMeta-")) {
-                int start = s.indexOf("task_") + 5;
+            if (s.startsWith("doSaveDerivateMeta")) {
+                int start = s.indexOf(PREFIX_TASK) + 6;
                 taskid = s.substring(start, s.indexOf('-', start));
                 StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
                 mcrobjid = sv.getValue();
-                start = s.indexOf("derivate_") + 9;
+                start = s.indexOf(PREFIX_DERIVATE) + 10;
                 String derid = s.substring(start);
                 saveDerivateMetadata(taskid, mcrobjid, derid, multiPart);
             }
 
             //doAddFile-task_${actionBean.taskid}-derivate_${derID}
-            if (s.startsWith("doAddFile-")) {
-                int start = s.indexOf("task_") + 5;
+            if (s.startsWith("doAddFile")) {
+                int start = s.indexOf(PREFIX_TASK) + 6;
                 taskid = s.substring(start, s.indexOf('-', start));
                 StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
                 mcrobjid = sv.getValue();
-                start = s.indexOf("derivate_") + 9;
+                start = s.indexOf(PREFIX_DERIVATE) + 10;
                 String derid = s.substring(start);
                 addFileToDerivate(taskid, mcrobjid, derid, multiPart);
             }
 
             //doDeleteFile-task_${actionBean.taskid}-derivate_${derID}-file_${f}
-            if (s.startsWith("doDeleteFile-")) {
-                int start = s.indexOf("task_") + 5;
+            if (s.startsWith("doDeleteFile")) {
+                int start = s.indexOf(PREFIX_TASK) + 6;
                 taskid = s.substring(start, s.indexOf('-', start));
                 StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
                 mcrobjid = sv.getValue();
-                start = s.indexOf("derivate_") + 9;
+                start = s.indexOf(PREFIX_DERIVATE) + 10;
                 String derid = s.substring(start, s.indexOf('-', start));
                 start = s.indexOf("file_") + 5;
                 String file = s.substring(start);
-                deleteFileFromDerivate(taskid, mcrobjid, derid, file);
+                deleteFileFromDerivate(mcrobjid, derid, file);
             }
 
             //doRenameFile-task_${actionBean.taskid}-derivate_${derID}-file_${f}
-            if (s.startsWith("doRenameFile-")) {
-                int start = s.indexOf("task_") + 5;
+            if (s.startsWith("doRenameFile")) {
+                int start = s.indexOf(PREFIX_TASK) + 6;
                 taskid = s.substring(start, s.indexOf('-', start));
                 StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
                 mcrobjid = sv.getValue();
-                start = s.indexOf("derivate_") + 9;
+                start = s.indexOf(PREFIX_DERIVATE) + 10;
                 String derid = s.substring(start, s.indexOf('-', start));
                 start = s.indexOf("file_") + 5;
                 String file = s.substring(start);
@@ -152,14 +156,14 @@ public class MCREditDerivatesController {
             }
 
             //doDeleteDerivate-task_${actionBean.taskid}-derivate_${derID}
-            if (s.startsWith("doDeleteDerivate-")) {
-                int start = s.indexOf("task_") + 5;
+            if (s.startsWith("doDeleteDerivate")) {
+                int start = s.indexOf(PREFIX_TASK) + 6;
                 taskid = s.substring(start, s.indexOf('-', start));
                 StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
                 mcrobjid = sv.getValue();
-                start = s.indexOf("derivate_") + 9;
+                start = s.indexOf(PREFIX_DERIVATE) + 10;
                 String derid = s.substring(start);
-                deleteDerivate(taskid, mcrobjid, derid);
+                deleteDerivate(mcrobjid, derid);
             }
         }
 
@@ -198,11 +202,11 @@ public class MCREditDerivatesController {
         String label = null;
         String title = null;
 
-        FormDataBodyPart fdbpLabel = multiPart.getField("saveDerivateMeta_label-task_" + taskid + "-derivate_" + derid);
+        FormDataBodyPart fdbpLabel = multiPart.getField("saveDerivateMeta_label"+ PREFIX_TASK + taskid + PREFIX_DERIVATE + derid);
         if (fdbpLabel != null) {
             label = StringUtils.trimToEmpty(fdbpLabel.getValue());
         }
-        FormDataBodyPart fdbpTitle = multiPart.getField("saveDerivateMeta_title-task_" + taskid + "-derivate_" + derid);
+        FormDataBodyPart fdbpTitle = multiPart.getField("saveDerivateMeta_title" + PREFIX_TASK + taskid + PREFIX_DERIVATE + derid);
         if (fdbpTitle != null) {
             title = StringUtils.trimToEmpty(fdbpTitle.getValue());
         }
@@ -211,10 +215,10 @@ public class MCREditDerivatesController {
             MCRObjectID.getInstance(derid));
 
         if (!StringUtils.isBlank(label)) {
-            der.getDerivate().getClassifications().removeIf(x -> "derivate_types".equals(x.getClassId()));
-            if (MCRCategoryDAOFactory.obtainInstance().exist(new MCRCategoryID("derivate_types", label))) {
+            der.getDerivate().getClassifications().removeIf(x -> CLASSID__DERIVATE_TYPES.equals(x.getClassId()));
+            if (MCRCategoryDAOFactory.obtainInstance().exist(new MCRCategoryID(CLASSID__DERIVATE_TYPES, label))) {
                 der.getDerivate().getClassifications()
-                    .add(new MCRMetaClassification("classification", 0, null, "derivate_types", label));
+                    .add(new MCRMetaClassification("classification", 0, null, CLASSID__DERIVATE_TYPES, label));
             } else {
                 LOGGER.warn("Classification 'derivate_types' does not contain a category with ID: {}", label);
             }
@@ -265,7 +269,7 @@ public class MCREditDerivatesController {
     }
 
     //File: addFile_file-task_${actionBean.taskid}-derivate_${derID}
-    private void deleteFileFromDerivate(String taskid, String mcrobjid, String derid, String fileName) {
+    private void deleteFileFromDerivate(String mcrobjid, String derid, String fileName) {
         MCRDerivate der = MCRBPMNUtils.loadMCRDerivateFromWorkflowDirectory(MCRObjectID.getInstance(mcrobjid),
             MCRObjectID.getInstance(derid));
         Path derDir = MCRBPMNUtils.getWorkflowDerivateDir(MCRObjectID.getInstance(mcrobjid), der.getId());
@@ -289,7 +293,7 @@ public class MCREditDerivatesController {
         Path derDir = MCRBPMNUtils.getWorkflowDerivateDir(MCRObjectID.getInstance(mcrobjid), der.getId());
         Path f = derDir.resolve(fileName);
         String newName = multiPart
-            .getField("renameFile_new-task_" + taskid + "-derivate_" + derid + "-file_" + fileName).getValue();
+            .getField("renameFile_new" + PREFIX_TASK + taskid + PREFIX_DERIVATE + derid + "-file_" + fileName).getValue();
 
         if (!StringUtils.isBlank(newName)) {
             newName = cleanupFileName(newName);
@@ -318,7 +322,7 @@ public class MCREditDerivatesController {
     }
 
     //File: addFile_file-task_${actionBean.taskid}-derivate_${derID}
-    private void deleteDerivate(String taskid, String mcrobjid, String derid) {
+    private void deleteDerivate(String mcrobjid, String derid) {
         MCRObject mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(MCRObjectID.getInstance(mcrobjid));
         MCRObjectID derID = MCRObjectID.getInstance(derid);
         mcrObj.getStructure().removeDerivate(derID);
@@ -329,7 +333,7 @@ public class MCREditDerivatesController {
 
     //File: addFile_file-task_${actionBean.taskid}-derivate_${derID}
     private void addFileToDerivate(String taskid, String mcrobjid, String derid, FormDataMultiPart multiPart) {
-        String field = "addFile_file-task_" + taskid + "-derivate_" + derid;
+        String field = "addFile_file" + PREFIX_TASK + taskid + PREFIX_DERIVATE + derid;
         String fileName = multiPart.getField(field).getFormDataContentDisposition().getFileName();
         try (InputStream is = multiPart.getField(field).getValueAs(InputStream.class)) {
             MCRDerivate der = MCRBPMNUtils.loadMCRDerivateFromWorkflowDirectory(MCRObjectID.getInstance(mcrobjid),
@@ -371,14 +375,12 @@ public class MCREditDerivatesController {
                     children.add(p);
                 }
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 LOGGER.error(e);
             }
 
             Collections.sort(children, new Comparator<>() {
                 @Override
                 public int compare(Path f0, Path f1) {
-                    // TODO Auto-generated method stub
                     return f0.toString().compareTo(f1.toString());
                 }
             });
@@ -400,19 +402,19 @@ public class MCREditDerivatesController {
     private void createNewDerivate(String taskid, String mcrobjid, FormDataMultiPart multiPart) {
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
         MCRDerivate der;
-        try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
             MCRWorkflowMgr wfm = MCRBPMNMgr
                 .getWorkflowMgr(ts.createTaskQuery().executionId(taskid).singleResult().getProcessInstanceId());
 
-            String label = multiPart.getField("newDerivate_label-task_" + taskid) == null
-                ? null : multiPart.getField("newDerivate_label-task_" + taskid).getValue();
-            String title = multiPart.getField("newDerivate_title-task_" + taskid) == null
-                ? null : multiPart.getField("newDerivate_title-task_" + taskid).getValue();
-            String fileName = multiPart.getField("newDerivate_file-task_" + taskid).getFormDataContentDisposition()
+            String label = multiPart.getField("newDerivate_label" + PREFIX_TASK + taskid) == null
+                ? null : multiPart.getField("newDerivate_label" + PREFIX_TASK + taskid).getValue();
+            String title = multiPart.getField("newDerivate_title" + PREFIX_TASK + taskid) == null
+                ? null : multiPart.getField("newDerivate_title" + PREFIX_TASK + taskid).getValue();
+            String fileName = multiPart.getField("newDerivate_file" + PREFIX_TASK + taskid).getFormDataContentDisposition()
                 .getFileName();
             der = wfm.createMCRDerivate(MCRObjectID.getInstance(mcrobjid), label, title);
 
-            try (InputStream is = multiPart.getField("newDerivate_file-task_" + taskid).getValueAs(InputStream.class)) {
+            try (InputStream is = multiPart.getField("newDerivate_file" + PREFIX_TASK + taskid).getValueAs(InputStream.class)) {
                 Path derDir = MCRBPMNUtils.getWorkflowDerivateDir(MCRObjectID.getInstance(mcrobjid), der.getId());
                 Files.createDirectories(derDir);
                 Files.copy(is, derDir.resolve(cleanupFileName(fileName)),
@@ -440,7 +442,7 @@ public class MCREditDerivatesController {
 
     public Map<String, String> calcDerivateLabels(String mode) {
         Map<String, String> result = new LinkedHashMap<>();
-        for (MCRCategory c : MCRCategoryDAOFactory.obtainInstance().getChildren(MCRCategoryID.rootID("derivate_types"))) {
+        for (MCRCategory c : MCRCategoryDAOFactory.obtainInstance().getChildren(MCRCategoryID.rootID(CLASSID__DERIVATE_TYPES))) {
             if (c.getCurrentLabel().isPresent()) {
                 Optional<MCRLabel> lblMode = c.getLabel("x-usedfor");
                 if (lblMode.isPresent()) {

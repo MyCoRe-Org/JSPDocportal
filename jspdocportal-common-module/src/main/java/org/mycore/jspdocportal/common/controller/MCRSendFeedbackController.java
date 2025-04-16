@@ -74,7 +74,6 @@ public class MCRSendFeedbackController {
         @FormParam("topicHeader") String topicHeader,
         @FormParam("message") String message,
         @FormParam("recipient") String recipient,
-        @FormParam("subject") String subject,
         @FormParam("returnURL") String returnURL,
         @FormParam("csrfToken") String csrfToken) {
         Map<String, Object> model = new HashMap<>();
@@ -111,29 +110,29 @@ public class MCRSendFeedbackController {
             }
 
             if (StringUtils.isNoneBlank(message, fromName) && isEmailValid) {
-                subject = MCRConfiguration2.getString("MCR.Workflow.Email.Feedback.Subject")
+                String subject = MCRConfiguration2.getString("MCR.Workflow.Email.Feedback.Subject")
                     .orElse("Feedbackformular zu {0}");
                 subject = subject.replace("{0}", topicHeader);
 
                 StringBuilder sbMailBody = new StringBuilder();
                 sbMailBody.append(subject);
-                sbMailBody.append("\n").append(StringUtils.repeat('=', subject.length()));
-                sbMailBody.append("\n");
+                sbMailBody.append('\n').append(StringUtils.repeat('=', subject.length()));
+                sbMailBody.append('\n');
                 sbMailBody.append("\nAngaben zu:");
                 sbMailBody.append("\n-----------");
-                sbMailBody.append("\n").append(topicHeader);
+                sbMailBody.append('\n').append(topicHeader);
                 sbMailBody.append("\n(").append(topicURL).append(')');
-                sbMailBody.append("\n");
+                sbMailBody.append('\n');
                 sbMailBody.append("\nAbsender:");
                 sbMailBody.append("\n---------");
-                sbMailBody.append("\n").append(fromName);
+                sbMailBody.append('\n').append(fromName);
                 if (StringUtils.isNotBlank(fromEmail)) {
                     sbMailBody.append(" (").append(fromEmail).append(')');
                 }
-                sbMailBody.append("\n");
+                sbMailBody.append('\n');
                 sbMailBody.append("\nNachricht:");
                 sbMailBody.append("\n----------");
-                sbMailBody.append("\n").append(message);
+                sbMailBody.append('\n').append(message);
 
                 List<InternetAddress> receiver = List
                     .of(new InternetAddress(MCRConfiguration2.getString("MCR.Workflow.Email.Feedback.Recipient").get()));

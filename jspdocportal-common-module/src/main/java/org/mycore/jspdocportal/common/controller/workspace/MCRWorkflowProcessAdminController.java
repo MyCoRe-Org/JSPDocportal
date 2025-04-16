@@ -2,6 +2,7 @@ package org.mycore.jspdocportal.common.controller.workspace;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,11 +30,11 @@ public class MCRWorkflowProcessAdminController {
     @POST
     public Response defaultRes(@QueryParam("objectType") String objectType,
         @Context HttpServletRequest request) {
-        try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
             for (Object o : request.getParameterMap().keySet()) {
                 String s = o.toString();
                 if (s.startsWith("doDeleteProcess_")) {
-                    String id = s.substring(s.indexOf("_") + 1);
+                    String id = s.substring(s.indexOf('_') + 1);
                     deleteProcessInstance(id);
                 }
             }
@@ -43,7 +44,7 @@ public class MCRWorkflowProcessAdminController {
 
     @GET
     public Response get(@QueryParam("objectType") String objectType) {
-        HashMap<String, Object> model = new HashMap<>();
+        Map<String, Object> model = new HashMap<>();
         String projectID = MCRConfiguration2.getString("MCR.SWF.Project.ID").orElse("");
         model.put("projectID", projectID);
         model.put("objectType", objectType);

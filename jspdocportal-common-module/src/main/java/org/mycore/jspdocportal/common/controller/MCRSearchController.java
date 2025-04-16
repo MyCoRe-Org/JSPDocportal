@@ -54,6 +54,8 @@ import jakarta.ws.rs.core.Response;
  */
 @Path("/do/search")
 public class MCRSearchController {
+    private static final String PARAM_MASK = "mask";
+
     private static final Logger LOGGER = LogManager.getLogger();
 
     public static final Namespace NS_XED = Namespace.getNamespace("xed", "http://www.mycore.de/xeditor");
@@ -72,14 +74,14 @@ public class MCRSearchController {
     
     @POST
     @Path("/{mask}")
-    public Response submit(@PathParam("mask") String mask, @Context HttpServletRequest request,
+    public Response submit(@PathParam(PARAM_MASK) String mask, @Context HttpServletRequest request,
         @Context HttpServletResponse response) {
         return defaultRes(mask, request, response);
     }
 
     @GET
     @Path("/{mask}")
-    public Response defaultRes(@PathParam("mask") String mask, @Context HttpServletRequest request,
+    public Response defaultRes(@PathParam(PARAM_MASK) String mask, @Context HttpServletRequest request,
         @Context HttpServletResponse response) {
         Map<String, Object> model = new HashMap<>();
         Viewable v = new Viewable(("/search/search"), model);
@@ -212,8 +214,8 @@ public class MCRSearchController {
             XMLOutputter xml = new XMLOutputter(Format.getPrettyFormat());
             String xmlMessage = xml.outputString(queryDoc);
             LOGGER.debug("{}", xmlMessage);
-            if (queryDoc.getRootElement().getAttribute("mask") != null) {
-                result.setMask(queryDoc.getRootElement().getAttributeValue("mask"));
+            if (queryDoc.getRootElement().getAttribute(PARAM_MASK) != null) {
+                result.setMask(queryDoc.getRootElement().getAttributeValue(PARAM_MASK));
             }
             if (!queryDoc.getRootElement().getChild("conditions").getChildren().isEmpty()) {
                 result.setMCRQueryXML(queryDoc);
@@ -261,7 +263,7 @@ public class MCRSearchController {
             result.doSearch();
         }
 
-        model.put("mask", mask);
+        model.put(PARAM_MASK, mask);
         model.put("showMask", showMask);
         model.put("showResults", showResults);
         model.put("result", result);
