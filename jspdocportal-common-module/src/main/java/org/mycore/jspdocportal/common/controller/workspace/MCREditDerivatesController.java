@@ -15,6 +15,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -63,6 +65,9 @@ public class MCREditDerivatesController {
     private static final String PREFIX_DERIVATE = "-derivate_";
     private static final String PREFIX_TASK = "-task_";
 
+    private static final Pattern PATTERN_ACTION = Pattern
+        .compile("(?<action>[^-]+)(-task_(?<task>[^-]+))?(-derivate_(?<derivate>[^-]+))?(-file_(?<file>[^-]+))?");
+
     public enum Direction {
         MOVE_UP, MOVE_DOWN
     }
@@ -74,101 +79,41 @@ public class MCREditDerivatesController {
     public Response submit(@Context HttpServletRequest request, FormDataMultiPart multiPart,
         @FormDataParam("taskid") String taskid, @FormDataParam("mcrobjid") String mcrobjid) {
 
-        RuntimeService rs = MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService();
         // classic request/form parameter:
         //for (Object o : request.getParameterMap().keySet()) {
         for (BodyPart p : multiPart.getBodyParts()) {
 
             String s = ((FormDataContentDisposition) p.getContentDisposition()).getName();
-            if (s.startsWith("doCreateNewDerivate")) {
-                int start = s.indexOf(PREFIX_TASK) + 6;
-                taskid = s.substring(start);
-                StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
-                mcrobjid = sv.getValue();
-                createNewDerivate(taskid, mcrobjid, multiPart);
-            }
-            //doMoveUpDerivate-task_${actionBean.taskid}-derivate_${derID}
-            if (s.startsWith("doMoveUpDerivate")) {
-                int start = s.indexOf(PREFIX_TASK) + 6;
-                taskid = s.substring(start, s.indexOf('-', start));
-                StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
-                mcrobjid = sv.getValue();
-                start = s.indexOf(PREFIX_DERIVATE) + 10;
-                String derid = s.substring(start);
-                moveDerivate(mcrobjid, derid, Direction.MOVE_UP);
-            }
+            ActionParams ap = ActionParams.ofString(s);
 
-            //doMoveDownDerivate-task_${actionBean.taskid}-derivate_${derID}
-            if (s.startsWith("doMoveDownDerivate")) {
-                int start = s.indexOf(PREFIX_TASK) + 6;
-                taskid = s.substring(start, s.indexOf('-', start));
-                StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
-                mcrobjid = sv.getValue();
-                start = s.indexOf(PREFIX_DERIVATE) + 10;
-                String derid = s.substring(start);
-                moveDerivate(mcrobjid, derid, Direction.MOVE_DOWN);
-            }
-
-            //doSaveDerivateMeta-task_${actionBean.taskid}-derivate_${derID}
-            if (s.startsWith("doSaveDerivateMeta")) {
-                int start = s.indexOf(PREFIX_TASK) + 6;
-                taskid = s.substring(start, s.indexOf('-', start));
-                StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
-                mcrobjid = sv.getValue();
-                start = s.indexOf(PREFIX_DERIVATE) + 10;
-                String derid = s.substring(start);
-                saveDerivateMetadata(taskid, mcrobjid, derid, multiPart);
-            }
-
-            //doAddFile-task_${actionBean.taskid}-derivate_${derID}
-            if (s.startsWith("doAddFile")) {
-                int start = s.indexOf(PREFIX_TASK) + 6;
-                taskid = s.substring(start, s.indexOf('-', start));
-                StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
-                mcrobjid = sv.getValue();
-                start = s.indexOf(PREFIX_DERIVATE) + 10;
-                String derid = s.substring(start);
-                addFileToDerivate(taskid, mcrobjid, derid, multiPart);
-            }
-
-            //doDeleteFile-task_${actionBean.taskid}-derivate_${derID}-file_${f}
-            if (s.startsWith("doDeleteFile")) {
-                int start = s.indexOf(PREFIX_TASK) + 6;
-                taskid = s.substring(start, s.indexOf('-', start));
-                StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
-                mcrobjid = sv.getValue();
-                start = s.indexOf(PREFIX_DERIVATE) + 10;
-                String derid = s.substring(start, s.indexOf('-', start));
-                start = s.indexOf(PREFIX_FILE) + 6;
-                String file = s.substring(start);
-                deleteFileFromDerivate(mcrobjid, derid, file);
-            }
-
-            //doRenameFile-task_${actionBean.taskid}-derivate_${derID}-file_${f}
-            if (s.startsWith("doRenameFile")) {
-                int start = s.indexOf(PREFIX_TASK) + 6;
-                taskid = s.substring(start, s.indexOf('-', start));
-                StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
-                mcrobjid = sv.getValue();
-                start = s.indexOf(PREFIX_DERIVATE) + 10;
-                String derid = s.substring(start, s.indexOf('-', start));
-                start = s.indexOf(PREFIX_FILE) + 6;
-                String file = s.substring(start);
-                renameFileInDerivate(taskid, mcrobjid, derid, file, multiPart);
-            }
-
-            //doDeleteDerivate-task_${actionBean.taskid}-derivate_${derID}
-            if (s.startsWith("doDeleteDerivate")) {
-                int start = s.indexOf(PREFIX_TASK) + 6;
-                taskid = s.substring(start, s.indexOf('-', start));
-                StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
-                mcrobjid = sv.getValue();
-                start = s.indexOf(PREFIX_DERIVATE) + 10;
-                String derid = s.substring(start);
-                deleteDerivate(mcrobjid, derid);
+            switch (ap.action) {
+                //doCreateNewDerivate-task_${actionBean.taskid}
+                case "doCreateNewDerivate"
+                    -> createNewDerivate(ap.taskId(), ap.mcrObjId(), multiPart);
+                //doMoveUpDerivate-task_${actionBean.taskid}-derivate_${derID}
+                case "doMoveUpDerivate"
+                    -> moveDerivate(ap.mcrObjId(), ap.mcrDerId(), Direction.MOVE_UP);
+                //doMoveDownDerivate-task_${actionBean.taskid}-derivate_${derID}
+                case "doMoveDownDerivate"
+                    -> moveDerivate(ap.mcrObjId(), ap.mcrDerId(), Direction.MOVE_DOWN);
+                //doSaveDerivateMeta-task_${actionBean.taskid}-derivate_${derID}
+                case "doSaveDerivateMeta"
+                    -> saveDerivateMetadata(ap.taskId(), ap.mcrObjId(), ap.mcrDerId(), multiPart);
+                //doAddFile-task_${actionBean.taskid}-derivate_${derID}
+                case "doAddFile"
+                    -> addFileToDerivate(ap.taskId(), ap.mcrObjId(), ap.mcrDerId(), multiPart);
+                //doDeleteFile-task_${actionBean.taskid}-derivate_${derID}-file_${f}
+                case "doDeleteFile"
+                    -> deleteFileFromDerivate(ap.mcrObjId(), ap.mcrDerId(), ap.fileName());
+                //doRenameFile-task_${actionBean.taskid}-derivate_${derID}-file_${f}
+                case "doRenameFile"
+                    -> renameFileInDerivate(ap.taskId(), ap.mcrObjId(), ap.mcrDerId(), ap.fileName(), multiPart);
+                //doDeleteDerivate-task_${actionBean.taskid}-derivate_${derID}
+                case "doDeleteDerivate"
+                    -> deleteDerivate(ap.mcrObjId(), ap.mcrDerId());
+                default -> LOGGER.error("Action {} not matched", ap.action());
             }
         }
-
         return defaultRes(request, taskid, mcrobjid);
     }
 
@@ -204,11 +149,13 @@ public class MCREditDerivatesController {
         String label = null;
         String title = null;
 
-        FormDataBodyPart fdbpLabel = multiPart.getField("saveDerivateMeta_label"+ PREFIX_TASK + taskid + PREFIX_DERIVATE + derid);
+        FormDataBodyPart fdbpLabel =
+            multiPart.getField("saveDerivateMeta_label" + PREFIX_TASK + taskid + PREFIX_DERIVATE + derid);
         if (fdbpLabel != null) {
             label = StringUtils.trimToEmpty(fdbpLabel.getValue());
         }
-        FormDataBodyPart fdbpTitle = multiPart.getField("saveDerivateMeta_title" + PREFIX_TASK + taskid + PREFIX_DERIVATE + derid);
+        FormDataBodyPart fdbpTitle =
+            multiPart.getField("saveDerivateMeta_title" + PREFIX_TASK + taskid + PREFIX_DERIVATE + derid);
         if (fdbpTitle != null) {
             title = StringUtils.trimToEmpty(fdbpTitle.getValue());
         }
@@ -295,7 +242,8 @@ public class MCREditDerivatesController {
         Path derDir = MCRBPMNUtils.getWorkflowDerivateDir(MCRObjectID.getInstance(mcrobjid), der.getId());
         Path f = derDir.resolve(fileName);
         String newName = multiPart
-            .getField("renameFile_new" + PREFIX_TASK + taskid + PREFIX_DERIVATE + derid + PREFIX_FILE + fileName).getValue();
+            .getField("renameFile_new" + PREFIX_TASK + taskid + PREFIX_DERIVATE + derid + PREFIX_FILE + fileName)
+            .getValue();
 
         if (!StringUtils.isBlank(newName)) {
             newName = cleanupFileName(newName);
@@ -412,11 +360,12 @@ public class MCREditDerivatesController {
                 ? null : multiPart.getField("newDerivate_label" + PREFIX_TASK + taskid).getValue();
             String title = multiPart.getField("newDerivate_title" + PREFIX_TASK + taskid) == null
                 ? null : multiPart.getField("newDerivate_title" + PREFIX_TASK + taskid).getValue();
-            String fileName = multiPart.getField("newDerivate_file" + PREFIX_TASK + taskid).getFormDataContentDisposition()
-                .getFileName();
+            String fileName = multiPart.getField("newDerivate_file" + PREFIX_TASK + taskid)
+                .getFormDataContentDisposition().getFileName();
             der = wfm.createMCRDerivate(MCRObjectID.getInstance(mcrobjid), label, title);
 
-            try (InputStream is = multiPart.getField("newDerivate_file" + PREFIX_TASK + taskid).getValueAs(InputStream.class)) {
+            try (InputStream is = multiPart.getField("newDerivate_file" + PREFIX_TASK + taskid)
+                .getValueAs(InputStream.class)) {
                 Path derDir = MCRBPMNUtils.getWorkflowDerivateDir(MCRObjectID.getInstance(mcrobjid), der.getId());
                 Files.createDirectories(derDir);
                 Files.copy(is, derDir.resolve(cleanupFileName(fileName)),
@@ -444,7 +393,8 @@ public class MCREditDerivatesController {
 
     public Map<String, String> calcDerivateLabels(String mode) {
         Map<String, String> result = new LinkedHashMap<>();
-        for (MCRCategory c : MCRCategoryDAOFactory.obtainInstance().getChildren(MCRCategoryID.rootID(CLASSID__DERIVATE_TYPES))) {
+        for (MCRCategory c : MCRCategoryDAOFactory.obtainInstance()
+            .getChildren(new MCRCategoryID(CLASSID__DERIVATE_TYPES))) {
             if (c.getCurrentLabel().isPresent()) {
                 Optional<MCRLabel> lblMode = c.getLabel("x-usedfor");
                 if (lblMode.isPresent()) {
@@ -485,5 +435,21 @@ public class MCREditDerivatesController {
 
     public Map<String, List<String>> getDerivateFiles(String mcrobjid) {
         return MCRBPMNUtils.getDerivateFiles(MCRObjectID.getInstance(mcrobjid));
+    }
+
+    public record ActionParams(String action, String taskId, String mcrObjId, String mcrDerId, String fileName) {
+
+        private static RuntimeService rs = MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService();
+        public static ActionParams ofString(String s) {
+            Matcher m = PATTERN_ACTION.matcher(s);
+            if (m.find()) {
+                StringValue sv = rs.getVariableTyped(m.group("task"), MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
+                String mcrobjid = sv.getValue();
+                return new ActionParams(m.group("action"), m.group("task"), mcrobjid, m.group("derivate"),
+                    m.group("file"));
+            } else {
+                return new ActionParams(null, null, null, null, null);
+            }
+        }
     }
 }
