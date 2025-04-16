@@ -83,7 +83,7 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
 
     private static final String TYPE_PHYSICAL = "PHYSICAL";
 
-    private static final String STRUCTMAP__TYPE_PHYSICAL = "/mets:mets/mets:structMap[@TYPE='PHYSICAL']";
+    private static final String XPATH_STRUCTMAP_PHYSICAL = "/mets:mets/mets:structMap[@TYPE='PHYSICAL']";
 
     protected enum OpenBy {
         PAGE, NR, PART, EMPTY
@@ -285,13 +285,13 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
                                 if (!nr.isEmpty()) {
                                     if (openBy == OpenBy.PAGE) {
                                         eMETSPhysDiv = XPathFactory.instance()
-                                            .compile(STRUCTMAP__TYPE_PHYSICAL
+                                            .compile(XPATH_STRUCTMAP_PHYSICAL
                                                 + "/mets:div[@TYPE='physSequence']/mets:div[starts-with(@ORDERLABEL, '"
                                                 + nr + "')]", Filters.element(), null, NS_METS)
                                             .evaluateFirst(docMETS);
                                     } else if (openBy == OpenBy.NR) {
                                         eMETSPhysDiv = XPathFactory.instance()
-                                            .compile(STRUCTMAP__TYPE_PHYSICAL
+                                            .compile(XPATH_STRUCTMAP_PHYSICAL
                                                 + "/mets:div[@TYPE='physSequence']/mets:div[@ORDER='" + nr
                                                 + "']", Filters.element(), null, NS_METS)
                                             .evaluateFirst(docMETS);
@@ -392,13 +392,13 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
                                 if (!nr.isEmpty()) {
                                     if (openBy == OpenBy.PAGE) {
                                         eMETSPhysDiv = XPathFactory.instance()
-                                            .compile(STRUCTMAP__TYPE_PHYSICAL
+                                            .compile(XPATH_STRUCTMAP_PHYSICAL
                                                 + "/mets:div[@TYPE='physSequence']/mets:div[starts-with(@ORDERLABEL, '"
                                                 + nr + "')]", Filters.element(), null, NS_METS)
                                             .evaluateFirst(docMETS);
                                     } else if (openBy == OpenBy.NR) {
                                         eMETSPhysDiv = XPathFactory.instance()
-                                            .compile(STRUCTMAP__TYPE_PHYSICAL
+                                            .compile(XPATH_STRUCTMAP_PHYSICAL
                                                 + "/mets:div[@TYPE='physSequence']/mets:div[@ORDER='" + nr
                                                 + "']", Filters.element(), null, NS_METS)
                                             .evaluateFirst(docMETS);
