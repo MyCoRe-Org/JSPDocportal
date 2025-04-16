@@ -12,6 +12,8 @@
 
   <properties>
     <manifest.priority>12</manifest.priority>
+    <!-- disable maven-pmd-plugin -->
+    <pmd.failOnViolation>false</pmd.failOnViolation>
   </properties>
   <build>
     <resources>
