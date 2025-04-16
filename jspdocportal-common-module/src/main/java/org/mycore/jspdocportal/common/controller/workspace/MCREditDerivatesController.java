@@ -58,6 +58,7 @@ import jakarta.ws.rs.core.Response;
 
 @jakarta.ws.rs.Path("/do/workspace/derivates")
 public class MCREditDerivatesController {
+    private static final String PREFIX_FILE = "-file_";
     private static final String CLASSID__DERIVATE_TYPES = "derivate_types";
     private static final String PREFIX_DERIVATE = "-derivate_";
     private static final String PREFIX_TASK = "-task_";
@@ -79,8 +80,9 @@ public class MCREditDerivatesController {
         for (BodyPart p : multiPart.getBodyParts()) {
 
             String s = ((FormDataContentDisposition) p.getContentDisposition()).getName();
-            if (s.startsWith("doCreateNewDerivate" + PREFIX_TASK)) {
-                taskid = s.substring(s.indexOf('_') + 1);
+            if (s.startsWith("doCreateNewDerivate")) {
+                int start = s.indexOf(PREFIX_TASK) + 6;
+                taskid = s.substring(start);
                 StringValue sv = rs.getVariableTyped(taskid, MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
                 mcrobjid = sv.getValue();
                 createNewDerivate(taskid, mcrobjid, multiPart);
@@ -137,7 +139,7 @@ public class MCREditDerivatesController {
                 mcrobjid = sv.getValue();
                 start = s.indexOf(PREFIX_DERIVATE) + 10;
                 String derid = s.substring(start, s.indexOf('-', start));
-                start = s.indexOf("file_") + 5;
+                start = s.indexOf(PREFIX_FILE) + 6;
                 String file = s.substring(start);
                 deleteFileFromDerivate(mcrobjid, derid, file);
             }
@@ -150,7 +152,7 @@ public class MCREditDerivatesController {
                 mcrobjid = sv.getValue();
                 start = s.indexOf(PREFIX_DERIVATE) + 10;
                 String derid = s.substring(start, s.indexOf('-', start));
-                start = s.indexOf("file_") + 5;
+                start = s.indexOf(PREFIX_FILE) + 6;
                 String file = s.substring(start);
                 renameFileInDerivate(taskid, mcrobjid, derid, file, multiPart);
             }
@@ -293,7 +295,7 @@ public class MCREditDerivatesController {
         Path derDir = MCRBPMNUtils.getWorkflowDerivateDir(MCRObjectID.getInstance(mcrobjid), der.getId());
         Path f = derDir.resolve(fileName);
         String newName = multiPart
-            .getField("renameFile_new" + PREFIX_TASK + taskid + PREFIX_DERIVATE + derid + "-file_" + fileName).getValue();
+            .getField("renameFile_new" + PREFIX_TASK + taskid + PREFIX_DERIVATE + derid + PREFIX_FILE + fileName).getValue();
 
         if (!StringUtils.isBlank(newName)) {
             newName = cleanupFileName(newName);
