@@ -41,6 +41,7 @@ import org.mycore.datamodel.metadata.validator.MCREditorMetadataValidator;
 public class MCREditorMetadatValidator4MCRMetaXML implements MCREditorMetadataValidator {
 
     //return null if everything is fine
+    @Override
     public String checkDataSubTag(Element datasubtag) {
         if (datasubtag.getName().equals("modsContainer")) {
             //remove empty mods subelements !!!
@@ -60,7 +61,7 @@ public class MCREditorMetadatValidator4MCRMetaXML implements MCREditorMetadataVa
                             + "| ./mods:mods/mods:relatedItem/mods:part/mods:extend",
                     Filters.element(), null, MCRConstants.MODS_NAMESPACE);
 
-            ArrayList<Element> data = new ArrayList<Element>(xpath.evaluate(datasubtag));
+            List<Element> data = new ArrayList<>(xpath.evaluate(datasubtag));
             for (Element e : data) {
                 if (e.getContentSize() == 0) {
                     e.getParentElement().removeContent(e);
@@ -68,7 +69,7 @@ public class MCREditorMetadatValidator4MCRMetaXML implements MCREditorMetadataVa
             }
 
         } else {
-            List<Element> l = new ArrayList<Element>();
+            List<Element> l = new ArrayList<>();
             l.addAll(datasubtag.getChildren());
             for (Element eChild : l) {
                 // remove empty name elments of pc:person
@@ -77,7 +78,7 @@ public class MCREditorMetadatValidator4MCRMetaXML implements MCREditorMetadataVa
                 //</pc:person>
                 if (eChild.getName().equals("person")
                         && eChild.getNamespace().getURI().equals("http://www.d-nb.de/standards/pc/")) {
-                    List<Element> grandChildren = new ArrayList<Element>();
+                    List<Element> grandChildren = new ArrayList<>();
                     grandChildren.addAll(eChild.getChildren());
                     for (Element e : grandChildren) {
                         if (e.getName().equals("name") && e.getContentSize() == 0) {

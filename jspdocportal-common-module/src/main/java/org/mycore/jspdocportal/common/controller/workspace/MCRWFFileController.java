@@ -54,6 +54,7 @@ import jakarta.ws.rs.core.StreamingOutput;
 @jakarta.ws.rs.Path("/do/wffile/{path: .*}")
 public class MCRWFFileController {
 
+    private static final String HEADER__CONTENT_TYPE = "Content-Type";
     private static final Logger LOGGER = LogManager.getLogger();
 
     @GET
@@ -80,6 +81,7 @@ public class MCRWFFileController {
         Path file = derDir.resolve(filename);
         if (Files.exists(file) && Files.isReadable(file)) {
             StreamingOutput stream = new StreamingOutput() {
+                @Override
                 public void write(OutputStream output) throws IOException, WebApplicationException {
                     try {
                         Files.copy(file, output);
@@ -91,16 +93,17 @@ public class MCRWFFileController {
 
             ResponseBuilder rb = Response.ok(stream);
             // 	 Set the headers.
-            if (filename.endsWith("pdf"))
-                rb.header("Content-Type", "application/pdf");
-            else if (filename.endsWith("jpg"))
-                rb.header("Content-Type", "image/jpeg");
-            else if (filename.endsWith("gif"))
-                rb.header("Content-Type", "image/gif");
-            else if (filename.endsWith("png"))
-                rb.header("Content-Type", "image/png");
-            else
-                rb.header("Content-Type", "application/x-download");
+            if (filename.endsWith("pdf")) {
+                rb.header(HEADER__CONTENT_TYPE, "application/pdf");
+            } else if (filename.endsWith("jpg")) {
+                rb.header(HEADER__CONTENT_TYPE, "image/jpeg");
+            } else if (filename.endsWith("gif")) {
+                rb.header(HEADER__CONTENT_TYPE, "image/gif");
+            } else if (filename.endsWith("png")) {
+                rb.header(HEADER__CONTENT_TYPE, "image/png");
+            } else {
+                rb.header(HEADER__CONTENT_TYPE, "application/x-download");
+            }
             rb.header("Content-Disposition", "attachment; filename=" + filename);
 
             return rb.build();

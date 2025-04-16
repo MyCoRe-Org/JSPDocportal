@@ -39,6 +39,7 @@ import jakarta.ws.rs.core.Response;
  */
 @Path("/mcrviewer")
 public class MCRViewerController {
+    private static final String PARAM_FILE_PATH = "filePath";
     private static final Logger LOGGER = LogManager.getLogger();
 
     @GET
@@ -56,7 +57,7 @@ public class MCRViewerController {
     @GET
     @Path("/{field}/{identifier}/{filePath:.*}")
     public Response doGetWithFile(@PathParam("field") String field, @PathParam("identifier") String identifier,
-        @PathParam("filePath") String filePath, @Context HttpServletRequest request) {
+        @PathParam(PARAM_FILE_PATH) String filePath, @Context HttpServletRequest request) {
 
         String cleanIdentifier = URLDecoder.decode(URLDecoder.decode(identifier, StandardCharsets.UTF_8),
             StandardCharsets.UTF_8);
@@ -64,7 +65,7 @@ public class MCRViewerController {
         model.put("field", field);
         model.put("identifier", cleanIdentifier);
         if (!StringUtils.isEmpty(filePath)) {
-            model.put("filePath", filePath);
+            model.put(PARAM_FILE_PATH, filePath);
         }
 
         Viewable v = new Viewable("/mcrviewer", model);
@@ -91,13 +92,13 @@ public class MCRViewerController {
                     model.put("doctype", "pdf");
                     String pdfProviderURL = String.valueOf(solrDoc.getFieldValue("ir.pdffulltext_url"));
                     model.put("pdfProviderURL", pdfProviderURL);
-                    if (!model.containsKey("filePath")) {
-                        model.put("filePath", pdfProviderURL.substring(pdfProviderURL.lastIndexOf('/') + 1));
+                    if (!model.containsKey(PARAM_FILE_PATH)) {
+                        model.put(PARAM_FILE_PATH, pdfProviderURL.substring(pdfProviderURL.lastIndexOf('/') + 1));
                     }
                 } else {
                     model.put("doctype", "mets");
-                    if (!model.containsKey("filePath")) {
-                        model.put("filePath", StringUtils.isEmpty(filePath) ? "iview2/phys_0001.iview2" : filePath);
+                    if (!model.containsKey(PARAM_FILE_PATH)) {
+                        model.put(PARAM_FILE_PATH, StringUtils.isEmpty(filePath) ? "iview2/phys_0001.iview2" : filePath);
                     }
                 }
             }

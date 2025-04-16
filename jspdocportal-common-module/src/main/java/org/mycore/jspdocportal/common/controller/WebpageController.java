@@ -90,9 +90,8 @@ public class WebpageController {
                     .orElse(
                         MCRConfiguration2.getString("MCR.Webpage.Resolution.default").orElse("/webpage"));
 
-                Viewable v = new Viewable(template, model);
-                return v;
-                //return Response.ok(v).build();
+                return new Viewable(template, model);
+                //return Response.ok(new Viewable(template, model)).build();
             }
         }
         //return Response.temporaryRedirect(URI.create(request.getContextPath())).build();
