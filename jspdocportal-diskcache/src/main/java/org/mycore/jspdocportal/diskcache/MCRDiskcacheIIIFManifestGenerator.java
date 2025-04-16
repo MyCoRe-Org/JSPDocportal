@@ -24,7 +24,7 @@ public class MCRDiskcacheIIIFManifestGenerator extends SimpleGenerator {
     @Override
     public void accept(String id, Path p) {
         long startTime = new Date().getTime();
-        MCRIIIFManifest manifest = MCRIIIFPresentationImpl.getInstance(null).getManifest(id);
+        MCRIIIFManifest manifest = MCRIIIFPresentationImpl.obtainInstance(null).getManifest(id);
         long endTime = new Date().getTime();
         long timeNeeded = endTime - startTime;
         LOGGER.info("IIIF Manifest / id:{} generation needed: {}ms", id, timeNeeded);

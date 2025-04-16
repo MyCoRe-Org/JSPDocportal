@@ -131,7 +131,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
                 new CacheLoader<>() {
                     @Override
                   public Map<MCRCategoryID, Boolean> load(MCRCategoryID key) throws Exception {
-                        return MCRCategLinkServiceFactory.obtainInstance().hasLinks(MCRCategoryDAOFactory.getInstance().getCategory(key,0));
+                        return MCRCategLinkServiceFactory.obtainInstance().hasLinks(MCRCategoryDAOFactory.obtainInstance().getCategory(key,0));
                   }
                 });
     
@@ -142,7 +142,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
                 new CacheLoader<>() {
                     @Override
                   public Map<MCRCategoryID, Number> load(MCRCategoryID key) throws Exception {
-                        return MCRCategLinkServiceFactory.obtainInstance().countLinks(MCRCategoryDAOFactory.getInstance().getCategory(key,0), false);
+                        return MCRCategLinkServiceFactory.obtainInstance().countLinks(MCRCategoryDAOFactory.obtainInstance().getCategory(key,0), false);
                   }
                 });
     
