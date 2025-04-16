@@ -24,6 +24,7 @@
 package org.mycore.jspdocportal.common.search;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.solr.common.SolrDocument;
 import org.mycore.common.config.MCRConfiguration2;
@@ -38,8 +39,8 @@ public class MCRSearchResultEntry {
     private int pos;
     private String mcrid;
     private String label;
-    private LinkedHashMap<String, String> data = new LinkedHashMap<String, String>();
-    private LinkedHashMap<String, String> internal = new LinkedHashMap<String, String>();
+    private Map<String, String> data = new LinkedHashMap<>();
+    private Map<String, String> internal = new LinkedHashMap<>();
 
     public MCRSearchResultEntry(SolrDocument solrDoc, int pos) {
         this.pos = pos;
@@ -76,11 +77,11 @@ public class MCRSearchResultEntry {
         return label;
     }
 
-    public LinkedHashMap<String, String> getData() {
+    public Map<String, String> getData() {
         return data;
     }
     
-    public LinkedHashMap<String, String> getInternal() {
+    public Map<String, String> getInternal() {
         return internal;
     }
 

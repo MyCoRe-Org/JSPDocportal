@@ -75,10 +75,10 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
     private static final DOMOutputter DOM_OUTPUTTER = new DOMOutputter();
     
     private static final LoadingCache<String, Document> MCROBJECTXML_CACHE = CacheBuilder.newBuilder().maximumSize(300)
-            .expireAfterWrite(3, TimeUnit.MINUTES).expireAfterAccess(15, TimeUnit.SECONDS).build(new CacheLoader<String, Document>() {
+            .expireAfterWrite(3, TimeUnit.MINUTES).expireAfterAccess(15, TimeUnit.SECONDS).build(new CacheLoader<>() {
                 @Override
                 public Document load(String mcrid) throws Exception {
-                    try (MCRHibernateTransactionWrapper htw = new MCRHibernateTransactionWrapper()) {
+                    try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
                         MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrid));
                         return mcrObj.createXML();
                     }
@@ -87,7 +87,7 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
     
     private String mcrid;
 
-    private boolean fromWorkflow = false;
+    private boolean fromWorkflow;
 
     private String varDOM;
 
@@ -149,6 +149,7 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
     /**
      * executes the tag
      */
+    @Override
     public void doTag() throws JspException, IOException {
         try {
             PageContext pageContext = (PageContext) getJspContext();
@@ -164,7 +165,7 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
                     QueryResponse solrResponse = queryRequest.process(solrClient);
                     SolrDocumentList solrResults = solrResponse.getResults();
 
-                    if(solrResults.size()>0) {
+                    if(!solrResults.isEmpty()) {
                         mcrid = String.valueOf(solrResults.get(0).getFirstValue("id"));
                     }
                 } catch (SolrServerException e) {
@@ -176,7 +177,7 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
             }
             
             MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrid);
-            org.jdom2.Document doc = null;
+            org.jdom2.Document doc;
             if (fromWorkflow) {
                 doc = MCRBPMNUtils.getWorkflowObjectXML(mcrObjID);
             } else {

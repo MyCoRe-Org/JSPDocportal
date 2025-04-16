@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class NavServlet extends HttpServlet {
+    @java.io.Serial
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -45,7 +46,7 @@ public class NavServlet extends HttpServlet {
         }
 
         final String path = Objects.requireNonNullElse(request.getParameter("path"), "left.start");
-        LOGGER.debug("Navigation servlet called with path {} (session {})", () -> path, () -> MCRSessionMgr.getCurrentSessionID());
+        LOGGER.debug("Navigation servlet called with path {} (session {})", () -> path, MCRSessionMgr::getCurrentSessionID);
 
         Element navitem = null;
 
@@ -89,7 +90,7 @@ public class NavServlet extends HttpServlet {
         org.w3c.dom.Document domYouAreHere = null;
         try {
             domYouAreHere = new org.jdom2.output.DOMOutputter()
-                    .output(new org.jdom2.Document((Element) navitem.clone()));
+                    .output(new org.jdom2.Document(navitem.clone()));
         } catch (org.jdom2.JDOMException e) {
             LOGGER.error("Domoutput failed: ", e);
         }

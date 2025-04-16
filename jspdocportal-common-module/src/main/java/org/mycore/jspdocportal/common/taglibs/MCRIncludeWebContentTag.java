@@ -39,12 +39,13 @@ public class MCRIncludeWebContentTag extends SimpleTagSupport {
 
     private String id;
 
+    @Override
     public void doTag() throws JspException, IOException {
         PageContext pageContext = (PageContext) getJspContext();
         JspWriter out = pageContext.getOut();
         out.flush();
 
-        try (MCRHibernateTransactionWrapper htw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
 
             if (!isGuestUser() && MCRAccessManager.checkPermission("administrate-webcontent")) {
                 if (getOpenEditorsFromSession().contains(id)) {
@@ -136,7 +137,7 @@ public class MCRIncludeWebContentTag extends SimpleTagSupport {
             : MCRResourceHelper.getResourceAsStream("/config/webcontent/" + lang + "/" + file)) {
             if (is != null) {
                 try (BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-                    String line = null;
+                    String line;
                     while ((line = br.readLine()) != null) {
                         out.println(line);
                     }
@@ -160,7 +161,7 @@ public class MCRIncludeWebContentTag extends SimpleTagSupport {
         Set<String> openEditors = (Set<String>) MCRSessionMgr.getCurrentSession().get("open_webcontent_editors");
 
         if (openEditors == null) {
-            openEditors = new HashSet<String>();
+            openEditors = new HashSet<>();
         }
         return openEditors;
     }

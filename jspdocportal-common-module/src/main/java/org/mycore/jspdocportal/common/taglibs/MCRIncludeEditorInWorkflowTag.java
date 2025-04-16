@@ -116,11 +116,12 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
         this.processid = processid;
     }
 
+    @Override
     public void doTag() throws JspException, IOException {
         PageContext pageContext = (PageContext) getJspContext();
 
         Properties parameters = getParameters();
-        String editorBase = "";
+        String editorBase;
         if (editorSessionID != null && !editorSessionID.equals("")) {
             parameters.put("XSL.editor.session.id", editorSessionID);
             editorBase = (String) pageContext.getSession().getAttribute("editorPath");
@@ -139,10 +140,12 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
                 StringBuffer base = new StringBuffer(MCRFrontendUtil.getBaseURL()).append("editor/workflow/editor-")
                     .append(step).append('-').append(type);
                 if (publicationType != null && !publicationType.equals("")) {
-                    if (publicationType.endsWith("TYPE0002"))
-                        base.append("-").append("TYPE0002");
-                    if (publicationType.endsWith("TYPE0001"))
-                        base.append("-").append("TYPE0001");
+                    if (publicationType.endsWith("TYPE0002")) {
+                        base.append('-').append("TYPE0002");
+                    }                        
+                    if (publicationType.endsWith("TYPE0001")) {
+                        base.append('-').append("TYPE0001");
+                    }
                 }
                 base.append(".xml");
                 editorBase = base.toString();

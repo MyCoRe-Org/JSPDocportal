@@ -76,7 +76,7 @@ public abstract class MCRAbstractNavigationTag extends MCRAbstractTag {
 	 * if the whole navigation should be shown, this should be true.
 	 * It is set by subclasses tag attribute
 	 */
-	protected boolean expanded = false;
+	protected boolean expanded;
 
 	/**
 	 * retrieves all information needed to create a navigation bar, line or whatever
@@ -133,6 +133,7 @@ public abstract class MCRAbstractNavigationTag extends MCRAbstractTag {
 	 * @param key A valid key
 	 * @return if the key is not found, it returns "???key???"
 	 */
+	@Override
 	protected String retrieveI18N(String key) {
 		if (key == null || key.equals("")) {
 			return "";

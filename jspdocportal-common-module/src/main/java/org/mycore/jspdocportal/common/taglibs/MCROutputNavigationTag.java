@@ -64,7 +64,7 @@ import jakarta.servlet.jsp.JspWriter;
  */
 public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
     private static final List<String> MODES = Arrays
-        .asList(new String[] { "left", "side", "top", "breadcrumbs", "toc", "navbar", "mobile", "top-dropdown" });
+        .asList("left", "side", "top", "breadcrumbs", "toc", "navbar", "mobile", "top-dropdown");
 
     private static final String INDENT = "\n       ";
 
@@ -74,6 +74,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    @Override
     public void doTag() throws JspException, IOException {
         init(mode);
         if (!MODES.contains(mode)) {
@@ -142,7 +143,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
      *            - the JSPOutputWriter
      */
     private void printLeftNav(String[] currentPath, NavigationObject currentNode, String cssClass, JspWriter out) {
-        try (MCRHibernateTransactionWrapper htw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
             List<NavigationItem> printableElements = printableItems(currentNode);
             if (printableElements.isEmpty()) {
                 return;
@@ -169,10 +170,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
                     .append(" <li id=\"" + retrieveNavPath(el) + "\"" + (active ? " class=\"active\"" : "") + ">");
 
                 out.append(indent);
-                String href = el.getHref();
-                if (!href.startsWith("http")) {
-                    href = MCRFrontendUtil.getBaseURL() + href;
-                }
+                String href = retrieveFullUrl(el);
                 out.append(" <a target=\"_self\" href=\"" + href + "\">" + msg + "</a>");
                 if (expanded || active) {
                     String[] subpath = path;
@@ -204,7 +202,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
      *
      */
     private void printSideNav(String[] currentPath, NavigationObject currentNode, String cssClass, JspWriter out) {
-        try (MCRHibernateTransactionWrapper htw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
             List<NavigationItem> printableElements = printableItems(currentNode);
             if (printableElements.isEmpty()) {
                 return;
@@ -225,7 +223,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
             for (NavigationItem el : printableElements) {
                 String id = el.getId();
                 boolean active = currentPath.length == 1 && currentPath[0].equals(id);
-                boolean doExpand = currentPath.length > 0 && currentPath[0].equals(id) && printableItems(el).size() > 0
+                boolean doExpand = currentPath.length > 0 && currentPath[0].equals(id) && !printableItems(el).isEmpty()
                     || expanded;
 
                 String msg = retrieveI18N(el.getI18n());
@@ -234,10 +232,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
                         + (doExpand ? " expanded" : "") + "\">");
 
                 out.append(indent);
-                String href = el.getHref();
-                if (!href.startsWith("http")) {
-                    href = MCRFrontendUtil.getBaseURL() + href;
-                }
+                String href = retrieveFullUrl(el);
                 out.append(" <a target=\"_self\" class=\"nav-link" + (active ? " active" : "") + "\" href=\"" + href
                     + "\">" + msg + "</a>");
                 if (doExpand) {
@@ -282,10 +277,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
                         boolean active = currentPath.length > 0 && currentPath[0].equals(el.getId());
                         String msg = retrieveI18N(el.getI18n());
                         out.append(INDENT).append("    <li class=\"nav-item\">");
-                        String href = el.getHref();
-                        if (!href.startsWith("http")) {
-                            href = MCRFrontendUtil.getBaseURL() + href;
-                        }
+                        String href = retrieveFullUrl(el);
                         out.append(INDENT).append("    <a target=\"_self\" class=\"nav-link" + (active ? " active" : "")
                             + "\" href=\"" + href + "\">" + msg + "</a>");
                         out.append(INDENT).append("   </li>");
@@ -330,7 +322,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
                         boolean active = currentPath.length > 0 && currentPath[0].equals(el.getId());
                         String msg = retrieveI18N(el.getI18n());
                         List<NavigationItem> printableElementsTmp = printableItems(el);
-                        if (printableElementsTmp.size() > 0) {
+                        if (!printableElementsTmp.isEmpty()) {
                             String dropdownId = Integer.toString(dropdownCounter);
                             out.append(INDENT).append("<li class=\"dropdown nav-item\">");
                             out.append(INDENT).append("<a class=\"nav-link dropdown-toggle\" id=\"navbarDropdown"
@@ -341,10 +333,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
                                 "<div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown" + dropdownId + "\">");
                             for (NavigationItem elTmp : printableElementsTmp) {
                                 String msgTmp = retrieveI18N(elTmp.getI18n());
-                                String href = elTmp.getHref();
-                                if (!href.startsWith("http")) {
-                                    href = MCRFrontendUtil.getBaseURL() + href;
-                                }
+                                String href = retrieveFullUrl(el);
                                 out.append(INDENT).append("<a target=\"_self\" class=\"dropdown-item\" href=\"" + href
                                     + "\">" + msgTmp + "</a>");
                             }
@@ -352,10 +341,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
                             out.append(INDENT).append("</li>");
                             dropdownCounter++;
                         } else {
-                            String href = el.getHref();
-                            if (!href.startsWith("http")) {
-                                href = MCRFrontendUtil.getBaseURL() + href;
-                            }
+                            String href = retrieveFullUrl(el);
                             out.append(INDENT).append("<li class=\"nav-item\">");
                             out.append(INDENT).append("<a target=\"_self\" class=\"nav-link" + (active ? " active" : "")
                                 + "\" href=\"" + href + "\">" + msg + "</a>");
@@ -414,10 +400,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
                 for (NavigationItem el : printableElements) {
                     String msg = retrieveI18N(el.getI18n());
                     out.append(INDENT).append("<li>");
-                    String href = el.getHref();
-                    if (!href.startsWith("http")) {
-                        href = MCRFrontendUtil.getBaseURL() + href;
-                    }
+                    String href = retrieveFullUrl(el);
                     out.append(INDENT).append("<a target=\"_self\" href=\"" + href + "\">" + msg + "</a>");
                     if (expanded) {
                         printTOC(el, out);
@@ -450,13 +433,10 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
         StringBuffer sbOut = new StringBuffer();
         sbOut.append(INDENT).append("</ol>");
         NavigationObject c = currentNode;
-        while (c instanceof NavigationItem) {
-            String href = ((NavigationItem) c).getHref();
-            String msg = retrieveI18N(((NavigationItem) c).getI18n());
-            if (!href.startsWith("http")) {
-                href = MCRFrontendUtil.getBaseURL() + href;
-            }
-            if (c == currentNode) {
+        while (c instanceof NavigationItem ni) {
+            String href = retrieveFullUrl(ni);
+            String msg = retrieveI18N(ni.getI18n());
+            if (c.equals(currentNode)) {
                 sbOut.insert(0, INDENT + "   </li>");
                 sbOut.insert(0, INDENT + "      <span>" + msg + "</span>");
                 sbOut.insert(0, INDENT + "   <li class=\"breadcrumb-item active\">");
@@ -479,6 +459,14 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
         } catch (IOException e) {
             LOGGER.error(e);
         }
+    }
+    
+    private String retrieveFullUrl(NavigationItem el) {
+        String href = el.getHref();
+        if (!href.startsWith("http")) {
+            href = MCRFrontendUtil.getBaseURL() + href;
+        }
+        return href;
     }
 
 }

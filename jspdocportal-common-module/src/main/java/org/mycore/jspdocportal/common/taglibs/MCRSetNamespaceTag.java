@@ -67,6 +67,7 @@ public class MCRSetNamespaceTag extends SimpleTagSupport {
 
     /* Eclipse EE4J implementation  */
     @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
     public void doTag() throws JspException, IOException {
         try {
             Class cXPathUtil = Class.forName("org.apache.taglibs.standard.tag.common.xml.XPathUtil");

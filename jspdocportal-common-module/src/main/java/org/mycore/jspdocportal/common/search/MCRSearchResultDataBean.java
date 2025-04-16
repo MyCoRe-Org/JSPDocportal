@@ -62,15 +62,16 @@ import jakarta.servlet.http.HttpServletRequest;
  *
  */
 public class MCRSearchResultDataBean implements Serializable {
+    @java.io.Serial
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = LogManager.getLogger();
 
     private String id;
 
-    private int current = 0;
+    private int current;
 
-    private int start = 0;
+    private int start;
 
     private int rows = 10;
 
@@ -78,11 +79,11 @@ public class MCRSearchResultDataBean implements Serializable {
 
     private String action = "";
 
-    private String mask = null;
+    private String mask;
 
     private String xedSessionId;
 
-    private Document mcrQueryXML = null;
+    private Document mcrQueryXML;
 
     private SolrQuery solrQuery = new SolrQuery();
 
@@ -90,13 +91,13 @@ public class MCRSearchResultDataBean implements Serializable {
 
     private QueryResponse solrQueryResponse;
 
-    private String errorMsg = null;
+    private String errorMsg;
 
-    private List<String> filterQueries = new ArrayList<String>();
+    private List<String> filterQueries = new ArrayList<>();
 
-    private List<String> facetFields = new ArrayList<String>();
+    private List<String> facetFields = new ArrayList<>();
 
-    private Map<String, Map<String, Long>> facetResult = new LinkedHashMap<String, Map<String, Long>>();
+    private Map<String, Map<String, Long>> facetResult = new LinkedHashMap<>();
 
     public MCRSearchResultDataBean() {
         this.id = UUID.randomUUID().toString();
@@ -104,10 +105,10 @@ public class MCRSearchResultDataBean implements Serializable {
 
     public static void addSearchresultToSession(HttpServletRequest request, MCRSearchResultDataBean searchresult) {
         @SuppressWarnings("unchecked")
-        LRUMap<String, MCRSearchResultDataBean> map = (LRUMap<String, MCRSearchResultDataBean>) request.getSession()
+        Map<String, MCRSearchResultDataBean> map = (LRUMap<String, MCRSearchResultDataBean>) request.getSession()
                 .getAttribute("mcrSearchResultMap");
         if (map == null) {
-            map = new LRUMap<String, MCRSearchResultDataBean>(16);
+            map = new LRUMap<>(16);
             request.getSession().setAttribute("mcrSearchResultMap", map);
         }
         map.put(searchresult.getId(), searchresult);
@@ -115,7 +116,7 @@ public class MCRSearchResultDataBean implements Serializable {
 
     public static MCRSearchResultDataBean retrieveSearchresultFromSession(HttpServletRequest request, String searchID) {
         @SuppressWarnings("unchecked")
-        LRUMap<String, MCRSearchResultDataBean> map = (LRUMap<String, MCRSearchResultDataBean>) request.getSession()
+        Map<String, MCRSearchResultDataBean> map = (LRUMap<String, MCRSearchResultDataBean>) request.getSession()
                 .getAttribute("mcrSearchResultMap");
         if (map == null) {
             return null;
@@ -190,7 +191,7 @@ public class MCRSearchResultDataBean implements Serializable {
         for (String ff : facetFields) {
             solrQuery.addFacetField(ff);
         }
-        if (facetFields.size() > 0) {
+        if (!facetFields.isEmpty()) {
             solrQuery.setFacetMinCount(1);
         }
 
@@ -210,7 +211,7 @@ public class MCRSearchResultDataBean implements Serializable {
 
             if (solrQuery.getFacetFields() != null) {
                 for (FacetField ff : solrQueryResponse.getFacetFields()) {
-                    LinkedHashMap<String, Long> fieldData = new LinkedHashMap<>();
+                    Map<String, Long> fieldData = new LinkedHashMap<>();
                     for (Count c : ff.getValues()) {
                         fieldData.put(c.getName(), c.getCount());
                     }
@@ -224,8 +225,9 @@ public class MCRSearchResultDataBean implements Serializable {
     }
 
     public MCRSearchResultEntry getHit(int hit) {
-        if (hit < 0 || hit > solrQueryResponse.getResults().getNumFound())
+        if (hit < 0 || hit > solrQueryResponse.getResults().getNumFound()) {
             return null;
+        }
         int pos = hit - start;
         if (pos < 0 || pos >= rows) {
             start = (hit / rows) * rows;
@@ -279,7 +281,7 @@ public class MCRSearchResultDataBean implements Serializable {
     }
 
     public List<MCRSearchResultEntry> getEntries() {
-        ArrayList<MCRSearchResultEntry> result = new ArrayList<MCRSearchResultEntry>();
+        List<MCRSearchResultEntry> result = new ArrayList<>();
         SolrDocumentList solrDocs = solrQueryResponse.getResults();
         for (int i = 0; i < solrDocs.size(); i++) {
             SolrDocument solrDoc = solrDocs.get(i);

@@ -28,10 +28,10 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -84,13 +84,15 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
 public class MCRClassificationBrowserTag extends SimpleTagSupport {
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private List<String> path = new ArrayList<>();
+    
     private String mode;
     
     private static LoadingCache<String, Integer> cacheHitCount = CacheBuilder.newBuilder()
             .maximumSize(5000)
             .expireAfterWrite(15, TimeUnit.MINUTES)
             .build(
-                new CacheLoader<String, Integer>() {
+                new CacheLoader<>() {
                     @Override
                   public Integer load(String key) throws Exception {
                         SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
@@ -115,7 +117,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
             .maximumSize(500)
             .expireAfterWrite(30, TimeUnit.MINUTES)
             .build(
-                new CacheLoader<MCRCategoryID, List<MCRCategory>>() {
+                new CacheLoader<>() {
                     @Override
                   public List<MCRCategory> load(MCRCategoryID key){
                         return MCRCategoryDAOFactory.obtainInstance().getChildren(key);
@@ -126,7 +128,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
             .maximumSize(10)
             .expireAfterWrite(15, TimeUnit.MINUTES)
             .build(
-                new CacheLoader<MCRCategoryID, Map<MCRCategoryID, Boolean>>() {
+                new CacheLoader<>() {
                     @Override
                   public Map<MCRCategoryID, Boolean> load(MCRCategoryID key) throws Exception {
                         return MCRCategLinkServiceFactory.obtainInstance().hasLinks(MCRCategoryDAOFactory.getInstance().getCategory(key,0));
@@ -137,7 +139,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
             .maximumSize(10)
             .expireAfterWrite(15, TimeUnit.MINUTES)
             .build(
-                new CacheLoader<MCRCategoryID, Map<MCRCategoryID, Number>>() {
+                new CacheLoader<>() {
                     @Override
                   public Map<MCRCategoryID, Number> load(MCRCategoryID key) throws Exception {
                         return MCRCategLinkServiceFactory.obtainInstance().countLinks(MCRCategoryDAOFactory.getInstance().getCategory(key,0), false);
@@ -149,14 +151,12 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
      */
     public void setModus(String mode) {
         this.mode = mode;
-        ;
     }
-
-    Vector<String> path = new Vector<String>();
 
     /**
      * @see jakarta.servlet.jsp.tagext.SimpleTagSupport#doTag()
      */
+    @Override
     public void doTag() throws JspException, IOException {
         PageContext pageContext = (PageContext) getJspContext();
         if("clear".equals(pageContext.getRequest().getParameter("_cache"))){
@@ -175,14 +175,14 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
         HttpServletRequest request = (HttpServletRequest) context.getRequest();
         String requestPath = request.getParameter("select");
         StringBuffer url = new StringBuffer(MCRFrontendUtil.getBaseURL());
-        url.append("do/classbrowser/" + mode + "?");
+        url.append("do/classbrowser/").append(mode).append('?');
 
         @SuppressWarnings("rawtypes")
         Enumeration paramNames = request.getParameterNames();
         while (paramNames.hasMoreElements()) {
             String s = paramNames.nextElement().toString();
             if (!s.equals("select") && !s.equals("modus")) {
-                url.append(URLEncoder.encode(s, StandardCharsets.UTF_8)).append("=")
+                url.append(URLEncoder.encode(s, StandardCharsets.UTF_8)).append('=')
                         .append(URLEncoder.encode(request.getParameter(s), StandardCharsets.UTF_8))
                         .append("&amp;");
             }
@@ -196,7 +196,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
         JspWriter out = getJspContext().getOut();
             out.write("\n\n<!-- ClassificationBrowser ("+rootClassifID.getRootID()+") START  -->");
             if (!MCRCategoryDAOFactory.obtainInstance().exist(rootClassifID)) {
-                LOGGER.error("Classification does not exist {}", () -> rootClassifID.getRootID());
+                LOGGER.error("Classification does not exist {}", rootClassifID::getRootID);
                 out.write("Classification " + rootClassifID.getRootID() + " does not exist!");
                 return;
             }
@@ -242,7 +242,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
             out.write("\n</div>");
             long d = System.currentTimeMillis() - start;
             out.write("\n\n<!-- ClassificationBrowser ("+rootClassifID.getRootID()+") ENDE  [" + Long.toString(d) + "ms] -->");
-            LOGGER.debug("ClassificationBrowser displayed for: {}   ({} ms)", () -> rootClassifID.getRootID(), () -> d);
+            LOGGER.debug("ClassificationBrowser displayed for: {}   ({} ms)", rootClassifID::getRootID, () -> d);
 
     }
 
@@ -381,25 +381,33 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
      */
     private String retrieveIconURL(CBConfig cb, boolean hasChildren, int curLevel, boolean hasLinks, boolean opened) {
         if (cb.expand) {
-            if (opened && hasChildren && hasLinks)
+            if (opened && hasChildren && hasLinks) {
                 return "images/folder_open.gif";
-            if (opened && hasChildren && !hasLinks)
+            }                
+            if (opened && hasChildren && !hasLinks) {
                 return "images/folder_open_empty.gif";
+            }
         }
         if (curLevel + 1 < cb.level) {
-            if (!opened && hasChildren && hasLinks)
+            if (!opened && hasChildren && hasLinks) {
                 return "images/folder_plus.gif";
-            if (!opened && hasChildren && !hasLinks)
+            }                
+            if (!opened && hasChildren && !hasLinks) {
                 return "images/folder_plus_empty.gif";
-            if (opened && hasChildren && hasLinks)
+            }                
+            if (opened && hasChildren && hasLinks) {
                 return "images/folder_minus.gif";
-            if (opened && hasChildren && !hasLinks)
+            }                
+            if (opened && hasChildren && !hasLinks) {
                 return "images/folder_minus_empty.gif";
+            }
         }
-        if (hasLinks)
+        if (hasLinks) {
             return "images/folder_plain.gif";
-        if (!hasLinks)
+        }
+        if (!hasLinks) {
             return "images/folder_plain_empty.gif";
+        }
 
         return "";
     }
@@ -458,12 +466,12 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
                 // do a subselect / create a url, that returns to an editor
                 url.append("servlets/XMLEditor");
                 url.append("?_action=end.subselect");
-                url.append("&amp;subselect.session=" + request.getParameter("XSL.subselect.session.SESSION"));
-                url.append("&amp;subselect.varpath=" + request.getParameter("XSL.subselect.varpath.SESSION"));
-                url.append("&amp;subselect.webpage="
-                        + URLEncoder.encode(request.getParameter("XSL.subselect.webpage.SESSION"), "UTF-8"));
-                url.append("&amp;_var_@categid=" + categ.getId().getId());
-                url.append("&amp;_var_@type=" + URLEncoder.encode(categ.getCurrentLabel().get().getText(), "UTF-8"));
+                url.append("&amp;subselect.session=").append(request.getParameter("XSL.subselect.session.SESSION"));
+                url.append("&amp;subselect.varpath=").append(request.getParameter("XSL.subselect.varpath.SESSION"));
+                url.append("&amp;subselect.webpage=")
+                        .append(URLEncoder.encode(request.getParameter("XSL.subselect.webpage.SESSION"), "UTF-8"));
+                url.append("&amp;_var_@categid=").append(categ.getId().getId());
+                url.append("&amp;_var_@type=").append(URLEncoder.encode(categ.getCurrentLabel().get().getText(), "UTF-8"));
 
             } else {
                 // "normal" classification browser - do a search
@@ -498,8 +506,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
         // displayed
         // -> so we can remove it here)
         path.clear();
-        for (int i = 0; i < uriParts.length; i++) {
-            String x = uriParts[i];
+        for (String x : uriParts) {
             if (x.length() > 0) {
                 if (path.contains(x)) {
                     path.remove(x);
@@ -508,11 +515,12 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
                 }
             }
         }
-        String result = "";
+
+        StringBuffer sbResult = new StringBuffer();
         for (String uriPart : path) {
-            result += "/" + uriPart;
+            sbResult.append('/').append(uriPart);
         }
-        return result;
+        return sbResult.toString();
     }
 
     /**
@@ -527,9 +535,9 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
     private String generateQuery(CBConfig cb, String categid) {
         StringBuffer result = new StringBuffer();
         if (cb.filter != null) {
-            result.append("+" + cb.filter.replace("=", ":"));
+            result.append('+').append(cb.filter.replace("=", ":"));
         }
-        result.append(" +category.top:" + cb.classification + "\\:" + categid);
+        result.append(" +category.top:").append(cb.classification).append("\\:").append(categid);
         return result.toString();
     }
 
@@ -673,7 +681,7 @@ class CBConfig {
 
         hideemptyleaves = MCRConfiguration2.getBoolean(PROP_PREFIX + mode + ".HideEmptyLeaves").orElse(true);
 
-        level = MCRConfiguration2.getInt(PROP_PREFIX + mode + ".Level").orElse(100000);
+        level = MCRConfiguration2.getInt(PROP_PREFIX + mode + ".Level").orElse(100_000);
 
         expand = MCRConfiguration2.getBoolean(PROP_PREFIX + mode + ".Expand").orElse(false);
 
