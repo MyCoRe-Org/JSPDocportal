@@ -7,7 +7,7 @@
     <version>2024.06-SNAPSHOT</version>
   </parent>
   <artifactId>jspdocportal-diskcache</artifactId>
-  <name>jspdocportal-diskcache</name>
+  <name>JSPDocportal DiskCache Module</name>
   <description>Cacheing and generation of derived files</description>
   <properties>
     <manifest.priority>13</manifest.priority>
