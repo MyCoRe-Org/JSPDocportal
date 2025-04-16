@@ -41,13 +41,13 @@ public class MCRIncludeXEditorTag extends SimpleTagSupport {
 
     private static final Pattern REGEX_XML_EMPTY_ELEMENTS = Pattern.compile("<(a|i|span|div|textarea)\\s([^>]*)?(\\s)?/>");
 
-    private String editorPath = null;
+    private String editorPath;
 
-    private String cancelURL = null;
+    private String cancelURL;
 
-    private String sourceURI = null;
+    private String sourceURI;
 
-    private String pageURL = null;
+    private String pageURL;
 
     /**
      * Path to external editor definition
@@ -67,10 +67,11 @@ public class MCRIncludeXEditorTag extends SimpleTagSupport {
         this.cancelURL = cancelURL;
     }
 
+    @Override
     public void doTag() throws JspException, IOException {
         PageContext pageContext = (PageContext) getJspContext();
 
-        try (MCRHibernateTransactionWrapper htw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
             MCRContent editorContent = null;
             if (editorPath != null && !editorPath.equals("")) {
                 if (!editorPath.startsWith("/")) {
@@ -119,7 +120,7 @@ public class MCRIncludeXEditorTag extends SimpleTagSupport {
 
                         MCRContent newContent = MCRStaticXEditorFileServlet.doExpandEditorElements(editorContent,
                                 request, (HttpServletResponse) pageContext.getResponse(), sessionID, pageURL);
-                        String content = null;
+                        String content;
                         if (newContent != null) {
                             content = newContent.asString().replaceAll("<\\?xml.*?\\?>", "");
                         } else {

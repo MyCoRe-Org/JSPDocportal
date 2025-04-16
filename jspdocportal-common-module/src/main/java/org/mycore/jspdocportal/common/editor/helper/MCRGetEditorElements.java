@@ -63,8 +63,8 @@ public class MCRGetEditorElements {
     private Properties parseQueryString(String query) {
         Properties params = new Properties();
         String[] splitParams = query.replaceAll("&amp;", "&").split("&");
-        for (int i = 0; i < splitParams.length; i++) {
-            String[] splitParam = splitParams[i].split("=");
+        for (String param : splitParams) {
+            String[] splitParam = param.split("=");
             params.put(splitParam[0].trim(), splitParam[1].trim());
         }
         return params;
@@ -72,7 +72,7 @@ public class MCRGetEditorElements {
 
     public Element resolveElement(String uri) {
         try {
-            String query = uri.substring(uri.indexOf("?") + 1);
+            String query = uri.substring(uri.indexOf('?') + 1);
             Properties params = parseQueryString(query);
             String mode = params.getProperty("mode");
             if (mode.equals("getHiddenVar")) {
@@ -84,9 +84,9 @@ public class MCRGetEditorElements {
             } else if (mode.equals("getSpecialCategoriesInItems")) {
                 return getSpecialCategoriesInItems(params);
             } else if (mode.equals("getGroupItems")) {
-                return getGroupItems(params);
+                return getGroupItems();
             } else if (mode.equals("getGroupItemAndLabelForUser")) {
-                return getGroupItemAndLabelForUser(params);
+                return getGroupItemAndLabelForUser();
             } else if (mode.equals("getClassificationLabelInItems")) {
                 return getClassificationLabelInItems(params);
             }
@@ -97,28 +97,27 @@ public class MCRGetEditorElements {
         }
     }
 
-    private Element getGroupItems(Properties params) throws TransformerException {
+    private Element getGroupItems() throws TransformerException {
         Element retitems = new Element("items");
         List<MCRRole> groupIDs = MCRRoleManager.listSystemRoles();
-
-        for (int i = 0; i < groupIDs.size(); i++) {
-            org.jdom2.Element item = new org.jdom2.Element("item")
-                    .setAttribute("value", (String) groupIDs.get(i).getName())
-                    .setAttribute("label", (String) groupIDs.get(i).getName());
+        for (MCRRole groupId : groupIDs) {
+            Element item = new Element("item")
+                .setAttribute("value", groupId.getName())
+                .setAttribute("label", groupId.getName());
             retitems.addContent(item);
         }
         return retitems;
     }
 
-    private Element getGroupItemAndLabelForUser(Properties params) throws TransformerException {
+    private Element getGroupItemAndLabelForUser() throws TransformerException {
         Element retitems = new Element("items");
         List<MCRRole> groups = MCRRoleManager.listSystemRoles();
         Iterator<MCRRole> itGroup = groups.iterator();
         while (itGroup.hasNext()) {
-            MCRRole group = (MCRRole) itGroup.next();
+            MCRRole group = itGroup.next();
             String id = group.getName();
             if (id.startsWith("create")) {
-                org.jdom2.Element item = new org.jdom2.Element("item").setAttribute("value", id).setAttribute("label",
+                Element item = new Element("item").setAttribute("value", id).setAttribute("label",
                         group.getName());
                 retitems.addContent(item);
             }
@@ -131,8 +130,9 @@ public class MCRGetEditorElements {
         if (classid == null || classid.equals("")) {
             String prop = params.getProperty("prop");
             String defaultValue = params.getProperty("defaultValue");
-            if (defaultValue == null || defaultValue.equals(""))
+            if (defaultValue == null || defaultValue.equals("")) {
                 defaultValue = "DocPortal_class_1";
+            }
             if (prop != null && !prop.equals("")) {
                 classid = MCRConfiguration2.getString(prop).orElse(defaultValue);
             } else {
@@ -156,8 +156,9 @@ public class MCRGetEditorElements {
         if (classid == null || classid.equals("")) {
             String prop = params.getProperty("prop");
             String defaultValue = params.getProperty("defaultValue");
-            if (defaultValue == null || defaultValue.equals(""))
+            if (defaultValue == null || defaultValue.equals("")) {
                 defaultValue = "DocPortal_class_1";
+            }
             if (prop != null && !prop.equals("")) {
                 classid = MCRConfiguration2.getString(prop).orElse(defaultValue);
             } else {
@@ -189,8 +190,9 @@ public class MCRGetEditorElements {
         String emptyLeafs = params.getProperty("emptyLeafs");
         if (emptyLeafs == null || emptyLeafs.equals("")) {
             emptyLeafs = "yes";
-        } else
+        } else {
             emptyLeafs = "no";
+        }
         String withCounter = params.getProperty("withCounter");
         if (withCounter == null || withCounter.equals("")) {
             withCounter = "true";
@@ -199,7 +201,7 @@ public class MCRGetEditorElements {
         if (classProp != null && categoryProp != null) {
             String classid = MCRConfiguration2.getString(classProp).orElse("DocPortal_class_1");
             Element items = transformClassToItems(classid, emptyLeafs, withCounter.equalsIgnoreCase("true"));
-            List<String> values = null;
+            List<String> values;
             try {
                 values = Arrays.asList(MCRConfiguration2.getString(categoryProp).orElse("").split(","));
             } catch (Exception ex) {
@@ -209,7 +211,7 @@ public class MCRGetEditorElements {
             for (Iterator<Element> it = items.getDescendants(new ElementFilter("item")); it.hasNext();) {
                 Element item = it.next();
                 if (values.contains(item.getAttributeValue("value"))) {
-                    retitems.addContent((Element) item.clone());
+                    retitems.addContent(item.clone());
                 }
             }
         }
@@ -227,10 +229,12 @@ public class MCRGetEditorElements {
         // Default-Values
         //	if(parasearch == null || parasearch.equals("")) parasearch = "true";
         //	if(textsearch == null || textsearch.equals("")) textsearch = "true";
-        if (notinherit == null || notinherit.equals(""))
+        if (notinherit == null || notinherit.equals("")) {
             notinherit = "true";
-        if (heritable == null || heritable.equals(""))
+        }
+        if (heritable == null || heritable.equals("")) {
             heritable = "false";
+        }
 
         Element hiddens = new Element("hiddens");
         Element hidden1 = new Element("hidden");
@@ -263,15 +267,16 @@ public class MCRGetEditorElements {
         String defaultValue = params.getProperty("defaultValue");
         String var = params.getProperty("var");
 
-        String propValue = "";
+        String propValue;
         if (bundle != null && !bundle.equals("")) {
             if (lang == null || lang.equals("")) {
                 lang = "de";
             }
             propValue = MCRTranslation.translate(prop, Locale.of(lang));
         } else {
-            if (defaultValue == null)
+            if (defaultValue == null) {
                 defaultValue = "";
+            }
             propValue = MCRConfiguration2.getString(prop).orElse(defaultValue);
         }
 

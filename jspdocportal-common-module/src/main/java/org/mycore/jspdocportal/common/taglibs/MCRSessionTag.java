@@ -42,7 +42,7 @@ public class MCRSessionTag extends SimpleTagSupport {
      * Time when the webapp was deployed 
      * coded as base32 String
      */
-    private static String deployTimeBase32 = null;
+    private static String deployTimeBase32;
 
     private String info;
 
@@ -56,6 +56,7 @@ public class MCRSessionTag extends SimpleTagSupport {
         var = inputVar;
     }
 
+    @Override
     public void doTag() throws JspException, IOException {
         PageContext pageContext = (PageContext) getJspContext();
 

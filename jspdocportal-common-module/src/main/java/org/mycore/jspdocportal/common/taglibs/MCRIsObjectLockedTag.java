@@ -28,6 +28,7 @@ public class MCRIsObjectLockedTag extends SimpleTagSupport {
         this.mcrid = mcrid;
     }
 
+    @Override
     public void doTag() throws JspException, IOException {
         PageContext pageContext = (PageContext) getJspContext();
         Boolean result = Boolean.TRUE;
@@ -41,7 +42,7 @@ public class MCRIsObjectLockedTag extends SimpleTagSupport {
                 result = Boolean.FALSE;
             }
         } catch (MCRPersistenceException e) {
-            LOGGER.debug("{}", () -> e.getMessage());
+            LOGGER.debug("{}", e::getMessage);
         }
         pageContext.setAttribute(var, result);
     }

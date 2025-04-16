@@ -30,7 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.mycore.jspdocportal.common.MCRNavigationUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mycore.jspdocportal.common.navigation.model.Navigation;
 import org.mycore.jspdocportal.common.navigation.model.NavigationItem;
 import org.mycore.resource.MCRResourceHelper;
@@ -48,6 +49,8 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "navigations", namespace = "http://www.mycore.org/jspdocportal/navigation")
 @XmlAccessorType(XmlAccessType.NONE)
 public class Navigations {
+    private static final Logger LOGGER = LogManager.getLogger();
+    
     @XmlElement(name = "navigation", namespace = "http://www.mycore.org/jspdocportal/navigation")
     private List<Navigation> list = new ArrayList<>();
 
@@ -56,7 +59,7 @@ public class Navigations {
     }
 
     public Map<String, Navigation> getMap() {
-        HashMap<String, Navigation> hashMap = new HashMap<>();
+        Map<String, Navigation> hashMap = new HashMap<>();
         for (Navigation n : list) {
             hashMap.put(n.getId(), n);
         }
@@ -71,7 +74,7 @@ public class Navigations {
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             m.marshal(n, os);
         } catch (JAXBException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
     }
 
@@ -81,7 +84,7 @@ public class Navigations {
             Unmarshaller um = context.createUnmarshaller();
             return (Navigations) um.unmarshal(ir);
         } catch (JAXBException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
         return null;
     }
@@ -105,7 +108,7 @@ public class Navigations {
     * @param sce - the ServletContext
     */
     public static void loadNavigation(ServletContext sce) {
-        Navigations nav = Navigations.unmarshall(MCRResourceHelper.getResourceAsStream("/config/navigation.xml"));
+        Navigations nav = unmarshall(MCRResourceHelper.getResourceAsStream("/config/navigation.xml"));
         for (Navigation n : nav.getList()) {
             annotate(n);
         }

@@ -24,14 +24,15 @@ public class MCRDisplayClassificationCategoryTag extends SimpleTagSupport {
 
     private String categid;
 
-    private boolean showDescription = false;
+    private boolean showDescription;
 
+    @Override
     public void doTag() throws JspException, IOException {
         if (lang == null) {
             lang = MCRSessionMgr.getCurrentSession().getCurrentLanguage();
         }
         if (classid != null && categid != null && lang != null) {
-            try (MCRHibernateTransactionWrapper mtw = new MCRHibernateTransactionWrapper()) {
+            try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
                 if (showDescription) {
                     String descr = categoryDAO.getCategory(new MCRCategoryID(classid, categid), 0).getLabel(lang).get()
                         .getDescription();
@@ -60,8 +61,8 @@ public class MCRDisplayClassificationCategoryTag extends SimpleTagSupport {
     }
 
     public void setValueURI(String valueURI) {
-        int start = valueURI.lastIndexOf("/");
-        int sep = valueURI.lastIndexOf("#");
+        int start = valueURI.lastIndexOf('/');
+        int sep = valueURI.lastIndexOf('#');
         if (start >= 0 && sep >= 0 && sep > start) {
             this.classid = valueURI.substring(start + 1, sep);
             this.categid = valueURI.substring(sep + 1);

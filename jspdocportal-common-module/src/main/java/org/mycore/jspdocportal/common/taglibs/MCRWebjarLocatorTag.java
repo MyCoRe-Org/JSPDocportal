@@ -102,6 +102,7 @@ public class MCRWebjarLocatorTag extends SimpleTagSupport {
         this.attribute = attribute;
     }
 
+    @Override
     public void doTag() throws JspException, IOException {
         PageContext pageContext = (PageContext) getJspContext();
         try {

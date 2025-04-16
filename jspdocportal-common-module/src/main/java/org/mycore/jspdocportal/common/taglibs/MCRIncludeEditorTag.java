@@ -40,6 +40,7 @@ public class MCRIncludeEditorTag extends SimpleTagSupport {
         this.cancelPage = cancelPage;
     }
 
+    @Override
     public void doTag() throws JspException, IOException {
         PageContext pageContext = (PageContext) getJspContext();
 

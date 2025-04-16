@@ -31,14 +31,15 @@ public class MCRHasAccessTag extends SimpleTagSupport {
         this.mcrid = mcrid;
     }
 
+    @Override
     public void doTag() throws JspException, IOException {
-        try (MCRHibernateTransactionWrapper htw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
             PageContext pageContext = (PageContext) getJspContext();
 
             if (mcrid == null || "".equals(mcrid)) { // allgemeiner check des aktuellen Users
-                pageContext.setAttribute(var, Boolean.valueOf(MCRAccessManager.checkPermission(permission)));
+                pageContext.setAttribute(var, MCRAccessManager.checkPermission(permission));
             } else {
-                pageContext.setAttribute(var, Boolean.valueOf(MCRAccessManager.checkPermission(mcrid, permission)));
+                pageContext.setAttribute(var, MCRAccessManager.checkPermission(mcrid, permission));
             }
         } catch (Exception e) {
             LOGGER.error("could not check access", e);

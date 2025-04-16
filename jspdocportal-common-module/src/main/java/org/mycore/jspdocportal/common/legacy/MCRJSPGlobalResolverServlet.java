@@ -71,18 +71,10 @@ import jakarta.servlet.http.HttpServletResponse;
 @Deprecated
 public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
 
+    @java.io.Serial
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = LogManager.getLogger();
-
-   /**
-     * The initalization of the servlet.
-     * 
-     * @see jakarta.servlet.GenericServlet#init()
-     */
-    public void init() throws ServletException {
-        super.init();
-    }
 
     /**
      * The method replace the default form MCRSearchServlet and redirect the
@@ -294,18 +286,17 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
                 MCRObjectID mcrMetaID = MCRObjectID.getInstance(mcrID);
                 label = MCRObjectID.getInstance(mcrMetaID.getProjectId() + "_derivate_" + label).toString();
             }
-            StringBuffer sbURL = null;
+            StringBuffer sbURL;
             if (path.length == 4) {
                 sbURL = createURLForMainDocInDerivateWithLabel(request, mcrID, label);
             } else {
                 sbURL = createRootURLForDerivateWithLabel(request, mcrID, label);
                 // display file on remaining path
                 for (int i = 4; i < path.length; i++) {
-                    sbURL.append("/").append(path[i]);
+                    sbURL.append('/').append(path[i]);
                 }
             }
             response.sendRedirect(sbURL.toString());
-            return;
         }
     }
 }

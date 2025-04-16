@@ -66,6 +66,7 @@ public class MCRTransformXslTag extends SimpleTagSupport {
 
     private String mcrid;
 
+    @Override
     public void doTag() throws JspException, IOException {
         try {
             // this works, if the default transformer is xslt3 (set by property):
@@ -89,7 +90,6 @@ public class MCRTransformXslTag extends SimpleTagSupport {
             if (dom != null) {
                 t.transform(new MCRDOMContent(dom), baos);
                 getJspContext().getOut().append(baos.toString(StandardCharsets.UTF_8));
-                return;
             }
         } catch (Exception e) {
             LOGGER.error("Error in XSLT-Processing ({}): {}", mcrid, stylesheet, e);

@@ -57,6 +57,7 @@ public class MCRCustomNavigationTag extends MCRAbstractNavigationTag {
 
     private String var;
 
+    @Override
     public void doTag() throws JspException, IOException {
         JspContext context = getJspContext();
         init(id);
@@ -71,7 +72,7 @@ public class MCRCustomNavigationTag extends MCRAbstractNavigationTag {
             return;
         }
 
-        if (nav.getChildren().size() == 0) {
+        if (nav.getChildren().isEmpty()) {
             return;
         }
         context.setAttribute(var, getNavigation(nav), PageContext.PAGE_SCOPE);

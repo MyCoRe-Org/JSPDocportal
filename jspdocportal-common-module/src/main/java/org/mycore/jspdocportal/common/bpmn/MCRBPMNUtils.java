@@ -58,7 +58,7 @@ public class MCRBPMNUtils {
     public static MCRObject loadMCRObjectFromWorkflowDirectory(MCRObjectID mcrObjID) {
         MCRObject mcrObj = null;
         try {
-            mcrObj = MCRBPMNUtils.getWorkflowObject(mcrObjID);
+            mcrObj = getWorkflowObject(mcrObjID);
         } catch (Exception e) {
             LOGGER.error(e);
         }
@@ -120,7 +120,7 @@ public class MCRBPMNUtils {
 
     public static Document getWorkflowObjectXML(MCRObjectID mcrObjID) {
         Document doc = null;
-        Path wfFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);
+        Path wfFile = getWorkflowObjectFile(mcrObjID);
         MCRPathContent mpc = new MCRPathContent(wfFile);
         try {
             doc = mpc.asXML();
@@ -148,7 +148,7 @@ public class MCRBPMNUtils {
 
     public static Document getWorkflowDerivateXML(MCRObjectID mcrObjID, MCRObjectID mcrDerID) {
         Document doc = null;
-        Path wfFile = MCRBPMNUtils.getWorkflowDerivateFile(mcrObjID, mcrDerID);
+        Path wfFile = getWorkflowDerivateFile(mcrObjID, mcrDerID);
         MCRPathContent mpc = new MCRPathContent(wfFile);
         try {
             doc = mpc.asXML();
@@ -213,7 +213,7 @@ public class MCRBPMNUtils {
     public static Map<String, List<String>> getDerivateFiles(MCRObjectID mcrObjID) {
         Map<String, List<String>> result = new HashMap<>();
         Path baseDir = getWorkflowObjectDir(mcrObjID);
-        MCRObject obj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
+        MCRObject obj = loadMCRObjectFromWorkflowDirectory(mcrObjID);
         try {
             for (MCRMetaLinkID derID : obj.getStructure().getDerivates()) {
                 String id = derID.getXLinkHref();

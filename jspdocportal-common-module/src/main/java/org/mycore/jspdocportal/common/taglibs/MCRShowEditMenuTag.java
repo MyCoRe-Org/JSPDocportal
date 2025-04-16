@@ -69,6 +69,7 @@ public class MCRShowEditMenuTag extends MCRAbstractTag {
 
     private String cssClass = "";
 
+    @Override
     public void doTag() throws JspException, IOException {
         init();
         MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrid);
@@ -100,7 +101,7 @@ public class MCRShowEditMenuTag extends MCRAbstractTag {
             Map<String, String> modeChecks = MCRConfiguration2.getSubPropertiesMap("MCR.Workflow.RetrieveMode.");
 
             for (Map.Entry<String, String> entry : modeChecks.entrySet()) {
-                String mode = entry.getKey().substring(entry.getKey().lastIndexOf(".") + 1);
+                String mode = entry.getKey().substring(entry.getKey().lastIndexOf('.') + 1);
                 String role = mode + "-" + mcrObjID.getTypeId();
                 if (MCRUserManager.getCurrentUser().isUserInRole(role)) {
                     XPathExpression<Object> xpCheck = xpFactory.compile(entry.getValue(), Filters.fpassthrough(), null,

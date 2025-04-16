@@ -47,10 +47,10 @@ public class NavigationItem implements NavigationObject {
     private String href;
 
     @XmlAttribute(name = "hidden")
-    private Boolean hidden = null;
+    private Boolean hidden;
 
     @XmlAttribute(name = "extern")
-    private Boolean extern = null;
+    private Boolean extern;
 
     @XmlAttribute(name = "permission")
     private String permission;
@@ -147,6 +147,7 @@ public class NavigationItem implements NavigationObject {
         return navItemList;
     }
 
+    @Override
     public NavigationObject getParent() {
         return parent;
     }

@@ -26,13 +26,13 @@ package org.mycore.jspdocportal.common.navigation.model;
 import java.util.List;
 
 public interface NavigationObject {
-    public NavigationItem retrieveChild(String id);
+    NavigationItem retrieveChild(String id);
 
-    public List<NavigationItem> getChildren();
+    List<NavigationItem> getChildren();
 
-    public NavigationObject getParent();
+    NavigationObject getParent();
 
-    public int getLevel();
+    int getLevel();
 
-    public String getId();
+    String getId();
 }

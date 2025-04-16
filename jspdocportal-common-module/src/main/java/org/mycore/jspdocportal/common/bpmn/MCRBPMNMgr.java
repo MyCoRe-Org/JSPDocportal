@@ -109,14 +109,14 @@ public class MCRBPMNMgr {
     }
 
     public static MCRWorkflowMgr getWorkflowMgr(DelegateExecution execution) {
-        String mode = String.valueOf(execution.getVariable(MCRBPMNMgr.WF_VAR_MODE));
+        String mode = String.valueOf(execution.getVariable(WF_VAR_MODE));
         return getWorkflowMgrForMode(mode);
     }
 
     public static MCRWorkflowMgr getWorkflowMgr(String processInstanceId) {
-        RuntimeService rs = MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService();
+        RuntimeService rs = getWorfklowProcessEngine().getRuntimeService();
 
-        String mode = String.valueOf(rs.getVariable(processInstanceId, MCRBPMNMgr.WF_VAR_MODE));
+        String mode = String.valueOf(rs.getVariable(processInstanceId, WF_VAR_MODE));
         return getWorkflowMgrForMode(mode);
     }
 

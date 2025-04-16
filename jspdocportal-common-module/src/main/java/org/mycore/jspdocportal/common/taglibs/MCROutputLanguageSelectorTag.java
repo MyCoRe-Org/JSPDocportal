@@ -95,6 +95,7 @@ public class MCROutputLanguageSelectorTag extends MCRAbstractTag {
 
     private String var;
 
+    @Override
     public void doTag() throws JspException, IOException {
 
         init();
@@ -109,21 +110,21 @@ public class MCROutputLanguageSelectorTag extends MCRAbstractTag {
 
         StringBuffer url = new StringBuffer(initialURL);
         if (!initialURL.toString().contains("?")) {
-            url.append("?");
+            url.append('?');
         }
 
         JspWriter out = getJspContext().getOut();
         JspContext context = getJspContext();
         JspFragment body = getJspBody();
 
-        Enumeration<String> pnames = (Enumeration<String>) request.getParameterNames();
+        Enumeration<String> pnames = request.getParameterNames();
 
         while (pnames.hasMoreElements()) {
             String pName = pnames.nextElement();
             if (pName.equals("lang")) {
                 continue;
             }
-            url.append(URLEncoder.encode(pName, StandardCharsets.UTF_8)).append("=")
+            url.append(URLEncoder.encode(pName, StandardCharsets.UTF_8)).append('=')
                 .append(URLEncoder.encode(request.getParameter(pName), StandardCharsets.UTF_8));
         }
         //UriBuilder.fromUri("").replaceQueryParam("lang",  "l");
@@ -131,6 +132,7 @@ public class MCROutputLanguageSelectorTag extends MCRAbstractTag {
 
         boolean first = true;
         for (String l : languages.split(",")) {
+            l = l.trim();
             LanguageVariables lv = new LanguageVariables();
             lv.setCurrentLang(lang);
             lv.setFirst(first);
@@ -140,7 +142,6 @@ public class MCROutputLanguageSelectorTag extends MCRAbstractTag {
             lv.setTitle(getTitle(l));
             StringBuilder imageURL = new StringBuilder(MCRFrontendUtil.getBaseURL());
             lv.setImageURL(imageURL.append("images/lang-").append(l).append(".svg").toString());
-            l = l.trim();
             if (first) {
                 first = false;
             }
