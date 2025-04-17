@@ -57,7 +57,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
     private static final Logger LOGGER = LogManager.getLogger();
 
     public void setIsNewEditorSource(String newEditorSource) {
-        this.isNewEditorSource = newEditorSource.equals("true");
+        this.isNewEditorSource = ("true").equals(newEditorSource);
     }
 
     public void setEditorSource(String editorSource) {
