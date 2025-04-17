@@ -26,18 +26,19 @@ public class MODSDataURLPostProcessor extends MCRPostProcessorXSL {
         final Document newXML = oldXML.clone();
 
         //
-         final XPathExpression<Element> dataURLXPath = XPathFactory.instance().compile(".//mods:abstract[@altFormat]",
+        final XPathExpression<Element> dataURLXPath = XPathFactory.instance().compile(".//mods:abstract[@altFormat]",
             Filters.element(), null, MCRConstants.MODS_NAMESPACE,
             MCRConstants.XLINK_NAMESPACE);
-         
-        for(Element e: dataURLXPath.evaluate(newXML)){
-            String content = "<html>"+e.getTextNormalize()+"</html>";
+
+        for (Element e : dataURLXPath.evaluate(newXML)) {
+            String content = "<html>" + e.getTextNormalize() + "</html>";
             content = content.replace("&nbsp;", "&#160;");
             String mimeType = Optional.ofNullable(e.getAttributeValue("contentType")).orElse("text/xml");
-            MCRDataURL dataURL = new MCRDataURL(content.getBytes(StandardCharsets.UTF_8), MCRDataURLEncoding.BASE64, mimeType, StandardCharsets.UTF_8);
+            MCRDataURL dataURL = new MCRDataURL(content.getBytes(StandardCharsets.UTF_8), MCRDataURLEncoding.BASE64,
+                mimeType, StandardCharsets.UTF_8);
             e.setAttribute("altFormat", dataURL.toString());
             SAXBuilder sb = new SAXBuilder();
-            Document doc = sb.build(new StringReader("<html>"+ StringEscapeUtils.unescapeHtml4(content) + "</html>"));
+            Document doc = sb.build(new StringReader("<html>" + StringEscapeUtils.unescapeHtml4(content) + "</html>"));
             StringBuffer sbText = new StringBuffer();
             doc.getDescendants(Filters.text()).forEach(t -> sbText.append(t.getValue()).append(' '));
             e.setText(StringUtils.normalizeSpace(sbText.toString()));

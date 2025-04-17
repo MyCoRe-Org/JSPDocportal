@@ -37,8 +37,8 @@ public class MCRSetStableServdateEventHandler extends MCREventHandlerBase {
 
     public static final String SERVDATE_TYPE_STABLE = "stable";
     public static final long DAYS_IN_WAITING = 10;
-    
-        @Override
+
+    @Override
     protected final void handleObjectCreated(MCREvent evt, MCRObject obj) {
         if (!obj.isImportMode()) {
             handleObject(obj);

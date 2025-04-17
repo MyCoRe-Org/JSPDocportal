@@ -34,20 +34,18 @@ public class MCRJSPPICreationEventhandler extends MCRPICreationEventHandler {
 
     @Override
     protected void handleObjectCreated(MCREvent evt, MCRObject obj) {
-        if(obj.isImportMode()) {
+        if (obj.isImportMode()) {
             MCRPIService.updateFlagsInDatabase(obj);
-        }
-        else {
+        } else {
             super.handleObjectCreated(evt, obj);
         }
     }
 
     @Override
     protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
-        if(obj.isImportMode()) {
+        if (obj.isImportMode()) {
             MCRPIService.updateFlagsInDatabase(obj);
-        }
-        else {
+        } else {
             super.handleObjectUpdated(evt, obj);
         }
     }

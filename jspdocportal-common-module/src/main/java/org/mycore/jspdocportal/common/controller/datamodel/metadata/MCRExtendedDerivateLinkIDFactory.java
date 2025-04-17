@@ -16,7 +16,7 @@ import org.mycore.datamodel.niofs.MCRPath;
 public class MCRExtendedDerivateLinkIDFactory extends MCRDefaultEnrichedDerivateLinkIDFactory {
     /** Logger */
     private static final Logger LOGGER = LogManager.getLogger();
-    
+
     @Override
     public MCREditableMetaEnrichedLinkID getDerivateLink(MCRDerivate der) {
         MCREditableMetaEnrichedLinkID derivateLinkID = super.getDerivateLink(der);
@@ -29,12 +29,13 @@ public class MCRExtendedDerivateLinkIDFactory extends MCRDefaultEnrichedDerivate
                     @SuppressWarnings("rawtypes")
                     MCRFileAttributes attrs = Files.readAttributes(mcrPath, MCRFileAttributes.class);
                     derivateLinkID.setOrCreateElement("maindoc_size", Long.toString(attrs.size()));
-                    derivateLinkID.getContentList().add(new Element("maindoc_"+attrs.digest().getAlgorithm().toLowerCase()).setText(attrs.digest().toHexString()));
+                    derivateLinkID.getContentList()
+                        .add(new Element("maindoc_" + attrs.digest().getAlgorithm().toLowerCase())
+                            .setText(attrs.digest().toHexString()));
                 } catch (IOException e) {
                     LOGGER.error(e);
                 }
-            }
-            else {
+            } else {
                 LOGGER.error("Error - maindoc '{}' does not exist for {}", () -> mainDoc, der::getId);
             }
         }

@@ -19,12 +19,12 @@ import jakarta.servlet.http.HttpServletRequest;
  */
 
 public class MCRDiskcacheDownloadServlet extends FileServlet {
-    
+
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
-    private MCRIDMapper mcrIdMapper
-        = MCRConfiguration2.getInstanceOf(MCRIDMapper.class, MCRIDMapper.MCR_PROPERTY_CLASS).get();
+    private MCRIDMapper mcrIdMapper =
+        MCRConfiguration2.getInstanceOf(MCRIDMapper.class, MCRIDMapper.MCR_PROPERTY_CLASS).get();
 
     @Override
     public void init() throws ServletException {

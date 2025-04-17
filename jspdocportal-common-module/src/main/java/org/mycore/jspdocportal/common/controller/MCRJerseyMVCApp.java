@@ -26,7 +26,8 @@ public class MCRJerseyMVCApp extends ResourceConfig {
     public MCRJerseyMVCApp() {
         super();
         setApplicationName("MyCoRe Jersey MVC");
-        String packages = MCRConfiguration2.getString("MCR.JSPDocportal.MVCApp.packages").orElse("org.mycore.jspdocportal.common.controller");
+        String packages = MCRConfiguration2.getString("MCR.JSPDocportal.MVCApp.packages")
+            .orElse("org.mycore.jspdocportal.common.controller");
         packages(packages.split(","));
         property(JspMvcFeature.TEMPLATE_BASE_PATH, "/WEB-INF/views");
         register(MCRMakePathAbsoluteFilter.class);

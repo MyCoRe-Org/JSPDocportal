@@ -66,8 +66,8 @@ public class MCRBPMNMgr {
     public static ProcessEngineConfiguration getWorkflowProcessEngineConfiguration() {
         try {
             Map<String, String> props = MCRConfiguration2.getSubPropertiesMap(WF_PROCESS_ENGINE_PROPERTIES_PREFIX);
-            StandaloneProcessEngineConfiguration peConf
-                = (StandaloneProcessEngineConfiguration) ProcessEngineConfiguration
+            StandaloneProcessEngineConfiguration peConf =
+                (StandaloneProcessEngineConfiguration) ProcessEngineConfiguration
                     .createStandaloneProcessEngineConfiguration();
             if (props.containsKey("JdbcDriver")) {
                 peConf.setJdbcDriver(props.get("JdbcDriver"));

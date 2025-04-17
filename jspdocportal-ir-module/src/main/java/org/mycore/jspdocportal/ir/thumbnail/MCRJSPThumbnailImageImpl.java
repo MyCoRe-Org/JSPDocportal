@@ -53,7 +53,7 @@ public class MCRJSPThumbnailImageImpl extends MCRThumbnailImageImpl {
             recordId = recordId.replace("/", "_");
         }
 
-        Optional<MCRPIRegistrationInfo> oPiInfo = MCRPIManager.getInstance().getInfo(recordId,  MCRLocalID.TYPE);
+        Optional<MCRPIRegistrationInfo> oPiInfo = MCRPIManager.getInstance().getInfo(recordId, MCRLocalID.TYPE);
         return oPiInfo.map(MCRPIRegistrationInfo::getMycoreID).map(MCRObjectID::getInstance);
     }
 }

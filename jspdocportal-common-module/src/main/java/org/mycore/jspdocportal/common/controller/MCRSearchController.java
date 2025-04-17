@@ -60,7 +60,8 @@ public class MCRSearchController {
 
     public static final Namespace NS_XED = Namespace.getNamespace("xed", "http://www.mycore.de/xeditor");
 
-    private static final Pattern REGEX_XML_EMPTY_ELEMENTS = Pattern.compile("<(a|i|span|div|textarea)\\s([^>]*)?(\\s)?/>");
+    private static final Pattern REGEX_XML_EMPTY_ELEMENTS =
+        Pattern.compile("<(a|i|span|div|textarea)\\s([^>]*)?(\\s)?/>");
 
     public static final int DEFAULT_ROWS = 100;
 
@@ -71,7 +72,7 @@ public class MCRSearchController {
         @Context HttpServletResponse response) {
         return defaultRes(null, request, response);
     }
-    
+
     @POST
     @Path("/{mask}")
     public Response submit(@PathParam(PARAM_MASK) String mask, @Context HttpServletRequest request,
@@ -110,7 +111,9 @@ public class MCRSearchController {
 
             if (hit != null && result != null && hit >= 0 && hit < result.getNumFound()) {
                 String mcrid = result.getHit(hit).getMcrid();
-                return Response.temporaryRedirect(URI.create(request.getContextPath()+ "/resolve/id/" + mcrid + "?_search=" + result.getId()))
+                return Response
+                    .temporaryRedirect(
+                        URI.create(request.getContextPath() + "/resolve/id/" + mcrid + "?_search=" + result.getId()))
                     .build();
             }
         }
@@ -298,7 +301,7 @@ public class MCRSearchController {
 
                     MCRContent newContent = MCRStaticXEditorFileServlet.doExpandEditorElements(editorContent, request,
                         response, sessionID,
-                        MCRFrontendUtil.getBaseURL() + "do/search/"+result.getMask());
+                        MCRFrontendUtil.getBaseURL() + "do/search/" + result.getMask());
                     String content;
                     if (newContent != null) {
                         content = newContent.asString().replaceAll("<\\?xml.*?\\?>", "");

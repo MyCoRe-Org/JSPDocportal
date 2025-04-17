@@ -30,7 +30,7 @@ public class MCRLocalIDGenerator extends MCRPIGenerator<MCRLocalID> {
 
     private static final String PROP_RECORDIDENTIFIER_SOURCE = "Source";
     private static final Map<String, AtomicInteger> PATTERN_COUNT_MAP = new HashMap<>();
-    
+
     @Override
     public MCRLocalID generate(MCRBase mcrBase, String additional) throws MCRPersistentIdentifierException {
         MCRObject mcrObj = (MCRObject) mcrBase;

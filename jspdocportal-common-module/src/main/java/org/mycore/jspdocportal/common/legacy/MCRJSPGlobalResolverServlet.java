@@ -91,16 +91,16 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
         }
         String key = path[0];
         String value = path[1];
-        
+
         //cleanup value from anchors, parameters, session ids 
         for (String s : Arrays.asList("#", "?", ";")) {
             if (value.contains(s)) {
                 value = value.substring(0, value.indexOf(s));
             }
         }
-        if(value.isEmpty()) {
+        if (value.isEmpty()) {
             response.sendError(404, MCRTranslation.translate("Resolver.error.unknownUrlSchema"));
-            return;  
+            return;
         }
         //GND resolving URL for profkat
         if ("gnd".equals(key)) {
@@ -135,7 +135,7 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
         } else {
             try {
                 value = URLDecoder.decode(URLDecoder.decode(value, "UTF-8"), "UTF-8");
-                if("recordIdentifier".equals(key) && value.contains("/")) {
+                if ("recordIdentifier".equals(key) && value.contains("/")) {
                     value = value.replaceFirst("/", "_");
                 }
 
@@ -169,7 +169,8 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
                     if (!MCRMetadataManager.exists(mcrObjID)) {
                         throw new MCRException("No object with id '" + mcrID + "' found.");
                     }
-                    String view = MCRConfiguration2.getString("MCR.JSPDocportal.Doctails.View").orElse("/content/docdetails.jsp");
+                    String view =
+                        MCRConfiguration2.getString("MCR.JSPDocportal.Doctails.View").orElse("/content/docdetails.jsp");
                     getServletContext().getRequestDispatcher(view + "?id=" + mcrID).forward(request,
                         response);
                 } catch (MCRException ex) {
@@ -201,7 +202,7 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
             }
             return;
         }
-        
+
         if (action.equals("image")) {
             String url = "";
             if (path.length == 3 || path.length == 4) {
@@ -225,7 +226,7 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
 
         if (action.equals("pdf")) {
             StringBuffer sbUrl = createURLForMainDocInDerivateWithLabel(request, mcrID, "fulltext");
-            if(sbUrl.length()==0) {
+            if (sbUrl.length() == 0) {
                 response.sendError(404);
                 return;
             }
@@ -258,7 +259,7 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
             response.sendRedirect(url.toString());
             return;
         }
-        
+
         // used in METS-Files in mets:mptr to resolve METS files of parent or child
         if (action.equals("dv_mets")) {
             StringBuffer url = createURLForMainDocInDerivateWithLabel(request, mcrID, "DV_METS");

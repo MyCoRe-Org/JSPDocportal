@@ -1,6 +1,5 @@
 package org.mycore.jspdocportal.common.legacy;
 
-
 import java.io.IOException;
 import java.util.Objects;
 
@@ -27,11 +26,12 @@ public class NavServlet extends HttpServlet {
 
     private static org.jdom2.Document navJdom;
 
-    private static final Namespace NS_NAV = Namespace.getNamespace("n", "http://www.mycore.org/jspdocportal/navigation");
+    private static final Namespace NS_NAV =
+        Namespace.getNamespace("n", "http://www.mycore.org/jspdocportal/navigation");
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
 
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
@@ -46,13 +46,14 @@ public class NavServlet extends HttpServlet {
         }
 
         final String path = Objects.requireNonNullElse(request.getParameter("path"), "left.start");
-        LOGGER.debug("Navigation servlet called with path {} (session {})", () -> path, MCRSessionMgr::getCurrentSessionID);
+        LOGGER.debug("Navigation servlet called with path {} (session {})", () -> path,
+            MCRSessionMgr::getCurrentSessionID);
 
         Element navitem = null;
 
         if (path.startsWith("~")) {
             XPathExpression<Element> xpe = XPathFactory.instance()
-                    .compile("/n:navigations//n:refitem[@id='" + path + "']", Filters.element(), null, NS_NAV);
+                .compile("/n:navigations//n:refitem[@id='" + path + "']", Filters.element(), null, NS_NAV);
             Element refitem = xpe.evaluateFirst(navJdom);
             if (refitem != null) {
                 navitem = refitem.getParentElement();
@@ -71,12 +72,12 @@ public class NavServlet extends HttpServlet {
                 }
             }
             navitem = XPathFactory.instance().compile(xpath.toString(), Filters.element(), null, NS_NAV)
-                    .evaluateFirst(navJdom);
+                .evaluateFirst(navJdom);
         }
 
         if (navitem == null) {
             navitem = XPathFactory.instance().compile("/n:navigations//n:navitem[1]", Filters.element(), null, NS_NAV)
-                    .evaluateFirst(navJdom);
+                .evaluateFirst(navJdom);
         }
 
         MCRSessionMgr.getCurrentSession().put("navPath", createPath(navitem, null));
@@ -90,7 +91,7 @@ public class NavServlet extends HttpServlet {
         org.w3c.dom.Document domYouAreHere = null;
         try {
             domYouAreHere = new org.jdom2.output.DOMOutputter()
-                    .output(new org.jdom2.Document(navitem.clone()));
+                .output(new org.jdom2.Document(navitem.clone()));
         } catch (org.jdom2.JDOMException e) {
             LOGGER.error("Domoutput failed: ", e);
         }

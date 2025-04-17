@@ -46,8 +46,10 @@ public class MCRSearchResultEntry {
         this.pos = pos;
         String objectType = String.valueOf(solrDoc.getFirstValue("objectType"));
         String labelfield = MCRConfiguration2.getString("MCR.SearchResult." + objectType + ".Headerfield").orElse("");
-        String[] datafields = MCRConfiguration2.getString("MCR.SearchResult." + objectType + ".Datafields").orElse("").split(",");
-        String[] internalfields = MCRConfiguration2.getString("MCR.SearchResult." + objectType + ".Internalfields").orElse("").split(",");
+        String[] datafields =
+            MCRConfiguration2.getString("MCR.SearchResult." + objectType + ".Datafields").orElse("").split(",");
+        String[] internalfields =
+            MCRConfiguration2.getString("MCR.SearchResult." + objectType + ".Internalfields").orElse("").split(",");
 
         this.mcrid = String.valueOf(solrDoc.getFirstValue("returnId"));
         this.label = String.valueOf(solrDoc.getFirstValue(labelfield));
@@ -80,11 +82,10 @@ public class MCRSearchResultEntry {
     public Map<String, String> getData() {
         return data;
     }
-    
+
     public Map<String, String> getInternal() {
         return internal;
     }
-
 
     public int getPos() {
         return pos;

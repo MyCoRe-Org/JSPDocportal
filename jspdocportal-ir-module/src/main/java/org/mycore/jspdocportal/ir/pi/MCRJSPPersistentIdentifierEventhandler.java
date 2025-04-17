@@ -30,24 +30,22 @@ import org.mycore.pi.MCRPersistentIdentifierEventHandler;
  * @author Robert Stephan
  *
  */
-public class MCRJSPPersistentIdentifierEventhandler extends MCRPersistentIdentifierEventHandler{
+public class MCRJSPPersistentIdentifierEventhandler extends MCRPersistentIdentifierEventHandler {
 
     @Override
     protected void handleObjectRepaired(MCREvent evt, MCRObject obj) {
-        if(obj.isImportMode()) {
+        if (obj.isImportMode()) {
             MCRPIService.updateFlagsInDatabase(obj);
-        }
-        else {
+        } else {
             super.handleObjectRepaired(evt, obj);
         }
     }
 
     @Override
     protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
-        if(obj.isImportMode()) {
+        if (obj.isImportMode()) {
             MCRPIService.updateFlagsInDatabase(obj);
-        }
-        else {
+        } else {
             super.handleObjectUpdated(evt, obj);
         }
     }

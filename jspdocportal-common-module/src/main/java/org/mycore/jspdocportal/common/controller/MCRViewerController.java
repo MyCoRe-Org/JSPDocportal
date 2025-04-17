@@ -98,7 +98,8 @@ public class MCRViewerController {
                 } else {
                     model.put("doctype", "mets");
                     if (!model.containsKey(PARAM_FILE_PATH)) {
-                        model.put(PARAM_FILE_PATH, StringUtils.isEmpty(filePath) ? "iview2/phys_0001.iview2" : filePath);
+                        model.put(PARAM_FILE_PATH,
+                            StringUtils.isEmpty(filePath) ? "iview2/phys_0001.iview2" : filePath);
                     }
                 }
             }

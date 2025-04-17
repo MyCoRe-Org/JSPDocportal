@@ -50,7 +50,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.NONE)
 public class Navigations {
     private static final Logger LOGGER = LogManager.getLogger();
-    
+
     @XmlElement(name = "navigation", namespace = "http://www.mycore.org/jspdocportal/navigation")
     private List<Navigation> list = new ArrayList<>();
 

@@ -31,13 +31,14 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 
 @Path("/do/startedit")
-public class MCRStartEditController  {
+public class MCRStartEditController {
     private static final Logger LOGGER = LogManager.getLogger();
 
     @GET
-    public Response defaultRes(@QueryParam("mcrid") String mcrid, @QueryParam("mode") String mode, @Context HttpServletRequest request) {
+    public Response defaultRes(@QueryParam("mcrid") String mcrid, @QueryParam("mode") String mode,
+        @Context HttpServletRequest request) {
         try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
-            if (request.getSession(false)==null  || !MCRAccessManager.checkPermission(mcrid, "writedb")) {
+            if (request.getSession(false) == null || !MCRAccessManager.checkPermission(mcrid, "writedb")) {
                 return Response.temporaryRedirect(URI.create(request.getContextPath() + "/do/login")).build();
             }
 
@@ -47,9 +48,10 @@ public class MCRStartEditController  {
                 if (MCRAccessManager.checkPermission(mcrid, "writedb")) {
                     MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrid);
                     MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
-                    if (Arrays.asList("published", "deleted", "reserved").contains(mcrObj.getService().getState().getId())) {
-                    	//String mode = retrieveModeFromMetadata(mcrObj);
-                    	//TODO validate mode
+                    if (Arrays.asList("published", "deleted", "reserved")
+                        .contains(mcrObj.getService().getState().getId())) {
+                        //String mode = retrieveModeFromMetadata(mcrObj);
+                        //TODO validate mode
                         Map<String, Object> variables = new HashMap<>();
                         variables.put(MCRBPMNMgr.WF_VAR_OBJECT_TYPE, mcrObjID.getTypeId());
                         variables.put(MCRBPMNMgr.WF_VAR_PROJECT_ID, mcrObjID.getProjectId());
@@ -62,7 +64,7 @@ public class MCRStartEditController  {
                                 .orElse(new MCRLabel(MCRSessionMgr.getCurrentSession().getLocale().getLanguage(),
                                     "??" + role + "??", ""))
                                 .getText());
-                        
+
                         RuntimeService rs = MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService();
                         //ProcessInstance pi = rs.startProcessInstanceByKey("create_object_simple", variables);
                         ProcessInstance pi = rs.startProcessInstanceByMessage("start_load", variables);
@@ -70,28 +72,29 @@ public class MCRStartEditController  {
                         for (Task t : ts.createTaskQuery().processInstanceId(pi.getId()).list()) {
                             ts.setAssignee(t.getId(), MCRUserManager.getCurrentUser().getUserID());
                         }
-                        return Response.temporaryRedirect(URI.create(request.getContextPath() + "/do/workspace/tasks")).build();
+                        return Response.temporaryRedirect(URI.create(request.getContextPath() + "/do/workspace/tasks"))
+                            .build();
                     }
-                   
+
                 }
             }
         }
         //TODO redirect to ERROR-Page
         return Response.temporaryRedirect(URI.create(request.getContextPath())).build();
     }
-    
+
     //DEPRECATED: mode as input param
-//    private static String retrieveModeFromMetadata(MCRObject mcrObj) {
-//    	Document doc = mcrObj.createXML();
-//    	Map<String, String>modeChecks = MCRConfiguration2.getSubPropertiesMap("MCR.Workflow.RetrieveMode.edit.");
-//    	
-//    	XPathFactory xpathFactory = XPathFactory.instance();
-//    	for(Map.Entry<String, String> entry: modeChecks.entrySet()) {
-//    		XPathExpression<Object> xpCheck =  xpathFactory.compile(entry.getValue(), Filters.fpassthrough(), null, MCRConstants.MODS_NAMESPACE);
-//    		if(xpCheck.evaluateFirst(doc)!=null) {
-//    			return entry.getKey().substring(entry.getKey().lastIndexOf(".")+1);
-//    		}
-//    	}
-//    	throw new MCRException("Pleae provide a property \"MCR.Workflow.RetrieveMode.{mode}\" with an XPath, that maps the current MyCoRe object");
-//    }
+    //    private static String retrieveModeFromMetadata(MCRObject mcrObj) {
+    //    	Document doc = mcrObj.createXML();
+    //    	Map<String, String>modeChecks = MCRConfiguration2.getSubPropertiesMap("MCR.Workflow.RetrieveMode.edit.");
+    //    	
+    //    	XPathFactory xpathFactory = XPathFactory.instance();
+    //    	for(Map.Entry<String, String> entry: modeChecks.entrySet()) {
+    //    		XPathExpression<Object> xpCheck =  xpathFactory.compile(entry.getValue(), Filters.fpassthrough(), null, MCRConstants.MODS_NAMESPACE);
+    //    		if(xpCheck.evaluateFirst(doc)!=null) {
+    //    			return entry.getKey().substring(entry.getKey().lastIndexOf(".")+1);
+    //    		}
+    //    	}
+    //    	throw new MCRException("Pleae provide a property \"MCR.Workflow.RetrieveMode.{mode}\" with an XPath, that maps the current MyCoRe object");
+    //    }
 }

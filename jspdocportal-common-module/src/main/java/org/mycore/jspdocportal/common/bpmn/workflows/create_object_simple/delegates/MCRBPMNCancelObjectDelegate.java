@@ -1,7 +1,5 @@
 package org.mycore.jspdocportal.common.bpmn.workflows.create_object_simple.delegates;
 
-
-
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr;

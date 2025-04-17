@@ -29,41 +29,46 @@ import java.io.Serializable;
  * 
  * @author Robert Stephan
  */
-public class MCRJSPErrorInfo implements Serializable  {
+public class MCRJSPErrorInfo implements Serializable {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;
-    
+
     int status;
     String headline;
     String message;
     Throwable exception;
-    
+
     public int getStatus() {
         return status;
     }
+
     public void setStatus(int status) {
         this.status = status;
     }
+
     public String getHeadline() {
         return headline;
     }
+
     public void setHeadline(String headline) {
         this.headline = headline;
     }
+
     public String getMessage() {
         return message;
     }
+
     public void setMessage(String message) {
         this.message = message;
     }
+
     public Throwable getException() {
         return exception;
     }
+
     public void setException(Throwable exception) {
         this.exception = exception;
     }
-   
-    
-    
+
 }
