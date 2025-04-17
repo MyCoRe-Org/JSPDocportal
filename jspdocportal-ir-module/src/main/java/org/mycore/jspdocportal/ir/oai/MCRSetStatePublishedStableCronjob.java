@@ -33,8 +33,8 @@ public class MCRSetStatePublishedStableCronjob extends MCRCronjob {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static final String FILTER_QUERY_OAI_READY
-        = "(+category:doctype\\:epub +state:published +modified:[* TO NOW-7DAYS/DAY])";
+    public static final String FILTER_QUERY_OAI_READY =
+        "(+category:doctype\\:epub +state:published +modified:[* TO NOW-7DAYS/DAY])";
 
     private void makeObjectOAIReady(MCRObjectID mcrObjectID) {
         if (MCRMetadataManager.exists(mcrObjectID)) {

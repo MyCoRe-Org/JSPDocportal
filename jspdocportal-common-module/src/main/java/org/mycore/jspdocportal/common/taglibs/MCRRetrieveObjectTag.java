@@ -71,20 +71,20 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
  */
 public class MCRRetrieveObjectTag extends SimpleTagSupport {
     private static final Logger LOGGER = LogManager.getLogger();
-    
+
     private static final DOMOutputter DOM_OUTPUTTER = new DOMOutputter();
-    
+
     private static final LoadingCache<String, Document> MCROBJECTXML_CACHE = CacheBuilder.newBuilder().maximumSize(300)
-            .expireAfterWrite(3, TimeUnit.MINUTES).expireAfterAccess(15, TimeUnit.SECONDS).build(new CacheLoader<>() {
-                @Override
-                public Document load(String mcrid) throws Exception {
-                    try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
-                        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrid));
-                        return mcrObj.createXML();
-                    }
+        .expireAfterWrite(3, TimeUnit.MINUTES).expireAfterAccess(15, TimeUnit.SECONDS).build(new CacheLoader<>() {
+            @Override
+            public Document load(String mcrid) throws Exception {
+                try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
+                    MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrid));
+                    return mcrObj.createXML();
                 }
-            });
-    
+            }
+        });
+
     private String mcrid;
 
     private boolean fromWorkflow;
@@ -92,19 +92,19 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
     private String varDOM;
 
     private String varJDOM;
-    
+
     private String query;
-    
-    private String cache="";
+
+    private String cache = "";
 
     public void setMcrid(String mcrid) {
         this.mcrid = mcrid;
     }
-    
+
     public void setQuery(String query) {
         this.query = query;
     }
-    
+
     public void setCache(String cache) {
         this.cache = cache;
     }
@@ -153,7 +153,7 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
     public void doTag() throws JspException, IOException {
         try {
             PageContext pageContext = (PageContext) getJspContext();
-            if(StringUtils.isNotBlank(query)) {
+            if (StringUtils.isNotBlank(query)) {
                 try {
                     SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
                     SolrQuery solrQuery = new SolrQuery();
@@ -165,26 +165,25 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
                     QueryResponse solrResponse = queryRequest.process(solrClient);
                     SolrDocumentList solrResults = solrResponse.getResults();
 
-                    if(!solrResults.isEmpty()) {
+                    if (!solrResults.isEmpty()) {
                         mcrid = String.valueOf(solrResults.get(0).getFirstValue("id"));
                     }
                 } catch (SolrServerException e) {
                     LOGGER.error(e);
                 }
             }
-            if(cache.contains("clear") || "clear".equals(pageContext.getRequest().getParameter("_cache"))) {
+            if (cache.contains("clear") || "clear".equals(pageContext.getRequest().getParameter("_cache"))) {
                 MCROBJECTXML_CACHE.invalidate(mcrid);
             }
-            
+
             MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrid);
             Document doc;
             if (fromWorkflow) {
                 doc = MCRBPMNUtils.getWorkflowObjectXML(mcrObjID);
             } else {
-                if(cache.contains("true") || cache.contains("on")) {
+                if (cache.contains("true") || cache.contains("on")) {
                     doc = MCROBJECTXML_CACHE.get(mcrid);
-                }
-                else {
+                } else {
                     doc = MCRMetadataManager.retrieveMCRObject(mcrObjID).createXML();
                 }
             }

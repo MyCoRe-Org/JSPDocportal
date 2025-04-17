@@ -43,7 +43,7 @@ public class MCRLinkListJsonSerializer extends StdSerializer<List<MCRAPIExploreR
 
     @Override
     public void serialize(List<MCRAPIExploreResponseLink> value, JsonGenerator generator, SerializerProvider provider)
-            throws IOException {
+        throws IOException {
         generator.writeStartObject();
         for (MCRAPIExploreResponseLink link : value) {
             generator.writeStringField(link.getRel(), link.getUrl());

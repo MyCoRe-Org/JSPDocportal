@@ -39,91 +39,89 @@ import org.jdom2.Namespace;
  */
 public class MCREditorClassificationHelper {
 
-	/**
-	 * transforms a classification into an items structure
-	 * using the categoryIDs as itemIDs
-	 * 
-	 * @param oldClassif the old classification as JDOM Document
-	 * @param displayEmptyLeafs false, if empty leafs should be hidden
-	 * @return the item structure as JDOM Document
-	 */
-	public static Document transformClassificationtoItems(Document oldClassif,
-			boolean displayEmptyLeafs) {
-		Element root = oldClassif.getRootElement().getChild("categories"); 
-		Document itemsDoc = new Document();
-		Element newRoot = new Element("items");
-		itemsDoc.addContent(newRoot);
-		transformClassificationToItems(root, newRoot, displayEmptyLeafs, false);
-		return itemsDoc;
-	}
+    /**
+     * transforms a classification into an items structure
+     * using the categoryIDs as itemIDs
+     * 
+     * @param oldClassif the old classification as JDOM Document
+     * @param displayEmptyLeafs false, if empty leafs should be hidden
+     * @return the item structure as JDOM Document
+     */
+    public static Document transformClassificationtoItems(Document oldClassif,
+        boolean displayEmptyLeafs) {
+        Element root = oldClassif.getRootElement().getChild("categories");
+        Document itemsDoc = new Document();
+        Element newRoot = new Element("items");
+        itemsDoc.addContent(newRoot);
+        transformClassificationToItems(root, newRoot, displayEmptyLeafs, false);
+        return itemsDoc;
+    }
 
-	/**
-	 * transforms a classification into an items structure
-	 * using the category labels as itemIDs
-	 * 
-	 * @param oldClassif the old classification as JDOM Document
-	 * @param displayEmptyLeafs false, if empty leafs should be hidden
-	 * @return the item structure as JDOM Document
-	 */
-	public static Document transformClassificationLabeltoItems(Document oldClassif,
-			boolean displayEmptyLeafs) {
-		Element root = oldClassif.getRootElement().getChild("categories"); 
-		Document itemsDoc = new Document();
-		Element newRoot = new Element("items");
-		itemsDoc.addContent(newRoot);
-		transformClassificationToItems(root, newRoot, displayEmptyLeafs, true);
-		return itemsDoc;
-	}
-	
-	
-	/**
-	 * makes the transformation (recursively called)
-	 * @param oldElem the element in the original DOM
-	 * @param newElem the element in the new DOM
-	 * @param displayEmptyLeafs false, if empty leafs should be hidden
-	 * @param useLabelasID true, if the label instead of the ID should be used as new ID
-	 */
-	private static void transformClassificationToItems(Element oldElem,
-			Element newElem, boolean displayEmptyLeafs, boolean useLabelasID) {
-		if (oldElem.getName().equals("categories")) {
-			Iterator<Element> it1 = oldElem.getChildren().iterator();
-			while (it1.hasNext()) {
-				transformClassificationToItems(it1.next(), newElem,
-						displayEmptyLeafs, useLabelasID);
-			}
-		}
-		if (oldElem.getName().equals("category")) {
-			String counter = oldElem.getAttributeValue("counter");
-			if (counter == null) {
-				counter = "";
-				oldElem.setAttribute("counter", counter);
-			}
-			if (displayEmptyLeafs || (!counter.equals("") && !counter.equals("0"))) {
-				Element el = new Element("item");
-				if(!useLabelasID){
-					el.setAttribute("value", oldElem.getAttributeValue("ID"));
-				}
-				else{
-					el.setAttribute("value", oldElem.getChild("label").getAttributeValue("text"));
-				}
-				newElem.addContent(el);
-				Iterator<Element> it2 = oldElem.getChildren().iterator();
-				while (it2.hasNext()) {
-					transformClassificationToItems(it2.next(), el,
-							displayEmptyLeafs, useLabelasID);
-				}
-			}
-		}
+    /**
+     * transforms a classification into an items structure
+     * using the category labels as itemIDs
+     * 
+     * @param oldClassif the old classification as JDOM Document
+     * @param displayEmptyLeafs false, if empty leafs should be hidden
+     * @return the item structure as JDOM Document
+     */
+    public static Document transformClassificationLabeltoItems(Document oldClassif,
+        boolean displayEmptyLeafs) {
+        Element root = oldClassif.getRootElement().getChild("categories");
+        Document itemsDoc = new Document();
+        Element newRoot = new Element("items");
+        itemsDoc.addContent(newRoot);
+        transformClassificationToItems(root, newRoot, displayEmptyLeafs, true);
+        return itemsDoc;
+    }
 
-		if (oldElem.getName().equals("label")) {
-			Element el = new Element("label");
-			el.setAttribute("lang", oldElem.getAttributeValue("lang",
-					Namespace.XML_NAMESPACE), Namespace.XML_NAMESPACE);
-			el.setText(oldElem.getAttributeValue("text") + " ["
-					+ oldElem.getParentElement().getAttributeValue("counter")
-					+ "]");
-			newElem.addContent(el);
+    /**
+     * makes the transformation (recursively called)
+     * @param oldElem the element in the original DOM
+     * @param newElem the element in the new DOM
+     * @param displayEmptyLeafs false, if empty leafs should be hidden
+     * @param useLabelasID true, if the label instead of the ID should be used as new ID
+     */
+    private static void transformClassificationToItems(Element oldElem,
+        Element newElem, boolean displayEmptyLeafs, boolean useLabelasID) {
+        if (oldElem.getName().equals("categories")) {
+            Iterator<Element> it1 = oldElem.getChildren().iterator();
+            while (it1.hasNext()) {
+                transformClassificationToItems(it1.next(), newElem,
+                    displayEmptyLeafs, useLabelasID);
+            }
+        }
+        if (oldElem.getName().equals("category")) {
+            String counter = oldElem.getAttributeValue("counter");
+            if (counter == null) {
+                counter = "";
+                oldElem.setAttribute("counter", counter);
+            }
+            if (displayEmptyLeafs || (!counter.equals("") && !counter.equals("0"))) {
+                Element el = new Element("item");
+                if (!useLabelasID) {
+                    el.setAttribute("value", oldElem.getAttributeValue("ID"));
+                } else {
+                    el.setAttribute("value", oldElem.getChild("label").getAttributeValue("text"));
+                }
+                newElem.addContent(el);
+                Iterator<Element> it2 = oldElem.getChildren().iterator();
+                while (it2.hasNext()) {
+                    transformClassificationToItems(it2.next(), el,
+                        displayEmptyLeafs, useLabelasID);
+                }
+            }
+        }
 
-		}
-	}
+        if (oldElem.getName().equals("label")) {
+            Element el = new Element("label");
+            el.setAttribute("lang", oldElem.getAttributeValue("lang",
+                Namespace.XML_NAMESPACE), Namespace.XML_NAMESPACE);
+            el.setText(oldElem.getAttributeValue("text") + " ["
+                + oldElem.getParentElement().getAttributeValue("counter")
+                + "]");
+            newElem.addContent(el);
+
+        }
+    }
 }

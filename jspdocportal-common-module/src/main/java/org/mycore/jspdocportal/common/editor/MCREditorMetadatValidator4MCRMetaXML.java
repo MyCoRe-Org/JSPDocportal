@@ -56,10 +56,10 @@ public class MCREditorMetadatValidator4MCRMetaXML implements MCREditorMetadataVa
             //           </mods:relatedItem> 
 
             XPathExpression<Element> xpath = XPathFactory.instance().compile(
-                    "./mods:mods/mods:relatedItem/mods:part/mods:detail "
-                            + "| ./mods:mods/mods:relatedItem/mods:part/mods:date "
-                            + "| ./mods:mods/mods:relatedItem/mods:part/mods:extend",
-                    Filters.element(), null, MCRConstants.MODS_NAMESPACE);
+                "./mods:mods/mods:relatedItem/mods:part/mods:detail "
+                    + "| ./mods:mods/mods:relatedItem/mods:part/mods:date "
+                    + "| ./mods:mods/mods:relatedItem/mods:part/mods:extend",
+                Filters.element(), null, MCRConstants.MODS_NAMESPACE);
 
             List<Element> data = new ArrayList<>(xpath.evaluate(datasubtag));
             for (Element e : data) {
@@ -77,7 +77,7 @@ public class MCREditorMetadatValidator4MCRMetaXML implements MCREditorMetadataVa
                 //       <pc:name type="nameUsedByThePerson" Scheme="PND" />
                 //</pc:person>
                 if (eChild.getName().equals("person")
-                        && eChild.getNamespace().getURI().equals("http://www.d-nb.de/standards/pc/")) {
+                    && eChild.getNamespace().getURI().equals("http://www.d-nb.de/standards/pc/")) {
                     List<Element> grandChildren = new ArrayList<>();
                     grandChildren.addAll(eChild.getChildren());
                     for (Element e : grandChildren) {

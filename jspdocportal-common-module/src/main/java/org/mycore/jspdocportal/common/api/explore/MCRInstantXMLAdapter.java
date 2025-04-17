@@ -30,7 +30,7 @@ import jakarta.xml.bind.annotation.adapters.XmlAdapter;
  *
  * @deprecated, use class from RestAPIv2 in 2020LTS
  */
-public class MCRInstantXMLAdapter extends XmlAdapter<String, Instant>{
+public class MCRInstantXMLAdapter extends XmlAdapter<String, Instant> {
 
     @Override
     public Instant unmarshal(String v) throws Exception {
@@ -39,7 +39,7 @@ public class MCRInstantXMLAdapter extends XmlAdapter<String, Instant>{
 
     @Override
     public String marshal(Instant v) throws Exception {
-       return v.toString();
+        return v.toString();
     }
 
 }

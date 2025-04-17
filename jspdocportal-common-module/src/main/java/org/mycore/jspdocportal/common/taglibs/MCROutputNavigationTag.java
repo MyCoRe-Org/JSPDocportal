@@ -461,7 +461,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
             LOGGER.error(e);
         }
     }
-    
+
     private String retrieveFullUrl(NavigationItem el) {
         String href = el.getHref();
         if (!href.startsWith("http")) {

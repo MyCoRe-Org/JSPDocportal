@@ -20,6 +20,7 @@
  */
 
 package org.mycore.jspdocportal.diskcache.servlet;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -206,7 +207,8 @@ public class FileDownloadServletUtils {
      * @since 2.6
      */
     public static String formatContentDispositionHeader(String filename, boolean attachment) {
-        return String.format(Locale.US, "%s;filename=\"%2$s\"; filename*=UTF-8''%2$s", (attachment ? "attachment" : "inline"),
+        return String.format(Locale.US, "%s;filename=\"%2$s\"; filename*=UTF-8''%2$s",
+            (attachment ? "attachment" : "inline"),
             encodeURI(filename));
     }
 

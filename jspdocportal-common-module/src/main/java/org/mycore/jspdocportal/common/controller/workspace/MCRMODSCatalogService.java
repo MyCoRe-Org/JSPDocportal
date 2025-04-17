@@ -7,5 +7,6 @@ import org.jdom2.Element;
 
 public interface MCRMODSCatalogService {
     void updateWorkflowFile(Path mcrFile, Document docJdom) throws Exception;
+
     Element retrieveMODSFromCatalogue(String sruQuery);
 }

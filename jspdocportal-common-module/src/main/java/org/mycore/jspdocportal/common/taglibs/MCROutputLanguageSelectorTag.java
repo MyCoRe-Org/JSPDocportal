@@ -56,40 +56,40 @@ import jakarta.servlet.jsp.tagext.JspFragment;
  * <li> lang.href - the link to be displayed for the current language</li>
  * <li> lang.imageURL - the URL to the image to be displayed for the current language</li>
  * </ul>
- */  
- /*  <p>Sample Usage (simple):</p>
- * <pre>
- * @code{
- *  <mcr:outputLanguageSelector languages="de,en" var="lang">
- *    <c:if test="${lang.currentLang != lang.lang}">
- *       <a href="${lang.href}">
- *       <img src="${lang.imageURL}"
- *           style="border-style: none; width: 24px; height: 12px; vertical-align: bottom;" />
- *       </a>
- *    </c:if>
- *  </mcr:outputLanguageSelector>
- *  }
- *  </pre>
- *  Sample Usage (advanced):
- *  <pre>
- *  @code{
- *  <mcr:outputLanguageSelector languages="de,en" var="lang">
- *   <c:if test="${!lang.first}">&#160;|&#160;</c:if>                     
- *   <c:choose>
- *      <c:when test="${lang_lang == lang.currentLang }">
- *          <span class="lang_link_active">${lang.label}</span>
- *      </c:when>
- *      <c:otherwise>
- *         <a href="${lang.href}" title="${lang.title}" class="lang_link">${lang.label}</a>
- *      </c:otherwise>
- *   </c:choose>                     
- * </mcr:outputLanguageSelector>
- * }
- * </pre>
- *  
- * @author Robert Stephan
- *
  */
+/*  <p>Sample Usage (simple):</p>
+* <pre>
+* @code{
+*  <mcr:outputLanguageSelector languages="de,en" var="lang">
+*    <c:if test="${lang.currentLang != lang.lang}">
+*       <a href="${lang.href}">
+*       <img src="${lang.imageURL}"
+*           style="border-style: none; width: 24px; height: 12px; vertical-align: bottom;" />
+*       </a>
+*    </c:if>
+*  </mcr:outputLanguageSelector>
+*  }
+*  </pre>
+*  Sample Usage (advanced):
+*  <pre>
+*  @code{
+*  <mcr:outputLanguageSelector languages="de,en" var="lang">
+*   <c:if test="${!lang.first}">&#160;|&#160;</c:if>                     
+*   <c:choose>
+*      <c:when test="${lang_lang == lang.currentLang }">
+*          <span class="lang_link_active">${lang.label}</span>
+*      </c:when>
+*      <c:otherwise>
+*         <a href="${lang.href}" title="${lang.title}" class="lang_link">${lang.label}</a>
+*      </c:otherwise>
+*   </c:choose>                     
+* </mcr:outputLanguageSelector>
+* }
+* </pre>
+*  
+* @author Robert Stephan
+*
+*/
 public class MCROutputLanguageSelectorTag extends MCRAbstractTag {
     private String languages;
 
@@ -128,7 +128,6 @@ public class MCROutputLanguageSelectorTag extends MCRAbstractTag {
                 .append(URLEncoder.encode(request.getParameter(pName), StandardCharsets.UTF_8));
         }
         //UriBuilder.fromUri("").replaceQueryParam("lang",  "l");
-        
 
         boolean first = true;
         for (String l : languages.split(",")) {

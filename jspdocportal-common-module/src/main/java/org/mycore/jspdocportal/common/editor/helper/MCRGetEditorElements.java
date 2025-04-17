@@ -118,7 +118,7 @@ public class MCRGetEditorElements {
             String id = group.getName();
             if (id.startsWith("create")) {
                 Element item = new Element("item").setAttribute("value", id).setAttribute("label",
-                        group.getName());
+                    group.getName());
                 retitems.addContent(item);
             }
         }
@@ -169,18 +169,18 @@ public class MCRGetEditorElements {
     }
 
     private Element transformClassToItems(String classid, String emptyLeafs, boolean withCounter)
-            throws TransformerException {
+        throws TransformerException {
         Document classJdom = MCRCategoryTransformer.getMetaDataDocument(
-                MCRCategoryDAOFactory.obtainInstance().getCategory(new MCRCategoryID(classid), -1), withCounter);
+            MCRCategoryDAOFactory.obtainInstance().getCategory(new MCRCategoryID(classid), -1), withCounter);
 
         boolean displayEmptyLeafs = (emptyLeafs.equalsIgnoreCase("yes") || emptyLeafs.equalsIgnoreCase("true"));
         return MCREditorClassificationHelper.transformClassificationtoItems(classJdom, displayEmptyLeafs)
-                .getRootElement();
+            .getRootElement();
     }
 
     private Element transformClassLabelsToItems(String classid) throws TransformerException {
         Document classJdom = MCRCategoryTransformer.getMetaDataDocument(
-                MCRCategoryDAOFactory.obtainInstance().getCategory(new MCRCategoryID(classid), -1), false);
+            MCRCategoryDAOFactory.obtainInstance().getCategory(new MCRCategoryID(classid), -1), false);
         return MCREditorClassificationHelper.transformClassificationLabeltoItems(classJdom, true).getRootElement();
     }
 

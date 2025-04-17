@@ -18,7 +18,7 @@ import jakarta.ws.rs.core.Response;
 public class MCRSitemapController {
 
     @GET
-    public Response get(){
+    public Response get() {
         Map<String, String> model = new HashMap<>();
         Viewable v = new Viewable("/sitemap/sitemap", model);
         return Response.ok(v).build();

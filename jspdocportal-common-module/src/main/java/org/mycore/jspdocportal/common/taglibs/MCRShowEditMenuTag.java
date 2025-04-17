@@ -114,7 +114,8 @@ public class MCRShowEditMenuTag extends MCRAbstractTag {
                                 "??" + role + "??", ""))
                             .getText();
                         out.append("    <a class=\"dropdown-item\" href=\"" + MCRFrontendUtil.getBaseURL()
-                            + "do/startedit?mcrid=" + mcrid + "&mode=" + mode + "\">" + MCRTranslation.translate("WF.menu.edit.action", label)+ "</a>");
+                            + "do/startedit?mcrid=" + mcrid + "&mode=" + mode + "\">"
+                            + MCRTranslation.translate("WF.menu.edit.action", label) + "</a>");
                     }
 
                 }

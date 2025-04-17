@@ -76,7 +76,8 @@ public class MCRAPIExplore {
 
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON + ";charset=UTF-8" })
-    @MCRCacheControl(maxAge = @MCRCacheControl.Age(time = 1, unit = TimeUnit.HOURS), sMaxAge = @MCRCacheControl.Age(time = 1, unit = TimeUnit.HOURS))
+    @MCRCacheControl(maxAge = @MCRCacheControl.Age(time = 1, unit = TimeUnit.HOURS),
+        sMaxAge = @MCRCacheControl.Age(time = 1, unit = TimeUnit.HOURS))
     /*
      * @Operation( summary = "Explore objects in this repository", responses
      * = @ApiResponse( content = @Content(array = @ArraySchema(schema
@@ -85,7 +86,7 @@ public class MCRAPIExplore {
      */
     @XmlElementWrapper(name = "mycoreobjects")
     public Response exploreObjects(@QueryParam("start") String start, @QueryParam("rows") String rows,
-            @QueryParam("sort") String sort, @QueryParam("filter") List<String> filter) throws IOException {
+        @QueryParam("sort") String sort, @QueryParam("filter") List<String> filter) throws IOException {
         Date lastModified = new Date(MCRXMLMetadataManager.getInstance().getLastModified());
 
         // enable on 2020 LTS
@@ -115,7 +116,7 @@ public class MCRAPIExplore {
             response.getHeader().setNumFound(solrResults.getNumFound());
             if (!q.getSorts().isEmpty()) {
                 response.getHeader().setSort(String.join(",", q.getSorts().stream()
-                        .map(x -> x.getItem() + " " + x.getOrder().name()).collect(Collectors.toList())));
+                    .map(x -> x.getItem() + " " + x.getOrder().name()).collect(Collectors.toList())));
             }
 
             for (SolrDocument solrDoc : solrResults) {
@@ -132,7 +133,7 @@ public class MCRAPIExplore {
     private MCRAPIExploreResponseObject createResponseObject(SolrDocument solrDoc) {
         Date dModified = (Date) solrDoc.getFieldValue("modified");
         MCRAPIExploreResponseObject responseObj = new MCRAPIExploreResponseObject(
-                String.valueOf(solrDoc.getFieldValue("id")), dModified.toInstant());
+            String.valueOf(solrDoc.getFieldValue("id")), dModified.toInstant());
 
         MCRConfiguration2.getString("MCR.API.Explore.PayloadFields").ifPresent(fields -> {
             for (String field : fields.split(",")) {

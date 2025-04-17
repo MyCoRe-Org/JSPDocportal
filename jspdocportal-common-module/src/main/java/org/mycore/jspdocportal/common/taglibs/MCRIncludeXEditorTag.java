@@ -39,7 +39,8 @@ public class MCRIncludeXEditorTag extends SimpleTagSupport {
 
     public static final Namespace NS_XED = Namespace.getNamespace("xed", "http://www.mycore.de/xeditor");
 
-    private static final Pattern REGEX_XML_EMPTY_ELEMENTS = Pattern.compile("<(a|i|span|div|textarea)\\s([^>]*)?(\\s)?/>");
+    private static final Pattern REGEX_XML_EMPTY_ELEMENTS =
+        Pattern.compile("<(a|i|span|div|textarea)\\s([^>]*)?(\\s)?/>");
 
     private String editorPath;
 
@@ -90,7 +91,7 @@ public class MCRIncludeXEditorTag extends SimpleTagSupport {
                     JspWriter out = pageContext.getOut();
                     Document doc = editorContent.asXML();
                     if (doc.getRootElement().getName().equals("form")
-                            && doc.getRootElement().getNamespace().equals(NS_XED)) {
+                        && doc.getRootElement().getNamespace().equals(NS_XED)) {
                         if (cancelURL != null && cancelURL.length() > 0) {
                             // setze xed:cancel
                             Element elCancel = new Element("cancel", NS_XED).setAttribute("url", cancelURL);
@@ -119,7 +120,7 @@ public class MCRIncludeXEditorTag extends SimpleTagSupport {
                         }
 
                         MCRContent newContent = MCRStaticXEditorFileServlet.doExpandEditorElements(editorContent,
-                                request, (HttpServletResponse) pageContext.getResponse(), sessionID, pageURL);
+                            request, (HttpServletResponse) pageContext.getResponse(), sessionID, pageURL);
                         String content;
                         if (newContent != null) {
                             content = newContent.asString().replaceAll("<\\?xml.*?\\?>", "");

@@ -40,7 +40,7 @@ public class MCRMetaHistoryEventCheck implements MCREditorMetadataValidator {
                 return "Attribute categid is empty";
             }
             String checkResult = MCREditorOutValidator.checkMetaObject(classification, MCRMetaClassification.class,
-                    false);
+                false);
             if (checkResult != null) {
                 return checkResult;
             }
