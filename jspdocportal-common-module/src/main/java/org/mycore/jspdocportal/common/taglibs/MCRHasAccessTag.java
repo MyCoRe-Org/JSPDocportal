@@ -33,7 +33,7 @@ public class MCRHasAccessTag extends SimpleTagSupport {
 
     @Override
     public void doTag() throws JspException, IOException {
-        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
             PageContext pageContext = (PageContext) getJspContext();
 
             if (mcrid == null || "".equals(mcrid)) { // allgemeiner check des aktuellen Users

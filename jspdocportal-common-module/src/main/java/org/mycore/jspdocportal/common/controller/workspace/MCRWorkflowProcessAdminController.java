@@ -30,7 +30,7 @@ public class MCRWorkflowProcessAdminController {
     @POST
     public Response defaultRes(@QueryParam("objectType") String objectType,
         @Context HttpServletRequest request) {
-        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
             for (Object o : request.getParameterMap().keySet()) {
                 String s = o.toString();
                 if (s.startsWith("doDeleteProcess_")) {

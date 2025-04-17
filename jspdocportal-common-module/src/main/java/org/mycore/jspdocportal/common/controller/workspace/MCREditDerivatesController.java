@@ -352,7 +352,7 @@ public class MCREditDerivatesController {
     private void createNewDerivate(String taskid, String mcrobjid, FormDataMultiPart multiPart) {
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
         MCRDerivate der;
-        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
             MCRWorkflowMgr wfm = MCRBPMNMgr
                 .getWorkflowMgr(ts.createTaskQuery().executionId(taskid).singleResult().getProcessInstanceId());
 

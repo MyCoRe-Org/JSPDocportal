@@ -40,7 +40,7 @@ public class MCRSaveWebcontentController {
     @POST
     public Response post(@Context HttpServletRequest request) {
         String referer = null;
-        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
             if (MCRAccessManager.checkPermission("administrate-webcontent")) {
                 for (Object o : request.getParameterMap().keySet()) {
                     String s = o.toString();

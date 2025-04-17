@@ -78,7 +78,7 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
             .expireAfterWrite(3, TimeUnit.MINUTES).expireAfterAccess(15, TimeUnit.SECONDS).build(new CacheLoader<>() {
                 @Override
                 public Document load(String mcrid) throws Exception {
-                    try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+                    try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
                         MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrid));
                         return mcrObj.createXML();
                     }

@@ -71,7 +71,7 @@ public class MCRIncludeXEditorTag extends SimpleTagSupport {
     public void doTag() throws JspException, IOException {
         PageContext pageContext = (PageContext) getJspContext();
 
-        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
             MCRContent editorContent = null;
             if (editorPath != null && !editorPath.equals("")) {
                 if (!editorPath.startsWith("/")) {

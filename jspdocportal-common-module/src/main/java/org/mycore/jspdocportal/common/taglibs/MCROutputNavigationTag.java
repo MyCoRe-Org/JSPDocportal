@@ -62,6 +62,7 @@ import jakarta.servlet.jsp.JspWriter;
  * 
  * 
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
     private static final List<String> MODES = Arrays
         .asList("left", "side", "top", "breadcrumbs", "toc", "navbar", "mobile", "top-dropdown");
@@ -143,7 +144,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
      *            - the JSPOutputWriter
      */
     private void printLeftNav(String[] currentPath, NavigationObject currentNode, String cssClass, JspWriter out) {
-        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
             List<NavigationItem> printableElements = printableItems(currentNode);
             if (printableElements.isEmpty()) {
                 return;
@@ -202,7 +203,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
      *
      */
     private void printSideNav(String[] currentPath, NavigationObject currentNode, String cssClass, JspWriter out) {
-        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
             List<NavigationItem> printableElements = printableItems(currentNode);
             if (printableElements.isEmpty()) {
                 return;
