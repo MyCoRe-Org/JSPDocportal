@@ -139,8 +139,8 @@ public class MCRAPIExplore {
             for (String field : fields.split(",")) {
                 Object value = solrDoc.getFieldValue(field);
                 if (value != null) {
-                    if (value instanceof List) {
-                        for (Object o : (List<?>) value) {
+                    if (value instanceof List<?> l) {
+                        for (Object o : l) {
                             responseObj.addPayload(field, o);
                         }
                     } else {

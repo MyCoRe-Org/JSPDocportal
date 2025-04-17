@@ -164,12 +164,12 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
             MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(id));
 
             //               add ACL's
-            if (MCRAccessManager.getAccessImpl() instanceof MCRRuleAccessInterface) {
+            if (MCRAccessManager.getAccessImpl() instanceof MCRRuleAccessInterface ruleAccessInterface) {
                 Iterator<String> it = MCRAccessManager.getPermissionsForID(id).iterator();
                 while (it.hasNext()) {
                     String s = it.next();
 
-                    Element rule = ((MCRRuleAccessInterface) MCRAccessManager.getAccessImpl()).getRule(id, s);
+                    Element rule = ruleAccessInterface.getRule(id, s);
                     mcrObj.getService().addRule(s, rule);
                 }
             }

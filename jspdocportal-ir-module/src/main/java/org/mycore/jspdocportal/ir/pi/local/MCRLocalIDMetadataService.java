@@ -39,10 +39,12 @@ public class MCRLocalIDMetadataService extends MCRPIMetadataService<MCRLocalID> 
     }
 
     private MCRObject checkObject(MCRBase base) throws MCRPersistentIdentifierException {
-        if (!(base instanceof MCRObject)) {
+        if (base instanceof MCRObject o) {
+            return o;
+        } else {
             throw new MCRPersistentIdentifierException(getClass().getName() + " does only support MyCoReObjects!");
         }
-        return (MCRObject) base;
+        
     }
 
     @Override

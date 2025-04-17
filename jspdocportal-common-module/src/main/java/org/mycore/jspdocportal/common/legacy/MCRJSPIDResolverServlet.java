@@ -222,12 +222,12 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
         MCRObjectStructure structure = o.getStructure();
         for (MCRMetaEnrichedLinkID der : structure.getDerivates()) {
             for (Content c : der.getContentList()) {
-                if (c instanceof Element && ((Element) c).getName().equals("classification")
-                    && "derivate_types".equals(((Element) c).getAttributeValue("classid"))
-                    && label.equals(((Element) c).getAttributeValue("categid"))) {
+                if (c instanceof Element e && e.getName().equals("classification")
+                    && "derivate_types".equals(e.getAttributeValue("classid"))
+                    && label.equals(e.getAttributeValue("categid"))) {
                     for (Content c1 : der.getContentList()) {
-                        if (c1 instanceof Element && ((Element) c1).getName().equals("maindoc")) {
-                            String maindoc = ((Element) c1).getTextNormalize();
+                        if (c1 instanceof Element e1 && e1.getName().equals("maindoc")) {
+                            String maindoc = e1.getTextNormalize();
                             StringBuffer sbPath = new StringBuffer(MCRFrontendUtil.getBaseURL());
                             sbPath.append("file/").append(mcrID).append('/').append(der.getXLinkHref()).append('/')
                                 .append(maindoc);
@@ -247,11 +247,11 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
 
         for (MCRMetaEnrichedLinkID der : structure.getDerivates()) {
             for (Content c : der.getContentList()) {
-                if (c instanceof Element && ((Element) c).getName().equals("classification")
-                    && "derivate_types".equals(((Element) c).getAttributeValue("classid"))
-                    && label.equals(((Element) c).getAttributeValue("categid"))) {
+                if (c instanceof Element e && e.getName().equals("classification")
+                    && "derivate_types".equals(e.getAttributeValue("classid"))
+                    && label.equals(e.getAttributeValue("categid"))) {
                     for (Content c1 : der.getContentList()) {
-                        if (c1 instanceof Element && ((Element) c1).getName().equals("maindoc")) {
+                        if (c1 instanceof Element e1 && e1.getName().equals("maindoc")) {
                             StringBuffer sbPath = new StringBuffer(MCRFrontendUtil.getBaseURL());
                             return sbPath.append("file/").append(mcrID).append('/').append(der.getXLinkHref());
                         }

@@ -171,8 +171,8 @@ public abstract class MCRAbstractNavigationTag extends MCRAbstractTag {
      * @return
      */
     protected NavigationItem findNavItem(NavigationObject currentNode, String[] path) {
-        if (path.length == 0 && currentNode instanceof NavigationItem) {
-            return (NavigationItem) currentNode;
+        if (path.length == 0 && currentNode instanceof NavigationItem nI) {
+            return nI;
         }
         if (path.length > 0) {
             NavigationObject navO = currentNode.retrieveChild(path[0]);
@@ -180,8 +180,8 @@ public abstract class MCRAbstractNavigationTag extends MCRAbstractTag {
         }
 
         // if the path is wrong - return the give node
-        if (currentNode instanceof NavigationItem) {
-            return (NavigationItem) currentNode;
+        if (currentNode instanceof NavigationItem nI) {
+            return nI;
         } else {
             return null;
         }
@@ -201,19 +201,17 @@ public abstract class MCRAbstractNavigationTag extends MCRAbstractTag {
         List<NavigationItem> result = new ArrayList<>();
 
         for (NavigationObject child : navO.getChildren()) {
-            if (!(child instanceof NavigationItem)) {
-                continue;
-            }
-            NavigationItem ni = (NavigationItem) child;
-            if (ni.isHidden()) {
-                continue;
-            }
-            if (StringUtils.isNotEmpty(ni.getPermission())) {
-                if (!MCRAccessManager.checkPermission(ni.getPermission())) {
+            if (child instanceof NavigationItem ni) {
+                if (ni.isHidden()) {
                     continue;
                 }
+                if (StringUtils.isNotEmpty(ni.getPermission())) {
+                    if (!MCRAccessManager.checkPermission(ni.getPermission())) {
+                        continue;
+                    }
+                }
+                result.add(ni);
             }
-            result.add(ni);
         }
         return result;
     }

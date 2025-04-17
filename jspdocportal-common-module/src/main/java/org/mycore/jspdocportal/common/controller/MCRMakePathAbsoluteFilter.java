@@ -73,8 +73,7 @@ public class MCRMakePathAbsoluteFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestContext)
         throws IOException {
-        if (requestContext instanceof ContainerRequest) {
-            ContainerRequest c = (ContainerRequest) requestContext;
+        if (requestContext instanceof ContainerRequest c) {
             URI baseURI = c.getBaseUri().resolve("..");
             requestContext.setRequestUri(baseURI, c.getRequestUri());
         }
