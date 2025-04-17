@@ -77,6 +77,11 @@
         <artifactId>jspdocportal-ir-module</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.mycore.jspdocportal</groupId>
+        <artifactId>jspdocportal-diskcache</artifactId>
+        <version>${project.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>org.webjars</groupId>
