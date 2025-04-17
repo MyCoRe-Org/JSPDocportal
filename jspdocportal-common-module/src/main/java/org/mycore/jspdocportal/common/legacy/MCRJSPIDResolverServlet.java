@@ -135,7 +135,7 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
 
             try {
                 QueryRequest queryRequest = new QueryRequest(query);
-                MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
                     MCRSolrAuthenticationLevel.SEARCH);
                 QueryResponse solrResponse = queryRequest.process(solrClient);
                 SolrDocumentList solrResults = solrResponse.getResults();

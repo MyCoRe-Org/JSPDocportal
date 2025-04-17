@@ -111,7 +111,7 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
                 solrQuery.setQuery("gnd_uri:" + MCRSolrUtils.escapeSearchValue("http://d-nb.info/gnd/" + value.trim()));
                 solrQuery.setFields("id");
                 QueryRequest queryRequest = new QueryRequest(solrQuery);
-                MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
                     MCRSolrAuthenticationLevel.SEARCH);
                 QueryResponse solrResponse = queryRequest.process(solrClient);
                 SolrDocumentList solrResults = solrResponse.getResults();
@@ -143,7 +143,7 @@ public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
                 SolrQuery solrQuery = new SolrQuery(key + ":" + ClientUtils.escapeQueryChars(value));
                 solrQuery.setRows(1);
                 QueryRequest queryRequest = new QueryRequest(solrQuery);
-                MCRSolrAuthenticationManager.getInstance().applyAuthentication(queryRequest,
+                MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
                     MCRSolrAuthenticationLevel.SEARCH);
                 QueryResponse solrQueryResponse = queryRequest.process(solrClient);
                 SolrDocumentList solrResults = solrQueryResponse.getResults();
