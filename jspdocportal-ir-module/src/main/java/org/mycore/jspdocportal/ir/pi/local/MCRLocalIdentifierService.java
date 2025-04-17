@@ -7,12 +7,12 @@ import org.mycore.pi.exceptions.MCRPersistentIdentifierException;
 
 public class MCRLocalIdentifierService extends MCRPIService<MCRLocalID> {
     public static final String DEFAULT_ID = "MCRLocalID";
-    
+
     public MCRLocalIdentifierService() {
         super(MCRLocalID.TYPE);
     }
 
-   @Override
+    @Override
     protected void update(MCRLocalID identifier, MCRBase obj, String additional)
         throws MCRPersistentIdentifierException {
         //do nothing

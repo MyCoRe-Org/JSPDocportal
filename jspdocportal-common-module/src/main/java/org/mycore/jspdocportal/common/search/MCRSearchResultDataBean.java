@@ -106,7 +106,7 @@ public class MCRSearchResultDataBean implements Serializable {
     public static void addSearchresultToSession(HttpServletRequest request, MCRSearchResultDataBean searchresult) {
         @SuppressWarnings("unchecked")
         Map<String, MCRSearchResultDataBean> map = (LRUMap<String, MCRSearchResultDataBean>) request.getSession()
-                .getAttribute("mcrSearchResultMap");
+            .getAttribute("mcrSearchResultMap");
         if (map == null) {
             map = new LRUMap<>(16);
             request.getSession().setAttribute("mcrSearchResultMap", map);
@@ -117,7 +117,7 @@ public class MCRSearchResultDataBean implements Serializable {
     public static MCRSearchResultDataBean retrieveSearchresultFromSession(HttpServletRequest request, String searchID) {
         @SuppressWarnings("unchecked")
         Map<String, MCRSearchResultDataBean> map = (LRUMap<String, MCRSearchResultDataBean>) request.getSession()
-                .getAttribute("mcrSearchResultMap");
+            .getAttribute("mcrSearchResultMap");
         if (map == null) {
             return null;
         }
@@ -150,9 +150,10 @@ public class MCRSearchResultDataBean implements Serializable {
         }
 
         for (String fq : filterQueries) {
-            if(fq.substring(1).startsWith("content:")) {
-            	String[] x = fq.split(":", 2);
-                solrQuery.addFilterQuery("{!join from=returnId to=id}" + x[0] + ":" + ClientUtils.escapeQueryChars(x[1]));
+            if (fq.substring(1).startsWith("content:")) {
+                String[] x = fq.split(":", 2);
+                solrQuery
+                    .addFilterQuery("{!join from=returnId to=id}" + x[0] + ":" + ClientUtils.escapeQueryChars(x[1]));
             }
 
             else if (fq.substring(1).startsWith("ir.pubyear_end:")) {
@@ -161,14 +162,13 @@ public class MCRSearchResultDataBean implements Serializable {
                     fq = fq + "]";
                     solrQuery.addFilterQuery(fq);
                 }
-            }
-            else if (fq.substring(1).startsWith("ir.pubyear_start:")) {
+            } else if (fq.substring(1).startsWith("ir.pubyear_start:")) {
                 if (Pattern.matches("^\\S+:\\d{4}$", fq)) {
                     fq = fq.replaceFirst(":", ":[");
                     fq = fq + " TO *]";
                     solrQuery.addFilterQuery(fq);
                 }
-                
+
             } else if (fq.toLowerCase(Locale.getDefault()).contains(" or ")) {
                 solrQuery.addFilterQuery(fq);
             } else {
@@ -176,11 +176,11 @@ public class MCRSearchResultDataBean implements Serializable {
                 solrQuery.addFilterQuery(x[0] + ":" + ClientUtils.escapeQueryChars(x[1]));
             }
         }
-        
-        if(!MCRAccessManager.checkPermission("edit")) {
+
+        if (!MCRAccessManager.checkPermission("edit")) {
             solrQuery.addFilterQuery("state:published");
         }
-        
+
         String[] ffs = solrQuery.getFacetFields();
         if (ffs != null) {
             for (String ff : ffs) {
@@ -356,9 +356,9 @@ public class MCRSearchResultDataBean implements Serializable {
 
     public String getSortfields() {
         return MCRConfiguration2
-                .getString("MCR.Searchmask." + (mask != null ? mask : "default") + ".sortfields")
-                .orElse(MCRConfiguration2.getString("MCR.Searchmask.default.sortfields").orElse(""))
-                .trim();
+            .getString("MCR.Searchmask." + (mask != null ? mask : "default") + ".sortfields")
+            .orElse(MCRConfiguration2.getString("MCR.Searchmask.default.sortfields").orElse(""))
+            .trim();
     }
 
     public String getXedSessionId() {
@@ -396,7 +396,7 @@ public class MCRSearchResultDataBean implements Serializable {
     public int getCsvDownloadRows() {
         return MCRConfiguration2.getInt("MCR.Search.CsvDownload.Rows").orElse(1000);
     }
-    
+
     public String getCsvDownloadFilename() {
         return MCRConfiguration2.getString("MCR.Search.CsvDownload.Filename").orElse("searchresult.csv");
     }

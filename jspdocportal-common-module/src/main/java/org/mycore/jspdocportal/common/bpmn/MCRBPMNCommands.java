@@ -53,11 +53,12 @@ public class MCRBPMNCommands extends MCRAbstractCommands {
      * @param resource 
      *               the filename of a class resource with the jbpm-processdefinition
      */
-    @MCRCommand(syntax = "deploy workflow processdefinition from resource {0}", help = "The command deploys a process definition to the database from a *.bpm20.xml file {0} available on classpath")
+    @MCRCommand(syntax = "deploy workflow processdefinition from resource {0}",
+        help = "The command deploys a process definition to the database from a *.bpm20.xml file {0} available on classpath")
     public static final void deployProcessDefinition(String resource) throws MCRException {
         try {
             ProcessEngine processEngine = MCRBPMNMgr.getWorkflowProcessEngineConfiguration()
-                    .setDatabaseSchemaUpdate(ProcessEngineConfigurationImpl.DB_SCHEMA_UPDATE_TRUE).buildProcessEngine();
+                .setDatabaseSchemaUpdate(ProcessEngineConfigurationImpl.DB_SCHEMA_UPDATE_TRUE).buildProcessEngine();
 
             RepositoryService repositoryService = processEngine.getRepositoryService();
             repositoryService.createDeployment().addClasspathResource(resource).deploy();

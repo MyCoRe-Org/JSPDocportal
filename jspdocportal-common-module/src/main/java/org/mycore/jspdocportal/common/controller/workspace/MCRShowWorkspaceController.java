@@ -324,7 +324,7 @@ public class MCRShowWorkspaceController {
         String mode = ((StringValue) rs.getVariableLocalTyped(taskID, MCRBPMNMgr.WF_VAR_MODE)).getValue();
 
         LOGGER.debug(
-            "ID: {}", 
+            "ID: {}",
             () -> MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getActivityInstance(taskID).getId());
 
         String propKey = "MCR.Workflow.Reservation.Editor.Path.create_object_simple." + mode;
@@ -431,7 +431,8 @@ public class MCRShowWorkspaceController {
                     }
                     sb.append("</td></tr><tr><td>");
                     if (optLabelIcon.isPresent()) {
-                        sb.append("<img src='").append(MCRFrontendUtil.getBaseURL()).append("images").append(optLabelIcon.get().getText()).append("' />");
+                        sb.append("<img src='").append(MCRFrontendUtil.getBaseURL()).append("images")
+                            .append(optLabelIcon.get().getText()).append("' />");
                     }
                     sb.append("</td><td>&nbsp;&nbsp;&nbsp;</td> <td style='text-align:justify'>");
                     if (optLabelText.isPresent()) {
@@ -470,7 +471,8 @@ public class MCRShowWorkspaceController {
             for (MCRMetaLinkID derID : mcrObj.getStructure().getDerivates()) {
                 result.append("<div class=\"row\">");
                 result.append("\n  <div class=\"offset-1 col-3\">");
-                result.append("<span class=\"badge badge-pill badge-secondary\">").append(derID.getXLinkHref()).append("</span>");
+                result.append("<span class=\"badge badge-pill badge-secondary\">").append(derID.getXLinkHref())
+                    .append("</span>");
                 result.append("\n  </div>");
                 MCRDerivate der = MCRBPMNUtils.loadMCRDerivateFromWorkflowDirectory(mcrObjID,
                     derID.getXLinkHrefID());
@@ -496,11 +498,11 @@ public class MCRShowWorkspaceController {
                     }
                     result.append("\n    <ul style=\"list-style-type: none;\">");
                     for (String fileName : derivateFiles.get(derID.getXLinkHref())) {
-                        if(result.length()>3600) {
+                        if (result.length() > 3600) {
                             result.append("\n        <li>...</li>");
                             break;
                         }
-                            
+
                         result.append("\n        <li>");
                         if (fileName.contains(".")) {
                             result.append("<i class=\"fa fa-file mr-3\"></i>");
@@ -508,12 +510,15 @@ public class MCRShowWorkspaceController {
                             result.append("<i class=\"fa fa-folder-open mr-3\"></i>");
                         }
                         result.append(
-                            "<a href=\"").append(MCRFrontendUtil.getBaseURL()).append("do/wffile/").append(mcrObjID.toString()).append('/')
-                                .append(der.getId().toString()).append('/').append(fileName).append("\">").append(fileName).append("</a>");
+                            "<a href=\"").append(MCRFrontendUtil.getBaseURL()).append("do/wffile/")
+                            .append(mcrObjID.toString()).append('/')
+                            .append(der.getId().toString()).append('/').append(fileName).append("\">").append(fileName)
+                            .append("</a>");
 
                         if (fileName.equals(der.getDerivate().getInternals().getMainDoc())) {
                             result.append("<span class=\"ml-3 text-secondary\" class=\"fa fa-star\" title=\"")
-                                  .append(MCRTranslation.translate("Editor.Common.derivate.maindoc")).append("\"></span>");
+                                .append(MCRTranslation.translate("Editor.Common.derivate.maindoc"))
+                                .append("\"></span>");
                         }
                         result.append("\n    </li>");
                     }

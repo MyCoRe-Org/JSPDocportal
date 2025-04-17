@@ -50,7 +50,7 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
  *  
  * @author Robert Stephan
  * 
- */ 
+ */
 /* Example:
  * <mcr:retrieveObject mcrid="${mcrid}" varDOM="doc" />
  * <mcr:transformXSL dom="${doc}" xslt="xsl/xsl3example.xsl" />

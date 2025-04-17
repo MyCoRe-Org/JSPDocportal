@@ -54,11 +54,10 @@ import java.util.regex.Pattern;
  */
 public class HashedDirectoryStructure {
     public static final Pattern UUID_PATTERN = Pattern
-            .compile("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}");
+        .compile("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}");
 
     //ppn30 - ppn299 - TODO better to start splitting by counting from endfrom back
     public static final Pattern ID_START_SPLITT_PATTERN = Pattern.compile("^([a-zA-Z]*[1-2]?[0-9]{2})");
-
 
     /**
      * 
@@ -69,7 +68,7 @@ public class HashedDirectoryStructure {
      * @return
      */
     public static Path createOutputDirectory(Path baseDir, String recordIdentifier) {
-        if(!recordIdentifier.contains("/")) {
+        if (!recordIdentifier.contains("/")) {
             recordIdentifier = recordIdentifier.replaceFirst("_", "/");
         }
         Path currentDir = baseDir;
@@ -115,30 +114,30 @@ public class HashedDirectoryStructure {
      * @param args
      *            - none
      */
-    @SuppressWarnings({"PMD.SystemPrintln", "PMD.AvoidDuplicateLiterals"})
+    @SuppressWarnings({ "PMD.SystemPrintln", "PMD.AvoidDuplicateLiterals" })
     public static void main(String[] args) {
         // testing ...
         String r = "rosdok/id123456789";
         Path p = createOutputDirectory(Paths.get("/depot"), r);
         System.out.println(
-                r + " : " + p.toString() + " -> " + p.equals(Paths.get("/depot/rosdok/id12/id12345/id12345678")));
+            r + " : " + p.toString() + " -> " + p.equals(Paths.get("/depot/rosdok/id12/id12345/id12345678")));
         r = "rosdok/ppn102345678X";
         p = createOutputDirectory(Paths.get("/depot"), r);
         System.out.println(
-                r + " : " + p.toString() + " -> " + p.equals(Paths.get("/depot/rosdok/ppn12/ppn12345/ppn12345678X")));
+            r + " : " + p.toString() + " -> " + p.equals(Paths.get("/depot/rosdok/ppn12/ppn12345/ppn12345678X")));
         r = "darl/rlbtext02";
         p = createOutputDirectory(Paths.get("/depot"), r);
         System.out.println(r + " : " + p.toString() + " -> " + p.equals(Paths.get("/depot/darl/rlbtext02")));
         r = "darl/3dfab9ef-e90b-4fa6-8f02-4b34f0206c25";
         p = createOutputDirectory(Paths.get("/depot"), r);
         System.out.println(r + " : " + p.toString() + " -> "
-                + p.equals(Paths.get("/depot/darl/3d/3dfab/3dfab9ef-e90b-4fa6-8f02-4b34f0206c25")));
+            + p.equals(Paths.get("/depot/darl/3d/3dfab/3dfab9ef-e90b-4fa6-8f02-4b34f0206c25")));
         r = "12345678";
         p = createOutputDirectory(Paths.get("/depot"), r);
         System.out.println(r + " : " + p.toString() + " -> " + p.equals(Paths.get("/depot/12/12345/12345678")));
         r = "prefix12345678";
         p = createOutputDirectory(Paths.get("/depot"), r);
         System.out.println(
-                r + " : " + p.toString() + " -> " + p.equals(Paths.get("/depot/prefix12/prefix12345/prefix12345678")));
+            r + " : " + p.toString() + " -> " + p.equals(Paths.get("/depot/prefix12/prefix12345/prefix12345678")));
     }
 }

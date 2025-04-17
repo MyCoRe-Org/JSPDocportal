@@ -27,8 +27,8 @@ import jakarta.servlet.jsp.PageContext;
  * The attribute "expanded" just points out, if the whole navigation tree should
  * be passed to the bean or just the first level.
  * </p>
- */ 
- 
+ */
+
 /* Example usage:
  * 
  * <pre>
@@ -66,7 +66,7 @@ public class MCRCustomNavigationTag extends MCRAbstractNavigationTag {
             if (path == null || path.length == 0) {
                 LOGGER.error("No navigation item found for navigation: {}, path: {}", id, currentPath);
             } else {
-                LOGGER.error("No navigation item found for navigation: {}, path: {}, item: {}", id, currentPath, 
+                LOGGER.error("No navigation item found for navigation: {}, path: {}, item: {}", id, currentPath,
                     path[0]);
             }
             return;

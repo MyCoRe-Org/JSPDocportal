@@ -57,9 +57,9 @@ public class MCRHibernateTransactionWrapper implements AutoCloseable {
             et.commit();
             */
             if (MCRTransactionManager.hasRollbackOnlyTransactions()) {
-            	MCRTransactionManager.rollbackTransactions();
+                MCRTransactionManager.rollbackTransactions();
             } else {
-            	MCRTransactionManager.commitTransactions();
+                MCRTransactionManager.commitTransactions();
             }
         }
     }

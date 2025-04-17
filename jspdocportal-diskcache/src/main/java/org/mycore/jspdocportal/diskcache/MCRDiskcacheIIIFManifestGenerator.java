@@ -19,7 +19,6 @@ import com.google.gson.GsonBuilder;
 public class MCRDiskcacheIIIFManifestGenerator extends SimpleGenerator {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    
 
     @Override
     public void accept(String id, Path p) {
@@ -40,7 +39,7 @@ public class MCRDiskcacheIIIFManifestGenerator extends SimpleGenerator {
             LOGGER.error(e);
         }
     }
-    
+
     protected Gson getGson() {
         return new GsonBuilder()
             .setPrettyPrinting()

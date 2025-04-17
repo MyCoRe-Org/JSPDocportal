@@ -61,7 +61,7 @@ public class WebpageController {
 
         if (path != null) {
             path = path.replace("\\", "/");
-            model.put("path",  path);
+            model.put("path", path);
 
             if (!path.contains("..") && StringUtils.countMatches(path, "/") <= 3) {
                 String navPath = MCRConfiguration2.getString("MCR.Webpage.Navigation.navbar." + path.replace("/", "."))

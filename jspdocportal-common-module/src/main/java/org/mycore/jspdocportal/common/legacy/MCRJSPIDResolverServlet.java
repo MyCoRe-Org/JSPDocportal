@@ -93,9 +93,9 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = LogManager.getLogger();
-    
+
     private static final Namespace NS_METS = Namespace.getNamespace("mets", "http://www.loc.gov/METS/");
-    
+
     private static final Namespace NS_XLINK = Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink");
 
     /**
@@ -221,15 +221,17 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
         MCRObject o = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrID));
         MCRObjectStructure structure = o.getStructure();
         for (MCRMetaEnrichedLinkID der : structure.getDerivates()) {
-            for(Content c: der.getContentList()) {
-                if(c instanceof Element && ((Element) c).getName().equals("classification") && "derivate_types".equals(((Element) c).getAttributeValue("classid"))
-                        && label.equals(((Element) c).getAttributeValue("categid"))){
-                    for(Content c1: der.getContentList()) {
-                        if(c1 instanceof Element && ((Element) c1).getName().equals("maindoc")){
-                          String maindoc = ((Element)c1).getTextNormalize();
-                          StringBuffer sbPath = new StringBuffer(MCRFrontendUtil.getBaseURL());
-                          sbPath.append("file/").append(mcrID).append('/').append(der.getXLinkHref()).append('/').append(maindoc);
-                          return sbPath;
+            for (Content c : der.getContentList()) {
+                if (c instanceof Element && ((Element) c).getName().equals("classification")
+                    && "derivate_types".equals(((Element) c).getAttributeValue("classid"))
+                    && label.equals(((Element) c).getAttributeValue("categid"))) {
+                    for (Content c1 : der.getContentList()) {
+                        if (c1 instanceof Element && ((Element) c1).getName().equals("maindoc")) {
+                            String maindoc = ((Element) c1).getTextNormalize();
+                            StringBuffer sbPath = new StringBuffer(MCRFrontendUtil.getBaseURL());
+                            sbPath.append("file/").append(mcrID).append('/').append(der.getXLinkHref()).append('/')
+                                .append(maindoc);
+                            return sbPath;
                         }
                     }
                 }
@@ -242,15 +244,16 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
     protected StringBuffer createRootURLForDerivateWithLabel(HttpServletRequest request, String mcrID, String label) {
         MCRObject o = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrID));
         MCRObjectStructure structure = o.getStructure();
-        
+
         for (MCRMetaEnrichedLinkID der : structure.getDerivates()) {
-            for(Content c: der.getContentList()) {
-                if(c instanceof Element && ((Element) c).getName().equals("classification") && "derivate_types".equals(((Element) c).getAttributeValue("classid"))
-                        && label.equals(((Element) c).getAttributeValue("categid"))){
-                    for(Content c1: der.getContentList()) {
-                        if(c1 instanceof Element && ((Element) c1).getName().equals("maindoc")){
-                          StringBuffer sbPath = new StringBuffer(MCRFrontendUtil.getBaseURL());
-                          return sbPath.append("file/").append(mcrID).append('/').append(der.getXLinkHref());
+            for (Content c : der.getContentList()) {
+                if (c instanceof Element && ((Element) c).getName().equals("classification")
+                    && "derivate_types".equals(((Element) c).getAttributeValue("classid"))
+                    && label.equals(((Element) c).getAttributeValue("categid"))) {
+                    for (Content c1 : der.getContentList()) {
+                        if (c1 instanceof Element && ((Element) c1).getName().equals("maindoc")) {
+                            StringBuffer sbPath = new StringBuffer(MCRFrontendUtil.getBaseURL());
+                            return sbPath.append("file/").append(mcrID).append('/').append(der.getXLinkHref());
                         }
                     }
                 }
@@ -306,7 +309,8 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
                                                     Filters.element(), null, NS_METS, NS_XLINK)
                                                     .evaluateFirst(docMETS);
                                                 if (eMETSSmLink != null) {
-                                                    eMETSPhysDiv = retrieveStructMapDiv(TYPE_PHYSICAL, eMETSSmLink.getAttributeValue("to", NS_XLINK), docMETS); 
+                                                    eMETSPhysDiv = retrieveStructMapDiv(TYPE_PHYSICAL,
+                                                        eMETSSmLink.getAttributeValue("to", NS_XLINK), docMETS);
                                                 }
                                             }
                                         }
@@ -314,7 +318,8 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
                                 }
                                 if (thumb == null) {
                                     // display in DFG-Viewer
-                                    sbURL = new StringBuffer(MCRConfiguration2.getString("MCR.JSPDocportal.DFG-Viewer.BaseURL").orElseThrow().trim());
+                                    sbURL = new StringBuffer(MCRConfiguration2
+                                        .getString("MCR.JSPDocportal.DFG-Viewer.BaseURL").orElseThrow().trim());
                                     sbURL.append("?set[mets]=");
                                     sbURL.append(URLEncoder.encode(MCRFrontendUtil.getBaseURL() + "file/" + mcrID + "/"
                                         + p.toString().replace(":/", "/"), "UTF-8"));
@@ -368,7 +373,7 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
         LOGGER.debug("created DFG-ViewerURL: {} -> {}", request::getContextPath, () -> urlMessage);
         return url;
     }
-    
+
     //TODO cleanup: first part (resolving from mets IDs) is the same as in method createURLForDFGViewer()
     protected String createURLForMyCoReViewer(HttpServletRequest request, String mcrID, OpenBy openBy, String nr) {
 
@@ -376,7 +381,7 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
         try {
             MCRObject o = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrID));
             for (MCRMetaEnrichedLinkID derMetaLink : o.getStructure().getDerivates()) {
-                if (!derMetaLink.getClassifications().isEmpty() && 
+                if (!derMetaLink.getClassifications().isEmpty() &&
                     "MCRVIEWER_METS".equals(derMetaLink.getClassifications().get(0).getID())) {
                     MCRObjectID derID = derMetaLink.getXLinkHrefID();
                     Path root = MCRPath.getRootPath(derID.toString());
@@ -405,7 +410,7 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
                                     } else if (openBy == OpenBy.PART) {
                                         eMETSPhysDiv = retrieveStructMapDiv(TYPE_PHYSICAL, nr, docMETS);
                                         if (eMETSPhysDiv == null) {
-                                            Element eMETSLogDiv = retrieveStructMapDiv(TYPE_LOGICAL, nr, docMETS); 
+                                            Element eMETSLogDiv = retrieveStructMapDiv(TYPE_LOGICAL, nr, docMETS);
                                             if (eMETSLogDiv != null) {
                                                 Element eMETSSmLink = XPathFactory.instance().compile(
                                                     "/mets:mets/mets:structLink" + "//mets:smLink[@xlink:from='"
@@ -413,7 +418,8 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
                                                     Filters.element(), null, NS_METS, NS_XLINK)
                                                     .evaluateFirst(docMETS);
                                                 if (eMETSSmLink != null) {
-                                                    eMETSPhysDiv = retrieveStructMapDiv(TYPE_PHYSICAL, eMETSSmLink.getAttributeValue("to", NS_XLINK), docMETS);
+                                                    eMETSPhysDiv = retrieveStructMapDiv(TYPE_PHYSICAL,
+                                                        eMETSSmLink.getAttributeValue("to", NS_XLINK), docMETS);
                                                 }
                                             }
                                         }

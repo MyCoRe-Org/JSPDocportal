@@ -21,8 +21,9 @@ public class MCRLocalIDParser implements MCRPIParser<MCRLocalID> {
                 return Optional.of(new MCRLocalID(m.group("project"), m.group("prefix"), Long.parseLong(m.group("num")),
                     m.group("check")));
             } else {
-                return Optional.of(new MCRLocalID(m.group("project"), m.group("prefix2"), Long.parseLong(m.group("num2")),
-                    m.group("check2")));
+                return Optional
+                    .of(new MCRLocalID(m.group("project"), m.group("prefix2"), Long.parseLong(m.group("num2")),
+                        m.group("check2")));
             }
         } else {
             return Optional.empty();

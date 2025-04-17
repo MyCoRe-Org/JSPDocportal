@@ -100,7 +100,7 @@ public class MCRAPIExploreResponseObject {
         links.clear();
         links.add(new MCRAPIExploreResponseLink("self", MCRFrontendUtil.getBaseURL() + "api/v2/objects/" + id));
         String frontpageURL = MCRFrontendUtil.getBaseURL() + MCRConfiguration2
-                .getString("MCR.RestAPI.V2.Links.FrontpageURL").orElse("receive/{id}").replace("{id}", id);
+            .getString("MCR.RestAPI.V2.Links.FrontpageURL").orElse("receive/{id}").replace("{id}", id);
         links.add(new MCRAPIExploreResponseLink("html", frontpageURL));
     }
 

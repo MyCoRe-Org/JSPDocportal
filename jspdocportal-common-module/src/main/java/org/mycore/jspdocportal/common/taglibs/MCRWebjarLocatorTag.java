@@ -45,8 +45,8 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
 public class MCRWebjarLocatorTag extends SimpleTagSupport {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    protected static final MCRCache<String, String> WEBJAR_LOCATOR_URL_CACHE
-        = new MCRCache<>(100, "MCRWebjarLocatorTag WebjarItemURLCache");
+    protected static final MCRCache<String, String> WEBJAR_LOCATOR_URL_CACHE =
+        new MCRCache<>(100, "MCRWebjarLocatorTag WebjarItemURLCache");
 
     protected static final WebJarAssetLocator WEBJAR_LOCATOR = new WebJarAssetLocator();
 
@@ -55,9 +55,9 @@ public class MCRWebjarLocatorTag extends SimpleTagSupport {
     private String var;
 
     private String file;
-    
+
     private String htmlElement;
-    
+
     private String attribute;
 
     /**
@@ -68,7 +68,7 @@ public class MCRWebjarLocatorTag extends SimpleTagSupport {
     public void setVar(String var) {
         this.var = var;
     }
-    
+
     /**
      * the htmlElement that should be written to output
      * (optional, if var is set)
@@ -93,7 +93,7 @@ public class MCRWebjarLocatorTag extends SimpleTagSupport {
     public void setFile(String file) {
         this.file = file;
     }
-    
+
     /**
      * additional attribute (especially 'async' or 'defer' for &lt;script&gt;)
      * @param attribute - additional attribute
@@ -112,31 +112,31 @@ public class MCRWebjarLocatorTag extends SimpleTagSupport {
                 url = WEBJAR_LOCATOR.getFullPath(project, file).substring("META-INF/resources/".length());
                 WEBJAR_LOCATOR_URL_CACHE.put(cacheKey, url);
             }
-            if(var!=null) {
+            if (var != null) {
                 pageContext.setAttribute(var, url);
             }
-            if(htmlElement!=null) {
-                if(htmlElement.equals("script")) {
+            if (htmlElement != null) {
+                if (htmlElement.equals("script")) {
                     pageContext.getOut().print("<script src=\"" + MCRFrontendUtil.getBaseURL() + url + "\"");
-                    if(attribute!=null && attribute.toLowerCase(Locale.getDefault()).contains("defer")) {
+                    if (attribute != null && attribute.toLowerCase(Locale.getDefault()).contains("defer")) {
                         pageContext.getOut().print(" defer=\"defer\"");
                     }
-                    if(attribute!=null && attribute.toLowerCase(Locale.getDefault()).contains("async")) {
+                    if (attribute != null && attribute.toLowerCase(Locale.getDefault()).contains("async")) {
                         pageContext.getOut().print(" async=\"async\"");
                     }
                     pageContext.getOut().print("></script>");
                 }
-                if(htmlElement.equals("stylesheet") || htmlElement.equals("css"))  {
-                    pageContext.getOut().print("<link href=\"" + MCRFrontendUtil.getBaseURL() + url + "\" rel=\"stylesheet\">");
+                if (htmlElement.equals("stylesheet") || htmlElement.equals("css")) {
+                    pageContext.getOut()
+                        .print("<link href=\"" + MCRFrontendUtil.getBaseURL() + url + "\" rel=\"stylesheet\">");
                 }
             }
         } catch (IllegalArgumentException e) {
-            pageContext.getOut().print("<!--ERROR in WebjarLocator: project: " + project + " file: "+file +"\n          message: "+e.getMessage()+"-->");
+            pageContext.getOut().print("<!--ERROR in WebjarLocator: project: " + project + " file: " + file
+                + "\n          message: " + e.getMessage() + "-->");
             pageContext.setAttribute(var, "#NOT_FOUND#" + e.getMessage().replaceAll(" ", "_"));
             LOGGER.error(e);
         }
     }
-
-
 
 }

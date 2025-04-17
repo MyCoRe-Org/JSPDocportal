@@ -135,7 +135,8 @@ public class MCRSendFeedbackController {
                 sbMailBody.append('\n').append(message);
 
                 List<InternetAddress> receiver = List
-                    .of(new InternetAddress(MCRConfiguration2.getString("MCR.Workflow.Email.Feedback.Recipient").get()));
+                    .of(new InternetAddress(
+                        MCRConfiguration2.getString("MCR.Workflow.Email.Feedback.Recipient").get()));
                 String[] ccProp = MCRConfiguration2.getString("MCR.Workflow.Email.CC").orElse("").split(",");
                 for (String s : ccProp) {
                     s = s.trim();
@@ -152,8 +153,7 @@ public class MCRSendFeedbackController {
                 //see other redirect POST request to GET response
                 if (StringUtils.isNotBlank(returnURL)) {
                     return Response.seeOther(URI.create(returnURL)).build();
-                }
-                else if (StringUtils.isNotBlank(topicURL)) {
+                } else if (StringUtils.isNotBlank(topicURL)) {
                     return Response.seeOther(URI.create(topicURL)).build();
                 }
             }

@@ -3,7 +3,7 @@ package org.mycore.jspdocportal.common.bpmn.identity.model;
 import org.camunda.bpm.engine.identity.User;
 import org.mycore.user2.MCRUser;
 
-public class MCRMyCoReIDMUser implements User{
+public class MCRMyCoReIDMUser implements User {
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
@@ -12,24 +12,22 @@ public class MCRMyCoReIDMUser implements User{
     private String lastName;
     private String eMail;
     private String password;
-    
+
     public MCRMyCoReIDMUser(MCRUser mcrUser) {
         setId(mcrUser.getUserID());
         String name = mcrUser.getUserName();
-        if(name.contains(" ")) {
+        if (name.contains(" ")) {
             int pos = name.lastIndexOf(' ');
             setFirstName(name.substring(0, pos));
-            setLastName(name.substring(pos +1 ));
-        }
-        else {
+            setLastName(name.substring(pos + 1));
+        } else {
             setFirstName("");
             setLastName(name);
         }
         setEmail(mcrUser.getEMailAddress());
         setPassword(mcrUser.getPassword());
-        
     }
-    
+
     @Override
     public String getId() {
         return id;
@@ -38,35 +36,31 @@ public class MCRMyCoReIDMUser implements User{
     @Override
     public void setId(String id) {
         this.id = id;
-        
     }
 
-   @Override
+    @Override
     public String getFirstName() {
-       return firstName;
+        return firstName;
     }
 
     @Override
     public void setFirstName(String firstName) {
         this.firstName = firstName;
-        
     }
 
     @Override
     public void setLastName(String lastName) {
         this.lastName = lastName;
-        
     }
 
     @Override
     public String getLastName() {
-       return lastName;
+        return lastName;
     }
 
     @Override
     public void setEmail(String email) {
         this.eMail = email;
-        
     }
 
     @Override

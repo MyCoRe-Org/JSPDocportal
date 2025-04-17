@@ -14,13 +14,11 @@ public class MCRMyCoReIDMPlugin implements ProcessEnginePlugin {
     @Override
     public void postInit(ProcessEngineConfigurationImpl processEngineConfiguration) {
         // nothing todo
-        
     }
 
     @Override
     public void postProcessEngineBuild(ProcessEngine processEngine) {
         // nothing todo
-        
     }
 
 }

@@ -46,17 +46,16 @@ import jakarta.servlet.jsp.jstl.fmt.LocalizationContext;
  *
  */
 public class MCRSessionInitializationFilter implements Filter {
-    
- public static final String ATTRIBUTE_NAME_INITIAL_URL = "initialURL"; 
-    
-    
+
+    public static final String ATTRIBUTE_NAME_INITIAL_URL = "initialURL";
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+        throws IOException, ServletException {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
@@ -67,26 +66,27 @@ public class MCRSessionInitializationFilter implements Filter {
         if (httpRequest.getAttribute(ATTRIBUTE_NAME_INITIAL_URL) == null) {
             httpRequest.setAttribute(ATTRIBUTE_NAME_INITIAL_URL, httpRequest.getRequestURL());
         }
-        
+
         MCRServlet.initializeMCRSession(httpRequest, name);
-        
+
         MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
-        
+
         //update the Language (Locale) in the MCRSession, if a request parameter &lang=xy is present
         MCRFrontendUtil.configureSession(mcrSession, httpRequest, httpResponse);
-        
+
         //this would set the current locale into the JSP Standard Taglib Configuration,
         //but switching the language seems to work without this command
         //import javax.servlet.jsp.jstl.core.Config;
         Locale currentLocale = (Locale) Config.get(httpRequest.getSession(), Config.FMT_LOCALE);
-        if(currentLocale == null || !currentLocale.equals(mcrSession.getLocale())) {
+        if (currentLocale == null || !currentLocale.equals(mcrSession.getLocale())) {
             Config.set(httpRequest.getSession(), Config.FMT_LOCALE, mcrSession.getLocale());
-            LocalizationContext locCtxt = new LocalizationContext(MCRTranslation.getResourceBundle("messages", mcrSession.getLocale()));
+            LocalizationContext locCtxt =
+                new LocalizationContext(MCRTranslation.getResourceBundle("messages", mcrSession.getLocale()));
             Config.set(httpRequest.getSession(), Config.FMT_LOCALIZATION_CONTEXT, locCtxt);
         }
 
         chain.doFilter(request, response);
-        
+
         MCRServlet.cleanupMCRSession(httpRequest, name);
     }
 

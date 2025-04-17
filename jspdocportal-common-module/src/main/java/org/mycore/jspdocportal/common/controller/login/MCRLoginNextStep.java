@@ -8,28 +8,28 @@ package org.mycore.jspdocportal.common.controller.login;
 *
 */
 public class MCRLoginNextStep {
-   private String url;
-   private String label;
+    private String url;
+    private String label;
 
-   public MCRLoginNextStep(String url, String label) {
-       super();
-       this.url = url;
-       this.label = label;
-   }
+    public MCRLoginNextStep(String url, String label) {
+        super();
+        this.url = url;
+        this.label = label;
+    }
 
-   /**
+    /**
     * 
     * @return the url or empty string
     */
-   public String getUrl() {
-       return url;
-   }
+    public String getUrl() {
+        return url;
+    }
 
-   /**
+    /**
     * 
     * @return the label
     */
-   public String getLabel() {
-       return label;
-   }
+    public String getLabel() {
+        return label;
+    }
 }
