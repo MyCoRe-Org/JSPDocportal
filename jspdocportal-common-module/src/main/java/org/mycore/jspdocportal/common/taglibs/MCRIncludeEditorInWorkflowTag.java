@@ -36,7 +36,7 @@ import jakarta.servlet.jsp.PageContext;
 import jakarta.servlet.jsp.tagext.SimpleTagSupport;
 
 public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
-    private String isNewEditorSource;
+    private boolean isNewEditorSource;
     private String editorSource;
     private String mcrid;
     private String step;
@@ -56,8 +56,8 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public void setIsNewEditorSource(String isNewEditorSource) {
-        this.isNewEditorSource = isNewEditorSource;
+    public void setIsNewEditorSource(String newEditorSource) {
+        this.isNewEditorSource = newEditorSource.equals("true");
     }
 
     public void setEditorSource(String editorSource) {
@@ -206,7 +206,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
 
         MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
         params.put("lang", mcrSession.getCurrentLanguage());
-        params.put("XSL.editor.source.new", isNewEditorSource);
+        params.put("XSL.editor.source.new", Boolean.toString(isNewEditorSource));
         params.put("mcrid", mcrid);
         params.put("processid", String.valueOf(processid));
         params.put("type", type);
@@ -228,7 +228,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
                 LOGGER.error("Wrong URL", mue);
             }
 
-        } else if (!isNewEditorSource.equals("true")
+        } else if (!isNewEditorSource
             && mcrid != null && !mcrid.equals("")
             && type != null && !type.equals("")) {
             try {

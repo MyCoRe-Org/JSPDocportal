@@ -277,7 +277,7 @@ public class MCRSearchController {
         StringWriter out = new StringWriter();
 
         MCRContent editorContent = null;
-        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
             URL resource = MCRResourceHelper.getResourceUrl("/editor/search/" + result.getMask() + ".xed");
             if (resource != null) {
                 editorContent = new MCRURLContent(resource);

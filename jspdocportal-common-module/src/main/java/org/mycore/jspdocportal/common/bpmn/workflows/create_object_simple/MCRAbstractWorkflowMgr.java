@@ -88,7 +88,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
     public MCRObject loadMCRObject(DelegateExecution execution) {
         MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(
             MCRObjectID.getInstance(String.valueOf(execution.getVariable(MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID))));
-        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
             mcrObj.getService().removeFlags(FLAG_EDITEDBY);
             mcrObj.getService().addFlag(FLAG_EDITEDBY, MCRUserManager.getCurrentUser().getUserID());
 
@@ -111,7 +111,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
             .getInstance(String.valueOf(execution.getVariable(MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID)));
         if (MCRMetadataManager.exists(mcrObjID)) {
             mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
-            try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+            try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
                 mcrObj.getService().setState(createStateCategory(STATE_DELETED));
                 mcrObj.getService().removeFlags(FLAG_EDITEDBY);
                 MCRMetadataManager.delete(mcrObj);
@@ -205,7 +205,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                 execution.removeVariable(MCRBPMNMgr.WF_VAR_VALIDATION_MESSAGE);
             }
             MCRObjectID mcrObjID = MCRObjectID.getInstance(String.valueOf(id));
-            try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+            try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
                 MCRObject mcrWFObj = MCRBPMNUtils.getWorkflowObject(mcrObjID);
                 MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
                 processDerivatesOnCommit(mcrObj, mcrWFObj);
@@ -328,7 +328,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
     private boolean resetMetadataAndCleanupWorkflowDir(MCRObjectID mcrObjID) {
         boolean result = true;
         if (MCRMetadataManager.exists(mcrObjID)) {
-            try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+            try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
                 MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
                 for (MCRMetaLinkID metaID : new ArrayList<MCRMetaLinkID>(mcrObj.getStructure().getDerivates())) {
                     MCRObjectID derID = metaID.getXLinkHrefID();

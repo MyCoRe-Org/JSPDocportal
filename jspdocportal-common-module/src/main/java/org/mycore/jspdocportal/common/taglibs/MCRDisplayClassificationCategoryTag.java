@@ -32,7 +32,7 @@ public class MCRDisplayClassificationCategoryTag extends SimpleTagSupport {
             lang = MCRSessionMgr.getCurrentSession().getCurrentLanguage();
         }
         if (classid != null && categid != null && lang != null) {
-            try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+            try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
                 if (showDescription) {
                     String descr = categoryDAO.getCategory(new MCRCategoryID(classid, categid), 0).getLabel(lang).get()
                         .getDescription();

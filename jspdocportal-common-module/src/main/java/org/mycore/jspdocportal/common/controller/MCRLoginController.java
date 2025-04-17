@@ -97,7 +97,7 @@ public class MCRLoginController {
                 model.put(MODEL_LOGIN_STATUS, "user.welcome");
                 model.put(MODEL_LOGIN_OK, true);
 
-                try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+                try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
                     updateData(mcrSession, model);
                 }
             }
@@ -123,7 +123,7 @@ public class MCRLoginController {
     public Response doLogin(@FormParam("userID") String userID, @FormParam("password") String password,
         @Context HttpServletRequest request) {
         MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
-        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
             Map<String, Object> model = new HashMap<>();
             Viewable v = new Viewable("/login", model);
             Response r = Response.ok(v).build();
@@ -177,7 +177,7 @@ public class MCRLoginController {
     private boolean loginInMyCore(String mcrUserID, String mcrPassword, MCRSession mcrSession,
         HttpServletRequest request, Map<String, Object> model) {
         boolean result = false;
-        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
             MCRUser mcrUser = MCRUserManager.login(mcrUserID, mcrPassword);
             if (mcrUser != null) {
                 result = true;
@@ -213,7 +213,7 @@ public class MCRLoginController {
      * @param mcrSession
      */
     private void updateData(MCRSession mcrSession, Map<String, Object> model) {
-        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
             List<MCRLoginNextStep> nextSteps = new ArrayList<>();
 
             StringBuffer name = new StringBuffer();

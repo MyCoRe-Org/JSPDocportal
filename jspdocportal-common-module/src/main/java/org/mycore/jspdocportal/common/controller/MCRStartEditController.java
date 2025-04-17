@@ -36,7 +36,7 @@ public class MCRStartEditController  {
 
     @GET
     public Response defaultRes(@QueryParam("mcrid") String mcrid, @QueryParam("mode") String mode, @Context HttpServletRequest request) {
-        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
             if (request.getSession(false)==null  || !MCRAccessManager.checkPermission(mcrid, "writedb")) {
                 return Response.temporaryRedirect(URI.create(request.getContextPath() + "/do/login")).build();
             }

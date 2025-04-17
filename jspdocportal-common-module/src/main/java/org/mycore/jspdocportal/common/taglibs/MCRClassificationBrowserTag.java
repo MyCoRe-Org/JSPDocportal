@@ -316,6 +316,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
                            c = n.intValue();
                        }
                    } catch (ExecutionException e) {
+                       // do nothing
                    }    
                 }
                 switch (c) {
@@ -554,7 +555,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
         try {
             return cacheHitCount.get(generateQuery(cb, categid));
         } catch (ExecutionException e) {
-        
+            // do nothing
         }
         return 0;
     }
@@ -572,7 +573,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
         try {
             return cacheHitCount.get(generateQuery(cb, categid)+"?*");
         } catch (ExecutionException e) {
-        
+            // do nothing
         }
         return 0;
     }

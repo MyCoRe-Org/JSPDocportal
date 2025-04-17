@@ -101,7 +101,7 @@ public class MCRShowWorkspaceController {
             return editObject(mcrID, null);
         }
 
-        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
             if (request.getSession(false) == null
                 || !MCRUserManager.getCurrentUser().isUserInRole("edit")) {
                 return Response.temporaryRedirect(URI.create(request.getContextPath() + "/do/login")).build();
@@ -163,7 +163,7 @@ public class MCRShowWorkspaceController {
             }
         }
 
-        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
             MCRUser user = MCRUserManager.getCurrentUser();
 
             TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
@@ -212,7 +212,7 @@ public class MCRShowWorkspaceController {
 
     private void createNewTask(String mode, String objectType, HttpServletRequest request, List<String> messages) {
         if (objectType != null) {
-            try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+            try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
                 String projectID = MCRConfiguration2.getStringOrThrow("MCR.SWF.Project.ID");
                 if (request.getSession(false) != null) {
                     Map<String, Object> variables = new HashMap<>();

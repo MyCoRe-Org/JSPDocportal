@@ -158,7 +158,7 @@ public class MCRSendFeedbackController {
                 }
             }
         } catch (UnsupportedEncodingException e) {
-
+            // do nothing
         } catch (Exception e) {
             LOGGER.error(e);
             messages.add(e.getMessage());

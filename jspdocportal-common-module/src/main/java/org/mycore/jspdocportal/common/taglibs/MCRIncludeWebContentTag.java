@@ -45,7 +45,7 @@ public class MCRIncludeWebContentTag extends SimpleTagSupport {
         JspWriter out = pageContext.getOut();
         out.flush();
 
-        try (MCRHibernateTransactionWrapper tw = new MCRHibernateTransactionWrapper()) {
+        try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
 
             if (!isGuestUser() && MCRAccessManager.checkPermission("administrate-webcontent")) {
                 if (getOpenEditorsFromSession().contains(id)) {
@@ -137,9 +137,10 @@ public class MCRIncludeWebContentTag extends SimpleTagSupport {
             : MCRResourceHelper.getResourceAsStream("/config/webcontent/" + lang + "/" + file)) {
             if (is != null) {
                 try (BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-                    String line;
-                    while ((line = br.readLine()) != null) {
+                    String line = br.readLine();
+                    while (line != null) {
                         out.println(line);
+                        line = br.readLine();
                     }
                 } catch (UnsupportedEncodingException | FileNotFoundException e) {
                     //do nothing
