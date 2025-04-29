@@ -49,6 +49,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocumentList;
 import org.glassfish.jersey.server.mvc.Viewable;
 import org.mycore.common.config.MCRConfiguration2;
@@ -147,7 +148,8 @@ public class MCRPDFDownloadController {
 
         SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
         SolrQuery query = new SolrQuery();
-        query.setQuery("recordIdentifier:" + recordIdentifier.replaceFirst("/", "_"));
+        query.setQuery("recordIdentifier:" + ClientUtils.escapeQueryChars(recordIdentifier)
+        + " OR recordIdentifier:" + recordIdentifier.replaceFirst("_", "/"));
 
         try {
             QueryRequest queryRequest = new QueryRequest(query);
