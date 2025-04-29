@@ -72,10 +72,15 @@ public class MCRViewerController {
 
         SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
         String value = cleanIdentifier;
-        if ("recordIdentifier".equals(field) && value.contains("/")) {
-            value = value.replaceFirst("/", "_");
+        String query = null;
+        if ("recordIdentifier".equals(field) && !value.contains("/")) {
+            value = value.replaceFirst("_", "/");
+            query = field + ":" + ClientUtils.escapeQueryChars(value)
+                + " OR " + field + ":" + ClientUtils.escapeQueryChars(value.replaceFirst("/", "_"));
+        } else {
+            query = field + ":" + ClientUtils.escapeQueryChars(value);
         }
-        SolrQuery solrQuery = new SolrQuery(field + ":" + ClientUtils.escapeQueryChars(value));
+        SolrQuery solrQuery = new SolrQuery(query);
         solrQuery.setRows(1);
 
         try {
