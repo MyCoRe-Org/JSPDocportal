@@ -41,6 +41,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -142,8 +143,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
      * The mode - the property prefix
      */
     public void setModus(String mode) {
-        this.mode = mode;
-        ;
+        this.mode = StringEscapeUtils.escapeHtml4(mode);
     }
 
     Vector<String> path = new Vector<String>();
@@ -167,14 +167,14 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
      
         PageContext context = (PageContext) getJspContext();
         HttpServletRequest request = (HttpServletRequest) context.getRequest();
-        String requestPath = request.getParameter("select");
+        String requestPath = StringEscapeUtils.escapeHtml4(request.getParameter("select"));
         StringBuffer url = new StringBuffer(MCRFrontendUtil.getBaseURL());
         url.append("do/classbrowser/" + mode + "?");
 
         @SuppressWarnings("rawtypes")
         Enumeration paramNames = request.getParameterNames();
         while (paramNames.hasMoreElements()) {
-            String s = paramNames.nextElement().toString();
+            String s = StringEscapeUtils.escapeHtml4(paramNames.nextElement().toString());
             if (!s.equals("select") && !s.equals("modus")) {
                 url.append(URLEncoder.encode(s, StandardCharsets.UTF_8)).append("=")
                         .append(URLEncoder.encode(request.getParameter(s), StandardCharsets.UTF_8))
