@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -174,17 +175,18 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
 
         PageContext context = (PageContext) getJspContext();
         HttpServletRequest request = (HttpServletRequest) context.getRequest();
-        String requestPath = request.getParameter("select");
+        String requestPath = StringEscapeUtils.escapeHtml4(request.getParameter("select"));
         StringBuffer url = new StringBuffer(MCRFrontendUtil.getBaseURL());
         url.append("do/classbrowser/").append(mode).append('?');
 
         @SuppressWarnings("rawtypes")
-        Enumeration paramNames = request.getParameterNames();
+        Enumeration<String> paramNames = request.getParameterNames();
         while (paramNames.hasMoreElements()) {
             String s = paramNames.nextElement().toString();
             if (!s.equals("select") && !s.equals("modus")) {
-                url.append(URLEncoder.encode(s, StandardCharsets.UTF_8)).append('=')
-                    .append(URLEncoder.encode(request.getParameter(s), StandardCharsets.UTF_8))
+                url.append(URLEncoder.encode(StringEscapeUtils.escapeHtml4(s), StandardCharsets.UTF_8)).append('=')
+                    .append(URLEncoder.encode(StringEscapeUtils.escapeHtml4(request.getParameter(s)),
+                        StandardCharsets.UTF_8))
                     .append("&amp;");
             }
         }
@@ -469,10 +471,14 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
                 // do a subselect / create a url, that returns to an editor
                 url.append("servlets/XMLEditor");
                 url.append("?_action=end.subselect");
-                url.append("&amp;subselect.session=").append(request.getParameter("XSL.subselect.session.SESSION"));
-                url.append("&amp;subselect.varpath=").append(request.getParameter("XSL.subselect.varpath.SESSION"));
+                url.append("&amp;subselect.session=")
+                    .append(StringEscapeUtils.escapeHtml4(request.getParameter("XSL.subselect.session.SESSION")));
+                url.append("&amp;subselect.varpath=")
+                    .append(StringEscapeUtils.escapeHtml4(request.getParameter("XSL.subselect.varpath.SESSION")));
                 url.append("&amp;subselect.webpage=")
-                    .append(URLEncoder.encode(request.getParameter("XSL.subselect.webpage.SESSION"), "UTF-8"));
+                    .append(URLEncoder.encode(
+                        StringEscapeUtils.escapeHtml4(request.getParameter("XSL.subselect.webpage.SESSION")),
+                        StandardCharsets.UTF_8));
                 url.append("&amp;_var_@categid=").append(categ.getId().getId());
                 url.append("&amp;_var_@type=")
                     .append(URLEncoder.encode(categ.getCurrentLabel().get().getText(), "UTF-8"));
