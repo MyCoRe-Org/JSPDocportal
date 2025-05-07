@@ -74,14 +74,15 @@
       </dependency>
       <dependency>
         <groupId>org.mycore.jspdocportal</groupId>
-        <artifactId>jspdocportal-ir-module</artifactId>
+        <artifactId>jspdocportal-diskcache</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.mycore.jspdocportal</groupId>
-        <artifactId>jspdocportal-diskcache</artifactId>
+        <artifactId>jspdocportal-ir-module</artifactId>
         <version>${project.version}</version>
       </dependency>
+
 
       <dependency>
         <groupId>org.webjars</groupId>
