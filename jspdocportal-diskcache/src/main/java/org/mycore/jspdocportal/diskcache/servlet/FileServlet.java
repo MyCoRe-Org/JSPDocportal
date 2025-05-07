@@ -227,7 +227,7 @@ public abstract class FileServlet extends HttpServlet {
     /**
      * Returns the file associated with the given HTTP servlet request.
      * If this method throws {@link IllegalArgumentException}, then the servlet will return a HTTP 400 error.
-     * If this method returns <code>null</code>, or if {@link File#isFile()} returns <code>false</code>, then the
+     * If this method returns <code>null</code>, or if {@link java.io.File#isFile()} returns <code>false</code>, then the
      * servlet will invoke {@link #handleFileNotFound(HttpServletRequest, HttpServletResponse)}.
      * @param request The involved HTTP servlet request.
      * @return The file associated with the given HTTP servlet request.
@@ -264,7 +264,7 @@ public abstract class FileServlet extends HttpServlet {
     /**
      * Returns the content type associated with the given HTTP servlet request and file.
      * <p>
-     * The default implementation delegates {@link File#getName()} to {@link ServletContext#getMimeType(String)} with a
+     * The default implementation delegates to {@link ServletContext#getMimeType(String)} with a
      * fallback default value of <code>application/octet-stream</code>.
      * @param request The involved HTTP servlet request.
      * @param file The involved file.
@@ -298,7 +298,7 @@ public abstract class FileServlet extends HttpServlet {
      * Returns the file name to be used in <code>Content-Disposition</code> header.
      * This does not need to be URL-encoded as this will be taken care of.
      * <p>
-     * The default implementation returns {@link File#getName()}.
+     * The default implementation returns {@link java.io.File#getName()}.
      * @param request The involved HTTP servlet request.
      * @param file The involved file.
      * @return The file name to be used in <code>Content-Disposition</code> header.
