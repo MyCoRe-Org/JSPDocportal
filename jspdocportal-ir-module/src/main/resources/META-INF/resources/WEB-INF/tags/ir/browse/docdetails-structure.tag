@@ -28,8 +28,8 @@
     }
     else {
         result.setQuery("ir.host.recordIdentifier:"+hostRecordIdentifier
-            +" OR ir.host.recordIdentifier:"+hostMcrID.replaceFirst("/", "_")
-            +" OR ir.host.recordIdentifier:"+hostMcrID.replaceFirst("_", "/")
+            +" OR ir.host.recordIdentifier:"+hostRecordIdentifier.replaceFirst("/", "_")
+            +" OR ir.host.recordIdentifier:"+hostRecordIdentifier.replaceFirst("_", "/")
             +" OR ir.host.recordIdentifier:"+hostMcrID);
     }
 	String sortOrder = hostMcrID.contains("_document_") ? "desc" : "asc";
