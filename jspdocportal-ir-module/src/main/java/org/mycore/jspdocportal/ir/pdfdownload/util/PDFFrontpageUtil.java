@@ -43,9 +43,9 @@ import org.mycore.common.MCRClassTools;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
 import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRExpandedObject;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.jspdocportal.common.taglibs.MCRTransformXslTag;
@@ -100,7 +100,7 @@ public class PDFFrontpageUtil {
         document.add(Chunk.NEWLINE);
 
         MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrid);
-        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
+        MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(mcrObjID);
 
         //Cover Image
         try {

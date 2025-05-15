@@ -40,10 +40,10 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRExpandedObject;
 import org.mycore.datamodel.metadata.MCRMetaClassification;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.xeditor.MCREditorSession;
@@ -353,7 +353,7 @@ public class MCRShowWorkspaceController {
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
         String txt;
         MCRObjectID mcrObjID;
-        MCRObject mcrObj;
+        MCRExpandedObject mcrObj;
         try {
             mcrObjID = MCRObjectID
                 .getInstance(String.valueOf(ts.getVariable(t.getId(), MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID)));
@@ -464,7 +464,7 @@ public class MCRShowWorkspaceController {
             return;
         }
 
-        MCRObject mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
+        MCRExpandedObject mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
         StringBuffer result = new StringBuffer();
         if (mcrObj != null && !mcrObj.getStructure().getDerivates().isEmpty()) {
             Map<String, List<String>> derivateFiles = MCRBPMNUtils.getDerivateFiles(mcrObjID);

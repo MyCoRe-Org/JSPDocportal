@@ -30,10 +30,10 @@ import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
+import org.mycore.datamodel.metadata.MCRExpandedObject;
 import org.mycore.datamodel.metadata.MCRMetaEnrichedLinkID;
 import org.mycore.datamodel.metadata.MCRMetaXML;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.MCRFrontendUtil;
@@ -106,7 +106,7 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
     @Override
     public void accept(String id, Path p) {
         if (MCRObjectID.isValid(id)) {
-            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(id));
+            MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(MCRObjectID.getInstance(id));
             Optional<MCRMetaEnrichedLinkID> optDerLink = mcrObj.getStructure().getDerivates().stream()
                 .filter(x -> x.getClassifications().contains(MCRCategoryID.ofString("derivate_types:REPOS_METS")))
                 .findFirst();
