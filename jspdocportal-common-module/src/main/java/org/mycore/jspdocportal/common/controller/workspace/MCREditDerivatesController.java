@@ -443,8 +443,11 @@ public class MCREditDerivatesController {
         public static ActionParams ofString(String s) {
             Matcher m = PATTERN_ACTION.matcher(s);
             if (m.find()) {
-                StringValue sv = rs.getVariableTyped(m.group("task"), MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
-                String mcrobjid = sv.getValue();
+                String mcrobjid = null;
+                if (m.group("task") != null) {
+                    StringValue sv = rs.getVariableTyped(m.group("task"), MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID);
+                    mcrobjid = sv.getValue();
+                }
                 return new ActionParams(m.group("action"), m.group("task"), mcrobjid, m.group("derivate"),
                     m.group("file"));
             } else {
