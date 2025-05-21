@@ -69,7 +69,7 @@
       import {MyCoReViewer} from "${iviewBaseURL}js/iview-client-base.es.js";
 
       window.addEventListener("load", function(){
-            window["viewer"] = new MyCoReViewer(jQuery("#${id}"), {
+            window["viewer"] = new MyCoReViewer(document.getElementById("${id}"), {
                 mobile: false,
                 pdfProviderURL: "${applicationScope.WebApplicationBaseURL}file/${mcrid}/${derid}/${maindoc}",
                 derivate: "${mcrid}",
@@ -156,7 +156,7 @@
     <script type="module">
       import {MyCoReViewer} from "${iviewBaseURL}js/iview-client-base.es.js";
       window.addEventListener("load", function(){
-        window["viewer"] = new MyCoReViewer(jQuery("#${id}"), {
+        window["viewer"] = new MyCoReViewer(document.getElementById("${id}"), {
                 mobile: false,
                 doctype: "mets",
                 metsURL: "${applicationScope.WebApplicationBaseURL}file/${mcrid}/${derid}/${maindoc}",

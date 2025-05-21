@@ -23,7 +23,6 @@
 
 <link rel="stylesheet" type="text/css" href="${applicationScope.WebApplicationBaseURL}modules/mcrviewer/mcrviewer.css" />
 <link rel="stylesheet" type="text/css" href="${iviewBaseURL}css/default.css" />
-<mcr:webjarLocator htmlElement="script" project="jquery" file="jquery.min.js" />
 <mcr:webjarLocator htmlElement="script" project="bootstrap" file="js/bootstrap.min.js" />
 
 <script type="module" src="${iviewBaseURL}js/iview-client-base.es.js"></script>
@@ -119,7 +118,7 @@
 								inGroup: "addOns"
 							} ]
 			};
-			window["viewer"] = new MyCoReViewer(jQuery("body"), config);
+			window["viewer"] = new MyCoReViewer(document.body, config);
 		};
 	</script>
 </c:if>
@@ -241,7 +240,7 @@
 				objId : ""
 
 			};
-			window["viewer"] = new MyCoReViewer(jQuery("body"), config);
+			window["viewer"] = new MyCoReViewer(document.body, config);
 		};
 	</script>
 </c:if>
