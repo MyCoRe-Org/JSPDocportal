@@ -41,9 +41,9 @@ import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRPathContent;
+import org.mycore.datamodel.metadata.MCRExpandedObject;
 import org.mycore.datamodel.metadata.MCRMetaEnrichedLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.iiif.presentation.impl.MCRIIIFPresentationImpl;
@@ -154,7 +154,7 @@ public class MCRJSPMetsIIIFPresentationImpl extends MCRIIIFPresentationImpl {
             }
         }
         if (mcrid != null) {
-            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrid);
+            MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(mcrid);
             Optional<MCRMetaEnrichedLinkID> optMCRViewerDerLink = mcrObj.getStructure().getDerivates().stream()
                 .filter(x -> x.getClassifications().stream()
                     .filter(c -> "REPOS_METS".equals(c.getId()))

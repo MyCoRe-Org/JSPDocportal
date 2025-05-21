@@ -56,11 +56,11 @@ import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRPathContent;
+import org.mycore.datamodel.metadata.MCRExpandedObject;
+import org.mycore.datamodel.metadata.MCRExpandedObjectStructure;
 import org.mycore.datamodel.metadata.MCRMetaEnrichedLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRObjectStructure;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.services.i18n.MCRTranslation;
@@ -401,8 +401,8 @@ public class MCRResolvingController {
 
     protected StringBuffer createURLForMainDocInDerivateWithLabel(HttpServletRequest request, String mcrID,
         String label) {
-        MCRObject o = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrID));
-        MCRObjectStructure structure = o.getStructure();
+        MCRExpandedObject o = MCRMetadataManager.retrieveMCRExpandedObject(MCRObjectID.getInstance(mcrID));
+        MCRExpandedObjectStructure structure = o.getStructure();
         for (MCRMetaEnrichedLinkID der : structure.getDerivates()) {
             for (Content c : der.getContentList()) {
                 if (c instanceof Element e && e.getName().equals("classification")
@@ -425,8 +425,8 @@ public class MCRResolvingController {
     }
 
     protected StringBuffer createRootURLForDerivateWithLabel(HttpServletRequest request, String mcrID, String label) {
-        MCRObject o = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrID));
-        MCRObjectStructure structure = o.getStructure();
+        MCRExpandedObject o = MCRMetadataManager.retrieveMCRExpandedObject(MCRObjectID.getInstance(mcrID));
+        MCRExpandedObjectStructure structure = o.getStructure();
 
         for (MCRMetaEnrichedLinkID der : structure.getDerivates()) {
             for (Content c : der.getContentList()) {
@@ -543,7 +543,7 @@ public class MCRResolvingController {
     }
 
     private Path retrieveMETSFileFromDerivate(String mcrId, String derivateType) throws IOException {
-        MCRObject o = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrId));
+        MCRExpandedObject o = MCRMetadataManager.retrieveMCRExpandedObject(MCRObjectID.getInstance(mcrId));
         for (MCRMetaEnrichedLinkID derMetaLink : o.getStructure().getDerivates()) {
             if (!derMetaLink.getClassifications().isEmpty() &&
                 derivateType.equals(derMetaLink.getClassifications().get(0).getId())) {
