@@ -18,12 +18,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<mcr:webjarLocator htmlElement="stylesheet" project="bootstrap" file="css/bootstrap.min.css" />
+<mcr:webjarLocator htmlElement="stylesheet" project="bootstrap" file="dist/css/bootstrap.min.css" />
 <mcr:webjarLocator htmlElement="stylesheet" project="font-awesome" file="css/all.min.css" />
 
 <link rel="stylesheet" type="text/css" href="${applicationScope.WebApplicationBaseURL}modules/mcrviewer/mcrviewer.css" />
 <link rel="stylesheet" type="text/css" href="${iviewBaseURL}css/default.css" />
-<mcr:webjarLocator htmlElement="script" project="bootstrap" file="js/bootstrap.min.js" />
+<mcr:webjarLocator htmlElement="script" project="bootstrap" file="dist/js/bootstrap.bundle.min.js" />
 
 <script type="module" src="${iviewBaseURL}js/iview-client-base.es.js"></script>
 <script type="module" src="${iviewBaseURL}js/iview-client-desktop.es.js"></script>
