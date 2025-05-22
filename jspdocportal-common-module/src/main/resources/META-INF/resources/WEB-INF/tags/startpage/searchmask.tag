@@ -13,31 +13,27 @@
     <input type="text" class="form-control ir-form-control" 
       placeholder="${lblSearch}" x-bind:placeholder="search_placeholder"
       x-model='search_term' x-on:keyup.enter="doSearch()" />
-    <div class="input-group-append">
-      <button class="btn btn-primary" type="button" x-on:click="doSearch()">
-        <i class="fa fa-search"></i>
-      </button>
-    </div>
+    <button class="btn btn-primary" type="button" x-on:click="doSearch()">
+      <i class="fa fa-search"></i>
+    </button>
   </div>
 
-  <div class="custom-control custom-control-inline float-right mr-0">
+  <div class="float-end">
     <a class="btn btn-outline-secondary btn-sm" href="${WebApplicationBaseURL}do/browse/${mode}"> 
       <fmt:message key="Browse.Search.alldocuments" />
     </a>
   </div>
 
-  <div class="custom-control custom-radio custom-control-inline">
-    <input type="radio" class="custom-control-input" id="filterField1" 
-           x-model="search_field" value="allMeta"> 
-    <label class="custom-control-label" for="filterField1"> 
+  <div class="form-check form-check-inline ms-2">
+    <input type="radio" class="form-check-input" id="filterField1" x-model="search_field" value="allMeta"> 
+    <label class="form-check-label" for="filterField1"> 
       <c:out escapeXml="false" value="${fn:replace(lblAllMeta,'<br />', ' ')}" />
     </label>
   </div>
 
-  <div class="custom-control custom-radio custom-control-inline">
-    <input type="radio" class="custom-control-input" id="filterField2" 
-           x-model="search_field" value="content">
-    <label class="custom-control-label" for="filterField2"> 
+  <div class="form-check form-check-inline">
+    <input type="radio" class="form-check-input" id="filterField2" x-model="search_field" value="content">
+    <label class="form-check-label" for="filterField2"> 
       <c:out escapeXml="false" value="${fn:replace(lblContent,'<br />', ' ')}" />
     </label>
   </div>
