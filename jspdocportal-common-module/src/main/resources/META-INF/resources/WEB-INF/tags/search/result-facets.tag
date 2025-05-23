@@ -77,15 +77,15 @@
 						</button>
 					</c:if>
 					<c:if test="${status.index >= top and status.last}">
-						<button id="moreFacets_btn_${facetID}" class="btn btn-link btn-sm" style="width:unset;align-self:end" 
-                                data-toggle="collapse" data-target=".toggle-${facetID}-collapse"  >${btnMore}</button>
+						<button id="moreFacets_btn_${facetID}" class="btn btn-link btn-sm text-decoration-none" style="width:unset;align-self:end" 
+                    data-bs-toggle="collapse" data-bs-target=".toggle-${facetID}-collapse">${btnMore}</button>
 						<script type="text/javascript">
-						$('.toggle-${facetID}-collapse:first').on('shown.bs.collapse', function () {
-							$('#moreFacets_btn_${facetID}').text('${btnLess}');
-						});
-						$('.toggle-${facetID}-collapse:first').on('hidden.bs.collapse', function () {
-							$('#moreFacets_btn_${facetID}').text('${btnMore}')
-						});
+						  document.querySelector(".toggle-${facetID}-collapse").addEventListener("shown.bs.collapse", event => {
+							  document.getElementById("moreFacets_btn_${facetID}").textContent="${btnLess}";
+						  });
+						  document.querySelector(".toggle-${facetID}-collapse").addEventListener("hidden.bs.collapse", event => {
+						    document.getElementById("moreFacets_btn_${facetID}").textContent="${btnMore}";
+						  });
 						</script>
 					</c:if>
 				</c:forEach>
