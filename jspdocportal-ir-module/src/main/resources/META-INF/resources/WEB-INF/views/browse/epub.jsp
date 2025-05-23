@@ -30,26 +30,27 @@
 
     <div class="row">
       <div class="col col-md-3 ">
-        <div class="ir-facets h-100">
+        <div class="ir-facets h-100 position-relative">
           <h3><fmt:message key="Browse.Filter.headline" /></h3>
           <script type="text/javascript">
-          $(function(){
-          	$('#facetInfo').on('hidden.bs.collapse', function () {
-          		$("#btnToogleFilterTextOn").addClass('d-none');
-          		$("#btnToogleFilterTextOff").removeClass('d-none');
-        	});
-        	$('#facetInfo').on('shown.bs.collapse', function () {
-        		$("#btnToogleFilterTextOn").removeClass('d-none');
-           		$("#btnToogleFilterTextOff").addClass('d-none');
-        	});
-          });
+            window.addEventListener('DOMContentLoaded', function(){
+              let facetInfo = document.getElementById("facetInfo");
+            	facetInfo.addEventListener("hidden.bs.collapse", event => {
+            	  document.getElementById("btnToogleFilterTextOn").classList.add("d-none");
+            	  document.getElementById("btnToogleFilterTextOff").classList.remove("d-none");
+              });
+            	facetInfo.addEventListener("shown.bs.collapse", event => {
+                document.getElementById("btnToogleFilterTextOn").classList.remove("d-none");
+                document.getElementById("btnToogleFilterTextOff").classList.add("d-none");
+        	    });
+            });
           </script>
-           <div style="position:absolute;top:-15px; right:0px" class="d-block d-md-none">
-                <button id="btnToogleFilter" class="btn btn-lg btn-link" data-toggle="collapse" data-target="#facetInfo">
-                      <i id="btnToogleFilterTextOn" class="fa fa-toggle-on text-primary"></i>
-                      <i id="btnToogleFilterTextOff" class="fa fa-toggle-off d-none text-warning"></i>
-                </button>
-            </div>
+          <div style="top:-15px; right:0px" class="d-block d-md-none position-absolute">
+            <button id="btnToogleFilter" class="btn btn-lg btn-link pe-0" data-bs-toggle="collapse" data-bs-target="#facetInfo">
+              <i id="btnToogleFilterTextOn" class="fa fa-toggle-on text-primary"></i>
+              <i id="btnToogleFilterTextOff" class="fa fa-toggle-off d-none text-warning"></i>
+            </button>
+          </div>
           <div id="facetInfo" class="collapse show">
           <form class="form-horizontal" onsubmit="return false;">
             <div class="form-group">
