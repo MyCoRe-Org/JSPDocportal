@@ -15,18 +15,18 @@
 <c:set var="top" value="${(empty top) ? 1000 : top}" />
 <script type="text/javascript">
 	function changeFacetIncludeURL(key, value) {
-		window.location=$("meta[name='mcr:baseurl']").attr("content")
-				 	       + "do/browse/${mask}?_search="
-				           + $("meta[name='mcr:search.id']").attr("content")
-					       + "&_add-filter="
-				       + encodeURIComponent("+" + key +":"+ value);
+		window.location=document.querySelector("meta[name='mcr:baseurl']").content
+		  + "do/browse/${mask}?_search="
+      + document.querySelector("meta[name='mcr:search.id']").content
+		  + "&_add-filter="
+			+ encodeURIComponent("+" + key +":"+ value);
 		}
 		function changeFacetExcludeURL(key,value) {
-			window.location=$("meta[name='mcr:baseurl']").attr("content")
-					       + "do/browse/${mask}?_search="
-				           + $("meta[name='mcr:search.id']").attr("content")
-					       + "&_add-filter="
-					       + encodeURIComponent("-" + key +":"+ value);
+			window.location=document.querySelector("meta[name='mcr:baseurl']").content
+        + "do/browse/${mask}?_search="
+				+ document.querySelector("meta[name='mcr:search.id']").attr("content")
+        + "&_add-filter="
+				+ encodeURIComponent("-" + key +":"+ value);
 		}
 </script>
 		
