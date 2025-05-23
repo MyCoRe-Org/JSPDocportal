@@ -196,7 +196,7 @@
 			        </div>
                   <script type="text/javascript">
                     //show structure tab and structure content area if children are available
-                    window.addEventListener('DOMContentLoaded',function(){
+                    window.addEventListener('DOMContentLoaded', function(){
                       let elemNavContentStructure = document.getElementById("nav_content_structure");
                   	  if(elemNavContentStructure.querySelector('.ir-structure-has-children')){
                   	    let elemNavItemStructure = document.getElementById("nav_item_structure");
