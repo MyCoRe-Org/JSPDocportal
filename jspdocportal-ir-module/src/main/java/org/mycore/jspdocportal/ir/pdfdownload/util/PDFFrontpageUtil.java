@@ -72,8 +72,8 @@ public class PDFFrontpageUtil {
         document.addCreationDate();
         document.addTitle("RosDok Download");
         document.addAuthor("Universitätsbibliothek Rostock");
-        document.addSubject("https://purl.uni-rostock.de/"+recordIdentifier.replace("rosdok_", "rosdok/"));
-        
+        document.addSubject("https://purl.uni-rostock.de/" + recordIdentifier.replace("rosdok_", "rosdok/"));
+
         try (InputStream is = PDFFrontpageUtil.class.getResourceAsStream("/rosdok_schriftzug.png")) {
             byte[] imgBytes = IOUtils.toByteArray(is);
             Image img = Image.getInstance(imgBytes);
@@ -88,7 +88,8 @@ public class PDFFrontpageUtil {
             "Dieses Werk wurde Ihnen durch die Universitätsbibliothek Rostock zum Download bereitgestellt.", font));
         document.add(
             new Paragraph("Für Fragen und Hinweise wenden Sie sich bitte an: digibib.ub@uni-rostock.de .", font));
-        ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("Europe/Berlin"));
+        ZonedDateTime zonedDateTime
+            = ZonedDateTime.of(LocalDateTime.now(ZoneId.of("Europe/Berlin")), ZoneId.of("Europe/Berlin"));
         document.add(new Paragraph("Das PDF wurde erstellt am: " + DTF.format(zonedDateTime) + ".", font));
         Rectangle rect = new Rectangle(document.left(), document.top() - 30 * 2.54f,
             document.getPageSize().getWidth() - document.rightMargin(), 10);
