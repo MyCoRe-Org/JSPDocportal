@@ -13,6 +13,29 @@
 	<properties>
 		<manifest.priority>13</manifest.priority>
 	</properties>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addExtensions></addExtensions>
+						</manifest>
+						<manifestEntries>
+							<MCR-Artifact-Id>${project.artifactId}</MCR-Artifact-Id>
+							<MCR-Application-Module>${project.name}</MCR-Application-Module>
+							<Priority>${manifest.priority}</Priority>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
 	<dependencies>
 		<dependency>
 			<!-- TEMPORARY - until we properly cleanup code from
@@ -55,27 +78,6 @@
 			<artifactId>jakarta.servlet-api</artifactId>
 		</dependency>
 	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-							<addExtensions></addExtensions>
-						</manifest>
-						<manifestEntries>
-							<MCR-Artifact-Id>${project.artifactId}</MCR-Artifact-Id>
-							<MCR-Application-Module>${project.name}</MCR-Application-Module>
-							<Priority>${manifest.priority}</Priority>
-						</manifestEntries>
-					</archive>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 
 	<dependencyManagement>
 		<dependencies>
