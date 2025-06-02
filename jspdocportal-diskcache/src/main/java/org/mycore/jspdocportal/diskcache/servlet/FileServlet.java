@@ -263,7 +263,7 @@ public abstract class FileServlet extends HttpServlet {
 
     /**
      * Returns <code>true</code> if we must force a "Save As" dialog based on the given HTTP servlet request and content
-     * type as obtained from {@link #getContentType(HttpServletRequest, File)}.
+     * type as obtained from getContentType(HttpServletRequest, File).
      * <p>
      * The default implementation will return <code>true</code> if the content type does <strong>not</strong> start with
      * <code>text</code> or <code>image</code>, and the <code>Accept</code> request header is either <code>null</code>
