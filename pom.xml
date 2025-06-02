@@ -26,7 +26,6 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </repository>
   </repositories>
-
   <profiles>
     <profile>
       <id>deploy-to-sonatype</id>
