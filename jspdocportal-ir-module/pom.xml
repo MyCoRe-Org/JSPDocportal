@@ -86,6 +86,10 @@
  	  <groupId>com.google.guava</groupId>
  	  <artifactId>guava</artifactId>
  	</dependency>
+ 	<dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
+    </dependency>
 	<dependency>
       <groupId>com.itextpdf</groupId>
       <artifactId>itextpdf</artifactId>
