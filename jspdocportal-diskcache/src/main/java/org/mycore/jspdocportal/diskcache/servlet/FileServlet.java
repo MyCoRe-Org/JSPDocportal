@@ -46,7 +46,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * <p>
  * The well known "<a href="https://balusc.omnifaces.org/2009/02/fileservlet-supporting-resume-and.html">BalusC FileServlet</a>",
  * as an abstract template, slightly refactored, rewritten and modernized with a.o. fast NIO stuff instead of legacy
- * RandomAccessFile. GZIP support is stripped off as that can be done application wide via {@link GzipResponseFilter}.
+ * RandomAccessFile. GZIP support is stripped off as that can be done application wide via a GzipResponseFilter.
  * <p>
  * This servlet properly deals with <code>ETag</code>, <code>If-None-Match</code> and <code>If-Modified-Since</code>
  * caching requests, hereby improving browser caching. This servlet also properly deals with <code>Range</code> and
@@ -57,7 +57,7 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * <h2>Usage</h2>
  * <p>
- * Just extend this class and override the {@link #getFile(HttpServletRequest)} method to return the desired file. If
+ * Just extend this class and override the getFile(HttpServletRequest) method to return the desired file. If
  * you want to trigger a HTTP 400 "Bad Request" error, simply throw {@link IllegalArgumentException}. If you want to
  * trigger a HTTP 404 "Not Found" error, simply return <code>null</code>, or a non-existent file.
  * <p>
@@ -99,11 +99,11 @@ import jakarta.servlet.http.HttpServletResponse;
  * content type, whether the file should be supplied as an attachment and the attachment's file name, then the developer
  * can opt to override one or more of the following protected methods:
  * <ul>
- * <li>{@link #handleFileNotFound(HttpServletRequest, HttpServletResponse)}
- * <li>{@link #getExpireTime(HttpServletRequest, File)}
- * <li>{@link #getContentType(HttpServletRequest, File)}
- * <li>{@link #isAttachment(HttpServletRequest, String)}
- * <li>{@link #getAttachmentName(HttpServletRequest, File)}
+ * <li>handleFileNotFound(HttpServletRequest, HttpServletResponse)
+ * <li>getExpireTime(HttpServletRequest, File)
+ * <li>getContentType(HttpServletRequest, File)
+ * <li>isAttachment(HttpServletRequest, String)
+ * <li>getAttachmentName(HttpServletRequest, File)
  * </ul>
  *
  * <p><strong>See also</strong>:
