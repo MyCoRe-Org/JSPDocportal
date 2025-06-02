@@ -27,10 +27,10 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17 and Maven Settings
+      - name: Set up JDK 21 and Maven Settings
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
           # Maven Distribution Server (step creates .m2/settings.xml)
           server-id: 'sonatype-central'
