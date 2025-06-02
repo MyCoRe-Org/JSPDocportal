@@ -21,8 +21,8 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: '21'
-	      distribution: 'temurin'
-		  # Maven Distribution Server (step creates .m2/settings.xml)
-		  server-id: 'sonatype-central'
-	  - name: Build with Maven
+          distribution: 'temurin'
+          # Maven Distribution Server (step creates .m2/settings.xml)
+          server-id: 'sonatype-central'
+      - name: Build with Maven
         run: mvn -B package --file pom.xml
