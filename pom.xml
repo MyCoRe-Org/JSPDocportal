@@ -27,13 +27,6 @@
     </repository>
   </repositories>
 
-  <modules>
-    <module>jspdocportal-bom</module>
-    <module>jspdocportal-common-module</module>
-    <module>jspdocportal-ir-module</module>
-    <module>jspdocportal-diskcache</module>
-  </modules>
-  
   <profiles>
     <profile>
       <id>deploy-to-sonatype</id>
@@ -55,4 +48,11 @@
       </build>
     </profile>
   </profiles>
+  
+  <modules>
+    <module>jspdocportal-bom</module>
+    <module>jspdocportal-common-module</module>
+    <module>jspdocportal-ir-module</module>
+    <module>jspdocportal-diskcache</module>
+  </modules>
 </project>
