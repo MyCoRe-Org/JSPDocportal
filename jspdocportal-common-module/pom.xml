@@ -73,7 +73,10 @@
       <groupId>com.itextpdf.tool</groupId>
       <artifactId>xmlworker</artifactId>
     </dependency> -->
-
+ 	<dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
+    </dependency>
     <dependency>
  	  <groupId>io.swagger.core.v3</groupId>
  	  <artifactId>swagger-annotations-jakarta</artifactId>
@@ -114,10 +117,10 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
     </dependency>
-    <!--<dependency>
+    <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
-    </dependency> -->
+    </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
