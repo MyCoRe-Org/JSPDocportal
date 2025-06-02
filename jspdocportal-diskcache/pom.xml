@@ -8,6 +8,7 @@
   </parent>
   <artifactId>jspdocportal-diskcache</artifactId>
   <name>JSPDocportal DiskCache Module</name>
+  <url>https://github.com/MyCoRe-Org/JSPDocportal/tree/main/jspdocportal-diskcache</url>
   <description>Cacheing and generation of derived files</description>
   <properties>
     <manifest.priority>13</manifest.priority>

@@ -9,7 +9,7 @@
   <artifactId>jspdocportal-common-module</artifactId>
   <packaging>jar</packaging>
   <name>JSPDocportal Common Module</name>
-  <url>http://maven.apache.org</url>
+  <url>https://github.com/MyCoRe-Org/JSPDocportal/tree/main/jspdocportal-common-module</url>
 
   <properties>
     <manifest.priority>11</manifest.priority>
