@@ -46,12 +46,12 @@
 			<artifactId>jakarta.servlet-api</artifactId>
 		</dependency>
 		<dependency>
-  			<groupId>org.apache.commons</groupId>
-  			<artifactId>commons-lang3</artifactId>
-  		</dependency>
-		<dependency>
   			<groupId>jakarta.ws.rs</groupId>
   			<artifactId>jakarta.ws.rs-api</artifactId>
+  		</dependency>
+		<dependency>
+  			<groupId>org.apache.commons</groupId>
+  			<artifactId>commons-lang3</artifactId>
   		</dependency>
 		<dependency>
   			<groupId>org.apache.logging.log4j</groupId>
