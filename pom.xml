@@ -13,6 +13,9 @@
   <name>JSPDocportal</name>
   <description>JSP based front-end for MyCoRe Repositories</description>
   <inceptionYear>2004</inceptionYear>
+  <properties>
+	  <maven.compiler.release>17</maven.compiler.release>
+  </properties>
 
   <repositories>
     <repository>
