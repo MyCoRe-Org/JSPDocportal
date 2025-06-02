@@ -241,19 +241,22 @@
 		          </x:if>
 		     </div><%--END: nav_content_root --%>
              <script type="text/javascript">
-               $(window).on('load', function(){
-                 if(urlParam('_mcrviewer_start')){
+               window.addEventListener("load", (event) => {
+                 if(urlParam("_mcrviewer_start")){
                    //[0] get Javascript object from Jquery object
-                   $("#content_viewer_area")[0].scrollIntoView();
+                   document.getElementById("content_viewer_area").scrollIntoView();
                  }
                });
                
-               $(function() {
-                 $('#nav_tab_fulltext').on('shown.bs.tab', function() {
+              document.addEventListener("DOMContentLoaded", (event) => {
+                if(document.getElementById("nav_tab_fulltext")){
+                  document.getElementById("nav_tab_fulltext").addEventListener("shown.bs.tab", (event) => {
                    <%--refresh viewer --%>
-                   $('#divMCRViewer').trigger('resize');
+                   let rszEvent = new CustomEvent('resize'); //instantiate the resize event
+                   rszEvent.initEvent('resize');
+                   document.getElementById("divMCRViewer").dispatchEvent(rszEvent);
                  });
-                 
+                }
                  var hash = window.location.hash;
                  if(hash.startsWith('#tab_')){
                    $('#nav_'+hash.substr(1)).tab('show');
