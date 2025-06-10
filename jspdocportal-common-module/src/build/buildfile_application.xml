@@ -96,7 +96,6 @@
 			create directory ${MCR.Save.FileSystem}
 			create directory ${MCR.WebContent.SaveFolder}
 			create directory ${MCR.WorkflowEngine.DeleteDirectory}
-			create directory ${MCR.EHCache.diskStore.path}
 		</mcr-execute>
 	</target>
 
