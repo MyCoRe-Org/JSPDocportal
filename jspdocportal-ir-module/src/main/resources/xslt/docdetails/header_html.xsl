@@ -249,13 +249,12 @@
       <!-- Badges -->
       <xsl:if test="./mods:classification[contains(@valueURI, 'licenseinfo#work')]">
         <xsl:variable name="licecat" select="mcrmods:to-category(./mods:classification[contains(@valueURI, 'licenseinfo#work')])" />
-        <div id="popover_content_{generate-id(./mods:classification[contains(@valueURI, 'licenseinfo#work')])}" style="display: none">
-        <div style="min-width:100em">
-            <button type="button" id="close_popover_content_{generate-id(./mods:classification[contains(@valueURI, 'licenseinfo#work')])}" class="close float-right" aria-label="Close">
-              <span aria-hidden="true">&#215;</span>
-            </button>
+        <xsl:variable name="popover_id" select="generate-id(./mods:classification[contains(@valueURI, 'licenseinfo#work')])" />
+        <div id="popover_content_{$popover_id}" style="display: none">
+          <div style="min-width:100em">
+            <button type="button" id="close_popover_content_{$popover_id}" class="btn-close float-end" aria-label="Close"></button>
             <xsl:value-of select="$licecat/label[@xml:lang=$CurrentLang]/@description" disable-output-escaping="true" />
-            </div>
+          </div>
         </div>
       </xsl:if> 
       

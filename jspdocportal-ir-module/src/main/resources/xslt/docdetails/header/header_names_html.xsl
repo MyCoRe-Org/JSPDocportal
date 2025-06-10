@@ -36,11 +36,8 @@
               <tr>
                 <!-- <th class="text-center"><i class="fas fa-portrait" title="Rolle" style="font-size:1.5em"></i></th> -->
                 <td colspan="2">
-                  <button type="button" id="close_popover_content_{generate-id(.)}" class="close float-right" aria-label="Close">
-                    <span aria-hidden="true">&#215;</span>
-                  </button>
+                  <button type="button" id="close_popover_content_{generate-id(.)}" class="btn-close float-end" aria-label="Close"></button>
                   <strong>{./mods:role/mods:roleTerm[@authority='GBV']}</strong>
-                
                 </td>
               </tr>
             </xsl:if>
@@ -96,9 +93,7 @@
               <tr>
                 <!-- <th class="text-center"><i class="fas fa-portrait" title="Rolle" style="font-size:1.5em"></i></th> -->
                 <td colspan="2">
-                  <button type="button" id="close_popover_content_{generate-id(.)}" class="close float-right" aria-label="Close">
-                    <span aria-hidden="true">&#215;</span>
-                  </button>
+                  <button type="button" id="close_popover_content_{generate-id(.)}" class="btn-close float-end" aria-label="Close"></button>
                   <strong>{./mods:role/mods:roleTerm[@authority='GBV']}</strong>
                 </td>
               </tr>
