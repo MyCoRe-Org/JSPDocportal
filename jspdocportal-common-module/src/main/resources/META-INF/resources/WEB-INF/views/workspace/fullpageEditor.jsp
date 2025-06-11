@@ -14,8 +14,8 @@
 <head>
   <title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
   <%@ include file="../fragments/html_head.jspf" %>
-  <mcr:webjarLocator htmlElement="script" project="ckeditor" file="standard/ckeditor.js" />
-  <mcr:webjarLocator htmlElement="script" project="ckeditor" file="standard/adapters/jquery.js" />
+  <mcr:webjarLocator htmlElement="script" project="tinymce" file="tinymce.min.js" />
+  <script src="${applicationScope.WebApplicationBaseURL}modules/tinymce-i18n/langs7/de.js"></script>
 </head>
 <body>
   <%@ include file="../fragments/header.jspf" %>

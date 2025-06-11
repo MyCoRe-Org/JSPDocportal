@@ -37,11 +37,25 @@
          <xed:bind xpath="mods:abstract[@type='advice']">
              <xed:bind xpath="@altFormat" initially="DO_CALCULATE" />
              <xed:bind xpath="@contentType" initially="text/xml" />
-            <textarea rows="10" id="description_description" type="text" class="form-control input-sm ckeditor" />
-	         <!-- Replace the textarea with id ... with a CKEditor 4 instance, using default configuration. -->
+            <textarea rows="10" id="description_description" type="text" class="form-control input-sm ir-htmleditor" />
+	         <!-- Replace the textarea with id ... with a customized TinyMCE editor. -->
     	     <script>
-    	      CKEDITOR.config.entities = false;
-        	  CKEDITOR.replace( 'description_description' );
+    	      document.addEventListener("DOMContentLoaded", function() {
+              tinymce.init({
+                selector: 'textarea#description_description',
+                license_key: 'gpl',
+                branding: false,
+                language: 'de',
+                element_format: 'xhtml',
+                entities: '',
+                entity_encoding: 'numeric',
+                plugins: 'code,image,link',
+                toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | image link | code',
+                
+                custom_elements: '~i',
+                extended_valid_elements: '#i[class|aria-hidden],#span[class|aria-hidden]'
+              });
+            });
          	</script>
          </xed:bind>         
        </div>

@@ -13,9 +13,8 @@
 <head>
   <title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
   <%@ include file="fragments/html_head.jspf" %>
-   <mcr:webjarLocator htmlElement="script" project="ckeditor" file="standard/ckeditor.js" />
-   <mcr:webjarLocator htmlElement="script" project="ckeditor" file="standard/adapters/jquery.js" />
-  
+   <mcr:webjarLocator htmlElement="script" project="tinymce" file="tinymce.min.js" />
+   <script src="${applicationScope.WebApplicationBaseURL}modules/tinymce-i18n/langs7/de.js"></script>
 </head>
 <body>
   <%@ include file="fragments/header.jspf" %>
@@ -28,11 +27,11 @@
 		<form id="editWebcontent_${it.id}" method="post" action="${applicationScope.WebApplicationBaseURL}do/save-webcontent" accept-charset="UTF-8">
 		    <input type="hidden" name="file_${it.id}" value="${it.file}" />
 		    <input type="hidden" name="referer_${it.id}" value="${it.referer}" />
-		    <textarea  id="taedit_${it.id}" name="content_${it.id}" rows="10" cols="80">${it.content}</textarea>
+		    <textarea  id="taedit_${it.id}" name="content_${it.id}" class="ir-htmleditor" rows="10" cols="80">${it.content}</textarea>
 		
 		<c:set var="jsid" value="${fn:replace(it.id, '.', '\\\\\\\\.')}" />
 		<script type="text/javascript">
-		
+		 /* Konfiguration CKEditor (OLD)
 		 	var config = {
 		 		basicEntities:false,
 		 	    entities_additional: 'gt,lt,amp', //remove &nbsp; from entities (not allowed in XHTML)
@@ -43,10 +42,27 @@
 				format_tags:'p;h1;h2;h3;h4;h5;h6;pre;address;div'
 				
          	};
-		 	CKEDITOR.dtd.$removeEmpty.span = false;
-		 	CKEDITOR.dtd.$removeEmpty.i = false;
-
-		    $(document).ready( function() {$('textarea#taedit_${jsid}').ckeditor(config); });
+		 	 CKEDITOR.dtd.$removeEmpty.span = false;
+		 	 CKEDITOR.dtd.$removeEmpty.i = false;
+		   $(document).ready( function() {$('textarea#taedit_${jsid}').ckeditor(config); });
+     */
+      document.addEventListener("DOMContentLoaded", function() {
+        tinymce.init({
+          selector: 'textarea#description_description',
+          license_key: 'gpl',
+          branding: false,
+          language: 'de',
+          element_format: 'xhtml',
+          entities: '',
+          entity_encoding: 'numeric',
+          plugins: 'code,image,link',
+          toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | image link | code',
+        
+          custom_elements: '~i',
+          extended_valid_elements: '#i[class|aria-hidden],#span[class|aria-hidden]'
+        });
+      });
+     });
 		</script>
 		  <div class="card">  
 		    <div class="card-body bg-warning">
