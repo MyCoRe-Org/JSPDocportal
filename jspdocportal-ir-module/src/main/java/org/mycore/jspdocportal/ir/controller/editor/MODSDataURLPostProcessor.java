@@ -38,7 +38,7 @@ public class MODSDataURLPostProcessor extends MCRPostProcessorXSL {
                 mimeType, StandardCharsets.UTF_8);
             e.setAttribute("altFormat", dataURL.toString());
             SAXBuilder sb = new SAXBuilder();
-            Document doc = sb.build(new StringReader("<html>" + StringEscapeUtils.unescapeHtml4(content) + "</html>"));
+            Document doc = sb.build(new StringReader(content));
             StringBuffer sbText = new StringBuffer();
             doc.getDescendants(Filters.text()).forEach(t -> sbText.append(t.getValue()).append(' '));
             e.setText(StringUtils.normalizeSpace(sbText.toString()));

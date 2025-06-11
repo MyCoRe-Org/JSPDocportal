@@ -83,11 +83,10 @@
         <version>${project.version}</version>
       </dependency>
 
-
       <dependency>
-        <groupId>org.webjars</groupId>
-        <artifactId>ckeditor</artifactId>
-        <version>4.4.7-1</version>
+        <groupId>org.webjars.npm</groupId>
+        <artifactId>tinymce</artifactId>
+        <version>7.9.0</version>
       </dependency>
       <dependency>
         <groupId>org.webjars</groupId>
