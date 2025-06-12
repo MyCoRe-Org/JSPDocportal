@@ -358,8 +358,10 @@
              data-services="[&quot;twitter&quot;, &quot;facebook&quot;, &quot;linkedin&quot;, &quot;xing&quot;, &quot;whatsapp&quot;, &quot;telegram&quot;, &quot;mail&quot;, &quot;info&quot;]"
              data-mail-url="mailto:" data-mail-subject="{mcri18n:translate('OMD.ir.shariff.subject')}" data-mail-body="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}"
              data-orientation="horizontal" data-theme="white">
-        </div> <!-- data-theme=standard|grey|white --> 
+        </div> <!-- data-theme=standard|grey|white -->
+        <!--
         <script src="{$WebApplicationBaseURL}modules/shariff_3.2.1/shariff.min.js"></script>
+        -->
         <p></p>
       </div>
     </xsl:if>
