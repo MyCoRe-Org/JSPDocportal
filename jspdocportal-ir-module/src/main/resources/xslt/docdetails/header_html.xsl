@@ -295,33 +295,6 @@
         </span>
       </xsl:if>
       </p> 
-
-      <!-- popover javascript -->
-      <script>
-        <xsl:text expand-text="false" disable-output-escaping="true">
-          $(function () {
-            $('[data-toggle="popover"]')
-               .popover(
-                 { delay: { "show": 50, "hide": 2500 }, 
-                   trigger:"click hover",
-                   sanitize:false,
-                   content: function(){
-                     var ref = $(this).attr('data-content-ref');
-                     return $(ref).children().html();
-                   }
-                 })
-                 .on('shown.bs.popover', function () {
-                 var $popup = $(this);
-                 if($popup.is('[data-content-ref]')){
-                   $(document).on("click", $popup.attr('data-content-ref').replace('#', '#close_'), 
-                     function(){
-                       $popup.popover('hide');
-                   });
-                 }
-              });
-          });
-        </xsl:text>
-      </script>
       </div>
     </xsl:for-each>
   </xsl:template>
