@@ -212,8 +212,8 @@
 		     </div><%--END: nav_content_root --%>
              <script type="text/javascript">
                window.addEventListener("load", (event) => {
-                 if(urlParam("_mcrviewer_start")){
-                   //[0] get Javascript object from Jquery object
+                 const urlParams = new URLSearchParams(window.location.search);
+                 if (urlParams.has('_mcrviewer_start')) {
                    document.getElementById("content_viewer_area").scrollIntoView();
                  }
                });
@@ -229,7 +229,9 @@
                 }
                  var hash = window.location.hash;
                  if(hash.startsWith('#tab_')){
-                   $('#nav_'+hash.substr(1)).tab('show');
+                   // $('#nav_'+hash.substr(1)).tab('show');
+                   let tabBtn = document.getElementById('nav_'+ hash.substr(1));
+                   bootstrap.Tab.getOrCreateInstance(tabBtn).show();
                  }
                });
              </script>
