@@ -25,53 +25,45 @@
 
   <xsl:template name="headerNames">
     <xsl:for-each select="./mods:name[@type='personal'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
-      <div id="popover_content_{generate-id(.)}" style="display: none" class="ir-popover">
-        <div>
-          <table class="w-100" style="min-width:15em">
-            <colgroup>
-              <col style="width: 15%" />
-              <col style="width: 85%" />
-            </colgroup>
-            <xsl:if test="./mods:role/mods:roleTerm[@authority='GBV']">
-              <tr>
-                <!-- <th class="text-center"><i class="fas fa-portrait" title="Rolle" style="font-size:1.5em"></i></th> -->
-                <td colspan="2">
-                  <button type="button" id="close_popover_content_{generate-id(.)}" class="btn-close float-end" aria-label="Close"></button>
-                  <strong>{./mods:role/mods:roleTerm[@authority='GBV']}</strong>
-                </td>
-              </tr>
-            </xsl:if>
-            <xsl:if test="./mods:nameIdentifier[@type='orcid']">
-              <tr>
-                <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/ORCIDiD_iconvector.svg"  style="height:1.5em" title="{mcri18n:translate('OMD.ir.docdetails.common.label.orcid')}" /></th>
-                <td><a href="https://orcid.org/{./mods:nameIdentifier[@type='orcid']}">{./mods:nameIdentifier[@type='orcid']}</a></td>
-              </tr>
-            </xsl:if>
-            <xsl:if test="./mods:nameIdentifier[@type='gnd']">
-              <tr>
-                <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Wabe.png" style="height:1.5em" title="{mcri18n:translate('OMD.ir.docdetails.common.label.gnd')}" /></th>
-                <td><a href="http://d-nb.info/gnd/{./mods:nameIdentifier[@type='gnd']}">{./mods:nameIdentifier[@type='gnd']}</a></td>
-              </tr>
-            </xsl:if>
-            <xsl:for-each select="./mods:affiliation">
-              <tr>
-                <th class="text-center align-text-top"><i class="fas fa-university" title="{mcri18n:translate('OMD.ir.docdetails.common.label.affiliation')}" style="font-size:1.5em"></i></th>
-                <td>{.}</td>
-              </tr>
-            </xsl:for-each>
-          </table>
-        </div>
-      </div>
+      <template id="tmpl_ir_popover_body_{generate-id(.)}">
+        <xsl:if test="./mods:role/mods:roleTerm[@authority='GBV']">
+          <strong>{./mods:role/mods:roleTerm[@authority='GBV']}</strong>
+        </xsl:if>
+        <table class="w-100" style="min-width:15em">
+          <colgroup>
+            <col style="width: 15%" />
+            <col style="width: 85%" />
+          </colgroup>
+           
+          <xsl:if test="./mods:nameIdentifier[@type='orcid']">
+            <tr>
+              <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/ORCIDiD_iconvector.svg"  style="height:1.5em" title="{mcri18n:translate('OMD.ir.docdetails.common.label.orcid')}" /></th>
+              <td><a href="https://orcid.org/{./mods:nameIdentifier[@type='orcid']}">{./mods:nameIdentifier[@type='orcid']}</a></td>
+            </tr>
+          </xsl:if>
+          <xsl:if test="./mods:nameIdentifier[@type='gnd']">
+            <tr>
+              <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Wabe.png" style="height:1.5em" title="{mcri18n:translate('OMD.ir.docdetails.common.label.gnd')}" /></th>
+              <td><a href="https://explore.gnd.network/gnd/{./mods:nameIdentifier[@type='gnd']}">{./mods:nameIdentifier[@type='gnd']}</a></td>
+            </tr>
+          </xsl:if>
+          <xsl:for-each select="./mods:affiliation">
+            <tr>
+              <th class="text-center align-text-top"><i class="fas fa-university" title="{mcri18n:translate('OMD.ir.docdetails.common.label.affiliation')}" style="font-size:1.5em"></i></th>
+              <td>{.}</td>
+            </tr>
+          </xsl:for-each>
+        </table>
+      </template>
     </xsl:for-each>
     <p>
       <xsl:for-each select="./mods:name[@type='personal'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
         <nobr>
           {string-join((./mods:namePart[@type='given'], ./mods:namePart[@type='family'], ./mods:namePart[not(@type)], ./mods:namePart[@type='termsOfAddress']),' ')}
-          <button class="btn btn-sm pl-1" type="button">
-            <xsl:attribute name="data-toggle">popover</xsl:attribute>
-            <xsl:attribute name="data-placement">bottom</xsl:attribute>
-            <xsl:attribute name="data-html">true</xsl:attribute>
-            <xsl:attribute name="data-content-ref">#popover_content_{generate-id(.)}</xsl:attribute>
+          <button id="btn_ir_popover_{generate-id(.)}" class="btn btn-sm ps-1" type="button">
+            <xsl:attribute name="data-bs-toggle">popover</xsl:attribute>
+            <xsl:attribute name="data-bs-placement">bottom</xsl:attribute>
+            <xsl:attribute name="data-ir-popover-body-template">#tmpl_ir_popover_body_{generate-id(.)}</xsl:attribute>
             <i class="fas fa-user-circle"></i>
           </button>
         </nobr>
@@ -82,41 +74,34 @@
     
     <!-- Körperschaften als Herausgeber -->
     <xsl:for-each select="./mods:name[@type='corporate'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
-      <div id="popover_content_{generate-id(.)}" style="display: none;" class="ir-popover">
+      <template id="tmpl_ir_popover_body_{generate-id(.)}">
         <div style="min-width:100em">
+          <xsl:if test="./mods:role/mods:roleTerm[@authority='GBV']">
+            <strong>{./mods:role/mods:roleTerm[@authority='GBV']}</strong>
+          </xsl:if>
           <table class="w-100" style="min-width:15em">
             <colgroup>
               <col style="width: 15%" />
               <col style="width: 85%" />
             </colgroup>
-            <xsl:if test="./mods:role/mods:roleTerm[@authority='GBV']">
-              <tr>
-                <!-- <th class="text-center"><i class="fas fa-portrait" title="Rolle" style="font-size:1.5em"></i></th> -->
-                <td colspan="2">
-                  <button type="button" id="close_popover_content_{generate-id(.)}" class="btn-close float-end" aria-label="Close"></button>
-                  <strong>{./mods:role/mods:roleTerm[@authority='GBV']}</strong>
-                </td>
-              </tr>
-            </xsl:if>
             <xsl:if test="./mods:nameIdentifier[@type='gnd']">
               <tr>
                 <th class="text-center"><img src="{$WebApplicationBaseURL}images/ir/GND_RGB_Wabe.png" style="height:1.5em" title="{mcri18n:translate('OMD.ir.docdetails.common.label.gnd')}" /></th>
-                <td><a href="http://d-nb.info/gnd/{./mods:nameIdentifier[@type='gnd']}">{./mods:nameIdentifier[@type='gnd']}</a></td>
+                <td><a href="https://explore.gnd.network/gnd/{./mods:nameIdentifier[@type='gnd']}">{./mods:nameIdentifier[@type='gnd']}</a></td>
               </tr>
             </xsl:if>
           </table>
         </div>
-      </div>
+      </template>
     </xsl:for-each>
     <p>
       <xsl:for-each select="./mods:name[@type='corporate'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
         <nobr>
           {string-join((./mods:namePart[not(@type)]),' ')}
-          <button class="btn btn-sm pl-1" type="button">
-            <xsl:attribute name="data-toggle">popover</xsl:attribute>
-            <xsl:attribute name="data-placement">bottom</xsl:attribute>
-            <xsl:attribute name="data-html">true</xsl:attribute>
-            <xsl:attribute name="data-content-ref">#popover_content_{generate-id(.)}</xsl:attribute>
+          <button id="btn_ir_popover_{generate-id(.)}" class="btn btn-sm ps-1" type="button">
+            <xsl:attribute name="data-bs-toggle">popover</xsl:attribute>
+            <xsl:attribute name="data-bs-placement">bottom</xsl:attribute>
+            <xsl:attribute name="data-ir-popover-body-template">#tmpl_ir_popover_body_{generate-id(.)}</xsl:attribute>
             <i class="fas fa-university"></i>
           </button>
         </nobr>
@@ -130,11 +115,7 @@
       <xsl:for-each select="./mods:name[@type='personal'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
         <span style="white-space:nowrap;">
           {string-join((./mods:namePart[@type='given'], ./mods:namePart[@type='family'], ./mods:namePart[not(@type)], ./mods:namePart[@type='termsOfAddress']),' ')}
-          <button class="btn btn-sm pl-1" type="button">
-            <xsl:attribute name="data-toggle">popover</xsl:attribute>
-            <xsl:attribute name="data-placement">bottom</xsl:attribute>
-            <xsl:attribute name="data-html">true</xsl:attribute>
-            <xsl:attribute name="data-content-ref">#popover_content_{generate-id(.)}</xsl:attribute>
+          <button class="btn btn-sm ps-1" type="button">
             <i class="fas fa-user-circle"></i>
           </button>
         </span>
@@ -147,11 +128,7 @@
       <xsl:for-each select="./mods:name[@type='corporate'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
         <span style="white-space:nowrap;">
           {string-join((./mods:namePart[not(@type)]),' ')}
-          <button class="btn btn-sm pl-1" type="button">
-            <xsl:attribute name="data-toggle">popover</xsl:attribute>
-            <xsl:attribute name="data-placement">bottom</xsl:attribute>
-            <xsl:attribute name="data-html">true</xsl:attribute>
-            <xsl:attribute name="data-content-ref">#popover_content_{generate-id(.)}</xsl:attribute>
+          <button class="btn btn-sm ps-1" type="button">
             <i class="fas fa-university"></i>
           </button>
         </span>
