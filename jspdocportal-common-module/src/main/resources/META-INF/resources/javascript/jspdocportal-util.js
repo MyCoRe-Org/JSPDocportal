@@ -55,4 +55,35 @@ class JSPDocportalUtil {
       }
     });
   }
+  
+  /**
+   * checks for a given DOI to which DOI agency it belongs (via https://doi.org/doiRA/)
+   * and redirect the browser to its coresponding metadata page.
+   * 
+   * The JSON response from https://doi.org/doiRA is:
+   * [{ "DOI": "10.29085/9781783304868",
+        "RA":  "Crossref" }]
+   * 
+   * The method call is configured in identifier classification:
+   * <category ID="doi">
+   *   <label xml:lang="x-portal-url" text="javascript:JSPDocportalUtil.gotoDOIMetadataPage('{0}');" />
+   * </category>
+   */
+  static gotoDOIMetadataPage(doi) {
+    fetch('https://doi.org/doiRA/' + doi)
+      .then(response => {
+        response.json()
+          .then(data => {
+            if (data[0].RA === 'DataCite') {
+              window.location.assign("https://commons.datacite.org/doi.org/" + doi);
+            } else if (data[0].RA === 'Crossref') {
+              window.location.assign("https://search.crossref.org/?from_ui=yes&q=" + doi);
+            } else if (data[0].RA === 'mEDRA') {
+              window.location.assign("https://www.medra.org/servlet/view?doi=" + doi);
+            } else {
+              window.location.assign("https://doi.org/doiRA/" + doi);
+            }
+          })
+      })
+  }
 }
