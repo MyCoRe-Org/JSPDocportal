@@ -90,30 +90,20 @@
 		   </c:if>
 		</c:if>
 		
-    <script>
-       // Bei URLs wie: ?farbe=rot&farbe=blau&farbe=grün
-       // const urlParams = new URLSearchParams(window.location.search);
-       // Ersten Wert abrufen
-       // const ersterWert = urlParams.get('farbe'); // "rot"
-       
-		$.urlParam = function(name){
-		    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-		    if (results==null){
-		       return null;
-		    }
-		    else{
-		       return results[1] || 0;
-		    }
-		}
-		<%-- $(function(){   = document.ready() --%>
-		$(function(){
-			var field = $.urlParam('searchField');
-			var value = $.urlParam('searchValue');
-			// test 'truthy-ness": false = {null | undefined > NAN | empty | 0 | false}
-			if(field && value){
-				$('input#'+field.replace('.', '\\.')).val(decodeURIComponent(value));
-			}
-		});
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const field = urlParams.get('searchField');
+        const value = urlParams.get('searchValue');
+      
+        // Test 'truthy-ness': false = {null | undefined | NaN | empty | 0 | false}
+        if (field && value) {
+          // Punkte in IDs müssen im QuerySelector via CSS.escape() mit '\.' ersetzt werden
+          // Input-Element mit ID suchen und Wert setzen (falls Element existiert)
+          document.querySelector('input#' + CSS.escape(field))?.value = decodeURIComponent(value);
+         }
+       }
+      });
 		</script>
 		</div>
         <c:if test="${pageScope.navSide == 'right'}">
