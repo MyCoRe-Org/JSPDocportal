@@ -90,7 +90,12 @@
 		   </c:if>
 		</c:if>
 		
-		<script>
+    <script>
+       // Bei URLs wie: ?farbe=rot&farbe=blau&farbe=grün
+       // const urlParams = new URLSearchParams(window.location.search);
+       // Ersten Wert abrufen
+       // const ersterWert = urlParams.get('farbe'); // "rot"
+       
 		$.urlParam = function(name){
 		    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
 		    if (results==null){

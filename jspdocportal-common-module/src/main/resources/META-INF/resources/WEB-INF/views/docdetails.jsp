@@ -32,15 +32,6 @@
   <%@ include file="fragments/html_head.jspf" %>
   <mcr:transformXSL dom="${doc}" xslt="xslt/docdetails/metatags_html.xsl" />
   <link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}modules/shariff_3.2.1/shariff.min.css">
-  <script>
-   var urlParam = function(name){
-		 var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-		 if(results){
-			 return results[1] || 0;
-         }
-         return null;
-	   }
-  </script>
 </head>
 <body>
   <%@ include file="fragments/header.jspf" %>
