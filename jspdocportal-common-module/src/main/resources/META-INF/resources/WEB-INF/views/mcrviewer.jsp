@@ -133,7 +133,7 @@
 		MCRSessionMgr.unlock();
 	 	try 
 		(MCRHibernateTransactionWrapper htw = new MCRHibernateTransactionWrapper()) {
-			MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(
+			MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(
 			MCRObjectID.getInstance(String.valueOf(pageContext.getAttribute("mcrid"))));
 			String derLabel = "MCRVIEWER_METS";
 			for (MCRMetaEnrichedLinkID derLink : mcrObj.getStructure().getDerivates()) {

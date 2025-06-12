@@ -63,12 +63,12 @@ import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRExpandedObject;
+import org.mycore.datamodel.metadata.MCRExpandedObjectStructure;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetaXML;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRObjectStructure;
 import org.mycore.datamodel.niofs.utils.MCRRecursiveDeleter;
 import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.MCRDerivateCommands;
@@ -161,7 +161,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
         // check dirname
         try {
             // if object do'snt exist - no exception is catched!
-            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(id));
+            MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(MCRObjectID.getInstance(id));
 
             //               add ACL's
             if (MCRAccessManager.getAccessImpl() instanceof MCRRuleAccessInterface ruleAccessInterface) {
@@ -182,7 +182,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                 new org.jdom2.output.XMLOutputter(Format.getPrettyFormat()).output(xml, out);
             }
 
-            MCRObjectStructure mcrStructure = mcrObj.getStructure();
+            MCRExpandedObjectStructure mcrStructure = mcrObj.getStructure();
             if (mcrStructure == null) {
                 return;
             }
@@ -256,7 +256,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
         String id = fn.substring(0, fn.lastIndexOf('.'));
         LOGGER.info(" ... processing object {}", id);
         try {
-            MCRObject mcrObj = new MCRObject(objectFile.toUri());
+            MCRExpandedObject mcrObj = new MCRExpandedObject(objectFile.toUri());
             mcrObj.setImportMode(true); //true = servdates are taken from xml file;
             //clone derivateIDs
             List<MCRMetaLinkID> derivateIDs = new ArrayList<>(mcrObj.getStructure().getDerivates());
@@ -501,7 +501,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
             ".//mods:mods/mods:titleInfo/mods:title", Filters.element(), null, MCRConstants.MODS_NAMESPACE);
 
         for (String mcrid : check) {
-            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrid));
+            MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(MCRObjectID.getInstance(mcrid));
             if (mcrObj.getParent() != null) {
                 MCRMetaXML mcrMODS = (MCRMetaXML) mcrObj.getMetadata().findFirst("def.modsContainer").get();
                 Element eMeta = (Element) mcrMODS.getContent().stream().filter(x -> x.getClass().equals(Element.class))
@@ -509,7 +509,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
                 Element eRelatedItem = eMeta.getChild("relatedItem", MCRConstants.MODS_NAMESPACE);
                 if (eRelatedItem != null) {
                     LOGGER.info("Creating mods:relatedItem for MCRObject {}", mcrid);
-                    MCRObject mcrParentObj = MCRMetadataManager.retrieveMCRObject(mcrObj.getParent());
+                    MCRExpandedObject mcrParentObj = MCRMetadataManager.retrieveMCRExpandedObject(mcrObj.getParent());
 
                     Element eParentMeta = mcrParentObj.getMetadata().createXML();
                     String recordIdentifier = xpathRecordIdentifier.evaluateFirst(eParentMeta).getTextNormalize();
@@ -552,9 +552,9 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
 
         //delete parent nodes
         for (String mcrid : check) {
-            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrid));
+            MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(MCRObjectID.getInstance(mcrid));
             if (mcrObj.getStructure().getParent() != null) {
-                mcrObj.getStructure().setParent((MCRMetaLinkID) null);
+                mcrObj.getStructure().removeParent();
                 try {
                     MCRMetadataManager.update(mcrObj);
                 } catch (MCRAccessException e) {
