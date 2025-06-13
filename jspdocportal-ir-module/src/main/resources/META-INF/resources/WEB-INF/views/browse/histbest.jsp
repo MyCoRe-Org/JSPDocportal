@@ -33,16 +33,20 @@
         <div class="ir-facets h-100">
           <h3><fmt:message key="Browse.Filter.headline" /></h3>
           <script type="text/javascript">
-          $(function(){
-          	$('#facetInfo').on('hidden.bs.collapse', function () {
-          		$("#btnToogleFilterTextOn").addClass('d-none');
-          		$("#btnToogleFilterTextOff").removeClass('d-none');
-        	});
-        	$('#facetInfo').on('shown.bs.collapse', function () {
-        		$("#btnToogleFilterTextOn").removeClass('d-none');
-           		$("#btnToogleFilterTextOff").addClass('d-none');
-        	});
-          });
+            document.addEventListener('DOMContentLoaded', function() {
+              const facetInfo = document.getElementById('facetInfo');
+              if (facetInfo) {
+                  facetInfo.addEventListener('hidden.bs.collapse', function() {
+                      document.getElementById('btnToogleFilterTextOn')?.classList.add('d-none');
+                      document.getElementById('btnToogleFilterTextOff')?.classList.remove('d-none');
+                  });
+
+                  facetInfo.addEventListener('shown.bs.collapse', function() {
+                      document.getElementById('btnToogleFilterTextOn')?.classList.remove('d-none');
+                      document.getElementById('btnToogleFilterTextOff')?.classList.add('d-none');
+                  });
+              }
+            });
           </script>
           <div style="position:absolute;top:-15px; right:0px" class="d-block d-md-none">
              <button id="btnToogleFilter" class="btn btn-lg btn-link" data-toggle="collapse" data-target="#facetInfo">
