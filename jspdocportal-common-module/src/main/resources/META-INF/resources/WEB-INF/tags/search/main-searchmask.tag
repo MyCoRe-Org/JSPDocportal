@@ -13,10 +13,18 @@
   <div class="input-group mb-3" data-ir-mode="${mode}">
 	<input type="text" class="form-control ir-form-control"
 		id="filterValue" name="filterValue" placeholder="${lblSearch} "
-		onkeypress="if (event.keyCode == 13) { changeFilterIncludeURL($('input[name=\'filterField\']:checked').val(), $('#filterValue').val(), $('#filterValue').parent().data('ir-mode'));}" />
+		onkeypress="if (event.key === 'Enter') { 
+                  changeFilterIncludeURL(
+                    document.querySelector('input[name=\'filterField\']:checked')?.value,
+                    document.getElementById('filterValue')?.value,
+                    document.getElementById('filterValue')?.parentElement?.dataset?.irMode);
+                }" />
 	<div class="input-group-append">
 		<button id="filterInclude" class="btn btn-primary" type="button"
-			onclick="changeFilterIncludeURL($('input[name=\'filterField\']:checked').val(), $('#filterValue').val(), $('#filterValue').parent().data('ir-mode'));">
+			      onclick="changeFilterIncludeURL(
+              document.querySelector('input[name=\'filterField\']:checked')?.value,
+              document.getElementById('filterValue')?.value,
+              document.getElementById('filterValue')?.parentElement?.dataset?.irMode);"
 			<i class="fa fa-search"></i>
 		</button>
 	</div>
@@ -42,10 +50,13 @@
 		<c:out escapeXml="false" value="${fn:replace(lblContent,'<br />', ' ')}" /></label>
   </div>
   <script>
-    function changeFilterIncludeURL(key, value, mask) {
-	  window.location=$("meta[name='mcr:baseurl']").attr("content")
-		+ "do/browse/"+mask+"?"
-    	+ "&_add-filter="
-    	+ encodeURIComponent("+" + key+":"+value);
+  function changeFilterIncludeURL(key, value, mask) {
+    const baseUrl = document.querySelector("meta[name='mcr:baseurl']")?.getAttribute("content");
+    if (baseUrl) {
+        window.location = baseUrl 
+            + "do/browse/" + mask + "?"
+            + "&_add-filter="
+            + encodeURIComponent("+" + key + ":" + value);
     }
+}
   </script>

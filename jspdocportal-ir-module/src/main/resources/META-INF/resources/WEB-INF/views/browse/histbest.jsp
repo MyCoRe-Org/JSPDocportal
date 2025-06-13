@@ -57,25 +57,29 @@
                 <div class="col">
                   <div class="input-group input-group-sm">
                     <script type="text/javascript">
-					    function changeFilterIncludeURL() {
-						  window.location=$("meta[name='mcr:baseurl']").attr("content")
-				 				    + "do/browse/histbest?_search="
-				        			+ $("meta[name='mcr:search.id']").attr("content")
-					    			+ "&_add-filter="
-					    			+ encodeURIComponent("+" + $("input[name='filterField']:checked").val()+":"+$("#filterValue").val());
-						}
-						function changeFilterExcludeURL() {
-						  window.location=$("meta[name='mcr:baseurl']").attr("content")
-					    		   + "do/browse/histbest?_search="
-				      	   	       + $("meta[name='mcr:search.id']").attr("content")
-					   	   		   + "&_add-filter="
-					   	   		   + encodeURIComponent("-" + $("input[name='filterField']:checked").val()+":"+$("#filterValue").val());
-						}
-					  <%-- for select box use: $("#filterField option:selected").val() --%>
-					</script>
+                      function changeFilterIncludeURL() {
+                        window.location = document.querySelector("meta[name='mcr:baseurl']").content
+                          + "do/browse/histbest?_search="
+                          + document.querySelector("meta[name='mcr:search.id']").content
+                          + "&_add-filter="
+                          + encodeURIComponent(""
+                              +"+" + document.querySelector("input[name='filterField']:checked").value
+                              +":" + document.getElementById("filterValue").value);
+                      }
+                      function changeFilterExcludeURL() {
+                        window.location = document.querySelector("meta[name='mcr:baseurl']").content
+                         + "do/browse/histbest?_search="
+                         + document.querySelector("meta[name='mcr:search.id']").content
+                         + "&_add-filter="
+                         + encodeURIComponent(""
+                             + "-" + document.querySelector("input[name='filterField']:checked").value
+                             + ":" + document.getElementById("filterValue").value);
+                      }
+                    </script>
+                    
                     <fmt:message var="lblTerm" key="Browse.Filter.term" />
                       <input class="form-control border-secondary" id="filterValue" name="filterValue" placeholder="${lblTerm}"
-                             type="text" onkeypress="if (event.keyCode == 13) { changeFilterIncludeURL();}">
+                             type="text" onkeypress="if (event.key === 'Enter') { changeFilterIncludeURL();}">
                       <div class="input-group-prepend">
                         <button id="filterInclude" class="btn btn-primary" onclick="changeFilterIncludeURL();">
                           <i class="fas fa-plus"></i>
