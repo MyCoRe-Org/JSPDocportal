@@ -47,7 +47,7 @@
   <%@ include file="fragments/html_head.jspf" %>
 
   <mcr:transformXSL dom="${doc}" xslt="xslt/docdetails/metatags_html.xsl" />
-  <link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}modules/shariff_3.2.1/shariff.min.css" />
+  <link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}modules/socializer_f794acd/css/socializer.min.css" />
 
     <script src="${WebApplicationBaseURL}javascript/jspdocportal-util.js"></script>
   
