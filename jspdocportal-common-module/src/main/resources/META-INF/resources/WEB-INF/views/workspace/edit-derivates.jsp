@@ -18,38 +18,41 @@
   <%@ include file="../fragments/html_head.jspf" %>
     <link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}css/style_workspace.css" />
     <script type="text/javascript">
-      function enableDerMetaEditing(derID){
-        $('#btnEditDerMetaSave_'+derID).show();
-        $('#btnEditDerMetaCancel_'+derID).show();
-        $('#btnEditDerMetaEdit_'+derID).hide();
-        $('#selectEditDerMetaLabel_'+derID).prop('disabled', false);
-        $('#txtEditDerMetaTitle_'+derID).prop('disabled', false);
+      function enableDerMetaEditing(derID) {
+        document.getElementById('btnEditDerMetaSave_' + derID)?.removeAttribute('hidden');
+        document.getElementById('btnEditDerMetaCancel_' + derID)?.removeAttribute('hidden');
+        document.getElementById('btnEditDerMetaEdit_' + derID)?.setAttribute('hidden', '');
+        document.getElementById('selectEditDerMetaLabel_' + derID)?.removeAttribute('disabled');
+        document.getElementById('txtEditDerMetaTitle_' + derID)?.removeAttribute('disabled');
       }
 
-      function disableDerMetaEditing(derID){
-        $('#btnEditDerMetaSave_'+derID).hide();
-        $('#btnEditDerMetaCancel_'+derID).hide();
-        $('#btnEditDerMetaEdit_'+derID).show();
+      function disableDerMetaEditing(derID) {
+        document.getElementById('btnEditDerMetaSave_' + derID)?.setAttribute('hidden', '');
+        document.getElementById('btnEditDerMetaCancel_' + derID)?.setAttribute('hidden', '');
+        document.getElementById('btnEditDerMetaEdit_' + derID)?.removeAttribute('hidden');
 
-        $('#selectEditDerMetaLabel_'+derID).val($('#selectEditDerMetaLabel_'+derID).data('original-value'));
-        $('#txtEditDerMetaTitle_'+derID).val($('#txtEditDerMetaTitle_'+derID).data('original-value'));
-        $('#selectEditDerMetaLabel_'+derID).prop('disabled', true);
-        $('#txtEditDerMetaTitle_'+derID).prop('disabled', true);
+        const selectElement = document.getElementById('selectEditDerMetaLabel_' + derID);
+        if (selectElement) {
+          selectElement.value = selectElement.dataset.originalValue || '';
+          selectElement.setAttribute('disabled', '');
+        }
+
+        const txtElement = document.getElementById('txtEditDerMetaTitle_' + derID);
+        if (txtElement) {
+          txtElement.value = txtElement.dataset.originalValue || '';
+          txtElement.setAttribute('disabled', '');
+        }
       }
 
       function renameFile(derid, filename){
         var x = prompt('Geben Sie einen neuen Dateinamen an: Alles wird gut:', filename);
         if(x!=null){
           document.getElementById('hiddenRenameFileNew_'+derid+'_'+filename).value = x;
-          //setting value of hidden input seems to be buggy in jquery
-          //$('#hiddenRenameFileNew_'+derid+'_'+filename).val(x)
           return true;
         }
         return false;
       }
-        
     </script>
-  
 </head>
 <body>
   <%@ include file="../fragments/header.jspf" %>

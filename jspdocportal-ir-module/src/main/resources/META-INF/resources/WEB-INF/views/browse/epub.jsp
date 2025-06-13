@@ -33,16 +33,18 @@
         <div class="ir-facets h-100 position-relative">
           <h3><fmt:message key="Browse.Filter.headline" /></h3>
           <script type="text/javascript">
-            window.addEventListener('DOMContentLoaded', function(){
-              let facetInfo = document.getElementById("facetInfo");
-            	facetInfo.addEventListener("hidden.bs.collapse", event => {
-            	  document.getElementById("btnToogleFilterTextOn").classList.add("d-none");
-            	  document.getElementById("btnToogleFilterTextOff").classList.remove("d-none");
-              });
-            	facetInfo.addEventListener("shown.bs.collapse", event => {
-                document.getElementById("btnToogleFilterTextOn").classList.remove("d-none");
-                document.getElementById("btnToogleFilterTextOff").classList.add("d-none");
-        	    });
+            document.addEventListener('DOMContentLoaded', function() {
+              const facetInfo = document.getElementById('facetInfo');
+              if (facetInfo) {
+                facetInfo.addEventListener('hidden.bs.collapse', function() {
+                  document.getElementById('btnToogleFilterTextOn')?.classList.add('d-none');
+                  document.getElementById('btnToogleFilterTextOff')?.classList.remove('d-none');
+                });
+                facetInfo.addEventListener('shown.bs.collapse', function() {
+                  document.getElementById('btnToogleFilterTextOn')?.classList.remove('d-none');
+                  document.getElementById('btnToogleFilterTextOff')?.classList.add('d-none');
+                });
+              }
             });
           </script>
           <div style="top:-15px; right:0px" class="d-block d-md-none position-absolute">
