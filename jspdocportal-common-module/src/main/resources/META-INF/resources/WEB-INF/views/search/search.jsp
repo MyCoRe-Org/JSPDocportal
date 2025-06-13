@@ -52,14 +52,20 @@
 					<c:out value="${it.xeditorHtml}" escapeXml="false" />
 				</div>
 				<script type="text/javascript">
-              		$('#searchmask').on('show.bs.collapse', function (event) {
-              			$('#buttonCollapseSearchmask').hide();
-            			$('#buttonCollapseSearchmask2').hide();
-        			});
-              		$('#searchmask').on('shown.bs.collapse', function (event) {
-              			event.target.scrollIntoView();
-              		});
-            	 </script>
+          document.addEventListener('DOMContentLoaded', function() {
+            const searchmask = document.getElementById('searchmask');
+            if (searchmask) {
+              searchmask.addEventListener('show.bs.collapse', function(event) {
+                document.getElementById('buttonCollapseSearchmask')?.setAttribute('hidden', '');
+                document.getElementById('buttonCollapseSearchmask2')?.setAttribute('hidden', '');
+              });
+
+              searchmask.addEventListener('shown.bs.collapse', function(event) {
+                event.target.scrollIntoView();
+              });
+            }
+          });
+        </script>
              </div>
            </div>
 		</c:if>
