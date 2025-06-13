@@ -9,9 +9,6 @@
 <%@ attribute name="mask" required="true" type="java.lang.String"%>
 <%@ attribute name="top" required="false" type="java.lang.Integer" %>
 
-<fmt:message var="btnMore" key="Browse.Filter.Buttons.more" />
-<fmt:message var="btnLess" key="Browse.Filter.Buttons.less" />
-
 <c:set var="top" value="${(empty top) ? 1000 : top}" />
 <script type="text/javascript">
 	function changeFacetIncludeURL(key, value) {
@@ -77,14 +74,20 @@
 						</button>
 					</c:if>
 					<c:if test="${status.index >= top and status.last}">
+            <fmt:message var="btnMore" key="Browse.Filter.Buttons.more" />
+            <fmt:message var="btnLess" key="Browse.Filter.Buttons.less" />
 						<button id="moreFacets_btn_${facetID}" class="btn btn-link btn-sm text-decoration-none" style="width:unset;align-self:end" 
                     data-bs-toggle="collapse" data-bs-target=".toggle-${facetID}-collapse">${btnMore}</button>
 						<script type="text/javascript">
-						  document.querySelector(".toggle-${facetID}-collapse").addEventListener("shown.bs.collapse", event => {
-							  document.getElementById("moreFacets_btn_${facetID}").textContent="${btnLess}";
-						  });
-						  document.querySelector(".toggle-${facetID}-collapse").addEventListener("hidden.bs.collapse", event => {
-						    document.getElementById("moreFacets_btn_${facetID}").textContent="${btnMore}";
+						  document.addEventListener('DOMContentLoaded', function() {
+						    const moreFacetsDiv = document.querySelector(".toggle-${facetID}-collapse")
+			          const moreFacetsBtn = document.getElementById('moreFacets_btn_${facetID}');
+						    moreFacetsDiv.addEventListener("shown.bs.collapse", function() {
+							    moreFacetsBtn.textContent="${btnLess}";
+						    });
+						    moreFacetsDiv.addEventListener("hidden.bs.collapse", function() {
+						      moreFacetsBtn.textContent="${btnMore}";
+						    });
 						  });
 						</script>
 					</c:if>

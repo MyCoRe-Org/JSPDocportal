@@ -9,9 +9,6 @@
 <%@ attribute name="mask" required="true" type="java.lang.String" %>
 <%@ attribute name="sort" required="false" type="java.lang.String" %>
 
-<fmt:message var="btnMore" key="Browse.Filter.Buttons.more" />
-<fmt:message var="btnLess" key="Browse.Filter.Buttons.less" />
-		
 <c:set var="facets" value="${result.facetResult}" />
 <c:if test="${facets.get(facetField).size() gt 0}">
 	<h5><fmt:message key="Browse.Filter.${mask}.${facetField}" /></h5>
@@ -34,15 +31,23 @@
 
 		<c:if test="${status.index >= top and status.last}">
 			</div>
-			<button id="moreFacets_btn_${facetID}" class="btn btn-link btn-sm ir-form-control pull-right" 
-                    data-toggle="collapse" data-target="#moreFacets_div_${facetID}"  >${btnMore}</button>
+      <fmt:message var="btnMore" key="Browse.Filter.Buttons.more" />
+      <fmt:message var="btnLess" key="Browse.Filter.Buttons.less" />
+			<button id="moreFacets_btn_${facetID}" class="btn btn-link btn-sm ir-form-control" style="width:unset;align-self:end"  
+              data-bs-toggle="collapse" data-bs-target="#moreFacets_div_${facetID}">${btnMore}</button>
 			<script type="text/javascript">
-				$('#moreFacets_div_${facetID}').on('shown.bs.collapse', function () {
-					$('#moreFacets_btn_${facetID}').text('${btnMore}');
-				});
-				$('#moreFacets_div_${facetID}').on('hidden.bs.collapse', function () {
-					$('#moreFacets_btn_${facetID}').text('${btnLess}')
-				});
+			  document.addEventListener('DOMContentLoaded', function() {
+			    const moreFacetsDiv = document.getElementById('moreFacets_div_${facetID}');
+			    const moreFacetsBtn = document.getElementById('moreFacets_btn_${facetID}');
+
+			    moreFacetsDiv.addEventListener('shown.bs.collapse', function() {
+			      moreFacetsBtn.textContent = '${btnMore}';
+			    });
+
+			    moreFacetsDiv.addEventListener('hidden.bs.collapse', function() {
+			      moreFacetsBtn.textContent = '${btnLess}';
+			    });
+			  });
 			</script>
 		</c:if>
 	</c:forEach>
