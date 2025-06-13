@@ -354,14 +354,15 @@
           </p>
         </xsl:if>
         <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.share')}</h4>
-        <div class="shariff" data-url="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}"
-             data-services="[&quot;twitter&quot;, &quot;facebook&quot;, &quot;linkedin&quot;, &quot;xing&quot;, &quot;whatsapp&quot;, &quot;telegram&quot;, &quot;mail&quot;, &quot;info&quot;]"
-             data-mail-url="mailto:" data-mail-subject="{mcri18n:translate('OMD.ir.shariff.subject')}" data-mail-body="{$WebApplicationBaseURL}resolve/id/{/mycoreobject/@ID}"
-             data-orientation="horizontal" data-theme="white">
-        </div> <!-- data-theme=standard|grey|white -->
-        <!--
-        <script src="{$WebApplicationBaseURL}modules/shariff_3.2.1/shariff.min.js"></script>
-        -->
+        <div class="socializer"
+             data-features="{mcri18n:translate('OMD.ir.socializer.features')}" data-sites="{mcri18n:translate('OMD.ir.socializer.sites')}"
+             data-meta-link="" data-meta-title=""></div>
+        <script src="{$WebApplicationBaseURL}modules/socializer_f794acd/js/socializer.min.js"></script>
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {{
+            socializer( '.socializer' );
+          }});
+        </script>
         <p></p>
       </div>
     </xsl:if>
