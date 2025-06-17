@@ -33,7 +33,7 @@
 			</div>
       <fmt:message var="btnMore" key="Browse.Filter.Buttons.more" />
       <fmt:message var="btnLess" key="Browse.Filter.Buttons.less" />
-			<button id="moreFacets_btn_${facetID}" class="btn btn-link btn-sm ir-form-control" style="width:unset;align-self:end"  
+			<button id="moreFacets_btn_${facetID}" class="btn btn-link btn-sm ir-form-control" style="width:unset;align-self:end" type="buton"
               data-bs-toggle="collapse" data-bs-target="#moreFacets_div_${facetID}">${btnMore}</button>
 			<script type="text/javascript">
 			  document.addEventListener('DOMContentLoaded', function() {

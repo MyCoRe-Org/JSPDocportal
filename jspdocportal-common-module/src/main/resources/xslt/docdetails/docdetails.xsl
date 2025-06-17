@@ -26,7 +26,7 @@
          <xsl:choose>
           <xsl:when test="$showInfo">
             <xsl:variable name="info" select="mcri18n:translate(concat($labelkey, '.info'))" />
-              <a id="infoButton_{$key}" class="float-left docdetails-info-btn" data-toggle="popover">
+              <a id="infoButton_{$key}" class="float-left docdetails-info-btn" data-bs-toggle="popover">
                 <i class="fa fa-info-circle"></i>
               </a>
               <script>

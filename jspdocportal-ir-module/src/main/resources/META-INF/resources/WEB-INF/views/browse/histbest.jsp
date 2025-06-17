@@ -49,7 +49,8 @@
             });
           </script>
           <div style="position:absolute;top:-15px; right:0px" class="d-block d-md-none">
-             <button id="btnToogleFilter" class="btn btn-lg btn-link" data-toggle="collapse" data-target="#facetInfo">
+             <button id="btnToogleFilter" class="btn btn-lg btn-link"
+                     data-bs-toggle="collapse" data-bs-target="#facetInfo">
                <i id="btnToogleFilterTextOn" class="fa fa-toggle-on text-primary"></i>
                <i id="btnToogleFilterTextOff" class="fa fa-toggle-off d-none text-warning"></i>
              </button>

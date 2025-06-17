@@ -29,7 +29,7 @@
             <div class="float-right">
               <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownNewActionsMenu"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <fmt:message key="WF.workspace.info.menu.new_task" />
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownNewActionsMenu">
@@ -60,8 +60,8 @@
             </c:forEach>
             <div class="card border border-dark my-3 w-100">
               <div class="card-header bg-dark">
-                <button class="btn btn-sm float-right btn-secondary mt-1" type="button" data-toggle="collapse"
-                        data-target="#publish-dialog-task_${currentTask.executionId}">
+                <button class="btn btn-sm float-right btn-secondary mt-1" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#publish-dialog-task_${currentTask.executionId}">
                   <fmt:message key="WF.workspace.button.publish_all_objects" />
                 </button>
                 <h3 class="text-light mb-0"><fmt:message key="WF.workspace.info.headline.claimed_tasks" /></h3>
@@ -146,8 +146,8 @@
                                    <fmt:message key="WF.workspace.button.pica3" />
                                 </a>
                                 <button id="workspace_button_mods_from_opac" class="btn btn-sm btn-outline-secondary"
-                                        type="button" data-toggle="collapse"
-                                        data-target="#import_mods-dialog-task_${currentTask.executionId}">
+                                        type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#import_mods-dialog-task_${currentTask.executionId}">
                                   <i class="fas fa-download"></i>
                                   <fmt:message key="WF.workspace.button.mods_from_opac" />
                                 </button>
@@ -202,8 +202,8 @@
                             <i class="fa fa-times"></i>
                             <fmt:message key="WF.workspace.button.cancel" />
                           </button>
-                          <button class="btn btn-danger btn-sm float-right" type="button" data-toggle="collapse"
-                          data-target="#delete-dialog-task_${currentTask.executionId}">
+                          <button class="btn btn-danger btn-sm float-right" type="button" 
+                                  data-bs-toggle="collapse" data-bs-target="#delete-dialog-task_${currentTask.executionId}">
                             <i class="fas fa-trash"></i>
                             <fmt:message key="WF.workspace.button.delete_object" />
                           </button>

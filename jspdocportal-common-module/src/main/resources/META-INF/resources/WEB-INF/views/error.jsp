@@ -22,8 +22,9 @@
 					<h2><c:out value="${pageTitle}" /></h2>
 					<c:if test="${not empty it.errorInfo.message or not empty it.errorInfo.exception}">
 						<fmt:message var="showDetails" key="Webpage.error.button.details" />
-						<button type="button" class="btn btn-default btn-sm float-right d-none d-sm-block" style="border:none;color:#DEDEDE;" data-toggle="collapse" data-target="#errorInfoPanel" title="${showDetails}">
-	    					<span class="fas fa-wrench"></span>
+						<button class="btn btn-default btn-sm float-right d-none d-sm-block" style="border:none;color:#DEDEDE;" type="button" 
+                    data-bs-toggle="collapse" data-bs-target="#errorInfoPanel" title="${showDetails}">
+	    					<i class="fas fa-wrench"></i>
 	        			</button>
 	        		</c:if>
 					<c:if test="${not empty it.errorInfo.headline}">

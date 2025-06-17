@@ -80,7 +80,7 @@ public class MCRShowEditMenuTag extends MCRAbstractTag {
         JspWriter out = getJspContext().getOut();
         out.append("<div class=\"ir-edit-menu dropdown " + cssClass + "\">");
         out.append("  <button class=\"ir-edit-menu-btn btn btn-primary dropdown-toggle "
-            + "\" type=\"button\" id=\"dropdownEditButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">");
+            + "\" type=\"button\" id=\"dropdownEditButton\" data-bs-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">");
         out.append("    <i class=\"fas fa-pencil-alt\"></i>");
         out.append("  </button>");
         out.append("  <div class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"dropdownEditButton\">");

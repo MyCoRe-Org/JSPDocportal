@@ -52,7 +52,7 @@
         <xsl:if test="$name/mods:nameIdentifier or $name/mods:affiliation">
           <xsl:element name="button">
             <xsl:attribute name="type">button</xsl:attribute>
-            <xsl:attribute name="data-toggle">popover</xsl:attribute>
+            <xsl:attribute name="data-bs-toggle">popover</xsl:attribute>
             <xsl:attribute name="class">btn btn-sm btn-link ir-docdetails-btn-info</xsl:attribute>
             <xsl:attribute name="data-mcr-action">popover4person</xsl:attribute>
             <xsl:if test="$name/mods:nameIdentifier[@type='gnd']">
@@ -78,7 +78,7 @@
         <xsl:if test="$name/mods:nameIdentifier or $name/mods:affiliation">
           <xsl:element name="button">
             <xsl:attribute name="type">button</xsl:attribute>
-            <xsl:attribute name="data-toggle">popover</xsl:attribute>
+            <xsl:attribute name="data-bs-toggle">popover</xsl:attribute>
             <xsl:attribute name="class">btn btn-sm btn-link ir-docdetails-btn-info</xsl:attribute>
             <xsl:attribute name="data-mcr-action">popover4person</xsl:attribute>
             <xsl:if test="$name/mods:nameIdentifier[@type='gnd']">

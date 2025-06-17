@@ -83,10 +83,10 @@
               <xsl:if test="./mods:recordInfo/mods:recordIdentifier">
                 <xsl:attribute name="href">{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(./mods:recordInfo/mods:recordIdentifier, '/', '_')}</xsl:attribute>
               </xsl:if>
-              <xsl:attribute name="data-toggle">popover</xsl:attribute>
-              <xsl:attribute name="data-placement">bottom</xsl:attribute>
-              <xsl:attribute name="data-html">true</xsl:attribute>
-              <xsl:attribute name="data-content">
+              <xsl:attribute name="data-bs-toggle">popover</xsl:attribute>
+              <xsl:attribute name="data-bs-placement">bottom</xsl:attribute>
+              <xsl:attribute name="data-bs-html">true</xsl:attribute>
+              <xsl:attribute name="data-bs-content">
                 &lt;strong&gt;
                 <xsl:choose>
                   <xsl:when test="./mods:titleInfo">
@@ -272,7 +272,8 @@
         <span>&#160;&#160;</span>
         <xsl:variable name="licecat" select="mcrmods:to-category(./mods:classification[contains(@valueURI, 'licenseinfo#work')])" />
 
-        <span id="badgeWorkLicense" class="badge ir-badge-header ir-badge-license p-0" data-toggle="popover" data-placement="bottom" data-html="true"
+        <span id="badgeWorkLicense" class="badge ir-badge-header ir-badge-license p-0" 
+              data-bs-toggle="popover" data-bs-placement="bottom" data-bs-html="true"
               data-content-ref="#popover_content_{generate-id(./mods:classification[contains(@valueURI, 'licenseinfo#work')])}">
           <xsl:choose>
             <xsl:when test="fn:ends-with($licecat/label[@xml:lang='x-icon']/@text, '.png')">

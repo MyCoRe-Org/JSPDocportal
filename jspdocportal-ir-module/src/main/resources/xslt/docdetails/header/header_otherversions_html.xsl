@@ -42,10 +42,10 @@
                   <xsl:attribute name="href" select="replace(./mods:identifier[@type='purl'], 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')" />   
                 </xsl:when>
               </xsl:choose>
-              <xsl:attribute name="data-toggle">popover</xsl:attribute>
-              <xsl:attribute name="data-placement">bottom</xsl:attribute>
-              <xsl:attribute name="data-html">true</xsl:attribute>
-              <xsl:attribute name="data-content">
+              <xsl:attribute name="data-bs-toggle">popover</xsl:attribute>
+              <xsl:attribute name="data-bs-placement">bottom</xsl:attribute>
+              <xsl:attribute name="data-bs-html">true</xsl:attribute>
+              <xsl:attribute name="data-bs-content">
                 <xsl:value-of select="concat(./mods:note[@type='relation_label'], ': &lt;br/&gt;')" />
                 &lt;strong&gt;
                 <xsl:choose>
@@ -92,10 +92,10 @@
                   <xsl:attribute name="href" select="replace(./mods:identifier[@type='purl'], 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')" />   
                 </xsl:when>
               </xsl:choose>
-              <xsl:attribute name="data-toggle">popover</xsl:attribute>
-              <xsl:attribute name="data-placement">bottom</xsl:attribute>
-              <xsl:attribute name="data-html">true</xsl:attribute>
-              <xsl:attribute name="data-content">
+              <xsl:attribute name="data-bs-toggle">popover</xsl:attribute>
+              <xsl:attribute name="data-bs-placement">bottom</xsl:attribute>
+              <xsl:attribute name="data-bs-html">true</xsl:attribute>
+              <xsl:attribute name="data-bs-content">
                 <xsl:value-of select="concat(./mods:note[@type='relation_label'], ': &lt;br/&gt;')" />
                 &lt;strong&gt;
                 <xsl:choose>

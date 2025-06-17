@@ -328,7 +328,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
                             out.append(INDENT).append("<li class=\"dropdown nav-item\">");
                             out.append(INDENT).append("<a class=\"nav-link dropdown-toggle\" id=\"navbarDropdown"
                                 + dropdownId
-                                + "\" role=\"button\" data-toggle=\"dropdown\" href=\"#\" aria-haspopup=\"true\" aria-expanded=\"false\">"
+                                + "\" role=\"button\" data-bs-toggle=\"dropdown\" href=\"#\" aria-haspopup=\"true\" aria-expanded=\"false\">"
                                 + msg + "</a>");
                             out.append(INDENT).append(
                                 "<div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown" + dropdownId + "\">");

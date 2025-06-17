@@ -73,8 +73,8 @@
             <c:set var="i18n_download_csv_title"><fmt:message key="Webpage.Searchresult.csvDownload.title" /></c:set>
             
             <div id="ir-drownload-dropdown" class="dropdown float-left">
-              <button class="btn btn-outline-primary page-item mr-3 dropdown-toggle" href="#" type="button" id="dropdownMenuDownload" 
-                 title="${i18n_download}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-outline-primary page-item mr-3 dropdown-toggle" type="button" id="dropdownMenuDownload" 
+                 title="${i18n_download}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                  <i class="fas fa-download"></i>
                </button>
                <div class="dropdown-menu" aria-labelledby="dropdownMenuDownload">

@@ -148,7 +148,7 @@
       <div style="mb-3">
        <xsl:if test="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext' or contains(@categid, 'METS')]]">
          <div class="dropdown w-100 mt-3">
-            <button class="btn btn-primary dropdown-toggle w-100" type="button" id="dropdownMenuShow" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn-primary dropdown-toggle w-100" type="button" id="dropdownMenuShow" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                <i class="far fa-eye pr-2"></i> {mcri18n:translate('OMD.ir.docdetails.rightside.menue.view')}
             </button>
             
@@ -182,7 +182,8 @@
        </xsl:if>
        <xsl:if test="/mycoreobject[not(contains(@ID,'_bundle_'))]">
          <div class="dropdown w-100 mt-3">
-            <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="dropdownMenuDownload" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="dropdownMenuDownload" 
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                <i class="fas fa-download pr-2"></i> {mcri18n:translate('OMD.ir.docdetails.rightside.menue.download')}
             </button>
             <div class="dropdown-menu border-secondary" aria-labelledby="dropdownMenuDownload" style="border-width:2px">
@@ -369,7 +370,8 @@
     <!--Tools -->
     <div class="my-0" style="position:relative"> 
           <div style="position:absolute; top:-3em;right:0em">
-            <button type="button" class="btn btn-sm ir-button-tools hidden-xs" data-toggle="collapse" data-target="#hiddenTools"
+            <button type="button" class="btn btn-sm ir-button-tools hidden-xs" 
+                    data-bs-toggle="collapse" data-bs-target="#hiddenTools"
                     title="{mcri18n:translate('Webpage.tools.menu4experts')}">
               <i class="fa fa-cog" style="opacity:.05"></i>
             </button>

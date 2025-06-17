@@ -138,7 +138,7 @@
                                     </div>
                                     <div class="col-1">   
                                       <fmt:message key="WF.derivates.delete" var="titleDelete"/>
-                                      <button title="${titleDelete}" data-toggle="collapse" data-target="#deleteDerivate_${derID}"
+                                      <button title="${titleDelete}" data-bs-toggle="collapse" data-bs-target="#deleteDerivate_${derID}"
                                         class="btn btn-danger pull-right" type="button"><i class="fas fa-trash"></i></button>
   									</div>
                                   </div>
@@ -202,7 +202,7 @@
                                                 </button>
                                                 <fmt:message key="WF.derivates.delete_file" var="fileDelete"/>
     											<fmt:message key="WF.derivates.delete_file.message" var="messageDeleteFile"/>
-    											<button class="btn btn-sm btn-danger" data-toggle="collapse" data-target="#deleteFile_${derID}_${fn:replace(f, '.', '_')}" 
+    											<button class="btn btn-sm btn-danger" data-bs-toggle="collapse" data-bs-target="#deleteFile_${derID}_${fn:replace(f, '.', '_')}" 
     													type="button">
     											        <i class="fas fa-trash"></i>
     											</button>
