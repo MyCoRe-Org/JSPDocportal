@@ -147,7 +147,7 @@
       <!-- Badges -->
       <p class="mt-3">
       <xsl:if test="./mods:genre[@displayLabel='doctype']">
-        <span class="badge ir-badge-header badge-secondary">
+        <span class="badge ir-badge-header text-bg-secondary">
           <xsl:value-of select="mcrclass:current-label-text(mcrmods:to-category(./mods:genre[@displayLabel='doctype']))" />
         </span>
         <span>&#160;&#160;&#160;&#160;&#160;</span>

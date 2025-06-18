@@ -85,7 +85,7 @@
                           <div class="row">
                             <div class="col-8">
                               <h5>
-                                <span class="badge badge-pill badge-secondary me-3" style="height: auto">${currentTask.executionId}</span>
+                                <span class="badge badge-pill text-bg-secondary me-3" style="height: auto">${currentTask.executionId}</span>
                                 ${currentVariables.wfHeadline} 
                                 <span class="badge badge-pill badge-primary ms-3" style="height: auto">${currentVariables.mcrObjectID}</span>
                                 <c:if test="${not empty currentVariables.wfObjectDisplayRecordIdentifier}">
@@ -242,7 +242,7 @@
                       <div class="row">
                         <div class="col-8">
                           <h5>
-                             <span class="badge badge-pill badge-secondary me-3" style="height: auto">${currentTask.executionId}</span>
+                             <span class="badge badge-pill text-bg-secondary me-3" style="height: auto">${currentTask.executionId}</span>
                              ${currentVariables.wfHeadline} 
                              <span class="badge badge-pill badge-primary ms-3" style="height: auto">${currentVariables.mcrObjectID}</span>
                           </h5>

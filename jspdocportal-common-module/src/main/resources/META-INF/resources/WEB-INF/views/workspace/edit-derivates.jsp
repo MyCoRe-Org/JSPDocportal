@@ -73,7 +73,7 @@
   					<div class="card-header text-bg-dark" style="min-height:54px">
                       <div class="row">
                         <div class="col-2">
-                          <span class="badge badge-pill badge-secondary">${it.currentVariables.mcrObjectID}</span>
+                          <span class="badge badge-pill text-bg-secondary">${it.currentVariables.mcrObjectID}</span>
                         </div>
                         <div class="col-8">
                         	<h3>
@@ -100,7 +100,7 @@
   							   <div class="card-header text-bg-light">
                                   <div class="row">
                                       <div class="col-2">
-                                          <span class="badge badge-pill badge-secondary" style="margin-right:24px; margin-top:6px;">${derID}</span>
+                                          <span class="badge badge-pill text-bg-secondary" style="margin-right:24px; margin-top:6px;">${derID}</span>
                                       </div>
                                       <div class="col-5">
                                         <h4>

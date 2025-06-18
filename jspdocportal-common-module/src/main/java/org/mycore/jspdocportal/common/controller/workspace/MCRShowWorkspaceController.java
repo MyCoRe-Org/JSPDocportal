@@ -471,7 +471,7 @@ public class MCRShowWorkspaceController {
             for (MCRMetaLinkID derID : mcrObj.getStructure().getDerivates()) {
                 result.append("<div class=\"row\">");
                 result.append("\n  <div class=\"offset-1 col-3\">");
-                result.append("<span class=\"badge badge-pill badge-secondary\">").append(derID.getXLinkHref())
+                result.append("<span class=\"badge badge-pill text-bg-secondary\">").append(derID.getXLinkHref())
                     .append("</span>");
                 result.append("\n  </div>");
                 MCRDerivate der = MCRBPMNUtils.loadMCRDerivateFromWorkflowDirectory(mcrObjID,

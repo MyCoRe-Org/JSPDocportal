@@ -39,7 +39,7 @@
                   <c:if test="${fn:startsWith(it.select, x.key)}"><c:set var="active">active</c:set></c:if>
                   <a href="${WebApplicationBaseURL}do/indexbrowser/${it.modus}?select=${x.key}"
                      class="btn btn-outline-secondary btn-sm indexbrowser-btn ${active}" role="button">${x.key} 
-                  <span class="badge badge-pill badge-secondary ms-2">${x.value}</span></a>
+                  <span class="badge badge-pill text-bg-secondary ms-2">${x.value}</span></a>
                 </c:forEach>
               </div>
             </c:if>
