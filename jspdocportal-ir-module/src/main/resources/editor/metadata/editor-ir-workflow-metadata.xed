@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xed:form xmlns:xed="http://www.mycore.de/xeditor" role="form" class="form-horizontal" accept-charset="UTF-8" method="post">
   <div class="row">
-    <div class="alert alert-info col-12">
-      <xed:output i18n="Editor.Common.headline" />
-    </div>
+    <div class="col-12">
+      <div class="alert alert-info>
+        <xed:output i18n="Editor.Common.headline" />
+      </div>
+    </div<
   </div>
   
   <xed:post-processor class="org.mycore.jspdocportal.ir.controller.editor.MODSDataURLPostProcessor" xsl="editor/ir_xeditor2mods.xsl" transformer="saxon" />
