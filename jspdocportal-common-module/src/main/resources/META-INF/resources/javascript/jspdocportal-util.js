@@ -86,4 +86,36 @@ class JSPDocportalUtil {
           })
       })
   }
+
+  /** 
+   * apply the currently set include filter to the given search page
+   * by generating a new url with parameters
+   * (used on browsing pages)
+   */
+  static applyIncludeSearchFilter(mask) {
+    window.location = document.querySelector("meta[name='mcr:baseurl']").content
+                       + "do/browse/"+mask
+                       + "?_search="
+                       + document.querySelector("meta[name='mcr:search.id']").content
+                       + "&_add-filter="
+                       + encodeURIComponent(""
+                           +"+" + document.querySelector("input[name='filterField']:checked").value
+                           +":" + document.getElementById("filterValue").value);
+  }
+
+  /** 
+   * apply the currently set include filter to the given search page
+   * by generating a new url with parameters
+   * (used on browsing pages)
+   */  
+  static applyExcludeSearchFilter(mask) {
+                     window.location = document.querySelector("meta[name='mcr:baseurl']").content
+                      + "do/browse/"+mask
+                      +"?_search="
+                      + document.querySelector("meta[name='mcr:search.id']").content
+                      + "&_add-filter="
+                      + encodeURIComponent(""
+                          + "-" + document.querySelector("input[name='filterField']:checked").value
+                          + ":" + document.getElementById("filterValue").value);
+  }
 }

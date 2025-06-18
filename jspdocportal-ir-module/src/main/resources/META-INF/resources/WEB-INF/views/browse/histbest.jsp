@@ -17,6 +17,7 @@
   <title>${pageTitle} @ <fmt:message key="Nav.Application" /></title>
   <%@ include file="../fragments/html_head.jspf" %>
   <meta name="mcr:search.id" content="${it.result.id}" />
+  <script src="${WebApplicationBaseURL}javascript/jspdocportal-util.js"></script>
 </head>
 <body>
   <%@ include file="../fragments/header.jspf" %>
@@ -61,32 +62,11 @@
               <div class="form-row">
                 <div class="col">
                   <div class="input-group input-group-sm">
-                    <script type="text/javascript">
-                      function changeFilterIncludeURL() {
-                        window.location = document.querySelector("meta[name='mcr:baseurl']").content
-                          + "do/browse/histbest?_search="
-                          + document.querySelector("meta[name='mcr:search.id']").content
-                          + "&_add-filter="
-                          + encodeURIComponent(""
-                              +"+" + document.querySelector("input[name='filterField']:checked").value
-                              +":" + document.getElementById("filterValue").value);
-                      }
-                      function changeFilterExcludeURL() {
-                        window.location = document.querySelector("meta[name='mcr:baseurl']").content
-                         + "do/browse/histbest?_search="
-                         + document.querySelector("meta[name='mcr:search.id']").content
-                         + "&_add-filter="
-                         + encodeURIComponent(""
-                             + "-" + document.querySelector("input[name='filterField']:checked").value
-                             + ":" + document.getElementById("filterValue").value);
-                      }
-                    </script>
-                    
                     <fmt:message var="lblTerm" key="Browse.Filter.term" />
                       <input class="form-control border-secondary" id="filterValue" name="filterValue" placeholder="${lblTerm}"
-                             type="text" onkeypress="if (event.key === 'Enter') { changeFilterIncludeURL();}">
+                             type="text" onkeypress="if (event.key === 'Enter') { JSPDocportalUtil.applyIncludeSearchFilter('histbest');}">
                       <div class="input-group-prepend">
-                        <button id="filterInclude" class="btn btn-primary" onclick="changeFilterIncludeURL();">
+                        <button id="filterInclude" class="btn btn-primary" onclick="JSPDocportalUtil.applyIncludeSearchFilter('histbest');">
                           <i class="fas fa-plus"></i>
                         </button>
                       </div>
