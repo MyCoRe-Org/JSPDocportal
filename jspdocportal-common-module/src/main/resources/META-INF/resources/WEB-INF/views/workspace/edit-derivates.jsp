@@ -106,7 +106,7 @@
                                         <h4>
                                           <c:set var="derLabel"><x:out select="$derDoc/mycorederivate/derivate/classifications/classification[@classid='derivate_types']/@categid" /></c:set>
                                           <select id="selectEditDerMetaLabel_${derID}" name="saveDerivateMeta_label-task_${it.taskid}-derivate_${derID}" 
-                                                  class="form-control" disabled="disabled"  data-original-value="${derLabel}">
+                                                  class="form-select" disabled="disabled"  data-original-value="${derLabel}">
                                             <c:forEach var="entry" items="${it.derivateLabels}">
                                               <c:if test="${entry.key eq derLabel}">
                                                 <option value="${entry.key}" selected="selected">${entry.value}</option>
@@ -253,7 +253,7 @@
   									<div class="form-group row">
     									<label for="inputLabel" class="col-sm-2 col-form-label text-end"><fmt:message key="WF.derivates.label"/></label>
    										<div class="col-8">
-      										<select class="form-control" name="newDerivate_label-task_${it.taskid}">
+      										<select class="form-select" name="newDerivate_label-task_${it.taskid}">
   												<c:forEach var="entry" items="${it.derivateLabels}">
                                               	  <c:if test="${entry.key eq derLabel}">
                                                     <option value="${entry.key}" selected="selected">${entry.value}</option>

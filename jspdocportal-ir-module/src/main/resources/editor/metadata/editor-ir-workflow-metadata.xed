@@ -80,7 +80,7 @@
           </label>
           <div class="col-4">
             <xed:bind xpath="@USE">
-              <select id="extcont_use" class="form-control input-sm">
+              <select id="extcont_use" class="form-select form-select-sm">
                 <option>fulltext</option>
                 <option>supplement</option>
                 <option>documentation</option>
@@ -129,7 +129,7 @@
           </label>
           <div class="col-4">
             <xed:bind xpath="@MIMETYPE" default="application/zip" >
-              <select id="extcont_mimeype" class="form-control input-sm">
+              <select id="extcont_mimeype" class="form-select form-select-sm">
               	<option>application/zip</option>
                 <option>application/pdf</option>
               </select>

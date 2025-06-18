@@ -60,7 +60,7 @@ import org.mycore.services.i18n.MCRTranslation;
  * result:
  * <pre>
  * {@code
- *     <select id="status" class="form-control">
+ *     <select id="status" class="form-select">
  *         <option value="">Bitte wählen</option>
  *         <option value="inprogress">in Bearbeitung</option>
  *         <option value="long">Langeintrag</option>
