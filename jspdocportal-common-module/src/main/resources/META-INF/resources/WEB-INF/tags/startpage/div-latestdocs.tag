@@ -32,7 +32,7 @@
                     <td style="vertical-align: top">
                       <p class="card-text" x-show="doc['ir.originInfo.result']" 
                          x-text="doc['ir.originInfo.result']">Rostock : Universität , 2022</p>
-                      <p class="card-text text-secondary font-weight-bold" x-show="doc['ir.doctype.result']"
+                      <p class="card-text text-secondary fw-bold" x-show="doc['ir.doctype.result']"
                          x-text="'${lang}'=='en' && doc['ir.doctype_en.result'] ? doc['ir.doctype_en.result'] :  doc['ir.doctype.result']" >Bachelorarbeit</p>
                       <p class="card-text text-secondary" 
                          x-text="doc['created'].substring(8,10)+'.'+doc['created'].substring(5,7)+'.'+doc['created'].substring(0,4)" >22.02.2022</p>

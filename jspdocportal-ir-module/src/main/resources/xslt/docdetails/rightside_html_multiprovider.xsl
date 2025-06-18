@@ -327,7 +327,7 @@
             <xsl:if test="fn:ends-with($lic_logo, '.svg')">
               <img src="{$lic_logo}" class="float-start me-3 p-1 bg-dark" style="max-width:7em;"/>
             </xsl:if>
-            <a href="{$categ/label[@xml:lang='x-uri']/@text}" class="font-weight-bold small">
+            <a href="{$categ/label[@xml:lang='x-uri']/@text}" class="fw-bold small">
               <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text"/>
             </a>
           </span>

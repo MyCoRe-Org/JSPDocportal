@@ -231,7 +231,7 @@
     								<div class="card-footer">
     									<div class="form-horizontal" role="form">
     										<div class="row">
-    											<label for="inputAddFile_${derID}" class="col-2 col-form-label font-weight-bold"><fmt:message key="WF.derivates.label.upload_file"/></label>
+    											<label for="inputAddFile_${derID}" class="col-2 col-form-label fw-bold"><fmt:message key="WF.derivates.label.upload_file"/></label>
     											<div class="col-8">
     												<fmt:message key="WF.derivates.file" var="file"/>
       												<input type="file" name="addFile_file-task_${it.taskid}-derivate_${derID}" class="form-control" style="height:auto" id="inputAddFile_${derID}" placeholder="${file}"></input>
