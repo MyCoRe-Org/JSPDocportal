@@ -38,7 +38,7 @@
 				<input type="hidden" name="topicURL" value="${it.topicURL}" />
 
 				<div class="row">
-					<label class="col-sm-2 control-label"><fmt:message
+					<label class="col-sm-2 form-label"><fmt:message
 							key="Webpage.feedback.label.recipient" /></label>
 					<div class="col-sm-10">
 						<p class="form-control-static">
@@ -47,7 +47,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<label class="col-sm-2 control-label"><fmt:message
+					<label class="col-sm-2 form-label"><fmt:message
 							key="Webpage.feedback.label.topic" /></label>
 					<div class="col-sm-10">
 						<h4 class="form-control-static" style="margin-top: 0px">${it.topicHeader}<br />(${it.topicURL})
@@ -56,21 +56,21 @@
 				</div>
 
 				<div class="row">
-					<label for="inputName" class="col-sm-2 control-label"><fmt:message
+					<label for="inputName" class="col-sm-2 form-label"><fmt:message
 							key="Webpage.feedback.label.senderName" /></label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" id="inputName" name="fromName" />
 					</div>
 				</div>
 				<div class="row">
-					<label for="inputEmail" class="col-sm-2 control-label"><fmt:message
+					<label for="inputEmail" class="col-sm-2 form-label"><fmt:message
 							key="Webpage.feedback.label.senderEmail" /></label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" id="inputEmail" name="fromEmail" />
 					</div>
 				</div>
 				<div class="row">
-					<label for="inputEmail" class="col-sm-2 control-label"><fmt:message
+					<label for="inputEmail" class="col-sm-2 form-label"><fmt:message
 							key="Webpage.feedback.label.message" /></label>
 					<div class="col-sm-10">
 						<textarea class="form-control" id="message" rows="10" name="message"></textarea> 
@@ -78,7 +78,7 @@
 				</div>
 				<hr />
 				<div class="row">
-					<label class="col-sm-2 control-label"></label>
+					<label class="col-sm-2 form-label"></label>
 					<div class="col-sm-10">
 						<fmt:message key="Webpage.feedback.button.send" var="lblSend" />
 						<input name="doSend" type="submit" id="submit-button" style="display:none" disabled="disabled" value="${lblSend}"  />

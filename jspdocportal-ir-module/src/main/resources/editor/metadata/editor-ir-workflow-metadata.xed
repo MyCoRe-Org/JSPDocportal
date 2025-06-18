@@ -24,7 +24,7 @@
       <div class="row">
         <div class="col-3">
           <xed:bind xpath="mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
-             <input id="ppn" type="text" class="form-control input-sm" />
+             <input id="ppn" type="text" class="form-control form-control-sm" />
           </xed:bind>         
         </div>
       </div>
@@ -37,7 +37,7 @@
          <xed:bind xpath="mods:abstract[@type='advice']">
              <xed:bind xpath="@altFormat" initially="DO_CALCULATE" />
              <xed:bind xpath="@contentType" initially="text/xml" />
-            <textarea rows="10" id="description_description" type="text" class="form-control input-sm ir-htmleditor" />
+            <textarea rows="10" id="description_description" type="text" class="form-control form-control-sm ir-htmleditor" />
 	         <!-- Replace the textarea with id ... with a customized TinyMCE editor. -->
     	     <script>
     	      document.addEventListener("DOMContentLoaded", function() {
@@ -64,18 +64,18 @@
       <h3><xed:output i18n="OMD.ir.editor.external_content.headline" /></h3>
       <xed:bind xpath="mods:extension[@displayLabel='external_content']/file">
         <div class="row">
-              <label class="col-2 control-label input-sm ir-label" for="extcont_filename">
+              <label class="col-2 form-label form-label-sm ir-label" for="extcont_filename">
                 <xed:output i18n="OMD.ir.editor.external_content.filename" />
               </label>
               <div class="col-10">
                <xed:bind xpath="@OWNERID">
-                 <input id="extcont_filename" type="text" class="form-control input-sm"   />
+                 <input id="extcont_filename" type="text" class="form-control form-control-sm" />
                </xed:bind>
           </div>           
         </div>
         
         <div class="row">
-          <label class="col-2 control-label input-sm ir-label" for="extcont_use">
+          <label class="col-2 form-label form-label-sm ir-label" for="extcont_use">
             <xed:output i18n="OMD.ir.editor.external_content.use" />
           </label>
           <div class="col-4">
@@ -88,43 +88,43 @@
               </select>
             </xed:bind>
           </div>
-          <label class="col-2 control-label input-sm ir-label" for="extcont_created">
+          <label class="col-2 form-label form-label-sm ir-label" for="extcont_created">
                 <xed:output i18n="OMD.ir.editor.external_content.created" />
               </label>
               <div class="col-4">
                <xed:bind xpath="@CREATED">
-                 <input id="extcont_created" type="text" class="form-control input-sm" placeholder="yyyy-mm-ddThh:mm:ssZ"  />
+                 <input id="extcont_created" type="text" class="form-control form-control-sm" placeholder="yyyy-mm-ddThh:mm:ssZ"  />
                </xed:bind>
           </div>           
         </div>
         <div class="row">
-          <label class="col-2 control-label input-sm ir-label" for="extcont_checksum">
+          <label class="col-2 form-label-label form-label-sm ir-label" for="extcont_checksum">
             <xed:output i18n="OMD.ir.editor.external_content.checksum" />
           </label>
           <div class="col-4">
             <xed:bind xpath="@CHECKSUM">
-              <input id="extcontent_checksum" type="text" class="form-control input-sm"   />
+              <input id="extcontent_checksum" type="text" class="form-control form-control-sm"   />
             </xed:bind>
           </div>
-          <label class="col-2 control-label input-sm ir-label" for="extcont_checksum_type">
+          <label class="col-2 form-label form-label-sm ir-label" for="extcont_checksum_type">
             <xed:output i18n="OMD.ir.editor.external_content.checksumType" />
           </label>
           <div class="col-4">
             <xed:bind xpath="@CHECKSUMTYPE" default="MD5" >
-              <input id="extcont_checksum_type" type="text" class="form-control input-sm" readonly="readonly" />
+              <input id="extcont_checksum_type" type="text" class="form-control form-control-sm" readonly="readonly" />
             </xed:bind>
           </div>
         </div>
         <div class="row">
-          <label class="col-2 control-label input-sm ir-label" for="extcont_size">
+          <label class="col-2 form-label form-label-sm ir-label" for="extcont_size">
             <xed:output i18n="OMD.ir.editor.external_content.size" />
           </label>
           <div class="col-4">
             <xed:bind xpath="@SIZE">
-              <input id="extcont_size" type="text" class="form-control input-sm" />
+              <input id="extcont_size" type="text" class="form-control form-control-sm" />
             </xed:bind>
           </div>
-          <label class="col-2 control-label input-sm ir-label" for="extcont_mimetype">
+          <label class="col-2 form-label form-label-sm ir-label" for="extcont_mimetype">
             <xed:output i18n="OMD.ir.editor.external_content.mimetype" />
           </label>
           <div class="col-4">
@@ -137,12 +137,12 @@
           </div>
         </div>
         <div class="row">
-          <label class="col-2 control-label input-sm ir-label" for="extcont_url">
+          <label class="col-2 form-label form-label-sm ir-label" for="extcont_url">
             <xed:output i18n="OMD.ir.editor.external_content.url" />
           </label>
           <div class="col-10">
             <xed:bind xpath="@URL">
-              <input id="extcont_url" type="text" class="form-control input-sm" />
+              <input id="extcont_url" type="text" class="form-control form-control-sm" />
             </xed:bind>
           </div>
         </div>

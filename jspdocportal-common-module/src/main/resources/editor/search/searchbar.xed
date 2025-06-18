@@ -11,12 +11,12 @@
 			<xed:bind xpath="condition[@field='objectType'][@operator='=']/@value" default="document"/>
 			<xed:bind xpath="condition[@field='allMeta'][@operator='contains']">
 				<div class="form-row ir-editor-row" style="margin-bottom:6px">
-					<label class="col-sm-3 control-label input-sm" for="allMeta">
+					<label class="col-sm-3 form-label form-label-sm" for="allMeta">
 						<xed:output i18n="Search.label.allMeta"/>
 					</label>
 					<div class="col-sm-9">
 						<xed:bind xpath="@value">
-							<input id="allMeta" type="text" class="form-control input-sm"/>
+							<input id="allMeta" type="text" class="form-control form-control-sm"/>
 						</xed:bind>
 					</div>
 				</div>

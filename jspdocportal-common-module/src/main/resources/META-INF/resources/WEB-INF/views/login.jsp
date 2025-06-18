@@ -45,14 +45,14 @@
       <div class="row">
         <div class="col offset-sm-3 col-sm-6 form-horizontal">
           <div class="row">  
-		    <label for="inputUserID" class="col-sm-4 control-label"><fmt:message key="Webpage.login.UserLogin" />:</label>
+		    <label for="inputUserID" class="col-sm-4 form-label"><fmt:message key="Webpage.login.UserLogin" />:</label>
 		    <div class="col-sm-8">
               <fmt:message var="userPlaceholder" key="Webpage.login.placeholder.UserLogin" />
 			  <input type="text" id="inputUserID" name="userID" placeholder="${userPlaceholder}"  class="form-control" />
 		    </div>
 		  </div>
 		  <div class="row mt-3">
-		    <label for="inputPassword" class="col-sm-4 control-label"><fmt:message key="Webpage.login.Password" />:</label>
+		    <label for="inputPassword" class="col-sm-4 form-label"><fmt:message key="Webpage.login.Password" />:</label>
 		    <div class="col-sm-8">
               <fmt:message var="passwordPlaceholder" key="Webpage.login.placeholder.Password" />
 			  <input type="password" id="inputPassword" name="password" placeholder="${passwordPlaceholder}" class="form-control" />
