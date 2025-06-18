@@ -59,7 +59,7 @@ import jakarta.servlet.jsp.JspWriter;
  *  
  *  <p>Sample Usage (simple):</p>
  *  
- *  &lt;mcr:showEditMenu mcrid="rosdok_document_00001234", cssClass="float-right" /&gt;
+ *  &lt;mcr:showEditMenu mcrid="rosdok_document_00001234", cssClass="float-end" /&gt;
  *  
  * @author Robert Stephan
  *

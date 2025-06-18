@@ -22,7 +22,7 @@
 					<h2><c:out value="${pageTitle}" /></h2>
 					<c:if test="${not empty it.errorInfo.message or not empty it.errorInfo.exception}">
 						<fmt:message var="showDetails" key="Webpage.error.button.details" />
-						<button class="btn btn-default btn-sm float-right d-none d-sm-block" style="border:none;color:#DEDEDE;" type="button" 
+						<button class="btn btn-default btn-sm float-end d-none d-sm-block" style="border:none;color:#DEDEDE;" type="button" 
                     data-bs-toggle="collapse" data-bs-target="#errorInfoPanel" title="${showDetails}">
 	    					<i class="fas fa-wrench"></i>
 	        			</button>

@@ -17,7 +17,7 @@
 	<c:if test="${numHits >= 0}">	
 		<c:set var="pageNavi">
 			<%-- // 36.168 Treffer                   Erste Seite | 11-20 | 21-30 | 31-40 | 41-50 | Letzte Seite --%>
-		  <nav class="float-right">
+		  <nav class="float-end">
             <ul class="pagination ir-result-pagination mb-0">
 			<c:if test="${result.numPages> 1}">
 				<c:set var="page"><%= Math.round(Math.floor((double) result.getStart() / result.getRows()) + 1) %></c:set>
@@ -72,7 +72,7 @@
             <c:set var="i18n_download"><fmt:message key="Webpage.Searchresult.download" /></c:set>
             <c:set var="i18n_download_csv_title"><fmt:message key="Webpage.Searchresult.csvDownload.title" /></c:set>
             
-            <div id="ir-drownload-dropdown" class="dropdown float-left">
+            <div id="ir-drownload-dropdown" class="dropdown float-start">
               <button class="btn btn-outline-primary page-item mr-3 dropdown-toggle" type="button" id="dropdownMenuDownload" 
                  title="${i18n_download}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                  <i class="fas fa-download"></i>

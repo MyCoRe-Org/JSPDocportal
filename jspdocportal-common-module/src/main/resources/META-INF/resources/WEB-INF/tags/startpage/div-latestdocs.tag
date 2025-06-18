@@ -54,7 +54,7 @@
         </div>
         <div class="pb-3">
           <a href="${WebApplicationBaseURL}do/browse/${it.path}" 
-             class="ir-latestdocs-more-button btn btn-sm btn-primary float-right mt-3">
+             class="ir-latestdocs-more-button btn btn-sm btn-primary float-end mt-3">
              <fmt:message key="Browse.Search.LatestDocs.button.more" />
           </a>
         </div>      

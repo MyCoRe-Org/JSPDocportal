@@ -26,7 +26,7 @@
       <div id="workspace" class="container">
         <div class="row">
           <div class="col workspace-content">
-            <div class="float-right">
+            <div class="float-end">
               <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownNewActionsMenu"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -94,10 +94,10 @@
                               </h5>
                             </div>
                             <div class="col-4">
-                              <button class="btn btn-sm btn-secondary float-right" name="doReleaseTask-task_${currentTask.executionId}">
+                              <button class="btn btn-sm btn-secondary float-end" name="doReleaseTask-task_${currentTask.executionId}">
                                 <fmt:message key="WF.workspace.submit.task" />
                               </button>
-                              <small class="text-left mr-3 float-right">
+                              <small class="text-left mr-3 float-end">
                                 <strong><fmt:message key="WF.workspace.start" /> </strong><br />
                                 <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${currentTask.createTime}" />
                               </small>
@@ -202,7 +202,7 @@
                             <i class="fa fa-times"></i>
                             <fmt:message key="WF.workspace.button.cancel" />
                           </button>
-                          <button class="btn btn-danger btn-sm float-right" type="button" 
+                          <button class="btn btn-danger btn-sm float-end" type="button" 
                                   data-bs-toggle="collapse" data-bs-target="#delete-dialog-task_${currentTask.executionId}">
                             <i class="fas fa-trash"></i>
                             <fmt:message key="WF.workspace.button.delete_object" />
@@ -248,11 +248,11 @@
                           </h5>
                         </div>
                         <div class="col-4">
-                          <button class="btn btn-secondary btn-sm float-right"
+                          <button class="btn btn-secondary btn-sm float-end"
                                   name="doAcceptTask-task_${currentTask.executionId}">
                             <fmt:message key="WF.workspace.submit.accept_task" />
                           </button>
-                          <small class="text-left mr-3 float-right">
+                          <small class="text-left mr-3 float-end">
                             <strong><fmt:message key="WF.workspace.start" /> </strong><br />
                             <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${currentTask.createTime}" />
                           </small>

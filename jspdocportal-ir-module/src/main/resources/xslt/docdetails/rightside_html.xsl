@@ -326,10 +326,10 @@
           <span class="clearfix">
             <xsl:variable name="lic_logo" select="fn:concat($WebApplicationBaseURL,'images',$categ/label[@xml:lang='x-icon']/@text)" />
             <xsl:if test="fn:ends-with($lic_logo, '.png')">
-              <img src="{$lic_logo}" class="float-left mr-3" />
+              <img src="{$lic_logo}" class="float-start mr-3" />
             </xsl:if>
             <xsl:if test="fn:ends-with($lic_logo, '.svg')">
-              <img src="{$lic_logo}" class="float-left mr-3 p-1 bg-dark" style="max-width:7em;"/>
+              <img src="{$lic_logo}" class="float-start mr-3 p-1 bg-dark" style="max-width:7em;"/>
             </xsl:if>
             <a href="{$categ/label[@xml:lang='x-uri']/@text}" class="font-weight-bold small">
               <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text"/>
@@ -435,7 +435,7 @@
       <strong>{mcrclass:current-label-text(./classification[@classid='derivate_types'])}</strong>
 
       <span class="small pl-2">({mcrstring:pretty-filesize(./maindoc_size)})</span> 
-      <a class="float-right py-1 small" download="{./maindoc}.md5" onclick="event.stopPropagation();"
+      <a class="float-end py-1 small" download="{./maindoc}.md5" onclick="event.stopPropagation();"
          href="data:text/plain;charset=US-ASCII,{encode-for-uri(concat(./maindoc_md5,'  ', ./maindoc))}">
         <i class="fas fa-download"></i> MD5
       </a>
@@ -462,7 +462,7 @@
       </xsl:choose>
       <strong>{mcrclass:current-label-text(document(concat('classification:metadata:0:children:derivate_types:',@USE))//category)}</strong>
       <span class="small pl-2">({mcrstring:pretty-filesize(./@SIZE)})</span> 
-      <a class="float-right py-1 small" download="{./@OWNERID}.md5" onclick="event.stopPropagation();"
+      <a class="float-end py-1 small" download="{./@OWNERID}.md5" onclick="event.stopPropagation();"
            href="data:text/plain;charset=US-ASCII,{encode-for-uri(concat(./@CHECKSUM,'  ', ./@OWNERID))}">
         <i class="fas fa-download"></i> MD5
       </a>

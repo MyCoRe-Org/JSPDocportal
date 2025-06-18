@@ -37,7 +37,7 @@
              <div class="col">
 				<c:set var="classCollapse" value="" />
 				<c:if test="${not it.showMask and it.result.numFound>0}">
-					<button id="buttonCollapseSearchmask" class="btn btn-secondary float-right" type="button"
+					<button id="buttonCollapseSearchmask" class="btn btn-secondary float-end" type="button"
 						    data-bs-toggle="collapse" data-bs-target="#searchmask" aria-expanded="false" aria-controls="searchmask">
 						<fmt:message key="Webpage.Searchresult.redefine" />
 					</button>
@@ -87,7 +87,7 @@
 		   <c:if test="${not it.showMask and it.result.numFound>0}">
              <div class="row">
                <div class="col">
-				  <button id="buttonCollapseSearchmask2" class="btn btn-secondary float-right mt-3" type="button"
+				  <button id="buttonCollapseSearchmask2" class="btn btn-secondary float-end mt-3" type="button"
 					      data-bs-toggle="collapse" data-bs-target="#searchmask" aria-expanded="false" aria-controls="searchmask">
 					  <fmt:message key="Webpage.Searchresult.redefine" />
 				  </button>

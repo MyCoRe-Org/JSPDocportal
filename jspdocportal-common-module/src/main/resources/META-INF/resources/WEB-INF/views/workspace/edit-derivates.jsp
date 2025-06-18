@@ -82,7 +82,7 @@
 					  	</h3>
                       </div>
                       <div class="col-2">
-  						<a class="btn btn-secondary float-right" href="${baseURL}do/workspace/tasks?mode=${it.mode}">
+  						<a class="btn btn-secondary float-end" href="${baseURL}do/workspace/tasks?mode=${it.mode}">
   						  <i class="fas fa-power-off"></i> <fmt:message key="WF.derivates.back" />
   						</a>
 					  	</div>
@@ -124,13 +124,13 @@
   										 <button id="btnEditDerMetaEdit_${derID}" type="button" class="btn btn-secondary" onclick="enableDerMetaEditing('${derID}')"><i class="fas fa-pencil-alt"></i> <fmt:message key="WF.derivates.button.edit"/></button>
                                          <x:if select="$doc/mycoreobject/structure/derobjects/derobject[1]/@xlink:href != $x/@xlink:href">
                                            <fmt:message key="WF.derivates.button.move_up" var="titleMoveUp"/>
-                                           <button id="btnEditDerMoveUp_${derID}" name="doMoveUpDerivate-task_${it.taskid}-derivate_${derID}" class="btn btn-secondary float-right ml-2" title="${titleMoveUp} }">
+                                           <button id="btnEditDerMoveUp_${derID}" name="doMoveUpDerivate-task_${it.taskid}-derivate_${derID}" class="btn btn-secondary float-end ml-2" title="${titleMoveUp} }">
                                               <i class="fa fa-arrow-up"></i>
                                             </button>
                                          </x:if>
                                          <x:if select="$doc/mycoreobject/structure/derobjects/derobject[last()]/@xlink:href != $x/@xlink:href">
                                             <fmt:message key="WF.derivates.button.move_down" var="titleMoveDown"/>
-                                            <button id="btnEditDerMoveDown_${derID}" name="doMoveDownDerivate-task_${it.taskid}-derivate_${derID}" class="btn btn-secondary float-right ml-2" title="${titleMoveDown}">
+                                            <button id="btnEditDerMoveDown_${derID}" name="doMoveDownDerivate-task_${it.taskid}-derivate_${derID}" class="btn btn-secondary float-end ml-2" title="${titleMoveDown}">
                                                 <i class="fa fa-arrow-down"></i>
                                              </button>
                                          </x:if>
@@ -139,7 +139,7 @@
                                     <div class="col-1">   
                                       <fmt:message key="WF.derivates.delete" var="titleDelete"/>
                                       <button title="${titleDelete}" data-bs-toggle="collapse" data-bs-target="#deleteDerivate_${derID}"
-                                        class="btn btn-danger pull-right" type="button"><i class="fas fa-trash"></i></button>
+                                        class="btn btn-danger float-end" type="button"><i class="fas fa-trash"></i></button>
   									</div>
                                   </div>
                                   

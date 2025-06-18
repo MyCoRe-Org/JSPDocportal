@@ -13,7 +13,7 @@
 
 <div class="row">
 	<div class="col mt-3 mb-2">
-      <div class="float-right">
+      <div class="float-end">
 		<script type="text/javascript">
 			function changeSortURL(value) {
 				window.location = $("meta[name='mcr:baseurl']").attr("content")

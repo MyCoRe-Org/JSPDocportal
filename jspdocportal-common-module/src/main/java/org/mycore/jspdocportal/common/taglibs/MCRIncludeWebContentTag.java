@@ -114,7 +114,7 @@ public class MCRIncludeWebContentTag extends SimpleTagSupport {
     private void showEditorButton(JspWriter out) throws IOException {
         String baseurl = getJspContext().getAttribute("WebApplicationBaseURL", PageContext.APPLICATION_SCOPE)
             .toString();
-        out.write("\n<div class=\"float-right\">");
+        out.write("\n<div class=\"float-end\">");
         out.write("\n    <form id=\"editWebcontent_" + id + "\" method=\"post\" action=\"" + baseurl
             + "do/save-webcontent\">");
         out.write("\n        <input type=\"hidden\" name=\"file_" + id + "\" value=\"" + file + "\" />");

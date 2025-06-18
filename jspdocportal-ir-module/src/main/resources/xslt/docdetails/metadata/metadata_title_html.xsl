@@ -42,12 +42,12 @@
         </xsl:otherwise>
       </xsl:choose>
       <xsl:if test="@type">
-        <span class="float-right small">
+        <span class="float-end small">
           [{mcri18n:translate(concat('OMD.ir.docdetails.othertitle.type.', @type))}]
         </span>
       </xsl:if>
       <xsl:if test="@otherType">
-        <span class="float-right small">
+        <span class="float-end small">
           [{mcri18n:translate(concat('OMD.ir.docdetails.othertitle.otherType.', @otherType))}]
         </span>
       </xsl:if>

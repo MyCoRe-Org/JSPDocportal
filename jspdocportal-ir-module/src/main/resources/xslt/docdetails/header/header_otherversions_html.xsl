@@ -26,7 +26,7 @@
   <xsl:template name="otherVersions">
     <!-- andere Versionen -->
     <xsl:if test="./mods:relatedItem[@type='otherVersion']">
-       <div class="float-right">
+       <div class="float-end">
        <p class="mt-3">
             <xsl:for-each select="./mods:relatedItem[@type='otherVersion']">
             <xsl:element name="a">
@@ -75,7 +75,7 @@
     <xsl:template name="preceding_succeeding_buttons">
     <!-- Vorgänger, Nachfolger -->
     <xsl:if test="./mods:relatedItem[@type='preceding' or @type='succeeding']">
-      <div class="float-right">
+      <div class="float-end">
        <p class="mt-3">
 
           <xsl:for-each select="./mods:relatedItem[@type='preceding' or @type='succeeding']">

@@ -58,7 +58,7 @@
              <img align="left" src="{$WebApplicationBaseURL}images/download_other.png" />
            </xsl:otherwise>
          </xsl:choose>
-         <span class="small float-right">({mcrstring:pretty-filesize(./maindoc_size)})</span>
+         <span class="small float-end">({mcrstring:pretty-filesize(./maindoc_size)})</span>
          <strong>{mcrclass:current-label-text(./classification[@classid='derivate_types'])}</strong>
          <br /><span class="small">{mcrstring:abbreviate-center(./maindoc, 80)}</span>
       </a>
@@ -88,7 +88,7 @@
              <img align="left" src="{$WebApplicationBaseURL}images/download_other.png" />
            </xsl:otherwise>
          </xsl:choose>
-         <span class="small float-right">({mcrstring:pretty-filesize(./@SIZE)})</span>
+         <span class="small float-end">({mcrstring:pretty-filesize(./@SIZE)})</span>
          <strong>{mcrclass:current-label-text(document(concat('classification:metadata:0:children:derivate_types:',./@USE))//category)}</strong>
          <br /><span class="small">{mcrstring:abbreviate-center(./@OWNERID, 80)}</span>
       </a>

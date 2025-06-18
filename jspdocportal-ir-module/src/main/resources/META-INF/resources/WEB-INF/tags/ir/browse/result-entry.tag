@@ -100,7 +100,7 @@
     </p>
   </div>
   <div class="col-md-3 d-none d-md-block">
-    <div class="img-thumbnail pull-right ir-result-image">
+    <div class="img-thumbnail float-end ir-result-image">
       <div style="position:relative;text-align:center">
           <c:choose>
             <c:when test="${entry.data['category'].contains('derivate_types:cover') or entry.data['category'].contains('derivate_types:fulltext')}">
