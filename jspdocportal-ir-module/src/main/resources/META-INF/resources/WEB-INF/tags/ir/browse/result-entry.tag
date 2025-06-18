@@ -59,7 +59,7 @@
     
     <p class="card-text">
       <mcr:session var="lang" info="language" />
-      <span class="badge ir-badge badge-secondary">
+      <span class="badge ir-badge text-bg-secondary">
         <c:choose>
           <c:when test="${lang eq 'en'}">${entry.data['ir.doctype_en.result']}</c:when>
           <c:otherwise>${entry.data['ir.doctype.result']}</c:otherwise>
@@ -93,7 +93,7 @@
       <c:if test="${hasAccess}">
         <c:forEach var="s" items="${entry.data['ir.state_class.facet']}">
           <c:if test="${not fn:contains(s, 'state:published')}">
-            <span class="badge ir-badge bg-warning">${fn:replace(fn:replace(fn:replace(s, ']',''), '[',''),'state:','')}</span>
+            <span class="badge ir-badge text-bg-warning">${fn:replace(fn:replace(fn:replace(s, ']',''), '[',''),'state:','')}</span>
           </c:if>
         </c:forEach>
       </c:if>

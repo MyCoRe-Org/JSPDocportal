@@ -59,7 +59,7 @@
               </div>
             </c:forEach>
             <div class="card border border-dark my-3 w-100">
-              <div class="card-header bg-dark">
+              <div class="card-header text-bg-dark">
                 <button class="btn btn-sm float-right btn-secondary mt-1" type="button" data-bs-toggle="collapse"
                         data-bs-target="#publish-dialog-task_${currentTask.executionId}">
                   <fmt:message key="WF.workspace.button.publish_all_objects" />
@@ -67,7 +67,7 @@
                 <h3 class="text-light mb-0"><fmt:message key="WF.workspace.info.headline.claimed_tasks" /></h3>
               </div>
               <div id="publish-dialog-task_${currentTask.executionId}" class="collapse">
-                <div class="card-body border border-secondary bg-warning">
+                <div class="card-body border border-secondary text-bg-warning">
                   <button name="doPublishAllTasks" value="" class="btn btn-primary btn-sm" type="submit">
                     <i class="fa fa-check-square-o"></i>
                     <fmt:message key="WF.workspace.button.publish_all" />
@@ -175,7 +175,7 @@
                           </div>
                         </div>
                         <div id="import_mods-dialog-task_${currentTask.executionId}" class="collapse">
-                          <div class="card-body border-bottom border-secondary bg-warning">
+                          <div class="card-body border-bottom border-secondary text-bg-warning">
                             <button name="doImportMODS-task_${currentTask.executionId}-${currentVariables.mcrObjectID}"
                                     value="" class="btn btn-primary btn-sm" type="submit">
                               <i class="fa fa-download"></i>
@@ -229,8 +229,8 @@
             </div>
 
             <div class="card border border-dark my-3 w-100">
-              <div class="card-header bg-dark">
-                <h3 class="text-light mb-0">
+              <div class="card-header text-bg-dark">
+                <h3 class="mb-0">
                   <fmt:message key="WF.workspace.info.headline.available_tasks" />
                 </h3>
               </div>

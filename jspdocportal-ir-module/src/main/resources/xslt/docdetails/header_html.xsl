@@ -34,8 +34,8 @@
     <xsl:if test="mcracl:check-permission(@ID, 'writedb')">
       <xsl:if test="./service/servstates/servstate[@categid='reserved']">
         <div class="card card-info border border-info mb-3">
-          <div class="card-header bg-info py-2">
-             <h4 class="text-white my-0">
+          <div class="card-header text-bg-info py-2">
+             <h4 class="my-0">
                {mcri18n:translate('OMD.ir.docdetails.header.title.reserved')}:
              </h4>
           </div>

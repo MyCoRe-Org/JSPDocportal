@@ -37,7 +37,7 @@
 					<div id="errorInfoPanel" class="collapse col-12 col-md-11 offset-md-1">
 						<div class="card mt-3 border border-danger ">
 							<c:if test="${not empty it.errorInfo.message}">
-								<div class="card-header bg-danger text-white"><c:out value="${it.errorInfo.message}" /></div>
+								<div class="card-header text-bg-danger"><c:out value="${it.errorInfo.message}" /></div>
 							</c:if>
 							<c:if test="${not empty it.errorInfo.exception}">
 								<div class="card-body">

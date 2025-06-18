@@ -70,7 +70,7 @@
 
 				<%-- load first time from request parameter "returnPath --%>
 				<div class="card border my-3">
-  					<div class="card-header bg-dark" style="min-height:54px">
+  					<div class="card-header text-bg-dark" style="min-height:54px">
                       <div class="row">
                         <div class="col-2">
                           <span class="badge badge-pill badge-secondary">${it.currentVariables.mcrObjectID}</span>
@@ -97,7 +97,7 @@
     						<c:set var="derDoc" value="${it.derivateXMLs[derID]}" />
     						<c:set var="maindoc"><x:out select="$derDoc/mycorederivate/derivate/internals/internal/@maindoc" /></c:set>
     						<div class="card border border-primary m-3">
-  							   <div class="card-header bg-light">
+  							   <div class="card-header text-bg-light">
                                   <div class="row">
                                       <div class="col-2">
                                           <span class="badge badge-pill badge-secondary" style="margin-right:24px; margin-top:6px;">${derID}</span>
@@ -154,7 +154,7 @@
                                   
                                 </div>
                       			<div id="deleteDerivate_${derID}" class="collapse">
-                                    <div class="card-body border-top border-secondary bg-warning">
+                                    <div class="card-body border-top border-secondary text-bg-warning">
   											<fmt:message key="WF.derivates.delete" var="titleDelete"/>
   											<button id="btnDeleteDerivate_${derID}_${f}" title="${titleDelete}" name="doDeleteDerivate-task_${it.taskid}-derivate_${derID}" 
     										        class="btn btn-danger btn-sm"><i class="fas fa-trash"></i><fmt:message key="WF.workspace.button.delete" /></button>
@@ -212,7 +212,7 @@
                                                  <div class="row">
                                                   <div class="col">
   												<div id="deleteFile_${derID}_${fn:replace(f, '.', '_')}" class="collapse">
-  													<div class="card-body border border-secondary bg-warning mt-1 mb-3">
+  													<div class="card-body border border-secondary text-bg-warning mt-1 mb-3">
   														<fmt:message key="WF.derivates.delete_file" var="fileDelete"/>
     													<fmt:message key="WF.derivates.delete_file.message" var="messageDeleteFile"/>
     													<button id="btnDeleteFile_${derID}_${f}" title="${fileDelete}" name="doDeleteFile-task_${it.taskid}-derivate_${derID}-file_${f}" 

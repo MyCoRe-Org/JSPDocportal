@@ -99,7 +99,7 @@ public class MCRIncludeWebContentTag extends SimpleTagSupport {
         //out.write("\n        ,{customConfig : '"+MCRFrontendUtil.getBaseURL() +"admin/ckeditor_config.js'}");
         //out.write("\n    );");
         out.write("\n</script>");
-        out.write("\n    <div class=\"panel-body bg-warning\">");
+        out.write("\n    <div class=\"panel-body text-bg-warning\">");
         out.write("\n        <input type=\"submit\"  name=\"doSave_"+id+"\" class=\"btn btn-primary\" title=\""
         		+MCRTranslation.translate("Webpage.editwebcontent.save")+"\"><i class=\"fa fa-floppy-o\"></i> "+MCRTranslation.translate("Webpage.editwebcontent.save")+"</input>");
         
@@ -146,7 +146,7 @@ public class MCRIncludeWebContentTag extends SimpleTagSupport {
                     //do nothing
                 }
             } else {
-                out.println("<p class=\"bg-warning panel-body\">");
+                out.println("<p class=\"panel-body text-bg-warning\">");
                 String dataDir = Paths.get(MCRConfiguration2.getString("MCR.datadir")
                     .orElseThrow()).toAbsolutePath().toString();
                 out.println(MCRTranslation.translate("Webpage.editwebcontent.nofile",

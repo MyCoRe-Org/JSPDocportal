@@ -76,7 +76,7 @@
         <div class="row">
           <div class="offset-sm-2 col-sm-8">
 		    <div class="card border border-primary mt-5">
-              <div class="card-header bg-light"><strong><fmt:message key="Webpage.login.your_options" /></strong></div>
+              <div class="card-header text-bg-light"><strong><fmt:message key="Webpage.login.your_options" /></strong></div>
   			  <div class="card-body">
   			    <ul>
     			  <c:forEach var="nextStep" items="${it.nextSteps}">

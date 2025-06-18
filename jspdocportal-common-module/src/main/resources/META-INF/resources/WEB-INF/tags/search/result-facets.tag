@@ -35,7 +35,7 @@
     <c:if test="${facetKey eq 'ir.state_class.facet'}">
        <mcr:hasAccess var="visible" permission="edit" />
        <c:if test="${visible}">
-         <c:set var="headerClass" value=" bg-warning" />
+         <c:set var="headerClass" value=" text-bg-warning" />
        </c:if>
     </c:if>
 	<c:if test="${facets.get(facetKey).size() gt 0 and visible}">

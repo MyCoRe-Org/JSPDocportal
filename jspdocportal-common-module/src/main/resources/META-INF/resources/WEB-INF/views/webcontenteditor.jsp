@@ -65,7 +65,7 @@
      });
 		</script>
 		  <div class="card">  
-		    <div class="card-body bg-warning">
+		    <div class="card-body text-bg-warning">
 		        <input type="submit"  name="doSave_${it.id}" class="btn btn-primary" 
 		               title="<fmt:message key="Webpage.editwebcontent.save"/>" value="Speichern" /> 
 		                 <%-- <i class="fa fa-floppy-o"></i> <fmt:message key="Webpage.editwebcontent.save" /> --%>

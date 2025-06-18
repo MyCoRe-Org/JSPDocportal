@@ -91,7 +91,7 @@
 		</div>
 	</c:set>
   
-	<div class="card-header bg-light w-100">
+	<div class="card-header text-bg-light w-100">
 		<c:out value="${pageNavi}" escapeXml="false"/>
 	</div>
 	<c:if test="${numHits eq 0}">
@@ -112,7 +112,7 @@
 			</c:forEach>
    		</ul>
 
-		<div class="card-footer bg-light w-100">
+		<div class="card-footer text-bg-light w-100">
 			<c:out value="${pageNavi}" escapeXml="false"/>
 		</div>			
 	</c:if>
