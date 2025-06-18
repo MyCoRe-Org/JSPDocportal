@@ -63,7 +63,7 @@
          <br /><span class="small">{mcrstring:abbreviate-center(./maindoc, 80)}</span>
       </a>
       <br />
-      <div class="mt-3 mb-4 text-right">
+      <div class="mt-3 mb-4 text-end">
       <span class="pr-3" style="font-variant: petite-caps;">MD5-Prüfsumme:</span>
       <a class="btn btn-sm btn-outline-secondary" 
          style=""  download="{./maindoc}.md5" 
@@ -93,7 +93,7 @@
          <br /><span class="small">{mcrstring:abbreviate-center(./@OWNERID, 80)}</span>
       </a>
       <br />
-      <div class="mt-3 mb-4 text-right">
+      <div class="mt-3 mb-4 text-end">
       <span class="pr-3" style="font-variant: petite-caps;">MD5-Prüfsumme:</span>
       <a class="btn btn-sm btn-outline-secondary" 
          style=""  download="{./@OWNERID}.md5" 

@@ -118,7 +118,7 @@
                                         </select>
                                         </h4> 
                                     </div>
-                                    <div class="col-4 text-right">
+                                    <div class="col-4 text-end">
   										 <button id="btnEditDerMetaSave_${derID}" name="doSaveDerivateMeta-task_${it.taskid}-derivate_${derID}" style="display:none;" class="btn btn-primary"><i class="fas fa-save"></i> <fmt:message key="WF.derivates.button.save"/></button>
   										 <button id="btnEditDerMetaCancel_${derID}" type="button" style="display:none;" class="btn btn-secondary" onclick="disableDerMetaEditing('${derID}')"><i class="fas fa-times"></i> <fmt:message key="WF.derivates.button.cancel"/></button>
   										 <button id="btnEditDerMetaEdit_${derID}" type="button" class="btn btn-secondary" onclick="enableDerMetaEditing('${derID}')"><i class="fas fa-pencil-alt"></i> <fmt:message key="WF.derivates.button.edit"/></button>
@@ -251,7 +251,7 @@
   							<div class="col-2" style="margin-top:0px"><h4><fmt:message key="WF.derivates.new_derivate"/></h4></div>
   							<div class="col-8">
   									<div class="form-group row">
-    									<label for="inputLabel" class="col-sm-2 col-form-label text-right"><fmt:message key="WF.derivates.label"/></label>
+    									<label for="inputLabel" class="col-sm-2 col-form-label text-end"><fmt:message key="WF.derivates.label"/></label>
    										<div class="col-8">
       										<select class="form-control" name="newDerivate_label-task_${it.taskid}">
   												<c:forEach var="entry" items="${it.derivateLabels}">
@@ -270,7 +270,7 @@
   									</div>
   									<c:if test="${fn:contains(objID,'_person_')}">
   									   <div class="form-group row">
-    									 <label for="inputTitle" class="col-2 col-form-label text-right"><fmt:message key="WF.derivates.title"/></label>
+    									 <label for="inputTitle" class="col-2 col-form-label text-end"><fmt:message key="WF.derivates.title"/></label>
     									 <div class="col-8">
     										<fmt:message key="WF.derivates.title" var="title"/>
       										<input type="text" name="newDerivate_title-task_${it.taskid}" class="form-control" id="inputTitle" placeholder="${title}"></input>
@@ -278,7 +278,7 @@
   									   </div>
   									</c:if>
   									<div class="form-group row">
-    									<label for="inputFile" class="col-2 col-form-label text-right"><fmt:message key="WF.derivates.file"/></label>
+    									<label for="inputFile" class="col-2 col-form-label text-end"><fmt:message key="WF.derivates.file"/></label>
     									<div class="col-8">
     										<fmt:message key="WF.derivates.title" var="file"/>
       										<input type="file" name="newDerivate_file-task_${it.taskid}" class="form-control" style="height:auto" id="inputFile" placeholder="${file}"></input>

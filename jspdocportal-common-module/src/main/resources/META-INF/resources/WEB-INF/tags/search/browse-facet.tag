@@ -19,7 +19,7 @@
 			<div id="moreFacets_div_${facetID}" class="collapse">
 		</c:if>
 
-		<button class="btn btn-sm btn-default ir-facets-btn" style="border:none; display:block;text-align:left;white-space:normal;width:100%" 
+		<button class="btn btn-sm btn-default text-start ir-facets-btn" style="border:none; display:block;white-space:normal;width:100%" 
 		        onclick="changeFacetIncludeURL('${facetField}','${countsKey}', '${mask}', '${result.id}');">
 			<span class="ir-facets-btn-label">
 				${actionBean.calcFacetOutputString(facetField, countsKey)}

@@ -76,7 +76,7 @@
       <div>
       <!-- Button zum übergeordneten Werk -->
       <xsl:if test="./mods:relatedItem[@type='host' or @type='series'][./mods:recordInfo]"> 
-        <div class="text-right">
+        <div class="text-end">
           <xsl:for-each select="./mods:relatedItem[@type='host' or @type='series'][./mods:recordInfo]">
             <xsl:element name="a">
               <xsl:attribute name="class">ir-btn-goto-top btn btn-outline-secondary btn-sm ml-2</xsl:attribute>

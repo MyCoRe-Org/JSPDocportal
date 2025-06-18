@@ -97,7 +97,7 @@
                               <button class="btn btn-sm btn-secondary float-end" name="doReleaseTask-task_${currentTask.executionId}">
                                 <fmt:message key="WF.workspace.submit.task" />
                               </button>
-                              <small class="text-left mr-3 float-end">
+                              <small class="text-start mr-3 float-end">
                                 <strong><fmt:message key="WF.workspace.start" /> </strong><br />
                                 <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${currentTask.createTime}" />
                               </small>
@@ -114,7 +114,7 @@
                               <h4 class="mt-0">${currentVariables.wfObjectDisplayTitle}</h4>
                               <c:out value="${currentVariables.wfObjectDisplayDescription}" escapeXml="false" />
                             </div>
-                            <div class="col-3 text-right">
+                            <div class="col-3 text-end">
                               <a href="${WebApplicationBaseURL}resolve/id/${currentVariables.mcrObjectID}?fromWF=true&anchor=task_${currentTask.executionId}"
                                 class="btn btn-sm btn-outline-secondary"> 
                                 <i class="far fa-newspaper"></i> <fmt:message key="WF.workspace.preview" />
@@ -252,7 +252,7 @@
                                   name="doAcceptTask-task_${currentTask.executionId}">
                             <fmt:message key="WF.workspace.submit.accept_task" />
                           </button>
-                          <small class="text-left mr-3 float-end">
+                          <small class="text-start mr-3 float-end">
                             <strong><fmt:message key="WF.workspace.start" /> </strong><br />
                             <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${currentTask.createTime}" />
                           </small>

@@ -335,7 +335,7 @@
               <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text"/>
             </a>
           </span>
-          <p class="text-justify form-text text-muted small">
+          <p class="text-justify form-text text-body-secondary small">
             <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@description" disable-output-escaping="true" />
           </p>
         </xsl:for-each>

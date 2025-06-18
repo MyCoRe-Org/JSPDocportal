@@ -239,7 +239,7 @@
           <div class="ir-right_side h-100">
             <div class="d-none d-lg-block">
               <search:result-navigator mcrid="${mcrid}" />
-              <mcr:showEditMenu mcrid="${mcrid}" cssClass="text-right pb-3" />
+              <mcr:showEditMenu mcrid="${mcrid}" cssClass="text-end pb-3" />
               <mcr:transformXSL dom="${doc}" xslt="xslt/docdetails/rightside_html.xsl" />
             </div>
           </div>

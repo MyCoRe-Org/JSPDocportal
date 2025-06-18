@@ -83,11 +83,11 @@
             <%-- utility method to update the visibility of categories dependend on the state of their children
               a) hide the sublist if all children are hidden (with style 'display:none')
               b) if there are visible children and the entry has no linked entries
-                 then disalbe the entry and set the class 'text-muted'
+                 then disable the entry and set the class 'text-body-secondary'
               former jQuerye expression:
               if("${mask}"=="epub" && $.inArray($(el).attr('data-mcr-facet-value'), ["institution:unirostock"])!=-1){
                   $(el).parent().attr('disabled', 'disabled');
-                  $(el).prev().addClass('text-muted');
+                  $(el).prev().addClass('text-body-secondary');
               }
             --%>
             if(Array.from(el.querySelectorAll(':scope > ul li'))
@@ -95,11 +95,11 @@
                     .length) {
                 el.style.display='block';
                 if(parseInt(el.dataset.mcrFacetCount)==0){
-                  el.previousElementSibling.classList.add('text-muted');
+                  el.previousElementSibling.classList.add('text-body-secondary');
                   el.previousElementSibling.classList.add('disabled');
                   el.previousElementSibling.style.display='block';
                 } else {
-                  el.previousElementSibling.classList.remove('text-muted');
+                  el.previousElementSibling.classList.remove('text-body-secondary');
                   el.previousElementSibling.classList.remove('disabled');
                 }
             } else { 
