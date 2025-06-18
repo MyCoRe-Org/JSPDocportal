@@ -16,7 +16,7 @@
       
     <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer[@type='reserved']/mods:mods">
       <h3><xed:output i18n="OMD.ir.editor.pi_reservation.headline" /></h3>
-      <div class="form-group row">
+      <div class="row">
         <label class="col-2 control-label input-sm ir-label" for="pireg_title_prov">
          <xed:output i18n="OMD.ir.editor.pi_reservation.DOI" />
        </label>
@@ -26,7 +26,7 @@
          </xed:bind>
        </div>
       </div>
-      <div class="form-group row">
+      <div class="row">
         <label class="col-2 control-label input-sm ir-label" for="pireg_title_prov">
          <xed:output i18n="OMD.ir.editor.pi_reservation.provisional_title" />
        </label>
@@ -36,7 +36,7 @@
          </xed:bind>
        </div>
       </div>
-      <div class="form-group row">
+      <div class="row">
         <label class="col-2 control-label input-sm ir-label" for="pireg_info_prov">
          <xed:output i18n="OMD.ir.editor.pi_reservation.provisional_remarks" />
        </label>

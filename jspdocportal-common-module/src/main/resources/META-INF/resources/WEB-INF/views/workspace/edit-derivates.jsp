@@ -250,7 +250,7 @@
     					<div class="row">
   							<div class="col-2" style="margin-top:0px"><h4><fmt:message key="WF.derivates.new_derivate"/></h4></div>
   							<div class="col-8">
-  									<div class="form-group row">
+  									<div class="row">
     									<label for="inputLabel" class="col-sm-2 col-form-label text-end"><fmt:message key="WF.derivates.label"/></label>
    										<div class="col-8">
       										<select class="form-select" name="newDerivate_label-task_${it.taskid}">
@@ -269,7 +269,7 @@
                                        </div>
   									</div>
   									<c:if test="${fn:contains(objID,'_person_')}">
-  									   <div class="form-group row">
+  									   <div class="row">
     									 <label for="inputTitle" class="col-2 col-form-label text-end"><fmt:message key="WF.derivates.title"/></label>
     									 <div class="col-8">
     										<fmt:message key="WF.derivates.title" var="title"/>

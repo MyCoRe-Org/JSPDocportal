@@ -58,68 +58,66 @@
           </div>
           <div id="facetInfo" class="collapse show">
           <form class="form-horizontal" onsubmit="return false;">
-            <div class="form-group">
-              <div class="form-row">
-                <div class="col">
-                  <div class="input-group input-group-sm">
-                    <fmt:message var="lblTerm" key="Browse.Filter.term" />
-                      <input class="form-control border-secondary" id="filterValue" name="filterValue" placeholder="${lblTerm}"
-                             type="text" onkeypress="if (event.key === 'Enter') { JSPDocportalUtil.applyIncludeSearchFilter('histbest');}">
-                      <div class="input-group-prepend">
-                        <button id="filterInclude" class="btn btn-primary" onclick="JSPDocportalUtil.applyIncludeSearchFilter('histbest');">
-                          <i class="fas fa-plus"></i>
-                        </button>
-                      </div>
-                    </div>
+            <div class="row">
+              <div class="col">
+                <div class="input-group input-group-sm">
+                  <fmt:message var="lblTerm" key="Browse.Filter.term" />
+                  <input class="form-control border-secondary" id="filterValue" name="filterValue" placeholder="${lblTerm}"
+                         type="text" onkeypress="if (event.key === 'Enter') { JSPDocportalUtil.applyIncludeSearchFilter('histbest');}">
+                  <div class="input-group-prepend">
+                    <button id="filterInclude" class="btn btn-primary" onclick="JSPDocportalUtil.applyIncludeSearchFilter('histbest');">
+                      <i class="fas fa-plus"></i>
+                    </button>
                   </div>
                 </div>
-              <div class="form-row">   
-                <div class="col">
-                  <table class="w-100">
-                    <tr>
-                      <td>
-                        <div class="form-check form-control-sm">
-                          <input id="filterField1"  type="radio" class="form-check-input" name="filterField" value="allMeta" checked="checked">
-                          <label for="filterField1" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.allMeta" /></label>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-check form-control-sm">
-                          <input id="filterField2"  type="radio" class="form-check-input" name="filterField" value="content" >
-                          <label for="filterField2" class="form-check-label" style="line-height:1em;" ><fmt:message key="Browse.Filter.histbest.content" /></label>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check form-control-sm">
-                          <input id="filterField3"  type="radio" class="form-check-input" name="filterField" value="ir.title_all" >
-                          <label for="filterField3" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.title_all" /></label>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-check form-control-sm">
-                          <input id="filterField4"  type="radio" class="form-check-input" name="filterField" value="ir.pubyear_start" >
-                          <label for="filterField4" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.pubyear_start" /></label>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check form-control-sm">
-                          <input id="filterField5"  type="radio" class="form-check-input" name="filterField" value="ir.creator_all" >
-                          <label for="filterField5" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.creator_all" /></label>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-check form-control-sm">
-                          <input id="filterField6"  type="radio" class="form-check-input" name="filterField" value="ir.pubyear_end" >
-                          <label for="filterField6" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.pubyear_end" /></label>
-                        </div>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
+              </div>
+            </div>
+            <div class="row">   
+              <div class="col">
+                <table class="w-100">
+                  <tr>
+                    <td>
+                      <div class="form-check form-control-sm">
+                        <input id="filterField1"  type="radio" class="form-check-input" name="filterField" value="allMeta" checked="checked">
+                        <label for="filterField1" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.allMeta" /></label>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-check form-control-sm">
+                        <input id="filterField2"  type="radio" class="form-check-input" name="filterField" value="content" >
+                        <label for="filterField2" class="form-check-label" style="line-height:1em;" ><fmt:message key="Browse.Filter.histbest.content" /></label>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="form-check form-control-sm">
+                        <input id="filterField3"  type="radio" class="form-check-input" name="filterField" value="ir.title_all" >
+                        <label for="filterField3" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.title_all" /></label>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-check form-control-sm">
+                        <input id="filterField4"  type="radio" class="form-check-input" name="filterField" value="ir.pubyear_start" >
+                        <label for="filterField4" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.pubyear_start" /></label>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="form-check form-control-sm">
+                        <input id="filterField5"  type="radio" class="form-check-input" name="filterField" value="ir.creator_all" >
+                        <label for="filterField5" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.creator_all" /></label>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-check form-control-sm">
+                        <input id="filterField6"  type="radio" class="form-check-input" name="filterField" value="ir.pubyear_end" >
+                        <label for="filterField6" class="form-check-label" ><fmt:message key="Browse.Filter.histbest.ir.pubyear_end" /></label>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
               </div>
             </div>
           </form>

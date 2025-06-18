@@ -37,7 +37,7 @@
 				<input type="hidden" name="topicHeader" value="${it.topicHeader}" />
 				<input type="hidden" name="topicURL" value="${it.topicURL}" />
 
-				<div class="form-group">
+				<div class="row">
 					<label class="col-sm-2 control-label"><fmt:message
 							key="Webpage.feedback.label.recipient" /></label>
 					<div class="col-sm-10">
@@ -46,7 +46,7 @@
 						</p>
 					</div>
 				</div>
-				<div class="form-group">
+				<div class="row">
 					<label class="col-sm-2 control-label"><fmt:message
 							key="Webpage.feedback.label.topic" /></label>
 					<div class="col-sm-10">
@@ -55,21 +55,21 @@
 					</div>
 				</div>
 
-				<div class="form-group">
+				<div class="row">
 					<label for="inputName" class="col-sm-2 control-label"><fmt:message
 							key="Webpage.feedback.label.senderName" /></label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" id="inputName" name="fromName" />
 					</div>
 				</div>
-				<div class="form-group">
+				<div class="row">
 					<label for="inputEmail" class="col-sm-2 control-label"><fmt:message
 							key="Webpage.feedback.label.senderEmail" /></label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" id="inputEmail" name="fromEmail" />
 					</div>
 				</div>
-				<div class="form-group">
+				<div class="row">
 					<label for="inputEmail" class="col-sm-2 control-label"><fmt:message
 							key="Webpage.feedback.label.message" /></label>
 					<div class="col-sm-10">
@@ -77,7 +77,7 @@
 					</div>
 				</div>
 				<hr />
-				<div class="form-group">
+				<div class="row">
 					<label class="col-sm-2 control-label"></label>
 					<div class="col-sm-10">
 						<fmt:message key="Webpage.feedback.button.send" var="lblSend" />
