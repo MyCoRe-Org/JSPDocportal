@@ -246,6 +246,7 @@
         <!-- Provider (bereitgestellt durch:) -->
         <xsl:if test="contains(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '/doctype#histbest')">
           <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.provider')}</h4>
+          <xsl:variable name="class_provider" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" />
           <xsl:variable name="prov_categories" as="element() *">
             <xsl:for-each select="$class_provider">  
               <xsl:copy-of select="mcrmods:to-mycoreclass(., 'single')/categories/category" />
@@ -255,7 +256,7 @@
               <xsl:copy-of select="document('classification:metadata:-1:children:provider')//category[label[@xml:lang='x-isil']/@text=$isil]" />                 
             </xsl:if>
           </xsl:variable> 
-          <xsl:for-each select="$class_provider">
+          <xsl:for-each select="$prov_categories">
             <xsl:variable name="categ" select="." />
             <xsl:variable name="homepage" select="$categ/category/label[@xml:lang='x-homepage']/@text" />
             <!--
@@ -368,9 +369,9 @@
       </div>
     </xsl:if>
     <!--Tools -->
-    <div class="my-0" style="position:relative"> 
+    <div class="my-0" style="position:relative">
           <div style="position:absolute; top:-3em;right:0em">
-            <button type="button" class="btn btn-sm ir-button-tools hidden-xs" 
+            <button type="button" class="btn btn-sm ir-button-tools hidden-xs"
                     data-bs-toggle="collapse" data-bs-target="#hiddenTools"
                     title="{mcri18n:translate('Webpage.tools.menu4experts')}">
               <i class="fa fa-cog" style="opacity:.05"></i>
