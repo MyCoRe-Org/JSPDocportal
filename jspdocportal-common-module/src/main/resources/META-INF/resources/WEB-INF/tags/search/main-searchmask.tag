@@ -51,12 +51,11 @@
   </div>
   <script>
   function changeFilterIncludeURL(key, value, mask) {
-    const baseUrl = document.querySelector("meta[name='mcr:baseurl']")?.getAttribute("content");
+    const baseUrl = document.querySelector("meta[name='mcr:baseurl']")?.content;
     if (baseUrl) {
-        window.location = baseUrl 
-            + "do/browse/" + mask + "?"
-            + "&_add-filter="
-            + encodeURIComponent("+" + key + ":" + value);
+      const url = new URL("do/browse/" + mask), baseUrl);
+      url.searchParams.set("_add-filter", "+" + key + ":" + value);
+      window.location.href = url.toString();
     }
 }
   </script>

@@ -12,17 +12,22 @@
 <%@ attribute name="mode" required="true" type="java.lang.String"%>
 
 <div class="row">
-	<div class="col mt-3 mb-2">
-      <div class="float-end">
-		<script type="text/javascript">
-			function changeSortURL(value) {
-				window.location = $("meta[name='mcr:baseurl']").attr("content")
-						+ "do/${mode}/${mask}?_search="
-						+ $("meta[name='mcr:search.id']").attr("content")
-						+ "&_sort="
-						+ encodeURIComponent($("#sortField option:selected").val() + " " + value);
-			}
-		</script>
+  <div class="col mt-3 mb-2">
+    <div class="float-end">
+      <script type="text/javascript">
+        function changeSortURL(value) {
+          const baseUrl = document.querySelector("meta[name='mcr:baseurl']")?.content || "";
+          const searchId = document.querySelector("meta[name='mcr:search.id']")?.content || "";
+          const sortField = document.getElementById("sortField");
+          const selectedValue = sortField?.options[sortField.selectedIndex]?.value || "";
+
+          const url = new URL("do/${mode}/${mask}", baseUrl);
+          url.searchParams.set("_search", searchId);
+          url.searchParams.set("_sort", selectedValue + " " + value);
+          window.location.href = url.toString();
+        }
+      </script>
+
 		<span class="pe-2"><fmt:message key="Webpage.Searchresult.resort-label" /></span>
         <br class="d-sm-none" />
 		  <select id="sortField" class="form-control ir-form-control form-control-sm me-2 d-inline w-auto" onchange="changeSortURL('asc')">
