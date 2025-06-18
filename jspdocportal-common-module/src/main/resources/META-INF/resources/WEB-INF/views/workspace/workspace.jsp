@@ -60,7 +60,7 @@
             </c:forEach>
             <div class="card border border-dark my-3 w-100">
               <div class="card-header text-bg-dark">
-                <button class="btn btn-sm float-right btn-secondary mt-1" type="button" data-bs-toggle="collapse"
+                <button class="btn btn-sm float-end btn-secondary mt-1" type="button" data-bs-toggle="collapse"
                         data-bs-target="#publish-dialog-task_${currentTask.executionId}">
                   <fmt:message key="WF.workspace.button.publish_all_objects" />
                 </button>
