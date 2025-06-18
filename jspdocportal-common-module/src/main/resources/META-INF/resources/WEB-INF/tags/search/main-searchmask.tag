@@ -11,42 +11,40 @@
   <fmt:message var="lblSearch" key="Browse.Search.placeholder"  />
 
   <div class="input-group mb-3" data-ir-mode="${mode}">
-	<input type="text" class="form-control ir-form-control"
-		id="filterValue" name="filterValue" placeholder="${lblSearch} "
-		onkeypress="if (event.key === 'Enter') { 
+    <input type="text" class="form-control ir-form-control"
+           id="filterValue" name="filterValue" placeholder="${lblSearch} "
+           onkeypress="if (event.key === 'Enter') { 
                   changeFilterIncludeURL(
                     document.querySelector('input[name=\'filterField\']:checked')?.value,
                     document.getElementById('filterValue')?.value,
                     document.getElementById('filterValue')?.parentElement?.dataset?.irMode);
-                }" />
-	<div class="input-group-append">
-		<button id="filterInclude" class="btn btn-primary" type="button"
-			      onclick="changeFilterIncludeURL(
+           }" />
+    <button id="filterInclude" class="btn btn-primary" type="button"
+            onclick="changeFilterIncludeURL(
               document.querySelector('input[name=\'filterField\']:checked')?.value,
               document.getElementById('filterValue')?.value,
               document.getElementById('filterValue')?.parentElement?.dataset?.irMode);"
-			<i class="fa fa-search"></i>
-		</button>
-	</div>
+      <i class="fa fa-search"></i>
+    </button>
   </div>
 
-  <div class="custom-control custom-control-inline float-end me-0">
+  <div class="form-check form-check-inline float-end me-0">
     <a class="btn btn-outline-secondary btn-sm" href="${WebApplicationBaseURL}do/browse/${mode}">
       <fmt:message key="Browse.Search.alldocuments" />
     </a>
   </div>
  
-  <div class="custom-control custom-radio custom-control-inline">
+  <div class="form-check form-check-inline">
 	<input type="radio" checked="checked" id="filterField1"
-		name="filterField" value="allMeta" class="custom-control-input">
-	<label class="form-label" for="filterField1">
+		name="filterField" value="allMeta" class="form-check-input">
+	<label class="form-check-label" for="filterField1">
 	<c:out escapeXml="false" value="${fn:replace(lblAllMeta,'<br />', ' ')}" /></label>
   </div>
 
-  <div class="custom-control custom-radio custom-control-inline">
+  <div class="form-check form-check-inline">
 	<input type="radio" id="filterField2" name="filterField"
-		value="content" class="custom-control-input"> <label
-		class="form-label" for="filterField2">
+		value="content" class="form-check-input"> <label
+		class="form-check-label" for="filterField2">
 		<c:out escapeXml="false" value="${fn:replace(lblContent,'<br />', ' ')}" /></label>
   </div>
   <script>

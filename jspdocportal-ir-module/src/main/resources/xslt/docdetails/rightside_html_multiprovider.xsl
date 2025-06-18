@@ -72,11 +72,9 @@
                              or /mycoreobject/structure/derobjects/derobject/classification[@categid='fulltext'])">
             <div class="input-group input-group-sm mt-3 px-3">
               <input id="input_search_in_doc" type="text" class="form-control" onKeyDown="searchInDoc(event)" 
-              placeholder="{mcri18n:translate('OMD.ir.docdetails.rightside.placeholder.search_in_doc')}" aria-describedby="search-in-document-addon" />
-              <div class="input-group-append">
-                <button type="button" class="btn btn-secondary" id="search-in-document-addon" onclick="searchInDoc(event)" 
-                title="{mcri18n:translate('OMD.ir.docdetails.rightside.title.search_in_doc')}"><i class="fa fa-search"></i></button>
-              </div>
+                     placeholder="{mcri18n:translate('OMD.ir.docdetails.rightside.placeholder.search_in_doc')}" aria-describedby="search-in-document-addon" />
+              <button type="button" class="btn btn-secondary" id="search-in-document-addon" onclick="searchInDoc(event)" 
+                      title="{mcri18n:translate('OMD.ir.docdetails.rightside.title.search_in_doc')}"><i class="fa fa-search"></i></button>
               <script>
                 function searchInDoc(e) {{
                   if(e.target.type == "button"  || (e.target.type == "text" &amp;&amp; e.keyCode === 13)) {{
