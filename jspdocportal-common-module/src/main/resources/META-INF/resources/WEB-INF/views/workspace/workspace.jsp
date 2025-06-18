@@ -72,7 +72,7 @@
                     <i class="fa fa-check-square-o"></i>
                     <fmt:message key="WF.workspace.button.publish_all" />
                   </button>
-                  <label class="ml-3"><fmt:message key="WF.workspace.label.publish_all" /></label>
+                  <label class="ms-3"><fmt:message key="WF.workspace.label.publish_all" /></label>
                 </div>
               </div>
               <div class="card-body p-0">
@@ -85,11 +85,11 @@
                           <div class="row">
                             <div class="col-8">
                               <h5>
-                                <span class="badge badge-pill badge-secondary mr-3" style="height: auto">${currentTask.executionId}</span>
+                                <span class="badge badge-pill badge-secondary me-3" style="height: auto">${currentTask.executionId}</span>
                                 ${currentVariables.wfHeadline} 
-                                <span class="badge badge-pill badge-primary ml-3" style="height: auto">${currentVariables.mcrObjectID}</span>
+                                <span class="badge badge-pill badge-primary ms-3" style="height: auto">${currentVariables.mcrObjectID}</span>
                                 <c:if test="${not empty currentVariables.wfObjectDisplayRecordIdentifier}">
-                                  <span class="badge badge-pill badge-info ml-3" style="height: auto">${currentVariables.wfObjectDisplayRecordIdentifier}</span>
+                                  <span class="badge badge-pill badge-info ms-3" style="height: auto">${currentVariables.wfObjectDisplayRecordIdentifier}</span>
                                 </c:if>
                               </h5>
                             </div>
@@ -97,7 +97,7 @@
                               <button class="btn btn-sm btn-secondary float-end" name="doReleaseTask-task_${currentTask.executionId}">
                                 <fmt:message key="WF.workspace.submit.task" />
                               </button>
-                              <small class="text-start mr-3 float-end">
+                              <small class="text-start me-3 float-end">
                                 <strong><fmt:message key="WF.workspace.start" /> </strong><br />
                                 <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${currentTask.createTime}" />
                               </small>
@@ -181,7 +181,7 @@
                               <i class="fa fa-download"></i>
                               <fmt:message key="WF.workspace.button.import" />
                             </button>
-                            <label class="ml-3"><fmt:message key="WF.workspace.label.import" /></label>
+                            <label class="ms-3"><fmt:message key="WF.workspace.label.import" /></label>
                           </div>
                         </div>
                         <div class="card-footer">
@@ -215,7 +215,7 @@
                               <i class="fas fa-trash"></i>
                               <fmt:message key="WF.workspace.button.delete" />
                             </button>
-                            <label class="ml-3"><fmt:message key="WF.workspace.label.delete" /></label>
+                            <label class="ms-3"><fmt:message key="WF.workspace.label.delete" /></label>
                           </div>
                         </div>
                       </div>
@@ -242,9 +242,9 @@
                       <div class="row">
                         <div class="col-8">
                           <h5>
-                             <span class="badge badge-pill badge-secondary mr-3" style="height: auto">${currentTask.executionId}</span>
+                             <span class="badge badge-pill badge-secondary me-3" style="height: auto">${currentTask.executionId}</span>
                              ${currentVariables.wfHeadline} 
-                             <span class="badge badge-pill badge-primary ml-3" style="height: auto">${currentVariables.mcrObjectID}</span>
+                             <span class="badge badge-pill badge-primary ms-3" style="height: auto">${currentVariables.mcrObjectID}</span>
                           </h5>
                         </div>
                         <div class="col-4">
@@ -252,7 +252,7 @@
                                   name="doAcceptTask-task_${currentTask.executionId}">
                             <fmt:message key="WF.workspace.submit.accept_task" />
                           </button>
-                          <small class="text-start mr-3 float-end">
+                          <small class="text-start me-3 float-end">
                             <strong><fmt:message key="WF.workspace.start" /> </strong><br />
                             <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${currentTask.createTime}" />
                           </small>

@@ -64,11 +64,11 @@
       </a>
       <br />
       <div class="mt-3 mb-4 text-end">
-      <span class="pr-3" style="font-variant: petite-caps;">MD5-Prüfsumme:</span>
+      <span class="pe-3" style="font-variant: petite-caps;">MD5-Prüfsumme:</span>
       <a class="btn btn-sm btn-outline-secondary" 
          style=""  download="{./maindoc}.md5" 
          href="data:text/plain;charset=US-ASCII,{encode-for-uri(concat(./maindoc_md5,'  ', ./maindoc))}">
-         <i class="fas fa-download pr-2"></i> {./maindoc_md5}
+         <i class="fas fa-download pe-2"></i> {./maindoc_md5}
       </a>
       </div>
   </xsl:template>
@@ -94,11 +94,11 @@
       </a>
       <br />
       <div class="mt-3 mb-4 text-end">
-      <span class="pr-3" style="font-variant: petite-caps;">MD5-Prüfsumme:</span>
+      <span class="pe-3" style="font-variant: petite-caps;">MD5-Prüfsumme:</span>
       <a class="btn btn-sm btn-outline-secondary" 
          style=""  download="{./@OWNERID}.md5" 
          href="data:text/plain;charset=US-ASCII,{encode-for-uri(concat(./@CHECKSUM,'  ', ./@OWNERID))}">
-         <i class="fas fa-download pr-2"></i> {./@CHECKSUM}
+         <i class="fas fa-download pe-2"></i> {./@CHECKSUM}
       </a>
       </div>
   </xsl:template>

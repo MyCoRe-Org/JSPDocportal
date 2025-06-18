@@ -80,7 +80,7 @@
 
           <xsl:for-each select="./mods:relatedItem[@type='preceding' or @type='succeeding']">
             <xsl:element name="a">
-              <xsl:attribute name="class">btn btn-sm btn-outline-secondary ml-3</xsl:attribute>
+              <xsl:attribute name="class">btn btn-sm btn-outline-secondary ms-3</xsl:attribute>
               <xsl:choose>
                 <xsl:when test="./mods:recordInfo/mods:recordIdentifier[@source='DE-28']">
                   <xsl:attribute name="href" select="concat($WebApplicationBaseURL, 'resolve/recordIdentifier/', replace(./mods:recordInfo/mods:recordIdentifier[@source='DE-28'],'/', '_'))" />   

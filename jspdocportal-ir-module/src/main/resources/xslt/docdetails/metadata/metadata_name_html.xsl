@@ -25,10 +25,10 @@
         </xsl:if>
         <xsl:choose>
           <xsl:when test="mods:role/mods:roleTerm[@authority='GBV']">
-            <span class="small pl-2">[{string-join(mods:role/mods:roleTerm[@authority='GBV'], ', ')}]</span>
+            <span class="small ps-2">[{string-join(mods:role/mods:roleTerm[@authority='GBV'], ', ')}]</span>
           </xsl:when>
           <xsl:when test="mods:role/mods:roleTerm[@authority='marcrelator']">
-            <span class="small pl-2">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:marcrelator_mycore:',mods:role/mods:roleTerm[@authority='marcrelator']))//category)}]</span>                 
+            <span class="small ps-2">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:marcrelator_mycore:',mods:role/mods:roleTerm[@authority='marcrelator']))//category)}]</span>                 
           </xsl:when>
         </xsl:choose>
       </td></tr>
@@ -61,10 +61,10 @@
         <span><xsl:value-of select="string-join(mods:namePart[not(@type='date')],', ')" /></span>
         <xsl:choose>
           <xsl:when test="mods:role/mods:roleTerm[@authority='GBV']">
-            <span class="small pl-2">[{string-join(mods:role/mods:roleTerm[@authority='GBV'], ', ')}]</span>
+            <span class="small ps-2">[{string-join(mods:role/mods:roleTerm[@authority='GBV'], ', ')}]</span>
           </xsl:when>
           <xsl:when test="mods:role/mods:roleTerm[@authority='marcrelator']">
-            <span class="small pl-2">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:marcrelator_mycore:',mods:role/mods:roleTerm[@authority='marcrelator']))//category)}]</span>                 
+            <span class="small ps-2">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:marcrelator_mycore:',mods:role/mods:roleTerm[@authority='marcrelator']))//category)}]</span>                 
           </xsl:when>
         </xsl:choose>
       </td></tr>

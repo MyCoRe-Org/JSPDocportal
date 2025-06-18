@@ -29,7 +29,7 @@
       <xsl:variable name="category" select="mcrclass:category('identifier', 'k10plus')" />
         <tr><th><abbr class="text-nowrap" title="{$category/label[@xml:lang=$CurrentLang]/@description}">{$category/label[@xml:lang=$CurrentLang]/@text}</abbr>:</th>
             <td><span class="ir-identifier-text">{.}</span>
-              <a class="ir-identifier-portal text-dark small ml-3" title="{mcri18n:translate('OMD.ir.docdetails.metadata.tooltip.identifier')}" 
+              <a class="ir-identifier-portal text-dark small ms-3" title="{mcri18n:translate('OMD.ir.docdetails.metadata.tooltip.identifier')}" 
                  href="{replace($category/label[@xml:lang='x-portal-url']/@text, '\{0\}',.)}">
                 <i class="fas fa-external-link-alt"></i>
               </a>
@@ -56,7 +56,7 @@
                </xsl:otherwise>
              </xsl:choose>
              <xsl:if test="$category/label[@xml:lang='x-portal-url']">
-               <a class="ir-identifier-portal text-dark small ml-3" title="{mcri18n:translate('OMD.ir.docdetails.metadata.tooltip.identifier')}" 
+               <a class="ir-identifier-portal text-dark small ms-3" title="{mcri18n:translate('OMD.ir.docdetails.metadata.tooltip.identifier')}" 
                   href="{replace($category/label[@xml:lang='x-portal-url']/@text, '\{0\}',.)}">
                  <i class="fas fa-external-link-alt"></i>
                </a>
@@ -72,7 +72,7 @@
          <tr><th><abbr class="text-nowrap" title="{$categ_purl/label[@xml:lang=$CurrentLang]/@description}">{$categ_purl/label[@xml:lang=$CurrentLang]/@text}</abbr>: </th>
             <td>
               <a href="{$p}">{$p}</a>
-               <a class="ir-identifier-portal text-dark small ml-3" title="{mcri18n:translate('OMD.ir.docdetails.metadata.tooltip.identifier')}" 
+               <a class="ir-identifier-portal text-dark small ms-3" title="{mcri18n:translate('OMD.ir.docdetails.metadata.tooltip.identifier')}" 
                   href="{replace($p, '://purl.uni-rostock.de/','://purl.uni-rostock.de/info/purl/')}">
                  <i class="fas fa-external-link-alt"></i>
                </a>

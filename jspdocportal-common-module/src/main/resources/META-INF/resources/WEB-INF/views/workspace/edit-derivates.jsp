@@ -124,13 +124,13 @@
   										 <button id="btnEditDerMetaEdit_${derID}" type="button" class="btn btn-secondary" onclick="enableDerMetaEditing('${derID}')"><i class="fas fa-pencil-alt"></i> <fmt:message key="WF.derivates.button.edit"/></button>
                                          <x:if select="$doc/mycoreobject/structure/derobjects/derobject[1]/@xlink:href != $x/@xlink:href">
                                            <fmt:message key="WF.derivates.button.move_up" var="titleMoveUp"/>
-                                           <button id="btnEditDerMoveUp_${derID}" name="doMoveUpDerivate-task_${it.taskid}-derivate_${derID}" class="btn btn-secondary float-end ml-2" title="${titleMoveUp} }">
+                                           <button id="btnEditDerMoveUp_${derID}" name="doMoveUpDerivate-task_${it.taskid}-derivate_${derID}" class="btn btn-secondary float-end ms-2" title="${titleMoveUp} }">
                                               <i class="fa fa-arrow-up"></i>
                                             </button>
                                          </x:if>
                                          <x:if select="$doc/mycoreobject/structure/derobjects/derobject[last()]/@xlink:href != $x/@xlink:href">
                                             <fmt:message key="WF.derivates.button.move_down" var="titleMoveDown"/>
-                                            <button id="btnEditDerMoveDown_${derID}" name="doMoveDownDerivate-task_${it.taskid}-derivate_${derID}" class="btn btn-secondary float-end ml-2" title="${titleMoveDown}">
+                                            <button id="btnEditDerMoveDown_${derID}" name="doMoveDownDerivate-task_${it.taskid}-derivate_${derID}" class="btn btn-secondary float-end ms-2" title="${titleMoveDown}">
                                                 <i class="fa fa-arrow-down"></i>
                                              </button>
                                          </x:if>
@@ -158,7 +158,7 @@
   											<fmt:message key="WF.derivates.delete" var="titleDelete"/>
   											<button id="btnDeleteDerivate_${derID}_${f}" title="${titleDelete}" name="doDeleteDerivate-task_${it.taskid}-derivate_${derID}" 
     										        class="btn btn-danger btn-sm"><i class="fas fa-trash"></i><fmt:message key="WF.workspace.button.delete" /></button>
-    										<label class="ml-3"><fmt:message key="WF.derivates.delete.message" /></label>
+    										<label class="ms-3"><fmt:message key="WF.derivates.delete.message" /></label>
   									</div>
   							   </div>
     							<div class="card-body border-top border-bottom border-secondary">
@@ -190,7 +190,7 @@
     											  <a href="${WebApplicationBaseURL}do/wffile/${it.currentVariables.mcrObjectID}/${derID}/${f}">${f}</a>
     											  <c:if test="${maindoc eq f}">
     												<c:set var="info"><fmt:message key="Editor.Common.derivate.maindoc" /></c:set>
-    												<i class="fas fa-star text-secondary ml-3" title="${info}"></i>
+    												<i class="fas fa-star text-secondary ms-3" title="${info}"></i>
     											  </c:if>
                                                 </div>
                                                 <div class="col-4">
@@ -216,10 +216,10 @@
   														<fmt:message key="WF.derivates.delete_file" var="fileDelete"/>
     													<fmt:message key="WF.derivates.delete_file.message" var="messageDeleteFile"/>
     													<button id="btnDeleteFile_${derID}_${f}" title="${fileDelete}" name="doDeleteFile-task_${it.taskid}-derivate_${derID}-file_${f}" 
-    										       				class="btn btn-danger btn-sm ml-3">
+    										       				class="btn btn-danger btn-sm ms-3">
     										        			<i class="fas fa-trash"></i><fmt:message key="WF.workspace.button.delete" />
     													</button>
-  														<label class=ml-3><fmt:message key="WF.derivates.delete_file.message"><fmt:param>${f}</fmt:param></fmt:message></label>
+  														<label class=ms-3><fmt:message key="WF.derivates.delete_file.message"><fmt:param>${f}</fmt:param></fmt:message></label>
   													</div>
   												</div>
                                                 </div>

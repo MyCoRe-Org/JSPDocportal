@@ -73,7 +73,7 @@
             <c:set var="i18n_download_csv_title"><fmt:message key="Webpage.Searchresult.csvDownload.title" /></c:set>
             
             <div id="ir-drownload-dropdown" class="dropdown float-start">
-              <button class="btn btn-outline-primary page-item mr-3 dropdown-toggle" type="button" id="dropdownMenuDownload" 
+              <button class="btn btn-outline-primary page-item me-3 dropdown-toggle" type="button" id="dropdownMenuDownload" 
                  title="${i18n_download}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                  <i class="fas fa-download"></i>
                </button>
@@ -84,7 +84,7 @@
           </c:if>
 
 		<c:if test="${fn:length(result.backURL) >0}">
-			<a class="btn btn-outline-primary page-item mr-3"
+			<a class="btn btn-outline-primary page-item me-3"
 			   href="${result.backURL}" ><fmt:message key="Webpage.searchresults.back" /></a>
 		</c:if>
 		<span class="ir-result-pagination-numfound btn">${result.numFound} <fmt:message key="Webpage.Searchresult.numHits" /></span>

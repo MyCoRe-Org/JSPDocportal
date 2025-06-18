@@ -26,7 +26,7 @@
               x-text="countPos >= 0 ? counts[countPos + 1] : '-'"></span>
       </li>
       <c:if test="${c.hasChildren()}">
-        <li class="list-group-item ir-facets-sublist py-0 pr-0"
+        <li class="list-group-item ir-facets-sublist py-0 pe-0"
             x-data="{countPos : counts.indexOf('${c.id.getRootID()}:${c.id.ID}')}"
             x-bind:data-mcr-facet-count="countPos >= 0 ? counts[countPos + 1] : 0">
           <startpage:classification-inner category="${c}" facetField="${facetField}" mask="${mask}" lang="${lang}"/>

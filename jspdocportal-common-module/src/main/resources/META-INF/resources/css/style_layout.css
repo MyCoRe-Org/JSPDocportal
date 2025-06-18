@@ -7,7 +7,7 @@
 /*  Outer Framework, 3 column design + header                          */
 /* ------------------------------------------------------------------- */  
 body{
-	background:#ffffff url('../images/layout/CPR-header_HG3.jpg') no-repeat center top;
+	background:#ffffff;
 	font-family:    Arial, Helvetica, sans-serif;
 	/*default browser font-size is 16px */
 	line-height: normal;

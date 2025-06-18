@@ -172,7 +172,7 @@
                 <tr>
                   <td class="text-justify">
                      {.}
-                    <span class="small pl-2">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:rfc5646:',@xml:lang))//category)}]</span>
+                    <span class="small ps-2">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:rfc5646:',@xml:lang))//category)}]</span>
                   </td>
                 </tr>
               </xsl:for-each>
@@ -291,7 +291,7 @@
                         </xsl:if>
                         </xsl:variable>
                         <xsl:if test="$ctx/*[local-name()=$dateX][not(@*)] != normalize-space($normalized_date)">
-                          <span class="small pl-2">({mcri18n:translate('OMD.ir.docdetails.metadata.label.normalized_date')} {normalize-space($normalized_date)})</span>
+                          <span class="small ps-2">({mcri18n:translate('OMD.ir.docdetails.metadata.label.normalized_date')} {normalize-space($normalized_date)})</span>
                         </xsl:if>
                       </xsl:if>
                     </td>

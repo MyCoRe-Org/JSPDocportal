@@ -505,9 +505,9 @@ public class MCRShowWorkspaceController {
 
                         result.append("\n        <li>");
                         if (fileName.contains(".")) {
-                            result.append("<i class=\"fa fa-file mr-3\"></i>");
+                            result.append("<i class=\"fa fa-file me-3\"></i>");
                         } else {
-                            result.append("<i class=\"fa fa-folder-open mr-3\"></i>");
+                            result.append("<i class=\"fa fa-folder-open me-3\"></i>");
                         }
                         result.append(
                             "<a href=\"").append(MCRFrontendUtil.getBaseURL()).append("do/wffile/")
@@ -516,7 +516,7 @@ public class MCRShowWorkspaceController {
                             .append("</a>");
 
                         if (fileName.equals(der.getDerivate().getInternals().getMainDoc())) {
-                            result.append("<span class=\"ml-3 text-secondary\" class=\"fa fa-star\" title=\"")
+                            result.append("<span class=\"ms-3 text-secondary\" class=\"fa fa-star\" title=\"")
                                 .append(MCRTranslation.translate("Editor.Common.derivate.maindoc"))
                                 .append("\"></span>");
                         }

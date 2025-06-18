@@ -39,7 +39,7 @@
                   <c:if test="${fn:startsWith(it.select, x.key)}"><c:set var="active">active</c:set></c:if>
                   <a href="${WebApplicationBaseURL}do/indexbrowser/${it.modus}?select=${x.key}"
                      class="btn btn-outline-secondary btn-sm indexbrowser-btn ${active}" role="button">${x.key} 
-                  <span class="badge badge-pill badge-secondary ml-2">${x.value}</span></a>
+                  <span class="badge badge-pill badge-secondary ms-2">${x.value}</span></a>
                 </c:forEach>
               </div>
             </c:if>
@@ -47,9 +47,9 @@
               <form action="${applicationScope.WebApplicationBaseURL}do/indexbrowser/${it.modus}"
                     id="indexbrowserForm" enctype="multipart/form-data" accept-charset="UTF-8" class="form-inline">
                 <label for="txtSelect"><fmt:message key="Webpage.indexbrowser.form.label" />:</label>
-                <input type="text" class="form-control form-control-sm ml-4 w-auto" name="select" value="${it.select}"/>
+                <input type="text" class="form-control form-control-sm ms-4 w-auto" name="select" value="${it.select}"/>
                 <fmt:message var="output" key="Webpage.indexbrowser.form.button" />
-                <button type="submit" name="doSearch" class="btn btn-sm btn-primary ml-4">${output}</button>
+                <button type="submit" name="doSearch" class="btn btn-sm btn-primary ms-4">${output}</button>
               </form>
             </div>
           </div>

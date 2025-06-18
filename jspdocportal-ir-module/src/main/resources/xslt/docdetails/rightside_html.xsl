@@ -150,7 +150,7 @@
          <div class="dropdown w-100 mt-3">
             <button class="btn btn-primary dropdown-toggle w-100" type="button" id="dropdownMenuShow" 
                      data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               <i class="far fa-eye pr-2"></i> {mcri18n:translate('OMD.ir.docdetails.rightside.menue.view')}
+               <i class="far fa-eye pe-2"></i> {mcri18n:translate('OMD.ir.docdetails.rightside.menue.view')}
             </button>
             
             <div class="dropdown-menu w-100 border-primary" aria-labelledby="dropdownMenuShow" style="border-width:2px">
@@ -185,7 +185,7 @@
          <div class="dropdown w-100 mt-3">
             <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="dropdownMenuDownload" 
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               <i class="fas fa-download pr-2"></i> {mcri18n:translate('OMD.ir.docdetails.rightside.menue.download')}
+               <i class="fas fa-download pe-2"></i> {mcri18n:translate('OMD.ir.docdetails.rightside.menue.download')}
             </button>
             <div class="dropdown-menu border-secondary" aria-labelledby="dropdownMenuDownload" style="border-width:2px">
               <xsl:for-each select="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext']]">
@@ -269,7 +269,7 @@
           <table style="table-layout:fixed">
             <tr>
               <xsl:if test="$logo_url">
-                <td class="pr-2">
+                <td class="pe-2">
                   <a href="{$homepage}"><img src="{$logo_url}" style="max-height:60px;max-width:120px;"/></a>
                 </td>
               </xsl:if>
@@ -326,10 +326,10 @@
           <span class="clearfix">
             <xsl:variable name="lic_logo" select="fn:concat($WebApplicationBaseURL,'images',$categ/label[@xml:lang='x-icon']/@text)" />
             <xsl:if test="fn:ends-with($lic_logo, '.png')">
-              <img src="{$lic_logo}" class="float-start mr-3" />
+              <img src="{$lic_logo}" class="float-start me-3" />
             </xsl:if>
             <xsl:if test="fn:ends-with($lic_logo, '.svg')">
-              <img src="{$lic_logo}" class="float-start mr-3 p-1 bg-dark" style="max-width:7em;"/>
+              <img src="{$lic_logo}" class="float-start me-3 p-1 bg-dark" style="max-width:7em;"/>
             </xsl:if>
             <a href="{$categ/label[@xml:lang='x-uri']/@text}" class="font-weight-bold small">
               <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text"/>
@@ -434,7 +434,7 @@
       </xsl:choose>
       <strong>{mcrclass:current-label-text(./classification[@classid='derivate_types'])}</strong>
 
-      <span class="small pl-2">({mcrstring:pretty-filesize(./maindoc_size)})</span> 
+      <span class="small ps-2">({mcrstring:pretty-filesize(./maindoc_size)})</span> 
       <a class="float-end py-1 small" download="{./maindoc}.md5" onclick="event.stopPropagation();"
          href="data:text/plain;charset=US-ASCII,{encode-for-uri(concat(./maindoc_md5,'  ', ./maindoc))}">
         <i class="fas fa-download"></i> MD5
@@ -461,7 +461,7 @@
         </xsl:otherwise>
       </xsl:choose>
       <strong>{mcrclass:current-label-text(document(concat('classification:metadata:0:children:derivate_types:',@USE))//category)}</strong>
-      <span class="small pl-2">({mcrstring:pretty-filesize(./@SIZE)})</span> 
+      <span class="small ps-2">({mcrstring:pretty-filesize(./@SIZE)})</span> 
       <a class="float-end py-1 small" download="{./@OWNERID}.md5" onclick="event.stopPropagation();"
            href="data:text/plain;charset=US-ASCII,{encode-for-uri(concat(./@CHECKSUM,'  ', ./@OWNERID))}">
         <i class="fas fa-download"></i> MD5
