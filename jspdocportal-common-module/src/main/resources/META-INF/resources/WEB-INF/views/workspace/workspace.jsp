@@ -44,7 +44,7 @@
               </div>
             </div>
             
-            <h2 class="text-dark">
+            <h2">
               <fmt:message key="WF.workspace.headline" />
             </h2>
           </div>
@@ -64,7 +64,7 @@
                         data-bs-target="#publish-dialog-task_${currentTask.executionId}">
                   <fmt:message key="WF.workspace.button.publish_all_objects" />
                 </button>
-                <h3 class="text-light mb-0"><fmt:message key="WF.workspace.info.headline.claimed_tasks" /></h3>
+                <h3 class="text-light my-1"><fmt:message key="WF.workspace.info.headline.claimed_tasks" /></h3>
               </div>
               <div id="publish-dialog-task_${currentTask.executionId}" class="collapse">
                 <div class="card-body border border-secondary text-bg-warning">
