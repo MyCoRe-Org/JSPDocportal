@@ -85,11 +85,11 @@
                           <div class="row">
                             <div class="col-8">
                               <h5>
-                                <span class="badge badge-pill text-bg-secondary me-3" style="height: auto">${currentTask.executionId}</span>
+                                <span class="badge rounded-pill text-bg-secondary me-3" style="height: auto">${currentTask.executionId}</span>
                                 ${currentVariables.wfHeadline} 
-                                <span class="badge badge-pill badge-primary ms-3" style="height: auto">${currentVariables.mcrObjectID}</span>
+                                <span class="badge rounded-pill text-bg-primary ms-3" style="height: auto">${currentVariables.mcrObjectID}</span>
                                 <c:if test="${not empty currentVariables.wfObjectDisplayRecordIdentifier}">
-                                  <span class="badge badge-pill badge-info ms-3" style="height: auto">${currentVariables.wfObjectDisplayRecordIdentifier}</span>
+                                  <span class="badge rounded-pill text-bg-info ms-3" style="height: auto">${currentVariables.wfObjectDisplayRecordIdentifier}</span>
                                 </c:if>
                               </h5>
                             </div>
@@ -242,9 +242,9 @@
                       <div class="row">
                         <div class="col-8">
                           <h5>
-                             <span class="badge badge-pill text-bg-secondary me-3" style="height: auto">${currentTask.executionId}</span>
+                             <span class="badge rounded-pill text-bg-secondary me-3" style="height: auto">${currentTask.executionId}</span>
                              ${currentVariables.wfHeadline} 
-                             <span class="badge badge-pill badge-primary ms-3" style="height: auto">${currentVariables.mcrObjectID}</span>
+                             <span class="badge rounded-pill text-bg-primary ms-3" style="height: auto">${currentVariables.mcrObjectID}</span>
                           </h5>
                         </div>
                         <div class="col-4">

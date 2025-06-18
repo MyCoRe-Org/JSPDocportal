@@ -18,7 +18,7 @@
 
  <xsl:template match="/mycoreobject">
   <xsl:if test="./metadata/def.modsContainer/modsContainer[@type='reserved']">
-    <span class="badge badge-info mr-3">ID-Reservierung</span><strong><xsl:value-of select="./metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods/mods:note[@type='provisional_title']" /></strong>
+    <span class="badge text-bg-info mr-3">ID-Reservierung</span><strong><xsl:value-of select="./metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods/mods:note[@type='provisional_title']" /></strong>
     <pre><xsl:value-of select="./metadata/def.modsContainer/modsContainer[@type='reserved']/mods:mods/mods:note[@type='provisional_remarks']" /></pre>
   </xsl:if>
   <xsl:for-each select="//mods:name[./mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='aut'][1]">
