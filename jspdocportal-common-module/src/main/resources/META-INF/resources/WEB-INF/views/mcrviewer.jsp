@@ -230,8 +230,8 @@
 		                       action : function(obj, evt){
 		                    	   <%-- Alternativ müsste man die Komponenten Liste des Viewer nach der MyCoReImageScrollComponent suchen. 
                                         Diese hat das Property _currentImage --%>
-		                    	   			var s = $("div[data-id='ImageChangeControllGroup'] > select > option:selected");
-		                    	   			window.open("${applicationScope.WebApplicationBaseURL}depot/${fn:replace(it.recordIdentifier,'/','_')}/images/"+s.data('id')+".jpg", '_blank');
+		                    	   			var s = document.querySelector("div[data-id='ImageChangeControllGroup'] > select > option:selected");
+		                    	   			window.open("${applicationScope.WebApplicationBaseURL}depot/${fn:replace(it.recordIdentifier,'/','_')}/images/"+s.dataset.id + ".jpg", '_blank');
 		                       },
 		                       icon: "download",
 		                       inGroup: "addOns2"

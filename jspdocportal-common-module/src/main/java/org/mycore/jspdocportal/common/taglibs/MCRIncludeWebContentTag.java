@@ -94,7 +94,7 @@ public class MCRIncludeWebContentTag extends SimpleTagSupport {
         //showText(out);
         out.write("\n    </textarea>");
         out.write("\n<script type=\"text/javascript\">");
-        out.write("\n    $(document).ready( function() {$('textarea#taedit_"+id+"').ckeditor(); alert('CKEditor loaded!'); });");
+        out.write("\n    §(document).ready( function() {§('textarea#taedit_"+id+"').ckeditor(); alert('CKEditor loaded!'); });");
         //out.write("\n    CKEDITOR.replace( 'taedit_"+id+"');");
         //out.write("\n        ,{customConfig : '"+MCRFrontendUtil.getBaseURL() +"admin/ckeditor_config.js'}");
         //out.write("\n    );");
