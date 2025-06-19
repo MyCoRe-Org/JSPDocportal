@@ -75,7 +75,7 @@
     <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='imported' or @type='created']/mods:mods">
       <div>
       <!-- Button zum übergeordneten Werk -->
-      <xsl:if test="./mods:relatedItem[@type='host' or @type='series'][./mods:recordInfo]"> 
+      <xsl:if test="./mods:relatedItem[@type='host' or @type='series'][./mods:recordInfo[mods:recordIdentifier]]"> 
         <div class="text-end">
           <xsl:for-each select="./mods:relatedItem[@type='host' or @type='series'][./mods:recordInfo]">
             <xsl:element name="a">
