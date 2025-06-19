@@ -60,7 +60,7 @@
       <xsl:for-each select="./mods:name[@type='personal'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
         <nobr>
           {string-join((./mods:namePart[@type='given'], ./mods:namePart[@type='family'], ./mods:namePart[not(@type)], ./mods:namePart[@type='termsOfAddress']),' ')}
-          <button id="btn_ir_popover_{generate-id(.)}" class="btn btn-sm ps-1" type="button">
+          <button id="btn_ir_click_popover_{generate-id(.)}" class="btn btn-sm ps-1" type="button">
             <xsl:attribute name="data-bs-toggle">popover</xsl:attribute>
             <xsl:attribute name="data-bs-placement">bottom</xsl:attribute>
             <xsl:attribute name="data-ir-popover-body-template">#tmpl_ir_popover_body_{generate-id(.)}</xsl:attribute>
@@ -98,7 +98,7 @@
       <xsl:for-each select="./mods:name[@type='corporate'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
         <nobr>
           {string-join((./mods:namePart[not(@type)]),' ')}
-          <button id="btn_ir_popover_{generate-id(.)}" class="btn btn-sm ps-1" type="button">
+          <button id="btn_ir_click_popover_{generate-id(.)}" class="btn btn-sm ps-1" type="button">
             <xsl:attribute name="data-bs-toggle">popover</xsl:attribute>
             <xsl:attribute name="data-bs-placement">bottom</xsl:attribute>
             <xsl:attribute name="data-ir-popover-body-template">#tmpl_ir_popover_body_{generate-id(.)}</xsl:attribute>

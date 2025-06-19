@@ -1,15 +1,26 @@
 class JSPDocportalUtil {
-  
-  /* ein erweiterte Bootstrap Popover-System mit gemischten Triggern (Hover + Click) und benutzerdefinierten Schließ-Buttons.
-     hover wird als Basis-Trigger verwendet, aber durch zusätzliche Click-Event-Listener erweitert.
-     Das ermöglicht folgendes Verhalten: Hover zeigt Popover, Click macht ihn "sticky".
-  */   
-  static initClickablePopovers() {
+
+  static initPopovers() {
+    //init normal popovers
     document.querySelectorAll('[id^="btn_ir_popover_"]').forEach(function(popoverTriggerEl) {
+      let popover = new bootstrap.Popover(popoverTriggerEl, {
+        delay: {
+          "show": 100,
+          "hide": 1500
+        }
+      });
+    });
+    
+    //init clickable popovers
+    /* ein erweiterte Bootstrap Popover-System mit gemischten Triggern (Hover + Click) und benutzerdefinierten Schließ-Buttons.
+       hover wird als Basis-Trigger verwendet, aber durch zusätzliche Click-Event-Listener erweitert.
+       Das ermöglicht folgendes Verhalten: Hover zeigt Popover, Click macht ihn "sticky".
+    */
+    document.querySelectorAll('[id^="btn_ir_click_popover_"]').forEach(function(popoverTriggerEl) {
       let popover = new bootstrap.Popover(popoverTriggerEl, {
         trigger: 'hover',
         delay: {
-          "show": 0,
+          "show": 100,
           "hide": 3000
         },
         html: true,

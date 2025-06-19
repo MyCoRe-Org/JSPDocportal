@@ -53,7 +53,7 @@
 
   <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", () => {
-      JSPDocportalUtil.initClickablePopovers();
+      JSPDocportalUtil.initPopovers();
     });
     
   </script>
