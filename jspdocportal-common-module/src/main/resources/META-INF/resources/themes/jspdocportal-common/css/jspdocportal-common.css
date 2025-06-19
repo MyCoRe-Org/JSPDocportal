@@ -336,6 +336,19 @@ div.ir-browse-classification ul{
 	margin-bottom:.33rem;
 }
 
+/* =================================================================== */
+/* Popover                                                             */
+/* =================================================================== */
+
+div.ir-popover .btn-close.float-end {
+  margin-right: -0.33rem;
+  padding-left: 1rem;
+}
+
+/* =================================================================== */
+/* Social Media Buttons (via Socializer plugin                         */
+/* =================================================================== */
+
 div.socializer a {
   text-decoration: none !important;
 }

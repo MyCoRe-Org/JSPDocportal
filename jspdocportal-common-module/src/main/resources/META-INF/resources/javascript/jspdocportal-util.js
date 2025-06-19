@@ -17,18 +17,34 @@ class JSPDocportalUtil {
        Das ermöglicht folgendes Verhalten: Hover zeigt Popover, Click macht ihn "sticky".
     */
     document.querySelectorAll('[id^="btn_ir_click_popover_"]').forEach(function(popoverTriggerEl) {
+      const closeBtn = '<button type="button" class="btn-close float-end" aria-label="Close"'
+                       +' data-ir-popover-trigger="#' + popoverTriggerEl.id + '"></button>';
       let popover = new bootstrap.Popover(popoverTriggerEl, {
         trigger: 'hover',
+        customClass: 'ir-popover',
         delay: {
           "show": 100,
           "hide": 3000
         },
         html: true,
         content: function() {
-          const templateId = popoverTriggerEl.dataset.irPopoverBodyTemplate.replace('#', '');
-          const bodyTemplate = document.getElementById(templateId);
-          const closeBtn = '<button type="button" class="btn-close float-end ps-1 pb-1" aria-label="Close" data-ir-popover-trigger="#' + popoverTriggerEl.id + '"></button>';
-          return '<div>' + closeBtn + bodyTemplate.innerHTML + '</div>';
+          const titleTemplateId = popoverTriggerEl.dataset.irPopoverTitleTemplate?.replace('#', '');
+          const bodyTemplateId = popoverTriggerEl.dataset.irPopoverBodyTemplate?.replace('#', '');
+          if(bodyTemplateId) {
+            const bodyTemplate = document.getElementById(bodyTemplateId);
+            if(!titleTemplateId) {
+              return '<div>' + closeBtn + bodyTemplate.innerHTML + '</div>';
+            }
+            return '<div>' + bodyTemplate.innerHTML + '</div>';
+          }
+        },
+        title: function() {
+          const titleTemplateId = popoverTriggerEl.dataset.irPopoverTitleTemplate?.replace('#', '');
+          if(titleTemplateId) {
+            const titleTemplate = document.getElementById(titleTemplateId);
+            return '<div>' + closeBtn + titleTemplate.innerHTML + '</div>';
+          }
+          return '';
         },
         container: 'body',
         sanitize: false
@@ -54,6 +70,7 @@ class JSPDocportalUtil {
       });
     });
 
+    //globales click event für alle close buttons
     document.addEventListener('click', (eventClick) => {
       const targetEl = eventClick.target;
       const idTriggerEl = targetEl.dataset.irPopoverTrigger;
