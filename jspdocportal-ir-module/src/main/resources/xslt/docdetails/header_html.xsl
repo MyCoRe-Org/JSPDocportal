@@ -132,20 +132,12 @@
         <p>
           <xsl:choose>
             <xsl:when test="contains(../mods:genre[@displayLabel='doctype']/@valueURI,'#histbest')">
-              <xsl:variable name="publisherAndPlace">
-              
-              </xsl:variable>
-              <xsl:variable name="publisherWithoutPlace">
-              </xsl:variable>
-              
-              <xsl:variable name="placeWithoutPublisher">
-              
-              </xsl:variable>
-              
               <xsl:variable name="publisherPlace">
                 <xsl:choose>
                   <xsl:when test="mods:publisher">
-                    {string-join(./mods:place[not(@supplied='yes')][not(following-sibling::mods:publisher)]/mods:placeTerm,', ')}
+                    <xsl:if test="./mods:place[not(@supplied='yes')][not(preceding-sibling::mods:publisher)]">
+                      {string-join(./mods:place[not(@supplied='yes')][not(preceding-sibling::mods:publisher)]/mods:placeTerm,', ')}, 
+                    </xsl:if>
                     <xsl:for-each select="mods:publisher">
                       <xsl:variable name="thePublisher" select="." />
                       {string-join(./following-sibling::mods:place[not(@supplied='yes')][preceding-sibling::mods:publisher[1]=$thePublisher]/mods:placeTerm,', ')}: {.}{if (not(../mods:publisher[last()]=$thePublisher)) then ', ' else ()}
@@ -158,7 +150,7 @@
               </xsl:variable>
                 {if (normalize-space($publisherPlace)='') then string-join((./mods:edition, ./mods:dateIssued[not(@*)], ./mods:dateCreated[not(@*)]), ', ') else string-join((./mods:edition, $publisherPlace, ./mods:dateIssued[not(@*)], ./mods:dateCreated[not(@*)]), ', ')}
             </xsl:when>
-            <xsl:otherwise>
+            <xsl:otherwise> <!-- doctype = epub -->
               {string-join((./mods:edition, ./mods:publisher, ./mods:dateIssued[not(@*)], ./mods:dateCreated[not(@*)]), ', ')}
             </xsl:otherwise>
           </xsl:choose>
