@@ -386,38 +386,26 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
      *            - is the category already displayed "opened"
      * @return
      */
-    @SuppressWarnings("PMD.NPathComplexity")
     private String retrieveIconURL(CBConfig cb, boolean hasChildren, int curLevel, boolean hasLinks, boolean opened) {
-        if (cb.expand) {
-            if (opened && hasChildren && hasLinks) {
-                return "images/folder_open.gif";
-            }
-            if (opened && hasChildren && !hasLinks) {
-                return "images/folder_open_empty.gif";
-            }
-        }
-        if (curLevel + 1 < cb.level) {
-            if (!opened && hasChildren && hasLinks) {
-                return "images/folder_plus.gif";
-            }
-            if (!opened && hasChildren && !hasLinks) {
-                return "images/folder_plus_empty.gif";
-            }
-            if (opened && hasChildren && hasLinks) {
-                return "images/folder_minus.gif";
-            }
-            if (opened && hasChildren && !hasLinks) {
-                return "images/folder_minus_empty.gif";
-            }
-        }
-        if (hasLinks) {
-            return "images/folder_plain.gif";
-        }
-        if (!hasLinks) {
-            return "images/folder_plain_empty.gif";
-        }
+        // Basis-Icon-Name bestimmen
+        String iconType = getIconType(cb, hasChildren, curLevel, opened);
+        
+        // Links-Suffix hinzufügen
+        String linksSuffix = hasLinks ? "" : "_empty";
+        return "images/" + iconType + linksSuffix + ".gif";
+    }
 
-        return "";
+    private String getIconType(CBConfig cb, boolean hasChildren, int curLevel, boolean opened) {
+        // Expand-Modus: nur geöffnete Ordner mit Kindern zeigen spezielles Icon
+        if (cb.expand && opened && hasChildren) {
+            return "folder_open";
+        }
+        // Level-basierte Ansicht: Plus/Minus Icons nur bei Ordnern mit Kindern
+        if (curLevel + 1 < cb.level && hasChildren) {
+            return opened ? "folder_minus" : "folder_plus";
+        }
+        // Standard-Fall für alle anderen Situationen
+        return "folder_plain";
     }
 
     /**
