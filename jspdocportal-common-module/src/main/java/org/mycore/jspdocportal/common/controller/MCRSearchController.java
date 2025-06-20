@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -117,8 +118,8 @@ public class MCRSearchController {
                     .build();
             }
         }
-        boolean showMask = true;
-        boolean showResults = false;
+        AtomicBoolean showMask = new AtomicBoolean(true);
+        AtomicBoolean showResults = new AtomicBoolean(false);
 
         if (request.getParameter("q") != null) {
             result = new MCRSearchResultDataBean();
@@ -126,8 +127,8 @@ public class MCRSearchController {
             result.setAction("do/search");
             result.setQuery(request.getParameter("q"));
             result.setMask("");
-            showMask = false;
-            showResults = true;
+            showMask.set(false);
+            showResults.set(true);
         }
 
         if (StringUtils.isNoneEmpty(request.getParameter("searchField"))) {
@@ -142,8 +143,8 @@ public class MCRSearchController {
                 result.setQuery("+" + request.getParameter("searchField") + ":*");
             }
             result.setMask("");
-            showMask = false;
-            showResults = true;
+            showMask.set(false);
+            showResults.set(true);
         }
         if (request.getParameter("sortField") != null && request.getParameter("sortValue") != null) {
             result.setSort(request.getParameter("sortField") + " " + request.getParameter("sortValue"));
@@ -162,8 +163,8 @@ public class MCRSearchController {
         result.setMask(mask);
 
         if (mask == null) {
-            showMask = false;
-            showResults = true;
+            showMask.set(false);
+            showResults.set(true);
             result.setAction("do/search");
         } else {
             result.setAction("do/search/" + mask);
@@ -177,12 +178,6 @@ public class MCRSearchController {
         Document queryDoc = (Document) request.getAttribute("MCRXEditorSubmission");
         if (queryDoc == null && result != null) {
             queryDoc = result.getMCRQueryXML();
-        }
-
-        if (queryDoc != null) {
-            request.setAttribute("MCRXEditorSubmission", queryDoc);
-            showMask = false;
-            showResults = true;
         }
 
         if (queryDoc == null) {
@@ -204,8 +199,8 @@ public class MCRSearchController {
                                 .contains("target org.mycore.frontend.xeditor.target.MCRRemoveTarget")
                             || changeData.getText().contains("target remove")
                             || changeData.getText().contains("org.mycore.frontend.xeditor.target.MCRSwapTarget")) {
-                            showMask = true;
-                            showResults = false;
+                            showMask.set(true);
+                            showResults.set(false);
 
                         }
                     }
@@ -214,6 +209,9 @@ public class MCRSearchController {
         }
 
         if (queryDoc != null) {
+            request.setAttribute("MCRXEditorSubmission", queryDoc);
+            showMask.set(false);
+            showResults.set(true);
             XMLOutputter xml = new XMLOutputter(Format.getPrettyFormat());
             String xmlMessage = xml.outputString(queryDoc);
             LOGGER.debug("{}", xmlMessage);
@@ -261,14 +259,14 @@ public class MCRSearchController {
                 // do nothing, use default
             }
         }
-        if (result.getSolrQuery() != null && showResults) {
+        if (result.getSolrQuery() != null && showResults.get()) {
             MCRSearchResultDataBean.addSearchresultToSession(request, result);
             result.doSearch();
         }
 
         model.put(PARAM_MASK, mask);
-        model.put("showMask", showMask);
-        model.put("showResults", showResults);
+        model.put("showMask", showMask.get());
+        model.put("showResults", showResults.get());
         model.put("result", result);
         model.put("xeditorHtml", createXeditorHtml(request, response));
 
