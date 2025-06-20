@@ -76,6 +76,7 @@ import org.mycore.solr.auth.MCRSolrAuthenticationManager;
  * @deprecated
  */
 @Deprecated
+@SuppressWarnings({"PMD.NcssCount", "PMD.CognitiveComplexity", "PMD.NPathComplexity"})
 public class MCRJSPIDResolverServlet extends HttpServlet {
     private static final String PATH__RESOLVE_ID = "resolve/id/";
 

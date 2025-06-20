@@ -159,6 +159,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
      * @see jakarta.servlet.jsp.tagext.SimpleTagSupport#doTag()
      */
     @Override
+    @SuppressWarnings({ "PMD.NPathComplexity" })
     public void doTag() throws JspException, IOException {
         PageContext pageContext = (PageContext) getJspContext();
         if ("clear".equals(pageContext.getRequest().getParameter("_cache"))) {
@@ -182,7 +183,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
         @SuppressWarnings("rawtypes")
         Enumeration<String> paramNames = request.getParameterNames();
         while (paramNames.hasMoreElements()) {
-            String s = paramNames.nextElement().toString();
+            String s = paramNames.nextElement();
             if (!s.equals("select") && !s.equals("modus")) {
                 url.append(URLEncoder.encode(StringEscapeUtils.escapeHtml4(s), StandardCharsets.UTF_8)).append('=')
                     .append(URLEncoder.encode(StringEscapeUtils.escapeHtml4(request.getParameter(s)),
@@ -263,6 +264,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
      *            - the current level to calculate the depth
      * @throws IOException
      */
+    @SuppressWarnings({ "PMD.NcssCount", "PMD.CognitiveComplexity", "PMD.NPathComplexity" })
     private boolean outputCategory(CBConfig cb, MCRCategory categ, String baseURL, String cbURL, int curLevel,
         boolean didIt) throws IOException {
         JspWriter out = getJspContext().getOut();
@@ -384,6 +386,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
      *            - is the category already displayed "opened"
      * @return
      */
+    @SuppressWarnings("PMD.NPathComplexity")
     private String retrieveIconURL(CBConfig cb, boolean hasChildren, int curLevel, boolean hasLinks, boolean opened) {
         if (cb.expand) {
             if (opened && hasChildren && hasLinks) {

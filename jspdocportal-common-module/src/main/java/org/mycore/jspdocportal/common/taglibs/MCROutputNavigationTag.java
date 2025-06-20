@@ -84,36 +84,34 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
         }
         JspWriter out = getJspContext().getOut();
 
-        if (mode.equals("left")) {
-            printLeftNav(path, nav, cssClass, out);
-        }
-
-        if (mode.equals("side")) {
-            out.append("\n<nav class=\"ir-nav-side\">");
-            printSideNav(path, nav, cssClass, out);
-            out.append("\n</nav>");
-        }
-
-        if (mode.equals("toc")) {
-            NavigationItem eNav = findNavItem(nav, path);
-            printTOC(eNav, out);
-        }
-
-        if (mode.equals("top")) {
-            printTopNav(path, nav, out);
-        }
-
-        if (mode.equals("top-dropdown")) {
-            printTopDropdownNav(path, nav, out);
-        }
-
-        if (mode.equals("navbar")) {
-            printNavbar(nav, out);
-        }
-
-        if (mode.equals("breadcrumbs")) {
-            NavigationItem eNav = findNavItem(nav, path);
-            printBreadcrumbs(eNav, out);
+        switch (mode) {
+            case "left" -> printLeftNav(path, nav, cssClass, out);
+            
+            case "side" -> {
+                out.append("\n<nav class=\"ir-nav-side\">");
+                printSideNav(path, nav, cssClass, out);
+                out.append("\n</nav>");
+            }
+            
+            case "toc" -> {
+                NavigationItem eNav = findNavItem(nav, path);
+                printTOC(eNav, out);
+            }
+            
+            case "top" -> printTopNav(path, nav, out);
+            
+            case "top-dropdown" -> printTopDropdownNav(path, nav, out);
+            
+            case "navbar" -> printNavbar(nav, out);
+            
+            case "breadcrumbs" -> {
+                NavigationItem eNav = findNavItem(nav, path);
+                printBreadcrumbs(eNav, out);
+            }
+            
+            default -> {
+                // ignore
+            }
         }
     }
 
@@ -318,37 +316,7 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
                     } else {
                         out.append("<ul>");
                     }
-                    int dropdownCounter = 0;
-                    for (NavigationItem el : printableElements) {
-                        boolean active = currentPath.length > 0 && currentPath[0].equals(el.getId());
-                        String msg = retrieveI18N(el.getI18n());
-                        List<NavigationItem> printableElementsTmp = printableItems(el);
-                        if (!printableElementsTmp.isEmpty()) {
-                            String dropdownId = Integer.toString(dropdownCounter);
-                            out.append(INDENT).append("<li class=\"dropdown nav-item\">");
-                            out.append(INDENT).append("<a class=\"nav-link dropdown-toggle\" id=\"navbarDropdown"
-                                + dropdownId
-                                + "\" role=\"button\" data-bs-toggle=\"dropdown\" href=\"#\" aria-haspopup=\"true\" aria-expanded=\"false\">"
-                                + msg + "</a>");
-                            out.append(INDENT).append(
-                                "<div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown" + dropdownId + "\">");
-                            for (NavigationItem elTmp : printableElementsTmp) {
-                                String msgTmp = retrieveI18N(elTmp.getI18n());
-                                String href = retrieveFullUrl(el);
-                                out.append(INDENT).append("<a target=\"_self\" class=\"dropdown-item\" href=\"" + href
-                                    + "\">" + msgTmp + "</a>");
-                            }
-                            out.append(INDENT).append("</div>");
-                            out.append(INDENT).append("</li>");
-                            dropdownCounter++;
-                        } else {
-                            String href = retrieveFullUrl(el);
-                            out.append(INDENT).append("<li class=\"nav-item\">");
-                            out.append(INDENT).append("<a target=\"_self\" class=\"nav-link" + (active ? " active" : "")
-                                + "\" href=\"" + href + "\">" + msg + "</a>");
-                            out.append(INDENT).append("</li>");
-                        }
-                    }
+                    outputNavigationItems(printableElements, currentPath, out);
                     if (getJspBody() != null) {
                         getJspBody().invoke(out);
                     }
@@ -357,6 +325,41 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
                 } catch (IOException | JspException e) {
                     LOGGER.error(e);
                 }
+            }
+        }
+    }
+
+    private void outputNavigationItems(List<NavigationItem> printableElements, String[] currentPath, JspWriter out)
+        throws IOException {
+        int dropdownCounter = 0;
+        for (NavigationItem el : printableElements) {
+            boolean active = currentPath.length > 0 && currentPath[0].equals(el.getId());
+            String msg = retrieveI18N(el.getI18n());
+            List<NavigationItem> printableElementsTmp = printableItems(el);
+            if (!printableElementsTmp.isEmpty()) {
+                String dropdownId = Integer.toString(dropdownCounter);
+                out.append(INDENT).append("<li class=\"dropdown nav-item\">");
+                out.append(INDENT).append("<a class=\"nav-link dropdown-toggle\" id=\"navbarDropdown"
+                    + dropdownId
+                    + "\" role=\"button\" data-bs-toggle=\"dropdown\" href=\"#\" aria-haspopup=\"true\" aria-expanded=\"false\">"
+                    + msg + "</a>");
+                out.append(INDENT).append(
+                    "<div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown" + dropdownId + "\">");
+                for (NavigationItem elTmp : printableElementsTmp) {
+                    String msgTmp = retrieveI18N(elTmp.getI18n());
+                    String href = retrieveFullUrl(el);
+                    out.append(INDENT).append("<a target=\"_self\" class=\"dropdown-item\" href=\"" + href
+                        + "\">" + msgTmp + "</a>");
+                }
+                out.append(INDENT).append("</div>");
+                out.append(INDENT).append("</li>");
+                dropdownCounter++;
+            } else {
+                String href = retrieveFullUrl(el);
+                out.append(INDENT).append("<li class=\"nav-item\">");
+                out.append(INDENT).append("<a target=\"_self\" class=\"nav-link" + (active ? " active" : "")
+                    + "\" href=\"" + href + "\">" + msg + "</a>");
+                out.append(INDENT).append("</li>");
             }
         }
     }

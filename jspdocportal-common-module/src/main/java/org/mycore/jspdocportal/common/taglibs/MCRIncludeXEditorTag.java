@@ -69,6 +69,7 @@ public class MCRIncludeXEditorTag extends SimpleTagSupport {
     }
 
     @Override
+    @SuppressWarnings({"PMD.CognitiveComplexity", "PMD.NPathComplexity"})
     public void doTag() throws JspException, IOException {
         PageContext pageContext = (PageContext) getJspContext();
 

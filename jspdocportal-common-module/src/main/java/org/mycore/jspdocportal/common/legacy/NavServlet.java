@@ -30,6 +30,7 @@ public class NavServlet extends HttpServlet {
         Namespace.getNamespace("n", "http://www.mycore.org/jspdocportal/navigation");
 
     @Override
+    @SuppressWarnings("PMD.NPathComplexity")
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 

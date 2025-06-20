@@ -69,6 +69,7 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 
 @Deprecated
+@SuppressWarnings({"PMD.NcssCount", "PMD.CognitiveComplexity", "PMD.NPathComplexity"})
 public class MCRJSPGlobalResolverServlet extends MCRJSPIDResolverServlet {
 
     @java.io.Serial

@@ -117,6 +117,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
     }
 
     @Override
+    @SuppressWarnings("PMD.NPathComplexity")
     public void doTag() throws JspException, IOException {
         PageContext pageContext = (PageContext) getJspContext();
 
@@ -197,6 +198,7 @@ public class MCRIncludeEditorInWorkflowTag extends SimpleTagSupport {
         }
     }
 
+    @SuppressWarnings("PMD.NPathComplexity")
     private Properties getParameters() {
         Properties params = new Properties();
 

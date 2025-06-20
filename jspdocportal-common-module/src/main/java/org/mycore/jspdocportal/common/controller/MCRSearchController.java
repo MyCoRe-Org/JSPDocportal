@@ -83,6 +83,7 @@ public class MCRSearchController {
 
     @GET
     @Path("/{mask}")
+    @SuppressWarnings({"PMD.NcssCount", "PMD.CognitiveComplexity", "PMD.NPathComplexity"})
     public Response defaultRes(@PathParam(PARAM_MASK) String mask, @Context HttpServletRequest request,
         @Context HttpServletResponse response) {
         Map<String, Object> model = new HashMap<>();
@@ -214,6 +215,7 @@ public class MCRSearchController {
 
     }
 
+    @SuppressWarnings("PMD.NPathComplexity")
     private void initializeQueryDoc(HttpServletRequest request, AtomicBoolean showMask, AtomicBoolean showResults) {
         Document queryDoc = (Document) request.getAttribute("MCRXEditorSubmission");
         if (queryDoc == null && result != null) {

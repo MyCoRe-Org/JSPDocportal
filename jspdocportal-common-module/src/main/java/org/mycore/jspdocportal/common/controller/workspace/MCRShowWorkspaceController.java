@@ -75,6 +75,7 @@ public class MCRShowWorkspaceController {
     }
 
     @GET
+    @SuppressWarnings({"PMD.NcssCount", "PMD.NcssCount", "PMD.NPathComplexity"})
     public Response defaultRes(@Context HttpServletRequest request) {
 
         Map<String, Object> model = new HashMap<>();
@@ -349,6 +350,7 @@ public class MCRShowWorkspaceController {
         ts.complete(t.getId());
     }
 
+    @SuppressWarnings("PMD.NcssCount")
     private void updateWFObjectMetadata(Task t) {
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
         String txt;
@@ -450,6 +452,7 @@ public class MCRShowWorkspaceController {
     }
 
     //TODO: -> JSP-Tag oder Model-Object + HTML im Frontend
+    @SuppressWarnings({"PMD.CognitiveComplexity", "PMD.NPathComplexity"})
     private void updateWFDerivateList(Task t) {
         TaskService ts = MCRBPMNMgr.getWorfklowProcessEngine().getTaskService();
         MCRObjectID mcrObjID;

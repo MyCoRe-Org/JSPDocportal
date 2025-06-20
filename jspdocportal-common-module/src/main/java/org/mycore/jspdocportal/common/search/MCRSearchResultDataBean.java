@@ -124,6 +124,7 @@ public class MCRSearchResultDataBean implements Serializable {
         return map.get(searchID);
     }
 
+    @SuppressWarnings({"PMD.NcssCount", "PMD.CognitiveComplexity", "PMD.NPathComplexity"})
     public void doSearch() {
         solrQueryResponse = null;
         SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();

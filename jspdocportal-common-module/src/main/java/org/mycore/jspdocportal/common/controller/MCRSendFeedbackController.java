@@ -66,6 +66,7 @@ public class MCRSendFeedbackController {
         return Response.ok(v).build();
     }
 
+    @SuppressWarnings({"PMD.NcssCount", "PMD.NPathComplexity"})
     @POST
     public Response doSend(@Context HttpServletRequest request,
         @FormParam("fromName") @DefaultValue("") String fromName,

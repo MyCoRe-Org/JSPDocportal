@@ -154,31 +154,7 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
         try {
             PageContext pageContext = (PageContext) getJspContext();
             if (StringUtils.isNotBlank(query)) {
-                try {
-                    SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
-                    SolrQuery solrQuery = new SolrQuery();
-
-                    if (query.startsWith("recordIdentifier:")) {
-                        String q = query.replaceFirst("/", "_");
-                        solrQuery.setQuery(q + " OR " + q.replaceFirst("_", "/"));
-
-                    } else {
-                        solrQuery.setQuery(query);
-                    }
-
-                    solrQuery.setFields("id");
-                    QueryRequest queryRequest = new QueryRequest(solrQuery);
-                    MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
-                        MCRSolrAuthenticationLevel.SEARCH);
-                    QueryResponse solrResponse = queryRequest.process(solrClient);
-                    SolrDocumentList solrResults = solrResponse.getResults();
-
-                    if (!solrResults.isEmpty()) {
-                        mcrid = String.valueOf(solrResults.get(0).getFirstValue("id"));
-                    }
-                } catch (SolrServerException e) {
-                    LOGGER.error(e);
-                }
+                mcrid = retrieveMcridFromSolr(query);
             }
             if (cache.contains("clear") || "clear".equals(pageContext.getRequest().getParameter("_cache"))) {
                 MCROBJECTXML_CACHE.invalidate(mcrid);
@@ -205,5 +181,34 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
         } catch (Exception e) {
             throw new MCRException(e);
         }
+    }
+
+    private static String retrieveMcridFromSolr(String query) throws IOException {
+        try {
+            SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
+            SolrQuery solrQuery = new SolrQuery();
+
+            if (query.startsWith("recordIdentifier:")) {
+                String q = query.replaceFirst("/", "_");
+                solrQuery.setQuery(q + " OR " + q.replaceFirst("_", "/"));
+
+            } else {
+                solrQuery.setQuery(query);
+            }
+
+            solrQuery.setFields("id");
+            QueryRequest queryRequest = new QueryRequest(solrQuery);
+            MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
+                MCRSolrAuthenticationLevel.SEARCH);
+            QueryResponse solrResponse = queryRequest.process(solrClient);
+            SolrDocumentList solrResults = solrResponse.getResults();
+
+            if (!solrResults.isEmpty()) {
+                return String.valueOf(solrResults.get(0).getFirstValue("id"));
+            }
+        } catch (SolrServerException e) {
+            LOGGER.error(e);
+        }
+        return null;
     }
 }

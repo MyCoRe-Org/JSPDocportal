@@ -6,8 +6,10 @@ import java.io.StringWriter;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -62,14 +64,7 @@ public class MCRIncludeEditorTag extends SimpleTagSupport {
             Source xmlSource = new JDOMSource(xml);
             Source xsltSource = new StreamSource(MCRResourceHelper.getResourceAsStream("/xsl/editor_standalone.xsl"));
 
-            // das Factory-Pattern unterstützt verschiedene XSLT-Prozessoren
-            TransformerFactory transFact = TransformerFactory.newInstance();
-            transFact.setURIResolver(MCRURIResolver.obtainInstance());
-            Transformer transformer = transFact.newTransformer(xsltSource);
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-
+            Transformer transformer = createTransformer(xsltSource);
             /*
              * <!-- editor-common.xsl ============ Parameter aus MyCoRe LayoutServlet
              * ============ --> <xsl:param name="WebApplicationBaseURL" /> <xsl:param
@@ -91,5 +86,17 @@ public class MCRIncludeEditorTag extends SimpleTagSupport {
         } catch (TransformerException | JDOMException e) {
             LOGGER.error("Exception", e);
         }
+    }
+
+    private Transformer createTransformer(Source xsltSource)
+        throws TransformerFactoryConfigurationError, TransformerConfigurationException {
+        // das Factory-Pattern unterstützt verschiedene XSLT-Prozessoren
+        TransformerFactory transFact = TransformerFactory.newInstance();
+        transFact.setURIResolver(MCRURIResolver.obtainInstance());
+        Transformer transformer = transFact.newTransformer(xsltSource);
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        return transformer;
     }
 }
