@@ -175,67 +175,7 @@ public class MCRSearchController {
             result.setBackURL(referrer);
         }
 
-        Document queryDoc = (Document) request.getAttribute("MCRXEditorSubmission");
-        if (queryDoc == null && result != null) {
-            queryDoc = result.getMCRQueryXML();
-        }
-
-        if (queryDoc == null) {
-            String sessionID = request.getParameter(MCREditorSessionStore.XEDITOR_SESSION_PARAM);
-            if (sessionID != null) {
-                if (sessionID.contains("-")) {
-                    sessionID = sessionID.split("-")[0];
-                }
-
-                MCREditorSession session = MCREditorSessionStoreUtils.getSessionStore().getSession(sessionID);
-                if (session != null) {
-                    queryDoc = session.getXMLCleaner().clean(session.getEditedXML());
-                    // if we come from a repeater button we should show mask and
-                    // hide result
-                    MCRChangeData changeData = session.getChangeTracker().findLastChange(queryDoc);
-                    if (changeData != null) {
-                        if (changeData.getText().contains("target org.mycore.frontend.xeditor.target.MCRInsertTarget")
-                            || changeData.getText()
-                                .contains("target org.mycore.frontend.xeditor.target.MCRRemoveTarget")
-                            || changeData.getText().contains("target remove")
-                            || changeData.getText().contains("org.mycore.frontend.xeditor.target.MCRSwapTarget")) {
-                            showMask.set(true);
-                            showResults.set(false);
-
-                        }
-                    }
-                }
-            }
-        }
-
-        if (queryDoc != null) {
-            request.setAttribute("MCRXEditorSubmission", queryDoc);
-            showMask.set(false);
-            showResults.set(true);
-            XMLOutputter xml = new XMLOutputter(Format.getPrettyFormat());
-            String xmlMessage = xml.outputString(queryDoc);
-            LOGGER.debug("{}", xmlMessage);
-            if (queryDoc.getRootElement().getAttribute(PARAM_MASK) != null) {
-                result.setMask(queryDoc.getRootElement().getAttributeValue(PARAM_MASK));
-            }
-            if (!queryDoc.getRootElement().getChild("conditions").getChildren().isEmpty()) {
-                result.setMCRQueryXML(queryDoc);
-                MCRQuery query = MCRQLSearchUtils.buildFormQuery(queryDoc.getRootElement());
-
-                SolrQuery solrQuery = MCRSolrSearchUtils.getSolrQuery(query, queryDoc, request);
-                result.setSolrQuery(solrQuery);
-            }
-        }
-
-        if (request.getParameter(MCREditorSessionStore.XEDITOR_SESSION_PARAM) != null) {
-            request.getSession().removeAttribute(MCREditorSessionStore.XEDITOR_SESSION_PARAM + "_" + result.getMask());
-            request.getSession().setAttribute(MCREditorSessionStore.XEDITOR_SESSION_PARAM + "_" + result.getMask(),
-                request.getParameter(MCREditorSessionStore.XEDITOR_SESSION_PARAM));
-        }
-
-        if (queryDoc == null) {
-            request.getSession().removeAttribute(MCREditorSessionStore.XEDITOR_SESSION_PARAM + "_" + result.getMask());
-        }
+        initializeQueryDoc(request, showMask, showResults);
 
         //TODO - Prüfen, ob notwendig ... Parameter-Übergabe für XEditor
         /*
@@ -272,6 +212,68 @@ public class MCRSearchController {
 
         return Response.ok(v).build();
 
+    }
+
+    private void initializeQueryDoc(HttpServletRequest request, AtomicBoolean showMask, AtomicBoolean showResults) {
+        Document queryDoc = (Document) request.getAttribute("MCRXEditorSubmission");
+        if (queryDoc == null && result != null) {
+            queryDoc = result.getMCRQueryXML();
+        }
+
+        if (queryDoc == null) {
+            String sessionID = request.getParameter(MCREditorSessionStore.XEDITOR_SESSION_PARAM);
+            if (sessionID != null) {
+                if (sessionID.contains("-")) {
+                    sessionID = sessionID.split("-")[0];
+                }
+
+                MCREditorSession session = MCREditorSessionStoreUtils.getSessionStore().getSession(sessionID);
+                if (session != null) {
+                    queryDoc = session.getXMLCleaner().clean(session.getEditedXML());
+                    // if we come from a repeater button we should show mask and
+                    // hide result
+                    MCRChangeData changeData = session.getChangeTracker().findLastChange(queryDoc);
+                    if (changeData != null) {
+                        if (changeData.getText().contains("target org.mycore.frontend.xeditor.target.MCRInsertTarget")
+                            || changeData.getText()
+                                .contains("target org.mycore.frontend.xeditor.target.MCRRemoveTarget")
+                            || changeData.getText().contains("target remove")
+                            || changeData.getText().contains("org.mycore.frontend.xeditor.target.MCRSwapTarget")) {
+                            showMask.set(true);
+                            showResults.set(false);
+
+                        }
+                    }
+                }
+            }
+        } else {
+            request.setAttribute("MCRXEditorSubmission", queryDoc);
+            showMask.set(false);
+            showResults.set(true);
+            XMLOutputter xml = new XMLOutputter(Format.getPrettyFormat());
+            String xmlMessage = xml.outputString(queryDoc);
+            LOGGER.debug("{}", xmlMessage);
+            if (queryDoc.getRootElement().getAttribute(PARAM_MASK) != null) {
+                result.setMask(queryDoc.getRootElement().getAttributeValue(PARAM_MASK));
+            }
+            if (!queryDoc.getRootElement().getChild("conditions").getChildren().isEmpty()) {
+                result.setMCRQueryXML(queryDoc);
+                MCRQuery query = MCRQLSearchUtils.buildFormQuery(queryDoc.getRootElement());
+
+                SolrQuery solrQuery = MCRSolrSearchUtils.getSolrQuery(query, queryDoc, request);
+                result.setSolrQuery(solrQuery);
+            }
+        }
+
+        if (request.getParameter(MCREditorSessionStore.XEDITOR_SESSION_PARAM) != null) {
+            request.getSession().removeAttribute(MCREditorSessionStore.XEDITOR_SESSION_PARAM + "_" + result.getMask());
+            request.getSession().setAttribute(MCREditorSessionStore.XEDITOR_SESSION_PARAM + "_" + result.getMask(),
+                request.getParameter(MCREditorSessionStore.XEDITOR_SESSION_PARAM));
+        }
+
+        if (queryDoc == null) {
+            request.getSession().removeAttribute(MCREditorSessionStore.XEDITOR_SESSION_PARAM + "_" + result.getMask());
+        }
     }
 
     private String createXeditorHtml(HttpServletRequest request, HttpServletResponse response) {
