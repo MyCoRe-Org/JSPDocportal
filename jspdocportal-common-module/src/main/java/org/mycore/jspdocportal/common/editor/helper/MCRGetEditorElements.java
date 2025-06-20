@@ -1,7 +1,4 @@
 /*
- * $RCSfile$
- * $Revision$ $Date$
- *
  * This file is part of ***  M y C o R e  *** 
  * See http://www.mycore.de/ for details.
  *
@@ -59,6 +56,16 @@ import org.mycore.user2.MCRRoleManager;
  */
 public class MCRGetEditorElements {
     private static final Logger LOGGER = LogManager.getLogger();
+
+    private static final String VALUE_TRUE = "true";
+    private static final String VALUE_FALSE = "false";
+    private static final String VALUE_YES = "yes";
+    private static final String VALUE_NO = "no";
+
+    private static final String ELEM_NAME_HIDDENS = "hiddens";
+    private static final String ELEM_NAME_HIDDEN = "hidden";
+    private static final String ATTR_NAME_VAR = "var";
+    private static final String ATTR_NAME_DEFAULT = "default";
 
     private Properties parseQueryString(String query) {
         Properties params = new Properties();
@@ -146,11 +153,11 @@ public class MCRGetEditorElements {
         String classid = params.getProperty("classid");
         String emptyLeafs = params.getProperty("emptyLeafs");
         if (emptyLeafs == null || emptyLeafs.equals("")) {
-            emptyLeafs = "yes";
+            emptyLeafs = VALUE_YES;
         }
         String withCounter = params.getProperty("withCounter");
         if (withCounter == null || withCounter.equals("")) {
-            withCounter = "true";
+            withCounter = VALUE_TRUE;
         }
 
         if (classid == null || classid.equals("")) {
@@ -165,17 +172,24 @@ public class MCRGetEditorElements {
                 classid = defaultValue;
             }
         }
-        return transformClassToItems(classid, emptyLeafs, withCounter.equalsIgnoreCase("true"));
+        return transformClassToItems(classid, emptyLeafs, isTruthyString(withCounter));
     }
 
     private Element transformClassToItems(String classid, String emptyLeafs, boolean withCounter)
         throws TransformerException {
         Document classJdom = MCRCategoryTransformer.getMetaDataDocument(
             MCRCategoryDAOFactory.obtainInstance().getCategory(new MCRCategoryID(classid), -1), withCounter);
-
-        boolean displayEmptyLeafs = (emptyLeafs.equalsIgnoreCase("yes") || emptyLeafs.equalsIgnoreCase("true"));
-        return MCREditorClassificationHelper.transformClassificationtoItems(classJdom, displayEmptyLeafs)
+        return MCREditorClassificationHelper.transformClassificationtoItems(classJdom, isTruthyString(emptyLeafs))
             .getRootElement();
+    }
+
+    /**
+     * returns true, if the given String has value 'yes' or 'true' (ignores case)
+     * @param value - the test value
+     * @return true, if test passed
+     */
+    private static boolean isTruthyString(String value) {
+        return value.equalsIgnoreCase("yes") || value.equalsIgnoreCase("true");
     }
 
     private Element transformClassLabelsToItems(String classid) throws TransformerException {
@@ -189,18 +203,18 @@ public class MCRGetEditorElements {
         String classProp = params.getProperty("classProp");
         String emptyLeafs = params.getProperty("emptyLeafs");
         if (emptyLeafs == null || emptyLeafs.equals("")) {
-            emptyLeafs = "yes";
+            emptyLeafs = VALUE_YES;
         } else {
-            emptyLeafs = "no";
+            emptyLeafs = VALUE_NO;
         }
         String withCounter = params.getProperty("withCounter");
         if (withCounter == null || withCounter.equals("")) {
-            withCounter = "true";
+            withCounter = VALUE_TRUE;
         }
         String categoryProp = params.getProperty("categoryProp");
         if (classProp != null && categoryProp != null) {
             String classid = MCRConfiguration2.getString(classProp).orElse("DocPortal_class_1");
-            Element items = transformClassToItems(classid, emptyLeafs, withCounter.equalsIgnoreCase("true"));
+            Element items = transformClassToItems(classid, emptyLeafs, isTruthyString(withCounter));
             List<String> values;
             try {
                 values = Arrays.asList(MCRConfiguration2.getString(categoryProp).orElse("").split(","));
@@ -230,28 +244,28 @@ public class MCRGetEditorElements {
         //	if(parasearch == null || parasearch.equals("")) parasearch = "true";
         //	if(textsearch == null || textsearch.equals("")) textsearch = "true";
         if (notinherit == null || notinherit.equals("")) {
-            notinherit = "true";
+            notinherit = VALUE_TRUE;
         }
         if (heritable == null || heritable.equals("")) {
-            heritable = "false";
+            heritable = VALUE_FALSE;
         }
 
-        Element hiddens = new Element("hiddens");
-        Element hidden1 = new Element("hidden");
-        hidden1.setAttribute("default", classname);
-        hidden1.setAttribute("var", var + "/@class");
-        //		Element hidden2 = new Element("hidden");
-        //		hidden2.setAttribute("default", parasearch);
-        //		hidden2.setAttribute("var", var + "/@parasearch");
-        //		Element hidden3 = new Element("hidden");
-        //		hidden3.setAttribute("default", textsearch);
-        //		hidden3.setAttribute("var", var + "/@textsearch");
-        Element hidden4 = new Element("hidden");
-        hidden4.setAttribute("default", notinherit);
-        hidden4.setAttribute("var", var + "/@notinherit");
-        Element hidden5 = new Element("hidden");
-        hidden5.setAttribute("default", heritable);
-        hidden5.setAttribute("var", var + "/@heritable");
+        Element hiddens = new Element(ELEM_NAME_HIDDENS);
+        Element hidden1 = new Element(ELEM_NAME_HIDDEN);
+        hidden1.setAttribute(ATTR_NAME_DEFAULT, classname);
+        hidden1.setAttribute(ATTR_NAME_VAR, var + "/@class");
+        //		Element hidden2 = new Element(ELEM_NAME_HIDDEN);
+        //		hidden2.setAttribute(ATTR_NAME_DEFAULT, parasearch);
+        //		hidden2.setAttribute(ATTR_NAME_VAR, var + "/@parasearch");
+        //		Element hidden3 = new Element(ELEM_NAME_HIDDEN);
+        //		hidden3.setAttribute(ATTR_NAME_DEFAULT, textsearch);
+        //		hidden3.setAttribute(ATTR_NAME_VAR, var + "/@textsearch");
+        Element hidden4 = new Element(ELEM_NAME_HIDDEN);
+        hidden4.setAttribute(ATTR_NAME_DEFAULT, notinherit);
+        hidden4.setAttribute(ATTR_NAME_VAR, var + "/@notinherit");
+        Element hidden5 = new Element(ELEM_NAME_HIDDEN);
+        hidden5.setAttribute(ATTR_NAME_DEFAULT, heritable);
+        hidden5.setAttribute(ATTR_NAME_VAR, var + "/@heritable");
         hiddens.addContent(hidden1);
         //		hiddens.addContent(hidden2);
         //		hiddens.addContent(hidden3);
@@ -280,10 +294,10 @@ public class MCRGetEditorElements {
             propValue = MCRConfiguration2.getString(prop).orElse(defaultValue);
         }
 
-        Element hiddens = new Element("hiddens");
-        Element hidden = new Element("hidden");
-        hidden.setAttribute("var", var.replaceAll("\\.", "/"));
-        hidden.setAttribute("default", propValue);
+        Element hiddens = new Element(ELEM_NAME_HIDDENS);
+        Element hidden = new Element(ELEM_NAME_HIDDEN);
+        hidden.setAttribute(ATTR_NAME_VAR, var.replaceAll("\\.", "/"));
+        hidden.setAttribute(ATTR_NAME_DEFAULT, propValue);
 
         hiddens.addContent(hidden);
         return hiddens;
