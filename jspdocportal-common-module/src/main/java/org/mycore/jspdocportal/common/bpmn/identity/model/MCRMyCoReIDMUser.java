@@ -24,8 +24,8 @@ public class MCRMyCoReIDMUser implements User {
             setFirstName("");
             setLastName(name);
         }
-        setEmail(mcrUser.getEMailAddress());
-        setPassword(mcrUser.getPassword());
+        setEmail(mcrUser.getEMail());
+        setPassword(mcrUser.getHash());
     }
 
     @Override

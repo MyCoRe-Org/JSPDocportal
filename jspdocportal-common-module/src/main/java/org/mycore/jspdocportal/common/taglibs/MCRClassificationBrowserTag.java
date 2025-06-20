@@ -132,7 +132,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
                 @Override
                 public Map<MCRCategoryID, Boolean> load(MCRCategoryID key) throws Exception {
                     return MCRCategLinkServiceFactory.obtainInstance()
-                        .hasLinks(MCRCategoryDAOFactory.obtainInstance().getCategory(key, 0));
+                        .checkForLinks(MCRCategoryDAOFactory.obtainInstance().getCategory(key, 0));
                 }
             });
 
