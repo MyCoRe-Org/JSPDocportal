@@ -127,11 +127,13 @@
               </button>
               <script>
                 <xsl:text expand-text="false" disable-output-escaping="true">
-                  $('#spanCollapseAbstract').on('hidden.bs.collapse', function () {
-                    $('#btnCollapseAbstract').empty().append('&lt;i class="fas fa-arrow-right"&gt;&lt;/i&gt;');
-                  });
-                  $('#spanCollapseAbstract').on('shown.bs.collapse', function () {
-                    $('#btnCollapseAbstract').empty().append('&lt;i class="fas fa-arrow-left"&gt;&lt;/i&gt;');
+                  document.addEventListener("DOMContentLoaded", (event) => {
+                    document.getElementById("spanCollapseAbstract").addEventListener("hidden.bs.collapse", event => {
+                      document.getElementById("btnCollapseAbstract").innerHTML='&lt;i class="fas fa-arrow-right"&gt;&lt;/i&gt;';
+                    });
+                    document.getElementById("spanCollapseAbstract").addEventListener("shown.bs.collapse", event => {
+                      document.getElementById("btnCollapseAbstract").innerHTML='&lt;i class="fas fa-arrow-left"&gt;&lt;/i&gt;';
+                    });
                   });
                 </xsl:text>
               </script>
