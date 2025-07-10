@@ -59,7 +59,8 @@
         <field name="purl"><xsl:value-of select="replace(mods:identifier[@type='purl'], 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')" /></field>  
       </xsl:if>
       <xsl:if test="mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
-        <field name="ppn"><xsl:value-of select="mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']" /></field>  
+        <field name="ppn"><xsl:value-of select="mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']" /></field>
+        <field name="allMeta"><xsl:value-of select="mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']" /></field>
       </xsl:if>
       <xsl:if test="mods:identifier[@type='doi']">
         <field name="doi"><xsl:value-of select="mods:identifier[@type='doi'][1]" /></field>  
