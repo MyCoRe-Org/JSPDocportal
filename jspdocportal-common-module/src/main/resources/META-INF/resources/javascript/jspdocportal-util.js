@@ -123,7 +123,7 @@ class JSPDocportalUtil {
   static applyIncludeSearchFilter(mask) {
     const url = new URL("do/browse/" + mask, document.querySelector("meta[name='mcr:baseurl']").content);
     url.searchParams.set("_search", document.querySelector("meta[name='mcr:search.id']").content);
-    url.searchParams.set("_add-filter=", "+" + document.querySelector("input[name='filterField']:checked").value
+    url.searchParams.set("_add-filter", "+" + document.querySelector("input[name='filterField']:checked").value
                                          +":" + document.getElementById("filterValue").value);
     window.location.href = url.toString();
   }
@@ -136,7 +136,7 @@ class JSPDocportalUtil {
   static applyExcludeSearchFilter(mask) {
     const url = new URL("do/browse/" + mask, document.querySelector("meta[name='mcr:baseurl']").content);
     url.searchParams.set("_search", document.querySelector("meta[name='mcr:search.id']").content);
-    url.searchParams.set("_add-filter=", "-" + document.querySelector("input[name='filterField']:checked").value
+    url.searchParams.set("_add-filter", "-" + document.querySelector("input[name='filterField']:checked").value
                                          + ":" + document.getElementById("filterValue").value);
     window.location.href = url.toString();
   }

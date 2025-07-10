@@ -135,8 +135,8 @@ public class BrowseController {
                     if (!s.trim().endsWith(":") && s.contains(":")) {
                         String key = s.substring(0, s.indexOf(':'));
                         String values = s.substring(s.indexOf(':') + 1);
-                        for (String val : values.split("\\s")) {
-                            String f = key + ":" + val;
+                        for (String val : values.trim().split("\\s+")) {
+                            String f = key + ":" + val ;
                             if (!result.getFilterQueries().contains(f)) {
                                 result.getFilterQueries().add(f);
                             }

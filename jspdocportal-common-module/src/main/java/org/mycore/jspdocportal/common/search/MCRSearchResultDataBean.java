@@ -210,7 +210,7 @@ public class MCRSearchResultDataBean implements Serializable {
             }
             setCurrent(start);
 
-            if (solrQuery.getFacetFields() != null) {
+            if (solrQueryResponse.getFacetFields() != null) {
                 for (FacetField ff : solrQueryResponse.getFacetFields()) {
                     Map<String, Long> fieldData = new LinkedHashMap<>();
                     for (Count c : ff.getValues()) {
