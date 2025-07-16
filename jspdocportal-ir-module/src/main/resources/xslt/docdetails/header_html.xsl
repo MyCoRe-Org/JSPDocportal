@@ -75,14 +75,12 @@
     <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='imported' or @type='created']/mods:mods">
       <div>
       <!-- Button zum übergeordneten Werk -->
-      <xsl:if test="./mods:relatedItem[@type='host' or @type='series'][./mods:recordInfo]"> 
+      <xsl:if test="./mods:relatedItem[@type='host' or @type='series'][./mods:recordInfo/mods:recordIdentifier]"> 
         <div class="text-right">
-          <xsl:for-each select="./mods:relatedItem[@type='host' or @type='series'][./mods:recordInfo]">
+          <xsl:for-each select="./mods:relatedItem[@type='host' or @type='series'][./mods:recordInfo/mods:recordIdentifier]">
             <xsl:element name="a">
               <xsl:attribute name="class">ir-btn-goto-top btn btn-outline-secondary btn-sm ml-2</xsl:attribute>
-              <xsl:if test="./mods:recordInfo/mods:recordIdentifier">
-                <xsl:attribute name="href">{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(./mods:recordInfo/mods:recordIdentifier, '/', '%252F')}</xsl:attribute>
-              </xsl:if>
+              <xsl:attribute name="href">{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(./mods:recordInfo/mods:recordIdentifier, '/', '%252F')}</xsl:attribute>
               <xsl:attribute name="data-toggle">popover</xsl:attribute>
               <xsl:attribute name="data-placement">bottom</xsl:attribute>
               <xsl:attribute name="data-html">true</xsl:attribute>

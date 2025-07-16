@@ -154,10 +154,10 @@
       </xsl:if>
       
       <xsl:for-each select="mods:relatedItem[(@otherType='hierarchical' or @otherType='appears_in') and @displayLabel='appears_in'][1]">
-        <xsl:for-each select="mods:titleInfo">
+        <xsl:for-each select="mods:titleInfo[1]">
           <field name="ir.host.title.result">{string-join((mods:nonSort, string-join((mods:title, mods:subTitle), ' : ')),' ')}</field> 
         </xsl:for-each>
-        <xsl:for-each select="mods:part">
+        <xsl:for-each select="mods:part[1]">
           <field name="ir.host.part.result">{string-join((mods:partNumber, mods:partName),' ')}</field> 
         </xsl:for-each>
       </xsl:for-each>
@@ -172,7 +172,7 @@
           <field name="ir.sortstring"><xsl:value-of select="." /></field> 
         </xsl:for-each>
       </xsl:for-each>
-      <xsl:for-each select="mods:relatedItem[@type='series']/mods:part/mods:detail[@type='volume']/mods:number">
+      <xsl:for-each select="(mods:relatedItem[@type='series'][./mods:recordInfo/mods:recordIdentifier]/mods:part/mods:detail[@type='volume']/mods:number)[1]">
         <field name="ir.seriesNumber.result"><xsl:value-of select="." /></field> 
       </xsl:for-each>
       
