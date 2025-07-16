@@ -75,15 +75,13 @@
     <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='imported' or @type='created']/mods:mods">
       <div>
       <!-- Button zum übergeordneten Werk -->
-      <xsl:if test="./mods:relatedItem[@type='host' or @type='series'][./mods:recordInfo[mods:recordIdentifier]]"> 
+      <xsl:if test="./mods:relatedItem[@type='host' or @type='series'][./mods:recordInfo/mods:recordIdentifier]"> 
         <div class="text-end">
-          <xsl:for-each select="./mods:relatedItem[@type='host' or @type='series'][./mods:recordInfo]">
+          <xsl:for-each select="./mods:relatedItem[@type='host' or @type='series'][./mods:recordInfo/mods:recordIdentifier]">
             <xsl:element name="a">
             <xsl:attribute name="id">btn_ir_popover_{generate-id(.)}</xsl:attribute>
               <xsl:attribute name="class">ir-btn-goto-top btn btn-outline-secondary btn-sm ms-2</xsl:attribute>
-              <xsl:if test="./mods:recordInfo/mods:recordIdentifier">
-                <xsl:attribute name="href">{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(./mods:recordInfo/mods:recordIdentifier, '/', '_')}</xsl:attribute>
-              </xsl:if>
+              <xsl:attribute name="href">{$WebApplicationBaseURL}resolve/recordIdentifier/{replace(./mods:recordInfo/mods:recordIdentifier, '/', '_')}</xsl:attribute>
               <xsl:attribute name="data-bs-toggle">popover</xsl:attribute>
               <xsl:attribute name="data-bs-placement">bottom</xsl:attribute>
               <xsl:attribute name="data-bs-trigger">hover focus</xsl:attribute>
