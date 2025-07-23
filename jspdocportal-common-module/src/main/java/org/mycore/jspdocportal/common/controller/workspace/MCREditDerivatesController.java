@@ -37,11 +37,11 @@ import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCREditableMetaEnrichedLinkID;
+import org.mycore.datamodel.metadata.MCRExpandedObject;
 import org.mycore.datamodel.metadata.MCRMetaClassification;
 import org.mycore.datamodel.metadata.MCRMetaEnrichedLinkID;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr;
@@ -184,7 +184,7 @@ public class MCREditDerivatesController {
     }
 
     private void moveDerivate(String mcrobjid, String derid, Direction dir) {
-        MCRObject mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(MCRObjectID.getInstance(mcrobjid));
+        MCRExpandedObject mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(MCRObjectID.getInstance(mcrobjid));
         List<MCRMetaEnrichedLinkID> derList = mcrObj.getStructure().getDerivates();
         for (int pos = 0; pos < derList.size(); pos++) {
             if (derList.get(pos).getXLinkHref().equals(derid)) {
@@ -202,7 +202,7 @@ public class MCREditDerivatesController {
 
     }
 
-    private void updateDerivateOrder(MCRObject mcrObj) {
+    private void updateDerivateOrder(MCRExpandedObject mcrObj) {
         List<MCRMetaEnrichedLinkID> derList = mcrObj.getStructure().getDerivates();
         for (int pos = 0; pos < derList.size(); pos++) {
             MCRMetaEnrichedLinkID derLink = mcrObj.getStructure().getDerivates().get(pos);
@@ -273,7 +273,7 @@ public class MCREditDerivatesController {
 
     //File: addFile_file-task_${actionBean.taskid}-derivate_${derID}
     private void deleteDerivate(String mcrobjid, String derid) {
-        MCRObject mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(MCRObjectID.getInstance(mcrobjid));
+        MCRExpandedObject mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(MCRObjectID.getInstance(mcrobjid));
         MCRObjectID derID = MCRObjectID.getInstance(derid);
         mcrObj.getStructure().removeDerivate(derID);
         updateDerivateOrder(mcrObj);
@@ -412,7 +412,7 @@ public class MCREditDerivatesController {
 
     public Map<String, Document> calcDerivateXMLs(String mcrobjid) {
         Map<String, Document> result = new HashMap<>();
-        MCRObject obj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(MCRObjectID.getInstance(mcrobjid));
+        MCRExpandedObject obj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(MCRObjectID.getInstance(mcrobjid));
         DOMOutputter domOut = new DOMOutputter();
         try {
             for (MCRMetaLinkID derID : obj.getStructure().getDerivates()) {

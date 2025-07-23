@@ -38,7 +38,7 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRExpandedObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.services.i18n.MCRTranslation;
@@ -85,7 +85,7 @@ public class MCRShowEditMenuTag extends MCRAbstractTag {
         out.append("  </button>");
         out.append("  <div class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"dropdownEditButton\">");
 
-        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
+        MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(mcrObjID);
         if (mcrObj.getService().isFlagTypeSet("editedby")) {
             if (mcrObj.getService().getFlags("editedby").contains(MCRUserManager.getCurrentUser().getUserID())) {
                 out.append("    <a class=\"dropdown-item\" href=\"" + MCRFrontendUtil.getBaseURL()

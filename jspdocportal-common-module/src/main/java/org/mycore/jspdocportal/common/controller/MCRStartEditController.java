@@ -16,8 +16,8 @@ import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
+import org.mycore.datamodel.metadata.MCRExpandedObject;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNMgr;
@@ -47,7 +47,7 @@ public class MCRStartEditController {
             if (mcrid != null) {
                 if (MCRAccessManager.checkPermission(mcrid, "writedb")) {
                     MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrid);
-                    MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
+                    MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(mcrObjID);
                     if (Arrays.asList("published", "deleted", "reserved")
                         .contains(mcrObj.getService().getState().getId())) {
                         //String mode = retrieveModeFromMetadata(mcrObj);
