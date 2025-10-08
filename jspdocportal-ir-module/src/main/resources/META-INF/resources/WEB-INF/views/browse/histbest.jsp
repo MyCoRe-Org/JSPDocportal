@@ -138,6 +138,7 @@
           <div class="row mb-3">
             <div class="col">
               <c:forEach var="fq" items="${it.result.filterQueries}">
+                <c:set var="fq">${fn:escapeXml(fq)}</c:set>
                 <c:if test="${not fn:contains(fq, '.facet:')}">
                   <c:url var="url" value="${WebApplicationBaseURL}do/browse/histbest">
                     <c:param name="_search" value="${it.result.id}" />
