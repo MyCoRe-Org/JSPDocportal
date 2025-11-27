@@ -469,11 +469,11 @@
     
     <xsl:variable name="json_urls" select="replace($catalogs, '''', '&quot;')" />
     <xsl:variable name="unapi_url" select="json-to-xml($json_urls)/json:map/json:string[@key='unapi']" />
-    <a class="badge px-1" target="_blank" href="{replace(replace($unapi_url, '\{0\}', $ppn), 'picaxml', 'bibtex')}">BibTeX</a>
-    <a class="badge px-1" target="_blank" href="{replace(replace($unapi_url, '\{0\}', $ppn), 'picaxml', 'endnote')}">EndNote</a>
-    <a class="badge px-1" target="_blank" href="{replace(replace($unapi_url, '\{0\}', $ppn), 'picaxml', 'ris')}">RIS</a>
-    <a class="badge px-1" target="_blank" href="{replace(replace($unapi_url, '\{0\}', $ppn), 'picaxml', 'dc')}">DublinCore</a>
-    <a class="badge px-1" target="_blank" href="{replace(replace($unapi_url, '\{0\}', $ppn), 'picaxml', 'mods')}">MODS</a>
+    <a class="badge px-1" target="_blank" href="{replace(replace(replace($unapi_url, '\{0\}', $ppn), 'picaxml', 'bibtex'), 'k10plus:', 'gvk:')}">BibTeX</a>
+    <a class="badge px-1" target="_blank" href="{replace(replace(replace($unapi_url, '\{0\}', $ppn), 'picaxml', 'endnote'), 'k10plus:', 'gvk:')}">EndNote</a>
+    <a class="badge px-1" target="_blank" href="{replace(replace(replace($unapi_url, '\{0\}', $ppn), 'picaxml', 'ris'), 'k10plus:', 'gvk:')}">RIS</a>
+    <a class="badge px-1" target="_blank" href="{replace(replace(replace($unapi_url, '\{0\}', $ppn), 'picaxml', 'dc'), 'k10plus:', 'gvk:')}">DublinCore</a>
+    <a class="badge px-1" target="_blank" href="{replace(replace(replace($unapi_url, '\{0\}', $ppn), 'picaxml', 'mods'), 'k10plus:', 'gvk:')}">MODS</a>
   </xsl:template>
   
 </xsl:stylesheet>
