@@ -234,7 +234,13 @@
               <xsl:for-each select="$ctx/mods:originInfo[@eventType=$type]">
                 <xsl:choose>
                   <xsl:when test="mods:publisher">
-                    {string-join(./mods:place[not(@supplied='yes')][not(following-sibling::mods:publisher)]/mods:placeTerm,', ')}
+                    <xsl:if test="./mods:place[not(@supplied='yes')][not(preceding-sibling::mods:publisher)]">
+                      <tr>
+                        <td>
+                          {string-join(./mods:place[not(@supplied='yes')][not(preceding-sibling::mods:publisher)]/mods:placeTerm,', ')}
+                        </td>
+                      </tr>
+                    </xsl:if>
                     <xsl:for-each select="mods:publisher">
                       <tr>
                         <td>
