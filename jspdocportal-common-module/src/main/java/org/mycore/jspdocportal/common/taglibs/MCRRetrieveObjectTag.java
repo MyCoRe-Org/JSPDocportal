@@ -38,8 +38,8 @@ import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Document;
 import org.jdom2.output.DOMOutputter;
 import org.mycore.common.MCRException;
+import org.mycore.datamodel.metadata.MCRExpandedObject;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
@@ -79,7 +79,7 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
             @Override
             public Document load(String mcrid) throws Exception {
                 try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
-                    MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrid));
+                    MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(MCRObjectID.getInstance(mcrid));
                     return mcrObj.createXML();
                 }
             }
@@ -168,7 +168,7 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
                 if (cache.contains("true") || cache.contains("on")) {
                     doc = MCROBJECTXML_CACHE.get(mcrid);
                 } else {
-                    doc = MCRMetadataManager.retrieveMCRObject(mcrObjID).createXML();
+                    doc = MCRMetadataManager.retrieveMCRExpandedObject(mcrObjID).createXML();
                 }
             }
             if (varDOM != null) {
