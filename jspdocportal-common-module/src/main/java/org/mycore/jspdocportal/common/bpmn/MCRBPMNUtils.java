@@ -26,6 +26,7 @@ import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRPathContent;
 import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRExpandedObject;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -55,8 +56,8 @@ public class MCRBPMNUtils {
         }
     }
 
-    public static MCRObject loadMCRObjectFromWorkflowDirectory(MCRObjectID mcrObjID) {
-        MCRObject mcrObj = null;
+    public static MCRExpandedObject loadMCRObjectFromWorkflowDirectory(MCRObjectID mcrObjID) {
+        MCRExpandedObject mcrObj = null;
         try {
             mcrObj = getWorkflowObject(mcrObjID);
         } catch (Exception e) {
@@ -105,9 +106,9 @@ public class MCRBPMNUtils {
         return p;
     }
 
-    public static MCRObject getWorkflowObject(MCRObjectID mcrObjID) {
+    public static MCRExpandedObject getWorkflowObject(MCRObjectID mcrObjID) {
         try {
-            return new MCRObject(getWorkflowObjectFile(mcrObjID).toUri());
+            return new MCRExpandedObject(getWorkflowObjectFile(mcrObjID).toUri());
         } catch (JDOMException | IOException e) {
             LOGGER.error(e);
             return null;
@@ -213,7 +214,7 @@ public class MCRBPMNUtils {
     public static Map<String, List<String>> getDerivateFiles(MCRObjectID mcrObjID) {
         Map<String, List<String>> result = new HashMap<>();
         Path baseDir = getWorkflowObjectDir(mcrObjID);
-        MCRObject obj = loadMCRObjectFromWorkflowDirectory(mcrObjID);
+        MCRExpandedObject obj = loadMCRObjectFromWorkflowDirectory(mcrObjID);
         try {
             for (MCRMetaLinkID derID : obj.getStructure().getDerivates()) {
                 String id = derID.getXLinkHref();

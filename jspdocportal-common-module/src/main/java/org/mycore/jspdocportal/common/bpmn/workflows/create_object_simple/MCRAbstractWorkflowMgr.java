@@ -27,6 +27,7 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRExpandedObject;
 import org.mycore.datamodel.metadata.MCRMetaClassification;
 import org.mycore.datamodel.metadata.MCRMetaEnrichedLinkIDFactory;
 import org.mycore.datamodel.metadata.MCRMetaIFS;
@@ -86,7 +87,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
 
     @Override
     public MCRObject loadMCRObject(DelegateExecution execution) {
-        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(
+        MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(
             MCRObjectID.getInstance(String.valueOf(execution.getVariable(MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID))));
         try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
             mcrObj.getService().removeFlags(FLAG_EDITEDBY);
@@ -147,7 +148,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
 
         if (MCRAccessManager.checkPermission("create-" + owner.getBase())
             || MCRAccessManager.checkPermission("create-" + owner.getTypeId())) {
-            MCRObject mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(owner);
+            MCRExpandedObject mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(owner);
             if (der.getId().getNumberAsInteger() == 0) {
                 MCRObjectID newDerID = MCRMetadataManager.getMCRObjectIDGenerator()
                     .getNextFreeId(der.getId().getBase());
@@ -206,12 +207,12 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
             }
             MCRObjectID mcrObjID = MCRObjectID.getInstance(String.valueOf(id));
             try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
-                MCRObject mcrWFObj = MCRBPMNUtils.getWorkflowObject(mcrObjID);
-                MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
+                MCRExpandedObject mcrWFObj = MCRBPMNUtils.getWorkflowObject(mcrObjID);
+                MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(mcrObjID);
                 processDerivatesOnCommit(mcrObj, mcrWFObj);
 
                 //reload mcrObject, because it was change in processDerivatesOnCommit
-                mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
+                mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(mcrObjID);
                 MCRObjectMetadata mcrObjMeta = mcrObj.getMetadata();
                 mcrObjMeta.removeInheritedMetadata();
                 while (mcrObjMeta.size() > 0) {
@@ -329,7 +330,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
         boolean result = true;
         if (MCRMetadataManager.exists(mcrObjID)) {
             try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
-                MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
+                MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(mcrObjID);
                 for (MCRMetaLinkID metaID : new ArrayList<MCRMetaLinkID>(mcrObj.getStructure().getDerivates())) {
                     MCRObjectID derID = metaID.getXLinkHrefID();
                     MCRDerivate derObj = null;
@@ -356,7 +357,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
                     }
                 }
 
-                mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjID);
+                mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(mcrObjID);
                 if (mcrObj.getService().getState() != null &&
                     STATE_NEW.equals(mcrObj.getService().getState().getId())) {
                     MCRMetadataManager.delete(mcrObj);
@@ -376,7 +377,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
     }
 
     // stores changes on Derivates in Workflow into the MyCoRe Object
-    private void processDerivatesOnLoad(MCRObject mcrObj) {
+    private void processDerivatesOnLoad(MCRExpandedObject mcrObj) {
         // delete derivates if necessary
 
         for (MCRMetaLinkID metalinkID : mcrObj.getStructure().getDerivates()) {
@@ -407,7 +408,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
     }
 
     // stores changes on Derivates in Workflow into the MyCoRe Object
-    private void processDerivatesOnCommit(MCRObject mcrObj, MCRObject mcrWFObj) {
+    private void processDerivatesOnCommit(MCRExpandedObject mcrObj, MCRExpandedObject mcrWFObj) {
         // delete derivates if necessary
         List<String> wfDerivateIDs = new ArrayList<>();
         for (MCRMetaLinkID derID : mcrWFObj.getStructure().getDerivates()) {

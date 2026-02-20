@@ -45,6 +45,8 @@ import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRPathContent;
+import org.mycore.datamodel.metadata.MCRExpandedObject;
+import org.mycore.datamodel.metadata.MCRExpandedObjectStructure;
 import org.mycore.datamodel.metadata.MCRMetaEnrichedLinkID;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -55,13 +57,13 @@ import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.jspdocportal.common.controller.MCRResolvingController;
 import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
-import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 
 /**
  * This servlet response the MCRObject certain by the call path
@@ -219,8 +221,8 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
 
     protected StringBuffer createURLForMainDocInDerivateWithLabel(HttpServletRequest request, String mcrID,
         String label) {
-        MCRObject o = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrID));
-        MCRObjectStructure structure = o.getStructure();
+        MCRExpandedObject o = MCRMetadataManager.retrieveMCRExpandedObject(MCRObjectID.getInstance(mcrID));
+        MCRExpandedObjectStructure structure = o.getStructure();
         for (MCRMetaEnrichedLinkID der : structure.getDerivates()) {
             for (Content c : der.getContentList()) {
                 if (c instanceof Element e && e.getName().equals("classification")
@@ -243,8 +245,8 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
     }
 
     protected StringBuffer createRootURLForDerivateWithLabel(HttpServletRequest request, String mcrID, String label) {
-        MCRObject o = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrID));
-        MCRObjectStructure structure = o.getStructure();
+        MCRExpandedObject o = MCRMetadataManager.retrieveMCRExpandedObject(MCRObjectID.getInstance(mcrID));
+        MCRExpandedObjectStructure structure = o.getStructure();
 
         for (MCRMetaEnrichedLinkID der : structure.getDerivates()) {
             for (Content c : der.getContentList()) {
@@ -272,7 +274,7 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
 
         StringBuffer sbURL = new StringBuffer("");
         try {
-            MCRObject o = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrID));
+            MCRExpandedObject o = MCRMetadataManager.retrieveMCRExpandedObject(MCRObjectID.getInstance(mcrID));
             for (MCRMetaLinkID derMetaLink : o.getStructure().getDerivates()) {
                 if ("METS".equals(derMetaLink.getXLinkTitle()) || "DV_METS".equals(derMetaLink.getXLinkTitle())) {
                     MCRObjectID derID = derMetaLink.getXLinkHrefID();
@@ -380,7 +382,7 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
 
         StringBuffer sbURL = new StringBuffer(MCRFrontendUtil.getBaseURL()).append(PATH__RESOLVE_ID).append(mcrID);
         try {
-            MCRObject o = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrID));
+            MCRExpandedObject o = MCRMetadataManager.retrieveMCRExpandedObject(MCRObjectID.getInstance(mcrID));
             for (MCRMetaEnrichedLinkID derMetaLink : o.getStructure().getDerivates()) {
                 if (!derMetaLink.getClassifications().isEmpty() &&
                     "MCRVIEWER_METS".equals(derMetaLink.getClassifications().get(0).getID())) {
