@@ -284,6 +284,8 @@ public final class DiskLruCache implements Closeable {
         }
     }
 
+    
+    @SuppressWarnings("PMD.NPathComplexity")
     private void readJournalLine(String line) throws IOException {
         int firstSpace = line.indexOf(' ');
         if (firstSpace == -1) {
