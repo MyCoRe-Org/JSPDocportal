@@ -26,7 +26,7 @@ import org.mycore.frontend.xeditor.MCREditorSession;
 import org.mycore.frontend.xeditor.MCREditorSessionStore;
 import org.mycore.frontend.xeditor.MCREditorSessionStoreUtils;
 import org.mycore.frontend.xeditor.MCRStaticXEditorFileServlet;
-import org.mycore.frontend.xeditor.tracker.MCRChangeData;
+import org.mycore.frontend.xeditor.tracker.MCRTrackedAction;
 import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 import org.mycore.jspdocportal.common.search.MCRSearchResultDataBean;
 import org.mycore.resource.MCRResourceHelper;
@@ -234,13 +234,13 @@ public class MCRSearchController {
                     queryDoc = session.getXMLCleaner().clean(session.getEditedXML());
                     // if we come from a repeater button we should show mask and
                     // hide result
-                    MCRChangeData changeData = session.getChangeTracker().findLastChange(queryDoc);
+                    MCRTrackedAction changeData = session.getChangeTracker().getLastChange();
                     if (changeData != null) {
-                        if (changeData.getText().contains("target org.mycore.frontend.xeditor.target.MCRInsertTarget")
-                            || changeData.getText()
+                        if (changeData.getMessage().contains("target org.mycore.frontend.xeditor.target.MCRInsertTarget")
+                            || changeData.getMessage()
                                 .contains("target org.mycore.frontend.xeditor.target.MCRRemoveTarget")
-                            || changeData.getText().contains("target remove")
-                            || changeData.getText().contains("org.mycore.frontend.xeditor.target.MCRSwapTarget")) {
+                            || changeData.getMessage().contains("target remove")
+                            || changeData.getMessage().contains("org.mycore.frontend.xeditor.target.MCRSwapTarget")) {
                             showMask.set(true);
                             showResults.set(false);
 
