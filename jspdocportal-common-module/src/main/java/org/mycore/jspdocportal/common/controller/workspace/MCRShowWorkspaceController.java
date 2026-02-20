@@ -68,7 +68,7 @@ public class MCRShowWorkspaceController {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private MCRMODSCatalogService modsCatService = MCRConfiguration2
-        .getInstanceOf(MCRMODSCatalogService.class, "MCR.Workflow.MODSCatalogService.class").orElse(null);
+        .getSingleInstanceOf(MCRMODSCatalogService.class, "MCR.Workflow.MODSCatalogService.class").orElse(null);
 
     @POST
     public Response submitForm(@Context HttpServletRequest request) {
