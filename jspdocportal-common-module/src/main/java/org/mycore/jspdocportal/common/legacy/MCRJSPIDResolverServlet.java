@@ -383,7 +383,7 @@ public class MCRJSPIDResolverServlet extends HttpServlet {
             MCRExpandedObject o = MCRMetadataManager.retrieveMCRExpandedObject(MCRObjectID.getInstance(mcrID));
             for (MCRMetaEnrichedLinkID derMetaLink : o.getStructure().getDerivates()) {
                 if (!derMetaLink.getClassifications().isEmpty() &&
-                    "MCRVIEWER_METS".equals(derMetaLink.getClassifications().get(0).getID())) {
+                    "MCRVIEWER_METS".equals(derMetaLink.getClassifications().get(0).getId())) {
                     MCRObjectID derID = derMetaLink.getXLinkHrefID();
                     Path root = MCRPath.getRootPath(derID.toString());
                     try (DirectoryStream<Path> ds = Files.newDirectoryStream(root)) {
