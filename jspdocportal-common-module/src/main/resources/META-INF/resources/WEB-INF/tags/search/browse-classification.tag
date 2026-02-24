@@ -16,7 +16,7 @@
 <%@ attribute name="lang" required="false" type="java.lang.String" %>
 <%@ attribute name="flatten" required="false" type="java.lang.String" %>
 
-<% MCRCategory rootCateg = MCRCategoryDAOFactory.getInstance().getCategory(MCRCategoryID.fromString(categid), -1);
+<% MCRCategory rootCateg = MCRCategoryDAOFactory.obtainInstance().getCategory(MCRCategoryID.ofString(categid), -1);
    jspContext.setAttribute("rootCateg", rootCateg);
    
    if(Boolean.valueOf((String)jspContext.getAttribute("flatten"))){

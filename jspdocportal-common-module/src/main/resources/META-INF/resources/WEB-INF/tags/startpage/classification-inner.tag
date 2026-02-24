@@ -14,20 +14,20 @@
   <ul class="list-group list-group-flush">
     <c:forEach var="c" items="${category.children}">
       <li class="list-group-item ir-facets-btn btn-sm px-2 py-1"
-          data-mcr-facet-value="${c.id.getRootID()}:${c.id.ID}"
-          x-data="{countPos : counts.indexOf('${c.id.getRootID()}:${c.id.ID}')}" x-show="countPos >= 0"
+          data-mcr-facet-value="${c.id.rootID}:${c.id.id}"
+          x-data="{countPos : counts.indexOf('${c.id.rootID}:${c.id.id}')}" x-show="countPos >= 0"
           x-on:click="window.location=baseurl + 'do/browse/' + mask
-              + '?_add-filter=' + encodeURIComponent('+${facetField}:${c.id.getRootID()}:${c.id.ID}')"
+              + '?_add-filter=' + encodeURIComponent('+${facetField}:${c.id.rootID}:${c.id.id}')"
           x-effect="updateHiddenStateForParents($el)">
         <startpage:classification-label category="${c}" lang="${lang}" />
         <span class="ir-facets-btn-count mcr-facet-count"
-              data-mcr-facet-field="${facetField}" data-mcr-facet-value="${c.id.getRootID()}:${c.id.ID}"
+              data-mcr-facet-field="${facetField}" data-mcr-facet-value="${c.id.rootID}:${c.id.id}"
               x-show="countPos >= 0 && counts[countPos + 1] > 0"
               x-text="countPos >= 0 ? counts[countPos + 1] : '-'"></span>
       </li>
       <c:if test="${c.hasChildren()}">
         <li class="list-group-item ir-facets-sublist py-0 pe-0"
-            x-data="{countPos : counts.indexOf('${c.id.getRootID()}:${c.id.ID}')}"
+            x-data="{countPos : counts.indexOf('${c.id.rootID}:${c.id.id}')}"
             x-bind:data-mcr-facet-count="countPos >= 0 ? counts[countPos + 1] : 0">
           <startpage:classification-inner category="${c}" facetField="${facetField}" mask="${mask}" lang="${lang}"/>
         </li>

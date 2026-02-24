@@ -52,7 +52,7 @@
 				String displayLabel="";
 				for(MCRMetaClassification c: mcrDerivate.getDerivate().getClassifications()){
 					if("derivate_types".equals(c.getClassId())){
-						MCRCategory categ = MCRCategoryDAOFactory.getInstance().getCategory(new MCRCategoryID(c.getClassId(), c.getCategId()),0);
+						MCRCategory categ = MCRCategoryDAOFactory.obtainInstance().getCategory(new MCRCategoryID(c.getClassId(), c.getCategId()),0);
 						displayLabel = categ.getCurrentLabel().orElse(new MCRLabel("de", "Dateibereich", null)).getText();
 					}
 				}

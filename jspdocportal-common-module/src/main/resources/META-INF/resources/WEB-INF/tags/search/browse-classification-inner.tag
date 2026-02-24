@@ -13,9 +13,9 @@
   <ul class="list-group list-group-flush">
     <c:forEach var="c" items="${category.children}">
       <li class="list-group-item ir-facets-btn btn-sm px-2 py-1 d-block"
-          onclick="changeFacetIncludeURL('${facetField}','${c.id.getRootID()}:${c.id.ID}', '${mask}', '${result.id}');">
+          onclick="changeFacetIncludeURL('${facetField}','${c.id.rootID}:${c.id.id}', '${mask}', '${result.id}');">
         <search:browse-classification-label category="${c}" lang="${lang}" />
-        <span class="ir-facets-btn-count mcr-facet-count" data-mcr-facet-field="${facetField}" data-mcr-facet-value="${c.id.getRootID()}:${c.id.ID}"></span>
+        <span class="ir-facets-btn-count mcr-facet-count" data-mcr-facet-field="${facetField}" data-mcr-facet-value="${c.id.rootID}:${c.id.id}"></span>
       </li>
       <c:if test="${c.hasChildren()}">
         <li class="list-group-item ir-facets-sublist py-0">
