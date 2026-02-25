@@ -5,6 +5,7 @@
 <%@tag import="org.jdom2.xpath.XPathExpression"%>
 <%@tag import="org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper"%>
 <%@tag import="org.mycore.datamodel.metadata.MCRDerivate"%>
+<%@tag import="org.mycore.datamodel.metadata.MCRExpandedObject"%>
 <%@tag import="org.mycore.datamodel.metadata.MCRMetaEnrichedLinkID"%>
 <%@tag import="org.mycore.datamodel.metadata.MCRObjectID"%>
 <%@tag import="org.mycore.datamodel.metadata.MCRMetadataManager"%>
@@ -40,7 +41,7 @@
 	
 	<%
 	try(MCRHibernateTransactionWrapper htw = new MCRHibernateTransactionWrapper()){
-		MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(String.valueOf(jspContext.getAttribute("mcrid"))));
+		MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(MCRObjectID.getInstance(String.valueOf(jspContext.getAttribute("mcrid"))));
 		String derLabel = "fulltext";
 		for(MCRMetaEnrichedLinkID derLink: mcrObj.getStructure().getDerivates()){
 		    String maindoc=null;
@@ -116,7 +117,7 @@
 	</style>
 <%
 	try(MCRHibernateTransactionWrapper htw = new MCRHibernateTransactionWrapper()){
-		MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(String.valueOf(jspContext.getAttribute("mcrid"))));
+		MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(MCRObjectID.getInstance(String.valueOf(jspContext.getAttribute("mcrid"))));
 		String derLabel = "MCRVIEWER_METS";
 		for(MCRMetaEnrichedLinkID derLink: mcrObj.getStructure().getDerivates()){
 		

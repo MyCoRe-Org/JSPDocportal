@@ -1,3 +1,4 @@
+<%@page import="org.mycore.datamodel.metadata.MCRExpandedObject"%>
 <%@page import="org.mycore.common.MCRSessionMgr"%>
 <%@page import="org.apache.logging.log4j.LogManager"%>
 <%@page import="org.apache.logging.log4j.core.Logger"%>
@@ -133,7 +134,7 @@
 		MCRSessionMgr.unlock();
 	 	try 
 		(MCRHibernateTransactionWrapper htw = new MCRHibernateTransactionWrapper()) {
-			MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(
+			MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(
 			MCRObjectID.getInstance(String.valueOf(pageContext.getAttribute("mcrid"))));
 			String derLabel = "MCRVIEWER_METS";
 			for (MCRMetaEnrichedLinkID derLink : mcrObj.getStructure().getDerivates()) {
