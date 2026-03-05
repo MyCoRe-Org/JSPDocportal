@@ -31,6 +31,7 @@ import javax.xml.transform.TransformerFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRClassTools;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRDOMContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
@@ -73,12 +74,14 @@ public class MCRTransformXslTag extends SimpleTagSupport {
             // MCR.LayoutService.TransformerFactoryClass=net.sf.saxon.TransformerFactoryImpl
             // MCRXSLTransformer t = MCRXSLTransformer.getInstance(stylesheet);
 
-            Class<? extends TransformerFactory> tfClass = MCRClassTools.forName("net.sf.saxon.TransformerFactoryImpl");
+            Class<? extends TransformerFactory> tfClass =
+                MCRClassTools.forName(MCRConfiguration2.getStringOrThrow("SAXON"));
             MCRXSLTransformer t = MCRXSLTransformer.obtainInstance(tfClass, stylesheet);
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             if (mcrid != null) {
-                t.transform(MCRXMLMetadataManager.obtainInstance().retrieveContent(MCRObjectID.getInstance(mcrid)), baos);
+                t.transform(MCRXMLMetadataManager.obtainInstance().retrieveContent(MCRObjectID.getInstance(mcrid)),
+                    baos);
                 getJspContext().getOut().append(baos.toString(StandardCharsets.UTF_8));
                 return;
             }

@@ -40,6 +40,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRClassTools;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
 import org.mycore.datamodel.metadata.MCRDerivate;
@@ -130,7 +131,7 @@ public class PDFFrontpageUtil {
         org.jdom2.Document jdomObj = mcrObj.createXML();
         String xslt = "xslt/docdetails/pdffrontpage_html.xsl";
         try {
-            Class<? extends TransformerFactory> tfClass = MCRClassTools.forName("net.sf.saxon.TransformerFactoryImpl");
+            Class<? extends TransformerFactory> tfClass = MCRClassTools.forName(MCRConfiguration2.getStringOrThrow("SAXON"));
             MCRXSLTransformer t = MCRXSLTransformer.obtainInstance(tfClass, xslt);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
 

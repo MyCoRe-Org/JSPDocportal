@@ -367,7 +367,7 @@ public class MCRShowWorkspaceController {
             // Title
             mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
 
-            Class<? extends TransformerFactory> tfClass = MCRClassTools.forName("net.sf.saxon.TransformerFactoryImpl");
+            Class<? extends TransformerFactory> tfClass = MCRClassTools.forName(MCRConfiguration2.getStringOrThrow("SAXON"));
             MCRXSLTransformer xsltTitle = MCRXSLTransformer.obtainInstance(tfClass,
                 MCRConfiguration2.getString("MCR.Workflow.MCRObject.Display.Title.XSL").orElseThrow());
             ByteArrayOutputStream baosTitle = new ByteArrayOutputStream();
