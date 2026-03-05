@@ -9,20 +9,10 @@
   xmlns:mcrstring="http://www.mycore.de/xslt/stringutils"
   xmlns:mcrclass="http://www.mycore.de/xslt/classification"
   xmlns:mcrmods="http://www.mycore.de/xslt/mods"
-  exclude-result-prefixes="xs mods xlink mcri18n mcracl mcrstring mcrclass mcrmods"
+  exclude-result-prefixes="#all"
   expand-text="yes">
- 
-  <xsl:import href="resource:xslt/functions/i18n.xsl" />
-  <xsl:import href="resource:xslt/functions/acl.xsl" />
-  <xsl:import href="resource:xslt/functions/stringutils.xsl" />
-  <xsl:import href="resource:xslt/functions/classification.xsl" />
-  <xsl:import href="resource:xslt/functions/mods.xsl" />
   
   <xsl:output method="html" indent="yes" standalone="no" encoding="UTF-8"/>
-
-  <xsl:param name="WebApplicationBaseURL"></xsl:param>
-  <xsl:param name="CurrentLang" />
-  <xsl:param name="DefaultLang" />
   
   <xsl:template name="identifier_k10plus_ppn">
     <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">

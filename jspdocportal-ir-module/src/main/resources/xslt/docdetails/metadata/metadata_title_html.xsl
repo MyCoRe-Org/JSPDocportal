@@ -5,10 +5,7 @@
   xmlns:mcrclass="http://www.mycore.de/xslt/classification"
   xmlns:mcrmods="http://www.mycore.de/xslt/mods"
   xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
-  version="3.0" exclude-result-prefixes="mods xlink" expand-text="true">
-  
-  <xsl:import href="resource:xslt/functions/i18n.xsl" />
-  <xsl:param name="WebApplicationBaseURL" />
+  version="3.0" exclude-result-prefixes="#all" expand-text="true">
   
   <xsl:template name="title">
     <xsl:if test="mods:partName or mods:partNumber">

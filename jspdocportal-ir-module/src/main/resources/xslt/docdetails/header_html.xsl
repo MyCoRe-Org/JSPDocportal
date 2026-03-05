@@ -9,23 +9,17 @@
   xmlns:mcrstring="http://www.mycore.de/xslt/stringutils"
   xmlns:mcrclass="http://www.mycore.de/xslt/classification"
   xmlns:mcrmods="http://www.mycore.de/xslt/mods"
-  exclude-result-prefixes="fn mods xlink mcri18n mcracl mcrstring mcrclass mcrmods"
+  exclude-result-prefixes="#all"
   expand-text="yes">
 
   <xsl:output method="xhtml" indent="yes" omit-xml-declaration="yes" encoding="UTF-8"/>
-   
-  <xsl:import href="resource:xslt/functions/i18n.xsl" />
-  <xsl:import href="resource:xslt/functions/acl.xsl" />
-  <xsl:import href="resource:xslt/functions/stringutils.xsl" />
-  <xsl:import href="resource:xslt/functions/classification.xsl" />
-  <xsl:import href="resource:xslt/functions/mods.xsl" />
+  
+  <xsl:include href="resource:xslt/default-parameters.xsl" />
+  <xsl:include href="xslInclude:functions" />
   
   <xsl:import href="resource:xslt/docdetails/header/header_names_html.xsl" />
   <xsl:import href="resource:xslt/docdetails/header/header_otherversions_html.xsl" />
   
-  <xsl:param name="WebApplicationBaseURL"></xsl:param>
-  <xsl:param name="CurrentLang" />
-  <xsl:param name="DefaultLang" />
   <xsl:param name="MCR.DOI.Prefix" />
   <xsl:param name="MCR.Identifier.PURL.BaseURL"></xsl:param>
 

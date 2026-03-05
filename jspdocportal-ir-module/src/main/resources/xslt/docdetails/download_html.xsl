@@ -6,12 +6,7 @@
   xmlns:mcrmods="http://www.mycore.de/xslt/mods"
   xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
   xmlns:mcrstring="http://www.mycore.de/xslt/stringutils"
-  version="3.0" exclude-result-prefixes="mods xlink" expand-text="true">
-  
-  <xsl:import href="resource:xslt/functions/classification.xsl" />
-  <xsl:import href="resource:xslt/functions/mods.xsl" />
-  <xsl:import href="resource:xslt/functions/i18n.xsl" />
-  <xsl:import href="resource:xslt/functions/stringutils.xsl" />
+  version="3.0" exclude-result-prefixes="#all" expand-text="true">
   
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="CurrentLang" />

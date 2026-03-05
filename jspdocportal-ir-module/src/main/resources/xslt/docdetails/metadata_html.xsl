@@ -8,20 +8,14 @@
   xmlns:mcrclass="http://www.mycore.de/xslt/classification"
   xmlns:mcrmods="http://www.mycore.de/xslt/mods"
   xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
-  exclude-result-prefixes="mods xlink ubr-researchdata ubr-legal mcrclass mcrmods mcri18n" expand-text="true">
+  exclude-result-prefixes="#all"
+  expand-text="true">
   
-  <xsl:import href="resource:xslt/functions/classification.xsl" />
-  <xsl:import href="resource:xslt/functions/mods.xsl" />
-  <xsl:import href="resource:xslt/functions/i18n.xsl" />
-  <xsl:import href="resource:xslt/docdetails/metadata/metadata_classifications_html.xsl" />
-  <xsl:import href="resource:xslt/docdetails/metadata/metadata_title_html.xsl" />
-  <xsl:import href="resource:xslt/docdetails/metadata/metadata_identifier_html.xsl" />
-  <xsl:import href="resource:xslt/docdetails/metadata/metadata_name_html.xsl" />
-  
-  <xsl:param name="WebApplicationBaseURL" />
-  <xsl:param name="CurrentLang" />
-  <xsl:param name="DefaultLang" />
   <xsl:output method="html" indent="yes" standalone="no" />
+  
+  <xsl:include href="resource:xslt/default-parameters.xsl" />
+  <xsl:include href="xslInclude:functions" />
+  
   <xsl:template match="/">
     <table class="ir-table-docdetails">
       <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='imported' or @type='created']/mods:mods">

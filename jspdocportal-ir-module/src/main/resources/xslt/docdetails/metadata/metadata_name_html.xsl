@@ -7,9 +7,6 @@
   xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
   version="3.0" exclude-result-prefixes="mods xlink" expand-text="true">
   
-  <xsl:import href="resource:xslt/functions/i18n.xsl" />
-  <xsl:param name="WebApplicationBaseURL" />
-  
   <xsl:template name="personal_name">
     <xsl:param name="names" />
     <xsl:for-each select="$names">

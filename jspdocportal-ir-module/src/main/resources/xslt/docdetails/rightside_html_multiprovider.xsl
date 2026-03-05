@@ -11,21 +11,15 @@
   xmlns:mcracl="http://www.mycore.de/xslt/acl"
   xmlns:json="http://www.w3.org/2005/xpath-functions"
   
-  exclude-result-prefixes="mods xlink fn json mcracl mcrclass mcri18n mcrmods mcrstring"
+  exclude-result-prefixes="#all"
   expand-text="yes">
-
-  <xsl:param name="WebApplicationBaseURL" select="'http://rosdok.uni-rostock.de/'"/>
-  <xsl:param name="WebApplicationTitle" select="'RosDok'"/>
-  <xsl:param name="CurrentLang" />
-  <xsl:param name="DefaultLang" />
   
   <xsl:output method="html" indent="yes" standalone="no" />
+
+  <xsl:include href="resource:xslt/default-parameters.xsl" />
+  <xsl:include href="xslInclude:functions" />
   
-  <xsl:import href="resource:xslt/functions/i18n.xsl" />
-  <xsl:import href="resource:xslt/functions/classification.xsl" />
-  <xsl:import href="resource:xslt/functions/stringutils.xsl" />
-  <xsl:import href="resource:xslt/functions/mods.xsl" />
-  <xsl:import href="resource:xslt/functions/acl.xsl" />
+  <xsl:param name="WebApplicationTitle" select="'RosDok'"/>
     
   <xsl:template match="/">
       
