@@ -34,23 +34,22 @@ import jakarta.servlet.ServletResponse;
  * The filter needs to be registered in web.xml or web-fragment.xml
  * for the standard Servlet for JSPs:
  * 
- *  ```
- *  <filter>
- *      <filter-name>MCRJerseyMVCJSPResponseFlushFilter</filter-name>
- *      <filter-class>org.mycore.jspdocportal.common.MCRJerseyMVCJSPResponseFlushFilter</filter-class>
- *  </filter>
- *  <!-- nur bei forwards, also kein Effekt auf direkte Aufrufe -->
- *  <filter-mapping>
- *      <filter-name>MCRJerseyMVCJSPResponseFlushFilter</filter-name>
- *      <servlet-name>jsp</servlet-name>
- *      <dispatcher>FORWARD</dispatcher>
- *   </filter-mapping>
- *   ```  
- * 
- * @author Robert Stephan
+ *  @author Robert Stephan
  */
-
 public class MCRJerseyMVCJSPResponseFlushFilter implements Filter {
+    /*  ```
+     *  <filter>
+     *      <filter-name>MCRJerseyMVCJSPResponseFlushFilter</filter-name>
+     *      <filter-class>org.mycore.jspdocportal.common.MCRJerseyMVCJSPResponseFlushFilter</filter-class>
+     *  </filter>
+     *  <!-- only on forwards, no effect on direct JSP calls -->
+     *  <filter-mapping>
+     *      <filter-name>MCRJerseyMVCJSPResponseFlushFilter</filter-name>
+     *      <servlet-name>jsp</servlet-name>
+     *      <dispatcher>FORWARD</dispatcher>
+     *   </filter-mapping>
+     *   ```
+     */
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
