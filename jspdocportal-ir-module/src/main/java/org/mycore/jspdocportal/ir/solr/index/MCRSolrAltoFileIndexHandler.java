@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.text.StringSubstitutor;
 import org.apache.logging.log4j.LogManager;
@@ -184,7 +184,7 @@ public class MCRSolrAltoFileIndexHandler extends MCRSolrAbstractStreamIndexHandl
         for (Entry<String, String[]> entry : fields) {
             for (String v : entry.getValue()) {
                 xml.append(StringSubstitutor.replace(TMPL_XML_UPDATE_FIELD, Map.of(
-                    "name", StringUtils.removeStart(entry.getKey(), "literal."),
+                    "name", Strings.CS.removeStart(entry.getKey(), "literal."),
                     "value", StringEscapeUtils.escapeXml10(v))));
             }
         }
