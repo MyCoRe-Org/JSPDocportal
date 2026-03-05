@@ -87,7 +87,7 @@ public class MCRAPIExplore {
     @XmlElementWrapper(name = "mycoreobjects")
     public Response exploreObjects(@QueryParam("start") String start, @QueryParam("rows") String rows,
         @QueryParam("sort") String sort, @QueryParam("filter") List<String> filter) throws IOException {
-        Date lastModified = new Date(MCRXMLMetadataManager.getInstance().getLastModified());
+        Date lastModified = new Date(MCRXMLMetadataManager.obtainInstance().getLastModified());
 
         // enable on 2020 LTS
         // if (cachedResponse.isPresent()) {

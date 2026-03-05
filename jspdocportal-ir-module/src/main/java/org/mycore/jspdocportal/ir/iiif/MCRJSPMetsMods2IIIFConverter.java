@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Attribute;
@@ -224,7 +224,7 @@ public class MCRJSPMetsMods2IIIFConverter {
             Optional<MCRLabel> oLabel = categ.getLabel("x-logo");
             if (oLabel.isPresent()) {
                 MCRIIIFResource logo = new MCRIIIFResource(
-                    MCRFrontendUtil.getBaseURL() + StringUtils.removeStart(oLabel.get().getText(), "/"),
+                    MCRFrontendUtil.getBaseURL() + Strings.CS.removeStart(oLabel.get().getText(), "/"),
                     MCRDCMIType.IMAGE);
                 manifest.setLogo(logo);
             }

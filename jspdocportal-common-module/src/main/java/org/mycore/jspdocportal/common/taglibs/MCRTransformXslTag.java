@@ -78,7 +78,7 @@ public class MCRTransformXslTag extends SimpleTagSupport {
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             if (mcrid != null) {
-                t.transform(MCRXMLMetadataManager.getInstance().retrieveContent(MCRObjectID.getInstance(mcrid)), baos);
+                t.transform(MCRXMLMetadataManager.obtainInstance().retrieveContent(MCRObjectID.getInstance(mcrid)), baos);
                 getJspContext().getOut().append(baos.toString(StandardCharsets.UTF_8));
                 return;
             }

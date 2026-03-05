@@ -142,7 +142,7 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
             }
         }
         if (Files.isDirectory(dir)) {
-            for (String id : MCRXMLMetadataManager.getInstance().listIDsOfType(type)) {
+            for (String id : MCRXMLMetadataManager.obtainInstance().listIDsOfType(type)) {
                 commandList.add("backup object " + id + " to directory " + dirname);
             }
         } else {
@@ -492,8 +492,8 @@ public class MCRJSPDocportalCommands extends MCRAbstractCommands {
     public static final void migrateParent2RelatedItem() {
         LOGGER.info("Please be patient, while collecting required MyCoRe objects.");
         List<String> check = new ArrayList<>();
-        check.addAll(MCRXMLMetadataManager.getInstance().listIDsOfType("bundle"));
-        check.addAll(MCRXMLMetadataManager.getInstance().listIDsOfType("document"));
+        check.addAll(MCRXMLMetadataManager.obtainInstance().listIDsOfType("bundle"));
+        check.addAll(MCRXMLMetadataManager.obtainInstance().listIDsOfType("document"));
 
         XPathExpression<Element> xpathRecordIdentifier = XPathFactory.instance().compile(
             ".//mods:mods/mods:recordInfo/mods:recordIdentifier", Filters.element(), null,
