@@ -78,6 +78,19 @@
     <!-- <url-pattern>/file/*</url-pattern> exclude MCRFileNodeServlet = MCRServlet -->
   </filter-mapping>
 
+  <!--  filter that flushes the response of internal forwards in
+        Jersey MVC JSP template engine  -->
+	<filter>
+		<filter-name>MCRJerseyMVCJSPResponseFlushFilter</filter-name>
+		<filter-class>org.mycore.jspdocportal.common.MCRJerseyMVCJSPResponseFlushFilter</filter-class>
+	</filter>
+	<!-- nur bei forwards, also kein Effekt auf direkte Aufrufe -->
+	<filter-mapping>
+		<filter-name>MCRJerseyMVCJSPResponseFlushFilter</filter-name>
+		<servlet-name>jsp</servlet-name>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+
   <!-- mycore servlets mapping -->
   <servlet-mapping>
     <servlet-name>MCRFileNodeServlet</servlet-name>
