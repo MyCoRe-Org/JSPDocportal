@@ -5,9 +5,13 @@
   xmlns:ubr-legal="http://purl.uni-rostock.de/ub/standards/ubr-legal-information-v1.0"
   version="1.0" exclude-result-prefixes="mods xlink ubr-legal">
 
-  <xsl:param name="WebApplicationBaseURL" select="'http://rosdok.uni-rostock.de/'"/>
-  <xsl:param name="WebApplicationTitle" select="'RosDok'"/>
   <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" />
+  
+  <xsl:include href="resource:xslt/default-parameters.xsl" />
+  <xsl:include href="xslInclude:functions" />
+  
+  <xsl:param name="WebApplicationTitle" select="'RosDok'"/>
+
   
   <xsl:template match="/">
   <xsl:for-each select="//modsContainer[1]/mods:mods">

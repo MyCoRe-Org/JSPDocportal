@@ -14,7 +14,7 @@
   exclude-result-prefixes="#all"
   expand-text="yes">
   
-  <xsl:output method="html" indent="yes" standalone="no" />
+  <xsl:output method="html" indent="yes" standalone="no" encoding="UTF-8" />
 
   <xsl:include href="resource:xslt/default-parameters.xsl" />
   <xsl:include href="xslInclude:functions" />

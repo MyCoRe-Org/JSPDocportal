@@ -8,7 +8,7 @@
      exclude-result-prefixes="mods xlink">
 
 <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />     
-<xsl:import href="resource:xslt/functions/i18n.xsl" />
+
 
 <xsl:template name="mods-title">
   <xsl:for-each select="./mods:titleInfo[@usage='primary']">

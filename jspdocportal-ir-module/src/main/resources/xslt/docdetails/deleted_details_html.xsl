@@ -4,14 +4,15 @@
   xmlns:mods="http://www.loc.gov/mods/v3" 
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:mcri18n="http://www.mycore.de/xslt/i18n"  
-  exclude-result-prefixes="mods xlink mcri18n mods"
+  exclude-result-prefixes="#all"
   expand-text="yes">
-
-  <xsl:import href="mods-util.xsl" />
-  <xsl:import href="resource:xslt/functions/i18n.xsl" />
   
-  <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />
-  <xsl:param name="WebApplicationBaseURL" />
+  <xsl:output method="html" indent="yes" standalone="no" encoding="UTF-8"/>
+
+  <xsl:include href="resource:xslt/default-parameters.xsl" />
+  <xsl:include href="xslInclude:functions" />
+  
+  <xsl:include href="resource:xslt/docdetails/metadata/mods-util.xsl" />
 
   <xsl:template match="/">
     <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">

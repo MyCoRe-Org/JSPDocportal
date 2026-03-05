@@ -16,6 +16,11 @@
   <xsl:include href="resource:xslt/default-parameters.xsl" />
   <xsl:include href="xslInclude:functions" />
   
+  <xsl:import href="resource:xslt/docdetails/metadata/metadata_classifications_html.xsl" />
+  <xsl:import href="resource:xslt/docdetails/metadata/metadata_title_html.xsl" />
+  <xsl:import href="resource:xslt/docdetails/metadata/metadata_identifier_html.xsl" />
+  <xsl:import href="resource:xslt/docdetails/metadata/metadata_name_html.xsl" />
+  
   <xsl:template match="/">
     <table class="ir-table-docdetails">
       <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='imported' or @type='created']/mods:mods">

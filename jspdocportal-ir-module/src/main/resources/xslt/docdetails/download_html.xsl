@@ -8,10 +8,11 @@
   xmlns:mcrstring="http://www.mycore.de/xslt/stringutils"
   version="3.0" exclude-result-prefixes="#all" expand-text="true">
   
-  <xsl:param name="WebApplicationBaseURL" />
-  <xsl:param name="CurrentLang" />
-  <xsl:param name="DefaultLang" />
   <xsl:output method="html" indent="yes" standalone="no" />
+  
+  <xsl:include href="resource:xslt/default-parameters.xsl" />
+  <xsl:include href="xslInclude:functions" />
+  
   <xsl:template match="/">
     <table class="ir-table-docdetails w-100">
       <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='imported' or @type='created']/mods:mods">

@@ -12,19 +12,12 @@
   expand-text="yes">
 
   <xsl:output method="xhtml" indent="yes" standalone="omit" encoding="UTF-8"/>
-   
-  <xsl:import href="resource:xslt/functions/i18n.xsl" />
-  <xsl:import href="resource:xslt/functions/acl.xsl" />
-  <xsl:import href="resource:xslt/functions/stringutils.xsl" />
-  <xsl:import href="resource:xslt/functions/classification.xsl" />
-  <xsl:import href="resource:xslt/functions/mods.xsl" />
+  
+  <xsl:include href="resource:xslt/default-parameters.xsl" />
+  <xsl:include href="xslInclude:functions" />
   
   <xsl:import href="resource:xslt/docdetails/header/header_names_html.xsl" />
   <xsl:import href="resource:xslt/docdetails/header/header_otherversions_html.xsl" />
-  
-  <xsl:param name="WebApplicationBaseURL"></xsl:param>
-  <xsl:param name="CurrentLang" />
-  <xsl:param name="DefaultLang" />
 
   <xsl:template match="/mycoreobject">
   
