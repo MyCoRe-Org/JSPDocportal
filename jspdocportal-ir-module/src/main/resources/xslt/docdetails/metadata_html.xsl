@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="3.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:mcrclass="http://www.mycore.de/xslt/classification"
+  xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
+  xmlns:mcrmods="http://www.mycore.de/xslt/mods"
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:ubr-researchdata="http://purl.uni-rostock.de/ub/standards/ubr-researchdata-information-v1.0"
   xmlns:ubr-legal="http://purl.uni-rostock.de/ub/standards/ubr-legal-information-v1.0"
-  xmlns:mcrclass="http://www.mycore.de/xslt/classification"
-  xmlns:mcrmods="http://www.mycore.de/xslt/mods"
-  xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
   exclude-result-prefixes="#all"
   expand-text="true">
   

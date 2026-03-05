@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" version="3.0" 
+<xsl:stylesheet version="3.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:mods="http://www.loc.gov/mods/v3" 
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
+  xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:mcri18n="http://www.mycore.de/xslt/i18n"  
   exclude-result-prefixes="#all"
   expand-text="yes">
   

@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" 
-     xmlns="http://www.w3.org/1999/xhtml" 
-     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-     xmlns:xlink="http://www.w3.org/1999/xlink"
-     xmlns:mods="http://www.loc.gov/mods/v3"
-     xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
-     exclude-result-prefixes="mods xlink">
+<xsl:stylesheet version="3.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
+  xmlns:mods="http://www.loc.gov/mods/v3"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  exclude-result-prefixes="#all">
 
-<xsl:output method="xml" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />     
-
-
-<xsl:template name="mods-title">
-  <xsl:for-each select="./mods:titleInfo[@usage='primary']">
+  <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />
+  
+  <xsl:template name="mods-title">
+   <xsl:for-each select="./mods:titleInfo[@usage='primary']">
     <h3>
       <xsl:if test="./mods:nonSort">
         <xsl:value-of select="./mods:nonSort" />&#160;  
@@ -27,10 +26,10 @@
       <xsl:if test="./mods:partNumber and ./mods:partName">: </xsl:if>
       <xsl:value-of select="./mods:partName" />
      </h3>
-  </xsl:if>
+     </xsl:if>
 
-  </xsl:for-each>
-</xsl:template>
+   </xsl:for-each>
+  </xsl:template>
 
     <xsl:template name="display-name">
       <xsl:param name="name"  />

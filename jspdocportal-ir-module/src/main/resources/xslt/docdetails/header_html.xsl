@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" version="3.0" 
+<xsl:stylesheet version="3.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns="http://www.w3.org/1999/xhtml"
   xmlns:fn="http://www.w3.org/2005/xpath-functions"
+  xmlns:mcracl="http://www.mycore.de/xslt/acl"
+  xmlns:mcrclass="http://www.mycore.de/xslt/classification"
+  xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
+  xmlns:mcrmods="http://www.mycore.de/xslt/mods"
+  xmlns:mcrstring="http://www.mycore.de/xslt/stringutils"
   xmlns:mods="http://www.loc.gov/mods/v3" 
   xmlns:xlink="http://www.w3.org/1999/xlink" 
-  xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
-  xmlns:mcracl="http://www.mycore.de/xslt/acl"
-  xmlns:mcrstring="http://www.mycore.de/xslt/stringutils"
-  xmlns:mcrclass="http://www.mycore.de/xslt/classification"
-  xmlns:mcrmods="http://www.mycore.de/xslt/mods"
   exclude-result-prefixes="#all"
   expand-text="yes">
 

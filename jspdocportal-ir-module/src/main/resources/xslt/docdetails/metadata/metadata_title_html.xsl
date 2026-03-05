@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:ubr-researchdata="http://purl.uni-rostock.de/ub/standards/ubr-researchdata-information-v1.0"
-  xmlns:ubr-legal="http://purl.uni-rostock.de/ub/standards/ubr-legal-information-v1.0"
+<xsl:stylesheet version="3.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:mcrclass="http://www.mycore.de/xslt/classification"
-  xmlns:mcrmods="http://www.mycore.de/xslt/mods"
   xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
-  version="3.0" exclude-result-prefixes="#all" expand-text="true">
+  xmlns:mcrmods="http://www.mycore.de/xslt/mods"
+  xmlns:mods="http://www.loc.gov/mods/v3"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  exclude-result-prefixes="#all"
+  expand-text="true">
   
   <xsl:template name="title">
     <xsl:if test="mods:partName or mods:partNumber">
