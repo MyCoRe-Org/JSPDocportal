@@ -46,7 +46,7 @@
   <link rel="canonical" href="${WebApplicationBaseURL}resolve/id/${mcrid}" />
   <%@ include file="fragments/html_head.jspf" %>
 
-  <mcr:transformXSL dom="${doc}" xslt="xslt/docdetails/metatags_html.xsl" />
+  <mcr:transformXSL dom="${doc}" transformer="docdetails_metatags_html" />
   <link type="text/css" rel="stylesheet" href="${WebApplicationBaseURL}modules/socializer_f794acd/css/socializer.min.css" />
 
   <script src="${WebApplicationBaseURL}javascript/jspdocportal-util.js"></script>
@@ -74,7 +74,7 @@
               <div class="ir-docdetails-header">
                 <x:choose>
                   <x:when select="$doc/mycoreobject/service/servstates/servstate[@categid='deleted']">
-                    <mcr:transformXSL dom="${doc}" xslt="xslt/docdetails/deleted_header_html.xsl" />
+                    <mcr:transformXSL dom="${doc}" transformer="docdetails_header4deleted_html" />
                   </x:when>
                   <x:otherwise>
                     <mcr:transformXSL dom="${doc}" transformer="docdetails_header_html" />
@@ -159,9 +159,9 @@
                   </div>
                 </div>
                 <x:if select="$doc/mycoreobject/metadata//*[@displayLabel='doctype'][contains(@valueURI, '/doctype#data')]">
-                  <div id="tabcontent_data" class="tab-pane fade" aria-labelledby="tab_fulltext">
+                  <div id="tabcontent_data" class="tab-pane fade" aria-labelledby="tab_data">
                     <div style="font-size: 85%;min-height:600px">
-                      <mcr:transformXSL dom="${doc}" xslt="xslt/docdetails/download_html.xsl" />
+                      <mcr:transformXSL dom="${doc}" transformer="docdetails_data_html" />
                     </div>
                   </div>
                 </x:if>
@@ -169,10 +169,10 @@
                   <div class="ir-docdetails-data" style="min-height:600px">
                     <x:choose>
                       <x:when select="$doc/mycoreobject/service/servstates/servstate/@categid='deleted'">
-                        <mcr:transformXSL dom="${doc}" xslt="xslt/docdetails/deleted_details_html.xsl" />
+                        <mcr:transformXSL dom="${doc}" transformer="docdetails_metadata4deleted_html" />
                       </x:when>
                       <x:otherwise>
-                        <mcr:transformXSL dom="${doc}" xslt="xslt/docdetails/metadata_html.xsl" />
+                        <mcr:transformXSL dom="${doc}" transformer="docdetails_metadata_html" />
                       </x:otherwise>
                     </x:choose>
                   </div>
@@ -240,7 +240,7 @@
             <div class="d-none d-lg-block">
               <search:result-navigator mcrid="${mcrid}" />
               <mcr:showEditMenu mcrid="${mcrid}" cssClass="text-end pb-3" />
-              <mcr:transformXSL dom="${doc}" xslt="xslt/docdetails/rightside_html.xsl" />
+              <mcr:transformXSL dom="${doc}" transformer="docdetails_rightside_html" />
             </div>
           </div>
         </div><%-- right area --%>
