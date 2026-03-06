@@ -49,7 +49,6 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
-import org.mycore.jspdocportal.common.taglibs.MCRTransformXslTag;
 import org.mycore.resource.MCRResourceHelper;
 
 import com.itextpdf.text.BaseColor;
@@ -134,15 +133,13 @@ public class PDFFrontpageUtil {
             Class<? extends TransformerFactory> tfClass = MCRClassTools.forName(MCRConfiguration2.getStringOrThrow("SAXON"));
             MCRXSLTransformer t = MCRXSLTransformer.obtainInstance(tfClass, xslt);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
             t.transform(new MCRJDOMContent(jdomObj), baos);
             String htmlContent = cleanUpHTML(baos.toString(StandardCharsets.UTF_8));
             LOGGER.debug(htmlContent);
             XMLWorkerHelper.getInstance().parseXHtml(writer, document, new StringReader(htmlContent));
 
         } catch (Exception e) {
-            LogManager.getLogger(MCRTransformXslTag.class)
-                .error("Something went wrong processing the XSLT: {}", xslt, e);
+            LOGGER.error("Something went wrong processing the XSLT: {}", xslt, e);
         }
     }
 
