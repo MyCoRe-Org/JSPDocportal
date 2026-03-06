@@ -187,8 +187,13 @@
     <tag-class>org.mycore.jspdocportal.common.taglibs.MCRTransformXslTag</tag-class>
     <body-content>scriptless</body-content>
     <attribute>
+      <name>transformer</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
       <name>xslt</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>

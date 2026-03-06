@@ -31,11 +31,14 @@ import javax.xml.transform.TransformerFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRClassTools;
+import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRDOMContent;
 import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.common.content.transformer.MCRContentTransformer;
+import org.mycore.common.content.transformer.MCRContentTransformerFactory;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
-import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.w3c.dom.Document;
 
@@ -65,6 +68,8 @@ public class MCRTransformXslTag extends SimpleTagSupport {
 
     private String stylesheet;
 
+    private String transformer;
+
     private String mcrid;
 
     @Override
@@ -74,33 +79,36 @@ public class MCRTransformXslTag extends SimpleTagSupport {
             // MCR.LayoutService.TransformerFactoryClass=net.sf.saxon.TransformerFactoryImpl
             // MCRXSLTransformer t = MCRXSLTransformer.getInstance(stylesheet);
 
-            Class<? extends TransformerFactory> tfClass =
-                MCRClassTools.forName(MCRConfiguration2.getStringOrThrow("SAXON"));
-            MCRXSLTransformer t = MCRXSLTransformer.obtainInstance(tfClass, stylesheet);
+            MCRContentTransformer t = null;
+            if (transformer != null) {
+                t = MCRContentTransformerFactory.getTransformer(transformer);
+            } else if (stylesheet != null) {
+                Class<? extends TransformerFactory> tfClass =
+                    MCRClassTools.forName(MCRConfiguration2.getStringOrThrow("SAXON"));
+                t = MCRXSLTransformer.obtainInstance(tfClass, stylesheet);
+            }
+            if (t == null) {
+                throw new MCRException("transformer or stylesheet attribute are not defined or invalid.");
+            }
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             if (mcrid != null) {
-                t.transform(MCRXMLMetadataManager.obtainInstance().retrieveContent(MCRObjectID.getInstance(mcrid)),
-                    baos);
-                getJspContext().getOut().append(baos.toString(StandardCharsets.UTF_8));
-                return;
-            }
-            if (jdom != null) {
+                MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrid);
+                org.jdom2.Document mcrJdom = MCRMetadataManager.retrieveMCRExpandedObject(mcrObjID).createXML();
+                t.transform(new MCRJDOMContent(mcrJdom), baos);
+            } else if (jdom != null) {
                 t.transform(new MCRJDOMContent(jdom), baos);
-                getJspContext().getOut().append(baos.toString(StandardCharsets.UTF_8));
-                return;
-            }
-            if (dom != null) {
+            } else if (dom != null) {
                 t.transform(new MCRDOMContent(dom), baos);
-                getJspContext().getOut().append(baos.toString(StandardCharsets.UTF_8));
             }
+            getJspContext().getOut().append(baos.toString(StandardCharsets.UTF_8));
         } catch (Exception e) {
             LOGGER.error("Error in XSLT-Processing ({}): {}", mcrid, stylesheet, e);
         }
     }
 
-    public String getXslt() {
-        return stylesheet;
+    public void setTransformer(String transformer) {
+        this.transformer = transformer;
     }
 
     public void setXslt(String stylesheet) {
@@ -118,4 +126,5 @@ public class MCRTransformXslTag extends SimpleTagSupport {
     public void setJdom(org.jdom2.Document jdom) {
         this.jdom = jdom;
     }
+
 }

@@ -77,7 +77,7 @@
                     <mcr:transformXSL dom="${doc}" xslt="xslt/docdetails/deleted_header_html.xsl" />
                   </x:when>
                   <x:otherwise>
-                    <mcr:transformXSL dom="${doc}" xslt="xslt/docdetails/header_html.xsl" />
+                    <mcr:transformXSL dom="${doc}" transformer="docdetails_header_html" />
                   </x:otherwise>
                 </x:choose>
               </div>
