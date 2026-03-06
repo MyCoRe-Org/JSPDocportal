@@ -12,8 +12,6 @@
   exclude-result-prefixes="#all"
   expand-text="yes">
 
-  <xsl:output method="xhtml" indent="yes" standalone="no"  omit-xml-declaration="yes" encoding="UTF-8"/>
-
   <xsl:template name="headerNames">
     <xsl:for-each select="./mods:name[@type='personal'][('aut','edt') = ./mods:role/mods:roleTerm[@authority='marcrelator']]">
       <template id="tmpl_ir_popover_body_{generate-id(.)}">

@@ -11,8 +11,6 @@
   exclude-result-prefixes="#all"
   expand-text="yes">
   
-  <xsl:output method="html" indent="yes" standalone="no" encoding="UTF-8"/>
-
   <!-- 
   <xsl:template name="classification2metadataTable">
     <xsl:param name="displayLabel" as="xs:string" />

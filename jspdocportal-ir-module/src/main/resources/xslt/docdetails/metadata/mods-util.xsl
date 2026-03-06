@@ -7,8 +7,6 @@
   xmlns:xlink="http://www.w3.org/1999/xlink"
   exclude-result-prefixes="#all">
 
-  <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />
-  
   <xsl:template name="mods-title">
    <xsl:for-each select="./mods:titleInfo[@usage='primary']">
     <h3>

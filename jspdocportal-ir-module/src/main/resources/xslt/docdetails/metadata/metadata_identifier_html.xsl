@@ -11,8 +11,6 @@
   exclude-result-prefixes="#all"
   expand-text="yes">
   
-  <xsl:output method="html" indent="yes" standalone="no" encoding="UTF-8"/>
-  
   <xsl:template name="identifier_k10plus_ppn">
     <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
       <xsl:variable name="category" select="mcrclass:category('identifier', 'k10plus')" />
