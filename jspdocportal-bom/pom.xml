@@ -90,13 +90,13 @@
       </dependency>
       <dependency>
         <groupId>org.webjars.npm</groupId>
-        <artifactId>vue</artifactId>
-        <version>3.5.29</version>
+        <artifactId>tinymce</artifactId>
+        <version>7.9.0</version>
       </dependency>
       <dependency>
         <groupId>org.webjars.npm</groupId>
-        <artifactId>tinymce</artifactId>
-        <version>7.9.0</version>
+        <artifactId>vue</artifactId>
+        <version>3.5.29</version>
       </dependency>
 
       <dependency>
