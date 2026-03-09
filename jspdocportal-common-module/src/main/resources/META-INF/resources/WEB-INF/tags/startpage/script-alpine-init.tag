@@ -3,23 +3,41 @@
 <%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<fmt:message var="lblPlaceholder" key="Browse.Search.placeholder.count" />
+<fmt:message var="lblSearchPlaceholder" key="Browse.Search.placeholder.count" />
+<fmt:message var="lblSearchEmpty" key="Browse.Search.placeholder" />
 <mcr:session var="lang" info="language" />
 
-<mcr:webjarLocator htmlElement="script" project="alpinejs" file="cdn.min.js" attribute="defer" />
+<mcr:webjarLocator htmlElement="script" project="vue" file="vue.global.prod.js" attribute="defer" />
 
-<script>
-  document.addEventListener('alpine:init', () => {
-    Alpine.data('startpage', () => ({
+
+<script type="module">
+
+const initApp = async () => {
+  Vue.createApp({
+    data() {
+      return {
         baseurl: document.querySelector('meta[name="mcr:baseurl"]').content,
         mask: document.querySelector('meta[name="mcr:mask"]').content,
         solrResponse: null,
         solrFacetCounts: null,
-        search_placeholder: '${lblPlaceholder}'.replace('[x]', 0),
+        search_placeholder: '${lblSearchEmpty}',
         search_term: '',
         search_field: 'allMeta',
-        
-        init() {
+      };
+    },
+
+    directives: { 
+      effect: {
+        mounted(el, binding) {
+          binding.value();
+        },
+        updated(el, binding) {
+          binding.value();
+        }
+      }
+    },
+
+    mounted() {
           var that = this;
           var facetElements = Array.from(document.getElementsByClassName('mcr-facet'));
           var facetFieldParams 
@@ -47,21 +65,22 @@
             .then(function(response) { return response.json(); })
             .then(function (data) {
                 let numFound = parseInt(data.response.numFound) || 0; //default 0 for NaN
-                that.search_placeholder = '${lblPlaceholder}'.replace('[x]', numFound.toLocaleString())
+                let plchldr = '${lblSearchPlaceholder}'.replace('[x]', numFound.toLocaleString());
+                that.search_placeholder = plchldr;
                 that.solrResponse = data.response;
                 that.solrFacetCounts = data.facet_counts;
                   
                 //test remove count for unirostock to provoke a disabled facet entry
-                //var pos = that.solrFacetCounts.facet_fields['ir.institution_class.facet'].indexOf('institution:unirostock')
-                //that.solrFacetCounts.facet_fields['ir.institution_class.facet'].splice(pos,2)
+                //var pos = that.solrFacetCounts.facet_fields['ir.institution_class.facet'].indexOf('institution:unirostock');
+                //that.solrFacetCounts.facet_fields['ir.institution_class.facet'].splice(pos,2);
                 //console.log(that.solrFacetCounts);
             })
             .catch(function (error) {
                 console.log(error);
             });
-        },
-        
-        doSearch() {
+    },
+    methods: {
+      doSearch() {
           window.location = this.baseurl + "do/browse/" + this.mask
             +"?_add-filter=" + encodeURIComponent("+" + this.search_field+":"+this.search_term);
         },
@@ -105,7 +124,13 @@
             } else { 
                 el.style.display='none';
             }
+        },
+
+        gotoPage(url) {
+          window.location = this.baseurl + url;
         }
-    }));
-  });
+    } //end of methods
+  }).mount('body');
+}
+initApp();
 </script>

@@ -90,8 +90,8 @@
       </dependency>
       <dependency>
         <groupId>org.webjars.npm</groupId>
-        <artifactId>alpinejs</artifactId>
-        <version>3.12.3</version>
+        <artifactId>vue</artifactId>
+        <version>3.5.29</version>
       </dependency>
       <dependency>
         <groupId>org.webjars.npm</groupId>
