@@ -30,8 +30,8 @@
         <startpage:classification-label category="${rootCateg}" lang="${lang}" />
       </h4>
     </div>
-    <template x-if="solrFacetCounts">
-      <div x-data="{ counts : solrFacetCounts.facet_fields['${facetField}'] }">
+    <template v-if="solrFacetCounts">
+      <div v-for="counts in [ solrFacetCounts.facet_fields['${facetField}'] ]">
         <startpage:classification-inner category="${rootCateg}" facetField="${facetField}" mask="${mask}" lang="${lang}"/>
       </div>
     </template>
