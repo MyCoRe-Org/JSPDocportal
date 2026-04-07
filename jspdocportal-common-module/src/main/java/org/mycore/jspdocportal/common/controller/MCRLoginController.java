@@ -79,7 +79,8 @@ public class MCRLoginController {
 
     private static final String MODEL_LOGIN_STATUS = "loginStatus";
 
-    private static final String LOGIN_VIEW = MCRConfiguration2.getStringOrThrow("MCR.LoginController.View");
+    private static final String LOGIN_VIEW =
+        MCRConfiguration2.getStringOrThrow("MCR.JSPDocportal.LoginController.View");
 
     public static final String SESSION_ATTR_MCR_USER = "mcr.jspdocportal.current_user";
 
