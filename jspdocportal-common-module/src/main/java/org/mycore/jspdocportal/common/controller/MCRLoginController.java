@@ -79,6 +79,8 @@ public class MCRLoginController {
 
     private static final String MODEL_LOGIN_STATUS = "loginStatus";
 
+    private static final String LOGIN_VIEW = MCRConfiguration2.getStringOrThrow("MCR.LoginController.View");
+
     public static final String SESSION_ATTR_MCR_USER = "mcr.jspdocportal.current_user";
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -101,7 +103,7 @@ public class MCRLoginController {
                     updateData(mcrSession, model);
                 }
             }
-            Viewable v = new Viewable("/login", model);
+            Viewable v = new Viewable(LOGIN_VIEW, model);
             return Response.ok(v).build();
         }
     }
@@ -114,7 +116,7 @@ public class MCRLoginController {
         request.getSession().removeAttribute(SESSION_ATTR_MCR_USER);
 
         Map<String, Object> model = new HashMap<>();
-        Viewable v = new Viewable("/login", model);
+        Viewable v = new Viewable(LOGIN_VIEW, model);
         return Response.ok(v).build();
 
     }
@@ -125,7 +127,7 @@ public class MCRLoginController {
         MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
         try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
             Map<String, Object> model = new HashMap<>();
-            Viewable v = new Viewable("/login", model);
+            Viewable v = new Viewable(LOGIN_VIEW, model);
             Response r = Response.ok(v).build();
             String oldUserID = mcrSession.getUserInformation().getUserID();
 
