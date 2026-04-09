@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.server.mvc.Viewable;
@@ -88,10 +89,10 @@ public class MCRLoginController {
 
     @GET
     public Response defaultRes(@QueryParam("logout") @DefaultValue("") String logout,
-        @Context HttpServletRequest request) {
+        @QueryParam("returnTo") @DefaultValue("") String returnTo, @Context HttpServletRequest request) {
 
         if ("true".equals(logout)) {
-            return doLogout(request);
+            return doLogout(request, returnTo);
         } else {
             Map<String, Object> model = new HashMap<>();
             MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
@@ -109,12 +110,16 @@ public class MCRLoginController {
         }
     }
 
-    public Response doLogout(HttpServletRequest request) {
+    private Response doLogout(HttpServletRequest request, String returnTo) {
         MCRSession session = MCRSessionMgr.getCurrentSession();
         String uid = session.getUserInformation().getUserID();
         LOGGER.debug("Log out user {}", uid);
         session.setUserInformation(MCRSystemUserInformation.GUEST);
         request.getSession().removeAttribute(SESSION_ATTR_MCR_USER);
+
+        if (!StringUtils.isBlank(returnTo) && MCRFrontendUtil.isSafeRedirect(returnTo)) {
+            return Response.seeOther(URI.create(returnTo)).build();
+        }
 
         Map<String, Object> model = new HashMap<>();
         Viewable v = new Viewable(LOGIN_VIEW, model);
