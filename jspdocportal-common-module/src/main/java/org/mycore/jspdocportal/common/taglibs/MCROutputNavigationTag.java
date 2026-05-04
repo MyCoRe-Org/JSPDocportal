@@ -219,34 +219,39 @@ public class MCROutputNavigationTag extends MCRAbstractNavigationTag {
             } else {
                 out.append(indent).append("  <ul class=\"nav flex-column level-" + Integer.toString(level + 1) + "\">");
             }
-            for (NavigationItem el : printableElements) {
-                String id = el.getId();
-                boolean active = currentPath.length == 1 && currentPath[0].equals(id);
-                boolean doExpand = currentPath.length > 0 && currentPath[0].equals(id) && !printableItems(el).isEmpty()
-                    || expanded;
-
-                String msg = retrieveI18N(el.getI18n());
-                out.append(indent)
-                    .append(" <li id=\"" + retrieveNavPath(el) + "\" class=\"nav-item"
-                        + (doExpand ? " expanded" : "") + "\">");
-
-                out.append(indent);
-                String href = retrieveFullUrl(el);
-                out.append(" <a target=\"_self\" class=\"nav-link" + (active ? " active" : "") + "\" href=\"" + href
-                    + "\">" + msg + "</a>");
-                if (doExpand) {
-                    String[] subpath = path;
-                    if (path.length > 0 && path[0].equals(currentNode.getId())) {
-                        subpath = Arrays.copyOfRange(path, 1, path.length);
-                    }
-                    printSideNav(subpath, el, null, out);
-                }
-                out.append(indent).append(" </li>");
-            }
+            printSideNavItems(printableElements, out, indent, currentPath, currentNode.getId());
 
             out.append(indent).append(" </ul>");
         } catch (Exception ex) {
             LOGGER.error(ex);
+        }
+    }
+
+    private void printSideNavItems(List<NavigationItem> printableElements, JspWriter out, String indent,
+        String[] currentPath, String currentNodeId) throws IOException {
+        for (NavigationItem el : printableElements) {
+            String id = el.getId();
+            boolean active = currentPath.length == 1 && currentPath[0].equals(id);
+            boolean doExpand = currentPath.length > 0 && currentPath[0].equals(id) && !printableItems(el).isEmpty()
+                || expanded;
+
+            String msg = retrieveI18N(el.getI18n());
+            out.append(indent)
+                .append(" <li id=\"" + retrieveNavPath(el) + "\" class=\"nav-item"
+                    + (doExpand ? " expanded" : "") + "\">");
+
+            out.append(indent);
+            String href = retrieveFullUrl(el);
+            out.append(" <a target=\"_self\" class=\"nav-link" + (active ? " active" : "") + "\" href=\"" + href
+                + "\">" + msg + "</a>");
+            if (doExpand) {
+                String[] subpath = path;
+                if (path.length > 0 && path[0].equals(currentNodeId)) {
+                    subpath = Arrays.copyOfRange(path, 1, path.length);
+                }
+                printSideNav(subpath, el, null, out);
+            }
+            out.append(indent).append(" </li>");
         }
     }
 
