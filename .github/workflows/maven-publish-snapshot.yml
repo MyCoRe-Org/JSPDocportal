@@ -13,6 +13,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'mycore-2025.06.x'
       - 'mycore-2024.06.x'
       - 'mycore-2023.06.x'
 
@@ -27,10 +28,10 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 21 and Maven Settings
+      - name: Set up JDK 25 and Maven Settings
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
+          java-version: '25'
           distribution: 'temurin'
           # Maven Distribution Server (step creates .m2/settings.xml)
           server-id: 'sonatype-central'
