@@ -45,9 +45,9 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocumentList;
@@ -56,7 +56,7 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.jspdocportal.ir.depotapi.HashedDirectoryStructure;
 import org.mycore.jspdocportal.ir.pdfdownload.PDFGenerator;
 import org.mycore.jspdocportal.ir.pdfdownload.PDFGeneratorService;
-import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.MCRSolrIndexRegistryManager;
 import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
 import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 
@@ -101,7 +101,7 @@ public class MCRPDFDownloadController {
             String recordIdentifier = path.endsWith(PDF_EXTENSION) ? path.substring(0, path.lastIndexOf('/')) : path;
             recordIdentifier = recordIdentifier.replace("/", "_");
 
-            SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
+            SolrClient solrClient = MCRSolrIndexRegistryManager.requireMainIndex().getClient();
             SolrQuery query = new SolrQuery();
             query.setQuery("recordIdentifier:" + recordIdentifier.replace("/", "_"));
 
@@ -146,7 +146,7 @@ public class MCRPDFDownloadController {
         String recordIdentifier = path.endsWith(PDF_EXTENSION) ? path.substring(0, path.lastIndexOf('/')) : path;
         recordIdentifier = recordIdentifier.replace("/", "_");
 
-        SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
+        SolrClient solrClient = MCRSolrIndexRegistryManager.requireMainIndex().getClient();
         SolrQuery query = new SolrQuery();
         query.setQuery("recordIdentifier:" + ClientUtils.escapeQueryChars(recordIdentifier)
         + " OR recordIdentifier:" + recordIdentifier.replaceFirst("_", "/"));

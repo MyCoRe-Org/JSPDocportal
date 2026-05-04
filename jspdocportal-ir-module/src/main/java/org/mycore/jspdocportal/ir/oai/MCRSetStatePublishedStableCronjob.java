@@ -17,7 +17,7 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mcr.cronjob.MCRCronjob;
-import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.MCRSolrIndexRegistryManager;
 import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
 import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 import org.mycore.util.concurrent.MCRFixedUserCallable;
@@ -54,7 +54,7 @@ public class MCRSetStatePublishedStableCronjob extends MCRCronjob {
         try {
             new MCRFixedUserCallable<Boolean>(() -> {
                 if (MCRConfiguration2.getString("MCR.Solr.ServerURL").isPresent()) {
-                    final SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
+                    final SolrClient solrClient = MCRSolrIndexRegistryManager.requireMainIndex().getClient();
                     final ModifiableSolrParams params = new ModifiableSolrParams();
 
                     params.set("start", 0);

@@ -30,9 +30,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Document;
@@ -43,7 +43,7 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 import org.mycore.jspdocportal.common.bpmn.MCRBPMNUtils;
-import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.MCRSolrIndexRegistryManager;
 import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
 import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 
@@ -185,7 +185,7 @@ public class MCRRetrieveObjectTag extends SimpleTagSupport {
 
     private static String retrieveMcridFromSolr(String query) throws IOException {
         try {
-            SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
+            SolrClient solrClient = MCRSolrIndexRegistryManager.requireMainIndex().getClient();
             SolrQuery solrQuery = new SolrQuery();
 
             if (query.startsWith("recordIdentifier:")) {

@@ -39,9 +39,9 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.mycore.common.config.MCRConfiguration2;
@@ -51,7 +51,7 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.services.i18n.MCRTranslation;
-import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.MCRSolrIndexRegistryManager;
 import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
 import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 
@@ -95,7 +95,7 @@ public class MCRClassificationBrowserTag extends SimpleTagSupport {
             new CacheLoader<>() {
                 @Override
                 public Integer load(String key) throws Exception {
-                    SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
+                    SolrClient solrClient = MCRSolrIndexRegistryManager.requireMainIndex().getClient();
                     SolrQuery query = new SolrQuery(key);
                     query.setRows(0);
                     try {

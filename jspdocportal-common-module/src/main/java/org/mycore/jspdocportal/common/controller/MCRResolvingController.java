@@ -39,9 +39,9 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
@@ -64,7 +64,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.services.i18n.MCRTranslation;
-import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.MCRSolrIndexRegistryManager;
 import org.mycore.solr.MCRSolrUtils;
 import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
 import org.mycore.solr.auth.MCRSolrAuthenticationManager;
@@ -334,7 +334,7 @@ public class MCRResolvingController {
                     query = key + ":" + ClientUtils.escapeQueryChars(value);
                 }
 
-                SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
+                SolrClient solrClient = MCRSolrIndexRegistryManager.requireMainIndex().getClient();
                 SolrQuery solrQuery = new SolrQuery(query);
                 solrQuery.setRows(1);
                 QueryRequest queryRequest = new QueryRequest(solrQuery);
@@ -357,7 +357,7 @@ public class MCRResolvingController {
     private Response resolveForGND(String gnd) {
         //"gnd_uri": "http://d-nb.info/gnd/14075444X"
         try {
-            SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
+            SolrClient solrClient = MCRSolrIndexRegistryManager.requireMainIndex().getClient();
             SolrQuery solrQuery = new SolrQuery();
             solrQuery.setQuery("gnd_uri:" + MCRSolrUtils.escapeSearchValue("http://d-nb.info/gnd/" + gnd));
             solrQuery.setFields("id");
