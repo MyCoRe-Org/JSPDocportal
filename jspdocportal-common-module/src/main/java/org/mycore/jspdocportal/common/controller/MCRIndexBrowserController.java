@@ -24,7 +24,7 @@ import org.glassfish.jersey.server.mvc.Viewable;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.jspdocportal.common.search.MCRSearchResultDataBean;
-import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.MCRSolrIndexRegistryManager;
 import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
 import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 
@@ -69,7 +69,7 @@ public class MCRIndexBrowserController {
             q.setRows(0);
             q.setStart(0);
 
-            SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
+            SolrClient solrClient = MCRSolrIndexRegistryManager.requireMainIndex().getClient();
 
             firstSelector.clear();
             try {

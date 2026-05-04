@@ -32,7 +32,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.MCRSolrIndexRegistryManager;
 import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
 import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 
@@ -84,7 +84,7 @@ public class MCRTemporaryObjectIDNormalizer {
                     QueryRequest queryRequest = new QueryRequest(params);
                     MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
                         MCRSolrAuthenticationLevel.SEARCH);
-                    solrResponse = queryRequest.process(MCRSolrCoreManager.getMainSolrClient());
+                    solrResponse = queryRequest.process(MCRSolrIndexRegistryManager.requireMainIndex().getClient());
                 } catch (Exception e) {
                     LOGGER.error("Error retrieving derivate id from SOLR", e);
                 }
@@ -126,7 +126,7 @@ public class MCRTemporaryObjectIDNormalizer {
                     QueryRequest queryRequest = new QueryRequest(params);
                     MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
                         MCRSolrAuthenticationLevel.SEARCH);
-                    solrResponse = queryRequest.process(MCRSolrCoreManager.getMainSolrClient());
+                    solrResponse = queryRequest.process(MCRSolrIndexRegistryManager.requireMainIndex().getClient());
                 } catch (Exception e) {
                     LOGGER.error("Error retrieving object id from SOLR", e);
                 }
