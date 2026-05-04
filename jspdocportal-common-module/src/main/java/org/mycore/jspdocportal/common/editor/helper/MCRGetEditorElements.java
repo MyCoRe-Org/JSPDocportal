@@ -35,7 +35,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
 import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.utils.MCRCategoryTransformer;
 import org.mycore.services.i18n.MCRTranslation;
@@ -178,7 +178,7 @@ public class MCRGetEditorElements {
     private Element transformClassToItems(String classid, String emptyLeafs, boolean withCounter)
         throws TransformerException {
         Document classJdom = MCRCategoryTransformer.getMetaDataDocument(
-            MCRCategoryDAOFactory.obtainInstance().getCategory(new MCRCategoryID(classid), -1), withCounter);
+            MCRCategoryDAO.obtainInstance().getCategory(new MCRCategoryID(classid), -1), withCounter);
         return MCREditorClassificationHelper.transformClassificationtoItems(classJdom, isTruthyString(emptyLeafs))
             .getRootElement();
     }
@@ -194,7 +194,7 @@ public class MCRGetEditorElements {
 
     private Element transformClassLabelsToItems(String classid) throws TransformerException {
         Document classJdom = MCRCategoryTransformer.getMetaDataDocument(
-            MCRCategoryDAOFactory.obtainInstance().getCategory(new MCRCategoryID(classid), -1), false);
+            MCRCategoryDAO.obtainInstance().getCategory(new MCRCategoryID(classid), -1), false);
         return MCREditorClassificationHelper.transformClassificationLabeltoItems(classJdom, true).getRootElement();
     }
 

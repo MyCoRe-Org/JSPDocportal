@@ -6,7 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
-import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper;
 
@@ -14,7 +13,7 @@ import jakarta.servlet.jsp.JspException;
 import jakarta.servlet.jsp.tagext.SimpleTagSupport;
 
 public class MCRDisplayClassificationCategoryTag extends SimpleTagSupport {
-    private static MCRCategoryDAO categoryDAO = MCRCategoryDAOFactory.obtainInstance();
+    private static MCRCategoryDAO categoryDAO = MCRCategoryDAO.obtainInstance();
 
     private static final Logger LOGGER = LogManager.getLogger();
 

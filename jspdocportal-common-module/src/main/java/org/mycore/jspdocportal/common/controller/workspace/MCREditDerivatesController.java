@@ -32,7 +32,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.server.mvc.Viewable;
 import org.jdom2.output.DOMOutputter;
 import org.mycore.datamodel.classifications2.MCRCategory;
-import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.datamodel.metadata.MCRDerivate;
@@ -165,7 +165,7 @@ public class MCREditDerivatesController {
 
         if (!StringUtils.isBlank(label)) {
             der.getDerivate().getClassifications().removeIf(x -> CLASSID__DERIVATE_TYPES.equals(x.getClassId()));
-            if (MCRCategoryDAOFactory.obtainInstance().exist(new MCRCategoryID(CLASSID__DERIVATE_TYPES, label))) {
+            if (MCRCategoryDAO.obtainInstance().exist(new MCRCategoryID(CLASSID__DERIVATE_TYPES, label))) {
                 der.getDerivate().getClassifications()
                     .add(new MCRMetaClassification("classification", 0, null, CLASSID__DERIVATE_TYPES, label));
             } else {
@@ -393,7 +393,7 @@ public class MCREditDerivatesController {
 
     public Map<String, String> calcDerivateLabels(String mode) {
         Map<String, String> result = new LinkedHashMap<>();
-        for (MCRCategory c : MCRCategoryDAOFactory.obtainInstance()
+        for (MCRCategory c : MCRCategoryDAO.obtainInstance()
             .getChildren(new MCRCategoryID(CLASSID__DERIVATE_TYPES))) {
             if (c.getCurrentLabel().isPresent()) {
                 Optional<MCRLabel> lblMode = c.getLabel("x-usedfor");

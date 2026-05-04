@@ -13,7 +13,7 @@ import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRSessionMgr;
-import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -59,7 +59,7 @@ public class MCRStartEditController {
                         variables.put(MCRBPMNMgr.WF_VAR_MODE, mode);
                         String role = mode + "-" + mcrObjID.getTypeId();
                         variables.put(MCRBPMNMgr.WF_VAR_HEADLINE,
-                            MCRCategoryDAOFactory.obtainInstance().getCategory(new MCRCategoryID("mcr-roles", role), 0)
+                            MCRCategoryDAO.obtainInstance().getCategory(new MCRCategoryID("mcr-roles", role), 0)
                                 .getCurrentLabel()
                                 .orElse(new MCRLabel(MCRSessionMgr.getCurrentSession().getLocale().getLanguage(),
                                     "??" + role + "??", ""))

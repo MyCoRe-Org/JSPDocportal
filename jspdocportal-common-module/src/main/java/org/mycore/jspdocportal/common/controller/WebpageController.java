@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.server.mvc.Viewable;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.classifications2.MCRCategory;
-import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.services.i18n.MCRTranslation;
 
@@ -113,7 +113,7 @@ public class WebpageController {
             result = MCRTranslation.translate("Browse.Facet." + facetKey.replace("_msg.facet", "") + "." + facetValue);
         }
         if (facetKey.contains("_class.facet")) {
-            MCRCategory categ = MCRCategoryDAOFactory.obtainInstance().getCategory(MCRCategoryID.ofString(facetValue),
+            MCRCategory categ = MCRCategoryDAO.obtainInstance().getCategory(MCRCategoryID.ofString(facetValue),
                 0);
             if (categ != null) {
                 result = categ.getCurrentLabel().get().getText();

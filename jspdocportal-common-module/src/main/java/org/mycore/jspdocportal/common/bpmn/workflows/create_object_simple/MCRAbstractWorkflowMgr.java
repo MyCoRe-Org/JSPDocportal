@@ -23,7 +23,7 @@ import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRDerivate;
@@ -138,7 +138,7 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
             der.getDerivate().getTitles().add(new MCRMetaLangText("title", "de", null, 0, "plain", title));
         }
         if (!StringUtils.isBlank(label)) {
-            if (MCRCategoryDAOFactory.obtainInstance().exist(new MCRCategoryID("derivate_types", label))) {
+            if (MCRCategoryDAO.obtainInstance().exist(new MCRCategoryID("derivate_types", label))) {
                 der.getDerivate().getClassifications()
                     .add(new MCRMetaClassification("classification", 0, null, "derivate_types", label));
             } else {

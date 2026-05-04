@@ -34,7 +34,7 @@ import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -107,7 +107,7 @@ public class MCRShowEditMenuTag extends MCRAbstractTag {
                     XPathExpression<Object> xpCheck = xpFactory.compile(entry.getValue(), Filters.fpassthrough(), null,
                         MCRConstants.MODS_NAMESPACE);
                     if (xpCheck.evaluateFirst(doc) != null) {
-                        String label = MCRCategoryDAOFactory.obtainInstance()
+                        String label = MCRCategoryDAO.obtainInstance()
                             .getCategory(new MCRCategoryID("mcr-roles", role), 0)
                             .getCurrentLabel()
                             .orElse(new MCRLabel(MCRSessionMgr.getCurrentSession().getLocale().getLanguage(),

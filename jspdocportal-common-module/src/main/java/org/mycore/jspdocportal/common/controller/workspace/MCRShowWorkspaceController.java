@@ -36,7 +36,7 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
 import org.mycore.datamodel.classifications2.MCRCategory;
-import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.datamodel.metadata.MCRDerivate;
@@ -199,7 +199,7 @@ public class MCRShowWorkspaceController {
         for (String role : roles) {
             if (role.startsWith("wf_")) {
                 newActions.put(role,
-                    MCRCategoryDAOFactory.obtainInstance().getCategory(new MCRCategoryID("mcr-roles", role), 0)
+                    MCRCategoryDAO.obtainInstance().getCategory(new MCRCategoryID("mcr-roles", role), 0)
                         .getCurrentLabel()
                         .orElse(new MCRLabel(MCRSessionMgr.getCurrentSession().getLocale().getLanguage(),
                             "??" + role + "??", ""))
@@ -223,7 +223,7 @@ public class MCRShowWorkspaceController {
                     variables.put(MCRBPMNMgr.WF_VAR_MODE, mode);
                     String role = mode + "-" + objectType;
                     variables.put(MCRBPMNMgr.WF_VAR_HEADLINE,
-                        MCRCategoryDAOFactory.obtainInstance().getCategory(new MCRCategoryID("mcr-roles", role), 0)
+                        MCRCategoryDAO.obtainInstance().getCategory(new MCRCategoryID("mcr-roles", role), 0)
                             .getCurrentLabel()
                             .orElse(new MCRLabel(MCRSessionMgr.getCurrentSession().getLocale().getLanguage(),
                                 "??" + role + "??", ""))
@@ -422,7 +422,7 @@ public class MCRShowWorkspaceController {
             Attribute attrLic = xpathLic.evaluateFirst(mcrObj.createXML());
             if (attrLic != null) {
                 String licID = attrLic.getValue().substring(attrLic.getValue().indexOf('#') + 1);
-                MCRCategory cat = MCRCategoryDAOFactory.obtainInstance()
+                MCRCategory cat = MCRCategoryDAO.obtainInstance()
                     .getCategory(MCRCategoryID.ofString("licenseinfo:" + licID), 0);
                 if (cat != null) {
                     Optional<MCRLabel> optLabelIcon = cat.getLabel("x-icon");
@@ -489,7 +489,7 @@ public class MCRShowWorkspaceController {
                     if (!der.getDerivate().getClassifications().isEmpty()) {
                         result.append("\n    <strong>");
                         for (MCRMetaClassification c : der.getDerivate().getClassifications()) {
-                            Optional<MCRLabel> oLabel = MCRCategoryDAOFactory.obtainInstance()
+                            Optional<MCRLabel> oLabel = MCRCategoryDAO.obtainInstance()
                                 .getCategory(new MCRCategoryID(c.getClassId(), c.getCategId()), 0).getCurrentLabel();
                             if (oLabel.isPresent()) {
                                 result.append('[').append(oLabel.get().getText()).append("] ");

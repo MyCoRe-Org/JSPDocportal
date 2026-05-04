@@ -42,7 +42,7 @@ import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.classifications2.MCRCategory;
-import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.frontend.MCRFrontendUtil;
@@ -219,7 +219,7 @@ public class MCRJSPMetsMods2IIIFConverter {
         if (attrProvider != null) {
             String providerID = attrProvider.getValue();
             providerID = providerID.substring(providerID.lastIndexOf('#') + 1);
-            MCRCategory categ = MCRCategoryDAOFactory.obtainInstance()
+            MCRCategory categ = MCRCategoryDAO.obtainInstance()
                 .getCategory(new MCRCategoryID("provider", providerID), 0);
             Optional<MCRLabel> oLabel = categ.getLabel("x-logo");
             if (oLabel.isPresent()) {

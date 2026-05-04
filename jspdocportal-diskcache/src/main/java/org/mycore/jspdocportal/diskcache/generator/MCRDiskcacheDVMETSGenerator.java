@@ -28,7 +28,6 @@ import org.jdom2.output.DOMOutputter;
 import org.mycore.common.content.MCRPathContent;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
-import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.metadata.MCRExpandedObject;
 import org.mycore.datamodel.metadata.MCRMetaEnrichedLinkID;
@@ -296,7 +295,7 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
     }
 
     private void insertCatalogLink(Mods mods, String provider, Document document, org.w3c.dom.Element eDvLinks) {
-        MCRCategoryDAO categDAO = MCRCategoryDAOFactory.obtainInstance();
+        MCRCategoryDAO categDAO = MCRCategoryDAO.obtainInstance();
 
         RecordInfo ri = getMODSChildren(mods, RecordInfo.class).get(0);
 
@@ -356,7 +355,7 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
     }
 
     private void insertSponsor(String sponsor, Document document, org.w3c.dom.Element eDvRights) {
-        MCRCategoryDAO categDAO = MCRCategoryDAOFactory.obtainInstance();
+        MCRCategoryDAO categDAO = MCRCategoryDAO.obtainInstance();
 
         MCRCategory catSponsor = categDAO.getCategory(new MCRCategoryID("sponsor", sponsor), 0);
         catSponsor.getLabel("de").ifPresent(l -> {
@@ -378,7 +377,7 @@ public class MCRDiskcacheDVMETSGenerator extends SimpleGenerator {
     }
 
     private void insertProvider(String provider, Document document, org.w3c.dom.Element eDvRights) {
-        MCRCategoryDAO categDAO = MCRCategoryDAOFactory.obtainInstance();
+        MCRCategoryDAO categDAO = MCRCategoryDAO.obtainInstance();
         MCRCategory catProvider = categDAO.getCategory(new MCRCategoryID("provider", provider), 0);
         catProvider.getLabel("de").ifPresent(l -> {
             org.w3c.dom.Element e2 = document.createElementNS(NAMESPACE__DFGVIEWER, "dv:owner");
