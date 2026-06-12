@@ -47,6 +47,10 @@ import jakarta.ws.rs.core.Context;
 
 @Path("/do/browse/{mask}")
 public class BrowseController {
+
+    private static final String VIEW_PREFIX =
+        MCRConfiguration2.getStringOrThrow("MCR.JSPDocportal.BrowseController.ViewPrefix");
+
     public static final Namespace NS_XED = Namespace.getNamespace("xed", "http://www.mycore.de/xeditor");
 
     public static final int DEFAULT_ROWS = 20;
@@ -57,7 +61,7 @@ public class BrowseController {
     public Viewable get(@PathParam("mask") String mask,
         @Context HttpServletRequest request) {
         Map<String, Object> model = new HashMap<>();
-        Viewable v = new Viewable("/browse/" + mask, model);
+        Viewable v = new Viewable(VIEW_PREFIX + mask, model);
 
         if (request.getParameter("_search") != null && request.getParameter("_search").length() > 0) {
             //check against null if session does not exist

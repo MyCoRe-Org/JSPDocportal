@@ -37,6 +37,9 @@ import jakarta.ws.rs.core.Response;
 public class MCRSaveWebcontentController {
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private static final String VIEW =
+        MCRConfiguration2.getStringOrThrow("MCR.JSPDocportal.SaveWebcontentController.View");
+
     @POST
     public Response post(@Context HttpServletRequest request) {
         String referer = null;
@@ -59,7 +62,7 @@ public class MCRSaveWebcontentController {
                         model.put("file", file);
                         model.put("content", loadContent(file));
 
-                        Viewable v = new Viewable("/webcontenteditor", model);
+                        Viewable v = new Viewable(VIEW, model);
                         return Response.ok(v).build();
 
                     }
