@@ -27,6 +27,9 @@ import jakarta.ws.rs.core.Response;
 public class MCRWorkflowProcessAdminController {
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private static final String VIEW =
+        MCRConfiguration2.getStringOrThrow("MCR.JSPDocportal.WorkflowProcessAdminController.View");
+
     @POST
     public Response defaultRes(@QueryParam("objectType") String objectType,
         @Context HttpServletRequest request) {
@@ -61,7 +64,7 @@ public class MCRWorkflowProcessAdminController {
             model.put("messages", List.of("You don't have the Permission to delete a process instance"));
         }
 
-        Viewable v = new Viewable("/workspace/administration", model);
+        Viewable v = new Viewable(VIEW, model);
         return Response.ok(v).build();
     }
 
