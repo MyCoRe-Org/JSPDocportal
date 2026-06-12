@@ -137,7 +137,11 @@
                           </div>
                           <div class="row mt-3">
                             <div class="col">
-                              <c:if test="${not fn:contains(currentVariables.mcrObjectID,'_person_')}">
+                              <mcr:isObjectTypeExcluded
+                                configKey="MCR.JSPDocportal.ShowWorkspaceController.Tasks.PicaImport.ExcludedObjectTypes"
+                                mcrId="${currentVariables.mcrObjectID}"
+                                var="picaExcluded" />
+                              <c:if test="${not picaExcluded}">
                                 <% pageContext.setAttribute("pica3URL", MCRConfiguration2.getString("MCR.Workflow.Pica3Import.URL").orElse("")); %>
                                 <a id="workspace_button_pica3_import"
                                    href="${pica3URL}?urn=${currentVariables.wfObjectDisplayPersistentIdentifier}&recordIdentifier=${currentVariables.wfObjectDisplayRecordIdentifier}&mcrid=${currentVariables.mcrObjectID}"
@@ -145,12 +149,24 @@
                                    <i class="fas fa-book"></i>
                                    <fmt:message key="WF.workspace.button.pica3" />
                                 </a>
+                              </c:if>
+                              <mcr:isObjectTypeExcluded
+                                configKey="MCR.JSPDocportal.ShowWorkspaceController.Tasks.ModsFromOpac.ExcludedObjectTypes"
+                                mcrId="${currentVariables.mcrObjectID}"
+                                var="opacExcluded" />
+                              <c:if test="${not opacExcluded}">
                                 <button id="workspace_button_mods_from_opac" class="btn btn-sm btn-outline-secondary"
                                         type="button" data-toggle="collapse"
                                         data-target="#import_mods-dialog-task_${currentTask.executionId}">
                                   <i class="fas fa-download"></i>
                                   <fmt:message key="WF.workspace.button.mods_from_opac" />
                                 </button>
+                              </c:if>
+                              <mcr:isObjectTypeExcluded
+                                configKey="MCR.JSPDocportal.ShowWorkspaceController.Tasks.EditReservation.ExcludedObjectTypes"
+                                mcrId="${currentVariables.mcrObjectID}"
+                                var="reservationExcluded" />
+                              <c:if test="${not reservationExcluded}">
                                 <button id="workspace_button_edit_reservation"
                                   name="doEditReservation-task_${currentTask.executionId}-${currentVariables.mcrObjectID}"
                                   value="" class="btn btn-sm btn-outline-secondary" type="submit">
