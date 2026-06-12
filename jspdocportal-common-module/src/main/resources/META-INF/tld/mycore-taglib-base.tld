@@ -711,5 +711,26 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+  <tag>
+    <description>Checks if the object type of MCRObjectID is excluded by the given configuration key</description>
+    <name>isObjectTypeExcluded</name>
+    <tag-class>org.mycore.jspdocportal.common.taglibs.MCRIsObjectTypeExcludedTag</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+      <name>configKey</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>mcrId</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>var</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+  </tag>
 
 </taglib>   
