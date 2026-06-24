@@ -20,8 +20,8 @@ import org.jdom2.JDOMException;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRURLContent;
-import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xsl.MCRParameterCollector;
+import org.mycore.common.xsl.uriresolver.MCRURIResolver;
 import org.mycore.resource.MCRResourceHelper;
 
 import jakarta.servlet.jsp.JspException;
