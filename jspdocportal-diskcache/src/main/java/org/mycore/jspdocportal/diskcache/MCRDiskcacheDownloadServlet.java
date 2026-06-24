@@ -24,7 +24,7 @@ public class MCRDiskcacheDownloadServlet extends FileServlet {
     private static final long serialVersionUID = 1L;
 
     private MCRIDMapper mcrIdMapper =
-        MCRConfiguration2.getInstanceOf(MCRIDMapper.class, MCRIDMapper.MCR_PROPERTY_CLASS).get();
+        MCRConfiguration2.getInstanceOf(MCRIDMapper.class, MCRIDMapper.MAPPER_PROPERTY).get();
 
     @Override
     public void init() throws ServletException {

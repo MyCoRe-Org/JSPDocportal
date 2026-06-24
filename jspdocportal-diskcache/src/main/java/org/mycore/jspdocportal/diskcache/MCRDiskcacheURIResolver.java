@@ -37,7 +37,7 @@ import org.xml.sax.InputSource;
 public class MCRDiskcacheURIResolver implements URIResolver {
 
     private MCRIDMapper mcrIdMapper =
-        MCRConfiguration2.getInstanceOf(MCRIDMapper.class, MCRIDMapper.MCR_PROPERTY_CLASS).get();
+        MCRConfiguration2.getInstanceOf(MCRIDMapper.class, MCRIDMapper.MAPPER_PROPERTY).get();
 
     @Override
     public Source resolve(String href, String base) throws TransformerException {
