@@ -62,7 +62,7 @@ public class MCRJSPDocportalIRCommands extends MCRAbstractCommands {
         Filters.element(), null, MODS_NAMESPACE);
 
     private static final MCRMODSCatalogService MODS_CATALOG_SERVICE = MCRConfiguration2
-        .getInstanceOf(MCRMODSCatalogService.class, "MCR.Workflow.MODSCatalogService.class").orElse(null);
+        .getInstanceOf(MCRMODSCatalogService.class, "MCR.Workflow.MODSCatalogService").orElse(null);
 
     /**
     * Update the MODS metadata of the given object with data from catalog
