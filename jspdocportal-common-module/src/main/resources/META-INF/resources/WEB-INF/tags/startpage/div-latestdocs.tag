@@ -20,7 +20,7 @@
                 </template>
                 <template v-if="doc['ir.title.result']">
                   <h5 class="card-title" v-for="title in [ doc['ir.title.result'] ]">
-                    <a class="card-link" href="#"
+                    <a class="card-link"
                        v-bind:href="baseurl + 'resolve/id/'+doc['id']" 
                        v-text="title.length > 120 ? title.substring(0,100) + '…' : title"></a>
                   </h5>
