@@ -14,7 +14,7 @@
 
     const baseUrl = document.querySelector('meta[name="mcr:baseurl"]').content;
     const mask = document.querySelector('meta[name="mcr:mask"]').content;
-    const currentLang = document.querySelector('meta[name="mcr:currentlang"]').content;
+    const currentLang = document.querySelector('meta[name="mcr:current_lang"]').content;
 
     let facetElements = Array.from(document.getElementsByTagName('mcr-class-card'));
     let facetFieldParams = facetElements.map(x => '&facet.field=' + x.getAttribute('facet-field')).join("");
