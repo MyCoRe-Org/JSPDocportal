@@ -207,7 +207,7 @@
                   const elemTabFulltext = document.getElementById('tab_fulltext');
                   if(elemTabFulltext) {
                     elemTabFulltext.addEventListener('shown.bs.tab', event => {
-                      document.getElementById('divMCRViewer').dispatchEvent(new Event('resize'));
+                      document.getElementById('divMCRViewer')?.dispatchEvent(new Event('resize'));
                     });
                     const urlParams = new URLSearchParams(window.location.search);
                     if(urlParams.has('_mcrviewer_start')) {
