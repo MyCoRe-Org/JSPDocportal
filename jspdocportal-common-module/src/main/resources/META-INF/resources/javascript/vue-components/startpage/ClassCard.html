@@ -1,0 +1,8 @@
+<div class="card ir-browse-classifications-card h-100" :data-mcr-classid="classid" :data-mcr-facet-field="props.facetField">
+  <div class="card-header p-2" v-if="classification?.ID">
+    <h4 class="mb-0">
+      {{ retrieveLabelText(classification, props.lang) }}
+    </h4>
+  </div>
+  <mcr-class-card-item :category="classification" :classid="classification?.ID" :lang="props.lang"/>
+</div>
