@@ -29,7 +29,7 @@ import jakarta.servlet.ServletResponse;
  * This filter is necessary if JSPs are rendered by Jersey's MVC-JSP template engine.
  * In combination with Jersey MVC 4.0.x and Tomcat 11 there are issues with the forwarding.
  * The response is internally forwarded to the template JSP.
- * I guess the some buffers are not flushed, so the output is broken and the last bytes are missing.
+ * I guess that some buffers are not flushed, so the output is broken and the last bytes are missing.
  * 
  * The filter needs to be registered in web.xml or web-fragment.xml
  * for the standard Servlet for JSPs:
@@ -56,11 +56,13 @@ public class MCRJerseyMVCJSPResponseFlushFilter implements Filter {
         throws IOException, ServletException {
         chain.doFilter(request, response);
 
-        try {
-            response.getWriter().flush();
-        } catch (IllegalStateException ex) {
-            // getOutputStream() has already been called for this response
-            response.getOutputStream().flush();
+        if (!response.isCommitted()) {
+            try {
+                response.getWriter().flush();
+            } catch (IllegalStateException ex) {
+                // getOutputStream() has already been called for this response
+                response.getOutputStream().flush();
+            }
         }
     }
 }
