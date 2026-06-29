@@ -9,6 +9,7 @@ const createClassCard = (template) => defineComponent({
     facetField: { type: String, required: true },
     classid: { type: String, required: true },
     mask: { type: String, required: true },
+    root: { type: String, required: false },
     lang: { type: String, required: true }
   },
 
@@ -28,7 +29,8 @@ const createClassCard = (template) => defineComponent({
     async function fetchClassification() {
       // MyCoRe Rest v1 unterstützt RootId-Filter für Teilbäume
       const langFilter = props.lang ? "lang:"+props.lang : "";
-      const classUrl =  baseUrl + "api/v1/classifications/"+props.classid+"?format=json&filter="+langFilter;
+      const rootFilter = props.root ? "root:"+props.root : "";
+      const classUrl =  baseUrl + "api/v1/classifications/"+props.classid+"?format=json&filter="+langFilter+";"+rootFilter;
       //const response = await fetch("https://corsproxy.io/?url=" + encodeURIComponent(classUrl));
       const response = await fetch(classUrl);
       classification.value = await response.json();
