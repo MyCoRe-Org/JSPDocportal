@@ -125,7 +125,6 @@ export async function initClassCardComponent(app, facetFieldsData, baseUrl) {
   ]);
 
   app.provide('facetFields', facetFieldsData);
-  app.provide('baseUrl', baseUrl);
   app.component("McrClassCard", createClassCard(tplClassCard));
   app.component("McrClassCardItem", createClassCardItem(tplClassCardItem));
 };

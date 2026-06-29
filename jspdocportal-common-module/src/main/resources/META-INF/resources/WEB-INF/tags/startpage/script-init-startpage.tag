@@ -9,13 +9,16 @@
 
 <script type="module">
     import { createApp } from 'vue';
+    import { createI18n } from 'vue-i18n';
     import {initClassCardComponent} from 'mcr-class-card';
     import {initLatestDocsCardComponent} from 'mcr-latest-docs-card';
+    import {initSearchboxCardComponent} from 'mcr-searchbox-card';
+    const app = createApp();
 
     const baseUrl = document.querySelector('meta[name="mcr:baseurl"]').content;
-    const mask = document.querySelector('meta[name="mcr:mask"]').content;
-    const currentLang = document.querySelector('meta[name="mcr:current_lang"]').content;
+    app.provide('baseUrl', baseUrl);
 
+    const mask = document.querySelector('meta[name="mcr:mask"]').content;
     let facetElements = Array.from(document.getElementsByTagName('mcr-class-card'));
     let facetFieldParams = facetElements.map(x => '&facet.field=' + x.getAttribute('facet-field')).join("");
     let latestDocsElements = Array.from(document.getElementsByTagName('mcr-latest-docs-card'));
@@ -33,11 +36,20 @@
           + "&fl="+solrFields;
     const solrData = await fetch(solrUrl).then(r => r.json());
   
-    const app = createApp();
-    await initClassCardComponent(app, solrData.facet_counts.facet_fields, baseUrl);
-    await initLatestDocsCardComponent(app, currentLang, solrData.response, baseUrl);
+    const currentLang = document.querySelector('meta[name="mcr:current_lang"]').content;
+    // Messages asynchron laden (top-level await in Modulen erlaubt)
+    const messages = await fetch(baseUrl+'javascript/vue-components/startpage/messages.json').then(r => r.json());
+    const i18n = createI18n({
+      legacy: false,        // Composition API aktivieren
+      locale: currentLang,  // Standardsprache
+      fallbackLocale: 'en', // Fallback falls eine Übersetzung fehlt
+      messages,
+    })
+    app.use(i18n);
 
-    //TODO: SearchboxCard (Placeholder + I18N in Suchschlitz mit Trefferzahl aktualisieren (i18n + parameter))
+    await initClassCardComponent(app, solrData.facet_counts.facet_fields, baseUrl);
+    await initLatestDocsCardComponent(app, solrData.response, baseUrl);
+    await initSearchboxCardComponent(app, solrData.response.numFound, baseUrl);
 
     app.mount(document.getElementById('app'));
 </script>

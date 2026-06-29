@@ -1,5 +1,5 @@
 import { defineComponent, inject, provide } from 'vue';
-import { createI18n, useI18n } from 'vue-i18n';
+import { useI18n } from 'vue-i18n';
 
 const createLatestDocsCard = (template) => defineComponent({
   name: 'LatestDocsCard',
@@ -15,20 +15,8 @@ const createLatestDocsCard = (template) => defineComponent({
     }
 });
 
-export async function initLatestDocsCardComponent(app, lang, solrResponse, baseUrl) {
-  // Messages asynchron laden (top-level await in Modulen erlaubt)
-  const messages = await fetch(baseUrl+'javascript/vue-components/startpage/messages.json').then(r => r.json());
-  const tplLatestDocsCard = await fetch(baseUrl + 'javascript/vue-components/startpage/LatestDocsCard.html').then(r => r.text())
-
-  const i18n = createI18n({
-    legacy: false,        // Composition API aktivieren
-    locale: lang,         // Standardsprache
-    fallbackLocale: 'en', // Fallback falls eine Übersetzung fehlt
-    messages,
-  })
-
-  app.use(i18n);
+export async function initLatestDocsCardComponent(app, solrResponse, baseUrl) {
   app.provide('solrResponse', solrResponse);
-  app.provide('baseUrl', baseUrl);
+  const tplLatestDocsCard = await fetch(baseUrl + 'javascript/vue-components/startpage/LatestDocsCard.html').then(r => r.text());
   app.component("McrLatestDocsCard", createLatestDocsCard(tplLatestDocsCard));
 };

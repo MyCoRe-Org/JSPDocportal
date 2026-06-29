@@ -1,0 +1,28 @@
+<div class="ir-browse-searchbox-card">
+  <div class="input-group mb-3">
+    <input type="text" class="form-control ir-form-control" 
+      v-bind:placeholder="placeholder"
+      v-model="searchTerm" v-on:keyup.enter="doSearch()" />
+    <button class="btn btn-primary" type="button" v-on:click="doSearch()">
+      <i class="fa fa-search"></i>
+    </button>
+  </div>
+
+  <div class="float-end">
+    <a class="btn btn-outline-secondary btn-sm" v-bind:href="baseUrl + 'do/browse/' + props.mask"> 
+      {{ t('Webpage.startpage.browse.searchbox.button_alldocuments') }}
+    </a>
+  </div>
+  <div class="form-check form-check-inline ms-2">
+    <input type="radio" class="form-check-input" id="filterField1" v-model="searchField" value="allMeta"> 
+    <label class="form-check-label" for="filterField1"> 
+      {{ t('Webpage.startpage.browse.searchbox.filter.' + props.mask + '.allMeta') }}
+    </label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input type="radio" class="form-check-input" id="filterField2" v-model="searchField" value="content">
+    <label class="form-check-label" for="filterField2"> 
+      {{ t('Webpage.startpage.browse.searchbox.filter.' + props.mask + '.content') }}
+    </label>
+  </div>
+</div>
