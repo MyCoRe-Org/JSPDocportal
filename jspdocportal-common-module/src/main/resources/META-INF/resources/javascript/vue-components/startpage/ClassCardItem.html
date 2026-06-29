@@ -2,9 +2,7 @@
   <template v-for="c in props.category.categories">
     <li class="list-group-item" v-if="sumCounts.get(c.ID) > 0" v-on:click="gotoPage(browseUrl, c.ID)">
       <span class="badge">{{ facetCounts.get(c.ID) }}</span>
-      <span class="ir-facets-btn-label">
-        {{ retrieveLabelText(c, props.lang) }}
-      </span>
+      <span class="ir-facets-btn-label" v-html="retrieveLabelText(c, props.lang)"></span>
     </li>
     <mcr-class-card-item :category="c" :lang="props.lang" />
   </template>
