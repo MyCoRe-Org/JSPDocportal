@@ -19,6 +19,7 @@ package org.mycore.jspdocportal.common.controller;
 
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
 import org.mycore.common.config.MCRConfiguration2;
 
@@ -30,6 +31,13 @@ public class MCRJerseyMVCApp extends ResourceConfig {
             .orElse("org.mycore.jspdocportal.common.controller");
         packages(packages.split(","));
         property(JspMvcFeature.TEMPLATE_BASE_PATH, "/WEB-INF/views");
+
+        /* By default, Jersey uses an internal 8-KB output buffer to determine the Content-Length 
+         * for HTTP responses. In MVC templates (JSP), this prevents premature
+         * flushing/streaming to the client. According to the Jersey User Guide (Appendix A), 
+         * setting `ServerProperties.OUTBOUND_CONTENT_LENGTH_BUFFER` to 0 
+         * disables caching, which immediately releases the data stream. */
+        property(ServerProperties.OUTBOUND_CONTENT_LENGTH_BUFFER, 128);
         register(MCRMakePathAbsoluteFilter.class);
         register(JspMvcFeature.class);
         register(MultiPartFeature.class);

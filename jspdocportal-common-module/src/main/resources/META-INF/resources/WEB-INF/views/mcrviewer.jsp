@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="org.mycore.datamodel.metadata.MCRExpandedObject"%>
 <%@page import="org.mycore.common.MCRSessionMgr"%>
 <%@page import="org.apache.logging.log4j.LogManager"%>
@@ -9,7 +10,7 @@
 <%@page import="org.mycore.datamodel.metadata.MCRMetadataManager"%>
 <%@page import="org.mycore.jspdocportal.common.MCRHibernateTransactionWrapper"%>
 
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld"%>
