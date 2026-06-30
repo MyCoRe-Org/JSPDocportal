@@ -44,7 +44,7 @@
               </div>
             </div>
             
-            <h2">
+            <h2>
               <fmt:message key="WF.workspace.headline" />
             </h2>
           </div>
