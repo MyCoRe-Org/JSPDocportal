@@ -8,11 +8,10 @@
   exclude-result-prefixes="mods xlink mcri18n mcracl"
   expand-text="yes">
  
-  <xsl:import href="resource:xslt/functions/i18n.xsl" />
-  <xsl:import href="resource:xslt/functions/acl.xsl" />
+  <xsl:include href="resource:xslt/default-parameters.xsl" />
+  <xsl:include href="xslInclude:functions" />
   <xsl:output method="html" indent="yes" standalone="no" encoding="UTF-8"/>
 
-  <xsl:param name="WebApplicationBaseURL"></xsl:param>
   <xsl:param name="MCR.DOI.Prefix"></xsl:param>
   <xsl:param name="MCR.Identifier.PURL.BaseURL"></xsl:param>
 

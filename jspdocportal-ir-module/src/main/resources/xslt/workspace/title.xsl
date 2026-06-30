@@ -7,10 +7,9 @@
   xmlns:mcracl="http://www.mycore.de/xslt/acl"
   exclude-result-prefixes="mods xlink mcri18n mcracl">
  
-  <xsl:import href="resource:xslt/functions/i18n.xsl" />
+  <xsl:include href="resource:xslt/default-parameters.xsl" />
+  <xsl:include href="xslInclude:functions" />
   <xsl:output method="html" indent="yes" standalone="no" encoding="UTF-8"/>
-
-  <xsl:param name="WebApplicationBaseURL"></xsl:param>
 
   <xsl:template match="/mycoreobject">
   <xsl:choose>
