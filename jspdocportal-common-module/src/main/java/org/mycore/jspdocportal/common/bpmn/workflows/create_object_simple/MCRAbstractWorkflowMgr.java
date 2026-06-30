@@ -87,13 +87,15 @@ public abstract class MCRAbstractWorkflowMgr implements MCRWorkflowMgr {
 
     @Override
     public MCRObject loadMCRObject(DelegateExecution execution) {
-        MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(
-            MCRObjectID.getInstance(String.valueOf(execution.getVariable(MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID))));
+        MCRObjectID mcrObjID =
+            MCRObjectID.getInstance(String.valueOf(execution.getVariable(MCRBPMNMgr.WF_VAR_MCR_OBJECT_ID)));
+        MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(mcrObjID);
         try (MCRHibernateTransactionWrapper unusedTw = new MCRHibernateTransactionWrapper()) {
             mcrObj.getService().removeFlags(FLAG_EDITEDBY);
             mcrObj.getService().addFlag(FLAG_EDITEDBY, MCRUserManager.getCurrentUser().getUserID());
 
             MCRMetadataManager.update(mcrObj);
+            mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(mcrObjID);
 
             MCRBPMNUtils.saveMCRObjectToWorkflowDirectory(mcrObj);
             processDerivatesOnLoad(mcrObj);
