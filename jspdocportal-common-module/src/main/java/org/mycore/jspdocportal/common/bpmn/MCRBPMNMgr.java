@@ -121,7 +121,7 @@ public class MCRBPMNMgr {
     }
 
     private static MCRWorkflowMgr getWorkflowMgrForMode(String mode) {
-        String prop = "MCR.Workflow.WorkflowMgr.Class.create_object_simple." + mode;
+        String prop = "MCR.Workflow.WorkflowMgr.create_object_simple." + mode;
         try {
             return MCRConfiguration2.getInstanceOf(MCRWorkflowMgr.class, prop).orElseThrow();
         } catch (Exception e) {
