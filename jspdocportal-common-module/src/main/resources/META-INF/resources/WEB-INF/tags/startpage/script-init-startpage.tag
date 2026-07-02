@@ -1,12 +1,4 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
-<fmt:message var="lblSearchPlaceholder" key="Browse.Search.placeholder.count" />
-<fmt:message var="lblSearchEmpty" key="Browse.Search.placeholder" />
-<mcr:session var="lang" info="language" />
-
 <script type="module">
     import { createApp } from 'vue';
     import { createI18n } from 'vue-i18n';
@@ -36,9 +28,10 @@
           + "&fl="+solrFields;
     const solrData = await fetch(solrUrl).then(r => r.json());
   
-    const currentLang = document.querySelector('meta[name="mcr:current_lang"]').content;
+    const currentLang = document.querySelector('meta[name="mcr:current_language"]').content;
+    const availLang = document.querySelector('meta[name="mcr:available_languages"]').content;
     // Messages asynchron laden (top-level await in Modulen erlaubt)
-    const messages = await fetch(baseUrl +"api/v1/messages?filter=Webpage.startpage.browse.&format=vue-i18n&lang=de;en").then(r => r.json());
+    const messages = await fetch(baseUrl +"api/v1/messages?filter=Webpage.startpage.browse.&format=vue-i18n&lang=" + availLang).then(r => r.json());
     const i18n = createI18n({
       legacy: false,        // Composition API aktivieren
       locale: currentLang,  // Standardsprache
