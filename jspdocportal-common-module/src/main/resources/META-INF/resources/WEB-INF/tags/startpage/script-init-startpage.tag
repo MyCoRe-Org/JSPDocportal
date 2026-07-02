@@ -44,5 +44,5 @@
     await initLatestDocsCardComponent(app, solrData.response, baseUrl);
     await initSearchboxCardComponent(app, solrData.response.numFound, baseUrl);
 
-    app.mount(document.getElementById('app'));
+    app.mount(document.getElementById('startpage_app'));
 </script>
