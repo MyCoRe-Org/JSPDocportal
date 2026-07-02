@@ -161,9 +161,10 @@
       <groupId>org.mycore</groupId>
       <artifactId>mycore-solr</artifactId>
     </dependency>
-        <dependency>
+    <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-solr-api</artifactId>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
