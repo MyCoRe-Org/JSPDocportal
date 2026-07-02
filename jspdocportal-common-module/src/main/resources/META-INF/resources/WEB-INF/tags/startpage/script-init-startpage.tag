@@ -26,7 +26,7 @@
  
     //const solrUrl = 'https://...de/servlets/solr/select?q=category%3A%22doctype%3Ahistbest%22&fq=state%3Apublished&sort=created+DESC&rows=5&wt=json&indent=true&facet=true&facet.field=ir.material_class.facet&facet.field=ir.epoch_class.facet&facet.field=ir.collection_class.facet&facet.field=ir.provider_class.facet&fl=id,created,ir.cover_url,ir.creator.result,ir.title.result,ir.doctype.result,ir.doctype_en.result,ir.originInfo.result&wt=json';
     //const solrData = await fetch("https://corsproxy.io/?url="+ encodeURIComponent(solrUrl)).then(r => r.json());
-    const solrUrl = baseUrl + "servlets/solr/select"
+    const solrUrl = baseUrl + "api/solr/main/select"
           + "?q=category%3A%22doctype%3A"+mask+"%22"
           + "&fq=state%3Apublished"
           + "&sort=created%20DESC"
@@ -38,7 +38,7 @@
   
     const currentLang = document.querySelector('meta[name="mcr:current_lang"]').content;
     // Messages asynchron laden (top-level await in Modulen erlaubt)
-    const messages = await fetch(baseUrl+'javascript/vue-components/startpage/messages.json').then(r => r.json());
+    const messages = await fetch(baseUrl +"api/v1/messages?filter=Webpage.startpage.browse.&format=vue-i18n&lang=de;en").then(r => r.json());
     const i18n = createI18n({
       legacy: false,        // Composition API aktivieren
       locale: currentLang,  // Standardsprache
