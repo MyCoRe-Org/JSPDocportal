@@ -30,6 +30,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
+import org.mycore.services.i18n.MCRTranslation;
 
 import jakarta.servlet.jsp.JspException;
 import jakarta.servlet.jsp.PageContext;
@@ -67,6 +68,9 @@ public class MCRSessionTag extends SimpleTagSupport {
                 break;
             case "language":
                 pageContext.setAttribute(var, mcrSession.getCurrentLanguage());
+                break;
+            case "availableLanguages":
+                pageContext.setAttribute(var, String.join(";",  MCRTranslation.getAvailableLanguages()));
                 break;
             case "IP":
                 pageContext.setAttribute(var, mcrSession.getCurrentIP());
