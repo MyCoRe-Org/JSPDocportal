@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jdom2.Element;
 import org.mycore.datamodel.metadata.MCRDefaultEnrichedDerivateLinkIDFactory;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCREditableMetaEnrichedLinkID;
@@ -29,9 +28,9 @@ public class MCRExtendedDerivateLinkIDFactory extends MCRDefaultEnrichedDerivate
                     @SuppressWarnings("rawtypes")
                     MCRFileAttributes attrs = Files.readAttributes(mcrPath, MCRFileAttributes.class);
                     derivateLinkID.setOrCreateElement("maindoc_size", Long.toString(attrs.size()));
-                    derivateLinkID.getContentList()
-                        .add(new Element("maindoc_" + attrs.digest().getAlgorithm().toLowerCase())
-                            .setText(attrs.digest().toHexString()));
+                    derivateLinkID.setOrCreateElement(
+                        "maindoc_" + attrs.digest().getAlgorithm().toLowerCase(),
+                        attrs.digest().toHexString());
                 } catch (IOException e) {
                     LOGGER.error(e);
                 }
