@@ -547,7 +547,8 @@ public final class DiskLruCache implements Closeable {
             journalWriter.append('\n');
 
             if (success) {
-                entry.sequenceNumber = nextSequenceNumber++;
+                entry.sequenceNumber = nextSequenceNumber;
+                nextSequenceNumber++;
             }
         } else {
             lruEntries.remove(entry.key);
