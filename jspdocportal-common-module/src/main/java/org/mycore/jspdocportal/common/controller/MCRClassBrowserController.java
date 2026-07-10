@@ -21,6 +21,9 @@ import jakarta.ws.rs.core.Response;
 @Path("/do/classbrowser/{modus}")
 public class MCRClassBrowserController {
 
+    private static final String VIEW =
+        MCRConfiguration2.getStringOrThrow("MCR.JSPDocportal.ClassBrowserController.View");
+
     @GET
     public Response defaultRes(@PathParam("modus") String modus,
         @Context HttpServletRequest request) {
@@ -29,7 +32,7 @@ public class MCRClassBrowserController {
         } else {
             Map<String, String> model = new HashMap<>();
             model.put("modus", modus);
-            Viewable v = new Viewable("/classbrowser", model);
+            Viewable v = new Viewable(VIEW, model);
             return Response.ok(v).build();
         }
     }
