@@ -137,7 +137,8 @@
                           </div>
                           <div class="row mt-3">
                             <div class="col">
-                              <c:if test="${not fn:contains(currentVariables.mcrObjectID,'_person_')}">
+                              <mcr:isTaskAllowedInWorkflow var="doGeneratePica3" task="generatePica3FromSubmissionForm" mcrid="${currentVariables.mcrObjectID}" />
+                              <c:if test="${doGeneratePica3}">
                                 <% pageContext.setAttribute("pica3URL", MCRConfiguration2.getString("MCR.Workflow.Pica3Import.URL").orElse("")); %>
                                 <a id="workspace_button_pica3_import"
                                    href="${pica3URL}?urn=${currentVariables.wfObjectDisplayPersistentIdentifier}&recordIdentifier=${currentVariables.wfObjectDisplayRecordIdentifier}&mcrid=${currentVariables.mcrObjectID}"
@@ -145,12 +146,18 @@
                                    <i class="fas fa-book"></i>
                                    <fmt:message key="WF.workspace.button.pica3" />
                                 </a>
+                              </c:if>
+                              <mcr:isTaskAllowedInWorkflow var="doImportMods" task="importModsFromOpac" mcrid="${currentVariables.mcrObjectID}"  />
+                              <c:if test="${doImportMods}">
                                 <button id="workspace_button_mods_from_opac" class="btn btn-sm btn-outline-secondary"
                                         type="button" data-bs-toggle="collapse"
                                         data-bs-target="#import_mods-dialog-task_${currentTask.executionId}">
                                   <i class="fas fa-download"></i>
                                   <fmt:message key="WF.workspace.button.mods_from_opac" />
                                 </button>
+                              </c:if>
+                              <mcr:isTaskAllowedInWorkflow var="doEditReservation" task="editReservation" mcrid="${currentVariables.mcrObjectID}" />
+                              <c:if test="${doEditReservation}">
                                 <button id="workspace_button_edit_reservation"
                                   name="doEditReservation-task_${currentTask.executionId}-${currentVariables.mcrObjectID}"
                                   value="" class="btn btn-sm btn-outline-secondary" type="submit">
@@ -158,6 +165,7 @@
                                   <fmt:message key="WF.workspace.button.edit_reservation" />
                                 </button>
                               </c:if>
+
                               <button id="workspace_button_edit_metadata"
                                 name="doEditObject-task_${currentTask.executionId}-${currentVariables.mcrObjectID}"
                                 value="" class="btn btn-sm btn-outline-secondary" type="submit">
