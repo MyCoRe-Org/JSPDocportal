@@ -231,7 +231,6 @@
       <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
-  
 	
 	<tag>
 		<description>A Tag, that checks via MCRAccessManager if the user 
