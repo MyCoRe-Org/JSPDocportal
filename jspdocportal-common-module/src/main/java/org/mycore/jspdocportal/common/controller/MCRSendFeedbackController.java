@@ -42,6 +42,8 @@ public class MCRSendFeedbackController {
     private static final Pattern EMAIL_PATTERN = Pattern
         .compile("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
 
+    private static final String VIEW =
+        MCRConfiguration2.getStringOrThrow("MCR.JSPDocportal.SendFeedbackController.View");
     //http://cpr.uni-rostock.de/feedback.action
     //?topicURL=http%3A%2F%2Fcpr.uni-rostock.de%2Fresolve%2Fid%2Fcpr_person_00003464
     //&topicHeader=Kr%C3%BCger%2C+Friedrich+Karl+von
@@ -51,7 +53,7 @@ public class MCRSendFeedbackController {
         @QueryParam("topicURL") String topicURL, @QueryParam("topicHeader") String topicHeader,
         @QueryParam("returnURL") @DefaultValue("") String returnURL) {
         Map<String, Object> model = new HashMap<>();
-        Viewable v = new Viewable("/feedback", model);
+        Viewable v = new Viewable(VIEW, model);
 
         String csrfToken = UUID.randomUUID().toString();
         request.getSession().setAttribute("feedbackFormCSRFToken", csrfToken);
@@ -78,7 +80,7 @@ public class MCRSendFeedbackController {
         @FormParam("returnURL") String returnURL,
         @FormParam("csrfToken") String csrfToken) {
         Map<String, Object> model = new HashMap<>();
-        Viewable v = new Viewable("/feedback", model);
+        Viewable v = new Viewable(VIEW, model);
 
         String sessionCSRFToken = String.valueOf(request.getSession().getAttribute("feedbackFormCSRFToken"));
         List<String> messages = new ArrayList<>();

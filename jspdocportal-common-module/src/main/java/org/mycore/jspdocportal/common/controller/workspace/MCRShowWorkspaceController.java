@@ -66,6 +66,14 @@ import jakarta.ws.rs.core.Response;
 public class MCRShowWorkspaceController {
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private static final String CONFIG_PREFIX = "MCR.JSPDocportal.ShowWorkspaceController.";
+
+    private static final String WORKSPACE_VIEW =
+        MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "Workspace.View");
+
+    private static final String FULL_PAGE_EDITOR_VIEW =
+        MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "FullPageEditor.View");
+
     private MCRMODSCatalogService modsCatService = MCRConfiguration2
         .getInstanceOf(MCRMODSCatalogService.class, "MCR.Workflow.MODSCatalogService.class").orElse(null);
 
@@ -207,7 +215,7 @@ public class MCRShowWorkspaceController {
         }
         model.put("newActions", newActions);
 
-        Viewable v = new Viewable("/workspace/workspace", model);
+        Viewable v = new Viewable(WORKSPACE_VIEW, model);
         return Response.ok(v).build();
     }
 
@@ -263,7 +271,7 @@ public class MCRShowWorkspaceController {
         MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
 
         Map<String, Object> model = new HashMap<>();
-        Viewable v = new Viewable("/workspace/fullpageEditor", model);
+        Viewable v = new Viewable(FULL_PAGE_EDITOR_VIEW, model);
 
         Path wfFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);
         String sourceURI = wfFile.toUri().toString();
@@ -307,7 +315,7 @@ public class MCRShowWorkspaceController {
         MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrID);
 
         Map<String, Object> model = new HashMap<>();
-        Viewable v = new Viewable("/workspace/fullpageEditor", model);
+        Viewable v = new Viewable(FULL_PAGE_EDITOR_VIEW, model);
 
         Path wfFile = MCRBPMNUtils.getWorkflowObjectFile(mcrObjID);
         String sourceURI = wfFile.toUri().toString();

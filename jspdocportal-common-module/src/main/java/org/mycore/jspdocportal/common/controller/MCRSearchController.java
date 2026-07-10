@@ -18,6 +18,7 @@ import org.jdom2.Document;
 import org.jdom2.Namespace;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.MCRURLContent;
@@ -66,6 +67,8 @@ public class MCRSearchController {
 
     public static final int DEFAULT_ROWS = 100;
 
+    private static final String VIEW = MCRConfiguration2.getStringOrThrow("MCR.JSPDocportal.SearchController.View");
+
     private MCRSearchResultDataBean result;
 
     @GET
@@ -87,7 +90,7 @@ public class MCRSearchController {
     public Response defaultRes(@PathParam(PARAM_MASK) String mask, @Context HttpServletRequest request,
         @Context HttpServletResponse response) {
         Map<String, Object> model = new HashMap<>();
-        Viewable v = new Viewable(("/search/search"), model);
+        Viewable v = new Viewable((VIEW), model);
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/xhtml;charset=utf-8");
 

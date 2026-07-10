@@ -31,6 +31,7 @@ import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.server.mvc.Viewable;
 import org.jdom2.output.DOMOutputter;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
@@ -60,6 +61,9 @@ import jakarta.ws.rs.core.Response;
 
 @jakarta.ws.rs.Path("/do/workspace/derivates")
 public class MCREditDerivatesController {
+    private static final String VIEW =
+        MCRConfiguration2.getStringOrThrow("MCR.JSPDocportal.EditDerivatesController.View");
+
     private static final String PREFIX_FILE = "-file_";
     private static final String CLASSID__DERIVATE_TYPES = "derivate_types";
     private static final String PREFIX_DERIVATE = "-derivate_";
@@ -121,7 +125,7 @@ public class MCREditDerivatesController {
     public Response defaultRes(@Context HttpServletRequest request,
         @QueryParam("taskid") String taskid, @QueryParam("mcrobjid") String mcrobjid) {
         Map<String, Object> model = new HashMap<>();
-        Viewable v = new Viewable("/workspace/edit-derivates", model);
+        Viewable v = new Viewable(VIEW, model);
         model.put("taskid", taskid);
         model.put("mcrobjid", mcrobjid);
 
@@ -440,6 +444,7 @@ public class MCREditDerivatesController {
     public record ActionParams(String action, String taskId, String mcrObjId, String mcrDerId, String fileName) {
 
         private static RuntimeService rs = MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService();
+
         public static ActionParams ofString(String s) {
             Matcher m = PATTERN_ACTION.matcher(s);
             if (m.find()) {
