@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.glassfish.jersey.server.mvc.Viewable;
 import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.services.i18n.MCRTranslation;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +16,8 @@ import jakarta.ws.rs.core.Response;
 
 @Path("/do/error")
 public class MCRErrorController {
+
+    private static final String VIEW = MCRConfiguration2.getStringOrThrow("MCR.JSPDocportal.ErrorController.View");
 
     @GET
     public Response defaultRes(@Context HttpServletRequest request) {
@@ -63,7 +66,7 @@ public class MCRErrorController {
 
         Map<String, Object> model = new HashMap<>();
         model.put("errorInfo", errorInfo);
-        Viewable v = new Viewable("/error", model);
+        Viewable v = new Viewable(VIEW, model);
 
         return Response.status(status).entity(v).build();
 

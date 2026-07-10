@@ -51,13 +51,16 @@ public class BrowseController {
 
     public static final int DEFAULT_ROWS = 20;
 
+    private static final String VIEW_PREFIX =
+        MCRConfiguration2.getStringOrThrow("MCR.JSPDocportal.BrowseController.ViewPrefix");
+
     private MCRSearchResultDataBean result;
 
     @GET
     public Viewable get(@PathParam("mask") String mask,
         @Context HttpServletRequest request) {
         Map<String, Object> model = new HashMap<>();
-        Viewable v = new Viewable("/browse/" + mask, model);
+        Viewable v = new Viewable(VIEW_PREFIX + mask, model);
 
         if (request.getParameter("_search") != null && request.getParameter("_search").length() > 0) {
             //check against null if session does not exist

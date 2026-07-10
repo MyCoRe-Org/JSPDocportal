@@ -77,6 +77,9 @@ public class MCRPDFDownloadController {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private static final String VIEW =
+        MCRConfiguration2.getStringOrThrow("MCR.JSPDocportal.PDFDownloadController.View");
+
     private static final String PROPERTY_DELETE_PDF_SECRET = "MCR.PDFDownload.Delete.Secret";
     private static final String HEADER_DELETE_PDF_SECRET = "X-MCR-PDFDownload-Delete-Secret";
     private static final DateTimeFormatter DTF =
@@ -149,7 +152,7 @@ public class MCRPDFDownloadController {
         SolrClient solrClient = MCRSolrIndexRegistryManager.requireMainIndex().getClient();
         SolrQuery query = new SolrQuery();
         query.setQuery("recordIdentifier:" + ClientUtils.escapeQueryChars(recordIdentifier)
-        + " OR recordIdentifier:" + recordIdentifier.replaceFirst("_", "/"));
+            + " OR recordIdentifier:" + recordIdentifier.replaceFirst("_", "/"));
 
         try {
             QueryRequest queryRequest = new QueryRequest(query);
@@ -195,7 +198,7 @@ public class MCRPDFDownloadController {
         model.put("progress", getProgress(servletContext, recordIdentifier));
         model.put("recordIdentifier", recordIdentifier);
 
-        Viewable v = new Viewable("/pdfdownload", model);
+        Viewable v = new Viewable(VIEW, model);
         return Response.ok(v).build();
     }
 

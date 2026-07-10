@@ -18,6 +18,7 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.glassfish.jersey.server.mvc.Viewable;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.solr.MCRSolrIndexRegistryManager;
 import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
 import org.mycore.solr.auth.MCRSolrAuthenticationManager;
@@ -41,6 +42,8 @@ import jakarta.ws.rs.core.Response;
 public class MCRViewerController {
     private static final String PARAM_FILE_PATH = "filePath";
     private static final Logger LOGGER = LogManager.getLogger();
+
+    private static final String VIEW = MCRConfiguration2.getStringOrThrow("MCR.JSPDocportal.ViewerController.View");
 
     @GET
     @Path("/{field}/{identifier}")
@@ -68,7 +71,7 @@ public class MCRViewerController {
             model.put(PARAM_FILE_PATH, filePath);
         }
 
-        Viewable v = new Viewable("/mcrviewer", model);
+        Viewable v = new Viewable(VIEW, model);
 
         SolrClient solrClient = MCRSolrIndexRegistryManager.requireMainIndex().getClient();
         String value = cleanIdentifier;

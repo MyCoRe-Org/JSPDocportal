@@ -40,6 +40,9 @@ import jakarta.ws.rs.core.Response;
 public class MCRIndexBrowserController {
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private static final String VIEW =
+        MCRConfiguration2.getStringOrThrow("MCR.JSPDocportal.IndexBrowserController.View");
+
     private Set<String> firstSelector = new TreeSet<>();
 
     private Map<String, Long> secondSelector = new TreeMap<>();
@@ -54,7 +57,7 @@ public class MCRIndexBrowserController {
         model.put("modus", modus);
         model.put("select", select);
 
-        Viewable v = new Viewable("/indexbrowser", model);
+        Viewable v = new Viewable(VIEW, model);
         try {
             String searchfield = MCRConfiguration2.getString("MCR.IndexBrowser." + modus + ".Searchfield").orElse(null);
             String facetfield = MCRConfiguration2.getString("MCR.IndexBrowser." + modus + ".Facetfield").orElse(null);

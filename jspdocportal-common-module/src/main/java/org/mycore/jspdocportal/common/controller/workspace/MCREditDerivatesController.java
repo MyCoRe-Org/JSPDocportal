@@ -31,6 +31,7 @@ import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.server.mvc.Viewable;
 import org.jdom2.output.DOMOutputter;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
@@ -73,6 +74,9 @@ public class MCREditDerivatesController {
     }
 
     private static final Logger LOGGER = LogManager.getLogger();
+
+    private static final String VIEW =
+        MCRConfiguration2.getStringOrThrow("MCR.JSPDocportal.EditDerivatesController.View");
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -121,7 +125,7 @@ public class MCREditDerivatesController {
     public Response defaultRes(@Context HttpServletRequest request,
         @QueryParam("taskid") String taskid, @QueryParam("mcrobjid") String mcrobjid) {
         Map<String, Object> model = new HashMap<>();
-        Viewable v = new Viewable("/workspace/edit-derivates", model);
+        Viewable v = new Viewable(VIEW, model);
         model.put("taskid", taskid);
         model.put("mcrobjid", mcrobjid);
 
