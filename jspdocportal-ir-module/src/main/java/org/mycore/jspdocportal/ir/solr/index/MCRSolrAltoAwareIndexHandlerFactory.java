@@ -21,9 +21,9 @@ package org.mycore.jspdocportal.ir.solr.index;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.mycore.solr.MCRSolrIndexType;
 import org.mycore.solr.index.MCRSolrIndexHandler;
+import org.mycore.solr.index.file.MCRSolrPathDocumentFactory;
 import org.mycore.solr.index.handlers.MCRSolrLazyInputDocumentHandlerFactory;
 
 /**
@@ -36,27 +36,31 @@ import org.mycore.solr.index.handlers.MCRSolrLazyInputDocumentHandlerFactory;
  */
 public class MCRSolrAltoAwareIndexHandlerFactory extends MCRSolrLazyInputDocumentHandlerFactory {
 
-    private static final Logger LOGGER = LogManager.getLogger();
-
-    @Override
-    public MCRSolrIndexHandler getIndexHandler(Path file, BasicFileAttributes attrs) {
-        return this.getIndexHandler(file, attrs, checkFile(file, attrs));
-    }
-
     @Override
     public MCRSolrIndexHandler getIndexHandler(Path file, BasicFileAttributes attrs, boolean sendContent) {
+        /* We ignore the sendContent param.
+         * We use Tika from MyCoRe to get the content of the file 
+         * - there is no need to send the file to Solr.
+         */
+        /*
         if (sendContent) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Solr: submitting file \"{} for indexing", file);
             }
             long start = System.currentTimeMillis();
-            /* extract metadata with tika */
             MCRSolrAltoFileIndexHandler indexHandler = new MCRSolrAltoFileIndexHandler(file, attrs);
             long end = System.currentTimeMillis();
             indexHandler.getStatistic().addTime(end - start);
             return indexHandler;
         } else {
             return super.getIndexHandler(file, attrs, sendContent);
-        }
+        }*/
+
+        //@see MCRSolrIndexHandlerFactory
+        MCRSolrIndexHandler indexHandler = new MCRAltoAwareSolrFileInputDocumentHandler(
+            () -> MCRSolrPathDocumentFactory.obtainInstance().getDocument(file, attrs), file.toString(),
+            MCRSolrIndexType.MAIN, file);
+        indexHandler.setIndexType(MCRSolrIndexType.MAIN);
+        return indexHandler;
     }
 }
