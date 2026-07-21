@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.Strings;
 import org.apache.commons.text.StringEscapeUtils;
@@ -44,6 +45,7 @@ import org.apache.solr.common.SolrInputField;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.util.ContentStreamBase;
 import org.mycore.common.MCRUtils;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.solr.MCRSolrIndexType;
 import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
 import org.mycore.solr.index.cs.MCRSolrPathContentStream;
@@ -52,18 +54,28 @@ import org.mycore.solr.index.handlers.stream.MCRSolrAbstractStreamIndexHandler;
 import org.mycore.solr.index.statistic.MCRSolrIndexStatistic;
 import org.mycore.solr.index.statistic.MCRSolrIndexStatisticCollector;
 
-public class MCRSolrAltoFileIndexHandler extends MCRSolrAbstractStreamIndexHandler {
+/**
+ * sample implementation on how to handle large fields, parallel to content stream indexing
+ * the stream and "small" Solr fields ares send via ContentStreamUpdateRequest (Solr fields as XML params)
+ * large Solr fields like for content or alto word coordinates are send as 2nd update request.
+ */
+public class MCRSolrStreamPlusLargeFieldsIndexHandler extends MCRSolrAbstractStreamIndexHandler {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
     private static final String TMPL_XML_FIELD = "\n  <field name=\"${name}\">${value}</field>";
     private static final String TMPL_XML_UPDATE_FIELD = "\n  <field name=\"${name}\" update=\"set\">${value}</field>";
 
-    protected Path file;
+    // the default "a^" is an anti-pattern that allways return false
+    // (there can be no "a" before the beginning of the term)
+    // sample configuration: MCR.Solr.JSPDocportal.LargeField.Pattern=^literal\.alto.*|^literal\.content$
+    private static final Pattern LARGE_SOLR_FIELD_PATTERN =
+        Pattern.compile(MCRConfiguration2.getString("MCR.Solr.JSPDocportal.LargeField.Pattern").orElse("a^"));
 
+    protected Path file;
     protected BasicFileAttributes attrs;
 
-    public MCRSolrAltoFileIndexHandler(Path file, BasicFileAttributes attrs) {
+    public MCRSolrStreamPlusLargeFieldsIndexHandler(Path file, BasicFileAttributes attrs) {
         this.file = file;
         this.attrs = attrs;
         this.setIndexType(MCRSolrIndexType.MAIN);
@@ -93,7 +105,7 @@ public class MCRSolrAltoFileIndexHandler extends MCRSolrAbstractStreamIndexHandl
 
                 // collect Alto specific parameters and remove those from the given solrParams
                 // then send them as atomic update doc with a 2nd request if applicable
-                List<Entry<String, String[]>> altoParams = extractAltoParams(solrParams);
+                List<Entry<String, String[]>> largeParams = extractLargeParams(solrParams);
 
                 updateRequest.setParams(solrParams);
                 updateRequest.setCommitWithin(getCommitWithin());
@@ -107,20 +119,22 @@ public class MCRSolrAltoFileIndexHandler extends MCRSolrAbstractStreamIndexHandl
                 /* actually send the request */
                 updateRequest.process(client);
 
-                if (!altoParams.isEmpty()) {
-                    String altoSolrDocXml = buildSolrAtomicUpdateDocXML(solrID, altoParams);
-                    ContentStreamUpdateRequest updateAltoReq = new ContentStreamUpdateRequest(SOLR_UPDATE_PATH);
-                    updateAltoReq.addContentStream(
+                if (!largeParams.isEmpty()) {
+                    String altoSolrDocXml = buildSolrAtomicUpdateDocXML(solrID, largeParams);
+                    ContentStreamUpdateRequest updateLargeFieldsReq = new ContentStreamUpdateRequest(SOLR_UPDATE_PATH);
+                    updateLargeFieldsReq.addContentStream(
                         new ContentStreamBase.StringStream(altoSolrDocXml, "application/xml"));
-                    updateAltoReq.setCommitWithin(getCommitWithin());
-                    updateAltoReq.process(client);
+                    getSolrAuthenticationFactory().applyAuthentication(updateLargeFieldsReq,
+                        MCRSolrAuthenticationLevel.INDEX);
+                    updateLargeFieldsReq.setCommitWithin(getCommitWithin());
+                    updateLargeFieldsReq.process(client);
                 }
 
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Solr: sending binary data \"{} ({})\" done in {}ms", file, solrID,
                         System.currentTimeMillis() - t);
                 }
-            } //MCR-1911: close any open resource
+            }
         }
     }
 
@@ -129,7 +143,9 @@ public class MCRSolrAltoFileIndexHandler extends MCRSolrAbstractStreamIndexHandl
         SolrInputDocument doc = MCRSolrPathDocumentFactory.obtainInstance().getDocument(file, attrs);
         for (SolrInputField field : doc) {
             String name = "literal." + field.getName();
-            if (field.getValueCount() > 1) {
+            if (field.getValueCount() == 0) {
+                params.set(name, (String) null);
+            } else if (field.getValueCount() > 1) {
                 String[] values = getValues(field.getValues());
                 params.set(name, values);
             } else {
@@ -152,16 +168,17 @@ public class MCRSolrAltoFileIndexHandler extends MCRSolrAbstractStreamIndexHandl
      * and removes them from the given ModifiableSolrParams object. 
      * e.g. &amp;literal.alto_words=alles%7C781%7C1086%7C148%7C32
      *      &amp;literal.alto_content=alles+wird+gut
+     *      &amp;literal.content=alles+wird+besser
      * 
      * @param solrParams the SolrParameterMap
      * @return Optional, containing the generated Solr update document as XML String
      */
-    private List<Entry<String, String[]>> extractAltoParams(ModifiableSolrParams solrParams) {
+    private List<Entry<String, String[]>> extractLargeParams(ModifiableSolrParams solrParams) {
         List<Entry<String, String[]>> altoParams = new ArrayList<>();
         Iterator<Entry<String, String[]>> it = solrParams.iterator();
         while (it.hasNext()) {
             Entry<String, String[]> param = it.next();
-            if (param.getKey().startsWith("literal.alto")) {
+            if (LARGE_SOLR_FIELD_PATTERN.matcher(param.getKey()).matches()) {
                 altoParams.add(Map.entry(param.getKey(), param.getValue()));
                 it.remove();
             }
