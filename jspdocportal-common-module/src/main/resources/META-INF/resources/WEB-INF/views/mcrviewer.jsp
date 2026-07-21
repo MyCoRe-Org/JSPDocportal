@@ -167,7 +167,7 @@
 				i18nURL : "${applicationScope.WebApplicationBaseURL}rsc/locale/translate/{lang}/component.viewer.*",
 				lang : "${lang}",
 				webApplicationBaseURL : "${applicationScope.WebApplicationBaseURL}",
-				derivateURL : "${applicationScope.WebApplicationBaseURL}file/${mcrid}/${derid}/",
+        derivateURL : "${applicationScope.WebApplicationBaseURL}depot/${fn:replace(it.recordIdentifier,'/','_')}/",
 				canvas: {
                 	startup:{
                 		fitWidth: true
