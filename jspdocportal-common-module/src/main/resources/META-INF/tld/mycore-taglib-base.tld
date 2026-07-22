@@ -144,6 +144,28 @@
         <rtexprvalue>true</rtexprvalue>
       </attribute>
     </tag>
+    
+  <tag>
+    <description> A Tag, that checks if a workflow task is allowed for the given object (checked by type)</description>
+    <name>isTaskAllowedInWorkflow</name>
+    <tag-class>org.mycore.jspdocportal.common.taglibs.MCRIsTasksAllowedInWorkflowTag</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+      <name>var</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>mcrid</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>task</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
 	
 	<tag>
 		<description>A Tag, that loads an MCRObject from Repository or workflow directory </description>
