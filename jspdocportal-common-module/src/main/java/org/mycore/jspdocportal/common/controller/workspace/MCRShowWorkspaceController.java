@@ -303,7 +303,7 @@ public class MCRShowWorkspaceController {
         RuntimeService rs = MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService();
         String mode = ((StringValue) rs.getVariableLocalTyped(taskID, MCRBPMNMgr.WF_VAR_MODE)).getValue();
 
-        String propKey = "MCR.Workflow.Metadata.Editor.Path.create_object_simple." + mode;
+        String propKey = "MCR.Workflow.Metadata.Editor.Path.create_object_simple." + mcrObjID.getTypeId() + "." + mode;
         String editorPath = MCRConfiguration2.getStringOrThrow(propKey);
         model.put("editorPath", editorPath);
 
