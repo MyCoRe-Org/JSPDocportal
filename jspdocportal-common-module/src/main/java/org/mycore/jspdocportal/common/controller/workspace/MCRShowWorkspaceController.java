@@ -68,11 +68,9 @@ public class MCRShowWorkspaceController {
 
     private static final String CONFIG_PREFIX = "MCR.JSPDocportal.ShowWorkspaceController.";
 
-    private static final String WORKSPACE_VIEW =
-        MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "Workspace.View");
+    private static final String WORKSPACE_VIEW = MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "Workspace.View");
 
-    private static final String FULL_PAGE_EDITOR_VIEW =
-        MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "FullPageEditor.View");
+    private static final String FULL_PAGE_EDITOR_VIEW = MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "FullPageEditor.View");
 
     private MCRMODSCatalogService modsCatService = MCRConfiguration2
         .getInstanceOf(MCRMODSCatalogService.class, "MCR.Workflow.MODSCatalogService.class").orElse(null);
@@ -304,7 +302,7 @@ public class MCRShowWorkspaceController {
         RuntimeService rs = MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService();
         String mode = ((StringValue) rs.getVariableLocalTyped(taskID, MCRBPMNMgr.WF_VAR_MODE)).getValue();
 
-        String propKey = "MCR.Workflow.Metadata.Editor.Path.create_object_simple." + mode;
+        String propKey = "MCR.Workflow.Metadata.Editor.Path.create_object_simple." + mcrObjID.getTypeId() + "." + mode;
         String editorPath = MCRConfiguration2.getStringOrThrow(propKey);
         model.put("editorPath", editorPath);
 
@@ -336,7 +334,7 @@ public class MCRShowWorkspaceController {
             "ID: {}",
             () -> MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getActivityInstance(taskID).getId());
 
-        String propKey = "MCR.Workflow.Reservation.Editor.Path.create_object_simple." + mode;
+        String propKey = "MCR.Workflow.Reservation.Editor.Path.create_object_simple." + mcrObjID.getTypeId() + "." + mode;
         String editorPath = MCRConfiguration2.getStringOrThrow(propKey);
         model.put("editorPath", editorPath);
 
