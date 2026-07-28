@@ -71,11 +71,10 @@ public class MCRShowWorkspaceController {
 
     private static final String CONFIG_PREFIX = "MCR.JSPDocportal.ShowWorkspaceController.";
 
-    private static final String WORKSPACE_VIEW =
-        MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "Workspace.View");
+    private static final String WORKSPACE_VIEW = MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "Workspace.View");
 
-    private static final String FULL_PAGE_EDITOR_VIEW =
-        MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "FullPageEditor.View");
+    private static final String FULL_PAGE_EDITOR_VIEW
+        = MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "FullPageEditor.View");
 
     @POST
     public Response submitForm(@Context HttpServletRequest request) {
@@ -335,7 +334,7 @@ public class MCRShowWorkspaceController {
             "ID: {}",
             () -> MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getActivityInstance(taskID).getId());
 
-        String propKey = "MCR.Workflow.Reservation.Editor.Path.create_object_simple." + mcrObjID.getTypeId() + mode;
+        String propKey = "MCR.Workflow.Reservation.Editor.Path.create_object_simple." + mcrObjID.getTypeId() + "." + mode;
         String editorPath = MCRConfiguration2.getStringOrThrow(propKey);
         model.put("editorPath", editorPath);
 
