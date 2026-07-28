@@ -73,8 +73,7 @@ public class MCRShowWorkspaceController {
 
     private static final String WORKSPACE_VIEW = MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "Workspace.View");
 
-    private static final String FULL_PAGE_EDITOR_VIEW
-        = MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "FullPageEditor.View");
+    private static final String FULL_PAGE_EDITOR_VIEW = MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "FullPageEditor.View");
 
     @POST
     public Response submitForm(@Context HttpServletRequest request) {
