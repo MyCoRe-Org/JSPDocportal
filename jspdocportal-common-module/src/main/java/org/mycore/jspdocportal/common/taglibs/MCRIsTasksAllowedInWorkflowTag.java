@@ -22,7 +22,7 @@ package org.mycore.jspdocportal.common.taglibs;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,11 +39,12 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
  */
 public class MCRIsTasksAllowedInWorkflowTag extends SimpleTagSupport {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String PROP_KEY_PREFIX = "MCR.Worfklow.MCRObject.Tasks.";
+    private static final String PROP_KEY_PREFIX = "MCR.Worfklow.AllowedTasks.create_object_simple.";
 
     private String var;
     private String mcrid;
     private String task;
+    private String wfMode;
 
     public void setVar(String var) {
         this.var = var;
@@ -57,15 +58,20 @@ public class MCRIsTasksAllowedInWorkflowTag extends SimpleTagSupport {
         this.task = task;
     }
 
+    public void setWfMode(String wfMode) {
+        this.wfMode = wfMode;
+    }
+
     @Override
     public void doTag() throws JspException, IOException {
         PageContext pageContext = (PageContext) getJspContext();
         pageContext.setAttribute(var, false);
         try {
             MCRObjectID mcrobjid = MCRObjectID.getInstance(mcrid);
-            Map<String, String> taskMap = MCRConfiguration2.getSubPropertiesMap(PROP_KEY_PREFIX);
-            if (taskMap.containsKey(mcrobjid.getTypeId())) {
-                List<String> tasks = Arrays.stream(taskMap.get(mcrobjid.getTypeId()).split(","))
+            String propKey = PROP_KEY_PREFIX + mcrobjid.getTypeId() + "." + wfMode;
+            Optional<String> oProp = MCRConfiguration2.getString(propKey);
+            if (oProp.isPresent()) {
+                List<String> tasks = Arrays.stream(oProp.get().split(","))
                     .map(String::trim)
                     .filter(s -> !s.isEmpty())
                     .toList();
