@@ -335,7 +335,7 @@ public class MCRShowWorkspaceController {
             "ID: {}",
             () -> MCRBPMNMgr.getWorfklowProcessEngine().getRuntimeService().getActivityInstance(taskID).getId());
 
-        String propKey = "MCR.Workflow.Reservation.Editor.Path.create_object_simple." + mode;
+        String propKey = "MCR.Workflow.Reservation.Editor.Path.create_object_simple." + mcrObjID.getTypeId() + mode;
         String editorPath = MCRConfiguration2.getStringOrThrow(propKey);
         model.put("editorPath", editorPath);
 
