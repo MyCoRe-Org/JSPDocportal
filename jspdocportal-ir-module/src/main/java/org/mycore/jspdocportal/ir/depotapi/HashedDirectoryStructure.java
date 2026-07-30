@@ -57,7 +57,7 @@ public class HashedDirectoryStructure {
         .compile("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}");
 
     //ppn30 - ppn299 - TODO better to start splitting by counting from endfrom back
-    public static final Pattern ID_START_SPLITT_PATTERN = Pattern.compile("^([a-zA-Z]*[1-2]?[0-9]{2})");
+    public static final Pattern ID_START_SPLITT_PATTERN = Pattern.compile("^([a-zA-Z]*[1-2]?[0-9]{1,2})");
 
     /**
      * 
