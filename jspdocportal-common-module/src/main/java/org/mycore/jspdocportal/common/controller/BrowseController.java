@@ -18,6 +18,8 @@
 
 package org.mycore.jspdocportal.common.controller;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -137,10 +139,10 @@ public class BrowseController {
             if (request.getParameter("_add-filter") != null) {
                 for (String s : request.getParameterValues("_add-filter")) {
                     if (!s.trim().endsWith(":") && s.contains(":")) {
-                        String key = s.substring(0, s.indexOf(':'));
+                        String key = URLEncoder.encode(s.substring(0, s.indexOf(":")), StandardCharsets.UTF_8);
                         String values = s.substring(s.indexOf(':') + 1);
                         for (String val : values.split("\\s")) {
-                            String f = key + ":" + val;
+                            String f = key + ":" + URLEncoder.encode(val, StandardCharsets.UTF_8);
                             if (!result.getFilterQueries().contains(f)) {
                                 result.getFilterQueries().add(f);
                             }
