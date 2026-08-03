@@ -73,7 +73,18 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
  * <mcr:transformXSL dom="${doc}" xslImports="docdetails-metadata" />
  */
 public class MCRTransformXslTag extends SimpleTagSupport {
+
     private static final Logger LOGGER = LogManager.getLogger();
+
+    private static final Class<? extends TransformerFactory> SAXON_TRANSFORMER_FACTORY_CLASS;
+
+    static {
+        try {
+            SAXON_TRANSFORMER_FACTORY_CLASS = MCRClassTools.forName("net.sf.saxon.TransformerFactoryImpl");
+        } catch (ClassNotFoundException e) {
+            throw new ExceptionInInitializerError(e);
+        }
+    }
 
     private Document dom;
 
@@ -92,17 +103,13 @@ public class MCRTransformXslTag extends SimpleTagSupport {
                 throw new JspException("Attributes 'xslt' and 'xslImports' are mutually exclusive");
             }
 
-            // this works, if the default transformer is xslt3 (set by property):
-            // MCR.LayoutService.TransformerFactoryClass=net.sf.saxon.TransformerFactoryImpl
-            // MCRXSLTransformer t = MCRXSLTransformer.getInstance(stylesheet);
-            Class<? extends TransformerFactory> tfClass = MCRClassTools.forName("net.sf.saxon.TransformerFactoryImpl");
             MCRXSLTransformer t;
             if (xslImports != null) {
                 String virtualStylesheet = createVirtualStylesheet(xslImports);
                 MCRTemplatesSource source = new MCRVirtualTemplatesSource(xslImports, virtualStylesheet);
-                t = new MCRTemplatesSourceXSLTransformer(tfClass, source);
+                t = new MCRTemplatesSourceXSLTransformer(SAXON_TRANSFORMER_FACTORY_CLASS, source);
             } else {
-                t = MCRXSLTransformer.obtainInstance(tfClass, stylesheet);
+                t = MCRXSLTransformer.obtainInstance(SAXON_TRANSFORMER_FACTORY_CLASS, stylesheet);
             }
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
