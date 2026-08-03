@@ -201,18 +201,18 @@ public class MCRTransformXslTag extends SimpleTagSupport {
 
             XMLReader reader = factory.newSAXParser().getXMLReader();
             InputSource inputSource = new InputSource(new StringReader(content));
-            inputSource.setSystemId(getURL().toExternalForm());
+            inputSource.setSystemId("file:/virtual/" + name + ".xsl");
 
             return new SAXSource(reader, inputSource);
         }
 
+        /**
+         * Always returns {@code null}, since this template source is virtual and backed by
+         * in-memory content rather than a real resource with a resolvable URL.
+         */
         @Override
         public URL getURL() {
-            try {
-                return URI.create("file:/virtual/" + name + ".xsl").toURL();
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
+            return null;
         }
 
         @Override
