@@ -122,6 +122,7 @@ public class MCRTransformXslTag extends SimpleTagSupport {
             }
         } catch (Exception e) {
             LOGGER.error("Error in XSLT-Processing ({}): {}", mcrid, stylesheet, e);
+            throw new JspException("Error transforming XSL for mcrid=" + mcrid, e);
         }
     }
 
