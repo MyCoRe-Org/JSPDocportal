@@ -60,11 +60,9 @@ import jakarta.servlet.jsp.JspException;
 import jakarta.servlet.jsp.tagext.SimpleTagSupport;
 
 /**
- * This class will add namespace declarations (prefix-uri pairs) to the XPathUtil class
- * which is used by the JSTL XML Tag Library to process XPath expressions.
- * This allows us to use any namespace prefix in XPath Expressions processed by this JSTL.
- * 
- * Uses the Java Reflection Framework to modify private fields
+ * JSP tag that transforms a DOM/JDOM document or an MCRObject (by ID) using an XSL
+ * stylesheet, either given directly via 'xslt' or composed virtually from XSL imports
+ * via 'xslImports'.
  *  
  * @author Robert Stephan
  * 
