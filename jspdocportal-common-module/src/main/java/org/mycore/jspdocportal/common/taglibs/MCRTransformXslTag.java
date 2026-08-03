@@ -178,7 +178,7 @@ public class MCRTransformXslTag extends SimpleTagSupport {
 
         private final String name;
         private final String content;
-        private final Long created;
+        private final long created;
 
         public MCRVirtualTemplatesSource(String name, String content) {
             super("virtual_" + name);
