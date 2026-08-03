@@ -156,18 +156,6 @@ public class MCRTransformXslTag extends SimpleTagSupport {
         this.jdom = jdom;
     }
 
-    static class MCRTemplatesSourceXSLTransformer extends MCRXSLTransformer {
-
-        public MCRTemplatesSourceXSLTransformer(Class<? extends TransformerFactory> factoryClass,
-            MCRTemplatesSource... templateSources) {
-            super(factoryClass);
-            this.templateSources = templateSources;
-            this.modified = new long[this.templateSources.length];
-            this.modifiedChecked = 0L;
-            this.templates = new Templates[this.templateSources.length];
-        }
-    }
-
     public static String createVirtualStylesheet(String importName) {
         return """
         <?xml version="1.0" encoding="UTF-8"?>
@@ -179,6 +167,18 @@ public class MCRTransformXslTag extends SimpleTagSupport {
 
         </xsl:stylesheet>
         """.formatted(importName);
+    }
+
+    static class MCRTemplatesSourceXSLTransformer extends MCRXSLTransformer {
+
+        public MCRTemplatesSourceXSLTransformer(Class<? extends TransformerFactory> factoryClass,
+            MCRTemplatesSource... templateSources) {
+            super(factoryClass);
+            this.templateSources = templateSources;
+            this.modified = new long[this.templateSources.length];
+            this.modifiedChecked = 0L;
+            this.templates = new Templates[this.templateSources.length];
+        }
     }
 
     static class MCRVirtualTemplatesSource extends MCRTemplatesSource {
