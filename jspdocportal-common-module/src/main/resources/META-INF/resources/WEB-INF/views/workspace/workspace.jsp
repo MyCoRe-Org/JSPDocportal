@@ -9,6 +9,7 @@
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="mcr" uri="http://www.mycore.org/jspdocportal/base.tld"%>
+<%@ taglib prefix="mcrworkspace" tagdir="/WEB-INF/tags/workspace"%>
 
 <fmt:message var="pageTitle" key="WF.workspace" />
 
@@ -111,8 +112,7 @@
                           </c:if>
                           <div class="row">
                             <div class="col-9">
-                              <h4 class="mt-0">${currentVariables.wfObjectDisplayTitle}</h4>
-                              <c:out value="${currentVariables.wfObjectDisplayDescription}" escapeXml="false" />
+                              <mcrworkspace:object-header mcrObjectID="${currentVariables.mcrObjectID}" />
                             </div>
                             <div class="col-3 text-right">
                               <a href="${WebApplicationBaseURL}resolve/id/${currentVariables.mcrObjectID}?fromWF=true&anchor=task_${currentTask.executionId}"
@@ -274,8 +274,7 @@
                           <c:if test="${not empty currentVariables.validationMessage}">
                             <div class="alert alert-danger" role="alert">${currentVariables.validationMessage}</div>
                           </c:if>
-                          <h4 style="margin-top: 0px">${currentVariables.wfObjectDisplayTitle}</h4>
-                          <c:out value="${currentVariables.wfObjectDisplayDescription}" escapeXml="false" />
+                          <mcrworkspace:object-header mcrObjectID="${currentVariables.mcrObjectID}" />
                         </div>
                       </div>
                     </div>
