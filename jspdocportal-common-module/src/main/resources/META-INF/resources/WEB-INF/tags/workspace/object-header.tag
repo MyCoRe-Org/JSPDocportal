@@ -7,16 +7,12 @@
 
 <c:choose>
   <c:when test="${empty mcrObjectID}">
-    <h4 class="mt-0"><fmt:message key="WF.common.newObject" /></h4>
+    <h4 class="mt-0">
+      <fmt:message key="WF.common.newObject" />
+    </h4>
   </c:when>
   <c:otherwise>
-    <mcr:retrieveObject
-      mcrid="${mcrObjectID}"
-      varDOM="mcrobj"
-      cache="true"
-      fromWorkflow="false" />
-    <mcr:transformXSL
-      dom="${mcrobj}"
-      xslImports="workspace-object-header" />
+    <mcr:retrieveObject mcrid="${mcrObjectID}" varDOM="mcrobj" cache="true" fromWorkflow="false" />
+    <mcr:transformXSL dom="${mcrobj}" xslImports="workspace-object-header" />
   </c:otherwise>
 </c:choose>
