@@ -24,19 +24,12 @@ package org.mycore.jspdocportal.common.taglibs;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.StringReader;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.Templates;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.SAXSource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.MCRCache;
 import org.mycore.common.MCRClassTools;
 import org.mycore.common.content.MCRDOMContent;
 import org.mycore.common.content.MCRJDOMContent;
@@ -44,10 +37,10 @@ import org.mycore.common.content.transformer.MCRXSLTransformer;
 import org.mycore.common.xsl.MCRTemplatesSource;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.jspdocportal.common.xsl.MCRDirectTemplatesSourceTransformer;
+import org.mycore.jspdocportal.common.xsl.MCRVirtualStylesheetUtils;
+import org.mycore.jspdocportal.common.xsl.MCRVirtualTemplatesSource;
 import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
 import jakarta.servlet.jsp.JspException;
 import jakarta.servlet.jsp.tagext.SimpleTagSupport;
@@ -98,9 +91,9 @@ public class MCRTransformXslTag extends SimpleTagSupport {
 
             MCRXSLTransformer t;
             if (xslImports != null) {
-                String virtualStylesheet = createVirtualStylesheet(xslImports);
+                String virtualStylesheet = MCRVirtualStylesheetUtils.createVirtualStylesheet(xslImports, "html");
                 MCRTemplatesSource source = new MCRVirtualTemplatesSource(xslImports, virtualStylesheet);
-                t = new MCRTemplatesSourceXSLTransformer(SAXON_TRANSFORMER_FACTORY_CLASS, source);
+                t = MCRDirectTemplatesSourceTransformer.obtainInstance(SAXON_TRANSFORMER_FACTORY_CLASS, source);
             } else {
                 t = MCRXSLTransformer.obtainInstance(SAXON_TRANSFORMER_FACTORY_CLASS, stylesheet);
             }
@@ -148,85 +141,5 @@ public class MCRTransformXslTag extends SimpleTagSupport {
 
     public void setJdom(org.jdom2.Document jdom) {
         this.jdom = jdom;
-    }
-
-    public static String createVirtualStylesheet(String importName) {
-        return """
-        <?xml version="1.0" encoding="UTF-8"?>
-        <xsl:stylesheet version="3.0"
-            xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-            <xsl:import href="xslImport:%s"/>
-            <xsl:output method="html" indent="yes" standalone="no" encoding="UTF-8" />
-
-        </xsl:stylesheet>
-        """.formatted(importName);
-    }
-
-    static class MCRTemplatesSourceXSLTransformer extends MCRXSLTransformer {
-
-        public MCRTemplatesSourceXSLTransformer(Class<? extends TransformerFactory> factoryClass,
-            MCRTemplatesSource... templateSources) {
-            super(factoryClass);
-            this.templateSources = templateSources;
-            this.modified = new long[this.templateSources.length];
-            this.modifiedChecked = 0L;
-            this.templates = new Templates[this.templateSources.length];
-        }
-    }
-
-    static class MCRVirtualTemplatesSource extends MCRTemplatesSource {
-
-        private final String name;
-        private final String content;
-        private final long created;
-
-        public MCRVirtualTemplatesSource(String name, String content) {
-            super("virtual_" + name);
-            this.name = name;
-            this.content = content;
-            this.created = System.currentTimeMillis();
-        }
-
-        @Override
-        public SAXSource getSource() throws SAXException, ParserConfigurationException {
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            factory.setNamespaceAware(true);
-
-            XMLReader reader = factory.newSAXParser().getXMLReader();
-            InputSource inputSource = new InputSource(new StringReader(content));
-            inputSource.setSystemId("file:/virtual/" + name + ".xsl");
-
-            return new SAXSource(reader, inputSource);
-        }
-
-        /**
-         * Always returns {@code null}, since this template source is virtual and backed by
-         * in-memory content rather than a real resource with a resolvable URL.
-         */
-        @Override
-        public URL getURL() {
-            return null;
-        }
-
-        @Override
-        public long getLastModified() {
-            return created;
-        }
-
-        @Override
-        public MCRCache.ModifiedHandle getModifiedHandle(long checkPeriod) {
-            return new MCRCache.ModifiedHandle() {
-                @Override
-                public long getLastModified() {
-                    return created;
-                }
-
-                @Override
-                public long getCheckPeriod() {
-                    return checkPeriod;
-                }
-            };
-        }
     }
 }
