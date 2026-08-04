@@ -35,7 +35,7 @@ public class MCRVirtualStylesheetUtils {
      * @param outputMethod the XSLT output method (e.g. {@code html}, {@code xml}, {@code text})
      * @return the generated XSL stylesheet source
      */
-    public static String createVirtualStylesheet(String importName, String outputMethod) {
+    public static String createImportStylesheet(String importName, String outputMethod) {
         return """
         <?xml version="1.0" encoding="UTF-8"?>
         <xsl:stylesheet version="3.0"

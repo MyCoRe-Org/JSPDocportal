@@ -91,7 +91,7 @@ public class MCRTransformXslTag extends SimpleTagSupport {
 
             MCRXSLTransformer t;
             if (xslImports != null) {
-                String virtualStylesheet = MCRVirtualStylesheetUtils.createVirtualStylesheet(xslImports, "html");
+                String virtualStylesheet = MCRVirtualStylesheetUtils.createImportStylesheet(xslImports, "html");
                 MCRTemplatesSource source = new MCRVirtualTemplatesSource(xslImports, virtualStylesheet);
                 t = MCRDirectTemplatesSourceTransformer.obtainInstance(SAXON_TRANSFORMER_FACTORY_CLASS, source);
             } else {
