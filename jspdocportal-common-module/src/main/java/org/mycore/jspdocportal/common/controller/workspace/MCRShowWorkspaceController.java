@@ -370,24 +370,6 @@ public class MCRShowWorkspaceController {
                 LOGGER.error("WFObject could not be read.");
             }
             mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
-<<<<<<< main
-
-            Class<? extends TransformerFactory> tfClass = MCRClassTools.forName(MCRConfiguration2.getStringOrThrow("SAXON"));
-            MCRXSLTransformer xsltTitle = MCRXSLTransformer.obtainInstance(tfClass,
-                MCRConfiguration2.getString("MCR.Workflow.MCRObject.Display.Title.XSL").orElseThrow());
-            ByteArrayOutputStream baosTitle = new ByteArrayOutputStream();
-            xsltTitle.transform(new MCRJDOMContent(mcrObj.createXML()), baosTitle);
-            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_TITLE, baosTitle.toString(StandardCharsets.UTF_8));
-
-            MCRXSLTransformer xsltDescription = MCRXSLTransformer.obtainInstance(tfClass,
-                MCRConfiguration2.getString("MCR.Workflow.MCRObject.Display.Description.XSL").orElseThrow());
-            ByteArrayOutputStream baosDescription = new ByteArrayOutputStream();
-            xsltDescription.transform(new MCRJDOMContent(mcrObj.createXML()), baosDescription);
-            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_DESCRIPTION,
-                baosDescription.toString(StandardCharsets.UTF_8));
-
-=======
->>>>>>> 3798f27 feat: workspace object header hook (#152)
         } catch (Exception e) {
             LOGGER.error(e);
             ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_VALIDATION_MESSAGE, e.getMessage());

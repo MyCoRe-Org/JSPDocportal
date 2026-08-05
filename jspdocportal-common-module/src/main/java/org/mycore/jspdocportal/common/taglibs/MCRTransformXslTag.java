@@ -31,19 +31,11 @@ import javax.xml.transform.TransformerFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRClassTools;
-import org.mycore.common.MCRException;
-import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRDOMContent;
 import org.mycore.common.content.MCRJDOMContent;
-import org.mycore.common.content.transformer.MCRContentTransformer;
-import org.mycore.common.content.transformer.MCRContentTransformerFactory;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
-<<<<<<< main
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-=======
 import org.mycore.common.xsl.MCRTemplatesSource;
-import org.mycore.datamodel.common.MCRXMLMetadataManager;
->>>>>>> 3798f27 feat: workspace object header hook (#152)
+import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.jspdocportal.common.xsl.MCRDirectTemplatesSourceTransformer;
 import org.mycore.jspdocportal.common.xsl.MCRVirtualStylesheetUtils;
@@ -99,18 +91,6 @@ public class MCRTransformXslTag extends SimpleTagSupport {
                 throw new JspException("Attributes 'xslt' and 'xslImports' are mutually exclusive");
             }
 
-<<<<<<< main
-            MCRContentTransformer t = null;
-            if (transformer != null) {
-                t = MCRContentTransformerFactory.getTransformer(transformer);
-            } else if (stylesheet != null) {
-                Class<? extends TransformerFactory> tfClass =
-                    MCRClassTools.forName(MCRConfiguration2.getStringOrThrow("SAXON"));
-                t = MCRXSLTransformer.obtainInstance(tfClass, stylesheet);
-            }
-            if (t == null) {
-                throw new MCRException("transformer or stylesheet attribute are not defined or invalid.");
-=======
             MCRXSLTransformer t;
             if (xslImports != null) {
                 String virtualStylesheet = MCRVirtualStylesheetUtils.createImportStylesheet(xslImports, "html");
@@ -118,7 +98,6 @@ public class MCRTransformXslTag extends SimpleTagSupport {
                 t = MCRDirectTemplatesSourceTransformer.obtainInstance(SAXON_TRANSFORMER_FACTORY_CLASS, source);
             } else {
                 t = MCRXSLTransformer.obtainInstance(SAXON_TRANSFORMER_FACTORY_CLASS, stylesheet);
->>>>>>> 3798f27 feat: workspace object header hook (#152)
             }
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -138,17 +117,12 @@ public class MCRTransformXslTag extends SimpleTagSupport {
         }
     }
 
-<<<<<<< main
-    public void setTransformer(String transformer) {
-        this.transformer = transformer;
-=======
     public void setXslImports(String xslImports) {
         this.xslImports = xslImports;
     }
 
     public String getXslt() {
         return stylesheet;
->>>>>>> 3798f27 feat: workspace object header hook (#152)
     }
 
     public void setXslt(String stylesheet) {
