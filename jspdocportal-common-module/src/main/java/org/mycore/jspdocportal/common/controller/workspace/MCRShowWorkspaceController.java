@@ -366,29 +366,10 @@ public class MCRShowWorkspaceController {
             if (mcrObjID == null) {
                 LOGGER.error("WFObject could not be read.");
             }
-
-            // Title
             mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
-
-            Class<? extends TransformerFactory> tfClass = MCRClassTools.forName("net.sf.saxon.TransformerFactoryImpl");
-            MCRXSLTransformer xsltTitle = MCRXSLTransformer.obtainInstance(tfClass,
-                MCRConfiguration2.getString("MCR.Workflow.MCRObject.Display.Title.XSL").orElseThrow());
-            ByteArrayOutputStream baosTitle = new ByteArrayOutputStream();
-            xsltTitle.transform(new MCRJDOMContent(mcrObj.createXML()), baosTitle);
-            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_TITLE, baosTitle.toString(StandardCharsets.UTF_8));
-
-            MCRXSLTransformer xsltDescription = MCRXSLTransformer.obtainInstance(tfClass,
-                MCRConfiguration2.getString("MCR.Workflow.MCRObject.Display.Description.XSL").orElseThrow());
-            ByteArrayOutputStream baosDescription = new ByteArrayOutputStream();
-            xsltDescription.transform(new MCRJDOMContent(mcrObj.createXML()), baosDescription);
-            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_DESCRIPTION,
-                baosDescription.toString(StandardCharsets.UTF_8));
-
         } catch (Exception e) {
             LOGGER.error(e);
             ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_VALIDATION_MESSAGE, e.getMessage());
-            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_TITLE, MCRTranslation.translate("WF.common.newObject"));
-            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_DESCRIPTION, "");
             return;
         }
 

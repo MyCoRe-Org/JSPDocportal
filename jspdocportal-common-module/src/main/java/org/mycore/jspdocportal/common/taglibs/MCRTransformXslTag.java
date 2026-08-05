@@ -34,19 +34,21 @@ import org.mycore.common.MCRClassTools;
 import org.mycore.common.content.MCRDOMContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
+import org.mycore.common.xsl.MCRTemplatesSource;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.jspdocportal.common.xsl.MCRDirectTemplatesSourceTransformer;
+import org.mycore.jspdocportal.common.xsl.MCRVirtualStylesheetUtils;
+import org.mycore.jspdocportal.common.xsl.MCRVirtualTemplatesSource;
 import org.w3c.dom.Document;
 
 import jakarta.servlet.jsp.JspException;
 import jakarta.servlet.jsp.tagext.SimpleTagSupport;
 
 /**
- * This class will add namespace declarations (prefix-uri pairs) to the XPathUtil class
- * which is used by the JSTL XML Tag Library to process XPath expressions.
- * This allows us to use any namespace prefix in XPath Expressions processed by this JSTL.
- * 
- * Uses the Java Reflection Framework to modify private fields
+ * JSP tag that transforms a DOM/JDOM document or an MCRObject (by ID) using an XSL
+ * stylesheet, either given directly via 'xslt' or composed virtually from XSL imports
+ * via 'xslImports'.
  *  
  * @author Robert Stephan
  * 
@@ -54,9 +56,21 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
 /* Example:
  * <mcr:retrieveObject mcrid="${mcrid}" varDOM="doc" />
  * <mcr:transformXSL dom="${doc}" xslt="xsl/xsl3example.xsl" />
+ * <mcr:transformXSL dom="${doc}" xslImports="docdetails-metadata" />
  */
 public class MCRTransformXslTag extends SimpleTagSupport {
+
     private static final Logger LOGGER = LogManager.getLogger();
+
+    private static final Class<? extends TransformerFactory> SAXON_TRANSFORMER_FACTORY_CLASS;
+
+    static {
+        try {
+            SAXON_TRANSFORMER_FACTORY_CLASS = MCRClassTools.forName("net.sf.saxon.TransformerFactoryImpl");
+        } catch (ClassNotFoundException e) {
+            throw new ExceptionInInitializerError(e);
+        }
+    }
 
     private Document dom;
 
@@ -66,15 +80,23 @@ public class MCRTransformXslTag extends SimpleTagSupport {
 
     private String mcrid;
 
+    private String xslImports;
+
     @Override
     public void doTag() throws JspException, IOException {
         try {
-            // this works, if the default transformer is xslt3 (set by property):
-            // MCR.LayoutService.TransformerFactoryClass=net.sf.saxon.TransformerFactoryImpl
-            // MCRXSLTransformer t = MCRXSLTransformer.getInstance(stylesheet);
+            if (xslImports != null && stylesheet != null) {
+                throw new JspException("Attributes 'xslt' and 'xslImports' are mutually exclusive");
+            }
 
-            Class<? extends TransformerFactory> tfClass = MCRClassTools.forName("net.sf.saxon.TransformerFactoryImpl");
-            MCRXSLTransformer t = MCRXSLTransformer.obtainInstance(tfClass, stylesheet);
+            MCRXSLTransformer t;
+            if (xslImports != null) {
+                String virtualStylesheet = MCRVirtualStylesheetUtils.createImportStylesheet(xslImports, "html");
+                MCRTemplatesSource source = new MCRVirtualTemplatesSource(xslImports, virtualStylesheet);
+                t = MCRDirectTemplatesSourceTransformer.obtainInstance(SAXON_TRANSFORMER_FACTORY_CLASS, source);
+            } else {
+                t = MCRXSLTransformer.obtainInstance(SAXON_TRANSFORMER_FACTORY_CLASS, stylesheet);
+            }
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             if (mcrid != null) {
@@ -93,7 +115,12 @@ public class MCRTransformXslTag extends SimpleTagSupport {
             }
         } catch (Exception e) {
             LOGGER.error("Error in XSLT-Processing ({}): {}", mcrid, stylesheet, e);
+            throw new JspException("Error transforming XSL for mcrid=" + mcrid, e);
         }
+    }
+
+    public void setXslImports(String xslImports) {
+        this.xslImports = xslImports;
     }
 
     public String getXslt() {
