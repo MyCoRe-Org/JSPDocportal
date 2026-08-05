@@ -369,9 +369,8 @@ public class MCRShowWorkspaceController {
             if (mcrObjID == null) {
                 LOGGER.error("WFObject could not be read.");
             }
-
-            // Title
             mcrObj = MCRBPMNUtils.loadMCRObjectFromWorkflowDirectory(mcrObjID);
+<<<<<<< main
 
             Class<? extends TransformerFactory> tfClass = MCRClassTools.forName(MCRConfiguration2.getStringOrThrow("SAXON"));
             MCRXSLTransformer xsltTitle = MCRXSLTransformer.obtainInstance(tfClass,
@@ -387,11 +386,11 @@ public class MCRShowWorkspaceController {
             ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_DESCRIPTION,
                 baosDescription.toString(StandardCharsets.UTF_8));
 
+=======
+>>>>>>> 3798f27 feat: workspace object header hook (#152)
         } catch (Exception e) {
             LOGGER.error(e);
             ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_VALIDATION_MESSAGE, e.getMessage());
-            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_TITLE, MCRTranslation.translate("WF.common.newObject"));
-            ts.setVariable(t.getId(), MCRBPMNMgr.WF_VAR_DISPLAY_DESCRIPTION, "");
             return;
         }
 
