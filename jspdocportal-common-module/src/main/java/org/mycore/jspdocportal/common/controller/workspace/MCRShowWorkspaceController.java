@@ -1,8 +1,6 @@
 package org.mycore.jspdocportal.common.controller.workspace;
 
-import java.io.ByteArrayOutputStream;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,8 +11,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
-
-import javax.xml.transform.TransformerFactory;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,12 +25,9 @@ import org.jdom2.Document;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
-import org.mycore.common.MCRClassTools;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.common.content.MCRJDOMContent;
-import org.mycore.common.content.transformer.MCRXSLTransformer;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
