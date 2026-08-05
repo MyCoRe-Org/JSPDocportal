@@ -18,6 +18,8 @@
 
 package org.mycore.jspdocportal.common.xsl;
 
+import java.util.Locale;
+
 /**
  * Utility methods for building synthetic ("virtual") XSL stylesheets that exist only
  * in memory rather than as a real classpath or filesystem resource.
@@ -36,7 +38,7 @@ public class MCRVirtualStylesheetUtils {
      * @return the generated XSL stylesheet source
      */
     public static String createImportStylesheet(String importName, String outputMethod) {
-        return """
+        return String.format(Locale.US, """
         <?xml version="1.0" encoding="UTF-8"?>
         <xsl:stylesheet version="3.0"
             xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -45,6 +47,7 @@ public class MCRVirtualStylesheetUtils {
             <xsl:output method="%s" indent="yes" standalone="no" encoding="UTF-8" />
 
         </xsl:stylesheet>
-        """.formatted(importName, outputMethod);
+        """,
+        importName, outputMethod);
     }
 }
