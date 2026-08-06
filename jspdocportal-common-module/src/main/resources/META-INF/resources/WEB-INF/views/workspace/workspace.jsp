@@ -112,7 +112,7 @@
                           </c:if>
                           <div class="row">
                             <div class="col-9">
-                              <mcrworkspace:object-header mcrObjectID="${currentVariables.mcrObjectID}" />
+                              <mcrworkspace:object-display mcrObjectID="${currentVariables.mcrObjectID}" />
                             </div>
                             <div class="col-3 text-right">
                               <a href="${WebApplicationBaseURL}resolve/id/${currentVariables.mcrObjectID}?fromWF=true&anchor=task_${currentTask.executionId}"
@@ -274,7 +274,7 @@
                           <c:if test="${not empty currentVariables.validationMessage}">
                             <div class="alert alert-danger" role="alert">${currentVariables.validationMessage}</div>
                           </c:if>
-                          <mcrworkspace:object-header mcrObjectID="${currentVariables.mcrObjectID}" />
+                          <mcrworkspace:object-display mcrObjectID="${currentVariables.mcrObjectID}" />
                         </div>
                       </div>
                     </div>
