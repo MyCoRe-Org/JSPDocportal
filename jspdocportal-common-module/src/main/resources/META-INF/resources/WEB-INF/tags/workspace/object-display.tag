@@ -12,7 +12,7 @@
     </h4>
   </c:when>
   <c:otherwise>
-    <mcr:retrieveObject mcrid="${mcrObjectID}" varDOM="mcrobj" cache="true" fromWorkflow="false" />
-    <mcr:transformXSL dom="${mcrobj}" xslImports="workspace-object-header" />
+    <mcr:retrieveObject mcrid="${mcrObjectID}" varDOM="mcrobj" fromWorkflow="true" />
+    <mcr:transformXSL dom="${mcrobj}" xslImports="workspace-object-display" />
   </c:otherwise>
 </c:choose>
