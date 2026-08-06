@@ -221,14 +221,11 @@
     <attribute>
       <name>xslt</name>
       <required>false</required>
-<<<<<<< main
-=======
       <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
       <name>xslImports</name>
       <required>false</required>
->>>>>>> 3798f27 feat: workspace object header hook (#152)
       <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>

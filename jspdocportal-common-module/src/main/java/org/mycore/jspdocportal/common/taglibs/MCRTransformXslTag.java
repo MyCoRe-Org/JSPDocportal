@@ -33,6 +33,8 @@ import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRClassTools;
 import org.mycore.common.content.MCRDOMContent;
 import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.common.content.transformer.MCRContentTransformer;
+import org.mycore.common.content.transformer.MCRContentTransformerFactory;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
 import org.mycore.common.xsl.MCRTemplatesSource;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -53,10 +55,10 @@ import jakarta.servlet.jsp.tagext.SimpleTagSupport;
  * @author Robert Stephan
  * 
  */
-/* Example:
- * <mcr:retrieveObject mcrid="${mcrid}" varDOM="doc" />
- * <mcr:transformXSL dom="${doc}" xslt="xsl/xsl3example.xsl" />
- * <mcr:transformXSL dom="${doc}" xslImports="docdetails-metadata" />
+/* Examples:
+ * a) <mcr:retrieveObject mcrid="${mcrid}" varDOM="doc" />
+ *    <mcr:transformXSL dom="${doc}" xslt="xsl/xsl3example.xsl" />
+ * b) <mcr:transformXSL dom="${doc}" xslImports="docdetails-metadata" />
  */
 public class MCRTransformXslTag extends SimpleTagSupport {
 
@@ -87,12 +89,24 @@ public class MCRTransformXslTag extends SimpleTagSupport {
     @Override
     public void doTag() throws JspException, IOException {
         try {
-            if (xslImports != null && stylesheet != null) {
-                throw new JspException("Attributes 'xslt' and 'xslImports' are mutually exclusive");
+            if (java.util.stream.Stream.of(transformer, xslImports, stylesheet)
+                .filter(java.util.Objects::nonNull)
+                .count() != 1) {
+                // only one of the variables should be not null
+                throw new JspException("Attributes 'xslt' and 'xslImports' and 'transformer' are mutually exclusive");
             }
 
-            MCRXSLTransformer t;
-            if (xslImports != null) {
+            if (java.util.stream.Stream.of(mcrid, dom, jdom)
+                .filter(java.util.Objects::nonNull)
+                .count() != 1) {
+                // only one of the variables should be not null
+                throw new JspException("Attributes 'mcrid', 'dom' and 'jdom' are mutually exclusive");
+            }
+
+            MCRContentTransformer t;
+            if (transformer != null) {
+                t = MCRContentTransformerFactory.getTransformer(transformer);
+            } else if (xslImports != null) {
                 String virtualStylesheet = MCRVirtualStylesheetUtils.createImportStylesheet(xslImports, "html");
                 MCRTemplatesSource source = new MCRVirtualTemplatesSource(xslImports, virtualStylesheet);
                 t = MCRDirectTemplatesSourceTransformer.obtainInstance(SAXON_TRANSFORMER_FACTORY_CLASS, source);
@@ -117,12 +131,12 @@ public class MCRTransformXslTag extends SimpleTagSupport {
         }
     }
 
-    public void setXslImports(String xslImports) {
-        this.xslImports = xslImports;
+    public void setTransformer(String transformer) {
+        this.transformer = transformer;
     }
 
-    public String getXslt() {
-        return stylesheet;
+    public void setXslImports(String xslImports) {
+        this.xslImports = xslImports;
     }
 
     public void setXslt(String stylesheet) {
