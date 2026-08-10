@@ -13,7 +13,7 @@ const createSearchboxCard = (template) => defineComponent({
     const {t, locale} = useI18n();
     const numFound = inject('numFound');
     const placeholder = computed(() => { 
-      return t("Webpage.startpage.browse.searchbox.placeholder").replace("%0%", numFound.toLocaleString());
+      return t("Webpage.startpage.browse.searchbox.placeholder", {count: numFound.toLocaleString() });
     })
     const baseUrl = inject('baseUrl');
     const searchTerm = ref('');
