@@ -22,7 +22,7 @@
           + "?q=category%3A%22doctype%3A"+mask+"%22"
           + "&fq=state%3Apublished"
           + "&sort=created%20DESC"
-          + "&rows=5&wt=json&wt=json&indent=true"
+          + "&rows=5&wt=json&indent=true"
           + "&facet=true"
           + facetFieldParams
           + "&fl="+solrFields;
