@@ -95,14 +95,14 @@ public class MCRSitelinksService {
             throw MCRSitelinksNotFoundException.forYear(year);
         }
 
-        MCRSitelinksMetadataService.ObjectIdsWithCount data =
+        MCRSitelinksMetadataService.LinkObjectsWithCount data =
             metadataService.getObjectIdsByYear(year, (page - 1) * pageSize, pageSize);
         long totalPages = (data.totalCount() + pageSize - 1) / pageSize;
         if (data.totalCount() == 0 || page > totalPages) {
             throw MCRSitelinksNotFoundException.forPage(year, page, totalPages);
         }
 
-        return new MCRSitelinksYearPageDto(year, page, data.totalCount(), data.objectIds());
+        return new MCRSitelinksYearPageDto(year, page, data.totalCount(), data.objects());
     }
 
     /**

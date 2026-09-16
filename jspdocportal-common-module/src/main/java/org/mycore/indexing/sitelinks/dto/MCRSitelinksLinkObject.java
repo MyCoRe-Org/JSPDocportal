@@ -18,15 +18,11 @@
 
 package org.mycore.indexing.sitelinks.dto;
 
-import java.util.List;
-
 /**
- * Data transfer object representing a paginated page of sitelinks for a specific year.
+ * Data transfer object representing a link object with object id and maindoc (pdf).
  *
- * @param year the year for which this page contains sitelinks
- * @param page the current page number
- * @param totalCount the total number of objects available for this year across all pages
- * @param objectIds the list of object IDs on this specific page
+ * @param objectId the MyCoRe Object ID
+ * @param fulltextUrl the URL to the fulltext document (pdf)
  */
-public record MCRSitelinksYearPageDto(int year, int page, long totalCount, List<MCRSitelinksLinkObject> objects) {
+public record MCRSitelinksLinkObject(String objectId, String fulltextUrl) {
 }

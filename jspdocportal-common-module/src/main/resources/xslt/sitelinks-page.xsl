@@ -89,16 +89,18 @@
         </ul>
       </nav>
       <ul>
-        <xsl:apply-templates select="object-ids/object-id" />
+        <xsl:apply-templates select="objects/object" />
       </ul>
     </body>
   </xsl:template>
 
-  <xsl:template match="object-id">
+  <xsl:template match="object">
     <li>
-      <a href="{concat($WebApplicationBaseURL, replace($MCR.Sitelinks.FrontpagePath, '\$ID', text()))}">
-        <xsl:value-of select="text()" />
-      </a>
+      <xsl:value-of select="@id" />
+      (<a href="{concat($WebApplicationBaseURL, replace($MCR.Sitelinks.FrontpagePath, '\$ID', @id))}">frontpage</a>)
+      <xsl:if test="@fulltext">
+        (<a href="{concat($WebApplicationBaseURL, @fulltext)}">fulltext</a>)
+      </xsl:if>
     </li>
   </xsl:template>
 

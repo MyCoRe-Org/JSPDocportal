@@ -21,6 +21,7 @@ package org.mycore.indexing.sitelinks;
 import java.util.List;
 
 import org.mycore.common.MCRException;
+import org.mycore.indexing.sitelinks.dto.MCRSitelinksLinkObject;
 
 /**
  * Service interface for retrieving object metadata used to generate sitelinks for search engine crawlers.
@@ -40,7 +41,7 @@ public interface MCRSitelinksMetadataService {
     List<Integer> getYearsWithObjects();
 
     /**
-     * Retrieves object IDs for objects issued in a specific year, with support for pagination.
+     * Retrieves links for objects issued in a specific year, with support for pagination.
      * Results are sorted primarily by issued date (descending), then by creation timestamp (descending).
      *
      * @param year   the year of the issued objects (e.g., 2021)
@@ -49,7 +50,7 @@ public interface MCRSitelinksMetadataService {
      * @return an {@link ObjectIdsWithCount} object containing a list of object IDs and the total count
      * @throws MCRException if a query or I/O error occurs
      */
-    ObjectIdsWithCount getObjectIdsByYear(int year, int offset, int limit);
+    LinkObjectsWithCount getObjectIdsByYear(int year, int offset, int limit);
 
 
     /**
@@ -58,7 +59,7 @@ public interface MCRSitelinksMetadataService {
      * @param objectIds  the list of object IDs for the requested page
      * @param totalCount the total number of objects matching the query (across all pages)
      */
-    record ObjectIdsWithCount(List<String> objectIds, long totalCount) {
+    record LinkObjectsWithCount(List<MCRSitelinksLinkObject> objects, long totalCount) {
     }
 
 }

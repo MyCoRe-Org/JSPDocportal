@@ -29,6 +29,7 @@ import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRContentTransformer;
 import org.mycore.common.xml.MCRLayoutTransformerFactory;
+import org.mycore.indexing.sitelinks.dto.MCRSitelinksLinkObject;
 import org.mycore.indexing.sitelinks.dto.MCRSitelinksRootPageDto;
 import org.mycore.indexing.sitelinks.dto.MCRSitelinksYearPageDto;
 
@@ -46,8 +47,10 @@ public class MCRSitelinksXslPageMapper implements MCRSitelinksPageMapper {
     private static final String YEARS = "years";
     private static final String YEAR = "year";
     private static final String PAGE = "page";
-    private static final String OBJECT_IDS = "object-ids";
-    private static final String OBJECT_ID = "object-id";
+    private static final String OBJECTS = "objects";
+    private static final String OBJECT = "object";
+    private static final String ATTR_ID = "id";
+    private static final String ATTR_FULLTEXT = "fulltext";
     private static final String ATTR_NUMBER = "number";
     private static final String ATTR_TOTAL_COUNT = "total-count";
     private static final String ATTR_YEAR = "year";
@@ -87,10 +90,10 @@ public class MCRSitelinksXslPageMapper implements MCRSitelinksPageMapper {
     @Override
     public MCRContent map(MCRSitelinksYearPageDto yearPage) {
         Element root = new Element(ROOT);
-        root.addContent(buildPageElement(yearPage.year(), yearPage.page(), yearPage.totalCount(), yearPage.objectIds()));
+        root.addContent(buildPageElement(yearPage.year(), yearPage.page(), yearPage.totalCount(), yearPage.objects()));
         try {
             return transformer.transform(new MCRJDOMContent(root));
-        }  catch (IOException e) {
+        } catch (IOException e) {
             throw new MCRSitelinksMappingException("Error while mapping page", e);
         }
     }
@@ -99,27 +102,28 @@ public class MCRSitelinksXslPageMapper implements MCRSitelinksPageMapper {
         Element yearsElement = new Element(YEARS);
         years.stream()
             .sorted(Comparator.reverseOrder())
-            .forEach(y -> yearsElement.addContent(createElement(YEAR, String.valueOf(y))));
+            .forEach(y -> yearsElement.addContent(new Element(YEAR).setText(String.valueOf(y))));
         return yearsElement;
     }
 
-    private static Element buildPageElement(int year, int page, long totalCount, List<String> objectIds) {
+    private static Element buildPageElement(int year, int page, long totalCount,
+        List<MCRSitelinksLinkObject> linkObjects) {
         Element pageElement = new Element(PAGE);
         pageElement.setAttribute(ATTR_NUMBER, String.valueOf(page));
         pageElement.setAttribute(ATTR_TOTAL_COUNT, String.valueOf(totalCount));
         pageElement.setAttribute(ATTR_YEAR, String.valueOf(year));
 
-        Element objectIdsElement = new Element(OBJECT_IDS);
-        objectIds.forEach(id -> objectIdsElement.addContent(createElement(OBJECT_ID, id)));
+        Element objectIdsElement = new Element(OBJECTS);
+        linkObjects.forEach(obj -> {
+            Element e = new Element(OBJECT);
+            e.setAttribute(ATTR_ID, obj.objectId());
+            if(obj.fulltextUrl()!=null) {
+                e.setAttribute(ATTR_FULLTEXT, obj.fulltextUrl());
+            }
+            objectIdsElement.addContent(e);
+        });
         pageElement.addContent(objectIdsElement);
-
         return pageElement;
-    }
-
-    private static Element createElement(String name, String text) {
-        Element element = new Element(name);
-        element.setText(text);
-        return element;
     }
 
     /**

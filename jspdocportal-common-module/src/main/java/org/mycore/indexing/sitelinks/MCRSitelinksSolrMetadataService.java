@@ -34,6 +34,7 @@ import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.common.config.annotation.MCRConfigurationProxy;
 import org.mycore.common.config.annotation.MCRProperty;
+import org.mycore.indexing.sitelinks.dto.MCRSitelinksLinkObject;
 import org.mycore.solr.MCRSolrIndexRegistryManager;
 import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
 import org.mycore.solr.auth.MCRSolrAuthenticationManager;
@@ -55,6 +56,8 @@ import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 public class MCRSitelinksSolrMetadataService implements MCRSitelinksMetadataService {
 
     private static final String FIELD_ID = "id";
+
+    private static final String FIELD_FULLTEXT = "ir.pdffulltext_url";
 
     private static final String FIELD_YEAR_ISSUED = "mods.yearIssued";
 
@@ -123,11 +126,11 @@ public class MCRSitelinksSolrMetadataService implements MCRSitelinksMetadataServ
     }
 
     @Override
-    public ObjectIdsWithCount getObjectIdsByYear(int year, int offset, int limit) {
+    public LinkObjectsWithCount getObjectIdsByYear(int year, int offset, int limit) {
         final SolrQuery query = new SolrQuery(DEFAULT_SOLR_QUERY);
         query.addFilterQuery(filterQuery);
         query.addFilterQuery(String.format(Locale.ROOT, FIELD_DATE_ISSUED + ":%s*", year));
-        query.setFields(FIELD_ID);
+        query.setFields(FIELD_ID, FIELD_FULLTEXT);
         query.setStart(offset);
         query.setRows(limit);
         query.addSort(FIELD_DATE_ISSUED, SolrQuery.ORDER.desc);
@@ -135,9 +138,12 @@ public class MCRSitelinksSolrMetadataService implements MCRSitelinksMetadataServ
         try {
             final QueryResponse response = getRequest(query).process(solrClient);
             long totalCount = response.getResults().getNumFound();
-            final List<String> objectIds =
-                response.getResults().stream().map((document) -> (String) document.getFieldValue(FIELD_ID)).toList();
-            return new ObjectIdsWithCount(objectIds, totalCount);
+            final List<MCRSitelinksLinkObject> objectIds =
+                response.getResults().stream()
+                    .map((document) -> new MCRSitelinksLinkObject((String) document.getFieldValue(FIELD_ID),
+                        (String) document.getFieldValue(FIELD_FULLTEXT)))
+                    .toList();
+            return new LinkObjectsWithCount(objectIds, totalCount);
         } catch (SolrServerException | IOException e) {
             throw new MCRException(e);
         }
