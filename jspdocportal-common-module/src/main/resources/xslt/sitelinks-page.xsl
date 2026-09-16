@@ -45,21 +45,17 @@
   </xsl:template>
 
   <xsl:template match="page">
-    <xsl:variable name="year" select="@year" />
     <xsl:variable name="max-page-number">
       <xsl:call-template name="max-page-number">
         <xsl:with-param name="total-count" select="@total-count" />
       </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="page-title">
-      Page <xsl:value-of select="@number" /> of <xsl:value-of select="$max-page-number" />
-    </xsl:variable>
-    <xsl:variable name="title">
-      <xsl:value-of select="concat('Sitelinks ', $year, ' - ', $page-title)" />
+      <xsl:value-of select="@year" /> - Page <xsl:value-of select="@number" /> of <xsl:value-of select="$max-page-number" />
     </xsl:variable>
     <head>
       <xsl:call-template name="basic-head">
-        <xsl:with-param name="title" select="$title" />
+        <xsl:with-param name="title" select="concat('Sitelinks ', $page-title)" />
       </xsl:call-template>
       <link rel="canonical" href="{concat($base-url, '/', @year)}" />
       <xsl:if test="@number > 1">
@@ -70,17 +66,16 @@
       </xsl:if>
     </head>
     <body>
-      <h1><xsl:value-of select="$title" /></h1>
+      <h1>Sitelinks</h1>
+      <h2><xsl:value-of select="$page-title" /></h2>
       <nav aria-label="Page navigation">
         <ul class="pagination">
           <li>
-            <a href="{$base-url}" aria-label="All sitelinks">All Years</a>
+            <a href="{$base-url}" aria-label="All sitelinks">↖ All Years</a>
           </li>
           <xsl:if test="@number > 1">
             <li>
-              <a href="{concat($base-url, '/', @year, '/page/', @number - 1)}" rel="prev">
-                « Previous Page
-              </a>
+              <a href="{concat($base-url, '/', @year, '/page/', @number - 1)}" rel="prev">« Previous Page</a>
             </li>
           </xsl:if>
           <li aria-current="page">
@@ -88,9 +83,7 @@
           </li>
           <xsl:if test="@number &lt; $max-page-number">
             <li>
-              <a href="{concat($base-url, '/', @year, '/page/', @number + 1)}" rel="next">
-                Next Page »
-              </a>
+              <a href="{concat($base-url, '/', @year, '/page/', @number + 1)}" rel="next">Next Page »</a>
             </li>
           </xsl:if>
         </ul>

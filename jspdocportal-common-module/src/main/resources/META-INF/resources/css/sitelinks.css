@@ -13,6 +13,11 @@ nav {
     margin-bottom: 1em;
 }
 
+nav li {
+  display:inline-block;
+  margin-right: 1em;
+}
+
 nav a {
     margin-right: 1em;
     text-decoration: none;
