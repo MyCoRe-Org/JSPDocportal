@@ -5,7 +5,7 @@
 
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="MCR.Sitelinks.PageSize" />
-  <xsl:param name="MCR.GoogleSitemap.ObjectPath" />
+  <xsl:param name="MCR.Sitelinks.FrontpagePath" />
   <xsl:param name="base-url" select="concat($WebApplicationBaseURL, 'sitelinks')" />
 
   <xsl:template match="/">
@@ -96,7 +96,7 @@
 
   <xsl:template match="object-id">
     <li>
-      <a href="{concat($WebApplicationBaseURL, $MCR.GoogleSitemap.ObjectPath, text())}">
+      <a href="{concat($WebApplicationBaseURL, replace($MCR.Sitelinks.FrontpagePath, '\$ID', text()))}">
         <xsl:value-of select="text()" />
       </a>
     </li>
