@@ -43,7 +43,7 @@ public class SitelinksServlet extends MCRContentServlet {
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String PROP_PREFIX = "SitelinksServlet.";
+    private static final String PROP_PREFIX = "MCR.Sitelinks.";
     private static final String PATH_PAGE = "page";
 
     private SitelinksService service;
@@ -85,9 +85,10 @@ public class SitelinksServlet extends MCRContentServlet {
                 MCRConfiguration2.getSingleInstanceOfOrThrow(SitelinksService.class, PROP_PREFIX + "Service.Class");
             this.mapper =
                 MCRConfiguration2.getSingleInstanceOfOrThrow(SitelinksPageMapper.class, PROP_PREFIX + "Mapper.Class");
-            this.pageSize = MCRConfiguration2.getString("Sitelinks.PageSize")
+            this.pageSize = MCRConfiguration2.getString(PROP_PREFIX + "PageSize")
                 .map(Integer::valueOf)
-                .orElseThrow(() -> new MCRConfigurationException("Please specify property: 'Sitelinks.PageSize'"));
+                .orElseThrow(
+                    () -> new MCRConfigurationException("Please specify property: '" + PROP_PREFIX + "PageSize'"));
         } catch (MCRConfigurationException e) {
             throw new ServletException("Failed to initialize SitelinksServlet", e);
         }
