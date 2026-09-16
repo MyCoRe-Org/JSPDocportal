@@ -49,11 +49,11 @@ public class MCRSitelinksXslPageMapper implements MCRSitelinksPageMapper {
     private static final String PAGE = "page";
     private static final String OBJECTS = "objects";
     private static final String OBJECT = "object";
-    private static final String ATTR_ID = "id";
-    private static final String ATTR_FULLTEXT = "fulltext";
-    private static final String ATTR_NUMBER = "number";
-    private static final String ATTR_TOTAL_COUNT = "total-count";
-    private static final String ATTR_YEAR = "year";
+    private static final String ATTR_OBJECT__ID = "id";
+    private static final String ATTR_OBJECT__FULLTEXT = "fulltext";
+    private static final String ATTR_PAGE__NUMBER = "number";
+    private static final String ATTR_PAGE__TOTAL_COUNT = "total-count";
+    private static final String ATTR_PAGE__YEAR = "year";
 
     private final MCRContentTransformer transformer;
 
@@ -109,16 +109,16 @@ public class MCRSitelinksXslPageMapper implements MCRSitelinksPageMapper {
     private static Element buildPageElement(int year, int page, long totalCount,
         List<MCRSitelinksLinkObject> linkObjects) {
         Element pageElement = new Element(PAGE);
-        pageElement.setAttribute(ATTR_NUMBER, String.valueOf(page));
-        pageElement.setAttribute(ATTR_TOTAL_COUNT, String.valueOf(totalCount));
-        pageElement.setAttribute(ATTR_YEAR, String.valueOf(year));
+        pageElement.setAttribute(ATTR_PAGE__NUMBER, String.valueOf(page));
+        pageElement.setAttribute(ATTR_PAGE__TOTAL_COUNT, String.valueOf(totalCount));
+        pageElement.setAttribute(ATTR_PAGE__YEAR, String.valueOf(year));
 
         Element objectIdsElement = new Element(OBJECTS);
         linkObjects.forEach(obj -> {
             Element e = new Element(OBJECT);
-            e.setAttribute(ATTR_ID, obj.objectId());
+            e.setAttribute(ATTR_OBJECT__ID, obj.objectId());
             if(obj.fulltextUrl()!=null) {
-                e.setAttribute(ATTR_FULLTEXT, obj.fulltextUrl());
+                e.setAttribute(ATTR_OBJECT__FULLTEXT, obj.fulltextUrl());
             }
             objectIdsElement.addContent(e);
         });
