@@ -44,13 +44,12 @@ import org.mycore.solr.auth.MCRSolrAuthenticationManager;
  * Solr-based implementation of {@link MCRSitelinksMetadataService}.
  * <p>
  * This implementation queries Solr to retrieve object metadata for sitelinks generation.
- * It expects the following Solr fields to be present:
+ * It expects certain Solr fields to be present:
  * <ul>
- *   <li>{@code mods.yearIssued} - the publication year, used for faceting and filtering</li>
- *   <li>{@code mods.dateIssued} - the full publication date (format: {@code yyyy-MM-dd} or {@code yyyy}),
- *       used for sorting</li>
- *   <li>{@code created} - the object creation timestamp, used as a fallback sort field</li>
  *   <li>{@code id} - the unique object identifier</li>
+ *   <li>a field with the fulltext url path, wich could be empty</li>
+ *   <li>a field for faceting and filtering e.g. {@code mods.yearIssued}</li>
+ *   <li>a field for sorting e.g. {@code created}</li>
  * </ul>
  */
 @MCRConfigurationProxy(proxyClass = MCRSitelinksSolrMetadataService.Factory.class)
@@ -59,8 +58,9 @@ public class MCRSitelinksSolrMetadataService implements MCRSitelinksMetadataServ
     private static final String FIELD_ID =
         MCRConfiguration2.getStringOrThrow("MCR.Sitelinks.SolrField.Id");
 
+    /** property can be empty - as default a random field name is used, which Solr ignores **/
     private static final String FIELD_FULLTEXT_URL =
-        MCRConfiguration2.getStringOrThrow("MCR.Sitelinks.SolrField.FulltextUrl");
+        MCRConfiguration2.getString("MCR.Sitelinks.SolrField.FulltextUrl").orElse("FULLTEXT_URL-FIELD-UNDEFINED");
 
     private static final String FIELD_FACETING =
         MCRConfiguration2.getStringOrThrow("MCR.Sitelinks.SolrField.Faceting");
