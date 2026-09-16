@@ -31,6 +31,7 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.params.FacetParams;
 import org.mycore.common.MCRException;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.common.config.annotation.MCRConfigurationProxy;
 import org.mycore.common.config.annotation.MCRProperty;
@@ -55,13 +56,17 @@ import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 @MCRConfigurationProxy(proxyClass = MCRSitelinksSolrMetadataService.Factory.class)
 public class MCRSitelinksSolrMetadataService implements MCRSitelinksMetadataService {
 
-    private static final String FIELD_ID = "id";
+    private static final String FIELD_ID =
+        MCRConfiguration2.getStringOrThrow("MCR.Sitelinks.SolrField.Id");
 
-    private static final String FIELD_FULLTEXT = "ir.pdffulltext_url";
+    private static final String FIELD_FULLTEXT_URL =
+        MCRConfiguration2.getStringOrThrow("MCR.Sitelinks.SolrField.FulltextUrl");
 
-    private static final String FIELD_YEAR_ISSUED = "mods.yearIssued";
+    private static final String FIELD_FACETING =
+        MCRConfiguration2.getStringOrThrow("MCR.Sitelinks.SolrField.Faceting");
 
-    private static final String FIELD_CREATED = "created";
+    private static final String FIELD_SORTING =
+        MCRConfiguration2.getStringOrThrow("MCR.Sitelinks.SolrField.Sorting");
 
     private static final String DEFAULT_SOLR_QUERY = "*:*";
 
@@ -111,12 +116,12 @@ public class MCRSitelinksSolrMetadataService implements MCRSitelinksMetadataServ
         query.setRows(0);
         query.addFilterQuery(filterQuery);
         query.setFacet(true);
-        query.addFacetField(FIELD_YEAR_ISSUED);
+        query.addFacetField(FIELD_FACETING);
         query.setFacetSort(FacetParams.FACET_SORT_INDEX);
         query.setFacetLimit(-1);
         try {
             final QueryResponse response = getRequest(query).process(solrClient);
-            return response.getFacetField(FIELD_YEAR_ISSUED).getValues()
+            return response.getFacetField(FIELD_FACETING).getValues()
                 .stream().map(FacetField.Count::getName).map(Integer::parseInt).toList();
         } catch (SolrServerException | IOException e) {
             throw new MCRException(e);
@@ -127,11 +132,11 @@ public class MCRSitelinksSolrMetadataService implements MCRSitelinksMetadataServ
     public LinkObjectsWithCount getObjectIdsByYear(int year, int offset, int limit) {
         final SolrQuery query = new SolrQuery(DEFAULT_SOLR_QUERY);
         query.addFilterQuery(filterQuery);
-        query.addFilterQuery(String.format(Locale.ROOT, FIELD_YEAR_ISSUED + ":%s", year));
-        query.setFields(FIELD_ID, FIELD_FULLTEXT);
+        query.addFilterQuery(String.format(Locale.ROOT, FIELD_FACETING + ":%s", year));
+        query.setFields(FIELD_ID, FIELD_FULLTEXT_URL);
         query.setStart(offset);
         query.setRows(limit);
-        query.addSort(FIELD_CREATED, SolrQuery.ORDER.desc);
+        query.addSort(FIELD_SORTING, SolrQuery.ORDER.desc);
         query.addSort(FIELD_ID, SolrQuery.ORDER.desc);
         try {
             final QueryResponse response = getRequest(query).process(solrClient);
@@ -139,7 +144,7 @@ public class MCRSitelinksSolrMetadataService implements MCRSitelinksMetadataServ
             final List<MCRSitelinksLinkObject> objectIds =
                 response.getResults().stream()
                     .map((document) -> new MCRSitelinksLinkObject((String) document.getFieldValue(FIELD_ID),
-                        (String) document.getFieldValue(FIELD_FULLTEXT)))
+                        (String) document.getFieldValue(FIELD_FULLTEXT_URL)))
                     .toList();
             return new LinkObjectsWithCount(objectIds, totalCount);
         } catch (SolrServerException | IOException e) {
