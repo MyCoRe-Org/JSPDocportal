@@ -61,8 +61,6 @@ public class MCRSitelinksSolrMetadataService implements MCRSitelinksMetadataServ
 
     private static final String FIELD_YEAR_ISSUED = "mods.yearIssued";
 
-    private static final String FIELD_DATE_ISSUED = "mods.dateIssued";
-
     private static final String FIELD_CREATED = "created";
 
     private static final String DEFAULT_SOLR_QUERY = "*:*";
@@ -129,12 +127,12 @@ public class MCRSitelinksSolrMetadataService implements MCRSitelinksMetadataServ
     public LinkObjectsWithCount getObjectIdsByYear(int year, int offset, int limit) {
         final SolrQuery query = new SolrQuery(DEFAULT_SOLR_QUERY);
         query.addFilterQuery(filterQuery);
-        query.addFilterQuery(String.format(Locale.ROOT, FIELD_DATE_ISSUED + ":%s*", year));
+        query.addFilterQuery(String.format(Locale.ROOT, FIELD_YEAR_ISSUED + ":%s", year));
         query.setFields(FIELD_ID, FIELD_FULLTEXT);
         query.setStart(offset);
         query.setRows(limit);
-        query.addSort(FIELD_DATE_ISSUED, SolrQuery.ORDER.desc);
         query.addSort(FIELD_CREATED, SolrQuery.ORDER.desc);
+        query.addSort(FIELD_ID, SolrQuery.ORDER.desc);
         try {
             final QueryResponse response = getRequest(query).process(solrClient);
             long totalCount = response.getResults().getNumFound();
