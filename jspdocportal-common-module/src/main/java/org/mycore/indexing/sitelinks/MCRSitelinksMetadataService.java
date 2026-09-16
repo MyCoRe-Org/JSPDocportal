@@ -29,7 +29,7 @@ import org.mycore.common.MCRException;
  * Implementations should ensure results are sorted by publication date (newest first) for optimal
  * crawler indexing.
  */
-public interface SitelinksMetadataService {
+public interface MCRSitelinksMetadataService {
 
     /**
      * Retrieves all years for which objects exist with an issued date.

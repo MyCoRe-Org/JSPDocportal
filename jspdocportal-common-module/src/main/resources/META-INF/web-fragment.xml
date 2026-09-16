@@ -110,11 +110,11 @@
   <!-- * Site links                                                   * -->
   <!-- **************************************************************** -->
   <servlet>
-    <servlet-name>SitelinkServlet</servlet-name>
-    <servlet-class>org.mycore.indexing.sitelinks.SitelinksServlet</servlet-class>
+    <servlet-name>MCRSitelinkServlet</servlet-name>
+    <servlet-class>org.mycore.indexing.sitelinks.MCRSitelinksServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>SitelinkServlet</servlet-name>
+    <servlet-name>MCRSitelinkServlet</servlet-name>
     <url-pattern>/sitelinks/*</url-pattern>
   </servlet-mapping>
 

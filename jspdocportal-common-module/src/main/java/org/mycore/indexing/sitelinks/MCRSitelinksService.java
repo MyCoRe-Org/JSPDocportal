@@ -30,8 +30,8 @@ import org.mycore.common.MCRCache;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.annotation.MCRConfigurationProxy;
 import org.mycore.common.config.annotation.MCRInstance;
-import org.mycore.indexing.sitelinks.dto.SitelinksRootPageDto;
-import org.mycore.indexing.sitelinks.dto.SitelinksYearPageDto;
+import org.mycore.indexing.sitelinks.dto.MCRSitelinksRootPageDto;
+import org.mycore.indexing.sitelinks.dto.MCRSitelinksYearPageDto;
 
 /**
  * Application service for generating sitelinks page data transfer objects.
@@ -40,14 +40,14 @@ import org.mycore.indexing.sitelinks.dto.SitelinksYearPageDto;
  * and paginated year-specific pages containing object IDs. Year data is cached to
  * optimize performance.
  */
-@MCRConfigurationProxy(proxyClass = SitelinksService.Factory.class)
-public class SitelinksService {
+@MCRConfigurationProxy(proxyClass = MCRSitelinksService.Factory.class)
+public class MCRSitelinksService {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String CACHE_KEY = "available_years";
     private static final long CACHE_TTL_MS = 5 * 60 * 1000;
 
-    private final SitelinksMetadataService metadataService;
+    private final MCRSitelinksMetadataService metadataService;
     private final MCRCache<String, Set<Integer>> yearCache;
 
     /**
@@ -55,7 +55,7 @@ public class SitelinksService {
      *
      * @param metadataService the service responsible for retrieving object metadata from the domain layer
      */
-    public SitelinksService(SitelinksMetadataService metadataService) {
+    public MCRSitelinksService(MCRSitelinksMetadataService metadataService) {
         this.metadataService = metadataService;
         this.yearCache = new MCRCache<>(1, "SitelinksYears");
     }
@@ -63,14 +63,14 @@ public class SitelinksService {
     /**
      * Retrieves the root page DTO containing all years for which sitelinks data is available.
      *
-     * @return a {@link SitelinksRootPageDto} containing all available years
+     * @return a {@link MCRSitelinksRootPageDto} containing all available years
      */
-    public SitelinksRootPageDto getRootPage() {
+    public MCRSitelinksRootPageDto getRootPage() {
         Set<Integer> years = getAvailableYears();
         List<Integer> sortedYears = years.stream()
             .sorted(Comparator.reverseOrder())
             .toList();
-        return new SitelinksRootPageDto(sortedYears);
+        return new MCRSitelinksRootPageDto(sortedYears);
     }
 
     /**
@@ -79,12 +79,12 @@ public class SitelinksService {
      * @param year the year for which to retrieve object IDs (e.g., 2024)
      * @param page the page number to retrieve (1-indexed, must be ≥ 1)
      * @param pageSize the maximum number of object IDs to include per page (must be &gt; 0)
-     * @return a {@link SitelinksYearPageDto} containing the requested page of object IDs,
+     * @return a {@link MCRSitelinksYearPageDto} containing the requested page of object IDs,
      *         pagination metadata, and the total count of objects for the year
      * @throws MCRException if {@code page < 1} or {@code pageSize < 1}
-     * @throws SitelinksNotFoundException if no data exists for the specified year
+     * @throws MCRSitelinksNotFoundException if no data exists for the specified year
      */
-    public SitelinksYearPageDto getYearPage(int year, int page, int pageSize) {
+    public MCRSitelinksYearPageDto getYearPage(int year, int page, int pageSize) {
         if (page < 1) {
             throw new MCRException("page must be greater than or equal to 1");
         }
@@ -92,17 +92,17 @@ public class SitelinksService {
             throw new MCRException("page size must be greater than or equal to 1");
         }
         if (!hasYearPage(year)) {
-            throw SitelinksNotFoundException.forYear(year);
+            throw MCRSitelinksNotFoundException.forYear(year);
         }
 
-        SitelinksMetadataService.ObjectIdsWithCount data =
+        MCRSitelinksMetadataService.ObjectIdsWithCount data =
             metadataService.getObjectIdsByYear(year, (page - 1) * pageSize, pageSize);
         long totalPages = (data.totalCount() + pageSize - 1) / pageSize;
         if (data.totalCount() == 0 || page > totalPages) {
-            throw SitelinksNotFoundException.forPage(year, page, totalPages);
+            throw MCRSitelinksNotFoundException.forPage(year, page, totalPages);
         }
 
-        return new SitelinksYearPageDto(year, page, data.totalCount(), data.objectIds());
+        return new MCRSitelinksYearPageDto(year, page, data.totalCount(), data.objectIds());
     }
 
     /**
@@ -143,19 +143,19 @@ public class SitelinksService {
     }
 
     /**
-     * Factory class for creating {@link SitelinksService} instances via configuration.
+     * Factory class for creating {@link MCRSitelinksService} instances via configuration.
      * <p>
      * This factory is used by the {@link MCRConfigurationProxy} annotation to automatically
      * instantiate the service with configuration values from properties.
      */
-    public static class Factory implements Supplier<SitelinksService> {
+    public static class Factory implements Supplier<MCRSitelinksService> {
 
-        @MCRInstance(name = "MetadataService", valueClass = SitelinksMetadataService.class)
-        public SitelinksMetadataService metadataService;
+        @MCRInstance(name = "MetadataService", valueClass = MCRSitelinksMetadataService.class)
+        public MCRSitelinksMetadataService metadataService;
 
         @Override
-        public SitelinksService get() {
-            return new SitelinksService(metadataService);
+        public MCRSitelinksService get() {
+            return new MCRSitelinksService(metadataService);
         }
     }
 }

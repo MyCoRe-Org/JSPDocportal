@@ -19,8 +19,8 @@
 package org.mycore.indexing.sitelinks;
 
 import org.mycore.common.content.MCRContent;
-import org.mycore.indexing.sitelinks.dto.SitelinksRootPageDto;
-import org.mycore.indexing.sitelinks.dto.SitelinksYearPageDto;
+import org.mycore.indexing.sitelinks.dto.MCRSitelinksRootPageDto;
+import org.mycore.indexing.sitelinks.dto.MCRSitelinksYearPageDto;
 
 /**
  * Mapper interface for transforming sitelinks DTOs into content representations.
@@ -29,23 +29,23 @@ import org.mycore.indexing.sitelinks.dto.SitelinksYearPageDto;
  * (root pages and year-specific pages) into {@link MCRContent} objects that can be
  * rendered or further processed.
  */
-public interface SitelinksPageMapper {
+public interface MCRSitelinksPageMapper {
 
     /**
      * Maps a sitelinks root page DTO to content.
      *
      * @param rootPage the root page to be mapped
      * @return the mapped content representation
-     * @throws SitelinksMappingException if an error occurs during mapping
+     * @throws MCRSitelinksMappingException if an error occurs during mapping
      */
-    MCRContent map(SitelinksRootPageDto rootPage) throws SitelinksMappingException;
+    MCRContent map(MCRSitelinksRootPageDto rootPage) throws MCRSitelinksMappingException;
 
     /**
      * Maps a sitelinks year page DTO to content.
      *
      * @param yearPage the year-specific page to be mapped
      * @return the mapped content representation
-     * @throws SitelinksMappingException if an error occurs during mapping
+     * @throws MCRSitelinksMappingException if an error occurs during mapping
      */
-    MCRContent map(SitelinksYearPageDto yearPage) throws SitelinksMappingException;
+    MCRContent map(MCRSitelinksYearPageDto yearPage) throws MCRSitelinksMappingException;
 }

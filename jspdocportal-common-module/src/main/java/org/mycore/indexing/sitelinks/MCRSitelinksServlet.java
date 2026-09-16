@@ -27,7 +27,7 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.common.content.MCRContent;
 import org.mycore.frontend.servlets.MCRContentServlet;
-import org.mycore.indexing.sitelinks.dto.SitelinksYearPageDto;
+import org.mycore.indexing.sitelinks.dto.MCRSitelinksYearPageDto;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,15 +39,15 @@ import jakarta.servlet.http.HttpServletResponse;
  * Provides endpoints to display years, months, and publications based on the
  * requested path parameters. Supports pagination and XML content mapping.
  */
-public class SitelinksServlet extends MCRContentServlet {
+public class MCRSitelinksServlet extends MCRContentServlet {
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String PROP_PREFIX = "MCR.Sitelinks.";
     private static final String PATH_PAGE = "page";
 
-    private SitelinksService service;
-    private SitelinksPageMapper mapper;
+    private MCRSitelinksService service;
+    private MCRSitelinksPageMapper mapper;
     private int pageSize;
 
     /**
@@ -55,7 +55,7 @@ public class SitelinksServlet extends MCRContentServlet {
      * <p>
      * Initialization is done in {@link #init()}.
      */
-    public SitelinksServlet() {
+    public MCRSitelinksServlet() {
         // Leave empty, container will call init()
     }
 
@@ -66,7 +66,7 @@ public class SitelinksServlet extends MCRContentServlet {
      * @param mapper the mapper used to transform pages into content representations
      * @param pageSize the maximum number of objects to display per page
      */
-    protected SitelinksServlet(SitelinksService service, SitelinksPageMapper mapper, int pageSize) {
+    protected MCRSitelinksServlet(MCRSitelinksService service, MCRSitelinksPageMapper mapper, int pageSize) {
         this.service = service;
         this.mapper = mapper;
         this.pageSize = pageSize;
@@ -82,9 +82,9 @@ public class SitelinksServlet extends MCRContentServlet {
         super.init();
         try {
             this.service =
-                MCRConfiguration2.getSingleInstanceOfOrThrow(SitelinksService.class, PROP_PREFIX + "Service.Class");
+                MCRConfiguration2.getSingleInstanceOfOrThrow(MCRSitelinksService.class, PROP_PREFIX + "Service.Class");
             this.mapper =
-                MCRConfiguration2.getSingleInstanceOfOrThrow(SitelinksPageMapper.class, PROP_PREFIX + "Mapper.Class");
+                MCRConfiguration2.getSingleInstanceOfOrThrow(MCRSitelinksPageMapper.class, PROP_PREFIX + "Mapper.Class");
             this.pageSize = MCRConfiguration2.getString(PROP_PREFIX + "PageSize")
                 .map(Integer::valueOf)
                 .orElseThrow(
@@ -101,7 +101,7 @@ public class SitelinksServlet extends MCRContentServlet {
             // GET /sitelinks -> list years
             try {
                 return mapper.map(service.getRootPage());
-            } catch (SitelinksMappingException e) {
+            } catch (MCRSitelinksMappingException e) {
                 LOGGER.error("Failed to map root page", e);
                 return null;
             }
@@ -145,12 +145,12 @@ public class SitelinksServlet extends MCRContentServlet {
 
     private Optional<MCRContent> getYearPage(int year, int page) {
         try {
-            SitelinksYearPageDto resultPage = service.getYearPage(year, page, pageSize);
+            MCRSitelinksYearPageDto resultPage = service.getYearPage(year, page, pageSize);
             return Optional.of(mapper.map(resultPage));
-        } catch (SitelinksNotFoundException e) {
+        } catch (MCRSitelinksNotFoundException e) {
             LOGGER.debug("Sitelinks not found: {}", e.getMessage());
             return Optional.empty();
-        } catch (SitelinksMappingException e) {
+        } catch (MCRSitelinksMappingException e) {
             LOGGER.error("Mapping failed for year {} page {}", year, page, e);
             return Optional.empty();
         }

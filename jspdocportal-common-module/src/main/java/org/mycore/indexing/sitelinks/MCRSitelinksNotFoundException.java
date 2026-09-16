@@ -29,7 +29,7 @@ import org.mycore.common.MCRException;
  * This exception is typically thrown when attempting to access data for a year
  * that has no associated sitelinks, or when a requested page is out of bounds.
  */
-public class SitelinksNotFoundException extends MCRException {
+public class MCRSitelinksNotFoundException extends MCRException {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -39,7 +39,7 @@ public class SitelinksNotFoundException extends MCRException {
      *
      * @param message the detail message
      */
-    public SitelinksNotFoundException(String message) {
+    public MCRSitelinksNotFoundException(String message) {
         super(message);
     }
 
@@ -49,8 +49,8 @@ public class SitelinksNotFoundException extends MCRException {
      * @param year the year that was not found
      * @return a new exception instance
      */
-    public static SitelinksNotFoundException forYear(int year) {
-        return new SitelinksNotFoundException("No sitelinks data found for year: " + year);
+    public static MCRSitelinksNotFoundException forYear(int year) {
+        return new MCRSitelinksNotFoundException("No sitelinks data found for year: " + year);
     }
 
     /**
@@ -61,8 +61,8 @@ public class SitelinksNotFoundException extends MCRException {
      * @param totalPages the total number of available pages
      * @return a new exception instance
      */
-    public static SitelinksNotFoundException forPage(int year, int page, long totalPages) {
-        return new SitelinksNotFoundException(
+    public static MCRSitelinksNotFoundException forPage(int year, int page, long totalPages) {
+        return new MCRSitelinksNotFoundException(
             String.format(Locale.ROOT,"Page %d does not exist for year %d (total pages: %d)", page, year, totalPages));
     }
 }

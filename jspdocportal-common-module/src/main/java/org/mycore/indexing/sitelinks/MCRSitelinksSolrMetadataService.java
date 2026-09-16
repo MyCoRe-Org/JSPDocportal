@@ -39,7 +39,7 @@ import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
 import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 
 /**
- * Solr-based implementation of {@link SitelinksMetadataService}.
+ * Solr-based implementation of {@link MCRSitelinksMetadataService}.
  * <p>
  * This implementation queries Solr to retrieve object metadata for sitelinks generation.
  * It expects the following Solr fields to be present:
@@ -51,8 +51,8 @@ import org.mycore.solr.auth.MCRSolrAuthenticationManager;
  *   <li>{@code id} - the unique object identifier</li>
  * </ul>
  */
-@MCRConfigurationProxy(proxyClass = SitelinksSolrMetadataService.Factory.class)
-public class SitelinksSolrMetadataService implements SitelinksMetadataService {
+@MCRConfigurationProxy(proxyClass = MCRSitelinksSolrMetadataService.Factory.class)
+public class MCRSitelinksSolrMetadataService implements MCRSitelinksMetadataService {
 
     private static final String FIELD_ID = "id";
 
@@ -78,7 +78,7 @@ public class SitelinksSolrMetadataService implements SitelinksMetadataService {
      * @param filterQuery a Solr filter query applied to all queries (e.g., {@code worldReadable:true})
      * @param requestHandler the Solr request handler path to query (e.g., {@code /select})
      */
-    public SitelinksSolrMetadataService(String filterQuery, String requestHandler) {
+    public MCRSitelinksSolrMetadataService(String filterQuery, String requestHandler) {
         SolrClient client = MCRSolrIndexRegistryManager.obtainRegistry()
             .getIndex("main")
             .orElseThrow(() -> new MCRConfigurationException("Solr index 'main' is not configured"))
@@ -96,7 +96,7 @@ public class SitelinksSolrMetadataService implements SitelinksMetadataService {
      * @param filterQuery a Solr filter query applied to all queries (e.g., {@code worldReadable:true})
      * @param requestHandler the Solr request handler path to query (e.g., {@code /select})
      */
-    public SitelinksSolrMetadataService(SolrClient solrClient, MCRSolrAuthenticationManager authenticationManager,
+    public MCRSitelinksSolrMetadataService(SolrClient solrClient, MCRSolrAuthenticationManager authenticationManager,
         String filterQuery, String requestHandler) {
         this.solrClient = solrClient;
         this.authenticationManager = authenticationManager;
@@ -151,12 +151,12 @@ public class SitelinksSolrMetadataService implements SitelinksMetadataService {
     }
 
     /**
-     * Factory class for creating {@link SitelinksSolrMetadataService} instances via configuration.
+     * Factory class for creating {@link MCRSitelinksSolrMetadataService} instances via configuration.
      * <p>
      * This factory is used by the {@link MCRConfigurationProxy} annotation to automatically
      * instantiate the service with configuration values from properties.
      */
-    public static class Factory implements Supplier<SitelinksSolrMetadataService> {
+    public static class Factory implements Supplier<MCRSitelinksSolrMetadataService> {
 
         /**
          * The Solr filter query configured via {@code .FilterQuery} property.
@@ -171,8 +171,8 @@ public class SitelinksSolrMetadataService implements SitelinksMetadataService {
         public String requestHandler;
 
         @Override
-        public SitelinksSolrMetadataService get() {
-            return new SitelinksSolrMetadataService(filterQuery, requestHandler);
+        public MCRSitelinksSolrMetadataService get() {
+            return new MCRSitelinksSolrMetadataService(filterQuery, requestHandler);
         }
     }
 }

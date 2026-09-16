@@ -28,7 +28,7 @@ import org.mycore.common.MCRException;
  * This can happen, for example, if the data is inconsistent or
  * the mapper encounters unexpected content.
  */
-public class SitelinksMappingException extends MCRException {
+public class MCRSitelinksMappingException extends MCRException {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -38,7 +38,7 @@ public class SitelinksMappingException extends MCRException {
      *
      * @param message the detail message
      */
-    public SitelinksMappingException(String message) {
+    public MCRSitelinksMappingException(String message) {
         super(message);
     }
 
@@ -49,7 +49,7 @@ public class SitelinksMappingException extends MCRException {
      * @param message the detail message
      * @param cause the cause of the exception
      */
-    public SitelinksMappingException(String message, Throwable cause) {
+    public MCRSitelinksMappingException(String message, Throwable cause) {
         super(message, cause);
     }
 }

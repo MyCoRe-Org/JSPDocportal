@@ -29,18 +29,18 @@ import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRContentTransformer;
 import org.mycore.common.xml.MCRLayoutTransformerFactory;
-import org.mycore.indexing.sitelinks.dto.SitelinksRootPageDto;
-import org.mycore.indexing.sitelinks.dto.SitelinksYearPageDto;
+import org.mycore.indexing.sitelinks.dto.MCRSitelinksRootPageDto;
+import org.mycore.indexing.sitelinks.dto.MCRSitelinksYearPageDto;
 
 /**
- * Implementation of {@link SitelinksPageMapper} that transforms sitelinks pages to HTML via XSL transformation.
+ * Implementation of {@link MCRSitelinksPageMapper} that transforms sitelinks pages to HTML via XSL transformation.
  * <p>
  * This mapper converts sitelinks page objects into XML structures and applies XSL transformations
  * to generate HTML output. The XML structure follows a defined schema with elements for years,
  * pages, and object IDs.
  */
-@MCRConfigurationProxy(proxyClass = SitelinksXslPageMapper.Factory.class)
-public class SitelinksXslPageMapper implements SitelinksPageMapper {
+@MCRConfigurationProxy(proxyClass = MCRSitelinksXslPageMapper.Factory.class)
+public class MCRSitelinksXslPageMapper implements MCRSitelinksPageMapper {
 
     private static final String ROOT = "sitelinks-page";
     private static final String YEARS = "years";
@@ -60,7 +60,7 @@ public class SitelinksXslPageMapper implements SitelinksPageMapper {
      * The transformer is obtained from the {@link MCRLayoutTransformerFactory}
      * using the root element name as transformer key.
      */
-    public SitelinksXslPageMapper() {
+    public MCRSitelinksXslPageMapper() {
         this(new MCRLayoutTransformerFactory().getTransformer(ROOT));
     }
 
@@ -69,29 +69,29 @@ public class SitelinksXslPageMapper implements SitelinksPageMapper {
      *
      * @param transformer the transformer
      */
-    public SitelinksXslPageMapper(MCRContentTransformer transformer) {
+    public MCRSitelinksXslPageMapper(MCRContentTransformer transformer) {
         this.transformer = transformer;
     }
 
     @Override
-    public MCRContent map(SitelinksRootPageDto rootPage) {
+    public MCRContent map(MCRSitelinksRootPageDto rootPage) {
         Element root = new Element(ROOT);
         root.addContent(buildYearsElement(rootPage.years()));
         try {
             return transformer.transform(new MCRJDOMContent(root));
         } catch (IOException e) {
-            throw new SitelinksMappingException("Error while mapping page", e);
+            throw new MCRSitelinksMappingException("Error while mapping page", e);
         }
     }
 
     @Override
-    public MCRContent map(SitelinksYearPageDto yearPage) {
+    public MCRContent map(MCRSitelinksYearPageDto yearPage) {
         Element root = new Element(ROOT);
         root.addContent(buildPageElement(yearPage.year(), yearPage.page(), yearPage.totalCount(), yearPage.objectIds()));
         try {
             return transformer.transform(new MCRJDOMContent(root));
         }  catch (IOException e) {
-            throw new SitelinksMappingException("Error while mapping page", e);
+            throw new MCRSitelinksMappingException("Error while mapping page", e);
         }
     }
 
@@ -123,16 +123,16 @@ public class SitelinksXslPageMapper implements SitelinksPageMapper {
     }
 
     /**
-     * Factory class for creating {@link SitelinksService} instances via configuration.
+     * Factory class for creating {@link MCRSitelinksService} instances via configuration.
      * <p>
      * This factory is used by the {@link MCRConfigurationProxy} annotation to automatically
      * instantiate the service with configuration values from properties.
      */
-    public static class Factory implements Supplier<SitelinksXslPageMapper> {
+    public static class Factory implements Supplier<MCRSitelinksXslPageMapper> {
 
         @Override
-        public SitelinksXslPageMapper get() {
-            return new SitelinksXslPageMapper();
+        public MCRSitelinksXslPageMapper get() {
+            return new MCRSitelinksXslPageMapper();
         }
     }
 }
