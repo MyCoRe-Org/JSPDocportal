@@ -387,12 +387,12 @@
           </tr>
         </xsl:if>
         
-        <xsl:if test="./mods:relatedItem[@type='isReferencedBy' or @type='references' or @type='otherFormat' or @type='otherVersion']">
+        <xsl:if test="./mods:relatedItem[@type='isReferencedBy' or @type='references' or @type='otherFormat' or @type='otherVersion' or @otherType='other_relation']">
           <tr>
             <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.references')}</th>
             <td>
               <table id="ir-table-docdetails-references" class="ir-table-docdetails-values">
-                <xsl:for-each select="./mods:relatedItem[@type='isReferencedBy' or @type='references' or @type='otherFormat' or @type='otherVersion']">
+                <xsl:for-each select="./mods:relatedItem[@type='isReferencedBy' or @type='references' or @type='otherFormat' or @type='otherVersion' or @otherType='other_relation']">
                   <tr><td>
                     <xsl:if test="./mods:note[@type='relation_label']">
                       <span class="small">{./mods:note[@type='relation_label']}:</span><br />
@@ -400,7 +400,7 @@
                     <xsl:if test="./mods:note[@type='format_type']">
                       {mods:note[@type='format_type']}
                     </xsl:if>
-                    {./mods:titleInfo/mods:title}
+                    {string-join((./mods:titleInfo/mods:title, ./mods:titleInfo/mods:subTitle), ' : ') }
                     <table>
                       <xsl:for-each select="./mods:identifier[@type='doi']">
                         <tr><th><abbr class="text-nowrap" title="Digital Object Identifier">DOI</abbr>:</th>
