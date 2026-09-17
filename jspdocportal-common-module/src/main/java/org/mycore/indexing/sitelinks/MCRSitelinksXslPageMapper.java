@@ -99,11 +99,11 @@ public class MCRSitelinksXslPageMapper implements MCRSitelinksPageMapper {
     }
 
     private static Element buildClustersElement(List<String> clusters) {
-        Element yearsElement = new Element(CLUSTERS);
+        Element clustersElement = new Element(CLUSTERS);
         clusters.stream()
             .sorted(Comparator.reverseOrder())
-            .forEach(y -> yearsElement.addContent(new Element(CLUSTER).setText(String.valueOf(y))));
-        return yearsElement;
+            .forEach(y -> clustersElement.addContent(new Element(CLUSTER).setText(String.valueOf(y))));
+        return clustersElement;
     }
 
     private static Element buildPageElement(String cluster, int page, long totalCount,
