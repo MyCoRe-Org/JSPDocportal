@@ -407,6 +407,11 @@
                             <td><a href="https://doi.org/{.}">{.}</a></td>
                         </tr>
                       </xsl:for-each>
+                      <xsl:for-each select="./mods:identifier[@type='url']">
+                        <tr><th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.website')}</th>
+                            <td><a href="{.}">{.}</a></td>
+                        </tr>
+                      </xsl:for-each>
                       <xsl:for-each select="./mods:recordInfo/mods:recordIdentifier">     
                         <tr><th><abbr class="text-nowrap" title="Persistente URL">PURL</abbr>: </th>
                             <td><a href="https://purl.uni-rostock.de/{.}">https://purl.uni-rostock.de/{.}</a></td>
