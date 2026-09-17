@@ -25,10 +25,9 @@
     <body>
       <h1><xsl:value-of select="$title" /></h1>
       <p>
-        This page is intended for crawlers and bots. Content is grouped by year and ordered by
-        <em>Date/Year Issued</em> (newest first).
+        This page is intended for crawlers and bots.<br /> Links to the repository objects are clustered (e.g. by year) and sorted.
       </p>
-      <nav aria-label="Year navigation">
+      <nav aria-label="Cluster navigation">
         <ul>
           <xsl:apply-templates select="year" />
         </ul>
@@ -71,7 +70,7 @@
       <nav aria-label="Page navigation">
         <ul class="pagination">
           <li>
-            <a href="{$base-url}" aria-label="All sitelinks">↖ All Years</a>
+            <a href="{$base-url}" aria-label="All sitelinks">↖ Up</a>
           </li>
           <xsl:if test="@number > 1">
             <li>
