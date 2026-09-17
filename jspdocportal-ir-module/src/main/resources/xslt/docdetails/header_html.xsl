@@ -183,19 +183,9 @@
         </xsl:choose>
       </p>
       
-      <!-- Abstract for EPUB -->
+      <!-- Abstract for EPUB and DATA-->
       <xsl:if test="not(contains(../mods:genre[@displayLabel='doctype']/@valueURI,'#histbest'))">
-        <xsl:variable name="abstract">
-        <xsl:choose>
-          <xsl:when test="./mods:abstract[@xml:lang=$CurrentLang]">
-            <xsl:value-of select="./mods:abstract[@xml:lang=$CurrentLang]" />
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="./mods:abstract[1]" />
-          </xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
-        <xsl:for-each select="$abstract[string-length(.)>0]">
+      <xsl:for-each select="./mods:abstract[1]">
         <p class="text-justify small pt-2">
           <strong>Abstract:  </strong>
           <xsl:variable name="text" select="mcrstring:shorten(., 400)" />
