@@ -46,23 +46,23 @@ public class MCRSitelinksNotFoundException extends MCRException {
     /**
      * Constructs a new exception for a non-existent year.
      *
-     * @param year the year that was not found
+     * @param cluster the cluster that was not found
      * @return a new exception instance
      */
-    public static MCRSitelinksNotFoundException forYear(int year) {
-        return new MCRSitelinksNotFoundException("No sitelinks data found for year: " + year);
+    public static MCRSitelinksNotFoundException forCluster(String cluster) {
+        return new MCRSitelinksNotFoundException("No sitelinks data found for cluster: " + cluster);
     }
 
     /**
      * Constructs a new exception for an invalid page.
      *
-     * @param year the year
+     * @param cluster the cluster
      * @param page the invalid page number
      * @param totalPages the total number of available pages
      * @return a new exception instance
      */
-    public static MCRSitelinksNotFoundException forPage(int year, int page, long totalPages) {
+    public static MCRSitelinksNotFoundException forPage(String cluster, int page, long totalPages) {
         return new MCRSitelinksNotFoundException(
-            String.format(Locale.ROOT,"Page %d does not exist for year %d (total pages: %d)", page, year, totalPages));
+            String.format(Locale.ROOT,"Page %d does not exist for cluster %s (total pages: %d)", page, cluster, totalPages));
     }
 }

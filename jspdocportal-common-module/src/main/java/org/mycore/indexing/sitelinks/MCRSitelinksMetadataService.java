@@ -35,22 +35,22 @@ public interface MCRSitelinksMetadataService {
     /**
      * Retrieves all years for which objects exist with an issued date.
      *
-     * @return a list of years
+     * @return a list of clusters
      * @throws MCRException if a Solr query or I/O error occurs
      */
-    List<Integer> getYearsWithObjects();
+    List<String> getClustersWithObjects();
 
     /**
-     * Retrieves links for objects issued in a specific year, with support for pagination.
+     * Retrieves links for objects issued in a specific cluster, with support for pagination.
      * Results are sorted primarily by issued date (descending), then by creation timestamp (descending).
      *
-     * @param year   the year of the issued objects (e.g., 2021)
+     * @param cluster the cluster of the issued objects (e.g. a year, like 2021)
      * @param offset the offset from which to start fetching results (for pagination)
      * @param limit  the maximum number of results to fetch (for pagination)
      * @return an {@link ObjectIdsWithCount} object containing a list of object IDs and the total count
      * @throws MCRException if a query or I/O error occurs
      */
-    LinkObjectsWithCount getObjectIdsByYear(int year, int offset, int limit);
+    LinkObjectsWithCount getObjectIdsByCluster(String cluster, int offset, int limit);
 
 
     /**

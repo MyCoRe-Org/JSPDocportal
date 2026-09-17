@@ -15,7 +15,7 @@
     </html>
   </xsl:template>
 
-  <xsl:template match="years">
+  <xsl:template match="clusters">
     <xsl:variable name="title">Sitelinks Index for Crawlers</xsl:variable>
     <head>
       <xsl:call-template name="basic-head">
@@ -29,13 +29,13 @@
       </p>
       <nav aria-label="Cluster navigation">
         <ul>
-          <xsl:apply-templates select="year" />
+          <xsl:apply-templates select="cluster" />
         </ul>
       </nav>
     </body>
   </xsl:template>
 
-  <xsl:template match="year">
+  <xsl:template match="cluster">
     <li>
       <a href="{concat($base-url, '/', text())}">
         <xsl:value-of select="text()" />
@@ -50,18 +50,18 @@
       </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="page-title">
-      <xsl:value-of select="@year" /> - Page <xsl:value-of select="@number" /> of <xsl:value-of select="$max-page-number" />
+      <xsl:value-of select="@cluster" /> - Page <xsl:value-of select="@number" /> of <xsl:value-of select="$max-page-number" />
     </xsl:variable>
     <head>
       <xsl:call-template name="basic-head">
         <xsl:with-param name="title" select="concat('Sitelinks ', $page-title)" />
       </xsl:call-template>
-      <link rel="canonical" href="{concat($base-url, '/', @year)}" />
+      <link rel="canonical" href="{concat($base-url, '/', @cluster)}" />
       <xsl:if test="@number > 1">
-        <link rel="prev" href="{concat($base-url, '/', @year, '/page/', @number - 1)}" />
+        <link rel="prev" href="{concat($base-url, '/', @cluster, '/page/', @number - 1)}" />
       </xsl:if>
       <xsl:if test="@number &lt; $max-page-number">
-        <link rel="next" href="{concat($base-url, '/', @year, '/page/', @number + 1)}" />
+        <link rel="next" href="{concat($base-url, '/', @cluster, '/page/', @number + 1)}" />
       </xsl:if>
     </head>
     <body>
@@ -74,7 +74,7 @@
           </li>
           <xsl:if test="@number > 1">
             <li>
-              <a href="{concat($base-url, '/', @year, '/page/', @number - 1)}" rel="prev">« Previous Page</a>
+              <a href="{concat($base-url, '/', @cluster, '/page/', @number - 1)}" rel="prev">« Previous Page</a>
             </li>
           </xsl:if>
           <li aria-current="page">
@@ -82,7 +82,7 @@
           </li>
           <xsl:if test="@number &lt; $max-page-number">
             <li>
-              <a href="{concat($base-url, '/', @year, '/page/', @number + 1)}" rel="next">Next Page »</a>
+              <a href="{concat($base-url, '/', @cluster, '/page/', @number + 1)}" rel="next">Next Page »</a>
             </li>
           </xsl:if>
         </ul>

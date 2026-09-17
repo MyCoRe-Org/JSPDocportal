@@ -31,7 +31,7 @@ import org.mycore.common.content.transformer.MCRContentTransformer;
 import org.mycore.common.xml.MCRLayoutTransformerFactory;
 import org.mycore.indexing.sitelinks.dto.MCRSitelinksLinkObject;
 import org.mycore.indexing.sitelinks.dto.MCRSitelinksRootPageDto;
-import org.mycore.indexing.sitelinks.dto.MCRSitelinksYearPageDto;
+import org.mycore.indexing.sitelinks.dto.MCRSitelinksClusterPageDto;
 
 /**
  * Implementation of {@link MCRSitelinksPageMapper} that transforms sitelinks pages to HTML via XSL transformation.
@@ -44,8 +44,8 @@ import org.mycore.indexing.sitelinks.dto.MCRSitelinksYearPageDto;
 public class MCRSitelinksXslPageMapper implements MCRSitelinksPageMapper {
 
     private static final String ROOT = "sitelinks-page";
-    private static final String YEARS = "years";
-    private static final String YEAR = "year";
+    private static final String CLUSTERS = "clusters";
+    private static final String CLUSTER = "cluster";
     private static final String PAGE = "page";
     private static final String OBJECTS = "objects";
     private static final String OBJECT = "object";
@@ -53,7 +53,7 @@ public class MCRSitelinksXslPageMapper implements MCRSitelinksPageMapper {
     private static final String ATTR_OBJECT__FULLTEXT = "fulltext";
     private static final String ATTR_PAGE__NUMBER = "number";
     private static final String ATTR_PAGE__TOTAL_COUNT = "total-count";
-    private static final String ATTR_PAGE__YEAR = "year";
+    private static final String ATTR_PAGE__CLUSTER = "cluster";
 
     private final MCRContentTransformer transformer;
 
@@ -79,7 +79,7 @@ public class MCRSitelinksXslPageMapper implements MCRSitelinksPageMapper {
     @Override
     public MCRContent map(MCRSitelinksRootPageDto rootPage) {
         Element root = new Element(ROOT);
-        root.addContent(buildYearsElement(rootPage.years()));
+        root.addContent(buildClustersElement(rootPage.clusters()));
         try {
             return transformer.transform(new MCRJDOMContent(root));
         } catch (IOException e) {
@@ -88,9 +88,9 @@ public class MCRSitelinksXslPageMapper implements MCRSitelinksPageMapper {
     }
 
     @Override
-    public MCRContent map(MCRSitelinksYearPageDto yearPage) {
+    public MCRContent map(MCRSitelinksClusterPageDto yearPage) {
         Element root = new Element(ROOT);
-        root.addContent(buildPageElement(yearPage.year(), yearPage.page(), yearPage.totalCount(), yearPage.objects()));
+        root.addContent(buildPageElement(yearPage.cluster(), yearPage.page(), yearPage.totalCount(), yearPage.objects()));
         try {
             return transformer.transform(new MCRJDOMContent(root));
         } catch (IOException e) {
@@ -98,20 +98,20 @@ public class MCRSitelinksXslPageMapper implements MCRSitelinksPageMapper {
         }
     }
 
-    private static Element buildYearsElement(List<Integer> years) {
-        Element yearsElement = new Element(YEARS);
-        years.stream()
+    private static Element buildClustersElement(List<String> clusters) {
+        Element yearsElement = new Element(CLUSTERS);
+        clusters.stream()
             .sorted(Comparator.reverseOrder())
-            .forEach(y -> yearsElement.addContent(new Element(YEAR).setText(String.valueOf(y))));
+            .forEach(y -> yearsElement.addContent(new Element(CLUSTER).setText(String.valueOf(y))));
         return yearsElement;
     }
 
-    private static Element buildPageElement(int year, int page, long totalCount,
+    private static Element buildPageElement(String cluster, int page, long totalCount,
         List<MCRSitelinksLinkObject> linkObjects) {
         Element pageElement = new Element(PAGE);
         pageElement.setAttribute(ATTR_PAGE__NUMBER, String.valueOf(page));
         pageElement.setAttribute(ATTR_PAGE__TOTAL_COUNT, String.valueOf(totalCount));
-        pageElement.setAttribute(ATTR_PAGE__YEAR, String.valueOf(year));
+        pageElement.setAttribute(ATTR_PAGE__CLUSTER, cluster);
 
         Element objectIdsElement = new Element(OBJECTS);
         linkObjects.forEach(obj -> {

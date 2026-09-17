@@ -27,7 +27,7 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.common.content.MCRContent;
 import org.mycore.frontend.servlets.MCRContentServlet;
-import org.mycore.indexing.sitelinks.dto.MCRSitelinksYearPageDto;
+import org.mycore.indexing.sitelinks.dto.MCRSitelinksClusterPageDto;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -111,14 +111,14 @@ public class MCRSitelinksServlet extends MCRContentServlet {
         }
         String[] pathParts = pathInfo.substring(1).split("/");
 
-        return parseYear(pathParts[0])
-            .flatMap(year -> {
+        return parseCluster(pathParts[0])
+            .flatMap(cluster -> {
                 if (pathParts.length == 1) {
-                    // GET /sitelinks/{year} -> list for year (page 1)
-                    return getYearPage(year, 1);
+                    // GET /sitelinks/{cluster} -> list for cluster (page 1)
+                    return getClusterPage(cluster, 1);
                 } else if (pathParts.length == 3 && PATH_PAGE.equals(pathParts[1])) {
-                    // GET /sitelinks/{year}/page/{page} -> list for year and page
-                    return parsePage(pathParts[2]).flatMap(page -> getYearPage(year, page));
+                    // GET /sitelinks/{cluster}/page/{page} -> list for cluster and page
+                    return parsePage(pathParts[2]).flatMap(page -> getClusterPage(cluster, page));
                 }
                 return Optional.empty();
             }).orElseGet(() -> {
@@ -127,12 +127,8 @@ public class MCRSitelinksServlet extends MCRContentServlet {
             });
     }
 
-    private Optional<Integer> parseYear(String yearStr) {
-        try {
-            return Optional.of(Integer.parseInt(yearStr));
-        } catch (NumberFormatException e) {
-            return Optional.empty();
-        }
+    private Optional<String> parseCluster(String clusterStr) {
+            return Optional.of(clusterStr.trim());
     }
 
     private Optional<Integer> parsePage(String pageStr) {
@@ -143,15 +139,15 @@ public class MCRSitelinksServlet extends MCRContentServlet {
         }
     }
 
-    private Optional<MCRContent> getYearPage(int year, int page) {
+    private Optional<MCRContent> getClusterPage(String cluster, int page) {
         try {
-            MCRSitelinksYearPageDto resultPage = service.getYearPage(year, page, pageSize);
+            MCRSitelinksClusterPageDto resultPage = service.getClusterPage(cluster, page, pageSize);
             return Optional.of(mapper.map(resultPage));
         } catch (MCRSitelinksNotFoundException e) {
             LOGGER.debug("Sitelinks not found: {}", e.getMessage());
             return Optional.empty();
         } catch (MCRSitelinksMappingException e) {
-            LOGGER.error("Mapping failed for year {} page {}", year, page, e);
+            LOGGER.error("Mapping failed for cluster {} page {}", cluster, page, e);
             return Optional.empty();
         }
     }

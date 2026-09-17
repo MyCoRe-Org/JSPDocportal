@@ -23,10 +23,10 @@ import java.util.List;
 /**
  * Data transfer object representing a paginated page of sitelinks for a specific year.
  *
- * @param year the year for which this page contains sitelinks
+ * @param cluster the cluster for which this page contains sitelinks
  * @param page the current page number
  * @param totalCount the total number of objects available for this year across all pages
  * @param objectIds the list of object IDs on this specific page
  */
-public record MCRSitelinksYearPageDto(int year, int page, long totalCount, List<MCRSitelinksLinkObject> objects) {
+public record MCRSitelinksClusterPageDto(String cluster, int page, long totalCount, List<MCRSitelinksLinkObject> objects) {
 }

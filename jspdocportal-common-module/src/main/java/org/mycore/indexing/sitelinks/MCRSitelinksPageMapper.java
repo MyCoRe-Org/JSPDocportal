@@ -20,7 +20,7 @@ package org.mycore.indexing.sitelinks;
 
 import org.mycore.common.content.MCRContent;
 import org.mycore.indexing.sitelinks.dto.MCRSitelinksRootPageDto;
-import org.mycore.indexing.sitelinks.dto.MCRSitelinksYearPageDto;
+import org.mycore.indexing.sitelinks.dto.MCRSitelinksClusterPageDto;
 
 /**
  * Mapper interface for transforming sitelinks DTOs into content representations.
@@ -43,9 +43,9 @@ public interface MCRSitelinksPageMapper {
     /**
      * Maps a sitelinks year page DTO to content.
      *
-     * @param yearPage the year-specific page to be mapped
+     * @param clusterPage the cluster-specific page to be mapped
      * @return the mapped content representation
      * @throws MCRSitelinksMappingException if an error occurs during mapping
      */
-    MCRContent map(MCRSitelinksYearPageDto yearPage) throws MCRSitelinksMappingException;
+    MCRContent map(MCRSitelinksClusterPageDto clusterPage) throws MCRSitelinksMappingException;
 }

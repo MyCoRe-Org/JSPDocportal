@@ -23,5 +23,5 @@ import java.util.List;
 /**
  * Data transfer object representing the root page of the sitelinks hierarchy.
  */
-public record MCRSitelinksRootPageDto(List<Integer> years) {
+public record MCRSitelinksRootPageDto(List<String> clusters) {
 }

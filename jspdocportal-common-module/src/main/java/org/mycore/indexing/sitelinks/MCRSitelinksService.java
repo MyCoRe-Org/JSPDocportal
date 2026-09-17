@@ -31,7 +31,7 @@ import org.mycore.common.MCRException;
 import org.mycore.common.config.annotation.MCRConfigurationProxy;
 import org.mycore.common.config.annotation.MCRInstance;
 import org.mycore.indexing.sitelinks.dto.MCRSitelinksRootPageDto;
-import org.mycore.indexing.sitelinks.dto.MCRSitelinksYearPageDto;
+import org.mycore.indexing.sitelinks.dto.MCRSitelinksClusterPageDto;
 
 /**
  * Application service for generating sitelinks page data transfer objects.
@@ -48,7 +48,7 @@ public class MCRSitelinksService {
     private static final long CACHE_TTL_MS = 5 * 60 * 1000;
 
     private final MCRSitelinksMetadataService metadataService;
-    private final MCRCache<String, Set<Integer>> yearCache;
+    private final MCRCache<String, Set<String>> clusterCache;
 
     /**
      * Constructs a new SitelinksService with the specified metadata service.
@@ -57,7 +57,7 @@ public class MCRSitelinksService {
      */
     public MCRSitelinksService(MCRSitelinksMetadataService metadataService) {
         this.metadataService = metadataService;
-        this.yearCache = new MCRCache<>(1, "SitelinksYears");
+        this.clusterCache = new MCRCache<>(1, "SitelinksClusters");
     }
 
     /**
@@ -66,80 +66,79 @@ public class MCRSitelinksService {
      * @return a {@link MCRSitelinksRootPageDto} containing all available years
      */
     public MCRSitelinksRootPageDto getRootPage() {
-        Set<Integer> years = getAvailableYears();
-        List<Integer> sortedYears = years.stream()
+        Set<String> clusters = getAvailableClusters();
+        List<String> sortedClusters = clusters.stream()
             .sorted(Comparator.reverseOrder())
             .toList();
-        return new MCRSitelinksRootPageDto(sortedYears);
+        return new MCRSitelinksRootPageDto(sortedClusters);
     }
 
     /**
      * Retrieves a paginated page of object IDs for a specific year.
      *
-     * @param year the year for which to retrieve object IDs (e.g., 2024)
+     * @param cluster the cluster for which to retrieve object IDs (e.g., 2024)
      * @param page the page number to retrieve (1-indexed, must be ≥ 1)
      * @param pageSize the maximum number of object IDs to include per page (must be &gt; 0)
-     * @return a {@link MCRSitelinksYearPageDto} containing the requested page of object IDs,
+     * @return a {@link MCRSitelinksClusterPageDto} containing the requested page of object IDs,
      *         pagination metadata, and the total count of objects for the year
      * @throws MCRException if {@code page < 1} or {@code pageSize < 1}
      * @throws MCRSitelinksNotFoundException if no data exists for the specified year
      */
-    public MCRSitelinksYearPageDto getYearPage(int year, int page, int pageSize) {
+    public MCRSitelinksClusterPageDto getClusterPage(String cluster, int page, int pageSize) {
         if (page < 1) {
             throw new MCRException("page must be greater than or equal to 1");
         }
         if (pageSize < 1) {
             throw new MCRException("page size must be greater than or equal to 1");
         }
-        if (!hasYearPage(year)) {
-            throw MCRSitelinksNotFoundException.forYear(year);
+        if (!hasClusterPage(cluster)) {
+            throw MCRSitelinksNotFoundException.forCluster(cluster);
         }
 
         MCRSitelinksMetadataService.LinkObjectsWithCount data =
-            metadataService.getObjectIdsByYear(year, (page - 1) * pageSize, pageSize);
+            metadataService.getObjectIdsByCluster(cluster, (page - 1) * pageSize, pageSize);
         long totalPages = (data.totalCount() + pageSize - 1) / pageSize;
         if (data.totalCount() == 0 || page > totalPages) {
-            throw MCRSitelinksNotFoundException.forPage(year, page, totalPages);
+            throw MCRSitelinksNotFoundException.forPage(cluster, page, totalPages);
         }
 
-        return new MCRSitelinksYearPageDto(year, page, data.totalCount(), data.objects());
+        return new MCRSitelinksClusterPageDto(cluster, page, data.totalCount(), data.objects());
     }
 
     /**
      * Checks if a year has any sitelinks data available.
      *
-     * @param year the year to check
+     * @param cluster the cluster to check
      * @return true if the year has sitelinks data, false otherwise
      */
-    public boolean hasYearPage(int year) {
-        return getAvailableYears().contains(year);
+    public boolean hasClusterPage(String cluster) {
+        return getAvailableClusters().contains(cluster);
     }
 
     /**
-     * Clears the year cache, forcing a fresh fetch on the next access.
+     * Clears the cluster cache, forcing a fresh fetch on the next access.
      */
     public void invalidateCache() {
-        LOGGER.info("Invalidating sitelinks year cache");
-        yearCache.clear();
+        LOGGER.info("Invalidating sitelinks cluster cache");
+        clusterCache.clear();
     }
 
-    private Set<Integer> getAvailableYears() {
+    private Set<String> getAvailableClusters() {
         long currentTime = System.currentTimeMillis();
-        Set<Integer> cached = yearCache.getIfUpToDate(CACHE_KEY, currentTime - CACHE_TTL_MS);
+        Set<String> cached = clusterCache.getIfUpToDate(CACHE_KEY, currentTime - CACHE_TTL_MS);
 
         if (LOGGER.isDebugEnabled()) {
             if (cached != null) {
                 LOGGER.debug("Using cached years data");
                 return cached;
             }
-            LOGGER.debug("Fetching fresh years data from metadata service");
+            LOGGER.debug("Fetching fresh clusters data from metadata service");
         }
 
-        Set<Integer> years = new HashSet<>(metadataService.getYearsWithObjects());
-        Set<Integer> immutableYears = Set.copyOf(years);
-        yearCache.put(CACHE_KEY, immutableYears, currentTime);
+        Set<String> immutableClusters = Set.copyOf(metadataService.getClustersWithObjects());
+        clusterCache.put(CACHE_KEY, immutableClusters, currentTime);
 
-        return immutableYears;
+        return immutableClusters;
     }
 
     /**

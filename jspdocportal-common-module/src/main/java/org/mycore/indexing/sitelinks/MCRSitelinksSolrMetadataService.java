@@ -111,7 +111,7 @@ public class MCRSitelinksSolrMetadataService implements MCRSitelinksMetadataServ
     }
 
     @Override
-    public List<Integer> getYearsWithObjects() {
+    public List<String> getClustersWithObjects() {
         final SolrQuery query = new SolrQuery(DEFAULT_SOLR_QUERY);
         query.setRows(0);
         query.addFilterQuery(filterQuery);
@@ -122,17 +122,17 @@ public class MCRSitelinksSolrMetadataService implements MCRSitelinksMetadataServ
         try {
             final QueryResponse response = getRequest(query).process(solrClient);
             return response.getFacetField(FIELD_FACETING).getValues()
-                .stream().map(FacetField.Count::getName).map(Integer::parseInt).toList();
+                .stream().map(FacetField.Count::getName).map(String::trim).toList();
         } catch (SolrServerException | IOException e) {
             throw new MCRException(e);
         }
     }
 
     @Override
-    public LinkObjectsWithCount getObjectIdsByYear(int year, int offset, int limit) {
+    public LinkObjectsWithCount getObjectIdsByCluster(String cluster, int offset, int limit) {
         final SolrQuery query = new SolrQuery(DEFAULT_SOLR_QUERY);
         query.addFilterQuery(filterQuery);
-        query.addFilterQuery(String.format(Locale.ROOT, FIELD_FACETING + ":%s", year));
+        query.addFilterQuery(String.format(Locale.ROOT, FIELD_FACETING + ":%s", cluster));
         query.setFields(FIELD_ID, FIELD_FULLTEXT_URL);
         query.setStart(offset);
         query.setRows(limit);
