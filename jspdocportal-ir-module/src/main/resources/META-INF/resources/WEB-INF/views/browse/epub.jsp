@@ -170,3 +170,4 @@
   <%@ include file="../fragments/footer.jspf" %>
   </body>
 </html>
+<% out.flush(); %>
