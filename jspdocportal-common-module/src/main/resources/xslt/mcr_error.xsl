@@ -61,7 +61,7 @@
            border: 1px solid var(--border);
            border-radius: 12px;
            padding: 2.5rem 2rem;
-           max-width: 420px;
+           max-width: 550px;
            width: 100%;
            text-align: center;
            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
