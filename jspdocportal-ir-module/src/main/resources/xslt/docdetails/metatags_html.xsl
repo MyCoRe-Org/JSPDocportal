@@ -44,7 +44,7 @@
     </xsl:for-each>
     
     <xsl:for-each select="./mods:originInfo[@eventType='publication' or @eventType='creation']">
-      <xsl:variable name="mods_pubdate" select="./mods:dateIssued" />
+      <xsl:variable name="mods_pubdate" select="./mods:dateIssued[@keyDate='yes']" />
       <meta name="citation_publication_date" content="{$mods_pubdate}" />
       <meta name="DC.issued" content="{$mods_pubdate}" />
       
@@ -66,29 +66,20 @@
     </xsl:for-each>
     
     <xsl:variable name="mcrid" select="/mycoreobject/@ID" />
-    <xsl:for-each select="/mycoreobject/structure/derobjects/derobject[@xlink:title='fulltext'][1]">
-      <xsl:variable name="derId" select="@xlink:href" />
-      
-      <xsl:variable name="derXML" select="document(concat('mcrobject:',$derId))" />
-      <!-- Debug: <xsl:variable name="derXML" select="document(concat('http://rosdok.uni-rostock.de/api/v1/objects/',$mcrid,'/derivates/', $derId))" /> -->
-      <xsl:for-each select="$derXML/mycorederivate/derivate/internals/internal">
-        <xsl:if test="string-length(@maindoc)>0">
-          <xsl:variable name="file_fulltext"><xsl:value-of select="$WebApplicationBaseURL"/>file/<xsl:value-of select="$derXML/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href" />/<xsl:value-of select="$derXML/mycorederivate/@ID" />/<xsl:value-of select="@maindoc" /></xsl:variable>
-          <meta name="citation_pdf_url" content="{$file_fulltext}" />
-          <meta name="DC.identifier" content="{$file_fulltext}" />
-        </xsl:if>
-      </xsl:for-each>
+    <xsl:for-each select="/mycoreobject/structure/derobjects/derobject[classification/@categid='fulltext'][1]">
+      <xsl:if test="string-length(maindoc)>0">
+        <xsl:variable name="file_fulltext"><xsl:value-of select="$WebApplicationBaseURL"/>file/<xsl:value-of select="$mcrid" />/<xsl:value-of select="./@xlink:href" />/<xsl:value-of select="./maindoc" /></xsl:variable>
+        <meta name="citation_pdf_url" content="{$file_fulltext}" />
+      </xsl:if>
     </xsl:for-each>
 
     <meta name="citation_abstract_url" content="{$WebApplicationBaseURL}resolve/id/{$mcrid}" />
     <meta name="DC.identifier" content="{$WebApplicationBaseURL}resolve/id/{$mcrid}" />
     
     <xsl:for-each select="./mods:identifier[@type='purl']/text()">
-      <meta name="citation_abstract_url" content="{replace(., 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')}" />
-      <meta name="DC.identifier" content="{.}" />
+      <meta name="DC.identifier" content="{replace(., 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')}" />
     </xsl:for-each>
     <xsl:for-each select="./mods:identifier[@type='urn']/text()">
-      <meta name="citation_abstract_url" content="https://nbn-resolving.org/{.}" />
       <meta name="DC.identifier" content="{.}" />
     </xsl:for-each>
     <xsl:for-each select="./mods:identifier[@type='doi']/text()">
@@ -109,6 +100,14 @@
     </xsl:for-each>
     <xsl:for-each select="./mods:genre[@displayLabel='doctype']/text()">
       <meta name="DC.type" content="{.}" />
+    </xsl:for-each>
+    <xsl:for-each select="./mods:relatedItem">
+      <xsl:for-each select="./mods:titleInfo">
+        <meta name="citation_journal_title" content="{string-join((./mods:nonSort, ./mods:title, ./mods:subTitle), ' ')}" />
+      </xsl:for-each>  
+      <xsl:for-each select="./mods:part/mods:detail[@type='volume']/mods:number">
+        <meta name="citation_volume" content="{.}" />
+      </xsl:for-each>  
     </xsl:for-each>
   </xsl:for-each>
   <xsl:for-each select="/mycoreobject/service/servdates/servdate[@type='modifydate']/text()">
