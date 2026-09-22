@@ -6,6 +6,7 @@
   xmlns:mcrmods="http://www.mycore.de/xslt/mods"
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:jdp_stringutils="http://www.mycore.de/xslt/jspdocportal/jdp_stringutils"
   xmlns:ubr-researchdata="http://purl.uni-rostock.de/ub/standards/ubr-researchdata-information-v1.0"
   xmlns:ubr-legal="http://purl.uni-rostock.de/ub/standards/ubr-legal-information-v1.0"
   exclude-result-prefixes="#all"
@@ -15,6 +16,7 @@
   
   <xsl:include href="resource:xslt/default-parameters.xsl" />
   <xsl:include href="xslInclude:functions" />
+  <xsl:include href="resource:xslt/functions/jspdocportal/jdp_stringutils.xsl" />
   
   <xsl:import href="resource:xslt/docdetails/metadata/metadata_classifications_html.xsl" />
   <xsl:import href="resource:xslt/docdetails/metadata/metadata_title_html.xsl" />
@@ -170,7 +172,7 @@
               <xsl:for-each select="./mods:abstract[@type='summary']">
                 <tr>
                   <td class="text-justify">
-                     {.}
+                   <xsl:copy-of select="jdp_stringutils:activate-hyperlinks(jdp_stringutils:lf2br(.))" />
                     <span class="small ps-2">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:rfc5646:',@xml:lang))//category)}]</span>
                   </td>
                 </tr>
