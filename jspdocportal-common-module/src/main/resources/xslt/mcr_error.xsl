@@ -60,7 +60,7 @@
            background: var(--card-bg);
            border: 1px solid var(--border);
            border-radius: 12px;
-           padding: 2.5rem 2rem;
+           padding: 1rem;
            max-width: 550px;
            width: 100%;
            text-align: center;
@@ -97,6 +97,10 @@
         }
         a.button:hover {
           opacity: 0.85;
+        }
+        .card-body{
+          max-height: 40vh;
+          overflow: auto;
         }
         </xsl:text>
       </style>
