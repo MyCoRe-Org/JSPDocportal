@@ -8,6 +8,7 @@
   xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
   xmlns:mcrmods="http://www.mycore.de/xslt/mods"
   xmlns:mcrstring="http://www.mycore.de/xslt/stringutils"
+  xmlns:jdp_stringutils="http://www.mycore.de/xslt/jspdocportal/jdp_stringutils"
   xmlns:mods="http://www.loc.gov/mods/v3" 
   xmlns:xlink="http://www.w3.org/1999/xlink" 
   exclude-result-prefixes="#all"
@@ -17,6 +18,7 @@
   
   <xsl:include href="resource:xslt/default-parameters.xsl" />
   <xsl:include href="xslInclude:functions" />
+  <xsl:include href="resource:xslt/functions/jspdocportal/jdp_stringutils.xsl" />
   
   <xsl:import href="resource:xslt/docdetails/header/header_names_html.xsl" />
   <xsl:import href="resource:xslt/docdetails/header/header_otherversions_html.xsl" />
@@ -191,9 +193,9 @@
           <xsl:variable name="text" select="mcrstring:shorten(., 400)" />
           <xsl:choose>
             <xsl:when test="ends-with($text, '…')">
-              {substring($text, 0, string-length($text))}
+              <xsl:copy-of select="jdp_stringutils:activate-hyperlinks(jdp_stringutils:lf2br(substring($text, 0, string-length($text))))" />
               <span class="collapse" id="spanCollapseAbstract">
-                {substring(., string-length($text)+1)}
+                <xsl:copy-of select="jdp_stringutils:activate-hyperlinks(jdp_stringutils:lf2br(substring(., string-length($text)+1)))" />
               </span>
               <button id="btnCollapseAbstract" class="btn btn-secondary btn-sm py-0 px-1" type="button"
                       data-bs-toggle="collapse" data-bs-target="#spanCollapseAbstract" aria-expanded="false" aria-controls="spanCollapseAbstract">
