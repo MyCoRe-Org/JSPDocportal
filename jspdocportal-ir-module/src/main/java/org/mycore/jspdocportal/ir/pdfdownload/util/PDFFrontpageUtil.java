@@ -23,24 +23,24 @@
  */
 package org.mycore.jspdocportal.ir.pdfdownload.util;
 
+import java.awt.Color;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-import javax.xml.transform.TransformerFactory;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.MCRClassTools;
-import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
 import org.mycore.datamodel.metadata.MCRDerivate;
@@ -50,22 +50,22 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.resource.MCRResourceHelper;
-
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.tool.xml.XMLWorkerHelper;
+import org.openpdf.text.Chunk;
+import org.openpdf.text.Document;
+import org.openpdf.text.DocumentException;
+import org.openpdf.text.Font;
+import org.openpdf.text.FontFactory;
+import org.openpdf.text.Image;
+import org.openpdf.text.Paragraph;
+import org.openpdf.text.Rectangle;
+import org.openpdf.text.pdf.PdfImportedPage;
+import org.openpdf.text.pdf.PdfReader;
+import org.openpdf.text.pdf.PdfWriter;
 
 public class PDFFrontpageUtil {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm 'Uhr'", Locale.GERMAN);
+    private static final Color COLOR_BLACK = new Color(0, 0, 0);
 
     public static void createFrontPage(PdfWriter writer, Document document, String recordIdentifier, String mcrid)
         throws DocumentException {
@@ -83,7 +83,7 @@ public class PDFFrontpageUtil {
             //do nothing
         }
 
-        Font font = FontFactory.getFont(Font.FontFamily.HELVETICA.name(), 10, Font.NORMAL);
+        Font font = FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL);
         document.add(new Paragraph(
             "Dieses Werk wurde Ihnen durch die Universitätsbibliothek Rostock zum Download bereitgestellt.", font));
         document.add(
@@ -93,7 +93,7 @@ public class PDFFrontpageUtil {
         Rectangle rect = new Rectangle(document.left(), document.top() - 30 * 2.54f,
             document.getPageSize().getWidth() - document.rightMargin(), 10);
         rect.setBorder(Rectangle.BOTTOM);
-        rect.setBorderColor(BaseColor.BLACK);
+        rect.setBorderColor(COLOR_BLACK);
         rect.setBorderWidth(1f);
         document.add(rect);
         document.add(Chunk.NEWLINE);
@@ -130,13 +130,35 @@ public class PDFFrontpageUtil {
         org.jdom2.Document jdomObj = mcrObj.createXML();
         String xslt = "xslt/docdetails/pdffrontpage_html.xsl";
         try {
-            Class<? extends TransformerFactory> tfClass = MCRClassTools.forName(MCRConfiguration2.getStringOrThrow("SAXON"));
-            MCRXSLTransformer t = MCRXSLTransformer.obtainInstance(tfClass, xslt);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            t.transform(new MCRJDOMContent(jdomObj), baos);
-            String htmlContent = cleanUpHTML(baos.toString(StandardCharsets.UTF_8));
+            MCRXSLTransformer t = MCRXSLTransformer.obtainInstance(xslt);
+            ByteArrayOutputStream baosHTML = new ByteArrayOutputStream();
+            t.transform(new MCRJDOMContent(jdomObj), baosHTML);
+            String htmlContent = cleanUpHTML(baosHTML.toString(StandardCharsets.UTF_8));
             LOGGER.debug(htmlContent);
-            XMLWorkerHelper.getInstance().parseXHtml(writer, document, new StringReader(htmlContent));
+
+            /*
+            ByteArrayOutputStream baosPDFFrontpage = new ByteArrayOutputStream();
+            ITextRenderer renderer = new ITextRenderer();
+            
+            //baseurl of file in the root images directory in the proper JAR
+            String baseUrl = PDFFrontpageUtil.class.getResource("/META-INF/resources/images/logo_Closed_Access.svg").toExternalForm();
+            renderer.setDocumentFromString(htmlContent, baseUrl);
+            renderer.layout();
+            renderer.createPDF(baosPDFFrontpage);
+            
+            PdfReader readerMetadata = new PdfReader(baosPDFFrontpage.toByteArray());
+            PdfImportedPage pdfImportMetadata = writer.getImportedPage(readerMetadata, 1);
+
+            writer.getDirectContent().addTemplate(pdfImportMetadata, 50, 200);
+
+            //XMLWorkerHelper.getInstance().parseXHtml(writer, document, new StringReader(htmlContent));
+          //  writer.addToBody(new PdfStream(baosPDFFrontpage.toByteArray()));
+            Path p = Files.createTempFile("pdffront", ".pdf");
+            LOGGER.error("temporary pdf frontpage: " + p.toString());
+            Files.copy(new ByteArrayInputStream(baosPDFFrontpage.toByteArray()), p , StandardCopyOption.REPLACE_EXISTING);
+            Path pHTML = p.getParent().resolve(p.getFileName().toString().replace(".pdf", ".html"));
+            Files.copy(new ByteArrayInputStream(htmlContent.getBytes()), pHTML , StandardCopyOption.REPLACE_EXISTING);
+            */
 
         } catch (Exception e) {
             LOGGER.error("Something went wrong processing the XSLT: {}", xslt, e);
@@ -144,20 +166,23 @@ public class PDFFrontpageUtil {
     }
 
     private static String cleanUpHTML(String content) {
+        String c = content.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
+        c = c.replace(MCRFrontendUtil.getBaseURL()+"images/", ""); //make image URLs relative
         return """
             <html xmlns='http://www.w3.org/1999/xhtml'>
               <head>
                 <style>
-                  body{font-size:12px;}
-                  h4{color: rgb(0, 74, 153);font-family: Verdana;font-size: 120%}
+                  body{font-size:12px; font-family:sans-serif}
+                  h4{color: rgb(0, 74, 153);font-family: Verdana,sans-serif;font-size: 120%}
                   a {text-decoration: none !important; font-size:120%;font-weight:bold;color:black;}
                   span.label {color: #777;}
-                  span.ir-badge-license img{height:20px !important;}
+                  span#badgeAccess {height:2em !important; display:inline-block;white-space: nowrap;}
+                  span#badgeLicense img{height:2em !important;}
                   p {margin-bottom:0.5em;}
                 </style>
               </head>
             """
-            + "\n  <body>" + content + "</body>"
+            + "\n  <body>" + c + "</body>"
             + "\n</html>";
     }
 }

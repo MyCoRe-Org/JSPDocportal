@@ -21,9 +21,17 @@
   <xsl:import href="resource:xslt/docdetails/header/header_otherversions_html.xsl" />
 
   <xsl:template match="/mycoreobject">
-  
-    <!-- Metadata Header -->  
-    <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='imported' or @type='created']/mods:mods">
+    <html>
+      <body>
+        <!-- Metadata Header -->  
+        <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer[@type='imported' or @type='created']/mods:mods">
+      
+      <xsl:call-template name="repositoryInfo" />
+      <br />
+      <br />
+      <img src="{$WebApplicationBaseURL}api/iiif/image/v2/thumbnail/{root()/mycoreobject/@ID}/full/!512,512/0/default.jpg" class="border border-secondary" style="width: 300px;" />
+      <br />
+      <br />      
       
       <xsl:call-template name="headerNames_noPopup" />
   
@@ -143,7 +151,7 @@
       <!-- Badges -->
       <p class="mt-3">
       <xsl:if test="./mods:genre[@displayLabel='doctype']">
-        <span class="badge ir-badge-header text-bg-secondary">
+        <span id="badgeDoctype" class="badge ir-badge-header text-bg-secondary">
           <xsl:value-of select="mcrclass:current-label-text(mcrmods:to-category(./mods:genre[@displayLabel='doctype']))" />
         </span>
         <span>&#160;&#160;&#160;&#160;&#160;</span>
@@ -169,33 +177,45 @@
     
       <xsl:if test="/mycoreobject/metadata/def.irControl/irControl/map/list[@key='mets_filegroups']/entry[text() = 'ALTO']">
         <span>&#160;&#160;&#160;&#160;&#160;</span>
-        <span class="badge ir-badge-header ir-badge-ocr">
+        <span id="badgeOCR" class="badge ir-badge-header ir-badge-ocr">
           {mcri18n:translate('OMD.ir.docdetails.header.label.ocr')}
         </span>
       </xsl:if>
       </p> 
  
-    </xsl:for-each>
+        </xsl:for-each>
+      </body>
+    </html>
   </xsl:template>
   
   <xsl:template name="accessBadge">
     <xsl:choose>
       <xsl:when test="./mods:classification[@displayLabel='accesscondition'][contains(@valueURI, 'restrictedaccess')]">
-        <span class="badge ir-badge-header ir-badge-restrictedaccess">
+        <span id="badgeAccess" class="badge ir-badge-header ir-badge-restrictedaccess">
           {mcri18n:translate('OMD.ir.docdetails.header.access.restricted')} &#160; <img style="height:20px;" src="{$WebApplicationBaseURL}images/logo_Closed_Access_black.png"/> &#160; {mcri18n:translate('OMD.ir.docdetails.header.access')}
         </span>
       </xsl:when>
       <xsl:when test="./mods:classification[@displayLabel='accesscondition'][contains(@valueURI, 'closedaccess')]">
-        <span class="badge ir-badge-header ir-badge-closedaccess">
+        <span id="badgeAccess" class="badge ir-badge-header ir-badge-closedaccess">
             {mcri18n:translate('OMD.ir.docdetails.header.access.closed')} <img style="height:20px;" src="{$WebApplicationBaseURL}images/logo_Closed_Access_black.png" /> &#160;  {mcri18n:translate('OMD.ir.docdetails.header.access')}
         </span>
       </xsl:when> 
       <xsl:otherwise>
-        <span class="badge ir-badge-header ir-badge-openaccess" style="border:1px solid grey;">
+        <span id="badgeAccess" class="badge ir-badge-header ir-badge-openaccess" style="border:1px solid grey;">
           {mcri18n:translate('OMD.ir.docdetails.header.access.open')}&#160; <img style="height:20px;" src="{$WebApplicationBaseURL}images/logo_Open_Access_black.png" /> &#160; {mcri18n:translate('OMD.ir.docdetails.header.access')}
         </span>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="repositoryInfo">
+    <div class="repository-header">
+      <img src="{$WebApplicationBaseURL}images/rosdok_schriftzug.png" />
+      <p>Dieses Werk wurde Ihnen durch die Universitätsbibliothek Rostock zum Download bereitgestellt.</p>
+      <p>Für Fragen und Hinweise wenden Sie sich bitte an: <strong>digibib.ub@uni-rostock.de</strong> .</p>
+      <p>Das PDF wurde erstellt am: <xsl:value-of select="format-date(current-date(),'[D01].[M01].[Y0001]')"/>. </p>
+      <hr />
+    </div>
   </xsl:template>
 
 </xsl:stylesheet>

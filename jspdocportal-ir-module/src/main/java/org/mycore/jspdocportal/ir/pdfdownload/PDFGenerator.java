@@ -52,15 +52,14 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.jspdocportal.ir.pdfdownload.util.PDFFrontpageUtil;
 import org.mycore.jspdocportal.ir.pdfdownload.util.PDFTOCUtil;
-
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfCopy;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfWriter;
+import org.openpdf.text.Document;
+import org.openpdf.text.DocumentException;
+import org.openpdf.text.Image;
+import org.openpdf.text.PageSize;
+import org.openpdf.text.Rectangle;
+import org.openpdf.text.pdf.PdfCopy;
+import org.openpdf.text.pdf.PdfReader;
+import org.openpdf.text.pdf.PdfWriter;
 
 import jakarta.servlet.ServletContext;
 
@@ -132,25 +131,26 @@ public class PDFGenerator implements Runnable {
             document = new Document(PageSize.A4);
             PdfCopy copy = new PdfCopy(document, Files.newOutputStream(tmpFile));
             document.open();
-            PdfReader reader = new PdfReader(new ByteArrayInputStream(frontPageBytes.toByteArray()));
+            try(PdfReader reader = new PdfReader(new ByteArrayInputStream(frontPageBytes.toByteArray()))){
             // loop over the pages in that document
             for (int page = 1; page <= reader.getNumberOfPages(); page++) {
                 copy.addPage(copy.getImportedPage(reader, page));
             }
             copy.freeReader(reader);
-            reader.close();
+            }
+            
 
             List<Path> imageFiles = Files.list(imgDir).sorted().toList();
             for (int i = 0; i < imageFiles.size(); i++) {
 
-                reader = new PdfReader(Files.newInputStream(imageFiles.get(i)));
+                try(PdfReader reader = new PdfReader(Files.newInputStream(imageFiles.get(i)))){
                 // loop over the pages in that document
                 int n = reader.getNumberOfPages();
                 for (int page = 1; page <= n; page++) {
                     copy.addPage(copy.getImportedPage(reader, page));
                 }
                 copy.freeReader(reader);
-                reader.close();
+                }
 
                 ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier,
                     (i + 1) * 100 / imageFiles.size());
