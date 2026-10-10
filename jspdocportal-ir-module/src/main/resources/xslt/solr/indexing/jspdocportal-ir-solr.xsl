@@ -335,6 +335,9 @@
            <xsl:for-each select="mods:classification[@displayLabel='accesscondition']">
                 <field name="ir.accesscondition_class.facet"><xsl:value-of select="translate(substring-after(@valueURI,'classifications/'),'#',':')" /></field>
            </xsl:for-each>
+           <xsl:for-each select="mods:classification[@displayLabel='licenseinfo'][contains(@valueURI, 'licenseinfo#work')]">
+                <field name="ir.worklicense_class.facet"><xsl:value-of select="translate(substring-after(@valueURI,'classifications/'),'#',':')" /></field>
+           </xsl:for-each>
            <xsl:for-each select="mods:classification[@displayLabel='sdnb']">
                 <field name="ir.sdnb_class.facet"><xsl:value-of select="translate(substring-after(@valueURI,'classifications/'),'#',':')" /></field>
            </xsl:for-each>

@@ -127,6 +127,24 @@ public class PDFFrontpageUtil {
         document.add(Chunk.NEWLINE);
 
         //Metadata
+        
+        /*
+         <c:when test="${fn:contains(entry.data['ir.accesscondition_class.facet'], 'restrictedaccess')}">
+          <span class="badge ir-badge ir-badge-restrictedaccess">
+            <fmt:message key="OMD.ir.docdetails.header.access.restricted" /> <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Closed_Access.png"/> <fmt:message key="OMD.ir.docdetails.header.access" />            
+          </span>
+        </c:when>
+        <c:when test="${fn:contains(entry.data['ir.accesscondition_class.facet'], 'closedaccess')}">
+          <span class="badge ir-badge ir-badge-closedaccess">
+            <fmt:message key="OMD.ir.docdetails.header.access.closed" /> <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Closed_Access.png"/> <fmt:message key="OMD.ir.docdetails.header.access" />
+          </span>
+        </c:when>
+        <c:when test="${fn:contains(entry.data['ir.accesscondition_class.facet'], 'openaccess')}">
+          <span class="badge ir-badge ir-badge-openaccess">
+            <fmt:message key="OMD.ir.docdetails.header.access.open" /> <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Open_Access.png"/> <fmt:message key="OMD.ir.docdetails.header.access" />
+          </span>
+        </c:when>
+         */
         org.jdom2.Document jdomObj = mcrObj.createXML();
         String xslt = "xslt/docdetails/pdffrontpage_html.xsl";
         try {
