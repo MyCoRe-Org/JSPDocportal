@@ -24,15 +24,9 @@
 package org.mycore.jspdocportal.ir.pdfdownload.util;
 
 import java.awt.Color;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -41,39 +35,47 @@ import java.util.Locale;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.content.MCRJDOMContent;
-import org.mycore.common.content.transformer.MCRXSLTransformer;
-import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRExpandedObject;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObjectID;
+import org.apache.solr.common.SolrDocument;
 import org.mycore.frontend.MCRFrontendUtil;
+import org.mycore.jspdocportal.ir.pdfdownload.PDFGenerator;
 import org.mycore.resource.MCRResourceHelper;
 import org.openpdf.text.Chunk;
 import org.openpdf.text.Document;
 import org.openpdf.text.DocumentException;
+import org.openpdf.text.Element;
 import org.openpdf.text.Font;
 import org.openpdf.text.FontFactory;
 import org.openpdf.text.Image;
+import org.openpdf.text.PageSize;
 import org.openpdf.text.Paragraph;
 import org.openpdf.text.Rectangle;
-import org.openpdf.text.pdf.PdfImportedPage;
-import org.openpdf.text.pdf.PdfReader;
+import org.openpdf.text.pdf.PdfPCell;
+import org.openpdf.text.pdf.PdfPTable;
 import org.openpdf.text.pdf.PdfWriter;
 
 public class PDFFrontpageUtil {
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm 'Uhr'", Locale.GERMAN);
     private static final Color COLOR_BLACK = new Color(0, 0, 0);
 
-    public static void createFrontPage(PdfWriter writer, Document document, String recordIdentifier, String mcrid)
-        throws DocumentException {
-        document.addCreationDate();
-        document.addTitle("RosDok Download");
-        document.addAuthor("Universitätsbibliothek Rostock");
-        document.addSubject("https://purl.uni-rostock.de/" + recordIdentifier.replace("rosdok_", "rosdok/"));
+    public static void createFrontPage(PdfWriter writer, Document document,
+        String recordIdentifier, SolrDocument solrDoc) throws DocumentException, IOException {
+        
+        document.setPageSize(PageSize.A4);
+        document.setMargins((float) PDFGenerator.BORDER, (float) PDFGenerator.BORDER,
+            (float) PDFGenerator.BORDER, (float) PDFGenerator.BORDER);
+        document.newPage();
 
+        addRepositoryHeader(document);
+        addDocumentDescription(document, solrDoc);
+        addBadges(document, solrDoc);
+
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+    }
+
+    private static void addRepositoryHeader(Document document) {
         try (InputStream is = MCRResourceHelper.getResourceAsStream("/rosdok_schriftzug.png")) {
             byte[] imgBytes = IOUtils.toByteArray(is);
             Image img = Image.getInstance(imgBytes);
@@ -84,6 +86,7 @@ public class PDFFrontpageUtil {
         }
 
         Font font = FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL);
+
         document.add(new Paragraph(
             "Dieses Werk wurde Ihnen durch die Universitätsbibliothek Rostock zum Download bereitgestellt.", font));
         document.add(
@@ -98,109 +101,95 @@ public class PDFFrontpageUtil {
         document.add(rect);
         document.add(Chunk.NEWLINE);
         document.add(Chunk.NEWLINE);
+    }
 
-        MCRObjectID mcrObjID = MCRObjectID.getInstance(mcrid);
-        MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(mcrObjID);
+    /** create a short description of the document
+     * 
+     * Output:
+     *   Samuel Gottlieb Vogel von  (Authors)
+     *   Brunnen-Diaet  (Title)
+     *   [Doberan]: [Verlag nicht ermittelbar], [1826] (Origin info)
+     *   https://purl.uni-rostock.de/rosdok/ppn1982113499 (PURL)
+     *
+     * Solr fields:
+     *    "ir.creator.result":"Gottlieb Vogel von",
+     *    "ir.title.result":"Brunnen-Diaet",
+     *    "ir.doctype.result":"Druck",
+     *    "ir.doctype_en.result":"monograph",
+     *    "ir.originInfo.result":"[Doberan]: [Verlag nicht ermittelbar], [1826]",
+     *    "purl":"https://purl.uni-rostock.de/rosdok/ppn1982113499",
+    
+     * @param document
+     * @param solrDoc
+     */
+    private static void addDocumentDescription(Document document, SolrDocument solrDoc) throws IOException {
 
-        //Cover Image
-        try {
-            for (MCRMetaLinkID derID : mcrObj.getStructure().getDerivates()) {
-                if ("cover".equals(derID.getXLinkTitle())) {
-                    MCRDerivate der = MCRMetadataManager
-                        .retrieveMCRDerivate(MCRObjectID.getInstance(derID.getXLinkHref()));
-                    String mainDoc = der.getDerivate().getInternals().getMainDoc();
-                    document.add(Chunk.NEWLINE);
-                    document.add(Chunk.NEWLINE);
-                    Image img = Image.getInstance(URI.create(MCRFrontendUtil.getBaseURL() + "file/" + mcrid + "/"
-                        + der.getId().toString() + "/" + mainDoc).toURL());
-                    img.scaleToFit(document.getPageSize().getWidth() * .33f, document.getPageSize().getHeight() * .33f);
-                    img.setAlignment(Image.MIDDLE);
+        PdfPTable table = new PdfPTable(new float[] { 2.0f, 1.0f });
+        table.setWidthPercentage(100f);
 
-                    document.add(img);
-                }
-            }
-        } catch (Exception e) {
-            //do nothing - ignore exception
+        PdfPCell cellMeta = new PdfPCell();
+        cellMeta.setBorder(PdfPCell.NO_BORDER);
+        cellMeta.setVerticalAlignment(Element.ALIGN_TOP);
+
+        Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL);
+        Font fontBold = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD);
+        Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD);
+        if (solrDoc.getFirstValue("ir.creator.result") != null) {
+            cellMeta.addElement(new Paragraph(String.valueOf(solrDoc.getFirstValue("ir.creator.result")), fontNormal));
+        }
+        if (solrDoc.getFirstValue("ir.title.result") != null) {
+            cellMeta.addElement(new Paragraph(String.valueOf(solrDoc.getFirstValue("ir.title.result")), fontTitle));
+        }
+        if (solrDoc.getFirstValue("ir.originInfo.result") != null) {
+            cellMeta
+                .addElement(new Paragraph(String.valueOf(solrDoc.getFirstValue("ir.originInfo.result")), fontNormal));
+        }
+        if (solrDoc.getFirstValue("purl") != null) {
+            cellMeta.addElement(new Paragraph(String.valueOf(solrDoc.getFirstValue("purl")), fontBold));
+        }
+        table.addCell(cellMeta);
+
+        PdfPCell cellImage = new PdfPCell();
+        cellImage.setBorder(PdfPCell.NO_BORDER);
+        cellImage.setPaddingLeft(PDFGenerator.BORDER * .5f);
+        cellImage.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+        if (solrDoc.getFirstValue("ir.cover_url") != null) {
+
+            Image img = Image.getInstance(
+                URI.create(MCRFrontendUtil.getBaseURL()
+                    + String.valueOf(solrDoc.getFirstValue("ir.cover_url")))
+                    .toURL());
+            img.scaleToFit(
+                (document.getPageSize().getWidth() - 2.5f * PDFGenerator.BORDER) * .33f,
+                (document.getPageSize().getHeight() - 2f * PDFGenerator.BORDER) * .33f);
+            img.setAlignment(Image.MIDDLE);
+            cellImage.addElement(img);
         }
 
-        document.add(Chunk.NEWLINE);
-        document.add(Chunk.NEWLINE);
+        table.addCell(cellImage);
+        document.add(table);
+    }
 
-        //Metadata
-        
+    // Druck Freier Zugang Lizenz-Logo
+    private static void addBadges(Document document, SolrDocument solrDoc) {
         /*
-         <c:when test="${fn:contains(entry.data['ir.accesscondition_class.facet'], 'restrictedaccess')}">
-          <span class="badge ir-badge ir-badge-restrictedaccess">
-            <fmt:message key="OMD.ir.docdetails.header.access.restricted" /> <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Closed_Access.png"/> <fmt:message key="OMD.ir.docdetails.header.access" />            
-          </span>
+        <c:when test="${fn:contains(entry.data['ir.accesscondition_class.facet'], 'restrictedaccess')}">
+        <span class="badge ir-badge ir-badge-restrictedaccess">
+          <fmt:message key="OMD.ir.docdetails.header.access.restricted" /> <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Closed_Access.png"/> <fmt:message key="OMD.ir.docdetails.header.access" />            
+        </span>
         </c:when>
         <c:when test="${fn:contains(entry.data['ir.accesscondition_class.facet'], 'closedaccess')}">
-          <span class="badge ir-badge ir-badge-closedaccess">
-            <fmt:message key="OMD.ir.docdetails.header.access.closed" /> <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Closed_Access.png"/> <fmt:message key="OMD.ir.docdetails.header.access" />
-          </span>
+        <span class="badge ir-badge ir-badge-closedaccess">
+          <fmt:message key="OMD.ir.docdetails.header.access.closed" /> <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Closed_Access.png"/> <fmt:message key="OMD.ir.docdetails.header.access" />
+        </span>
         </c:when>
         <c:when test="${fn:contains(entry.data['ir.accesscondition_class.facet'], 'openaccess')}">
-          <span class="badge ir-badge ir-badge-openaccess">
-            <fmt:message key="OMD.ir.docdetails.header.access.open" /> <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Open_Access.png"/> <fmt:message key="OMD.ir.docdetails.header.access" />
-          </span>
+        <span class="badge ir-badge ir-badge-openaccess">
+          <fmt:message key="OMD.ir.docdetails.header.access.open" /> <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Open_Access.png"/> <fmt:message key="OMD.ir.docdetails.header.access" />
+        </span>
         </c:when>
-         */
-        org.jdom2.Document jdomObj = mcrObj.createXML();
-        String xslt = "xslt/docdetails/pdffrontpage_html.xsl";
-        try {
-            MCRXSLTransformer t = MCRXSLTransformer.obtainInstance(xslt);
-            ByteArrayOutputStream baosHTML = new ByteArrayOutputStream();
-            t.transform(new MCRJDOMContent(jdomObj), baosHTML);
-            String htmlContent = cleanUpHTML(baosHTML.toString(StandardCharsets.UTF_8));
-            LOGGER.debug(htmlContent);
-
-            /*
-            ByteArrayOutputStream baosPDFFrontpage = new ByteArrayOutputStream();
-            ITextRenderer renderer = new ITextRenderer();
-            
-            //baseurl of file in the root images directory in the proper JAR
-            String baseUrl = PDFFrontpageUtil.class.getResource("/META-INF/resources/images/logo_Closed_Access.svg").toExternalForm();
-            renderer.setDocumentFromString(htmlContent, baseUrl);
-            renderer.layout();
-            renderer.createPDF(baosPDFFrontpage);
-            
-            PdfReader readerMetadata = new PdfReader(baosPDFFrontpage.toByteArray());
-            PdfImportedPage pdfImportMetadata = writer.getImportedPage(readerMetadata, 1);
-
-            writer.getDirectContent().addTemplate(pdfImportMetadata, 50, 200);
-
-            //XMLWorkerHelper.getInstance().parseXHtml(writer, document, new StringReader(htmlContent));
-          //  writer.addToBody(new PdfStream(baosPDFFrontpage.toByteArray()));
-            Path p = Files.createTempFile("pdffront", ".pdf");
-            LOGGER.error("temporary pdf frontpage: " + p.toString());
-            Files.copy(new ByteArrayInputStream(baosPDFFrontpage.toByteArray()), p , StandardCopyOption.REPLACE_EXISTING);
-            Path pHTML = p.getParent().resolve(p.getFileName().toString().replace(".pdf", ".html"));
-            Files.copy(new ByteArrayInputStream(htmlContent.getBytes()), pHTML , StandardCopyOption.REPLACE_EXISTING);
-            */
-
-        } catch (Exception e) {
-            LOGGER.error("Something went wrong processing the XSLT: {}", xslt, e);
-        }
+        */
     }
 
-    private static String cleanUpHTML(String content) {
-        String c = content.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
-        c = c.replace(MCRFrontendUtil.getBaseURL()+"images/", ""); //make image URLs relative
-        return """
-            <html xmlns='http://www.w3.org/1999/xhtml'>
-              <head>
-                <style>
-                  body{font-size:12px; font-family:sans-serif}
-                  h4{color: rgb(0, 74, 153);font-family: Verdana,sans-serif;font-size: 120%}
-                  a {text-decoration: none !important; font-size:120%;font-weight:bold;color:black;}
-                  span.label {color: #777;}
-                  span#badgeAccess {height:2em !important; display:inline-block;white-space: nowrap;}
-                  span#badgeLicense img{height:2em !important;}
-                  p {margin-bottom:0.5em;}
-                </style>
-              </head>
-            """
-            + "\n  <body>" + c + "</body>"
-            + "\n</html>";
-    }
 }

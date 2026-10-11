@@ -49,14 +49,10 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.glassfish.jersey.server.mvc.Viewable;
-import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.common.content.MCRContent;
-import org.mycore.common.content.transformer.MCRXSLTransformer;
-import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.jspdocportal.ir.depotapi.HashedDirectoryStructure;
 import org.mycore.jspdocportal.ir.pdfdownload.PDFGenerator;
 import org.mycore.jspdocportal.ir.pdfdownload.PDFGeneratorService;
@@ -71,7 +67,6 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.StreamingOutput;
@@ -139,30 +134,34 @@ public class MCRPDFDownloadController {
         List<String> errorMessages = new ArrayList<>();
         model.put("errorMessages", errorMessages);
 
-        SolrClient solrClient = MCRSolrIndexRegistryManager.requireMainIndex().getClient();
-        SolrQuery query = new SolrQuery();
-        query.setQuery("recordIdentifier:" + recordIdentifier);
-
         try {
-            QueryRequest queryRequest = new QueryRequest(query);
-            MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
-                MCRSolrAuthenticationLevel.SEARCH);
-            QueryResponse response = queryRequest.process(solrClient);
-            SolrDocumentList solrResults = response.getResults();
+            String filename = recordIdentifier + PDF_EXTENSION;
+            final Path resultPDF = HashedDirectoryStructure
+                .createOutputDirectory(calculateCacheDir(), recordIdentifier).resolve(filename);
+            boolean ready = Files.exists(resultPDF);
 
-            if (solrResults.getNumFound() > 0) {
-                String filename = recordIdentifier + PDF_EXTENSION;
+            if (getProgress(servletContext, recordIdentifier) == 109) {
+                errorMessages.add("The PDF could not be created.");
+            }
+            fillModel(model, request, resultPDF, filename, ready);
 
-                final Path resultPDF = HashedDirectoryStructure
-                    .createOutputDirectory(calculateCacheDir(), recordIdentifier).resolve(filename);
-                boolean ready = Files.exists(resultPDF);
+            if (!Files.exists(resultPDF) && getProgress(servletContext, recordIdentifier) < 0) {
 
-                fillModel(model, request, resultPDF, filename, ready);
-                String mcrid = String.valueOf(solrResults.get(0).getFirstValue("returnId"));
-                generatePdf(servletContext, recordIdentifier, resultPDF, mcrid);
+                SolrClient solrClient = MCRSolrIndexRegistryManager.requireMainIndex().getClient();
+                SolrQuery query = new SolrQuery();
+                query.setQuery("recordIdentifier:" + recordIdentifier);
 
-            } else {
-                errorMessages.add("The RecordIdentifier \"<strong>" + recordIdentifier + "\"</strong> is unkown.");
+                QueryRequest queryRequest = new QueryRequest(query);
+                MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
+                    MCRSolrAuthenticationLevel.SEARCH);
+                QueryResponse response = queryRequest.process(solrClient);
+                SolrDocumentList solrResults = response.getResults();
+
+                if (solrResults.getNumFound() > 0) {
+                    generatePdf(servletContext, recordIdentifier, resultPDF, solrResults.get(0));
+                } else {
+                    errorMessages.add("The RecordIdentifier \"<strong>" + recordIdentifier + "\"</strong> is unkown.");
+                }
             }
         } catch (SolrServerException | IOException e) {
             LOGGER.error(e);
@@ -208,10 +207,7 @@ public class MCRPDFDownloadController {
                     if (ready && getProgress(servletContext, recordIdentifier) < 0) {
                         return downloadPDF(filename, resultPDF);
                     }
-
-                    String mcrid = String.valueOf(solrResults.get(0).getFirstValue("returnId"));
-                    generatePdf(servletContext, recordIdentifier, resultPDF, mcrid);
-
+                    generatePdf(servletContext, recordIdentifier, resultPDF, solrResults.get(0));
                 } else {
                     errorMessages.add("The RecordIdentifier \"<strong>" + recordIdentifier + "\"</strong> is unkown.");
                 }
@@ -226,57 +222,13 @@ public class MCRPDFDownloadController {
         return Response.ok(v).build();
     }
 
-    private void generatePdf(ServletContext servletContext, String recordId, final Path resultPDF, String mcrid) {
-        if (!Files.exists(resultPDF) && getProgress(servletContext, recordId) < 0) {
-            servletContext.setAttribute(PDFGenerator.SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordId, 0);
-            Path depotDir = Paths.get(MCRConfiguration2.getString("MCR.depotdir").orElse(""));
-            PDFGeneratorService.execute(new PDFGenerator(resultPDF,
-                HashedDirectoryStructure.createOutputDirectory(depotDir, recordId),
-                recordId, mcrid, servletContext));
-        }
-
-        if (getProgress(servletContext, recordId) > 100) {
-            servletContext.removeAttribute(PDFGenerator.SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordId);
-        }
-    }
-
-    @GET
-    @jakarta.ws.rs.Path("html/recordIdentifier/{recordId}")
-    public Response getHTMLMetadataPage(@Context HttpServletRequest request, @Context ServletContext servletContext,
-        @PathParam("recordId") String recordIdentifier) {
-        Map<String, Object> model = new HashMap<>();
-
-        List<String> errorMessages = new ArrayList<>();
-        model.put("errorMessages", errorMessages);
-
-        SolrClient solrClient = MCRSolrIndexRegistryManager.requireMainIndex().getClient();
-        SolrQuery query = new SolrQuery();
-        query.setQuery("recordIdentifier:" + recordIdentifier);
-
-        try {
-            QueryRequest queryRequest = new QueryRequest(query);
-            MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest,
-                MCRSolrAuthenticationLevel.SEARCH);
-            QueryResponse response = queryRequest.process(solrClient);
-            SolrDocumentList solrResults = response.getResults();
-
-            if (solrResults.getNumFound() > 0) {
-                String mcrid = String.valueOf(solrResults.get(0).getFirstValue("returnId"));
-                MCRContent mcrObjXML =
-                    MCRXMLMetadataManager.obtainInstance().retrieveContent(MCRObjectID.getInstance(mcrid));
-                String xslt = "xslt/docdetails/pdffrontpage_html.xsl";
-
-                MCRXSLTransformer t = MCRXSLTransformer.obtainInstance(xslt);
-                MCRContent outHTML = t.transform(mcrObjXML);
-                return Response.ok(outHTML.asString(), MediaType.TEXT_HTML_TYPE).build();
-
-            } else {
-                errorMessages.add("The RecordIdentifier \"<strong>" + recordIdentifier + "\"</strong> is unkown.");
-            }
-        } catch (SolrServerException | IOException | MCRException e) {
-            LOGGER.error(e);
-        }
-        return Response.status(404).entity(String.join("<br />", errorMessages)).build();
+    private void generatePdf(ServletContext servletContext, String recordId, final Path resultPDF,
+        SolrDocument solrDoc) {
+        servletContext.setAttribute(PDFGenerator.SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordId, 0);
+        Path depotDir = Paths.get(MCRConfiguration2.getString("MCR.depotdir").orElse(""));
+        PDFGeneratorService.execute(new PDFGenerator(resultPDF,
+            HashedDirectoryStructure.createOutputDirectory(depotDir, recordId),
+            recordId, solrDoc, servletContext));
     }
 
     private void fillModel(Map<String, Object> model, HttpServletRequest request, final Path resultPDF, String filename,
