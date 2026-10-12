@@ -138,6 +138,7 @@ public class MCRPDFDownloadController {
             String filename = recordIdentifier + PDF_EXTENSION;
             final Path resultPDF = HashedDirectoryStructure
                 .createOutputDirectory(calculateCacheDir(), recordIdentifier).resolve(filename);
+
             boolean ready = Files.exists(resultPDF);
 
             if (getProgress(servletContext, recordIdentifier) == 109) {
@@ -204,10 +205,13 @@ public class MCRPDFDownloadController {
 
                     fillModel(model, request, resultPDF, filename, ready);
 
-                    if (ready && getProgress(servletContext, recordIdentifier) < 0) {
+                    if (ready) {
                         return downloadPDF(filename, resultPDF);
                     }
-                    generatePdf(servletContext, recordIdentifier, resultPDF, solrResults.get(0));
+                    if (getProgress(servletContext, recordIdentifier) < 0) {
+                        generatePdf(servletContext, recordIdentifier, resultPDF, solrResults.get(0));
+                    }
+
                 } else {
                     errorMessages.add("The RecordIdentifier \"<strong>" + recordIdentifier + "\"</strong> is unkown.");
                 }

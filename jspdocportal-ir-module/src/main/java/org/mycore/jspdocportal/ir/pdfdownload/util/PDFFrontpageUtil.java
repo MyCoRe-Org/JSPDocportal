@@ -36,6 +36,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.common.SolrDocument;
+import org.mycore.datamodel.classifications2.MCRCategory;
+import org.mycore.datamodel.classifications2.MCRCategoryDAO;
+import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.jspdocportal.ir.pdfdownload.PDFGenerator;
 import org.mycore.resource.MCRResourceHelper;
@@ -56,12 +59,13 @@ import org.openpdf.text.pdf.PdfWriter;
 public class PDFFrontpageUtil {
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final String SPACES = "    ";
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm 'Uhr'", Locale.GERMAN);
     private static final Color COLOR_BLACK = new Color(0, 0, 0);
 
     public static void createFrontPage(PdfWriter writer, Document document,
         String recordIdentifier, SolrDocument solrDoc) throws DocumentException, IOException {
-        
+
         document.setPageSize(PageSize.A4);
         document.setMargins((float) PDFGenerator.BORDER, (float) PDFGenerator.BORDER,
             (float) PDFGenerator.BORDER, (float) PDFGenerator.BORDER);
@@ -69,9 +73,8 @@ public class PDFFrontpageUtil {
 
         addRepositoryHeader(document);
         addDocumentDescription(document, solrDoc);
-        addBadges(document, solrDoc);
-
         document.add(Chunk.NEWLINE);
+        addBadges(document, solrDoc);
         document.add(Chunk.NEWLINE);
     }
 
@@ -134,6 +137,7 @@ public class PDFFrontpageUtil {
         Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL);
         Font fontBold = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD);
         Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD);
+
         if (solrDoc.getFirstValue("ir.creator.result") != null) {
             cellMeta.addElement(new Paragraph(String.valueOf(solrDoc.getFirstValue("ir.creator.result")), fontNormal));
         }
@@ -155,7 +159,6 @@ public class PDFFrontpageUtil {
         cellImage.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
         if (solrDoc.getFirstValue("ir.cover_url") != null) {
-
             Image img = Image.getInstance(
                 URI.create(MCRFrontendUtil.getBaseURL()
                     + String.valueOf(solrDoc.getFirstValue("ir.cover_url")))
@@ -171,25 +174,84 @@ public class PDFFrontpageUtil {
         document.add(table);
     }
 
-    // Druck Freier Zugang Lizenz-Logo
-    private static void addBadges(Document document, SolrDocument solrDoc) {
-        /*
-        <c:when test="${fn:contains(entry.data['ir.accesscondition_class.facet'], 'restrictedaccess')}">
-        <span class="badge ir-badge ir-badge-restrictedaccess">
-          <fmt:message key="OMD.ir.docdetails.header.access.restricted" /> <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Closed_Access.png"/> <fmt:message key="OMD.ir.docdetails.header.access" />            
-        </span>
-        </c:when>
-        <c:when test="${fn:contains(entry.data['ir.accesscondition_class.facet'], 'closedaccess')}">
-        <span class="badge ir-badge ir-badge-closedaccess">
-          <fmt:message key="OMD.ir.docdetails.header.access.closed" /> <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Closed_Access.png"/> <fmt:message key="OMD.ir.docdetails.header.access" />
-        </span>
-        </c:when>
-        <c:when test="${fn:contains(entry.data['ir.accesscondition_class.facet'], 'openaccess')}">
-        <span class="badge ir-badge ir-badge-openaccess">
-          <fmt:message key="OMD.ir.docdetails.header.access.open" /> <img style="height:1em;padding:0 .25em" src="${WebApplicationBaseURL}images/logo_Open_Access.png"/> <fmt:message key="OMD.ir.docdetails.header.access" />
-        </span>
-        </c:when>
-        */
+    /** draw badges, eg. Druck + Open Access + License-Logo */
+    private static void addBadges(Document document, SolrDocument solrDoc) throws IOException {
+        Font fontBadge = FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL, Color.WHITE);
+        Paragraph p = new Paragraph();
+
+        if (solrDoc.getFirstValue("ir.doctype_class.facet") != null) {
+            MCRCategoryID cId = MCRCategoryID.ofString(String.valueOf(solrDoc.getFirstValue("ir.doctype_class.facet")));
+            MCRCategory categ = MCRCategoryDAO.obtainInstance().getCategory(cId, 0);
+            p.add(new Chunk(SPACES));
+            p.add(new Chunk(SPACES + categ.getLabel("de").get().getText() + SPACES, fontBadge)
+                .setGenericTag("badge-doctype"));
+            p.add(new Chunk(SPACES + SPACES + SPACES));
+        }
+
+        if (solrDoc.getFirstValue("ir.accesscondition_class.facet") != null) {
+            String access = String.valueOf(solrDoc.getFirstValue("ir.accesscondition_class.facet"));
+            if (access.contains("openaccess")) {
+                p.add(new Chunk(SPACES + "Open ", fontBadge)
+                    .setGenericTag("badge-openaccess"));
+                Image imgLogo = getImage("/META-INF/resources/images/logo_Open_Access.png");
+                imgLogo.scaleToFit(14f, 28f);
+                Chunk img = new Chunk(imgLogo, 0f, -7f, true);
+                p.add(img);
+                p.add(new Chunk(" Access" + SPACES, fontBadge)
+                    .setGenericTag("badge-openaccess"));
+            }
+            if (access.contains("restrictedaccess")) {
+                p.add(new Chunk(SPACES + "Restricted ", fontBadge)
+                    .setGenericTag("badge-restrictedaccess"));
+                Image imgLogo = getImage("/META-INF/resources/images/logo_Closed_Access.png");
+                imgLogo.scaleToFit(14f, 28f);
+                Chunk img = new Chunk(imgLogo, 0f, -7f, true);
+                p.add(img);
+                p.add(new Chunk(" Access" + SPACES, fontBadge)
+                    .setGenericTag("badge-restrictedaccess"));
+            }
+            if (access.contains("closedAccess")) {
+                p.add(new Chunk(SPACES + "Closed ", fontBadge)
+                    .setGenericTag("badge-closedaccess"));
+                Image imgLogo = getImage("/META-INF/resources/images/logo_Closed_Access.png");
+                imgLogo.scaleToFit(14f, 28f);
+                Chunk img = new Chunk(imgLogo, 0f, -7f, true);
+                p.add(img);
+                p.add(new Chunk(" Access" + SPACES, fontBadge)
+                    .setGenericTag("badge-closedaccess"));
+            }
+            
+        }
+        
+        if (solrDoc.getFirstValue("ir.worklicense_class.facet") != null) {
+            p.add(new Chunk(SPACES + SPACES));
+            MCRCategoryID cId =
+                MCRCategoryID.ofString(String.valueOf(solrDoc.getFirstValue("ir.worklicense_class.facet")));
+            MCRCategory categ = MCRCategoryDAO.obtainInstance().getCategory(cId, 0);
+            String iconPath = categ.getLabel("x-icon").get().getText();
+            Image imgLogo = getImage("/META-INF/resources/images" + iconPath);
+            fitImageToHeight(imgLogo, 23f);
+            Chunk chunkIcon = new Chunk(imgLogo, 0f, -8f, true).setGenericTag("badge-license_icon");
+            p.add(chunkIcon);
+        }
+
+        //this Chunk with tag name '!DRAW_BADGES!' triggers the drawing event in PDFPageEventHandler
+        p.add(new Chunk(SPACES).setGenericTag("!DRAW_BADGES!"));
+        document.add(p);
     }
 
+    private static void fitImageToHeight(Image imgLogo, float height) {
+        float width = height * imgLogo.getWidth() / imgLogo.getHeight();
+        imgLogo.scaleToFit(width, height);
+    }
+
+    private static Image getImage(String imgPath) throws IOException {
+        try (InputStream is = MCRResourceHelper.getResourceAsStream(imgPath)) {
+            byte[] imgBytes = IOUtils.toByteArray(is);
+            return Image.getInstance(imgBytes);
+        } catch (IOException e) {
+            LOGGER.error("Could not read image: " + imgPath, e);
+            throw e;
+        }
+    }
 }

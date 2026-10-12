@@ -44,6 +44,7 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.frontend.MCRFrontendUtil;
+import org.mycore.jspdocportal.ir.pdfdownload.util.PDFBadgeBoxingEvent;
 import org.mycore.jspdocportal.ir.pdfdownload.util.PDFFrontpageUtil;
 import org.mycore.jspdocportal.ir.pdfdownload.util.PDFTOCUtil;
 import org.openpdf.text.Document;
@@ -96,6 +97,7 @@ public class PDFGenerator implements Runnable {
             Document document = createNewPDF();
             Path tmpFile = Paths.get(pdfOutFile.toAbsolutePath().toString() + ".tmp");
             PdfWriter writer = PdfWriter.getInstance(document, Files.newOutputStream(tmpFile));
+            writer.setPageEvent(new PDFBadgeBoxingEvent());
 
             document.open();
             Path ocrDir = depotDir.resolve("ocrpdf");
