@@ -91,6 +91,10 @@
                       <xsl:for-each select="./mods:titleInfo">
                         {./mods:nonSort} {./mods:title}
                         <xsl:if test="./mods:subTitle"> : {./mods:subTitle}</xsl:if>
+                        <xsl:if test="./mods:partNumber | ./mods:partName">
+                          &lt;br /&gt;
+                          {string-join((./mods:partNumber |./mods:partName), ': ')}      
+                        </xsl:if>
                       </xsl:for-each>
                     </xsl:variable>
                     {$title}
