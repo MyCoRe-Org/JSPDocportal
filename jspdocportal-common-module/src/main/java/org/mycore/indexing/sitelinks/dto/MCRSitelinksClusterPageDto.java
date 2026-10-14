@@ -26,7 +26,7 @@ import java.util.List;
  * @param cluster the cluster for which this page contains sitelinks
  * @param page the current page number
  * @param totalCount the total number of objects available for this year across all pages
- * @param objectIds the list of object IDs on this specific page
+ * @param objects the list of sitelinks objects for this specific page
  */
 public record MCRSitelinksClusterPageDto(String cluster, int page, long totalCount, List<MCRSitelinksLinkObject> objects) {
 }

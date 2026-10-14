@@ -47,7 +47,7 @@ public interface MCRSitelinksMetadataService {
      * @param cluster the cluster of the issued objects (e.g. a year, like 2021)
      * @param offset the offset from which to start fetching results (for pagination)
      * @param limit  the maximum number of results to fetch (for pagination)
-     * @return an {@link ObjectIdsWithCount} object containing a list of object IDs and the total count
+     * @return an {@link LinkObjectsWithCount} object containing a list of object IDs and the total count
      * @throws MCRException if a query or I/O error occurs
      */
     LinkObjectsWithCount getObjectIdsByCluster(String cluster, int offset, int limit);
@@ -56,7 +56,7 @@ public interface MCRSitelinksMetadataService {
     /**
      * Container for paginated object ID results.
      *
-     * @param objectIds  the list of object IDs for the requested page
+     * @param objects the list of objects for the requested page
      * @param totalCount the total number of objects matching the query (across all pages)
      */
     record LinkObjectsWithCount(List<MCRSitelinksLinkObject> objects, long totalCount) {
