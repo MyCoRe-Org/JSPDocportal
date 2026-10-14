@@ -143,17 +143,40 @@ public class PDFFrontpageUtil {
         Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD);
 
         if (solrDoc.getFirstValue("ir.creator.result") != null) {
-            cellMeta.addElement(new Paragraph(String.valueOf(solrDoc.getFirstValue("ir.creator.result")), fontNormal));
+            cellMeta.addElement(
+                new Paragraph(String.valueOf(solrDoc.getFirstValue("ir.creator.result")), fontNormal));
         }
         if (solrDoc.getFirstValue("ir.title.result") != null) {
-            cellMeta.addElement(new Paragraph(String.valueOf(solrDoc.getFirstValue("ir.title.result")), fontTitle));
+            Font fontTitleDisplay = solrDoc.getFirstValue("ir.partNumber.result") != null
+                || solrDoc.getFirstValue("ir.partName.result") != null
+                    ? fontBold : fontTitle;
+            cellMeta.addElement(
+                new Paragraph(String.valueOf(solrDoc.getFirstValue("ir.title.result")), fontTitleDisplay));
         }
+        StringBuffer sbSubtitle = new StringBuffer();
+        if (solrDoc.getFirstValue("ir.partNumber.result") != null) {
+            sbSubtitle.append(String.valueOf(solrDoc.getFirstValue("ir.partNumber.result")));
+        }
+        if (solrDoc.getFirstValue("ir.partName.result") != null) {
+            if (sbSubtitle.length() > 0) {
+                sbSubtitle.append(": ");
+            }
+            sbSubtitle.append(String.valueOf(solrDoc.getFirstValue("ir.partName.result")));
+        }
+        if (sbSubtitle.length() > 0) {
+            cellMeta.addElement(new Paragraph(sbSubtitle.toString(), fontTitle));
+        }
+
         if (solrDoc.getFirstValue("ir.originInfo.result") != null) {
-            cellMeta
-                .addElement(new Paragraph(String.valueOf(solrDoc.getFirstValue("ir.originInfo.result")), fontNormal));
+            cellMeta.addElement(Chunk.NEWLINE);
+            cellMeta.addElement(
+                new Paragraph(String.valueOf(solrDoc.getFirstValue("ir.originInfo.result")), fontNormal));
+
         }
         if (solrDoc.getFirstValue("purl") != null) {
-            cellMeta.addElement(new Paragraph(String.valueOf(solrDoc.getFirstValue("purl")), fontBold));
+            cellMeta.addElement(Chunk.NEWLINE);
+            cellMeta.addElement(
+                new Paragraph(String.valueOf(solrDoc.getFirstValue("purl")), fontBold));
         }
         table.addCell(cellMeta);
 
