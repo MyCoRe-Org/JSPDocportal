@@ -28,6 +28,8 @@ import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.mycore.common.MCRException;
+
 /**
  * This class produces a hashed directory structure for a given recordIdentifier.
  * 
@@ -105,7 +107,12 @@ public class HashedDirectoryStructure {
 
             result = upperParentDir.resolve(currentDir.getFileName());
         }
-        return result;
+
+        if (result.startsWith(baseDir)) {
+            return result;
+        } else {
+            throw new MCRException("Bad path: " + result);
+        }
     }
 
     /**

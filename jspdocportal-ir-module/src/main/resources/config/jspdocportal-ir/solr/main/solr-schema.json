@@ -31,6 +31,14 @@
 			"stored": true
 		}
 	},
+  {
+    "add-field": {
+      "name": "ir.worklicense_class.facet",
+      "type": "string",
+      "multiValued": true,
+      "stored": true
+    }
+  },
 	{
 		"add-field": {
 			"name": "ir.state_class.facet",
