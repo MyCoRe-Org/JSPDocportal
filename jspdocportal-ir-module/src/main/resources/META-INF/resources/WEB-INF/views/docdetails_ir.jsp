@@ -118,7 +118,7 @@
 
               <div id="tabcontent_root" class="tab-content" style="padding-bottom:75px">
                 <x:if select="$doc/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext' or @categid='MCRVIEWER_METS']]">
-                  <div id="tabcontent_fulltext" class="tab-pane fade" aria-labelledby="tab_fulltext">
+                  <div id="tabcontent_fulltext" class="tab-pane fade active show" aria-labelledby="tab_fulltext">
                     <x:if select="$doc/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext']]">
                       <c:set var="derid"><x:out select="$doc/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext']]/@xlink:href" /></c:set>
                        <mcr:hasAccess var="hasAccess" permission="read" mcrid="${derid}" />
@@ -159,7 +159,7 @@
                   </div>
                 </div>
                 <x:if select="$doc/mycoreobject/metadata//*[@displayLabel='doctype'][contains(@valueURI, '/doctype#data')]">
-                  <div id="tabcontent_data" class="tab-pane fade" aria-labelledby="tab_data">
+                  <div id="tabcontent_data" class="tab-pane fade active show" aria-labelledby="tab_data">
                     <div style="font-size: 85%;min-height:600px">
                       <mcr:transformXSL dom="${doc}" transformer="docdetails_data_html" />
                     </div>
@@ -250,3 +250,4 @@
   <%@ include file="fragments/footer.jspf" %>
 </body>
 </html>
+<% out.flush(); %>

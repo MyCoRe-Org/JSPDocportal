@@ -65,14 +65,6 @@
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
     </dependency>
-    <!--<dependency>
-      <groupId>com.itextpdf</groupId>
-      <artifactId>itextpdf</artifactId>
-    </dependency> -->
-    <!-- <dependency>
-      <groupId>com.itextpdf.tool</groupId>
-      <artifactId>xmlworker</artifactId>
-    </dependency> -->
     <!--added for bamboo-->
     <dependency>
       <groupId>com.ibm.icu</groupId>

@@ -6,6 +6,7 @@
   xmlns:mcrmods="http://www.mycore.de/xslt/mods"
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:jdp_stringutils="http://www.mycore.de/xslt/jspdocportal/jdp_stringutils"
   xmlns:ubr-researchdata="http://purl.uni-rostock.de/ub/standards/ubr-researchdata-information-v1.0"
   xmlns:ubr-legal="http://purl.uni-rostock.de/ub/standards/ubr-legal-information-v1.0"
   exclude-result-prefixes="#all"
@@ -15,6 +16,7 @@
   
   <xsl:include href="resource:xslt/default-parameters.xsl" />
   <xsl:include href="xslInclude:functions" />
+  <xsl:include href="resource:xslt/functions/jspdocportal/jdp_stringutils.xsl" />
   
   <xsl:import href="resource:xslt/docdetails/metadata/metadata_classifications_html.xsl" />
   <xsl:import href="resource:xslt/docdetails/metadata/metadata_title_html.xsl" />
@@ -170,7 +172,7 @@
               <xsl:for-each select="./mods:abstract[@type='summary']">
                 <tr>
                   <td class="text-justify">
-                     {.}
+                   <xsl:copy-of select="jdp_stringutils:activate-hyperlinks(jdp_stringutils:lf2br(.))" />
                     <span class="small ps-2">[{mcrclass:current-label-text(document(concat('classification:metadata:0:children:rfc5646:',@xml:lang))//category)}]</span>
                   </td>
                 </tr>
@@ -387,12 +389,12 @@
           </tr>
         </xsl:if>
         
-        <xsl:if test="./mods:relatedItem[@type='isReferencedBy' or @type='references' or @type='otherFormat' or @type='otherVersion']">
+        <xsl:if test="./mods:relatedItem[@type='isReferencedBy' or @type='references' or @type='otherFormat' or @type='otherVersion' or @otherType='other_relation']">
           <tr>
             <th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.references')}</th>
             <td>
               <table id="ir-table-docdetails-references" class="ir-table-docdetails-values">
-                <xsl:for-each select="./mods:relatedItem[@type='isReferencedBy' or @type='references' or @type='otherFormat' or @type='otherVersion']">
+                <xsl:for-each select="./mods:relatedItem[@type='isReferencedBy' or @type='references' or @type='otherFormat' or @type='otherVersion' or @otherType='other_relation']">
                   <tr><td>
                     <xsl:if test="./mods:note[@type='relation_label']">
                       <span class="small">{./mods:note[@type='relation_label']}:</span><br />
@@ -400,11 +402,16 @@
                     <xsl:if test="./mods:note[@type='format_type']">
                       {mods:note[@type='format_type']}
                     </xsl:if>
-                    {./mods:titleInfo/mods:title}
+                    {string-join((./mods:titleInfo/mods:title, ./mods:titleInfo/mods:subTitle), ' : ') }
                     <table>
                       <xsl:for-each select="./mods:identifier[@type='doi']">
                         <tr><th><abbr class="text-nowrap" title="Digital Object Identifier">DOI</abbr>:</th>
                             <td><a href="https://doi.org/{.}">{.}</a></td>
+                        </tr>
+                      </xsl:for-each>
+                      <xsl:for-each select="./mods:identifier[@type='url']">
+                        <tr><th>{mcri18n:translate('OMD.ir.docdetails.metadata.label.website')}</th>
+                            <td><a href="{.}">{.}</a></td>
                         </tr>
                       </xsl:for-each>
                       <xsl:for-each select="./mods:recordInfo/mods:recordIdentifier">     

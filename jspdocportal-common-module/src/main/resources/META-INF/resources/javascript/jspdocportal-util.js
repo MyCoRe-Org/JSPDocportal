@@ -4,6 +4,8 @@ class JSPDocportalUtil {
     //init normal popovers
     document.querySelectorAll('[id^="btn_ir_popover_"]').forEach(function(popoverTriggerEl) {
       let popover = new bootstrap.Popover(popoverTriggerEl, {
+        trigger: 'hover',
+        customClass: 'ir-popover',
         delay: {
           "show": 100,
           "hide": 1500

@@ -23,8 +23,6 @@
  */
 package org.mycore.jspdocportal.ir.pdfdownload;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -37,6 +35,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.solr.common.SolrDocument;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
@@ -44,23 +43,19 @@ import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
-import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRExpandedObject;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
+import org.mycore.jspdocportal.ir.pdfdownload.util.PDFBadgeBoxingEvent;
 import org.mycore.jspdocportal.ir.pdfdownload.util.PDFFrontpageUtil;
 import org.mycore.jspdocportal.ir.pdfdownload.util.PDFTOCUtil;
-
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfCopy;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfWriter;
+import org.mycore.services.i18n.MCRTranslation;
+import org.openpdf.text.Document;
+import org.openpdf.text.DocumentException;
+import org.openpdf.text.Image;
+import org.openpdf.text.PageSize;
+import org.openpdf.text.Rectangle;
+import org.openpdf.text.pdf.PdfImportedPage;
+import org.openpdf.text.pdf.PdfReader;
+import org.openpdf.text.pdf.PdfWriter;
 
 import jakarta.servlet.ServletContext;
 
@@ -81,216 +76,205 @@ public class PDFGenerator implements Runnable {
     private static final Namespace NS_XLINK = Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink");
 
     private Path pdfOutFile;
-    private Path dataDir;
+    private Path depotDir;
     private String recordIdentifier;
-    private String mcrid;
     private ServletContext ctx;
+    private SolrDocument solrDoc;
 
-    public PDFGenerator(Path pdfOutFile, Path dataDir, String recordIdentifier, String mcrid, ServletContext ctx) {
+    public PDFGenerator(Path pdfOutFile, Path depotDir, String recordIdentifier, SolrDocument solrDoc,
+        ServletContext ctx) {
         this.pdfOutFile = pdfOutFile;
-        this.dataDir = dataDir;
+        this.depotDir = depotDir;
         this.recordIdentifier = recordIdentifier;
-        this.mcrid = mcrid;
+        this.solrDoc = solrDoc;
         this.ctx = ctx;
     }
 
     @Override
     public void run() {
-        ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier, 0);
-        Path baseDir = dataDir;
-        Path ocrDir = baseDir.resolve("ocrpdf");
-        if (Files.exists(ocrDir)) {
-            createFromPDFOCR(ocrDir);
-        } else {
-            Path imgDir = baseDir.resolve("images");
-            if (Files.exists(imgDir)) {
-                createFromImage(imgDir);
-            } else {
-                // old derivates - create from METS
-                createFromMETS();
-                // ToDo generate Download Fehler PDF
-            }
-        }
-    }
-
-    private void createFromPDFOCR(Path imgDir) {
         try {
-            //create frontpage
-            Document document = new Document(PageSize.A4);
-            ByteArrayOutputStream frontPageBytes = new ByteArrayOutputStream();
-            PdfWriter writer = PdfWriter.getInstance(document, frontPageBytes);
+            ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier, 0);
+            Files.createDirectories(pdfOutFile.getParent());
 
-            document.open();
-            PDFFrontpageUtil.createFrontPage(writer, document, recordIdentifier, mcrid);
+            Document document = createNewPDF();
+            Path tmpFile = Paths.get(pdfOutFile.toAbsolutePath().toString() + ".tmp");
+            PdfWriter writer = PdfWriter.getInstance(document, Files.newOutputStream(tmpFile));
+            writer.setPageEvent(new PDFBadgeBoxingEvent());
+
+            Path ocrDir = depotDir.resolve("ocrpdf");
+            if (Files.exists(ocrDir)) {
+                createFromPDFOCR(document, writer, ocrDir);
+            } else {
+                Path imgDir = depotDir.resolve("images");
+                if (Files.exists(imgDir)) {
+                    createFromImage(document, imgDir);
+                } else {
+                    // old derivates - create from METS
+                    Object reposMetsPath = solrDoc.getFirstValue("ir.reposmets_url");
+                    if (reposMetsPath != null) {
+                        URL metsURL = URI.create(MCRFrontendUtil.getBaseURL() + String.valueOf(reposMetsPath)).toURL();
+                        createFromMETS(document, metsURL);
+                    }
+                }
+            }
+
+            PDFFrontpageUtil.createFrontPage(writer, document, recordIdentifier, solrDoc);
+
+            writer.setOutlines(PDFTOCUtil.createTOC(depotDir, 0));
+
             document.close();
             writer.close();
 
-            //content
-            Files.createDirectories(pdfOutFile.getParent());
-            Path tmpFile = Paths.get(pdfOutFile.toAbsolutePath().toString() + ".tmp");
+            Files.move(tmpFile, pdfOutFile, StandardCopyOption.REPLACE_EXISTING);
+            ctx.removeAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier);
 
-            document = new Document(PageSize.A4);
-            PdfCopy copy = new PdfCopy(document, Files.newOutputStream(tmpFile));
-            document.open();
-            PdfReader reader = new PdfReader(new ByteArrayInputStream(frontPageBytes.toByteArray()));
-            // loop over the pages in that document
-            for (int page = 1; page <= reader.getNumberOfPages(); page++) {
-                copy.addPage(copy.getImportedPage(reader, page));
-            }
-            copy.freeReader(reader);
-            reader.close();
+        } catch (IOException | DocumentException | JDOMException e) {
+            LOGGER.error(e);
+            ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier, 109);
+        }
+    }
 
-            List<Path> imageFiles = Files.list(imgDir).sorted().toList();
-            for (int i = 0; i < imageFiles.size(); i++) {
+    /** 
+     * creates a new PDF and sets PDF document metadata 
+     */
+    private Document createNewPDF() {
+        Document document = new Document(PageSize.A4);
 
-                reader = new PdfReader(Files.newInputStream(imageFiles.get(i)));
+        //add PDF Metadata
+        document.addCreationDate();
+        if (solrDoc.getFirstValue("ir.creator.result") != null) {
+            document.addAuthor(String.valueOf(solrDoc.getFirstValue("ir.creator.result")));
+        } else {
+            document.addTitle(MCRTranslation.translate("PDFDownload.pdf.metadata.default_author"));
+        }
+        if (solrDoc.getFirstValue("ir.title.result") != null) {
+            document.addTitle(String.valueOf(solrDoc.getFirstValue("ir.title.result")));
+        } else {
+            document.addTitle(MCRTranslation.translate("PDFDownload.pdf.metadata.default_title"));
+        }
+
+        StringBuffer sbSubject = new StringBuffer();
+        if (solrDoc.getFirstValue("ir.originInfo.result") != null) {
+            sbSubject.append(String.valueOf(solrDoc.getFirstValue("ir.originInfo.result")));
+        }
+        if (solrDoc.getFirstValue("purl") != null) {
+            sbSubject.append("\n").append(String.valueOf(solrDoc.getFirstValue("purl")));
+        }
+        if (solrDoc.getFirstValue("doi") != null) {
+            sbSubject.append("\n").append(String.valueOf(solrDoc.getFirstValue("doi")));
+        }
+        if (sbSubject.length() > 0) {
+            document.addSubject(sbSubject.toString());
+        }
+
+        return document;
+    }
+
+    private void createFromPDFOCR(Document document, PdfWriter writer, Path imgDir)
+        throws IOException, DocumentException {
+
+        List<Path> imageFiles = Files.list(imgDir).sorted().toList();
+        for (int i = 0; i < imageFiles.size(); i++) {
+            try (PdfReader reader = new PdfReader(Files.newInputStream(imageFiles.get(i)))) {
                 // loop over the pages in that document
                 int n = reader.getNumberOfPages();
                 for (int page = 1; page <= n; page++) {
-                    copy.addPage(copy.getImportedPage(reader, page));
-                }
-                copy.freeReader(reader);
-                reader.close();
-
-                ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier,
-                    (i + 1) * 100 / imageFiles.size());
-
-                // this is just for debgging
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    // do nothing
-                }
-            }
-            copy.setOutlines(PDFTOCUtil.createTOC(dataDir, 1));
-            document.close();
-
-            Files.move(tmpFile, pdfOutFile, StandardCopyOption.REPLACE_EXISTING);
-            ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier, 101);
-        } catch (IOException | DocumentException e) {
-            LOGGER.error(e);
-        }
-    }
-
-    private void createFromImage(Path imgDir) {
-        try {
-            Document document = new Document();
-            Files.createDirectories(pdfOutFile.getParent());
-            Path tmpFile = Paths.get(pdfOutFile.toAbsolutePath().toString() + ".tmp");
-            PdfWriter writer = PdfWriter.getInstance(document, Files.newOutputStream(tmpFile));
-
-            document.open();
-            PDFFrontpageUtil.createFrontPage(writer, document, recordIdentifier, mcrid);
-
-            Image img;
-            List<Path> imageFiles = Files.list(imgDir).sorted().toList();
-
-            @SuppressWarnings("unused")
-            Rectangle pageSize = document.getPageSize();
-            for (int i = 0; i < imageFiles.size(); i++) {
-                //default
-                img = Image.getInstance(imageFiles.get(i).toAbsolutePath().toString());
-                img.scalePercent(72 * 100 / DEFAULT_DPI);
-                img.setAbsolutePosition(0f, 0f);
-
-                document.setPageSize(new Rectangle(img.getScaledWidth(), img.getScaledHeight()));
-                document.setMargins(0f, 0f, 0f, 0f);
-                document.newPage();
-
-                document.add(img);
-                ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier,
-                    (i + 1) * 100 / imageFiles.size());
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    // do nothing
-                }
-            }
-            writer.setOutlines(PDFTOCUtil.createTOC(dataDir, 1));
-            document.close();
-            writer.close();
-
-            Files.move(tmpFile, pdfOutFile, StandardCopyOption.REPLACE_EXISTING);
-            ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier, 101);
-        } catch (IOException | DocumentException e) {
-            LOGGER.error(e);
-            ctx.removeAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier);
-        }
-    }
-
-    private void createFromMETS() {
-        List<String> imgURLs = new ArrayList<>();
-
-        org.jdom2.Document metsXML = null;
-        ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier, 1);
-
-        try {
-            MCRExpandedObject mcrObj = MCRMetadataManager.retrieveMCRExpandedObject(MCRObjectID.getInstance(mcrid));
-            for (MCRMetaLinkID derID : mcrObj.getStructure().getDerivates()) {
-                if ("DV_METS".equals(derID.getXLinkTitle())) {
-                    MCRDerivate der = MCRMetadataManager
-                        .retrieveMCRDerivate(MCRObjectID.getInstance(derID.getXLinkHref()));
-                    String mainDoc = der.getDerivate().getInternals().getMainDoc();
-
-                    URL metsURL =
-                        URI.create(MCRFrontendUtil.getBaseURL() + "file/" + mcrid + "/" + der.getId().toString()
-                            + "/" + mainDoc).toURL();
-                    SAXBuilder sb = new SAXBuilder();
-                    metsXML = sb.build(metsURL);
-
-                    XPathExpression<Element> xpImages = XPathFactory.instance().compile(
-                        "//mets:fileGrp[@USE='DEFAULT']/mets:file/mets:FLocat", Filters.element(), null, NS_METS);
-
-                    for (Element ef : xpImages.evaluate(metsXML)) {
-                        imgURLs.add(ef.getAttributeValue("href", NS_XLINK));
+                    PdfImportedPage importedPage = writer.getImportedPage(reader, page);
+                    document.setPageSize(new Rectangle(importedPage.getWidth(), importedPage.getHeight()));
+                    if (i == 0 && page == 1) {
+                        document.open();
+                    } else {
+                        document.newPage();
                     }
-
-                    break;
+                    writer.getDirectContent().addTemplate(importedPage, 0, 0);
                 }
+                writer.freeReader(reader);
             }
 
-            Document document = new Document();
-            Files.createDirectories(pdfOutFile.getParent());
-            Path tmpFile = Paths.get(pdfOutFile.toAbsolutePath().toString() + ".tmp");
-            PdfWriter writer = PdfWriter.getInstance(document, Files.newOutputStream(tmpFile));
+            ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier,
+                (i + 1) * 100 / imageFiles.size());
 
-            document.open();
-            PDFFrontpageUtil.createFrontPage(writer, document, recordIdentifier, mcrid);
-
-            Image img;
-            @SuppressWarnings("unused")
-            Rectangle pageSize = document.getPageSize();
-            for (int i = 0; i < imgURLs.size(); i++) {
-                //default
-                img = Image.getInstance(URI.create(imgURLs.get(i)).toURL());
-                img.scalePercent(72 * 100 / DEFAULT_DPI);
-                img.setAbsolutePosition(0f, 0f);
-
-                document.setPageSize(new Rectangle(img.getScaledWidth(), img.getScaledHeight()));
-                document.setMargins(0f, 0f, 0f, 0f);
-                document.newPage();
-
-                document.add(img);
-                ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier,
-                    (i + 1) * 100 / imgURLs.size());
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    // do nothing
-                }
+            // this is just for debgging
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                // do nothing
             }
-            if (!imgURLs.isEmpty()) {
-                writer.setOutlines(PDFTOCUtil.createTOC(metsXML, 1));
-            }
-
-            document.close();
-            writer.close();
-
-            Files.move(tmpFile, pdfOutFile, StandardCopyOption.REPLACE_EXISTING);
-            ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier, 101);
-        } catch (IOException | JDOMException | DocumentException e) {
-            LOGGER.error(e);
-            ctx.removeAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier);
         }
+    }
+
+    private void createFromImage(Document document, Path imgDir) throws IOException, DocumentException {
+        Image img;
+        List<Path> imageFiles = Files.list(imgDir).sorted().toList();
+
+        @SuppressWarnings("unused")
+        Rectangle pageSize = document.getPageSize();
+        for (int i = 0; i < imageFiles.size(); i++) {
+            //default
+            img = Image.getInstance(imageFiles.get(i).toAbsolutePath().toString());
+            img.scalePercent(72 * 100 / DEFAULT_DPI);
+            img.setAbsolutePosition(0f, 0f);
+
+            document.setPageSize(new Rectangle(img.getWidth(), img.getHeight()));
+            document.setMargins(0f, 0f, 0f, 0f);
+            if (i == 0) {
+                document.open();
+            } else {
+                document.newPage();
+            }
+            document.add(img);
+
+            ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier,
+                (i + 1) * 100 / imageFiles.size());
+
+            // this is just for debgging
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                // do nothing
+            }
+        }
+    }
+
+    private void createFromMETS(Document document, URL metsURL) throws IOException, DocumentException, JDOMException {
+        List<String> imgURLs = new ArrayList<>();
+        Image img;
+
+        SAXBuilder sb = new SAXBuilder();
+        org.jdom2.Document metsXML = sb.build(metsURL);
+
+        XPathExpression<Element> xpImages = XPathFactory.instance().compile(
+            "//mets:fileGrp[@USE='DEFAULT']/mets:file/mets:FLocat", Filters.element(), null, NS_METS);
+
+        for (Element ef : xpImages.evaluate(metsXML)) {
+            imgURLs.add(ef.getAttributeValue("href", NS_XLINK));
+        }
+
+        @SuppressWarnings("unused")
+        Rectangle pageSize = document.getPageSize();
+        for (int i = 0; i < imgURLs.size(); i++) {
+            //default
+            img = Image.getInstance(URI.create(imgURLs.get(i)).toURL());
+            img.scalePercent(72 * 100 / DEFAULT_DPI);
+            img.setAbsolutePosition(0f, 0f);
+
+            document.setPageSize(new Rectangle(img.getWidth(), img.getHeight()));
+            document.setMargins(0f, 0f, 0f, 0f);
+            if (i == 0) {
+                document.open();
+            } else {
+                document.newPage();
+            }
+            document.add(img);
+
+            ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier,
+                (i + 1) * 100 / imgURLs.size());
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                // do nothing
+            }
+        }
+
     }
 }
