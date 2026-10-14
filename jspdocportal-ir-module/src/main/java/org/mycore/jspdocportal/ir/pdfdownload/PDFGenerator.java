@@ -53,6 +53,7 @@ import org.openpdf.text.DocumentException;
 import org.openpdf.text.Image;
 import org.openpdf.text.PageSize;
 import org.openpdf.text.Rectangle;
+import org.openpdf.text.pdf.PdfImportedPage;
 import org.openpdf.text.pdf.PdfReader;
 import org.openpdf.text.pdf.PdfWriter;
 
@@ -100,7 +101,6 @@ public class PDFGenerator implements Runnable {
             PdfWriter writer = PdfWriter.getInstance(document, Files.newOutputStream(tmpFile));
             writer.setPageEvent(new PDFBadgeBoxingEvent());
 
-            document.open();
             Path ocrDir = depotDir.resolve("ocrpdf");
             if (Files.exists(ocrDir)) {
                 createFromPDFOCR(document, writer, ocrDir);
@@ -175,13 +175,18 @@ public class PDFGenerator implements Runnable {
 
         List<Path> imageFiles = Files.list(imgDir).sorted().toList();
         for (int i = 0; i < imageFiles.size(); i++) {
-
             try (PdfReader reader = new PdfReader(Files.newInputStream(imageFiles.get(i)))) {
                 // loop over the pages in that document
                 int n = reader.getNumberOfPages();
                 for (int page = 1; page <= n; page++) {
-                    document.newPage();
-                    writer.getDirectContent().addTemplate(writer.getImportedPage(reader, page), 0, 0);
+                    PdfImportedPage importedPage = writer.getImportedPage(reader, page);
+                    document.setPageSize(new Rectangle(importedPage.getWidth(), importedPage.getHeight()));
+                    if (i == 0 && page == 1) {
+                        document.open();
+                    } else {
+                        document.newPage();
+                    }
+                    writer.getDirectContent().addTemplate(importedPage, 0, 0);
                 }
                 writer.freeReader(reader);
             }
@@ -210,11 +215,15 @@ public class PDFGenerator implements Runnable {
             img.scalePercent(72 * 100 / DEFAULT_DPI);
             img.setAbsolutePosition(0f, 0f);
 
-            document.setPageSize(new Rectangle(img.getScaledWidth(), img.getScaledHeight()));
+            document.setPageSize(new Rectangle(img.getWidth(), img.getHeight()));
             document.setMargins(0f, 0f, 0f, 0f);
-            document.newPage();
-
+            if (i == 0) {
+                document.open();
+            } else {
+                document.newPage();
+            }
             document.add(img);
+
             ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier,
                 (i + 1) * 100 / imageFiles.size());
 
@@ -249,11 +258,15 @@ public class PDFGenerator implements Runnable {
             img.scalePercent(72 * 100 / DEFAULT_DPI);
             img.setAbsolutePosition(0f, 0f);
 
-            document.setPageSize(new Rectangle(img.getScaledWidth(), img.getScaledHeight()));
+            document.setPageSize(new Rectangle(img.getWidth(), img.getHeight()));
             document.setMargins(0f, 0f, 0f, 0f);
-            document.newPage();
-
+            if (i == 0) {
+                document.open();
+            } else {
+                document.newPage();
+            }
             document.add(img);
+
             ctx.setAttribute(SESSION_ATTRIBUTE_PROGRESS_PREFIX + recordIdentifier,
                 (i + 1) * 100 / imgURLs.size());
             try {
