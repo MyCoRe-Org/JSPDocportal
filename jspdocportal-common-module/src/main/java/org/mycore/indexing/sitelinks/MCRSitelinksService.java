@@ -1,0 +1,160 @@
+/*
+ * This file is part of ***  M y C o R e  ***
+ * See https://www.mycore.de/ for details.
+ *
+ * MyCoRe is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MyCoRe is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MyCoRe.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package org.mycore.indexing.sitelinks;
+
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Supplier;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mycore.common.MCRCache;
+import org.mycore.common.MCRException;
+import org.mycore.common.config.annotation.MCRConfigurationProxy;
+import org.mycore.common.config.annotation.MCRInstance;
+import org.mycore.indexing.sitelinks.dto.MCRSitelinksRootPageDto;
+import org.mycore.indexing.sitelinks.dto.MCRSitelinksClusterPageDto;
+
+/**
+ * Application service for generating sitelinks page data transfer objects.
+ * <p>
+ * This service provides methods to generate root pages listing all available years
+ * and paginated year-specific pages containing object IDs. Year data is cached to
+ * optimize performance.
+ */
+@MCRConfigurationProxy(proxyClass = MCRSitelinksService.Factory.class)
+public class MCRSitelinksService {
+
+    private static final Logger LOGGER = LogManager.getLogger();
+    private static final String CACHE_KEY = "available_years";
+    private static final long CACHE_TTL_MS = 5 * 60 * 1000;
+
+    private final MCRSitelinksMetadataService metadataService;
+    private final MCRCache<String, Set<String>> clusterCache;
+
+    /**
+     * Constructs a new SitelinksService with the specified metadata service.
+     *
+     * @param metadataService the service responsible for retrieving object metadata from the domain layer
+     */
+    public MCRSitelinksService(MCRSitelinksMetadataService metadataService) {
+        this.metadataService = metadataService;
+        this.clusterCache = new MCRCache<>(1, "SitelinksClusters");
+    }
+
+    /**
+     * Retrieves the root page DTO containing all years for which sitelinks data is available.
+     *
+     * @return a {@link MCRSitelinksRootPageDto} containing all available years
+     */
+    public MCRSitelinksRootPageDto getRootPage() {
+        Set<String> clusters = getAvailableClusters();
+        List<String> sortedClusters = clusters.stream()
+            .sorted(Comparator.reverseOrder())
+            .toList();
+        return new MCRSitelinksRootPageDto(sortedClusters);
+    }
+
+    /**
+     * Retrieves a paginated page of object IDs for a specific year.
+     *
+     * @param cluster the cluster for which to retrieve object IDs (e.g., 2024)
+     * @param page the page number to retrieve (1-indexed, must be ≥ 1)
+     * @param pageSize the maximum number of object IDs to include per page (must be &gt; 0)
+     * @return a {@link MCRSitelinksClusterPageDto} containing the requested page of object IDs,
+     *         pagination metadata, and the total count of objects for the year
+     * @throws MCRException if {@code page < 1} or {@code pageSize < 1}
+     * @throws MCRSitelinksNotFoundException if no data exists for the specified year
+     */
+    public MCRSitelinksClusterPageDto getClusterPage(String cluster, int page, int pageSize) {
+        if (page < 1) {
+            throw new MCRException("page must be greater than or equal to 1");
+        }
+        if (pageSize < 1) {
+            throw new MCRException("page size must be greater than or equal to 1");
+        }
+        if (!hasClusterPage(cluster)) {
+            throw MCRSitelinksNotFoundException.forCluster(cluster);
+        }
+
+        MCRSitelinksMetadataService.LinkObjectsWithCount data =
+            metadataService.getObjectIdsByCluster(cluster, (page - 1) * pageSize, pageSize);
+        long totalPages = (data.totalCount() + pageSize - 1) / pageSize;
+        if (data.totalCount() == 0 || page > totalPages) {
+            throw MCRSitelinksNotFoundException.forPage(cluster, page, totalPages);
+        }
+
+        return new MCRSitelinksClusterPageDto(cluster, page, data.totalCount(), data.objects());
+    }
+
+    /**
+     * Checks if a year has any sitelinks data available.
+     *
+     * @param cluster the cluster to check
+     * @return true if the year has sitelinks data, false otherwise
+     */
+    public boolean hasClusterPage(String cluster) {
+        return getAvailableClusters().contains(cluster);
+    }
+
+    /**
+     * Clears the cluster cache, forcing a fresh fetch on the next access.
+     */
+    public void invalidateCache() {
+        LOGGER.info("Invalidating sitelinks cluster cache");
+        clusterCache.clear();
+    }
+
+    private Set<String> getAvailableClusters() {
+        long currentTime = System.currentTimeMillis();
+        Set<String> cached = clusterCache.getIfUpToDate(CACHE_KEY, currentTime - CACHE_TTL_MS);
+
+        if (LOGGER.isDebugEnabled()) {
+            if (cached != null) {
+                LOGGER.debug("Using cached years data");
+                return cached;
+            }
+            LOGGER.debug("Fetching fresh clusters data from metadata service");
+        }
+
+        Set<String> immutableClusters = Set.copyOf(metadataService.getClustersWithObjects());
+        clusterCache.put(CACHE_KEY, immutableClusters, currentTime);
+
+        return immutableClusters;
+    }
+
+    /**
+     * Factory class for creating {@link MCRSitelinksService} instances via configuration.
+     * <p>
+     * This factory is used by the {@link MCRConfigurationProxy} annotation to automatically
+     * instantiate the service with configuration values from properties.
+     */
+    public static class Factory implements Supplier<MCRSitelinksService> {
+
+        @MCRInstance(name = "MetadataService", valueClass = MCRSitelinksMetadataService.class)
+        public MCRSitelinksMetadataService metadataService;
+
+        @Override
+        public MCRSitelinksService get() {
+            return new MCRSitelinksService(metadataService);
+        }
+    }
+}

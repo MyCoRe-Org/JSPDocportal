@@ -105,6 +105,18 @@
     <servlet-name>MCRStoreMetadataServlet</servlet-name>
     <url-pattern>/servlets/MCRStoreMetadataServlet</url-pattern>
   </servlet-mapping>
+  
+  <!-- **************************************************************** -->
+  <!-- * Site links                                                   * -->
+  <!-- **************************************************************** -->
+  <servlet>
+    <servlet-name>MCRSitelinkServlet</servlet-name>
+    <servlet-class>org.mycore.indexing.sitelinks.MCRSitelinksServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MCRSitelinkServlet</servlet-name>
+    <url-pattern>/sitelinks/*</url-pattern>
+  </servlet-mapping>
 
   <!-- **************************************************************** -->
   <!-- * Jersey MVC * -->
