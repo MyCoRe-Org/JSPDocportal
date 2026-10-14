@@ -42,6 +42,8 @@ import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.jspdocportal.ir.pdfdownload.PDFGenerator;
 import org.mycore.resource.MCRResourceHelper;
+import org.mycore.services.i18n.MCRTranslation;
+import org.openpdf.text.BadElementException;
 import org.openpdf.text.Chunk;
 import org.openpdf.text.Document;
 import org.openpdf.text.DocumentException;
@@ -72,31 +74,31 @@ public class PDFFrontpageUtil {
         document.newPage();
 
         addRepositoryHeader(document);
-        addDocumentDescription(document, solrDoc);
+        addDocumentDescription(document, recordIdentifier, solrDoc);
         document.add(Chunk.NEWLINE);
         addBadges(document, solrDoc);
         document.add(Chunk.NEWLINE);
     }
 
     private static void addRepositoryHeader(Document document) {
-        try (InputStream is = MCRResourceHelper.getResourceAsStream("/rosdok_schriftzug.png")) {
+        try (InputStream is =
+            MCRResourceHelper.getResourceAsStream(MCRTranslation.translate("PDFDownload.pdf.header.logo"))) {
             byte[] imgBytes = IOUtils.toByteArray(is);
             Image img = Image.getInstance(imgBytes);
-            img.scalePercent(25f);
+            fitImageToHeight(img, 30f);
             document.add(img);
         } catch (IOException e) {
             //do nothing
         }
 
         Font font = FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL);
-
-        document.add(new Paragraph(
-            "Dieses Werk wurde Ihnen durch die Universitätsbibliothek Rostock zum Download bereitgestellt.", font));
-        document.add(
-            new Paragraph("Für Fragen und Hinweise wenden Sie sich bitte an: digibib.ub@uni-rostock.de .", font));
+        document.add(new Paragraph(MCRTranslation.translate("PDFDownload.pdf.header.hints.p1"), font));
+        document.add(new Paragraph(MCRTranslation.translate("PDFDownload.pdf.header.hints.p2"), font));
+        document.add(new Paragraph(MCRTranslation.translate("PDFDownload.pdf.header.hints.p3"), font));
         ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneId.of("Europe/Berlin"));
-        document.add(new Paragraph("Das PDF wurde erstellt am: " + DTF.format(zonedDateTime) + ".", font));
-        Rectangle rect = new Rectangle(document.left(), document.top() - 30 * 2.54f,
+        document.add(new Paragraph(
+            MCRTranslation.translate("PDFDownload.pdf.header.hints.created_at", DTF.format(zonedDateTime)), font));
+        Rectangle rect = new Rectangle(document.left(), document.top() - 35 * 2.54f,
             document.getPageSize().getWidth() - document.rightMargin(), 10);
         rect.setBorder(Rectangle.BOTTOM);
         rect.setBorderColor(COLOR_BLACK);
@@ -123,9 +125,11 @@ public class PDFFrontpageUtil {
      *    "purl":"https://purl.uni-rostock.de/rosdok/ppn1982113499",
     
      * @param document
+     * @param recordId
      * @param solrDoc
      */
-    private static void addDocumentDescription(Document document, SolrDocument solrDoc) throws IOException {
+    private static void addDocumentDescription(Document document, String recordId, SolrDocument solrDoc)
+        throws IOException {
 
         PdfPTable table = new PdfPTable(new float[] { 2.0f, 1.0f });
         table.setWidthPercentage(100f);
@@ -159,15 +163,20 @@ public class PDFFrontpageUtil {
         cellImage.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
         if (solrDoc.getFirstValue("ir.cover_url") != null) {
-            Image img = Image.getInstance(
-                URI.create(MCRFrontendUtil.getBaseURL()
-                    + String.valueOf(solrDoc.getFirstValue("ir.cover_url")))
-                    .toURL());
-            img.scaleToFit(
-                (document.getPageSize().getWidth() - 2.5f * PDFGenerator.BORDER) * .33f,
-                (document.getPageSize().getHeight() - 2f * PDFGenerator.BORDER) * .33f);
-            img.setAlignment(Image.MIDDLE);
-            cellImage.addElement(img);
+            try {
+                Image img = Image.getInstance(
+                    URI.create(MCRFrontendUtil.getBaseURL()
+                        + String.valueOf(solrDoc.getFirstValue("ir.cover_url")))
+                        .toURL());
+                img.scaleToFit(
+                    (document.getPageSize().getWidth() - 2.5f * PDFGenerator.BORDER) * .33f,
+                    (document.getPageSize().getHeight() - 2f * PDFGenerator.BORDER) * .33f);
+                img.setAlignment(Image.MIDDLE);
+
+                cellImage.addElement(img);
+            } catch (BadElementException | IOException e) {
+                LOGGER.error("Could not write cover image to PDF frontpage for " + recordId, e);
+            }
         }
 
         table.addCell(cellImage);
@@ -220,9 +229,9 @@ public class PDFFrontpageUtil {
                 p.add(new Chunk(" Access" + SPACES, fontBadge)
                     .setGenericTag("badge-closedaccess"));
             }
-            
+
         }
-        
+
         if (solrDoc.getFirstValue("ir.worklicense_class.facet") != null) {
             p.add(new Chunk(SPACES + SPACES));
             MCRCategoryID cId =

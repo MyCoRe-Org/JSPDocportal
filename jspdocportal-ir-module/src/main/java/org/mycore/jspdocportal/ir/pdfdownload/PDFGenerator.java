@@ -47,6 +47,7 @@ import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.jspdocportal.ir.pdfdownload.util.PDFBadgeBoxingEvent;
 import org.mycore.jspdocportal.ir.pdfdownload.util.PDFFrontpageUtil;
 import org.mycore.jspdocportal.ir.pdfdownload.util.PDFTOCUtil;
+import org.mycore.services.i18n.MCRTranslation;
 import org.openpdf.text.Document;
 import org.openpdf.text.DocumentException;
 import org.openpdf.text.Image;
@@ -138,10 +139,34 @@ public class PDFGenerator implements Runnable {
      */
     private Document createNewPDF() {
         Document document = new Document(PageSize.A4);
+
+        //add PDF Metadata
         document.addCreationDate();
-        document.addTitle("RosDok Download");
-        document.addAuthor("Universitätsbibliothek Rostock");
-        document.addSubject("https://purl.uni-rostock.de/" + recordIdentifier.replace("rosdok_", "rosdok/"));
+        if (solrDoc.getFirstValue("ir.creator.result") != null) {
+            document.addAuthor(String.valueOf(solrDoc.getFirstValue("ir.creator.result")));
+        } else {
+            document.addTitle(MCRTranslation.translate("PDFDownload.pdf.metadata.default_author"));
+        }
+        if (solrDoc.getFirstValue("ir.title.result") != null) {
+            document.addTitle(String.valueOf(solrDoc.getFirstValue("ir.title.result")));
+        } else {
+            document.addTitle(MCRTranslation.translate("PDFDownload.pdf.metadata.default_title"));
+        }
+
+        StringBuffer sbSubject = new StringBuffer();
+        if (solrDoc.getFirstValue("ir.originInfo.result") != null) {
+            sbSubject.append(String.valueOf(solrDoc.getFirstValue("ir.originInfo.result")));
+        }
+        if (solrDoc.getFirstValue("purl") != null) {
+            sbSubject.append("\n").append(String.valueOf(solrDoc.getFirstValue("purl")));
+        }
+        if (solrDoc.getFirstValue("doi") != null) {
+            sbSubject.append("\n").append(String.valueOf(solrDoc.getFirstValue("doi")));
+        }
+        if (sbSubject.length() > 0) {
+            document.addSubject(sbSubject.toString());
+        }
+
         return document;
     }
 
