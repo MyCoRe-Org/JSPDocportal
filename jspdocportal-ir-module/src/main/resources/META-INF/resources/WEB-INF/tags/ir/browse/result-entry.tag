@@ -6,37 +6,57 @@
 <%@ taglib prefix="search" tagdir="/WEB-INF/tags/search"%>
 
 <%@ attribute name="url" required="true" type="java.lang.String"%>
+<%@ attribute name="hostRecordIdentifier" required="false" type="java.lang.String"%>
 <%@ attribute name="entry" required="true" type="org.mycore.jspdocportal.common.search.MCRSearchResultEntry"%>
 <%@ attribute name="mode" required="false" type="java.lang.String"%>
 
 <div class="row">
   <div class="col-md-9" style="position:relative">
-    <c:if test="${fn:endsWith(mode,'series')}">
-      <c:if test="${not empty entry.data['ir.seriesNumber.result']}">
-        <div style="position:absolute;top:-5px;left:0px" class="border border-dark px-2" title="${mode}">
-          <strong>${entry.data['ir.seriesNumber.result']}</strong>
-        </div>
-        <p class="card-text">&nbsp;</p>
-      </c:if>
+    <c:if test="${fn:endsWith(mode,'series') or fn:endsWith(mode,'journal')}">
+      <c:forEach var="item" items="${entry.listData['ir.host.parentNumber.result']}">
+        <c:set var="prefix" value="[${hostRecordIdentifier}]"/>
+        <c:if test="${fn:startsWith(item, prefix)}">
+          <div style="position:absolute;top:-5px;left:0px" class="border border-dark px-2" title="${mode}">
+            <strong>${fn:substringAfter(item, prefix)}</strong>
+          </div>
+          <p class="card-text">&nbsp;</p>
+        </c:if>
+      </c:forEach>
     </c:if>
     <p class="card-text">${entry.data['ir.creator.result']}</p>
-    <c:choose>
-      <c:when test="${empty(entry.data['ir.partNumber.result']) and empty(entry.data['ir.partName.result'])}">
-        <h4 class="card-title"><a href="${url}">${entry.label}</a></h4>
-      </c:when>
-      <c:otherwise>
-        <c:if test="${not (fn:endsWith(mode,'journal') or fn:endsWith(mode,'multipart'))}">
-          <h5 class="card-title"><a href="${url}">${entry.label}</a></h5>
-        </c:if>
-        <h4 class="card-title"><a href="${url}">
-          <c:if test="${not empty entry.data['ir.partNumber.result']}">${entry.data['ir.partNumber.result']}</c:if>
-          <c:if test="${(not empty entry.data['ir.partNumber.result']) and not empty entry.data['ir.partName.result']}"><br /></c:if>
-          <c:if test="${not empty entry.data['ir.partName.result']}">${entry.data['ir.partName.result']}</c:if>
-        </a></h4>
-      </c:otherwise>
-    </c:choose>
+    
+    <h4 class="card-title">
+      <a href="${url}">
+        <c:choose>
+          <c:when test="${empty(entry.data['ir.partNumber.result']) and empty(entry.data['ir.partName.result'])}">
+            ${entry.label}
+          </c:when>
+          <c:when test="${not empty hostRecordIdentifier}">
+            <c:if test="${not (fn:endsWith(mode,'journal') or fn:endsWith(mode,'multipart'))}">
+              <span class="h5">${entry.label}</span><br />
+            </c:if>
+            <c:forEach var="item" items="${entry.listData['ir.host.parentNumber.result']}">
+              <c:set var="prefix" value="[${hostRecordIdentifier}]"/>
+              <c:if test="${fn:startsWith(item, prefix)}">
+                 ${fn:substringAfter(item, prefix)}
+              </c:if>
+            </c:forEach>
+          </c:when>
+          <c:when test="${not empty entry.data['ir.partNumber.result']}">
+            <c:if test="${not (fn:endsWith(mode,'multipart'))}">
+              <span class="h5">${entry.label}</span><br />
+            </c:if>
+            ${entry.data['ir.partNumber.result']}
+          </c:when>
+        </c:choose>
+        <c:if test="${(not empty entry.data['ir.partNumber.result']) and not empty entry.data['ir.partName.result']}"><br /></c:if>
+        <c:if test="${not empty entry.data['ir.partName.result']}">${entry.data['ir.partName.result']}</c:if>
+      </a>
+    </h4>
     <c:if test="${not empty(entry.data['ir.host.title.result'])}">
-      <p class="card-text"><span class="display-label"><fmt:message key="OMD.ir.docdetails.header.label.appears_in" /></span> ${entry.data['ir.host.title.result']}
+      <p class="card-text">
+        <span class="display-label"><fmt:message key="OMD.ir.docdetails.header.label.appears_in" /></span>
+        ${entry.data['ir.host.title.result']}
         <c:if test="${not empty(entry.data['ir.host.part.result'])}">
           ${entry.data['ir.host.part.result']}
         </c:if>

@@ -174,8 +174,10 @@
           <field name="ir.sortstring"><xsl:value-of select="." /></field> 
         </xsl:for-each>
       </xsl:for-each>
-      <xsl:for-each select="(mods:relatedItem[@type='series'][./mods:recordInfo/mods:recordIdentifier]/mods:part/mods:detail[@type='volume']/mods:number)[1]">
-        <field name="ir.seriesNumber.result"><xsl:value-of select="." /></field> 
+      <xsl:for-each select="mods:relatedItem[(@otherType='hierarchical' or @otherType='appears_in') and not(@displayLabel='appears_in')][./mods:recordInfo/mods:recordIdentifier]">
+        <xsl:for-each select="(mods:part/mods:detail[@type='volume']/mods:number)[1]">
+          <field name="ir.host.parentNumber.result">[<xsl:value-of select="ancestor::mods:relatedItem/mods:recordInfo/mods:recordIdentifier" />]<xsl:value-of select="." /></field> 
+        </xsl:for-each>
       </xsl:for-each>
       
       <!-- ab hier ungeprüft: -->      

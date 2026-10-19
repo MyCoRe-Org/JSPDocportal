@@ -23,7 +23,10 @@
  */
 package org.mycore.jspdocportal.common.search;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.solr.common.SolrDocument;
@@ -40,6 +43,7 @@ public class MCRSearchResultEntry {
     private String mcrid;
     private String label;
     private Map<String, String> data = new LinkedHashMap<>();
+    private Map<String, List<String>> listData = new LinkedHashMap<>();
     private Map<String, String> internal = new LinkedHashMap<>();
 
     public MCRSearchResultEntry(SolrDocument solrDoc, int pos) {
@@ -56,7 +60,16 @@ public class MCRSearchResultEntry {
         for (String df : datafields) {
             Object o = solrDoc.getFieldValue(df);
             if (o != null) {
-                data.put(df, String.valueOf(o));
+                if(o instanceof Collection col) {
+                    ArrayList<String> values = new ArrayList<>();
+                    for (Object c : col) {
+                        values.add(String.valueOf(c));
+                    }
+                    listData.put(df, values);
+                }
+                else {
+                    data.put(df, String.valueOf(o));
+                }
             }
         }
         for (String intfld : internalfields) {
@@ -81,6 +94,10 @@ public class MCRSearchResultEntry {
 
     public Map<String, String> getData() {
         return data;
+    }
+    
+    public Map<String, List<String>> getListData() {
+        return listData;
     }
 
     public Map<String, String> getInternal() {

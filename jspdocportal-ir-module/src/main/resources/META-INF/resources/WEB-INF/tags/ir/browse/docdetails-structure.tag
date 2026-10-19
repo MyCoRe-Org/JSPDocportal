@@ -23,15 +23,7 @@
  --%>
 <% 
 	MCRSearchResultDataBean result = new MCRSearchResultDataBean();
-    if(StringUtils.isEmpty(hostRecordIdentifier)){
-        result.setQuery("ir.host.recordIdentifier:"+hostMcrID);
-    }
-    else {
-        result.setQuery("ir.host.recordIdentifier:"+hostRecordIdentifier
-            +" OR ir.host.recordIdentifier:"+hostRecordIdentifier.replaceFirst("/", "_")
-            +" OR ir.host.recordIdentifier:"+hostRecordIdentifier.replaceFirst("_", "/")
-            +" OR ir.host.recordIdentifier:"+hostMcrID);
-    }
+  result.setQuery("ir.host.recordIdentifier:"+hostRecordIdentifier);
 	String sortOrder = hostMcrID.contains("_document_") ? "desc" : "asc";
 	result.setSort("ir.sortstring " + sortOrder);
     result.setRows(999);
@@ -56,11 +48,11 @@
         <c:set var="url"   value="${pageContext.request.contextPath}/resolve/id/${entry.mcrid}?_search=${result.id}&_hit=${entry.pos}" />
         <li class="list-group-item">
           <div class="ir-result-card">
-            <browse:result-entry entry="${entry}" url="${url}" mode="${hostDoctype}" />
+            <browse:result-entry entry="${entry}" url="${url}" mode="${hostDoctype}" hostRecordIdentifier="${hostRecordIdentifier}" />
             <div style="clear:both"></div>
-		  </div>
-		</li>				 
-	  </c:forEach>
+          </div>
+        </li>
+      </c:forEach>
            
       <c:if test="${(hostDoctype eq 'histbest.print.journal') and not(empty(hostZDBID))}">
         <li class="list-group-item">

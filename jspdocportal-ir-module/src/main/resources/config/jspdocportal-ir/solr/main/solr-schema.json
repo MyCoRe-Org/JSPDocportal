@@ -247,14 +247,14 @@
 			"stored": true
 		}
 	},
-	{
-		"add-field": {
-			"name": "ir.seriesNumber.result",
-			"type": "string",
-			"multiValued": false,
-			"stored": true
-		}
-	},
+  {
+    "add-field": {
+      "name": "ir.host.parentNumber.result",
+      "type": "string",
+      "multiValued": true,
+      "stored": true
+    }
+  },
 	{
 		"add-field": {
 			"name": "ir.pdffulltext_url",
@@ -334,5 +334,13 @@
 			"multiValued": true,
 			"stored": false
 		}
-	}
-]        
+	},
+  {
+    "add-field": {
+      "name": "ir.admin.test_set",
+      "type": "string",
+      "multiValued": false,
+      "stored": true
+    }
+  }
+]
