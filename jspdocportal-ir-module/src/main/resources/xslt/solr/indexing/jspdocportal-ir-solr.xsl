@@ -348,6 +348,11 @@
                 <field name="ir.institution_class.facet"><xsl:value-of select="translate(substring-after(@valueURI,'classifications/'),'#',':')" /></field>
            </xsl:for-each>
     </xsl:for-each>
+    <xsl:for-each select="def.modsContainer/modsContainer[@type='edited'][1]/mods:mods">
+      <xsl:for-each select="./mods:note[@type='test_set']">
+        <field name="ir.admin.test_set"><xsl:value-of select="." /></field>
+      </xsl:for-each>
+    </xsl:for-each>
   </xsl:template>
   <xsl:template match="def.irControl/irControl">   
     <xsl:for-each select="map/list[@key='mets_filegroups']/entry[text()='ALTO'][1]">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xed:form xmlns:xed="http://www.mycore.de/xeditor" role="form" class="form-horizontal" accept-charset="UTF-8" method="post">
+<xed:form xmlns:xed="http://www.mycore.de/xeditor" role="form" class="form-horizontal ir-editor-workflow-metadata" accept-charset="UTF-8" method="post">
   <div class="row">
     <div class="col-12">
       <div class="alert alert-info">
@@ -11,6 +11,7 @@
   <xed:post-processor class="org.mycore.jspdocportal.ir.controller.editor.MODSDataURLPostProcessor" xsl="editor/ir_xeditor2mods.xsl" transformer="saxon" />
   <xed:cleanup-rule xpath="//modsContainer[@type='edited']/mods:mods/mods:abstract[@type='advice']" relevant-if="string-length(text()) &gt; 0" />
   <xed:cleanup-rule xpath="//modsContainer[@type='edited']/mods:mods/mods:extension[@displayLabel='external_content']" relevant-if="string-length(./file/@OWNERID) &gt; 0 or string-length(./file/@URL) &gt; 0 " />
+  <xed:cleanup-rule xpath="//modsContainer[@type='edited']/mods:mods/mods:note[@type='test_set']" relevant-if="string-length(normalize-space(text())) &gt; 0" />
   <xed:cleanup-rule xpath="//modsContainer[@type='edited']" relevant-if="./mods:mods/*" />
   
   <xed:cleanup-rule xpath="//modsContainer[@type='imported']/mods:mods/mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']" relevant-if="string-length(text()) &gt; 0" />
@@ -23,7 +24,7 @@
 
     <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer[@type='imported']/mods:mods">
       <h3><xed:output i18n="OMD.ir.editor.ppn.headline" /></h3>
-      <div class="row">
+      <div class="row mb-4">
         <div class="col-3">
           <xed:bind xpath="mods:recordInfo/mods:recordInfoNote[@type='k10plus_ppn']">
              <input id="ppn" type="text" class="form-control form-control-sm" />
@@ -33,8 +34,8 @@
     </xed:bind>
     
     <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer[@type='edited']/mods:mods">
-      <h3><xed:output i18n="OMD.ir.editor.description.headline" /></h3>
-      <div class="row">
+      <h3 ><xed:output i18n="OMD.ir.editor.description.headline" /></h3>
+      <div class="row mb-4">
         <div class="col-12">
          <xed:bind xpath="mods:abstract[@type='advice']">
              <xed:bind xpath="@altFormat" initially="DO_CALCULATE" />
@@ -138,7 +139,7 @@
             </xed:bind>
           </div>
         </div>
-        <div class="row">
+        <div class="row mb-4">
           <label class="col-2 form-label form-label-sm ir-label" for="extcont_url">
             <xed:output i18n="OMD.ir.editor.external_content.url" />
           </label>
@@ -149,7 +150,17 @@
           </div>
         </div>
       </xed:bind>
-    </xed:bind>
+      
+      <h3 class="text-warning"><xed:output i18n="OMD.ir.editor.test_set.headline" /></h3>
+      <div class="row">
+        <div class="col">
+          <xed:bind xpath="mods:note[@type='test_set']">
+             <textarea id="test_set" rows="3" class="form-control form-control-sm" />
+          </xed:bind>
+        </div>
+      </div>
+    </xed:bind> <!--END OF /modsContainer[@type='edited']/mods:mods -->
+
     <xed:include uri="resource:editor/metadata/includes-generic.xed" ref="cancel.submit" />
   </xed:bind>
         
