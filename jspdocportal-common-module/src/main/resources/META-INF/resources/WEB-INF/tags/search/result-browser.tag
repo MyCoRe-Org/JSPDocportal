@@ -69,8 +69,18 @@
               <c:param name="wt">csv</c:param>
               <c:param name="fl">${result.csvDownloadFields}</c:param>
             </c:url>
+            <c:url var="static_search_url" value="${WebApplicationBaseURL}${result.action}">
+              <c:forEach var="fq" items="${result.filterQueries}">
+                  <c:param name="_add-filter">${fq}</c:param>
+              </c:forEach>  
+              <c:if test="${not empty result.sort}">
+                <c:param name="_sort">${result.sort}</c:param>
+              </c:if>
+            </c:url>
+            
             <c:set var="i18n_download"><fmt:message key="Webpage.Searchresult.download" /></c:set>
-            <c:set var="i18n_download_csv_title"><fmt:message key="Webpage.Searchresult.csvDownload.title" /></c:set>
+            <c:set var="i18n_download_csv_title"><fmt:message key="Webpage.Searchresult.download.csv.title" /></c:set>
+            <c:set var="i18n_download_static_search_url"><fmt:message key="Webpage.Searchresult.download.staticSearchUrl.title" /></c:set>
             
             <div id="ir-drownload-dropdown" class="dropdown float-start">
               <button class="btn btn-outline-primary page-item me-3 dropdown-toggle" type="button" id="dropdownMenuDownload" 
@@ -78,7 +88,8 @@
                  <i class="fas fa-download"></i>
                </button>
                <div class="dropdown-menu" aria-labelledby="dropdownMenuDownload">
-                <a class="dropdown-item" rel="nofollow" href="${csv_url}" download="${result.csvDownloadFilename}" title="${i18n_download_csv_title}"><fmt:message key="Webpage.Searchresult.csvDownload" /></a>
+                <a class="dropdown-item" rel="nofollow" href="${static_search_url}" title="${i18n_download_static_search_url_title}"><fmt:message key="Webpage.Searchresult.download.staticSearchUrl" /></a>
+                <a class="dropdown-item" rel="nofollow" href="${csv_url}" download="${result.csvDownloadFilename}" title="${i18n_download_csv_title}"><fmt:message key="Webpage.Searchresult.download.csv" /></a>
               </div>
             </div>
           </c:if>
