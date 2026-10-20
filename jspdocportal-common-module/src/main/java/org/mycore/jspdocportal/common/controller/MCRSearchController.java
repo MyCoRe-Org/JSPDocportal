@@ -134,6 +134,11 @@ public class MCRSearchController {
             showMask.set(false);
             showResults.set(true);
         }
+        for(String fq: request.getParameterValues("fq")) {
+            if(StringUtils.isNotBlank(fq)) {
+            result.getFilterQueries().add(fq);
+            }
+        }
 
         if (StringUtils.isNoneEmpty(request.getParameter("searchField"))) {
             result = new MCRSearchResultDataBean();

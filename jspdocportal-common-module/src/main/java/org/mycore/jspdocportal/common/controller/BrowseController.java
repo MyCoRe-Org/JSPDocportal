@@ -116,6 +116,11 @@ public class BrowseController {
             result.setAction("browse");
             result.setQuery(request.getParameter("q"));
             result.setMask("");
+            for(String fq: request.getParameterValues("fq")) {
+                if(StringUtils.isNotBlank(fq)) {
+                result.getFilterQueries().add(fq);
+                }
+            }
         }
 
         if (request.getParameter("searchField") != null && request.getParameter("searchValue") != null) {
