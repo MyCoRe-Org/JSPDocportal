@@ -12,7 +12,7 @@
   <url>https://github.com/MyCoRe-Org/JSPDocportal/tree/main/jspdocportal-common-module</url>
 
   <properties>
-    <manifest.priority>11</manifest.priority>
+    <manifest.priority>85</manifest.priority>
 
     <!-- disable maven-pmd-plugin -->
     <pmd.failOnViolation>false</pmd.failOnViolation>

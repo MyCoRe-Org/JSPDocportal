@@ -11,7 +11,7 @@
   <description>Cacheing and generation of derived files</description>
   <url>https://github.com/MyCoRe-Org/JSPDocportal/tree/main/jspdocportal-diskcache</url>
   <properties>
-    <manifest.priority>13</manifest.priority>
+    <manifest.priority>86</manifest.priority>
   </properties>
   <build>
     <plugins>

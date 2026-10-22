@@ -11,7 +11,7 @@
   <name>JSPDocportal Institutional Repository Module</name>
 
   <properties>
-    <manifest.priority>12</manifest.priority>
+    <manifest.priority>89</manifest.priority>
     <!-- disable maven-pmd-plugin -->
     <pmd.failOnViolation>false</pmd.failOnViolation>
   </properties>
