@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="3.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:json="http://www.w3.org/2005/xpath-functions"
   xmlns:fn="http://www.w3.org/2005/xpath-functions"
+  xmlns:json="http://www.w3.org/2005/xpath-functions"
   xmlns:mcracl="http://www.mycore.de/xslt/acl"
   xmlns:mcrclass="http://www.mycore.de/xslt/classification"
   xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
@@ -12,16 +12,16 @@
   xmlns:xlink="http://www.w3.org/1999/xlink"
   exclude-result-prefixes="#all"
   expand-text="yes">
-  
-  <xsl:output method="html" indent="yes" standalone="no" />
-  
+
+  <xsl:output method="html" indent="yes" standalone="no" encoding="UTF-8" />
+
   <xsl:include href="resource:xslt/default-parameters.xsl" />
   <xsl:include href="xslInclude:functions" />
-  
+
   <xsl:param name="WebApplicationTitle" select="'RosDok'"/>
-    
+
   <xsl:template match="/">
-      
+
     <!-- Cover -->
     <xsl:variable name="recordID" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier[@source='DE-28' or @source='DE-519']" />
     <xsl:variable name="showViewer" select="exists(/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='MCRVIEWER_METS' or @categid='fulltext']])" />
@@ -34,36 +34,28 @@
           <img style="width:150px" src="{$WebApplicationBaseURL}images/filetypeicons/bundle.png" />
         </xsl:when>
         <xsl:when test="contains(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '#data')">
-           <img style="width:150px" src="{$WebApplicationBaseURL}images/filetypeicons/data.png" />
+          <img style="width:150px" src="{$WebApplicationBaseURL}images/filetypeicons/data.png" />
         </xsl:when>
         <xsl:otherwise>
-      <img style="width:150px" src="{$WebApplicationBaseURL}images/filetypeicons/document.png" />
+          <img style="width:150px" src="{$WebApplicationBaseURL}images/filetypeicons/document.png" />
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-   
+
     <xsl:variable name="derid" select="/mycoreobject[not(contains(@ID, '_bundle_'))]/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='MCRVIEWER_METS' or @categid='fulltext']]/@xlink:href" />
     <xsl:variable name="access" select="mcracl:check-permission($derid, 'read')" />
-    
+
     <xsl:choose>
       <xsl:when test="$showViewer and $access">
         <div class="ir-box ir-box-docdetails-image text-center" style="position:relative">
-          <xsl:variable name="startpagePath" select="if (//def.irControl/irControl/map[@key='ROOT']/entry[@key='start_image']) then (concat('/iview2/',//def.irControl/irControl/map[@key='ROOT']/entry[@key='start_image'],'.iview2')) else ()" />
-        <a id="ir-thumbnail-image-parent" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID,'/','_')}{$startpagePath}" 
+          <xsl:variable name="startpagePath"
+                        select="if (//def.irControl/irControl/map[@key='ROOT']/entry[@key='start_image']) then (concat('/iview2/',//def.irControl/irControl/map[@key='ROOT']/entry[@key='start_image'],'.iview2')) else ()" />
+            <a id="ir-thumbnail-image-parent" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID,'/','_')}{$startpagePath}" 
              style="display:inline-block;min-height:2em" title="{mcri18n:translate('OMD.ir.docdetails.rightside.title.mcrviewer')}"></a>
-             <!-- Anzeigen:Button -->
-             <!-- 
-             <div class="text-center" style="position:absolute;top:.5em;right:0;left:0;">
-               <a class="btn btn-light btn-sm border border-secondary" href="{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID, '/','_')}" 
-                  title="{mcri18n:translate('OMD.ir.docdetails.rightside.title.mcrviewer')}">
-                 <i class="far fa-eye text-primary"></i> {mcri18n:translate('OMD.ir.docdetails.rightside.label.mcrviewer')}
-               </a>
-             </div>
-             -->
-          <xsl:if test="$recordID 
+            <xsl:if test="$recordID 
                         and (/mycoreobject/metadata/def.irControl/irControl/map/list[@key='mets_filegroups']/entry[text() = 'ALTO'] 
                              or /mycoreobject/structure/derobjects/derobject/classification[@categid='fulltext'])">
-            <div class="input-group input-group-sm mt-3 px-3">
+              <div class="input-group input-group-sm mt-3 px-3">
               <input id="input_search_in_doc" type="text" class="form-control" onKeyDown="searchInDoc(event)" 
                      placeholder="{mcri18n:translate('OMD.ir.docdetails.rightside.placeholder.search_in_doc')}" aria-describedby="search-in-document-addon" />
               <button type="button" class="btn btn-secondary" id="search-in-document-addon" onclick="searchInDoc(event)" 
@@ -71,9 +63,9 @@
               <script>
                 function searchInDoc(e) {{
                   if(e.target.type == "button"  || (e.target.type == "text" &amp;&amp; e.keyCode === 13)) {{
-                    window.open("{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{replace($recordID,'/','_')}?q="+document.getElementById("input_search_in_doc").value,"_self");
+                    window.open("{$WebApplicationBaseURL}mcrviewer/recordIdentifier/{$recordID}?q="+document.getElementById("input_search_in_doc").value,"_self");
                   }}
-               }}
+                }}
               </script>
             </div>
           </xsl:if>
@@ -84,7 +76,7 @@
         </div>
       </xsl:otherwise>
    </xsl:choose>
-   <!-- curly bracets are quoted!!! -->
+   <!-- curly brackets are quoted (doubled) !!! -->
    <script>
      var image = new Image();
      image.onload = function() {{
@@ -103,8 +95,8 @@
      image.src = "{$image/img/@src}";
    </script>
  
-   <!-- Dauerhaft zitieren -->
-     <xsl:if test="not(/mycoreobject/service/servstates/servstate/@categid='deleted')">
+    <!-- Dauerhaft zitieren -->
+    <xsl:if test="not(/mycoreobject/service/servstates/servstate/@categid='deleted')">
       <div class="ir-box ir-box-emph">
         <h4 class="text-primary">{mcri18n:translate('OMD.ir.docdetails.rightside.headline.persistent_url')}</h4>
         <xsl:choose>
@@ -140,7 +132,7 @@
        <xsl:if test="/mycoreobject/structure/derobjects/derobject[classification[@classid='derivate_types'][@categid='fulltext' or contains(@categid, 'METS')]]">
          <div class="dropdown w-100 mt-3">
             <button class="btn btn-primary dropdown-toggle w-100" type="button" id="dropdownMenuShow" 
-                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                <i class="far fa-eye pe-2"></i> {mcri18n:translate('OMD.ir.docdetails.rightside.menue.view')}
             </button>
             
@@ -212,17 +204,16 @@
        </div>
     </xsl:if>
     
+    <!-- multiple provider are possible on bundle -->
     <xsl:variable name="class_provider" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" />
     <xsl:variable name="catalogs">
-      <xsl:choose>
-        <xsl:when test="$class_provider">
-          <xsl:value-of select="mcrmods:to-mycoreclass($class_provider[1], 'single')/categories/category/label[@xml:lang='x-catalog']/@text" />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:variable name="isil" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier/@source" />
-          <xsl:value-of select="document('classification:metadata:-1:children:provider')//category[label[@xml:lang='x-isil']/@text=$isil]/label[@xml:lang='x-catalog']/@text" />                 
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:for-each select="$class_provider[1]">
+        <xsl:value-of select="mcrmods:to-mycoreclass(., 'single')/categories/category/label[@xml:lang='x-catalog']/@text" />
+      </xsl:for-each>
+      <xsl:if test="not($class_provider)">
+        <xsl:variable name="isil" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier/@source" />
+        <xsl:value-of select="document('classification:metadata:-1:children:provider')//category[label[@xml:lang='x-isil']/@text=$isil]/label[@xml:lang='x-catalog']/@text" />
+      </xsl:if>
     </xsl:variable>
        
     <xsl:if test="not(/mycoreobject/service/servstates/servstate/@categid='deleted')">
@@ -234,42 +225,38 @@
         </div>
       </xsl:for-each>
         
+      <!-- Provider (bereitgestellt durch:) -->
       <div class="ir-box mt-3">
-      
-        <!-- Provider (bereitgestellt durch:) -->
         <xsl:if test="contains(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@displayLabel='doctype']/@valueURI, '/doctype#histbest')">
           <h4>{mcri18n:translate('OMD.ir.docdetails.rightside.headline.provider')}</h4>
           <xsl:variable name="class_provider" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@displayLabel='provider']" />
-          <xsl:variable name="categ">
-            <xsl:choose>
-              <xsl:when test="$class_provider">
-                <xsl:copy-of select="mcrmods:to-mycoreclass($class_provider[1], 'single')/categories/category" />
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:variable name="isil" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier/@source" />
-                <xsl:copy-of select="document('classification:metadata:-1:children:provider')//category[label[@xml:lang='x-isil']/@text=$isil]" />                 
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable> 
-          <xsl:variable name="homepage" select="$categ/category/label[@xml:lang='x-homepage']/@text" />
-          <!--
-          <xsl:variable name="json_viewer" select="replace($categ/category/label[@xml:lang='x-dfg-viewer']/@text, '''', '&quot;')" />
-          <xsl:variable name="logo_url" select="replace(json-to-xml($json_viewer)/json:map/json:string[@key='logo_url'], 'http://rosdok.uni-rostock.de/',$WebApplicationBaseURL)" />
-          -->
-          <xsl:variable name="logo_url" select="concat($WebApplicationBaseURL, substring($categ/category/label[@xml:lang='x-logo']/@text,1))" />
-          <table style="table-layout:fixed">
-            <tr>
-              <xsl:if test="$logo_url">
-                <td class="pe-2">
-                  <a href="{$homepage}"><img src="{$logo_url}" style="max-height:60px;max-width:120px;"/></a>
+          <xsl:variable name="prov_categories" as="element()*">
+            <xsl:for-each select="$class_provider">
+              <xsl:copy-of select="mcrmods:to-mycoreclass(., 'single')/categories/category" />
+            </xsl:for-each>
+            <xsl:if test="not($class_provider)">
+              <xsl:variable name="isil" select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:recordInfo/mods:recordIdentifier/@source" />
+              <xsl:copy-of select="document('classification:metadata:-1:children:provider')//category[label[@xml:lang='x-isil']/@text=$isil]" />                 
+            </xsl:if>
+          </xsl:variable>
+          <table style="table-layout:fixed">          
+          <xsl:for-each select="$prov_categories">
+            <xsl:variable name="categ" select="." />
+            <xsl:variable name="homepage" select="$categ/label[@xml:lang='x-homepage']/@text" />
+            <xsl:variable name="logo_url" select="concat($WebApplicationBaseURL, substring($categ/label[@xml:lang='x-logo']/@text,1))" />
+              <tr>
+                <xsl:if test="$logo_url">
+                  <td class="pe-2 text-center">
+                    <a href="{$homepage}"><img src="{$logo_url}" style="max-height:60px;max-width:120px;"/></a>
+                  </td>
+                </xsl:if>
+                <td>
+                  <a href="{$homepage}" class="small" style="line-height:normal">
+                    <xsl:value-of select="$categ/label[@xml:lang=$CurrentLang]/@text" />
+                  </a>
                 </td>
-              </xsl:if>
-              <td>
-                <a href="{$homepage}" class="small" style="line-height:normal">
-                  <xsl:value-of select="$categ/category/label[@xml:lang=$CurrentLang]/@text" />
-                </a>
-              </td>
-            </tr>
+              </tr>
+          </xsl:for-each>
           </table>
           <p></p>
         </xsl:if>
