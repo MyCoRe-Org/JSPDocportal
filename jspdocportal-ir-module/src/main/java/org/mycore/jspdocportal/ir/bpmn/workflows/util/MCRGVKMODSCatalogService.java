@@ -63,7 +63,7 @@ public abstract class MCRGVKMODSCatalogService implements MCRMODSCatalogService 
         Element eRecordInfo = XP_RECORD_ID.evaluateFirst(docJdom);
         if (eModsContainer != null && eRecordInfo != null) {
             // retrieve MODS by PURL
-            String query = "pica.url=purl*" + eRecordInfo.getTextTrim().replace("/", "")
+            String query = "pica.ulv=purl*" + eRecordInfo.getTextTrim().replace("/", "")
                 + " and pica.bib=" + getELN();
             return retrieveMODSFromCatalogue(query);
         }
@@ -71,7 +71,7 @@ public abstract class MCRGVKMODSCatalogService implements MCRMODSCatalogService 
         if (eModsContainer != null) {
             //retrieve MODS by MyCoRe ID
             String mcrID = docJdom.getRootElement().getAttributeValue("ID");
-            String query = "pica.url=" + getResolvingURLPrefix() + mcrID.replace("_", "");
+            String query = "pica.ulv=" + getResolvingURLPrefix() + mcrID.replace("_", "");
             return retrieveMODSFromCatalogue(query);
         }
         return null;
